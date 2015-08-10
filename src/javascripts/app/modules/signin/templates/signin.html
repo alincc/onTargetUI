@@ -1,0 +1,26 @@
+<div class="container w-xxl w-auto-xs">
+    <a href class="navbar-brand block m-t">{{app.name}}</a>
+
+    <div class="m-b-lg">
+        <form name="form" class="form-validation" ng-submit="signin(user)">
+            <div class="text-danger wrapper text-center" ng-show="authError">
+                {{authError}}
+            </div>
+            <div class="list-group list-group-sm">
+                <div class="list-group-item">
+                    <input type="text" placeholder="Username" class="form-control no-border" ng-model="user.username"
+                           required>
+                </div>
+                <div class="list-group-item">
+                    <input type="password" placeholder="Password" class="form-control no-border"
+                           ng-model="user.password" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary btn-block"
+                    ng-disabled='form.$invalid || form.$submitted'>Log in
+            </button>
+
+            <div class="text-right m-t m-b"><a ui-sref="forgotpassword">Forgot password ?</a> | <a ui-sref="requestdemo">Request a demo</a></div>
+        </form>
+    </div>
+</div>

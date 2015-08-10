@@ -1,0 +1,333 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '-msvs_version=2015' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ 'E:\\Sang\\Projects\\201508_OnTarget\\ontarget\\Code',
+6 verbose install   [ 'gulp',
+6 verbose install     'gulp-less',
+6 verbose install     'gulp-concat',
+6 verbose install     'gulp-minify-css',
+6 verbose install     'gulp-rename',
+6 verbose install     'bower',
+6 verbose install     'chai',
+6 verbose install     'chai-as-promised',
+6 verbose install     'gulp-connect',
+6 verbose install     'gulp-jshint',
+6 verbose install     'gulp-karma',
+6 verbose install     'gulp-replace',
+6 verbose install     'gulp-uglify',
+6 verbose install     'jshint-stylish',
+6 verbose install     'gulp-shell',
+6 verbose install     'karma',
+6 verbose install     'karma-chai',
+6 verbose install     'karma-chai-plugins',
+6 verbose install     'karma-firefox-launcher',
+6 verbose install     'karma-mocha',
+6 verbose install     'karma-phantomjs-launcher',
+6 verbose install     'karma-requirejs',
+6 verbose install     'karma-sinon-chai',
+6 verbose install     'mocha',
+6 verbose install     'mocha-sinon',
+6 verbose install     'open',
+6 verbose install     'sinon',
+6 verbose install     'sinon-chai',
+6 verbose install     'del' ] ]
+7 info preinstall OnTarget@1.0.0
+8 verbose readDependencies using package.json deps
+9 verbose already installed skipping gulp@^3.5.6 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+10 verbose already installed skipping gulp-less@^3.0.1 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+11 verbose already installed skipping gulp-concat@^2.2.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+12 verbose already installed skipping gulp-minify-css@^0.3.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+13 verbose already installed skipping gulp-rename@^1.2.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+14 verbose already installed skipping bower@1.4.1 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+15 verbose cache add [ 'chai@latest', null ]
+16 verbose cache add name=undefined spec="chai@latest" args=["chai@latest",null]
+17 verbose parsed url { protocol: null,
+17 verbose parsed url   slashes: null,
+17 verbose parsed url   auth: null,
+17 verbose parsed url   host: null,
+17 verbose parsed url   port: null,
+17 verbose parsed url   hostname: null,
+17 verbose parsed url   hash: null,
+17 verbose parsed url   search: null,
+17 verbose parsed url   query: null,
+17 verbose parsed url   pathname: 'chai@latest',
+17 verbose parsed url   path: 'chai@latest',
+17 verbose parsed url   href: 'chai@latest' }
+18 verbose already installed skipping chai-as-promised@^5.1.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+19 verbose already installed skipping gulp-connect@^2.2.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+20 verbose already installed skipping gulp-jshint@^1.10.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+21 verbose already installed skipping gulp-karma@0.0.4 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+22 verbose already installed skipping gulp-replace@^0.5.3 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+23 verbose already installed skipping gulp-uglify@^1.2.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+24 verbose already installed skipping jshint-stylish@^1.0.1 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+25 verbose already installed skipping gulp-shell@^0.4.2 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+26 verbose cache add [ 'karma@latest', null ]
+27 verbose cache add name=undefined spec="karma@latest" args=["karma@latest",null]
+28 verbose parsed url { protocol: null,
+28 verbose parsed url   slashes: null,
+28 verbose parsed url   auth: null,
+28 verbose parsed url   host: null,
+28 verbose parsed url   port: null,
+28 verbose parsed url   hostname: null,
+28 verbose parsed url   hash: null,
+28 verbose parsed url   search: null,
+28 verbose parsed url   query: null,
+28 verbose parsed url   pathname: 'karma@latest',
+28 verbose parsed url   path: 'karma@latest',
+28 verbose parsed url   href: 'karma@latest' }
+29 verbose cache add name="chai" spec="latest" args=["chai","latest"]
+30 verbose parsed url { protocol: null,
+30 verbose parsed url   slashes: null,
+30 verbose parsed url   auth: null,
+30 verbose parsed url   host: null,
+30 verbose parsed url   port: null,
+30 verbose parsed url   hostname: null,
+30 verbose parsed url   hash: null,
+30 verbose parsed url   search: null,
+30 verbose parsed url   query: null,
+30 verbose parsed url   pathname: 'latest',
+30 verbose parsed url   path: 'latest',
+30 verbose parsed url   href: 'latest' }
+31 verbose addNamed [ 'chai', 'latest' ]
+32 verbose addNamed [ null, null ]
+33 verbose cache add name="karma" spec="latest" args=["karma","latest"]
+34 verbose parsed url { protocol: null,
+34 verbose parsed url   slashes: null,
+34 verbose parsed url   auth: null,
+34 verbose parsed url   host: null,
+34 verbose parsed url   port: null,
+34 verbose parsed url   hostname: null,
+34 verbose parsed url   hash: null,
+34 verbose parsed url   search: null,
+34 verbose parsed url   query: null,
+34 verbose parsed url   pathname: 'latest',
+34 verbose parsed url   path: 'latest',
+34 verbose parsed url   href: 'latest' }
+35 verbose addNamed [ 'karma', 'latest' ]
+36 verbose addNamed [ null, null ]
+37 silly lockFile 332f8fe7-chai-latest chai@latest
+38 verbose lock chai@latest C:\Users\SangDao\AppData\Roaming\npm-cache\332f8fe7-chai-latest.lock
+39 silly lockFile 3f9391e6-karma-latest karma@latest
+40 verbose lock karma@latest C:\Users\SangDao\AppData\Roaming\npm-cache\3f9391e6-karma-latest.lock
+41 verbose already installed skipping karma-chai@^0.1.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+42 verbose already installed skipping karma-chai-plugins@^0.6.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+43 verbose already installed skipping karma-firefox-launcher@^0.1.4 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+44 verbose already installed skipping karma-mocha@^0.1.10 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+45 verbose already installed skipping karma-phantomjs-launcher@^0.1.4 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+46 verbose already installed skipping karma-requirejs@^0.2.2 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+47 verbose already installed skipping karma-sinon-chai@0.3.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+48 verbose already installed skipping mocha@^2.1.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+49 verbose already installed skipping mocha-sinon@^1.1.4 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+50 verbose already installed skipping open@^0.0.5 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+51 verbose cache add [ 'sinon@latest', null ]
+52 verbose cache add name=undefined spec="sinon@latest" args=["sinon@latest",null]
+53 verbose parsed url { protocol: null,
+53 verbose parsed url   slashes: null,
+53 verbose parsed url   auth: null,
+53 verbose parsed url   host: null,
+53 verbose parsed url   port: null,
+53 verbose parsed url   hostname: null,
+53 verbose parsed url   hash: null,
+53 verbose parsed url   search: null,
+53 verbose parsed url   query: null,
+53 verbose parsed url   pathname: 'sinon@latest',
+53 verbose parsed url   path: 'sinon@latest',
+53 verbose parsed url   href: 'sinon@latest' }
+54 verbose already installed skipping sinon-chai@^2.8.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+55 verbose already installed skipping del@1.2.0 E:\Sang\Projects\201508_OnTarget\ontarget\Code
+56 verbose cache add name="sinon" spec="latest" args=["sinon","latest"]
+57 verbose parsed url { protocol: null,
+57 verbose parsed url   slashes: null,
+57 verbose parsed url   auth: null,
+57 verbose parsed url   host: null,
+57 verbose parsed url   port: null,
+57 verbose parsed url   hostname: null,
+57 verbose parsed url   hash: null,
+57 verbose parsed url   search: null,
+57 verbose parsed url   query: null,
+57 verbose parsed url   pathname: 'latest',
+57 verbose parsed url   path: 'latest',
+57 verbose parsed url   href: 'latest' }
+58 verbose addNamed [ 'sinon', 'latest' ]
+59 verbose addNamed [ null, null ]
+60 silly lockFile 2afeecab-sinon-latest sinon@latest
+61 verbose lock sinon@latest C:\Users\SangDao\AppData\Roaming\npm-cache\2afeecab-sinon-latest.lock
+62 info addNameTag [ 'chai', 'latest' ]
+63 info addNameTag [ 'karma', 'latest' ]
+64 info addNameTag [ 'sinon', 'latest' ]
+65 verbose request where is /chai
+66 verbose request registry https://registry.npmjs.org/
+67 verbose request id d29f73f9c432a9c8
+68 verbose url raw /chai
+69 verbose url resolving [ 'https://registry.npmjs.org/', './chai' ]
+70 verbose url resolved https://registry.npmjs.org/chai
+71 verbose request where is https://registry.npmjs.org/chai
+72 info trying registry request attempt 1 at 16:09:42
+73 verbose etag "EOLXXR8HQWB57DAMZZ4V6GW5S"
+74 http GET https://registry.npmjs.org/chai
+75 verbose request where is /karma
+76 verbose request registry https://registry.npmjs.org/
+77 verbose url raw /karma
+78 verbose url resolving [ 'https://registry.npmjs.org/', './karma' ]
+79 verbose url resolved https://registry.npmjs.org/karma
+80 verbose request where is https://registry.npmjs.org/karma
+81 info trying registry request attempt 1 at 16:09:42
+82 verbose etag "COA7RTTL6B6TPUWQ3IQACF0DX"
+83 http GET https://registry.npmjs.org/karma
+84 verbose request where is /sinon
+85 verbose request registry https://registry.npmjs.org/
+86 verbose url raw /sinon
+87 verbose url resolving [ 'https://registry.npmjs.org/', './sinon' ]
+88 verbose url resolved https://registry.npmjs.org/sinon
+89 verbose request where is https://registry.npmjs.org/sinon
+90 info trying registry request attempt 1 at 16:09:42
+91 verbose etag "8QGDEQMOBT2B79CYN3TMB4C7G"
+92 http GET https://registry.npmjs.org/sinon
+93 http 304 https://registry.npmjs.org/chai
+94 silly registry.get cb [ 304,
+94 silly registry.get   { date: 'Fri, 07 Aug 2015 09:09:45 GMT',
+94 silly registry.get     via: '1.1 varnish',
+94 silly registry.get     'cache-control': 'max-age=60',
+94 silly registry.get     etag: '"EOLXXR8HQWB57DAMZZ4V6GW5S"',
+94 silly registry.get     age: '22',
+94 silly registry.get     connection: 'keep-alive',
+94 silly registry.get     'x-served-by': 'cache-lax1422-LAX',
+94 silly registry.get     'x-cache': 'HIT',
+94 silly registry.get     'x-cache-hits': '1',
+94 silly registry.get     'x-timer': 'S1438938585.137897,VS0,VE0',
+94 silly registry.get     vary: 'Accept' } ]
+95 verbose etag https://registry.npmjs.org/chai from cache
+96 http 304 https://registry.npmjs.org/sinon
+97 silly registry.get cb [ 304,
+97 silly registry.get   { date: 'Fri, 07 Aug 2015 09:09:45 GMT',
+97 silly registry.get     via: '1.1 varnish',
+97 silly registry.get     'cache-control': 'max-age=60',
+97 silly registry.get     etag: '"8QGDEQMOBT2B79CYN3TMB4C7G"',
+97 silly registry.get     age: '26',
+97 silly registry.get     connection: 'keep-alive',
+97 silly registry.get     'x-served-by': 'cache-lax1430-LAX',
+97 silly registry.get     'x-cache': 'HIT',
+97 silly registry.get     'x-cache-hits': '1',
+97 silly registry.get     'x-timer': 'S1438938585.143196,VS0,VE1',
+97 silly registry.get     vary: 'Accept' } ]
+98 verbose etag https://registry.npmjs.org/sinon from cache
+99 verbose addNamed [ 'chai', '3.2.0' ]
+100 verbose addNamed [ '3.2.0', '3.2.0' ]
+101 silly lockFile c3634feb-chai-3-2-0 chai@3.2.0
+102 verbose lock chai@3.2.0 C:\Users\SangDao\AppData\Roaming\npm-cache\c3634feb-chai-3-2-0.lock
+103 silly lockFile c3634feb-chai-3-2-0 chai@3.2.0
+104 silly lockFile c3634feb-chai-3-2-0 chai@3.2.0
+105 silly lockFile 332f8fe7-chai-latest chai@latest
+106 silly lockFile 332f8fe7-chai-latest chai@latest
+107 verbose addNamed [ 'sinon', '1.15.4' ]
+108 verbose addNamed [ '1.15.4', '1.15.4' ]
+109 silly lockFile 6ec46f9b-sinon-1-15-4 sinon@1.15.4
+110 verbose lock sinon@1.15.4 C:\Users\SangDao\AppData\Roaming\npm-cache\6ec46f9b-sinon-1-15-4.lock
+111 info already installed chai@3.2.0
+112 silly lockFile 6ec46f9b-sinon-1-15-4 sinon@1.15.4
+113 silly lockFile 6ec46f9b-sinon-1-15-4 sinon@1.15.4
+114 silly lockFile 2afeecab-sinon-latest sinon@latest
+115 silly lockFile 2afeecab-sinon-latest sinon@latest
+116 http 304 https://registry.npmjs.org/karma
+117 silly registry.get cb [ 304,
+117 silly registry.get   { date: 'Fri, 07 Aug 2015 09:09:45 GMT',
+117 silly registry.get     via: '1.1 varnish',
+117 silly registry.get     'cache-control': 'max-age=60',
+117 silly registry.get     etag: '"COA7RTTL6B6TPUWQ3IQACF0DX"',
+117 silly registry.get     age: '0',
+117 silly registry.get     connection: 'keep-alive',
+117 silly registry.get     'x-served-by': 'cache-lax1422-LAX',
+117 silly registry.get     'x-cache': 'HIT',
+117 silly registry.get     'x-cache-hits': '1',
+117 silly registry.get     'x-timer': 'S1438938585.126774,VS0,VE82',
+117 silly registry.get     vary: 'Accept' } ]
+118 verbose etag https://registry.npmjs.org/karma from cache
+119 info already installed sinon@1.15.4
+120 verbose addNamed [ 'karma', '0.13.8' ]
+121 verbose addNamed [ '0.13.8', '0.13.8' ]
+122 silly lockFile b7f97835-karma-0-13-8 karma@0.13.8
+123 verbose lock karma@0.13.8 C:\Users\SangDao\AppData\Roaming\npm-cache\b7f97835-karma-0-13-8.lock
+124 silly lockFile b7f97835-karma-0-13-8 karma@0.13.8
+125 silly lockFile b7f97835-karma-0-13-8 karma@0.13.8
+126 silly lockFile 3f9391e6-karma-latest karma@latest
+127 silly lockFile 3f9391e6-karma-latest karma@latest
+128 info already installed karma@0.13.8
+129 silly resolved []
+130 info build E:\Sang\Projects\201508_OnTarget\ontarget\Code
+131 verbose linkStuff [ false,
+131 verbose linkStuff   false,
+131 verbose linkStuff   false,
+131 verbose linkStuff   'E:\\Sang\\Projects\\201508_OnTarget\\ontarget' ]
+132 info linkStuff OnTarget@1.0.0
+133 verbose linkBins OnTarget@1.0.0
+134 verbose linkMans OnTarget@1.0.0
+135 verbose rebuildBundles OnTarget@1.0.0
+136 verbose rebuildBundles [ '.bin',
+136 verbose rebuildBundles   'bower',
+136 verbose rebuildBundles   'chai',
+136 verbose rebuildBundles   'chai-as-promised',
+136 verbose rebuildBundles   'del',
+136 verbose rebuildBundles   'gulp',
+136 verbose rebuildBundles   'gulp-concat',
+136 verbose rebuildBundles   'gulp-connect',
+136 verbose rebuildBundles   'gulp-jshint',
+136 verbose rebuildBundles   'gulp-karma',
+136 verbose rebuildBundles   'gulp-less',
+136 verbose rebuildBundles   'gulp-minify-css',
+136 verbose rebuildBundles   'gulp-rename',
+136 verbose rebuildBundles   'gulp-replace',
+136 verbose rebuildBundles   'gulp-shell',
+136 verbose rebuildBundles   'gulp-uglify',
+136 verbose rebuildBundles   'jshint-stylish',
+136 verbose rebuildBundles   'karma',
+136 verbose rebuildBundles   'karma-chai',
+136 verbose rebuildBundles   'karma-chai-plugins',
+136 verbose rebuildBundles   'karma-firefox-launcher',
+136 verbose rebuildBundles   'karma-mocha',
+136 verbose rebuildBundles   'karma-phantomjs-launcher',
+136 verbose rebuildBundles   'karma-requirejs',
+136 verbose rebuildBundles   'karma-sinon-chai',
+136 verbose rebuildBundles   'mocha',
+136 verbose rebuildBundles   'mocha-sinon',
+136 verbose rebuildBundles   'open',
+136 verbose rebuildBundles   'requirejs',
+136 verbose rebuildBundles   'sinon',
+136 verbose rebuildBundles   'sinon-chai' ]
+137 verbose rebuild bundle E:\Sang\Projects\201508_OnTarget\ontarget\Code\node_modules\requirejs
+138 info build E:\Sang\Projects\201508_OnTarget\ontarget\Code\node_modules\requirejs
+139 info preinstall requirejs@2.1.20
+140 verbose linkStuff [ false,
+140 verbose linkStuff   false,
+140 verbose linkStuff   false,
+140 verbose linkStuff   'E:\\Sang\\Projects\\201508_OnTarget\\ontarget\\Code\\node_modules' ]
+141 info linkStuff requirejs@2.1.20
+142 verbose linkBins requirejs@2.1.20
+143 verbose link bins [ { 'r.js': './bin/r.js' },
+143 verbose link bins   'E:\\Sang\\Projects\\201508_OnTarget\\ontarget\\Code\\node_modules\\.bin',
+143 verbose link bins   false ]
+144 verbose linkMans requirejs@2.1.20
+145 verbose rebuildBundles requirejs@2.1.20
+146 info install requirejs@2.1.20
+147 info postinstall requirejs@2.1.20
+148 info install OnTarget@1.0.0
+149 info postinstall OnTarget@1.0.0
+150 info prepublish OnTarget@1.0.0
+151 error peerinvalid The package karma does not satisfy its siblings' peerDependencies requirements!
+151 error peerinvalid Peer gulp-karma@0.0.4 wants karma@>=0.10 <=0.13
+151 error peerinvalid Peer karma-chai@0.1.0 wants karma@>=0.10.9
+151 error peerinvalid Peer karma-mocha@0.1.10 wants karma@>=0.12.8
+151 error peerinvalid Peer karma-phantomjs-launcher@0.1.4 wants karma@>=0.9
+151 error peerinvalid Peer karma-requirejs@0.2.2 wants karma@>=0.9
+152 error System Windows_NT 6.2.9200
+153 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "-msvs_version=2015"
+154 error cwd E:\Sang\Projects\201508_OnTarget\ontarget\Code
+155 error node -v v0.10.33
+156 error npm -v 1.4.28
+157 error code EPEERINVALID
+158 verbose exit [ 1, true ]

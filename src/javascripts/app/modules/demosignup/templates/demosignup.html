@@ -1,0 +1,66 @@
+<div class="container w-xxl w-auto-xs">
+    <a href class="navbar-brand block m-t">{{app.name}}</a>
+    <div class="m-b-lg">
+        <form name="form" class="form-validation" ng-submit="demoSignup(user)">
+            <div class="text-success wrapper text-center" ng-show='signupMsg'>
+                {{signupMsg}}
+            </div>
+            <div class="list-group list-group-sm" ng-hide="signupMsg">
+                <div class="list-group-item">
+                    <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required />
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="First name" class="form-control no-border" ng-model="user.firstName" required />
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="Last name" class="form-control no-border" ng-model="user.lastName" required />
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="Phone number" class="form-control no-border" ng-model="user.phoneNumber" required />
+                </div>
+                <div class="list-group-item">
+                    <textarea placeholder="Message" class="form-control no-border" ng-model="user.msg" required />
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="Company Name" class="form-control no-border" ng-model="user.companyName" required />
+                </div>
+                <div class="list-group-item">
+                    <select class="form-control no-border" ng-model="user.companyTypeId" placeholder="Company Type" required>
+                        <option value="" selected>-- Select One --</option>
+                        <option value="1">GENERAL CONTRACTOR</option>
+                        <option value="2">CONSTRUCTION MANAGER</option>
+                        <option value="3">SUBCONTRACTOR</option>
+                        <option value="4">OWNER</option>
+                        <option value="5">SPECIALITY CONTRACTOR</option>
+                        <option value="6">ARCHITECTS/ENGINEERS</option>
+                    </select>
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="Address one" class="form-control no-border" ng-model="user.companyAddress1" required />
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="Address two" class="form-control no-border" ng-model="user.companyAddress2" />
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="City" class="form-control no-border" ng-model="user.companyCity" required />
+                </div>
+                <div class="list-group-item">
+                    <select class="form-control no-border" ng-model="user.companyCountry" placeholder="State" required
+                            ng-options="country.code as country.name for country in countries" ng-change="getStateList()">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="list-group-item">
+                    <select class="form-control no-border" ng-model="user.companyState" placeholder="State"
+                            required ng-options="state.code as state.name for state in states">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="Zipcode" class="form-control no-border" ng-model="user.companyZip" required />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled='form.$invalid || form.$submitted' ng-hide="signupMsg">Sign up</button>
+        </form>
+    </div>
+</div>

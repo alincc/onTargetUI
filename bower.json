@@ -1,0 +1,37 @@
+{
+  "name": "OnTarget",
+  "private": "true",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "jquery": "~1.11.3",
+    "angular": "~1.4.3",
+    "angular-cookies": "~1.4.3",
+    "angular-messages": "~1.4.3",
+    "angular-mocks": "~1.4.3",
+    "angular-resource": "~1.4.3",
+    "angular-animate": "~1.4.3",
+    "angular-sanitize": "~1.4.3",
+    "angular-touch": "~1.4.3",
+    "angular-moment": "~0.10.1",
+    "angularLocalStorage": "~0.3.0",
+    "angular-loading-bar": "0.7.1",
+    "components-font-awesome": "~4.3.0",
+    "less": "~2.5.0",
+    "ui-router": "~0.2.15",
+    "requirejs": "~2.1.18",
+    "requirejs-text": "~2.0.14",
+    "lodash": "~3.6.0",
+    "requirejs-plugins": "1.0.3",
+    "angular-bootstrap": "~0.13.2",
+    "bootstrap-css-only": "latest",
+    "animate.css": "latest",
+    "angularjs-toaster": "~0.4.15",
+    "angular-ui-event": "latest",
+    "angular-ui-mask": "latest",
+    "angular-svg-round-progressbar": "latest",
+    "autosize": "latest",
+    "angular-utils-pagination": "latest",
+    "ng-file-upload": "latest"
+  }
+}
