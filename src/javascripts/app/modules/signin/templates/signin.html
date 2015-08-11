@@ -1,26 +1,42 @@
-<div class="container w-xxl w-auto-xs">
-    <a href class="navbar-brand block m-t">{{app.name}}</a>
-
-    <div class="m-b-lg">
-        <form name="form" class="form-validation" ng-submit="signin(user)">
-            <div class="text-danger wrapper text-center" ng-show="authError">
-                {{authError}}
-            </div>
-            <div class="list-group list-group-sm">
-                <div class="list-group-item">
-                    <input type="text" placeholder="Username" class="form-control no-border" ng-model="user.username"
-                           required>
+<div class="content sign-in-page">
+    <div class="logo w-xxxl w-auto-xs">
+        <a href class="logo m-b-lg block m-t">
+            <img src="img/onTargetLogo.png"/>
+        </a>
+    </div>
+    <div class="container w-xxxl w-auto-xs">
+        <div class="m-b-lg">
+            <form name="form" class="form-validation form-horizontal" ng-submit="signin(user)" no-validate
+                  autocomplete="false">
+                <legend>
+                    Sign in to OnTarget App
+                </legend>
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-user"></span>
+                                </span>
+                        <input name="username" type="text" id="username" ng-model="user.username"
+                               class="form-control input-lg"
+                               placeholder="Username" required="" ng-pattern="/^[a-z0-9]{3,15}$/">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="password" placeholder="Password" class="form-control no-border"
-                           ng-model="user.password" required>
+                <div class="form-group">
+                    <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-lock"></span>
+                                </span>
+                        <input name="password" type="password" ng-model="user.password" class="form-control input-lg"
+                               placeholder="Password" required="">
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-lg btn-primary btn-block"
-                    ng-disabled='form.$invalid || form.$submitted'>Log in
-            </button>
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg"
+                        ng-disabled='form.$invalid || form.$submitted'>Log in
+                </button>
 
-            <div class="text-right m-t m-b"><a ui-sref="forgotpassword">Forgot password ?</a> | <a ui-sref="requestdemo">Request a demo</a></div>
-        </form>
+                <div class="text-right m-t m-b"><a ui-sref="forgotpassword">Forgot password ?</a> | <a
+                        ui-sref="requestdemo">Request a demo</a></div>
+            </form>
+        </div>
     </div>
 </div>

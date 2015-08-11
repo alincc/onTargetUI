@@ -8,10 +8,10 @@ var connect = require('gulp-connect');
 var open = require('open');
 var jshint = require('gulp-jshint');
 var karma = require('gulp-karma');
-//var uglify = require('gulp-uglify');
-//var replace = require('gulp-replace');
-//var shell = require('gulp-shell');
-//var del = require('del');
+var uglify = require('gulp-uglify');
+var replace = require('gulp-replace');
+var shell = require('gulp-shell');
+var del = require('del');
 
 var paths = {
   less: ['./src/less/**/*.less']
@@ -33,7 +33,7 @@ gulp.task('less', function(done) {
 // Copy Images
 gulp.task('images', function() {
   return gulp.src([
-    './src/img/*'])
+    './src/img/**/*'])
     .pipe(gulp.dest('./build/img/'));
 });
 
@@ -59,8 +59,8 @@ gulp.task('fonts', function() {
 gulp.task('html', function() {
   return gulp.src([
     './src/index.html'])
-    //.pipe(replace('javascripts/main', 'javascripts/main.min'))
-    //.pipe(replace('css/main.css', 'css/main.min.css'))
+    .pipe(replace('javascripts/main', 'javascripts/main.min'))
+    .pipe(replace('css/main.css', 'css/main.min.css'))
     .pipe(gulp.dest('./build/'));
 });
 
@@ -100,10 +100,10 @@ gulp.task('runbuild', function() {
 // Window r.js command line fix (It conflict between r.js and r.cmd.js)
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
 // del node_modules\.bin\r.js
-//gulp.task('requireJsOptimizer', shell.task([
-//  // This is the command
-//  'r.js -o src/javascripts/build.js'
-//]));
+gulp.task('requireJsOptimizer', shell.task([
+  // This is the command
+  'r.js -o src/javascripts/build.js'
+]));
 
 // Watch
 gulp.task('watch', ['connect', 'serve'], function() {
@@ -158,12 +158,12 @@ gulp.task('build', ['lint', 'less', 'fonts', 'images', 'script', 'html', 'requir
     //.pipe(uglify())
     .pipe(gulp.dest('build/javascripts'));
 
-  //del([
-  //  'build/javascripts/main.js',
-  //  'build/javascripts/build.js',
-  //  'src/javascripts/main.min.js',
-  //  'src/javascripts/main.min.js.map'
-  //]);
+  del([
+    'build/javascripts/main.js',
+    'build/javascripts/build.js',
+    'src/javascripts/main.min.js',
+    'src/javascripts/main.min.js.map'
+  ]);
 });
 
 // start task

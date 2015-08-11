@@ -25,8 +25,8 @@ define(function(require) {
           var $elem;
 
           function getParents(el, c) {
-            if (angular.isDefined(el) && angular.isDefined(el.parent()) && el.parent() !== null) {
-              if (el.hasClass(c)) {
+            if(angular.isDefined(el) && angular.isDefined(el.parent()) && el.parent() !== null) {
+              if(el.hasClass(c)) {
                 $elem = el;
                 return el;
               } else {
@@ -37,20 +37,20 @@ define(function(require) {
             }
           }
 
-          if (attrs.toggle === 'dropdown' && !angular.isDefined(attrs.target)) {
+          if(attrs.toggle === 'dropdown' && !angular.isDefined(attrs.target)) {
             getParents(elem, 'dropdown');
           }
 
           elem.on('click', function() {
-            if ($elem) {
+            if($elem) {
               $elem.toggleClass('open');
             }
-            else if (attrs.target) {
+            else if(attrs.target) {
               var $target = angular.element(document.querySelector(attrs.target));
-              if ($target) {
-                if (attrs.toggle === 'modal') {
+              if($target) {
+                if(attrs.toggle === 'modal') {
                   $target.toggleClass('in');
-                  if ($target.hasClass('in')) {
+                  if($target.hasClass('in')) {
                     $target.css('display', 'block');
                   }
                   else {
@@ -68,7 +68,6 @@ define(function(require) {
       };
     }
   ]);
-
   module.directive("dismiss", ["$timeout",
     function() {
       return {
@@ -77,8 +76,8 @@ define(function(require) {
           var $modal;
 
           function getParents(el) {
-            if (angular.isDefined(el) && angular.isDefined(el.parent()) && el.parent() !== null) {
-              if (el.hasClass('modal')) {
+            if(angular.isDefined(el) && angular.isDefined(el.parent()) && el.parent() !== null) {
+              if(el.hasClass('modal')) {
                 $modal = el;
                 return el;
               } else {
@@ -92,8 +91,8 @@ define(function(require) {
           getParents(elem);
 
           elem.on('click', function() {
-            if ($modal) {
-              if (attrs.dismiss === 'modal') {
+            if($modal) {
+              if(attrs.dismiss === 'modal') {
                 $modal.css('display', '');
                 $modal.removeClass('in');
               }
@@ -107,5 +106,28 @@ define(function(require) {
       };
     }
   ]);
+  module.directive('background', ['$location', function($location) {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        scope.$watch(function() {
+          return $location.path();
+        }, function(e) {
+          switch(e) {
+            case '/signin':
+            case '/forgot-password':
+            case '/request-demo':
+            case '/demo-signup':
+            case '/pages/signup':
+              elem.addClass('has-background');
+              break;
+            default:
+              elem.removeClass('has-background');
+              break;
+          }
+        });
+      }
+    };
+  }]);
   return module;
 });

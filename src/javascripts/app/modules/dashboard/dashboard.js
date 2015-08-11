@@ -16,7 +16,7 @@ define(function(require) {
         ['$stateProvider',
             function($stateProvider) {
                 $stateProvider
-                    .state('dashboard', {
+                    .state('app.dashboard', {
                         url: '/dashboard',
                         templateUrl: "dashboard/templates/dashboard.html",
                         controller: 'DashBoardController',

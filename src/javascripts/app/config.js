@@ -180,6 +180,7 @@ define(function(require) {
   module.constant('appConstant', {
     domain: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     baseUrl: 'http://app.ontargetcloud.com:8080',
+    resourceUrl: 'http://app.ontargetcloud.com:9000',
     app: {
       name: "OnTarget",
       id: "OnTarget",
@@ -197,9 +198,9 @@ define(function(require) {
       },
       settings: {
         themeID: 1,
-        navbarHeaderColor: 'bg-black',
-        navbarCollapseColor: 'bg-white-only',
-        asideColor: 'bg-black',
+        navbarHeaderColor: 'bg-app',
+        navbarCollapseColor: 'bg-app',
+        asideColor: 'bg-white',
         headerFixed: true,
         asideFixed: false,
         asideFolded: false,

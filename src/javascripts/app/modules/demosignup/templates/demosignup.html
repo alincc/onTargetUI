@@ -1,66 +1,168 @@
-<div class="container w-xxl w-auto-xs">
-    <a href class="navbar-brand block m-t">{{app.name}}</a>
-    <div class="m-b-lg">
-        <form name="form" class="form-validation" ng-submit="demoSignup(user)">
-            <div class="text-success wrapper text-center" ng-show='signupMsg'>
-                {{signupMsg}}
-            </div>
-            <div class="list-group list-group-sm" ng-hide="signupMsg">
-                <div class="list-group-item">
-                    <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required />
+<div class="content demo-sign-up-page">
+    <div class="logo w-xxxl w-auto-xs">
+        <a href class="logo m-b-lg block m-t">
+            <img src="img/onTargetLogo.png"/>
+        </a>
+    </div>
+    <div class="container w-xxxl w-auto-xs">
+        <div class="text-success wrapper text-center" ng-show="signupMsg">
+            {{signupMsg}}
+        </div>
+        <div class="text-center m-t m-b" ng-show="signupMsg"><a ui-sref="signin">Back to Sign in</a></div>
+        <div class="m-b-lg" ng-hide="signupMsg">
+            <form name="form" class="form-validation form-horizontal" ng-submit="demoSignup(user)" no-validate
+                  autocomplete="false">
+                <legend>
+                    Request demo
+                </legend>
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-envelope-o"></span>
+                                </span>
+                        <input name="email" type="email" id="email" ng-model="user.email"
+                               class="form-control input-lg"
+                               placeholder="Email" required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="First name" class="form-control no-border" ng-model="user.firstName" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-user"></span>
+                                </span>
+                        <input name="firstName" type="text" id="firstName" ng-model="user.firstName"
+                               class="form-control input-lg"
+                               placeholder="First name" required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="Last name" class="form-control no-border" ng-model="user.lastName" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-user"></span>
+                                </span>
+                        <input name="lastName" type="text" id="lastName" ng-model="user.lastName"
+                               class="form-control input-lg"
+                               placeholder="Last name" required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="Phone number" class="form-control no-border" ng-model="user.phoneNumber" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-phone"></span>
+                                </span>
+                        <input name="phoneNumber" type="text" id="phoneNumber" ng-model="user.phoneNumber"
+                               class="form-control input-lg" ui-mask="{{'(999)-999-9999'}}"
+                               placeholder="Phone no." ui-mask-placeholder required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <textarea placeholder="Message" class="form-control no-border" ng-model="user.msg" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-comment-o"></span>
+                                </span>
+                        <input name="msg" type="text" id="msg" ng-model="user.msg"
+                               class="form-control input-lg"
+                               placeholder="Message" required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="Company Name" class="form-control no-border" ng-model="user.companyName" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-building-o"></span>
+                                </span>
+                        <input name="companyName" type="text" id="companyName" ng-model="user.companyName"
+                               class="form-control input-lg"
+                               placeholder="Company name" required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <select class="form-control no-border" ng-model="user.companyTypeId" placeholder="Company Type" required>
-                        <option value="" selected>-- Select One --</option>
-                        <option value="1">GENERAL CONTRACTOR</option>
-                        <option value="2">CONSTRUCTION MANAGER</option>
-                        <option value="3">SUBCONTRACTOR</option>
-                        <option value="4">OWNER</option>
-                        <option value="5">SPECIALITY CONTRACTOR</option>
-                        <option value="6">ARCHITECTS/ENGINEERS</option>
-                    </select>
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-building-o"></span>
+                                </span>
+                        <select class="form-control input-lg" ng-model="user.companyTypeId" placeholder="Company Type"
+                                required>
+                            <option value="" selected>-- Select One --</option>
+                            <option value="1">GENERAL CONTRACTOR</option>
+                            <option value="2">CONSTRUCTION MANAGER</option>
+                            <option value="3">SUBCONTRACTOR</option>
+                            <option value="4">OWNER</option>
+                            <option value="5">SPECIALITY CONTRACTOR</option>
+                            <option value="6">ARCHITECTS/ENGINEERS</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="Address one" class="form-control no-border" ng-model="user.companyAddress1" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-road"></span>
+                                </span>
+                        <input name="companyAddress1" type="text" id="companyAddress1" ng-model="user.companyAddress1"
+                               class="form-control input-lg"
+                               placeholder="Address 1" required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="Address two" class="form-control no-border" ng-model="user.companyAddress2" />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-road"></span>
+                                </span>
+                        <input name="companyAddress2" type="text" id="companyAddress2" ng-model="user.companyAddress2"
+                               class="form-control input-lg"
+                               placeholder="Address 2">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="City" class="form-control no-border" ng-model="user.companyCity" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-building-o"></span>
+                                </span>
+                        <input name="companyCity" type="text" id="companyCity" ng-model="user.companyCity"
+                               class="form-control input-lg"
+                               placeholder="Company city" required="">
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <select class="form-control no-border" ng-model="user.companyCountry" placeholder="State" required
-                            ng-options="country.code as country.name for country in countries" ng-change="getStateList()">
-                        <option value="">-- Select --</option>
-                    </select>
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-globe"></span>
+                                </span>
+                        <select class="form-control input-lg" ng-model="user.companyCountry" placeholder="State"
+                                required
+                                ng-options="country.code as country.name for country in countries"
+                                ng-change="getStateList()">
+                            <option value="">-- Select --</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <select class="form-control no-border" ng-model="user.companyState" placeholder="State"
-                            required ng-options="state.code as state.name for state in states">
-                        <option value="">-- Select --</option>
-                    </select>
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-building-o"></span>
+                                </span>
+                        <select class="form-control input-lg" ng-model="user.companyState" placeholder="State"
+                                required ng-options="state.code as state.name for state in states">
+                            <option value="">-- Select --</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="list-group-item">
-                    <input type="text" placeholder="Zipcode" class="form-control no-border" ng-model="user.companyZip" required />
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-envelope-o"></span>
+                                </span>
+                        <input name="companyZip" type="text" id="companyZip" ng-model="user.companyZip"
+                               class="form-control input-lg"
+                               placeholder="Zipcode" required="">
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled='form.$invalid || form.$submitted' ng-hide="signupMsg">Sign up</button>
-        </form>
+
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg"
+                        ng-disabled="form.$invalid || form.$submitted">Sign up
+                </button>
+
+                <div class="text-right m-t m-b">Already have an account? <a ui-sref="signin">Sign in</a></div>
+            </form>
+        </div>
     </div>
 </div>

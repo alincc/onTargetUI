@@ -4,8 +4,11 @@ define(function(require) {
     config = require('app/config'),
     controller = require('./controllers/signup'),
     accountServiceModule = require('app/common/services/account'),
-    template = require('text!./templates/signup.html');
-  var module = angular.module('app.signup', ['ui.router', 'app.config', 'common.services.account', 'common.context.user']);
+    template = require('text!./templates/signup.html'),
+    uimask = require('angularUiMask'),
+    fileupload = require('app/common/services/upload'),
+    userAvatar = require('app/common/directives/userAvatar');
+  var module = angular.module('app.signup', ['ui.router', 'app.config', 'common.services.account', 'common.context.user', 'ui.mask', 'common.services.upload', 'common.directives.userAvatar']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('signup/templates/signup.html', template);
   }]);
@@ -15,16 +18,30 @@ define(function(require) {
       function($stateProvider) {
         $stateProvider
           .state('signup', {
-            url: '/signup',
+            url: '/pages/signup?q',
             templateUrl: "signup/templates/signup.html",
             controller: 'SignUpController',
             authorization: false,
             resolve: {
-              authorized: ['$rootScope', 'userContext', '$location', function($rootScope, userContext, $location) {
-                if (userContext.authentication().isAuth) {
-                  $location.path("/app/task/todo");
+              registrationTokenData: ['$rootScope', 'userContext', '$location', 'accountFactory', '$q', '$stateParams', function($rootScope, userContext, $location, accountFactory, $q, $stateParams) {
+                var deferred = $q.defer();
+                var collaborateToken = $stateParams.q;
+                if(userContext.authentication().isAuth) {
+                  $location.path("/app/dashboard");
+                  deferred.reject();
+                } else {
+                  accountFactory.validateSignupToken(collaborateToken).success(function(data) {
+                    var regData = angular.extend(data, {
+                      collaborateToken: collaborateToken
+                    });
+                    deferred.resolve(regData);
+                  })
+                    .error(function(data) {
+                      $location.path("/signin");
+                      deferred.reject();
+                    });
                 }
-                return true;
+                return deferred.promise;
               }]
             }
           });

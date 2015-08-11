@@ -1,12 +1,72 @@
 <!-- list -->
 <ul class="nav">
-    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-        <span>Navigation</span>
+    <li class="header">
+        <a href="#">
+            <img src="img/icons/hamburger-icon.png"/>
+        </a>
     </li>
-    <li ng-class="{'active':isActive('app.task', true)}">
-        <a ui-sref="app.task.todo">
-            <i class="fa fa-tasks text-info-dker"></i>
-            <span class="font-bold">Tasks</span>
+    <li ui-sref-active="selected" class="item">
+        <a ui-sref="app.dashboard">
+            <img src="img/icons/dashboard-icon-white.png" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/dashboard-icon.png" class="inacti" />
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item">
+        <a ui-sref="app.onTime">
+            <img src="img/icons/onTime-icon-white.PNG" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onTime-icon.PNG" class="inacti" />
+            <span>onTIME</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item">
+        <a ui-sref="app.onSite">
+            <img src="img/icons/onSite-icon-white.PNG" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onSite-icon.PNG" class="inacti" />
+            <span>onSITE</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item">
+        <a ui-sref="app.onFile">
+            <img src="img/icons/onFile-icon-white.PNG" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onFile-icon.PNG" class="inacti" />
+            <span>onFILE</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item">
+        <a ui-sref="app.onTarget">
+            <img src="img/icons/onTarget-icon-white.PNG" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onTarget-icon.PNG" class="inacti" />
+            <span>onTARGET</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item">
+        <a ui-sref="app.onBim">
+            <img src="img/icons/onBim-icon-white.PNG" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onBim-icon.PNG" class="inacti" />
+            <span>onBIM</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item">
+        <a ui-sref="app.onContact">
+            <img src="img/icons/onContact-icon-white.PNG" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onContact-icon.PNG" class="inacti" />
+            <span>onCONTACT</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item">
+        <a ui-sref="app.onReport">
+            <img src="img/icons/onReport-icon-white.PNG" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onReport-icon.PNG" class="inacti" />
+            <span>onREPORT</span>
         </a>
     </li>
 </ul>

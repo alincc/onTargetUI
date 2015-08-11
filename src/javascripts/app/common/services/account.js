@@ -4,10 +4,10 @@ define(function (require) {
         config = require('app/config'),
         userServiceModule = require('./../context/user');
     var module = angular.module('common.services.account', ['app.config', 'common.context.user']);
-    module.factory('accountFactory', ['$http', 'appConstant', 'userContext', '$q', function ($http, constant, userContext, $q) {
+    module.factory('accountFactory', ['$http', 'appConstant', 'userContext', '$q', '$rootScope', function ($http, constant, userContext, $q, $rootScope) {
         var services = {};
         services.register = function (data) {
-            return $http.post(constant.domain + '/api/Account/Register', data);
+            return $http.post(constant.domain + '/collaborate/registernewuser', data);
         };
         //login
         services.login = function (userName, password) {
@@ -29,7 +29,10 @@ define(function (require) {
                         };
                         services.getProfile(user).then(
                             function (resp) {
-                                userContext.fillInfo(resp.data.user, true);
+                                var userData = angular.extend(resp.data.user, {
+                                    username: userName
+                                });
+                                userContext.fillInfo(userData, true);
                                 deferred.resolve();
                             }, function (err) {
                                 deferred.reject(err);
@@ -44,10 +47,13 @@ define(function (require) {
             return deferred.promise;
         };
 
-
         services.logout = function () {
             var deferred = $q.defer();
-            $http.post(constant.domain + '/user/logout', {})
+            $http.post(constant.domain + '/user/logout', null, {
+                params: {
+                    'username': $rootScope.currentUserInfo.username
+                }
+            })
                 .then(function () {
                     userContext.clearInfo();
                     deferred.resolve();
@@ -68,7 +74,7 @@ define(function (require) {
         services.changePassword = function (data) {
             return $http.post(constant.domain + '/api/account/ChangePassword', data, {
                 headers: {
-                    'Authorization':false
+                    'Authorization': false
                 }
             });
         };
@@ -91,7 +97,14 @@ define(function (require) {
         //  return $http.post(constant.domain + '/api/account/resetpassword', {token: token, password: password});
         //};
         services.demoSignup = function (user) {
-            return $http.post(constant.baseUrl + '/collaborate/demoSignup', user);
+            return $http.post(constant.domain + '/onTargetInvitation/inviteToNewAccount', user);
+        };
+
+        services.validateSignupToken = function (tokendata) {
+            return $http.post(constant.resourceUrl + '/collaborate/validatetoken/' + tokendata);
+        };
+        services.registerOntargetUser = function (formdata) {
+            return $http.post(constant.domain + "/register/createUser/", formdata);
         };
 
         return services;

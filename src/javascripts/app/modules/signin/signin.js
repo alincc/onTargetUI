@@ -22,7 +22,7 @@ define(function(require) {
             resolve: {
               authorized: ['$rootScope', 'userContext', '$location', function($rootScope, userContext, $location) {
                 if (userContext.authentication().isAuth) {
-                  $location.path("/dashboard");
+                  $location.path("/app/dashboard");
                 }
                 return true;
               }]

@@ -9,7 +9,8 @@ define(function(require) {
     app = require('./app'),
     userAvatar = require('./userAvatar'),
     ngMatch = require('./ngMatch'),
-    noBreak = require('./noBreak');
+    noBreak = require('./noBreak'),
+    loadingBar = require('./loadingBar');
 
   var module = angular.module('common.directives',
     [
@@ -21,6 +22,8 @@ define(function(require) {
       'common.directives.app',
       'common.directives.ngMatch',
       'common.directives.userAvatar',
-      'common.directives.noBreak']);
+      'common.directives.noBreak',
+      'common.directives.loadingBar'
+    ]);
   return module;
 });

@@ -1,16 +1,32 @@
-<div class="container w-xxl w-auto-xs">
-    <a href class="navbar-brand block m-t">{{app.name}}</a>
-    <div class="m-b-lg">
-        <form name="form" class="form-validation" ng-submit="requestDemo(user)">
-            <div class="text-danger wrapper text-center" ng-show="authError">
-                {{authError}}
-            </div>
-            <div class="list-group list-group-sm">
-                <div class="list-group-item">
-                    <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required />
+<div class="content request-demo-page">
+    <div class="logo w-xxxl w-auto-xs">
+        <a href class="logo m-b-lg block m-t">
+            <img src="img/onTargetLogo.png"/>
+        </a>
+    </div>
+    <div class="container w-xxxl w-auto-xs">
+        <div class="m-b-lg">
+            <form name="form" class="form-validation form-horizontal" ng-submit="requestDemo(user)" no-validate
+                  autocomplete="false">
+                <legend>
+                    Request Demo
+                </legend>
+                <div class="form-group">
+                    <div class="input-group input-group-first">
+                                <span class="input-group-addon">
+                                    <span class="fa fa-envelope-o"></span>
+                                </span>
+                        <input name="email" type="email" id="username" ng-model="user.email"
+                               class="form-control input-lg"
+                               placeholder="Email" required="">
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-lg btn-primary btn-block" ng-disabled='form.$invalid || form.$submitted'>Request demo</button>
-        </form>
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg"
+                        ng-disabled='form.$invalid || form.$submitted'>Request demo
+                </button>
+
+                <div class="text-right m-t m-b"><a ui-sref="signin">Back to Sign in</a></div>
+            </form>
+        </div>
     </div>
 </div>

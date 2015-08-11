@@ -14,11 +14,10 @@ define(function() {
       accountFactory.login(model.username, model.password)
         .then(function() {
           $scope.form.$setPristine();
-          $state.go('dashboard');
+          $state.go('app.dashboard');
         },
         function(er) {
           console.log(er);
-          //$scope.authError = er.data.returnMessage;
           $scope.form.$setPristine();
         });
     };
