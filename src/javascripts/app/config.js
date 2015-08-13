@@ -26,8 +26,8 @@ define(function(require) {
           request: function(config) {
             if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
-                "loggedInUserId": $rootScope.currentUserInfo.id,
-                "loggedInUserProjectId": 1
+                "loggedInUserId": $rootScope.currentUserInfo.userId,
+                "loggedInUserProjectId": $rootScope.mainProjectInfo.projectId
               };
             }
             return config;
@@ -36,7 +36,7 @@ define(function(require) {
       }]);
 
       // Error handler
-      $httpProvider.interceptors.push(['$q', 'toaster', function($q, toaster) {
+      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', function($q, toaster, constant) {
         return {
           response: function(response) {
             var defer = $q.defer();
@@ -45,6 +45,9 @@ define(function(require) {
               toaster.pop('error', 'Error', response.data.returnMessage);
               defer.reject(response);
             } else {
+              if((response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.resourceUrl) > -1) && response.config.headers['AutoAlert']) {
+                toaster.pop('success', 'Success', response.data.returnMessage);
+              }
               defer.resolve(response);
             }
 

@@ -11,9 +11,10 @@ define([
         token: '',
         userData: {}
       };
+    $rootScope.currentUserInfo = authentication.userData;
 
     service.setToken = function(token) {
-      if (!token) {
+      if(!token) {
         authentication.isAuth = false;
         authentication.token = undefined;
         //authentication.refresh_token = undefined;
@@ -30,13 +31,13 @@ define([
       authentication.userData = angular.extend(authentication.userData, obj);
       $rootScope.currentUserInfo = authentication.userData;
       // Save data to local storage
-      if (rememberMe) {
+      if(rememberMe) {
         service.saveLocal(authentication);
       }
     };
 
     service.clearInfo = function() {
-      authentication.userData = {};
+      authentication.userData = $rootScope.currentUserInfo = {};
       authentication.token = '';
       authentication.isAuth = false;
       service.saveLocal(authentication);

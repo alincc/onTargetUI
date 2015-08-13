@@ -1,0 +1,56 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <!-- main -->
+    <div class="col">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="m-n font-thin h3 text-black">Account Requests</h1>
+                </div>
+            </div>
+        </div>
+        <!-- / main header -->
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <div class="table-responsive">
+                    <table class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Message</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center" ng-if="!isLoading && !results.length">
+                                    No pending request account.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" class="text-center" ng-if="isLoading">
+                                    <spinner text="Loading..."></spinner>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="user in results">
+                                <td ng-bind="user.firstName"></td>
+                                <td ng-bind="user.lastName"></td>
+                                <td ng-bind="user.email"></td>
+                                <td ng-bind="user.phoneNumber"></td>
+                                <td ng-bind="user.msg"></td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" ng-click="approve(user, $index)"><i class="fa fa-check"></i> Approve</button>
+                                    <button class="btn btn-danger btn-sm" ng-click="reject(user, $index)"><i class="fa fa-times"></i> Reject</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / main -->
+</div>

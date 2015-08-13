@@ -6,11 +6,16 @@
     </div>
     <div class="container w-xxxl w-auto-xs">
         <div class="m-b-lg">
-            <form name="form" class="form-validation form-horizontal" ng-submit="requestDemo(user)" no-validate
-                  autocomplete="false">
+            <form name="form" class="form-horizontal" ng-submit="requestDemo(user, form)" novalidate>
                 <legend>
                     Request Demo
                 </legend>
+
+                    <div class='alert alert-warning'
+                         ng-show="submitted && (form.email.$error.required || form.email.$error.email )">
+                        <span class="help-inline" ng-show="form.email.$error.required">Email is missing. <br/></span>
+                        <span class="help-inline" ng-show="form.email.$error.email">Invalid email format.<br/></span>
+                    </div>
                 <div class="form-group">
                     <div class="input-group input-group-first">
                                 <span class="input-group-addon">
@@ -18,11 +23,10 @@
                                 </span>
                         <input name="email" type="email" id="username" ng-model="user.email"
                                class="form-control input-lg"
-                               placeholder="Email" required="">
+                               placeholder="Email" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg"
-                        ng-disabled='form.$invalid || form.$submitted'>Request demo
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted=true">Request demo
                 </button>
 
                 <div class="text-right m-t m-b"><a ui-sref="signin">Back to Sign in</a></div>

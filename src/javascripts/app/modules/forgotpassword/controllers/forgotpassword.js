@@ -6,9 +6,14 @@ define(function() {
     };
 
     $scope.app = appConstant.app;
+    $scope.msg = '';
     $scope.authError = '';
 
-    $scope.forgotPassword = function(user) {
+    $scope.forgotPassword = function(user, form) {
+      if(form.$invalid)
+      {
+        return false;
+      }
       accountFactory.forgotPassword(user)
         .then(function(resp) {
           if(resp.data.returnVal === "ERROR") {
@@ -16,7 +21,8 @@ define(function() {
             $scope.authError = resp.data.returnMessage;
           }
           else {
-            $state.go('signin');
+            $scope.msg = resp.data.returnMessage;
+            //$state.go('signin');
           }
           $scope.form.$setPristine();
         },

@@ -1,9 +1,6 @@
 /**
  * Created by thophan on 8/11/2015.
  */
-/**
- * Created by thophan on 8/10/2015.
- */
 /* jslint plusplus: true */
 define(function(require) {
     'use strict';

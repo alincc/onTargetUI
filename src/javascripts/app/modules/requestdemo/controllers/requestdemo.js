@@ -11,7 +11,11 @@ define(function() {
         $scope.app = appConstant.app;
         $scope.authError = '';
 
-        $scope.requestDemo = function(model) {
+        $scope.requestDemo = function(model, form) {
+            if(form.$invalid)
+            {
+                return false;
+            }
             $state.go('demosignup', {email: model.email});
         };
     }];

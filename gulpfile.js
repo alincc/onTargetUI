@@ -70,6 +70,11 @@ gulp.task('script', function() {
     './src/bower_components/requirejs/*',
     './src/bower_components/requirejs/**/*.*'])
     .pipe(gulp.dest('./build/bower_components/requirejs'));
+
+  gulp.src([
+    './src/javascripts/app/common/resources/**/*.json'])
+    .pipe(gulp.dest('./build/javascripts/app/common/resources'));
+
 });
 
 // Jshint

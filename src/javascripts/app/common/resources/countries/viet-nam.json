@@ -4,55 +4,55 @@
 		"code": "VN-44"
 	},
 	{
-		"name": "Bà Rịa–Vũng Tàu",
+		"name": "Ba Ria–Vung Tau",
 		"code": "VN-43"
 	},
 	{
-		"name": "Bình Dương",
+		"name": "Binh Duong",
 		"code": "VN-57"
 	},
 	{
-		"name": "Bình Phước",
+		"name": "Binh Phuoc",
 		"code": "VN-58"
 	},
 	{
-		"name": "Bình Thuận",
+		"name": "Binh Thuan",
 		"code": "VN-40"
 	},
 	{
-		"name": "Bình Định",
+		"name": "Binh Dinh",
 		"code": "VN-31"
 	},
 	{
-		"name": "Bạc Liêu",
+		"name": "Bac Lieu",
 		"code": "VN-55"
 	},
 	{
-		"name": "Bắc Giang",
+		"name": "Bac Giang",
 		"code": "VN-54"
 	},
 	{
-		"name": "Bắc Kạn",
+		"name": "Bac Kan",
 		"code": "VN-53"
 	},
 	{
-		"name": "Bắc Ninh",
+		"name": "Bac Ninh",
 		"code": "VN-56"
 	},
 	{
-		"name": "Bến Tre",
+		"name": "Ben Tre",
 		"code": "VN-50"
 	},
 	{
-		"name": "Cao Bằng",
+		"name": "Cao Bang",
 		"code": "VN-04"
 	},
 	{
-		"name": "Cà Mau",
+		"name": "Ca Mau",
 		"code": "VN-59"
 	},
 	{
-		"name": "Cần Thơ",
+		"name": "Can Tha",
 		"code": "VN-CT"
 	},
 	{
@@ -60,55 +60,55 @@
 		"code": "VN-30"
 	},
 	{
-		"name": "Hà Giang",
+		"name": "Ha Giang",
 		"code": "VN-03"
 	},
 	{
-		"name": "Hà Nam",
+		"name": "Ha Nam",
 		"code": "VN-63"
 	},
 	{
-		"name": "Hà Nội",
+		"name": "Ha Noi",
 		"code": "VN-HN"
 	},
 	{
-		"name": "Hà Tây",
+		"name": "Ha Tay",
 		"code": "VN-15"
 	},
 	{
-		"name": "Hà Tĩnh",
+		"name": "Ha Tinh",
 		"code": "VN-23"
 	},
 	{
-		"name": "Hòa Bình",
+		"name": "Haa Binh",
 		"code": "VN-14"
 	},
 	{
-		"name": "Hưng Yên",
+		"name": "Hung Yen",
 		"code": "VN-66"
 	},
 	{
-		"name": "Hải Dương",
+		"name": "Hai Duong",
 		"code": "VN-61"
 	},
 	{
-		"name": "Hải Phòng",
+		"name": "Hai Phong",
 		"code": "VN-HP"
 	},
 	{
-		"name": "Hậu Giang",
+		"name": "Hau Giang",
 		"code": "VN-73"
 	},
 	{
-		"name": "Hồ Chí Minh",
+		"name": "Ho Chi Minh",
 		"code": "VN-SG"
 	},
 	{
-		"name": "Khánh Hòa",
+		"name": "Khanh Hoa",
 		"code": "VN-34"
 	},
 	{
-		"name": "Kiên Giang",
+		"name": "Kien Giang",
 		"code": "VN-47"
 	},
 	{
@@ -116,7 +116,7 @@
 		"code": "VN-28"
 	},
 	{
-		"name": "Lai Châu",
+		"name": "Lai Chau",
 		"code": "VN-01"
 	},
 	{
@@ -124,135 +124,135 @@
 		"code": "VN-41"
 	},
 	{
-		"name": "Lào Cai",
+		"name": "Lao Cai",
 		"code": "VN-02"
 	},
 	{
-		"name": "Lâm Đồng",
+		"name": "Lam Dong",
 		"code": "VN-35"
 	},
 	{
-		"name": "Lạng Sơn",
+		"name": "Lang Son",
 		"code": "VN-09"
 	},
 	{
-		"name": "Nam Định",
+		"name": "Nam Dinh",
 		"code": "VN-67"
 	},
 	{
-		"name": "Nghệ An",
+		"name": "Nghe An",
 		"code": "VN-22"
 	},
 	{
-		"name": "Ninh Bình",
+		"name": "Ninh Binh",
 		"code": "VN-18"
 	},
 	{
-		"name": "Ninh Thuận",
+		"name": "Ninh Thuan",
 		"code": "VN-36"
 	},
 	{
-		"name": "Phú Thọ",
+		"name": "Phu Tho",
 		"code": "VN-68"
 	},
 	{
-		"name": "Phú Yên",
+		"name": "Phu Yen",
 		"code": "VN-32"
 	},
 	{
-		"name": "Quảng Bình",
+		"name": "Quang Binh",
 		"code": "VN-24"
 	},
 	{
-		"name": "Quảng Nam",
+		"name": "Quang Nam",
 		"code": "VN-27"
 	},
 	{
-		"name": "Quảng Ngãi",
+		"name": "Quang Ngai",
 		"code": "VN-29"
 	},
 	{
-		"name": "Quảng Ninh",
+		"name": "Quang Ninh",
 		"code": "VN-13"
 	},
 	{
-		"name": "Quảng Trị",
+		"name": "Quang Tri",
 		"code": "VN-25"
 	},
 	{
-		"name": "Sóc Trăng",
+		"name": "Soc Trang",
 		"code": "VN-52"
 	},
 	{
-		"name": "Sơn La",
+		"name": "Son La",
 		"code": "VN-05"
 	},
 	{
-		"name": "Thanh Hóa",
+		"name": "Thanh Hoa",
 		"code": "VN-21"
 	},
 	{
-		"name": "Thái Bình",
+		"name": "Thai Binh",
 		"code": "VN-20"
 	},
 	{
-		"name": "Thái Nguyên",
+		"name": "Thai Nguyen",
 		"code": "VN-69"
 	},
 	{
-		"name": "Thừa Thiên–Huế",
+		"name": "Thua Thien–Hue",
 		"code": "VN-26"
 	},
 	{
-		"name": "Tiền Giang",
+		"name": "Tien Giang",
 		"code": "VN-46"
 	},
 	{
-		"name": "Trà Vinh",
+		"name": "Tra Vinh",
 		"code": "VN-51"
 	},
 	{
-		"name": "Tuyên Quang",
+		"name": "Tuyen Quang",
 		"code": "VN-07"
 	},
 	{
-		"name": "Tây Ninh",
+		"name": "Tay Ninh",
 		"code": "VN-37"
 	},
 	{
-		"name": "Vĩnh Long",
+		"name": "Vinh Long",
 		"code": "VN-49"
 	},
 	{
-		"name": "Vĩnh Phúc",
+		"name": "Vinh Phúc",
 		"code": "VN-70"
 	},
 	{
-		"name": "Yên Bái",
+		"name": "Yen Bai",
 		"code": "VN-06"
 	},
 	{
-		"name": "Điện Biên",
+		"name": "Dien Bien",
 		"code": "VN-71"
 	},
 	{
-		"name": "Đà Nẵng",
+		"name": "Da Nang",
 		"code": "VN-DN"
 	},
 	{
-		"name": "Đắk Lắk",
+		"name": "Dak Lak",
 		"code": "VN-33"
 	},
 	{
-		"name": "Đắk Nông",
+		"name": "Dak Nong",
 		"code": "VN-72"
 	},
 	{
-		"name": "Đồng Nai",
+		"name": "Dong Nai",
 		"code": "VN-39"
 	},
 	{
-		"name": "Đồng Tháp",
+		"name": "Dong Thap",
 		"code": "VN-45"
 	}
 ]

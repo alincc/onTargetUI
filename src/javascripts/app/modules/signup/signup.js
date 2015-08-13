@@ -27,8 +27,8 @@ define(function(require) {
                 var deferred = $q.defer();
                 var collaborateToken = $stateParams.q;
                 if(userContext.authentication().isAuth) {
+                  $location.search('q', null);
                   $location.path("/app/dashboard");
-                  deferred.reject();
                 } else {
                   accountFactory.validateSignupToken(collaborateToken).success(function(data) {
                     var regData = angular.extend(data, {
@@ -37,8 +37,8 @@ define(function(require) {
                     deferred.resolve(regData);
                   })
                     .error(function(data) {
+                      $location.search('q', null);
                       $location.path("/signin");
-                      deferred.reject();
                     });
                 }
                 return deferred.promise;

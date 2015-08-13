@@ -3,7 +3,7 @@
  */
 define(function() {
     'use strict';
-    var controller = ['$scope', 'userContext', '$state', '$stateParams', 'appConstant', 'accountFactory', 'countriesResource', function($scope, userContext, $state, $stateParams, appConstant, accountFactory, countriesResource) {
+    var controller = ['$scope', 'userContext', '$state', '$stateParams', 'appConstant', 'accountFactory', 'countryFactory', function($scope, userContext, $state, $stateParams, appConstant, accountFactory, countryFactory) {
         $scope.user = {
             email: $stateParams.email,
             firstName : '',
@@ -20,7 +20,7 @@ define(function() {
             companyZip : ''
         };
 
-        $scope.countries = countriesResource.getCountryList();
+        $scope.countries = countryFactory.getCountryList();
 
         $scope.app = appConstant.app;
         $scope.signupMsg = '';
@@ -29,7 +29,7 @@ define(function() {
             var fileName = getCountryFileName($scope.user.companyCountry);
             if(fileName !== undefined)
             {
-                countriesResource.getStateList(fileName).then(
+                countryFactory.getStateList(fileName).then(
                     function (resp) {
                         $scope.states = resp.data;
                     }, function (err) {
@@ -48,10 +48,13 @@ define(function() {
                 .value();
 
             return fileName[0];
-            //var result = $.grep($scope.countries, function(e){ return e.code == countryCode; });
         };
 
-        $scope.demoSignup = function (model) {
+        $scope.demoSignup = function (model, form) {
+            if(form.$invalid)
+            {
+                return false;
+            }
             console.log(model);
             accountFactory.demoSignup(model).then(
                 function (resp) {

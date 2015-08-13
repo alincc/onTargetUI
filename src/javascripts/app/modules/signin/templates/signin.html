@@ -6,11 +6,17 @@
     </div>
     <div class="container w-xxxl w-auto-xs">
         <div class="m-b-lg">
-            <form name="form" class="form-validation form-horizontal" ng-submit="signin(user)" no-validate
+            <form name="form" class="form-horizontal" ng-submit="signin(user, form)" novalidate
                   autocomplete="false">
                 <legend>
                     Sign in to OnTarget App
                 </legend>
+                <div class='alert alert-warning'
+                     ng-show="submitted && (form.username.$error.required || form.password.$error.required || form.username.$error.pattern)">
+                    <span class="help-inline" ng-show="form.username.$error.required">Username is missing.<br/></span>
+                    <span class="help-inline" ng-show="form.username.$error.pattern">Invalid username format.<br/></span>
+                    <span class="help-inline" ng-show="form.password.$error.required">Password is missing<br/></span>
+                </div>
                 <div class="form-group">
                     <div class="input-group input-group-first">
                                 <span class="input-group-addon">
@@ -30,9 +36,7 @@
                                placeholder="Password" required="">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg"
-                        ng-disabled='form.$invalid || form.$submitted'>Log in
-                </button>
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted=true">Log in</button>
 
                 <div class="text-right m-t m-b"><a ui-sref="forgotpassword">Forgot password ?</a> | <a
                         ui-sref="requestdemo">Request a demo</a></div>
