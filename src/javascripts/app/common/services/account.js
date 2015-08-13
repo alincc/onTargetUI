@@ -1,65 +1,65 @@
-define(function(require) {
+define(function (require){
   'use strict';
   var angular = require('angular'),
     config = require('app/config'),
     userContextModule = require('app/common/context/user'),
     projectContextModule = require('app/common/context/project');
   var module = angular.module('common.services.account', ['app.config', 'common.context.user', 'common.context.project']);
-  module.factory('accountFactory', ['$http', 'appConstant', 'userContext', '$q', '$rootScope', 'projectContext', function($http, constant, userContext, $q, $rootScope, projectContext) {
+  module.factory('accountFactory', ['$http', 'appConstant', 'userContext', '$q', '$rootScope', 'projectContext', function ($http, constant, userContext, $q, $rootScope, projectContext){
     var services = {};
-    services.register = function(data) {
+    services.register = function (data){
       return $http.post(constant.domain + '/collaborate/registernewuser', data);
     };
     //login
-    services.login = function(userName, password) {
+    services.login = function (userName, password){
       var deferred = $q.defer();
       var loginUser = {
         username: userName,
         password: password
       };
       $http.post(constant.domain + '/user/signin', loginUser)
-        .then(function(resp) {
+        .then(function (resp){
           // Save access token and refresh token
           userContext.setToken(resp.data.token);
 
           //Get user profile
-          if(resp.data.user) {
+          if (resp.data.user) {
             var user = {
               userId: resp.data.user.userId,
               accountStatus: null
             };
             services.getProfile(user).then(
-              function(resp) {
+              function (resp){
                 var userData = angular.extend(resp.data.user, {
                   username: userName
                 });
                 userContext.fillInfo(userData, true);
                 deferred.resolve();
-              }, function(err) {
+              }, function (err){
                 deferred.reject(err);
               });
           }
           else {
             deferred.reject(resp);
           }
-        }, function(err) {
+        }, function (err){
           deferred.reject(err);
         });
       return deferred.promise;
     };
 
-    services.logout = function() {
+    services.logout = function (){
       var deferred = $q.defer();
       $http.post(constant.domain + '/user/logout', null, {
         params: {
           'username': $rootScope.currentUserInfo.username
         }
       })
-        .then(function() {
+        .then(function (){
           userContext.clearInfo();
           projectContext.clearInfo();
           deferred.resolve();
-        }, function() {
+        }, function (){
           userContext.clearInfo();
           projectContext.clearInfo();
           deferred.resolve();
@@ -74,7 +74,7 @@ define(function(require) {
     //  "ConfirmPassword": "sample string 3"
     //}
 
-    services.changePassword = function(data) {
+    services.changePassword = function (data){
       return $http.post(constant.domain + '/api/account/ChangePassword', data, {
         headers: {
           'Authorization': false
@@ -83,12 +83,12 @@ define(function(require) {
     };
 
     //get profile
-    services.getProfile = function(user) {
+    services.getProfile = function (user){
       return $http.post(constant.domain + '/profile/getUserDetails', user);
     };
 
     //forgot password
-    services.forgotPassword = function(user) {
+    services.forgotPassword = function (user){
       return $http.post(constant.domain + '/profile/forgotPasswordRequest', user, {
         headers: {
           'Authorization': false
@@ -101,11 +101,11 @@ define(function(require) {
     //  return $http.post(constant.domain + '/api/account/resetpassword', {token: token, password: password});
     //};
 
-    services.demoSignup = function(user) {
+    services.demoSignup = function (user){
       return $http.post(constant.domain + '/onTargetInvitation/inviteToNewAccount', user);
     };
 
-    services.validateSignupToken = function(tokendata) {
+    services.validateSignupToken = function (tokendata){
       return $http.post(constant.resourceUrl + '/collaborate/validatetoken/' + tokendata, null);
     };
 
@@ -117,15 +117,27 @@ define(function(require) {
       return $http.post(constant.domain + "/profile/changeForgotPassword", model, {
         headers: {
           'Authorization': false
-      }});
+        }
+      });
     };
 
-    services.registerOntargetUser = function(formdata) {
+    services.registerOntargetUser = function (formdata){
       return $http.post(constant.domain + "/register/createUser/", formdata, {
         headers: {
           AutoAlert: true
         }
       });
+    };
+
+    services.updateProfile = function (userInfo){
+      return $http.post(constant.domain + '/profile/updateUserProfile', {
+          userProfileInfo: userInfo
+        },
+        {
+          headers: {
+            AutoAlert: true
+          }
+        });
     };
 
     return services;

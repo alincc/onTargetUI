@@ -40,7 +40,8 @@ require.config({
     angularSvgRoundProgress: "../bower_components/angular-svg-round-progressbar/src/module",
     autosize: "../bower_components/autosize/dist/autosize",
     angularUtilsPagination: '../bower_components/angular-utils-pagination/dirPagination',
-    angularUiMask: '../bower_components/angular-ui-mask/dist/mask'
+    angularUiMask: '../bower_components/angular-ui-mask/dist/mask',
+    ngScrollable:'../bower_components/ng-scrollable/src/ng-scrollable'
   },
 
   shim: {
@@ -100,6 +101,9 @@ require.config({
       deps: ['angular']
     },
     "angularUiMask": {
+      deps: ['angular']
+    },
+    "ngScrollable": {
       deps: ['angular']
     }
   }

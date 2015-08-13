@@ -32,6 +32,7 @@
     "angular-svg-round-progressbar": "latest",
     "autosize": "latest",
     "angular-utils-pagination": "latest",
-    "ng-file-upload": "latest"
+    "ng-file-upload": "latest",
+    "ng-scrollable": "latest"
   }
 }

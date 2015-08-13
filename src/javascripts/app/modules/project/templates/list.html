@@ -1,73 +1,123 @@
 <div class="projectlist-page">
     <div class="hbox hbox-auto-xs hbox-auto-sm">
-        <!-- main -->
-        <div class="row">
-            <!-- main header -->
-            <div class="bg-light lter b-b wrapper-md">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <a href="" class="btn btn-sm btn-info pull-right" ng-click="openCreateProjectModal()"><i
-                                class="fa fa-plus-circle"></i>
-                            Add Project</a>
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a href="" class="btn btn-sm btn-info pull-right" ng-click="openCreateProjectModal()"><i
+                            class="fa fa-plus-circle"></i>
+                        Add Project</a>
 
-                        <h1 class="m-n font-thin h3 text-black">Project List</h1>
+                    <h1 class="m-n font-thin h3 text-black">PROJECT PORTFOLIO
+                        <div class="buttons">
+                            <button class="btn btn-sm" ng-click="changeMode('grid')"
+                                    ng-class="{'btn-info': viewMode==='grid'}"><i
+                                    class="fa fa-th-large"></i></button>
+                            <button class="btn btn-sm" ng-click="changeMode('list')"
+                                    ng-class="{'btn-info': viewMode==='list'}"><i
+                                    class="fa fa-reorder"></i></button>
+                        </div>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <!-- / main header -->
+        <div class="wrapper-md">
+            <div class="row" ng-if="!isLoading && !projects.length">
+                <div class="col-xs-12">
+                    <alert type="info" class="text-center">No projects</alert>
+                </div>
+            </div>
+            <div class="row" ng-if="isLoading">
+                <div class="col-xs-12 text-center">
+                    <spinner text="Loading..."></spinner>
+                </div>
+            </div>
+            <div class="row project-grid" ng-repeat="r in arrangedProjects" ng-if="viewMode==='grid'">
+                <div ng-repeat="project in r"
+                     class="col-xs-6 col-md-3 project-box">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <!--project image-->
+                            <div class="project-image" align="center">
+                                <a href="javascript:void(0)"
+                                   ng-click="goDashboard(project)">
+                                    <img user-avatar
+                                         ng-src="{{project.projectImagePath}}" class="img-responsive"/>
+                                </a>
+                            </div>
+                            <!--project name-->
+                            <div align="center" class="project-name" ng-bind="project.projectName">
+                            </div>
+
+                            <div class="description-container">
+                                <!--control-->
+                                <div align="center">
+                                    <ul class="list-inline">
+                                        <li class="text-left"><a href="javascript:void(0)"
+                                                                 ng-click="editProjectModal(project)"><i
+                                                class="fa fa-pencil-square-o"></i>
+                                            Edit</a>
+                                        </li>
+                                        <li class="text-center"><a href="javascript:void(0)"
+                                                                   ng-click="deleteProject(project)"><i
+                                                class="fa fa-trash-o"></i>
+                                            Delete</a></li>
+                                        <li class="text-right"><a href="javascript:void(0)"
+                                                                  ng-click="goDashboard(project)"><i
+                                                class="fa fa-clock-o"></i>
+                                            Dashboard</a></li>
+                                    </ul>
+                                </div>
+                                <!--project description-->
+                                <div ng-bind="project.projectDescription">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- / main header -->
-            <div class="wrapper-md">
-                <div class="row">
-                    <div class="project-container">
-                        <div class="col-xs-12" ng-if="!isLoading && !projects.length">
-                            <alert type="info" class="text-center">No projects</alert>
-                        </div>
-                        <div class="col-xs-12 text-center" ng-if="isLoading">
-                            <spinner text="Loading..."></spinner>
-                        </div>
-                        <div ng-repeat="project in projects"
-                             class="col-md-4 col-sm-6 col-lg-3 project-box">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <!--project image-->
-                                    <div align="center">
-                                        <img user-avatar
-                                             ng-src="{{project.projectImagePath}}" class="img-responsive"/>
-                                    </div>
-                                    <!--project name-->
-                                    <div align="center" class="project-name" ng-bind="project.projectName">
-                                    </div>
-
-                                    <div class="description-container">
-                                        <!--control-->
-                                        <div align="center">
-                                            <ul class="list-inline">
-                                                <li class="pull-left"><a href="javascript:void(0)"
-                                                                         ng-click="editProjectModal(project)"><i
-                                                        class="fa fa-pencil-square-o"></i>
-                                                    Edit</a>
-                                                </li>
-                                                <li style="margin: 0 auto; float: none;"><a href="javascript:void(0)"
-                                                                                            ng-click="deleteProject(project)"><i
-                                                        class="fa fa-trash-o"></i>
-                                                    Delete</a></li>
-                                                <li class="pull-right"><a href="javascript:void(0)"
-                                                                          ng-click="goDashboard(project)"><i
-                                                        class="fa fa-clock-o"></i>
-                                                    Dashboard</a></li>
-                                            </ul>
-                                        </div>
-                                        <!--project description-->
-                                        <div ng-bind="project.projectDescription">
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="row project-list" ng-repeat="r in arrangedProjects" ng-if="viewMode==='list'">
+                <div ng-repeat="project in r"
+                     class="col-xs-6 project-box">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <!--project image-->
+                            <div align="center">
+                                <img user-avatar
+                                     ng-src="{{project.projectImagePath}}" class="img-responsive"/>
+                            </div>
+                            <!--project name-->
+                            <div align="center" class="project-name" ng-bind="project.projectName">
                             </div>
 
+                            <div class="description-container">
+                                <!--control-->
+                                <div align="center">
+                                    <ul class="list-inline">
+                                        <li class="text-left"><a href="javascript:void(0)"
+                                                                 ng-click="editProjectModal(project)"><i
+                                                class="fa fa-pencil-square-o"></i>
+                                            <span>Edit</span></a>
+                                        </li>
+                                        <li class="text-center"><a href="javascript:void(0)"
+                                                                   ng-click="deleteProject(project)"><i
+                                                class="fa fa-trash-o"></i>
+                                            <span>Delete</span></a></li>
+                                        <li class="text-right"><a href="javascript:void(0)"
+                                                                  ng-click="goDashboard(project)"><i
+                                                class="fa fa-clock-o"></i>
+                                            <span>Dashboard</span></a></li>
+                                    </ul>
+                                </div>
+                                <!--project description-->
+                                <div ng-bind="project.projectDescription">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- / main -->
     </div>
 </div>

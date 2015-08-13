@@ -119,6 +119,7 @@ define(function(require) {
             case '/request-demo':
             case '/demo-signup':
             case '/pages/signup':
+            case '/pages/reset-password':
               elem.addClass('has-background');
               break;
             default:

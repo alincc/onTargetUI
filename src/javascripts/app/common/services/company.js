@@ -15,6 +15,18 @@ define(function(require) {
           return $http.post(constant.domain + '/company/getCompanyList', {});
         };
 
+        service.get = function(param) {
+          return $http.post(constant.domain + '/company/getCompanyInfo', param);
+        };
+
+        service.update = function(param) {
+          return $http.post(constant.domain + '/profile/updateCompanyInfo', param, {
+            headers: {
+              AutoAlert: true
+            }
+          });
+        };
+
         return service;
       }
     ]

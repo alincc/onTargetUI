@@ -17,6 +17,7 @@ define([
         _TASK_CREATED_ = '_TASK_CREATED_',
         _TASK_UPDATED_ = '_TASK_UPDATED_',
         _ASSIGNEE_SELECTION_ = '_ASSIGNEE_SELECTION_',
+        _UPDATE_PROFILE_SUCCESS_ = '_UPDATE_PROFILE_SUCCESS_',
 
         requestStarted = function() {
           $rootScope.$broadcast(_START_REQUEST_);
@@ -86,7 +87,15 @@ define([
           $rootScope.$broadcast(_TASK_UPDATED_, args);
         },
         onTaskUpdated = function($scope, handler) {
-          $scope.$on(_TASK_UPDATED_, function(event, args) {
+          $scope.$on(_TASK_UPDATED_, function (event, args) {
+            handler(args);
+          });
+        },
+        updateProfileSuccess = function(args) {
+          $rootScope.$broadcast(_UPDATE_PROFILE_SUCCESS_, args);
+        },
+        onUpdateProfileSuccess = function($scope, handler) {
+          $scope.$on(_UPDATE_PROFILE_SUCCESS_, function (event, args) {
             handler(args);
           });
         };
@@ -109,7 +118,9 @@ define([
         taskUpdated: taskUpdated,
         onTaskUpdated: onTaskUpdated,
         logoutSuccess: logoutSuccess,
-        onLogoutSuccess: onLogoutSuccess
+        onLogoutSuccess: onLogoutSuccess,
+        updateProfileSuccess: updateProfileSuccess,
+        onUpdateProfileSuccess: onUpdateProfileSuccess
       };
     }]);
 });

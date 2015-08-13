@@ -12,6 +12,10 @@ define(function (require){
     demosignup: require('./demosignup/demosignup'),
     pendingUserManagement: require('./pendingUserManagement/pendingUserManagement'),
     project: require('./project/project'),
-    resetpassword: require('./resetpassword/resetpassword')
+    resetpassword: require('./resetpassword/resetpassword'),
+    onTime: require('./onTime/onTime'),
+    editprofile: require('./editprofile/editprofile'),
+    company: require('./editCompany/company'),
+    changePassword: require('./changePassword/changePassword')
   };
 });

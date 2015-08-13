@@ -1,7 +1,7 @@
 define(function (){
   'use strict';
-  var controller = ['$scope', 'userContext', '$state', 'appConstant', 'accountFactory', 'uploadFile', '$timeout', 'registrationTokenData',
-    function ($scope, userContext, $state, appConstant, accountFactory, uploadFile, $timeout, registrationTokenData){
+  var controller = ['$scope', 'userContext', '$state', 'appConstant', 'accountFactory', 'uploadFile', '$timeout', 'registrationTokenData', 'toaster',
+    function ($scope, userContext, $state, appConstant, accountFactory, uploadFile, $timeout, registrationTokenData, toaster){
       $scope.user = {
         username: "",
         email: "",
@@ -36,8 +36,7 @@ define(function (){
       $scope.isUploadAvatar = false;
 
       $scope.registerUser = function (user, form){
-        if(form.$invalid)
-        {
+        if (form.$invalid) {
           return false;
         }
         accountFactory.registerOntargetUser(user).success(function (data){
@@ -55,7 +54,12 @@ define(function (){
 
       $scope.$watch('file', function (){
         if ($scope.file) {
-          $scope.upload([$scope.file]);
+          if (appConstant.app.allowedImageExtension.test($scope.file.type)) {
+            $scope.upload([$scope.file]);
+          }
+          else {
+            toaster.pop('error', 'Error', 'Only accept jpg, png file');
+          }
         }
       });
 

@@ -1,22 +1,200 @@
-<form name="project_form" no-validate class="form-horizontal">
-    <div class="form-group">
-        <label class="col-lg-2 control-label">Name</label>
-        <div class="col-lg-10">
-            <input type="text" class="form-control" placeholder="Name" required ng-model="projectModel.name" name="name"/>
-        </div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Name</label>
+
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Name" required ng-model="projectModel.projectName"
+               name="projectName"/>
+        <ng-messages ng-if="project_form.projectName.$dirty"
+                     for="project_form.projectName.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project name</span>
+        </ng-messages>
     </div>
-    <div class="form-group">
-        <label class="col-lg-2 control-label">Description</label>
-        <div class="col-lg-10">
-            <input type="text" class="form-control" placeholder="Description" required ng-model="projectModel.description" name="description"/>
-        </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Description</label>
+
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Description" required
+               ng-model="projectModel.projectDescription" name="projectDescription"/>
+        <ng-messages ng-if="project_form.projectDescription.$dirty"
+                     for="project_form.projectDescription.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project description</span>
+        </ng-messages>
     </div>
-    <div class="form-group">
-        <label class="col-lg-2 control-label">Type</label>
-        <div class="col-lg-10">
-            <select class="form-control" name="type" ng-model="projectModel.type">
-                <option value="">Select</option>
-            </select>
-        </div>
+</div>
+<div class="form-group" ng-if="editProject">
+    <label class="col-xs-2 control-label">Company</label>
+    <div class="col-xs-10">
+        <select class="form-control" name="companyId" ng-model="projectModel.companyId" required
+                ng-options="company.companyId as company.companyName for company in companies">
+            <option value="">-- Select One --</option>
+        </select>
+        <ng-messages ng-if="project_form.companyId.$dirty"
+                     for="project_form.companyId.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please select company</span>
+        </ng-messages>
     </div>
-</form>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Type</label>
+
+    <div class="col-xs-10">
+        <select class="form-control" name="projectTypeId" ng-model="projectModel.projectTypeId" required
+                ng-options="projectType.id as projectType.name for projectType in projectTypes">
+            <option value="">-- Select One --</option>
+        </select>
+        <ng-messages ng-if="project_form.projectTypeId.$dirty"
+                     for="project_form.projectTypeId.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please select project type</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group" ng-if="addProject">
+    <label class="col-xs-2 control-label">Unit Of Measurement</label>
+
+    <div class="col-xs-10">
+        <select class="form-control" name="unitOfMeasurement" ng-model="projectModel.unitOfMeasurement" required
+                ng-options="unitOfMeasurement.id as unitOfMeasurement.name for unitOfMeasurement in unitOfMeasurements">
+            <option value="">-- Select One --</option>
+        </select>
+        <ng-messages ng-if="project_form.unitOfMeasurement.$dirty"
+                     for="project_form.unitOfMeasurement.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please select project unit of measurement</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Status</label>
+
+    <div class="col-xs-10">
+        <select class="form-control" name="status" ng-model="projectModel.status"
+                ng-options="projectStatus.id as projectStatus.name for projectStatus in projectStatuses" required>
+            <option value="">-- Select One --</option>
+        </select>
+        <ng-messages ng-if="project_form.status.$dirty"
+                     for="project_form.status.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please select project status</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Start date</label>
+
+    <div class="col-xs-10">
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="Start date" required ng-model="projectModel.startDate"
+                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="projectModel.endDate"
+                   datepicker-options="startDate.options"
+                   name="startDate"/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="startDate.open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+        <ng-messages ng-if="project_form.startDate.$dirty"
+                     for="project_form.startDate.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project start date</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">End date</label>
+
+    <div class="col-xs-10">
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="End date" required ng-model="projectModel.endDate"
+                   ng-click="startDate.isOpen = !startDate.isOpen"
+                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="projectModel.startDate"
+                   datepicker-options="endDate.options"
+                   name="endDate"/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="endDate.open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+        <ng-messages ng-if="project_form.endDate.$dirty"
+                     for="project_form.endDate.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project end date</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group" ng-if="addProject">
+    <label class="col-xs-2 control-label">Project image</label>
+
+    <div class="col-xs-10">
+        <input type="file" class="form-control" name="projectImagePath"
+               onchange="angular.element(this).scope().onFileSelect(this)">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Address 1</label>
+
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Address 1" required
+               ng-model="projectModel.projectAddress.address1" name="address1"/>
+        <ng-messages ng-if="project_form.address1.$dirty"
+                     for="project_form.address1.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project address</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Address 2</label>
+
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Address 2"
+               ng-model="projectModel.projectAddress.address2" name="address2"/>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">City</label>
+
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="City" required ng-model="projectModel.projectAddress.city"
+               name="city"/>
+        <ng-messages ng-if="project_form.city.$dirty"
+                     for="project_form.city.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project city</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Country</label>
+
+    <div class="col-xs-10">
+        <select class="form-control" name="country" ng-model="projectModel.projectAddress.country" required
+                ng-options="country.code as country.name for country in countries" ng-change="getStateList()">
+            <option value="">-- Select --</option>
+        </select>
+        <ng-messages ng-if="project_form.country.$dirty"
+                     for="project_form.country.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please select country</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">State</label>
+
+    <div class="col-xs-10">
+        <select class="form-control" name="state" ng-model="projectModel.projectAddress.state"
+                ng-options="state.code as state.name for state in states" required>
+            <option value="">-- Select --</option>
+        </select>
+        <ng-messages ng-if="project_form.state.$dirty"
+                     for="project_form.state.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please select state</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Zip code</label>
+
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Zip code" required
+               ng-model="projectModel.projectAddress.zip" name="zip"/>
+        <ng-messages ng-if="project_form.zip.$dirty"
+                     for="project_form.zip.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project address zip code</span>
+        </ng-messages>
+    </div>
+</div>

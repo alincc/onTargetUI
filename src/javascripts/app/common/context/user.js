@@ -17,12 +17,10 @@ define([
       if(!token) {
         authentication.isAuth = false;
         authentication.token = undefined;
-        //authentication.refresh_token = undefined;
         this.clearInfo();
       } else {
         authentication.isAuth = true;
         authentication.token = token;
-        //authentication.refresh_token = refresh_token;
       }
       service.saveLocal(authentication);
     };
@@ -53,7 +51,7 @@ define([
       data = data || {};
       authentication = data;
       $rootScope.currentUserInfo = authentication.userData;
-      service.setToken(data.token, data.refresh_token);
+      service.setToken(data.token);
     };
 
     service.signOut = function() {

@@ -43,7 +43,11 @@ define(function (require){
     'app.demosignup',
     'app.pendingUserManagement',
     'app.project',
-    'app.resetpassword'
+    'app.resetpassword',
+    'app.onTime',
+    'app.editprofile',
+    'app.company',
+    'app.changePassword'
   ]);
 
   app
