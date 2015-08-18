@@ -4,7 +4,7 @@ define(function(require) {
     config = require('app/config'),
     countryServiceModule = require('app/common/services/country');
   var module = angular.module('common.services.util', ['app.config', 'common.services.country']);
-  module.factory('utilFactory', ['countryFactory', '$q', function(countryFactory, $q) {
+  module.factory('utilFactory', ['countryFactory', '$q', '$http', function(countryFactory, $q, $http) {
     var services = {};
     /**
      * @param {DOMElement} element
@@ -118,6 +118,15 @@ define(function(require) {
       }
 
       return deferred.promise;
+    };
+
+    services.getWeather = function(zip){
+      return $http.get('http://api.openweathermap.org/data/2.5/weather',{
+        params:{
+          zip: zip,
+          units: 'imperial'
+        }
+      });
     };
 
     return services;

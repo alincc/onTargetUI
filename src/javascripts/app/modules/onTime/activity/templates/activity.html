@@ -12,185 +12,14 @@
                     </div>
                 </div>
                 <div class="heading">
-                    <span class="text">Project Name Goes Here</span>
+                    <span class="text">{{currentProject.projectName}}</span>
                 </div>
                 <div class="activity-list" ng-scrollable="{scrollX:'none', scrollY:'right'}">
-                    <div class="activity-item">
+                    <div class="activity-item" ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }" ng-repeat="activity in activities" ng-click="selectActiity(activity)">
                         <div class="info">
-                            <div class="title">First Floor Concrete</div>
+                            <div class="title">{{activity.projectName}}</div>
                             <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
-                            </div>
-                            <div class="tasks">
-                                <span>7 Active</span> | <span>3 Pending</span>
-                            </div>
-                        </div>
-                        <div class="status">
-                            <div class="percentage">
-                                32%
-                            </div>
-                        </div>
-                        <div class="arrow-icon">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="info">
-                            <div class="title">First Floor Concrete</div>
-                            <div class="date">
-                                <span>03/04/15</span> | <span>12/04/15</span>
+                                <span>{{activity.startDate|date:'MM/dd/yyyy'}}</span> | <span>{{activity.endDate|date:'MM/dd/yyyy'}}</span>
                             </div>
                             <div class="tasks">
                                 <span>7 Active</span> | <span>3 Pending</span>
@@ -208,7 +37,9 @@
                 </div>
             </div>
             <div class="panel-footer bg-light lter">
-                <button class="btn btn-primary"><i class="fa fa-plus"></i> Add Activity</button>
+                <button class="btn btn-primary" ng-click="openCreateActivityModal()"><i class="fa fa-plus"></i> Add Activity</button>
+                <button class="btn btn-primary" ng-click="openEditActivityModal()" ng-show="activitySelected"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                <button class="btn btn-primary" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><i class="fa fa-times"></i> Delete</button>
             </div>
         </div>
     </div>

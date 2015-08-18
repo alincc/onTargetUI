@@ -13,8 +13,9 @@ define(function(require) {
     accountServiceModule = require('app/common/services/account'),
     utilServiceModule = require('app/common/services/util'),
     Chart = require('chartjs'),
-    angularChartJS = require('angularChartJS');
-  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js']);
+    angularChartJS = require('angularChartJS'),
+    ngScrollable = require('ngScrollable');
+  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js', 'ngScrollable']);
 
   module.run(['$templateCache', function($templateCache) {
     Chart.defaults.global.colours=[

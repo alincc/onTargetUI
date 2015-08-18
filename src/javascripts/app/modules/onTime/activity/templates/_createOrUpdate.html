@@ -1,0 +1,89 @@
+<div class="form-group">
+    <label class="col-xs-2 control-label">Name</label>
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Name" required ng-model="project.projectName"
+               name="projectName"/>
+        <ng-messages ng-if="form.projectName.$dirty"
+                     for="form.projectName.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Name is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Description</label>
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Description" required ng-model="project.projectDescription"
+               name="projectDescription"/>
+        <ng-messages ng-if="form.projectDescription.$dirty"
+                     for="form.projectDescription.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Description is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Company Name</label>
+    <div class="col-xs-10">
+        <select class="form-control" name="companyId" ng-model="project.companyId" required
+                ng-options="company.companyId as company.companyName for company in companies">
+            <option value="">-- Select --</option>
+        </select>
+        <ng-messages ng-if="form.companyId.$dirty"
+                     for="form.companyId.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Company name is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Status</label>
+    <div class="col-xs-10">
+        <select class="form-control" name="status" ng-model="project.status"
+                ng-options="projectStatus.id as projectStatus.name for projectStatus in projectStatuses" required>
+            <option value="">-- Select --</option>
+        </select>
+        <ng-messages ng-if="form.status.$dirty"
+                     for="form.status.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Status is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Start date</label>
+
+    <div class="col-xs-10">
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="Start date" required ng-model="project.startDate"
+                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="project.endDate"
+                   datepicker-options="startDate.options"
+                   name="startDate" ng-click="startDate.isOpen = !startDate.isOpen" ng-readonly="true"/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="startDate.open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+        <ng-messages ng-if="form.startDate.$dirty"
+                     for="form.startDate.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project start date</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">End date</label>
+
+    <div class="col-xs-10">
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="End date" required ng-model="project.endDate"
+                   ng-click="endDate.isOpen = !endDate.isOpen"
+                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="project.startDate"
+                   datepicker-options="endDate.options"
+                   name="endDate" ng-readonly="true"/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="endDate.open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+        <ng-messages ng-if="form.endDate.$dirty"
+                     for="form.endDate.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project end date</span>
+        </ng-messages>
+    </div>
+</div>

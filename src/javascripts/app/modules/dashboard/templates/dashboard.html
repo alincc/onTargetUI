@@ -9,7 +9,7 @@
             </div>
         </div>
         <!-- / main header -->
-        <div class="wrapper-md">
+        <div class="wrapper-md p-r-none">
             <div class="row">
                 <div class="col-xs-12 col-md-6 project-description">
                     <div class="panel panel-default">
@@ -19,16 +19,127 @@
                             </div>
                             <div class="project-info">
                                 <h4 ng-bind="currentProject.projectName"></h4>
+
                                 <div class="project-address">
                                     <p ng-bind-html="currentProject.fullAddress1"></p>
-                                    <p ng-bind-html="currentProject.fullAddress2" ng-if="currentProject.fullAddress2.length"></p>
+
+                                    <p ng-bind-html="currentProject.fullAddress2"
+                                       ng-if="currentProject.fullAddress2.length"></p>
                                 </div>
                                 <div class="project-desc" ng-bind-html="currentProject.projectDescription"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6 project-heath">
+                <div class="col-xs-12 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-4 project-date">
+                                    <div class="desc">
+                                        <p class="large" ng-bind="projectDate.remain"></p>
+
+                                        <p class="small">{{ projectDate.remain > 1 ? 'days remaining' : 'day remaining'
+                                            }}</p>
+                                    </div>
+                                    <div class="start-date">Start date: <span
+                                            ng-bind="currentProject.startDate | date"></span></div>
+                                    <span
+                                            round-progress
+                                            max="projectDate.total"
+                                            current="projectDate.spent"
+                                            color="#00d8ff"
+                                            bgcolor="#ececec"
+                                            radius="80"
+                                            stroke="25"
+                                            semi="false"
+                                            rounded="false"
+                                            clockwise="true"
+                                            responsive="false"
+                                            iterations="10"
+                                            animation="easeInOutQuart">
+                                    </span>
+
+                                    <div class="end-date">End date: <span
+                                            ng-bind="currentProject.endDate | date"></span></div>
+                                </div>
+                                <div class="col-xs-8">
+                                    chart
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-9">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <img src="img/icons/leaf.PNG"/>
+                                </div>
+                                <div class="text"><span ng-bind="dashboardBi.treesSaved.treesSaved"
+                                                        class="number"></span> <span class="desc">Trees saved</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <img src="img/icons/lock.PNG"/>
+                                </div>
+                                <div class="text"><span ng-bind="dashboardBi.timeSaved.timeSavedValue"
+                                                        class="number"></span> <span class="desc">hrs Time Saved</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <img src="img/icons/first-aid.PNG"/>
+                                </div>
+                                <div class="text"><span ng-bind="dashboardBi.noAccident.noAccidentDays"
+                                                        class="number"></span> <span
+                                        class="desc">days w/o accidents</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <img src="img/icons/safety.PNG"/>
+                                </div>
+                                <div class="text"><span class="desc" ng-bind="safetyInfo"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="weather-container">
+                                <div class="icon">
+                                    <i class="wi {{ getWeatherIcon() }}"></i>
+                                </div>
+                                <div class="info">
+                                    <p class="temp" ng-bind="weather.temp+' F'"></p>
+
+                                    <p class="name" ng-bind="weather.name"></p>
+
+                                    <p class="humidity">Humidity: <span ng-bind="weather.humidity+'%'"></span></p>
+
+                                    <p class="windspeed">Windspeed: <span ng-bind="weather.windSpeed+'MPM NW'"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 project-heath">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <h4>Project Health</h4>
@@ -44,34 +155,163 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-md-9">
-                    <div class="row">
-                        <div class="col-xs-12 col-md-4">
-                            Trees saved
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            Hrs time saved
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            days w/o accidents
+                <div class="col-xs-12 col-md-8 task-container">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <tabset class="tab-container">
+                                <tab heading="Past due" class="task-past-due">
+                                    <div class="task-list" ng-scrollable="{scrollX:'none', scrollY:'right'}">
+                                        <div class="task-item" ng-repeat="task in tasks.pastDue">
+                                            <div class="task-status">
+                                                <div class="percentage">50%</div>
+                                            <span
+                                                    round-progress
+                                                    max="100"
+                                                    current="50"
+                                                    color="#00d8ff"
+                                                    bgcolor="#ececec"
+                                                    radius="25"
+                                                    stroke="5"
+                                                    semi="false"
+                                                    rounded="false"
+                                                    clockwise="true"
+                                                    responsive="false"
+                                                    iterations="10"
+                                                    animation="easeInOutQuart">
+                                            </span>
+                                            </div>
+                                            <div class="task-info">
+                                                <div class="title">Scaffolding</div>
+                                                <div class="assignee">Assigned to: <span>Sang Dao</span></div>
+                                                <div class="priority"><span class="hight">HIGHT</span> priority</div>
+                                            </div>
+                                            <div class="task-update-date">
+                                                Updated On: <span>03/03/2015</span>
+                                            </div>
+                                            <div class="task-due-date">
+                                                Due Date: <span>03/03/2015</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab heading="Active" class="task-active">
+                                    Active
+                                </tab>
+                                <tab heading="Completed" class="task-completed">
+                                    Completed
+                                </tab>
+                                <tab heading="Due in 7 days" class="task-due-in-7-days">
+                                    Due in 7 days
+                                </tab>
+                                <tab heading="Scheduled" class="task-scheduled">
+                                    Scheduled
+                                </tab>
+                                <tab heading="Critical" class="task-critical">
+                                    Critical
+                                </tab>
+                            </tabset>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6 task-status-section">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <h4>Task Status</h4>
+
+                                            <div class="status-list">
+                                                <div class="status-item">
+                                                    <div class="title">Active - <span>10</span></div>
+                                                    <div class="progress">
+                                                        <progressbar class="progress-striped active m-b-sm" value="78"
+                                                                     type="success"></progressbar>
+                                                    </div>
+                                                </div>
+                                                <div class="status-item">
+                                                    <div class="title">Ongoing - <span>10</span></div>
+                                                    <div class="progress">
+                                                        <progressbar class="progress-striped active m-b-sm" value="34"
+                                                                     type="success"></progressbar>
+                                                    </div>
+                                                </div>
+                                                <div class="status-item">
+                                                    <div class="title">Completed - <span>10</span></div>
+                                                    <div class="progress">
+                                                        <progressbar class="progress-striped active m-b-sm" value="50"
+                                                                     type="success"></progressbar>
+                                                    </div>
+                                                </div>
+                                                <div class="status-item">
+                                                    <div class="title">Pending - <span>10</span></div>
+                                                    <div class="progress">
+                                                        <progressbar class="progress-striped active m-b-sm" value="20"
+                                                                     type="success"></progressbar>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-6 submittal-status-section">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <h4>Submittal Status</h4>
+                                    <span
+                                            round-progress
+                                            max="100"
+                                            current="50"
+                                            color="#c1d64c"
+                                            bgcolor="#63b2db"
+                                            radius="117"
+                                            stroke="40"
+                                            semi="false"
+                                            rounded="false"
+                                            clockwise="true"
+                                            responsive="true"
+                                            iterations="10"
+                                            animation="easeInOutQuart">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            Make it your mission
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-3">
-                    Weather
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 col-md-8">
-                    Tasks
                 </div>
                 <div class="col-xs-12 col-md-4">
-                    Activity log
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="timeline-container" ng-scrollable="{scrollX:'none', scrollY:'right'}">
+                                <ul class="timeline timeline-center">
+                                    <li class="tl-header">
+                                        <div class="btn btn-info">Now</div>
+                                    </li>
+                                    <li class="tl-item tl-left">
+                                        <div class="tl-wrap b-primary">
+                                            <span class="tl-date">17:00</span>
+                                            <div class="tl-content panel padder b-a block">
+                                                <span class="arrow left pull-up hidden-left"></span>
+                                                <span class="arrow right pull-up visible-left"></span>
+                                                <div>
+                                                    Hello
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="tl-item">
+                                        <div class="tl-wrap b-primary">
+                                            <span class="tl-date">14:00</span>
+                                            <div class="tl-content panel padder b-a block">
+                                                <span class="arrow left pull-up hidden-left"></span>
+                                                <span class="arrow right pull-up visible-left"></span>
+                                                <div>
+                                                    Hallo
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

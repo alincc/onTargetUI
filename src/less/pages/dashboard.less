@@ -1,11 +1,45 @@
 .dashboard-page {
+  .panel-default, .info-left-icon {
+    box-shadow: 0px 2px 5px #d4d4d4;
+    .panel-default {
+      box-shadow: none;
+    }
+  }
   .project-description {
+    .panel-body {
+      display: table;
+      width: 100%;
+      .project-image {
+        display: table-cell;
+        vertical-align: top;
+        padding-right: 15px;
+        img {
+          height: 226px;
+        }
+      }
+      .project-info {
+        display: table-cell;
+        vertical-align: top;
+        width: 100%;
+        h4 {
+          margin-top: 0;
+          font-size: 21px;
+          font-weight: 600;
+        }
+        .project-address {
+          font-size: 14px;
+          color: #a7a7a7;
+        }
+
+      }
+    }
   }
   .project-heath {
     .panel-body {
       position: relative;
-      h4{
-        margin-top:0;
+      h4 {
+        margin-top: 0;
+        color: #7a7b7a;
       }
       .chart-container {
         .line-legend {
@@ -39,6 +73,352 @@
             }
           }
         }
+      }
+    }
+  }
+  .project-date {
+    position: relative;
+    text-align: center;
+    .desc {
+      position: absolute;
+      top: 89px;
+      left: 50%;
+      white-space: nowrap;
+      margin-left: -32px;
+      p {
+        margin: 0;
+        &.large {
+          font-size: 30px;
+          line-height: 25px;
+        }
+        &.small {
+          font-size: 12px;
+        }
+      }
+    }
+    .start-date {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #adadad;
+      span {
+        font-weight: 600;
+        color: #7a7b7a;
+      }
+    }
+    .end-date {
+      text-align: center;
+      margin-top: 10px;
+      color: #adadad;
+      span {
+        font-weight: 600;
+        color: #7a7b7a;
+      }
+    }
+  }
+  .info-left-icon {
+    display: table;
+    width: 100%;
+    border: solid 1px #d5d5d5;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    .icon {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      background-color: #ececec;
+      border-right: solid 1px #d5d5d5;
+      width: 60px;
+      height: 60px;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      img {
+        max-width: 100%;
+        max-height: 40px;
+      }
+    }
+    .text {
+      display: table-cell;
+      vertical-align: middle;
+      background-color: #fff;
+      padding: 0 10px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      .number {
+        font-size: 30px;
+        color: #7a7b7a;
+        font-weight: 600;
+        padding-right: 10px;
+      }
+      .desc {
+        font-size: 19px;
+        color: #adadad;
+      }
+    }
+  }
+  .weather-container {
+    display: table;
+    width: 100%;
+    .icon {
+      display: table-cell;
+      vertical-align: middle;
+      i {
+        font-size: 60px;
+        color: #4279bd;
+      }
+    }
+    .info {
+      display: table-cell;
+      vertical-align: top;
+      width: 100%;
+      p {
+        text-align: center;
+        margin: 0;
+        &.temp {
+          font-size: 30px;
+          color: #7a7b7a;
+          line-height: 40px;
+        }
+        &.name {
+          color: #000;
+          font-size: 17px;
+          font-weight: 600;
+          line-height: 37px;
+        }
+        &.humidity {
+          color: #a5a5a5;
+          line-height: 18px;
+        }
+        &.windspeed {
+          color: #a5a5a5;
+          line-height: 18px;
+        }
+      }
+    }
+  }
+  .task-container {
+    .tab-container {
+      .nav-tabs {
+        li {
+          a {
+            background-color: #ececec;
+            padding: 10px 15px 5px 15px;
+            color: #888888;
+            &:before {
+              content: ' ';
+              width: 100%;
+              height: 5px;
+              display: block;
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index: 1;
+            }
+          }
+
+          &.active, &:hover {
+            a {
+              background-color: #fff;
+              color: #000;
+            }
+          }
+
+          &.task-past-due {
+            a {
+              &:before {
+                background-color: #d60505;
+              }
+            }
+          }
+          &.task-active {
+            a {
+              &:before {
+                background-color: #7fc41c;
+              }
+            }
+          }
+          &.task-completed {
+            a {
+              &:before {
+                background-color: #d8d64d;
+              }
+            }
+          }
+          &.task-due-in-7-days {
+            a {
+              &:before {
+                background-color: #4279bd;
+              }
+            }
+          }
+          &.task-scheduled {
+            a {
+              &:before {
+                background-color: #963800;
+              }
+            }
+          }
+          &.task-critical {
+            a {
+              &:before {
+                background-color: #ff0000;
+              }
+            }
+          }
+        }
+      }
+      .tab-content {
+        .task-list {
+          height: 400px;
+          .task-item {
+            display: table;
+            width: 100%;
+            border-bottom: solid 1px #ececec;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            .task-status {
+              display: table-cell;
+              position: relative;
+              border-right: solid 1px #ececec;
+              padding: 0 10px;
+              vertical-align: middle;
+              .percentage {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                margin-left: -10px;
+                font-weight: 700;
+                margin-top: -12px;
+              }
+            }
+            .task-info {
+              display: table-cell;
+              vertical-align: top;
+              width: 100%;
+              padding: 0 10px;
+              .title {
+                color: #000000;
+                font-size: 16px;
+              }
+              .assignee {
+                color: #adadad;
+                span {
+                  color: #000000;
+                }
+              }
+              .priority {
+                color: #000000;
+                span {
+                  font-size: 20px;
+                  &.hight {
+                    color: red;
+                  }
+                }
+              }
+            }
+            .task-update-date {
+              display: table-cell;
+              white-space: nowrap;
+              vertical-align: middle;
+              color: #adadad;
+              padding: 0 20px 0 0;
+              span {
+                color: #000000;
+              }
+            }
+            .task-due-date {
+              white-space: nowrap;
+              display: table-cell;
+              vertical-align: middle;
+              color: #adadad;
+              span {
+                color: #000000;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .task-status-section {
+    .status-list {
+      .status-item {
+        .title {
+          text-align: center;
+          color: #b3b3b3;
+          span {
+            font-weight: 700;
+            color: #000;
+          }
+        }
+        .progress, .progress-bar {
+          -webkit-border-radius: 15px;
+          -moz-border-radius: 15px;
+          border-radius: 15px;
+        }
+        .progress {
+          background-color: #acb2be;
+        }
+        .progress-bar {
+          background-color: #80d44b;
+
+          background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+        }
+      }
+    }
+  }
+  .submittal-status-section {
+    .panel-body {
+      text-align: center;
+      h4 {
+        text-align: left;
+      }
+    }
+  }
+  .timeline-container {
+    height: 815px;
+    .tl-header {
+      .btn {
+        background-color: #4279bd;
+        border-color: #4279bd;
+        padding: 2px 20px;
+      }
+    }
+    .tl-wrap {
+      border-width: 0 0 0 2px;
+      border-color: #4279bd;
+      padding: 15px 0 15px 18px;
+      &:before {
+        margin-left: -26px;
+        background: #4279bd;
+        border-width: 7px;
+        box-shadow: 0 0 0 3px #fff;
+      }
+      &:hover:before {
+        background: #4279bd;
+        border-color: #4279bd;
+      }
+    }
+
+    .tl-left {
+      .tl-wrap {
+        border-left-width: 0;
+        border-right-width: 2px;
+        margin-right: 0px;
+        padding-left: 0;
+        padding-right: 20px;
+        &:before {
+          margin-right: -29px;
+        }
+      }
+    }
+
+    .tl-date {
+      top: 13px;
+    }
+
+    .tl-left {
+      .tl-date {
+        margin-right: -7.5em;
       }
     }
   }

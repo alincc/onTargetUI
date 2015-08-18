@@ -46,6 +46,12 @@ define(function(require) {
             projectId: projectId
           });
         };
+
+        service.getDashboardBi = function(projectId) {
+          return $http.post(constant.resourceUrl + '/dashboard/getDashboardBi', {
+            projectId: projectId
+          });
+        };
         return service;
       }
     ]
