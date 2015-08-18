@@ -4,8 +4,9 @@ define(function(require) {
     config = require('app/config'),
     controller = require('./controllers/requestdemo'),
     accountServiceModule = require('app/common/services/account'),
+    angularMessages = require('angularMessages'),
     template = require('text!./templates/requestdemo.html');
-  var module = angular.module('app.requestdemo', ['ui.router', 'app.config', 'common.services.account']);
+  var module = angular.module('app.requestdemo', ['ui.router', 'app.config', 'common.services.account', 'ngMessages']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('requestdemo/templates/requestdemo.html', template);
   }]);

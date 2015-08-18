@@ -7,7 +7,7 @@ define(function(require) {
     autoGrow = require('./autoGrow'),
     uiToggleClass = require('./uiToggleClass'),
     app = require('./app'),
-    userAvatar = require('./userAvatar'),
+    imagePath = require('./imagePath'),
     ngMatch = require('./ngMatch'),
     noBreak = require('./noBreak'),
     loadingBar = require('./loadingBar'),
@@ -22,7 +22,7 @@ define(function(require) {
       'common.directives.uiToggleClass',
       'common.directives.app',
       'common.directives.ngMatch',
-      'common.directives.userAvatar',
+      'common.directives.imagePath',
       'common.directives.noBreak',
       'common.directives.loadingBar',
       'common.directives.spinner'

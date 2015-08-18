@@ -7,8 +7,9 @@ define(function(require) {
     config = require('app/config'),
     controller = require('./controllers/resetpassword'),
     accountServiceModule = require('app/common/services/account'),
+    angularMessages = require('angularMessages'),
     template = require('text!./templates/resetpassword.html');
-  var module = angular.module('app.resetpassword', ['ui.router', 'app.config', 'common.services.account', 'common.context.user']);
+  var module = angular.module('app.resetpassword', ['ui.router', 'app.config', 'common.services.account', 'common.context.user', 'ngMessages']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('resetpassword/templates/resetpassword.html', template);
   }]);

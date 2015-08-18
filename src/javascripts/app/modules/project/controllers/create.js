@@ -1,10 +1,10 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function (){
+define(function() {
   'use strict';
   var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'uploadFile', 'appConstant', 'toaster', '$timeout',
-    function ($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, uploadFile, appConstant, toaster, $timeout){
+    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, uploadFile, appConstant, toaster, $timeout) {
 
       $scope.projectModel = {
         projectId: null,
@@ -67,13 +67,13 @@ define(function (){
       $scope.onSubmit = false;
 
 
-      $scope.getStateList = function (){
+      $scope.getStateList = function() {
         var fileName = getCountryFileName($scope.projectModel.projectAddress.country);
-        if (fileName !== undefined) {
+        if(fileName !== undefined) {
           countryFactory.getStateList(fileName).then(
-            function (resp){
+            function(resp) {
               $scope.states = resp.data;
-            }, function (err){
+            }, function(err) {
               $scope.states = {};
             }
           );
@@ -82,9 +82,9 @@ define(function (){
         }
       };
 
-      var getCountryFileName = function (countryCode){
+      var getCountryFileName = function(countryCode) {
         var fileName = _($scope.countries)
-          .filter(function (country){
+          .filter(function(country) {
             return country.code === countryCode;
           })
           .pluck('filename')
@@ -93,56 +93,62 @@ define(function (){
         return fileName[0];
       };
 
-      $scope.save = function (){
-       /* if ($scope.project_form.$invalid) {
-          return false;
-        }*/
+      $scope.save = function() {
+        /* if ($scope.project_form.$invalid) {
+         return false;
+         }*/
         $scope.onSubmit = true;
         projectFactory.addProject($scope.model).then(
-          function (resp){
+          function(resp) {
+            toaster.pop('success', 'Success', resp.data.returnMessage);
+            $scope.project_form.$setPristine();
             $modalInstance.close({});
-          }, function (err){
+          }, function(err) {
             $scope.onSubmit = false;
             console.log(err);
           }
         );
       };
 
-      $scope.cancel = function (){
+      $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
       };
 
-      $scope.onFileSelect = function (element){
-        var file = element.files[0];
-        if (file) {
-          if (appConstant.app.allowedImageExtension.test(file.type)) {
-            $scope.upload([file]);
+      $scope.picture = {
+        file: null,
+        percentage: 0,
+        isUploadPicture: false
+      };
+      $scope.$watch('picture.file', function() {
+        if($scope.picture.file) {
+          if(appConstant.app.allowedImageExtension.test($scope.picture.file.type)) {
+            $scope.upload([$scope.picture.file]);
           }
           else {
             toaster.pop('error', 'Error', 'Only accept jpg, png file');
           }
         }
-      };
+      });
 
-      function upload(file){
-        $scope.isUploadAvatar = true;
-        uploadFile.upload(file).progress(function (evt){
+      function upload(file) {
+        $scope.picture.isUploadPicture = true;
+        uploadFile.upload(file).progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.percentage = progressPercentage;
-        }).success(function (data, status, headers, config){
-          $timeout(function (){
+          $scope.picture.percentage = progressPercentage;
+        }).success(function(data, status, headers, config) {
+          $timeout(function() {
             $scope.projectModel.projectImagePath = 'assets/profile/' + data.imageName;
-            $scope.isUploadAvatar = false;
+            $scope.picture.isUploadPicture = false;
           });
         })
-          .error(function (){
-            $scope.isUploadAvatar = false;
+          .error(function() {
+            $scope.picture.isUploadPicture = false;
           });
       }
 
-      $scope.upload = function (files){
-        if (files && files.length) {
-          for (var i = 0; i < files.length; i++) {
+      $scope.upload = function(files) {
+        if(files && files.length) {
+          for(var i = 0; i < files.length; i++) {
             upload(files[i]);
           }
         }

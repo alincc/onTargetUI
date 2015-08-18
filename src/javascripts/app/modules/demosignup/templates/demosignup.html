@@ -10,27 +10,11 @@
         </div>
         <div class="text-center m-t m-b" ng-show="signupMsg"><a ui-sref="signin">Back to Sign in</a></div>
         <div class="m-b-lg" ng-hide="signupMsg">
-            <form name="form" class="form-horizontal" ng-submit="demoSignup(user, form)" novalidate
+            <form name="form" class="form-horizontal form-validation" ng-submit="demoSignup(user)" no-validate
                   autocomplete="false">
                 <legend>
                     Request demo
                 </legend>
-                <div class='alert alert-warning'
-                     ng-show="submitted && (form.$invalid)">
-                    <span class="help-inline" ng-show="form.email.$error.required">Email is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.email.$error.pattern">Invalid email format.<br/></span>
-                    <span class="help-inline" ng-show="form.firstName.$error.required">First name is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.lastName.$error.required">Last name is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.phoneNumber.$error.required">Phone number is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.msg.$error.required">Message is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.companyName.$error.required">Company name is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.companyType.$error.required">Please select a company type.<br/></span>
-                    <span class="help-inline" ng-show="form.companyAddress1.$error.required">Company address one is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.companyCity.$error.required">City is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.companyCountry.$error.required">Please select a country.<br/></span>
-                    <span class="help-inline" ng-show="form.companyState.$error.required">Please select a state.<br/></span>
-                    <span class="help-inline" ng-show="form.companyZip.$error.required">Zipcode is missing.<br/></span>
-                </div>
                 <div class="form-group">
                     <div class="input-group input-group-first">
                                 <span class="input-group-addon">
@@ -39,6 +23,11 @@
                         <input name="email" type="email" id="email" ng-model="user.email"
                                class="form-control input-lg"
                                placeholder="Email" required="">
+                        <ng-messages ng-if="form.email.$dirty"
+                                     for="form.email.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Email is missing.</span>
+                            <span class="help-block m-b-none text-danger" ng-message when="email">Invalid email format.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -49,6 +38,10 @@
                         <input name="firstName" type="text" id="firstName" ng-model="user.firstName"
                                class="form-control input-lg"
                                placeholder="First name" required="">
+                        <ng-messages ng-if="form.firstName.$dirty"
+                                     for="form.firstName.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">First name is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -59,6 +52,10 @@
                         <input name="lastName" type="text" id="lastName" ng-model="user.lastName"
                                class="form-control input-lg"
                                placeholder="Last name" required="">
+                        <ng-messages ng-if="form.lastName.$dirty"
+                                     for="form.lastName.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Last name is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -69,6 +66,10 @@
                         <input name="phoneNumber" type="text" id="phoneNumber" ng-model="user.phoneNumber"
                                class="form-control input-lg" ui-mask="{{'(999)-999-9999'}}"
                                placeholder="Phone number" ui-mask-placeholder required="">
+                        <ng-messages ng-if="form.phoneNumber.$dirty"
+                                     for="form.phoneNumber.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Phone number is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -79,6 +80,10 @@
                         <input name="msg" type="text" id="msg" ng-model="user.msg"
                                class="form-control input-lg"
                                placeholder="Message" required="">
+                        <ng-messages ng-if="form.msg.$dirty"
+                                     for="form.msg.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Message is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -89,6 +94,10 @@
                         <input name="companyName" type="text" id="companyName" ng-model="user.companyName"
                                class="form-control input-lg"
                                placeholder="Company name" required="">
+                        <ng-messages ng-if="form.companyName.$dirty"
+                                     for="form.companyName.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Company name is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -98,7 +107,7 @@
                                 </span>
                         <select name="companyType" class="form-control input-lg" ng-model="user.companyTypeId" placeholder="Company Type"
                                 required>
-                            <option value="" selected>-- Select One --</option>
+                            <option value="" selected>-- Select --</option>
                             <option value="1">GENERAL CONTRACTOR</option>
                             <option value="2">CONSTRUCTION MANAGER</option>
                             <option value="3">SUBCONTRACTOR</option>
@@ -106,6 +115,10 @@
                             <option value="5">SPECIALITY CONTRACTOR</option>
                             <option value="6">ARCHITECTS/ENGINEERS</option>
                         </select>
+                        <ng-messages ng-if="form.companyType.$dirty"
+                                     for="form.companyType.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Please select a company type.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -116,6 +129,10 @@
                         <input name="companyAddress1" type="text" id="companyAddress1" ng-model="user.companyAddress1"
                                class="form-control input-lg"
                                placeholder="Address 1" required="">
+                        <ng-messages ng-if="form.companyAddress1.$dirty"
+                                     for="form.companyAddress1.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Company address one is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -136,6 +153,10 @@
                         <input name="companyCity" type="text" id="companyCity" ng-model="user.companyCity"
                                class="form-control input-lg"
                                placeholder="City" required="">
+                        <ng-messages ng-if="form.companyCity.$dirty"
+                                     for="form.companyCity.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">City is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -149,6 +170,10 @@
                                 ng-change="getStateList()">
                             <option value="">-- Select --</option>
                         </select>
+                        <ng-messages ng-if="form.companyCountry.$dirty"
+                                     for="form.companyCountry.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Please select a country.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -160,6 +185,10 @@
                                 required ng-options="state.code as state.name for state in states">
                             <option value="">-- Select --</option>
                         </select>
+                        <ng-messages ng-if="form.companyState.$dirty"
+                                     for="form.companyState.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Please select a state.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -170,13 +199,14 @@
                         <input name="companyZip" type="text" id="companyZip" ng-model="user.companyZip"
                                class="form-control input-lg"
                                placeholder="Zipcode" required="">
+                        <ng-messages ng-if="form.companyZip.$dirty"
+                                     for="form.companyZip.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Zip code is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
 
-                <!--<button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg"
-                        ng-disabled="form.$invalid || form.$submitted">Sign up
-                </button>-->
-                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted = true">Sign up</button>
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-disabled="form.$submitted || form.$invalid">Sign up</button>
 
                 <div class="text-right m-t m-b">Already have an account? <a ui-sref="signin">Sign in</a></div>
             </form>

@@ -21,26 +21,31 @@ define(function(require) {
           return $http.post(constant.domain + '/project/getProjectsByUser/', model);
         };
 
-        service.addProject = function (model){
+        service.addProject = function(model) {
           return $http.post(constant.domain + '/project/addProject', model);
         };
 
-        service.deleteProject = function (model){
+        service.deleteProject = function(model) {
           return $http.post(constant.domain + '/project/deleteProject', model);
         };
 
-        service.getProjectStatuses = function (){
+        service.getProjectStatuses = function() {
           return angular.fromJson(projectStatuses);
         };
 
-        service.getProjectTypes = function (){
+        service.getProjectTypes = function() {
           return angular.fromJson(projectTypes);
         };
-        
-        service.getProjectUnitOfMeasurements = function (){
+
+        service.getProjectUnitOfMeasurements = function() {
           return angular.fromJson(unitOfMeasurements);
         };
 
+        service.getBudgetMeterData = function(projectId) {
+          return $http.post(constant.resourceUrl + '/graphdata/getbudgetmeterdata', {
+            projectId: projectId
+          });
+        };
         return service;
       }
     ]

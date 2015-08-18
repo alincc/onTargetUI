@@ -8,8 +8,9 @@ define(function(require) {
     controller = require('./controllers/demosignup'),
     accountServiceModule = require('app/common/services/account'),
     template = require('text!./templates/demosignup.html'),
+    angularMessages = require('angularMessages'),
     countryServiceModule =require('app/common/services/country');
-  var module = angular.module('app.demosignup', ['ui.router', 'app.config', 'common.services.account', 'common.services.country']);
+  var module = angular.module('app.demosignup', ['ui.router', 'app.config', 'common.services.account', 'common.services.country', 'ngMessages']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('demosignup/templates/demosignup.html', template);
   }]);

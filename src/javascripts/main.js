@@ -37,11 +37,13 @@ require.config({
     toaster: "../bower_components/angularjs-toaster/toaster",
     angularUiEvent: "../bower_components/angular-ui-event/dist/event",
     ngFileUpload: "../bower_components/ng-file-upload/ng-file-upload-all",
-    angularSvgRoundProgress: "../bower_components/angular-svg-round-progressbar/src/module",
+    angularSvgRoundProgress: "../bower_components/angular-svg-round-progressbar/build/roundProgress",
     autosize: "../bower_components/autosize/dist/autosize",
     angularUtilsPagination: '../bower_components/angular-utils-pagination/dirPagination',
     angularUiMask: '../bower_components/angular-ui-mask/dist/mask',
-    ngScrollable:'../bower_components/ng-scrollable/src/ng-scrollable'
+    ngScrollable: '../bower_components/ng-scrollable/src/ng-scrollable',
+    chartjs : '../bower_components/Chart.js/chart',
+    angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart'
   },
 
   shim: {
@@ -105,6 +107,9 @@ require.config({
     },
     "ngScrollable": {
       deps: ['angular']
+    },
+    "angularChartJS": {
+      deps: ['chartjs', 'angular']
     }
   }
 });

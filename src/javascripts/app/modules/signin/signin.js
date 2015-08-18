@@ -4,8 +4,9 @@ define(function(require) {
     config = require('app/config'),
     controller = require('./controllers/signin'),
     accountServiceModule = require('app/common/services/account'),
+    angularMessages = require('angularMessages'),
     template = require('text!./templates/signin.html');
-  var module = angular.module('app.signin', ['ui.router', 'app.config', 'common.services.account', 'common.context.user']);
+  var module = angular.module('app.signin', ['ui.router', 'app.config', 'common.services.account', 'common.context.user', 'ngMessages']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('signin/templates/signin.html', template);
   }]);

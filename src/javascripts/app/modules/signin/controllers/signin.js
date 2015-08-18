@@ -10,9 +10,8 @@ define(function() {
 
     $scope.app = appConstant.app;
 
-    $scope.signin = function(model, form) {
-      if(form.$invalid)
-      {
+    $scope.signin = function(model) {
+      if($scope.form.$invalid) {
         return false;
       }
       accountFactory.login(model.username, model.password)

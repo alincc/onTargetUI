@@ -33,6 +33,7 @@
     "autosize": "latest",
     "angular-utils-pagination": "latest",
     "ng-file-upload": "latest",
-    "ng-scrollable": "latest"
+    "ng-scrollable": "latest",
+    "angular-chart.js": "latest"
   }
 }

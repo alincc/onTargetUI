@@ -99,12 +99,11 @@ define(function (){
       $scope.getStateList();
 
       $scope.save = function (){
-        /*if ($scope.project_form.$invalid) {
-         return false;
-         }*/
         $scope.onSubmit = true;
         projectFactory.addProject($scope.model).then(
           function (resp){
+            toaster.pop('success', 'Success', resp.data.returnMessage);
+            $scope.project_form.$setPristine();
             $modalInstance.close({});
           }, function (err){
             $scope.onSubmit = false;
@@ -115,6 +114,46 @@ define(function (){
 
       $scope.cancel = function (){
         $modalInstance.dismiss('cancel');
+      };
+
+      $scope.picture = {
+        file: null,
+        percentage: 0,
+        isUploadPicture: false
+      };
+      $scope.$watch('picture.file', function() {
+        if($scope.picture.file) {
+          if(appConstant.app.allowedImageExtension.test($scope.picture.file.type)) {
+            $scope.upload([$scope.picture.file]);
+          }
+          else {
+            toaster.pop('error', 'Error', 'Only accept jpg, png file');
+          }
+        }
+      });
+
+      function upload(file) {
+        $scope.picture.isUploadPicture = true;
+        uploadFile.upload(file).progress(function(evt) {
+          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+          $scope.picture.percentage = progressPercentage;
+        }).success(function(data, status, headers, config) {
+          $timeout(function() {
+            $scope.projectModel.projectImagePath = 'assets/profile/' + data.imageName;
+            $scope.picture.isUploadPicture = false;
+          });
+        })
+          .error(function() {
+            $scope.picture.isUploadPicture = false;
+          });
+      }
+
+      $scope.upload = function(files) {
+        if(files && files.length) {
+          for(var i = 0; i < files.length; i++) {
+            upload(files[i]);
+          }
+        }
       };
     }];
   return controller;

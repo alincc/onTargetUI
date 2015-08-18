@@ -9,9 +9,8 @@ define(function() {
     $scope.msg = '';
     $scope.authError = '';
 
-    $scope.forgotPassword = function(user, form) {
-      if(form.$invalid)
-      {
+    $scope.forgotPassword = function(user) {
+      if($scope.form.$invalid) {
         return false;
       }
       accountFactory.forgotPassword(user)

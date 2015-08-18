@@ -1,7 +1,8 @@
 define(function(require) {
   'use strict';
-  var angular = require('angular');
-  var module = angular.module('common.directives.app', []);
+  var angular = require('angular'),
+    config = require('app/config');
+  var module = angular.module('common.directives.app', ['app.config']);
   module.directive("uiNav", ["$timeout",
     function() {
       return {
@@ -125,6 +126,23 @@ define(function(require) {
             default:
               elem.removeClass('has-background');
               break;
+          }
+        });
+      }
+    };
+  }]);
+  module.directive('fullWidth', ['$location', '$state', '$rootScope', 'appConstant', function($location, $state, $rootScope, appConstant) {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+          if(toState.fullWidth === true) {
+            elem.addClass('hide-aside');
+            appConstant.app.settings.hideAside = true;
+          }
+          else {
+            elem.removeClass('hide-aside');
+            appConstant.app.settings.hideAside = false;
           }
         });
       }

@@ -10,10 +10,22 @@ define(function(require) {
     template = require('text!./templates/dashboard.html'),
     userContextModule = require('app/common/context/user'),
     projectContextModule = require('app/common/context/project'),
-    accountServiceModule = require('app/common/services/account');
-  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project']);
+    accountServiceModule = require('app/common/services/account'),
+    utilServiceModule = require('app/common/services/util'),
+    Chart = require('chartjs'),
+    angularChartJS = require('angularChartJS');
+  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js']);
 
   module.run(['$templateCache', function($templateCache) {
+    Chart.defaults.global.colours=[
+      '#06bf3f', // green
+      '#ff7e00', // orange
+      '#4279bd', // blue
+      '#46BFBD', // green
+      '#FDB45C', // yellow
+      '#949FB1', // grey
+      '#4D5360'  // dark grey
+    ];
     $templateCache.put('dashboard/templates/dashboard.html', template);
   }]);
 
@@ -29,10 +41,17 @@ define(function(require) {
             controller: 'DashBoardController',
             authorization: true,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', function($location, projectContext, $q, $state, $window) {
+              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'utilFactory', '$rootScope', function($location, projectContext, $q, $state, $window, utilFactory, $rootScope) {
                 var deferred = $q.defer();
                 if(projectContext.valid()) {
-                  deferred.resolve();
+                  // prepare project address
+                  utilFactory.generateAddress($rootScope.currentProjectInfo.projectAddress)
+                    .then(function(add) {
+                      $rootScope.currentProjectInfo.fullAddress1 = add;
+                      $rootScope.currentProjectInfo.fullAddress2 = $rootScope.currentProjectInfo.address2;
+                      projectContext.setProject(angular.copy($rootScope.currentProjectInfo));
+                      deferred.resolve();
+                    });
                 } else {
                   $window.location.href = $state.href('app.projectlist');
                 }

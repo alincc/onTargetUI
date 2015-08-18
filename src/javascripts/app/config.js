@@ -1,4 +1,4 @@
-define(function (require){
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash'),
@@ -10,7 +10,7 @@ define(function (require){
 
   var module = angular.module('app.config', ['ui.router', 'angularUtils.directives.dirPagination', 'common.context.user', 'toaster']);
   module.config(['$locationProvider', '$urlRouterProvider', '$httpProvider', 'paginationTemplateProvider',
-    function ($locationProvider, $urlRouterProvider, $httpProvider, paginationTemplateProvider){
+    function($locationProvider, $urlRouterProvider, $httpProvider, paginationTemplateProvider) {
 
       //Enable cross domain calls
       $httpProvider.defaults.useXDomain = true;
@@ -21,10 +21,10 @@ define(function (require){
 
 
       // Authorization header
-      $httpProvider.interceptors.push(['userContext', '$rootScope', function (userContext, $rootScope){
+      $httpProvider.interceptors.push(['userContext', '$rootScope', function(userContext, $rootScope) {
         return {
-          request: function (config){
-            if (angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
+          request: function(config) {
+            if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
                 "loggedInUserProjectId": $rootScope.mainProjectInfo.projectId
@@ -36,16 +36,16 @@ define(function (require){
       }]);
 
       // Error handler
-      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', function ($q, toaster, constant){
+      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', function($q, toaster, constant) {
         return {
-          response: function (response){
+          response: function(response) {
             var defer = $q.defer();
 
-            if (response && response.data && response.data.returnVal === 'ERROR') {
+            if(response && response.data && response.data.returnVal === 'ERROR') {
               toaster.pop('error', 'Error', response.data.returnMessage);
               defer.reject(response);
             } else {
-              if ((response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.resourceUrl) > -1) && response.config.headers['AutoAlert']) {
+              if((response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.resourceUrl) > -1) && response.config.headers['AutoAlert']) {
                 toaster.pop('success', 'Success', response.data.returnMessage);
               }
               defer.resolve(response);
@@ -83,7 +83,7 @@ define(function (require){
 
             return defer.promise;
           },
-          responseError: function (response){
+          responseError: function(response) {
             console.log(response);
             //if(response.status === 401) {
             //  var deferred = $q.defer();
@@ -169,15 +169,20 @@ define(function (require){
     }
   ]);
 
-  module.run(['$rootScope', 'userContext', '$location', function ($rootScope, userContext, $location){
+  module.run(['$rootScope', 'userContext', '$location', function($rootScope, userContext, $location) {
     // Validate Authorization Page
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams){
-      if (userContext.authentication().isAuth || toState.authorization === false) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      if(userContext.authentication().isAuth || toState.authorization === false) {
 
       } else {
         $location.path('/signin');
       }
     });
+
+    // app settings
+    $rootScope.appSettings = {
+      hideAside: false
+    };
   }]);
 
   module.constant('appConstant', {
@@ -209,7 +214,8 @@ define(function (require){
         asideFixed: false,
         asideFolded: false,
         asideDock: false,
-        container: false
+        container: false,
+        hideAside: false
       }
     }
   });

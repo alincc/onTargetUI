@@ -5,33 +5,19 @@
         </a>
     </div>
     <div class="container w-xxxl w-auto-xs">
-        <form name="form" class="form-horizontal" ng-submit="registerUser(user, form)" novalidate
+        <form name="form" class="form-horizontal form-validation" ng-submit="registerUser(user, form)" novalidate
               autocomplete="false">
             <legend>
                 Sign up
             </legend>
-            <div class='alert alert-warning'
-                 ng-show="submitted && (form.$invalid)">
-                <span class="help-inline" ng-show="form.firstName.$error.required">First name is missing.<br/></span>
-                <span class="help-inline" ng-show="form.lastName.$error.required">Last name is missing.<br/></span>
-                <span class="help-inline" ng-show="form.email.$error.required">Email is missing.<br/></span>
-                <span class="help-inline" ng-show="form.email.$error.pattern">Invalid email format.<br/></span>
-                <span class="help-inline" ng-show="form.title.$error.required">Title is missing.<br/></span>
-                <span class="help-inline" ng-show="form.phoneNumber.$error.required">Phone number is missing.<br/></span>
-                <span class="help-inline" ng-show="form.discipline.$error.required">Please select a discipline.<br/></span>
-                <span class="help-inline" ng-show="form.username.$error.required">Username is missing.<br/></span>
-                <span class="help-inline" ng-show="form.username.$error.pattern">Invalid username format.<br/></span>
-                <span class="help-inline" ng-show="form.password.$error.required">Password is missing<br/></span>
-                <span class="help-inline" ng-show="form.confirmpassword.$error.compareTo">Confirmation password doesn't match<br/></span>
-            </div>
             <div class="row">
                 <div class="col-xs-4 avatar-container">
                     <a ngf-select ng-model="file" ngf-multiple="false">
                         <div class="overlay">
                             <p>Change picture</p>
                         </div>
-                        <img user-avatar
-                             src="{{user.userImagePath === '' || user.userImagePath === undefined ? 'images/ontargetassets/user.jpg' : user.userImagePath}}"/>
+                        <img image-path
+                             ng-src="{{user.userImagePath}}"/>
                     </a>
                     <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploadAvatar"></div>
                 </div>
@@ -44,6 +30,10 @@
                             <input name="firstName" type="text" id="firstName" ng-model="user.firstName"
                                    class="form-control input-lg"
                                    placeholder="First name" required=""/>
+                            <ng-messages ng-if="form.firstName.$dirty"
+                                         for="form.firstName.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">First name is missing.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -54,6 +44,10 @@
                             <input name="lastName" type="text" id="lastName" ng-model="user.lastName"
                                    class="form-control input-lg"
                                    placeholder="Last name" required=""/>
+                            <ng-messages ng-if="form.lastName.$dirty"
+                                         for="form.lastName.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">Last name is missing.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -64,6 +58,11 @@
                             <input name="email" type="email" id="email" ng-model="user.email"
                                    class="form-control input-lg"
                                    placeholder="Email address" required=""/>
+                            <ng-messages ng-if="form.email.$dirty"
+                                         for="form.email.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">Email is missing.</span>
+                                <span class="help-block m-b-none text-danger" ng-message when="email">Invalid username format.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -74,6 +73,10 @@
                             <input name="title" type="text" id="title" ng-model="user.title"
                                    class="form-control input-lg"
                                    placeholder="Title" required=""/>
+                            <ng-messages ng-if="form.title.$dirty"
+                                         for="form.title.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">Title is missing.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -84,6 +87,10 @@
                             <input name="phoneNumber" type="text" id="phoneNumber" ng-model="user.phoneNumber"
                                    class="form-control input-lg" ui-mask="{{'(999)-999-9999'}}"
                                    placeholder="Phone number" ui-mask-placeholder required="">
+                            <ng-messages ng-if="form.phoneNumber.$dirty"
+                                         for="form.phoneNumber.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">Phone number is missing.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -103,6 +110,10 @@
                                 <option class="option_text_color" value="8">Tunnels</option>
                                 <option class="option_text_color" value="9">Design</option>
                             </select>
+                            <ng-messages ng-if="form.discipline.$dirty"
+                                         for="form.discipline.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">Please select a discipline.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -112,7 +123,12 @@
                                 </span>
                             <input name="username" type="text" id="username" ng-model="user.username"
                                    class="form-control input-lg"
-                                   placeholder="Username" required=""/>
+                                   placeholder="Username" required="" ng-pattern="/^[a-z0-9]{3,15}$/"/>
+                            <ng-messages ng-if="form.username.$dirty"
+                                         for="form.username.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">Username is missing.</span>
+                                <span class="help-block m-b-none text-danger" ng-message when="pattern">Username is invalid.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -123,6 +139,10 @@
                             <input name="password" type="password" id="password" ng-model="user.password"
                                    class="form-control input-lg"
                                    placeholder="Password" required=""/>
+                            <ng-messages ng-if="form.password.$dirty"
+                                         for="form.password.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">Password is missing.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -134,6 +154,10 @@
                                    ng-model="confirmpassword"
                                    class="form-control input-lg"
                                    placeholder="Confirm password" compare-to="user.password"/>
+                            <ng-messages ng-if="form.confirmpassword.$dirty"
+                                         for="form.confirmpassword.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="compareTo">Confirmation password doesn't match.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted = true">Save</button>

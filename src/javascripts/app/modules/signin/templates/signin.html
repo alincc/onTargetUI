@@ -6,17 +6,11 @@
     </div>
     <div class="container w-xxxl w-auto-xs">
         <div class="m-b-lg">
-            <form name="form" class="form-horizontal" ng-submit="signin(user, form)" novalidate
+            <form name="form" class="form-horizontal form-validation" ng-submit="signin(user)" no-validate
                   autocomplete="false">
                 <legend>
                     Sign in to OnTarget App
                 </legend>
-                <div class='alert alert-warning'
-                     ng-show="submitted && (form.username.$error.required || form.password.$error.required || form.username.$error.pattern)">
-                    <span class="help-inline" ng-show="form.username.$error.required">Username is missing.<br/></span>
-                    <span class="help-inline" ng-show="form.username.$error.pattern">Invalid username format.<br/></span>
-                    <span class="help-inline" ng-show="form.password.$error.required">Password is missing<br/></span>
-                </div>
                 <div class="form-group">
                     <div class="input-group input-group-first">
                                 <span class="input-group-addon">
@@ -25,6 +19,11 @@
                         <input name="username" type="text" id="username" ng-model="user.username"
                                class="form-control input-lg"
                                placeholder="Username" required="" ng-pattern="/^[a-z0-9]{3,15}$/">
+                        <ng-messages ng-if="form.username.$dirty"
+                                     for="form.username.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Username is missing.</span>
+                            <span class="help-block m-b-none text-danger" ng-message when="pattern">Username is invalid.</span>
+                        </ng-messages>
                     </div>
                 </div>
                 <div class="form-group">
@@ -34,9 +33,13 @@
                                 </span>
                         <input name="password" type="password" ng-model="user.password" class="form-control input-lg"
                                placeholder="Password" required="">
+                        <ng-messages ng-if="form.password.$dirty"
+                                     for="form.password.$error">
+                            <span class="help-block m-b-none text-danger" ng-message when="required">Password is missing.</span>
+                        </ng-messages>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted=true">Log in</button>
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-disabled="form.$submitted || form.$invalid">Log in</button>
 
                 <div class="text-right m-t m-b"><a ui-sref="forgotpassword">Forgot password ?</a> | <a
                         ui-sref="requestdemo">Request a demo</a></div>

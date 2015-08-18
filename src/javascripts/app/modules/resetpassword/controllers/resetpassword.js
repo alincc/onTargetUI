@@ -13,19 +13,17 @@ define(function() {
     $scope.authError = '';
     $scope.app = appConstant.app;
 
-    if (forgotPasswordTokenData.returnVal === "SUCCESS") {
+    if(forgotPasswordTokenData.returnVal === "SUCCESS") {
       $scope.model.forgotPasswordToken = forgotPasswordTokenData.collaborateToken;
-    }else if (forgotPasswordTokenData.returnVal) {
+    } else if(forgotPasswordTokenData.returnVal) {
       $scope.displayForm = false;
     }
 
-
-    $scope.reset = function(model, form) {
-      if(form.$invalid)
-      {
+    $scope.reset = function(model) {
+      if($scope.form.$invalid) {
         return false;
       }
-      console.log(model);
+
       accountFactory.resetForgotPassword(model)
         .then(function() {
           $scope.resetMsg = 'Password changed successfully.';

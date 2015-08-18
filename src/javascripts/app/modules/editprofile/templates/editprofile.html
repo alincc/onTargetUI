@@ -18,8 +18,8 @@
                                 <div class="overlay">
                                     <p>Change picture</p>
                                 </div>
-                                <img user-avatar
-                                     src="{{editUserData.userImagePath === '' || editUserData.userImagePath === undefined ? 'images/ontargetassets/user.jpg' : editUserData.userImagePath}}"/>
+                                <img image-path
+                                     ng-src="{{editUserData.userImagePath}}"/>
                             </a>
                             <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploadAvatar"></div>
                         </div>

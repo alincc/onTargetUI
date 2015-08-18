@@ -20,7 +20,6 @@ define(function(require) {
                         file: file
                     });
                 };
-
                 return service;
             }
         ]

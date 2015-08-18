@@ -2,15 +2,15 @@ define(function (require){
   'use strict';
   var angular = require('angular'),
     config = require('app/config'),
+    angularMessages = require('angularMessages'),
     controller = require('./controllers/signup'),
     accountServiceModule = require('app/common/services/account'),
     template = require('text!./templates/signup.html'),
     uimask = require('angularUiMask'),
     fileupload = require('app/common/services/upload'),
-    userAvatar = require('app/common/directives/userAvatar'),
     toaster = require('toaster'),
     ngFileUpload = require('ngFileUpload');
-  var module = angular.module('app.signup', ['ui.router', 'app.config', 'common.services.account', 'common.context.user', 'ui.mask', 'common.services.upload', 'common.directives.userAvatar', 'toaster', 'ngFileUpload']);
+  var module = angular.module('app.signup', ['ui.router', 'app.config', 'common.services.account', 'common.context.user', 'ui.mask', 'common.services.upload', 'toaster', 'ngFileUpload', 'ngMessages']);
   module.run(['$templateCache', function ($templateCache){
     $templateCache.put('signup/templates/signup.html', template);
   }]);

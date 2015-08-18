@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function (require){
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     angularBootstrap = require('angularBootstrap'),
@@ -20,10 +20,16 @@ define(function (require){
     projectServiceModule = require('app/common/services/project'),
     accountServiceModule = require('app/common/services/account'),
     companyServiceModule = require('app/common/services/company'),
-    userContextModule = require('app/common/context/user');
-  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages']);
+    countryServiceModule = require('app/common/services/country'),
+    userContextModule = require('app/common/context/user'),
+    ngFileUpload = require('app/common/services/upload'),
+    angularSvgRoundProgress = require('angularSvgRoundProgress'),
+    utilServiceModule = require('app/common/services/util'),
+    angularSanitize = require('angularSanitize'),
+    toaster = require('toaster');
+  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country']);
 
-  module.run(['$templateCache', function ($templateCache){
+  module.run(['$templateCache', function($templateCache) {
     $templateCache.put('project/templates/list.html', template);
     $templateCache.put('project/templates/_createOrUpdate.html', createOrUpdateTemplate);
     $templateCache.put('project/templates/create.html', createTemplate);
@@ -38,13 +44,14 @@ define(function (require){
 
   module.config(
     ['$stateProvider',
-      function ($stateProvider){
+      function($stateProvider) {
         $stateProvider
           .state('app.projectlist', {
             url: '/projectlist',
             templateUrl: "project/templates/list.html",
             controller: 'ProjectListController',
-            authorization: true
+            authorization: true,
+            fullWidth: true
           });
       }
     ]
