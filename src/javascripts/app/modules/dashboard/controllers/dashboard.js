@@ -2,10 +2,11 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', '$timeout', function($scope, $rootScope, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, $timeout) {
+  var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout) {
     $scope.app = appConstant.app;
     $scope.currentProject = $rootScope.currentProjectInfo;
-    console.log($scope.currentProject);
+    $scope.mainProject = $rootScope.mainProjectInfo;
+    //console.log($scope.currentProject);
 
     // Project health
     $scope.isLoadingProjectHealth = true;
@@ -180,18 +181,106 @@ define(function(require) {
 
     // Tasks
     $scope.tasks = {
-      pastDue: [1, 2, 3, 4, 5, 6, 7, 8],
+      pastDue: [],
       active: [],
       completed: [],
       dueIn7Day: [],
       scheduled: [],
-      critical: []
+      critical: [],
+      all: []
     };
+
+    var parseTask = function (){
+      var activities = $scope.currentProject.projects;
+      if(activities.length > 0){
+        for (var i = 0; i < activities.length; i++) {
+          var taskList = activities[i].taskList?activities[i].taskList:[];
+          for (var j = 0; j < taskList.length; j++) {
+            var tsk = taskList[j];
+            $scope.tasks.scheduled.push(tsk);
+            if ('1' === tsk.status) {
+              $scope.tasks.active.push(tsk);
+            } else if ('3' === tsk.status) {
+              $scope.tasks.completed.push(tsk);
+            }
+
+            var tskEndDate = Date.parse(tsk.endDate);
+            var now = Date.parse(new Date());
+            var diffDays = tskEndDate - now;
+            if (diffDays <= 0) {
+              $scope.tasks.pastDue.push(tsk);
+            }
+
+            if (diffDays/(1000*60*60*24) <= 7) {
+              $scope.tasks.dueIn7Day.push(tsk);
+            }
+
+            if ('1' === tsk.severity) {
+              $scope.tasks.critical.push(tsk);
+            }
+          }
+        }
+      }
+    };
+    parseTask();
+
+    console.log($scope.tasks);
 
     // fix scroll
     $timeout(function() {
       $scope.$broadcast('content.reload');
     }, 1000);
+
+    $scope.tasksStatus = [];
+    $scope.taskStatusCount = 0;
+    $scope.isTasksStatusLoading = true;
+    projectFactory.getTaskCount($scope.currentProject.projectId).then(
+      function (resp){
+        $scope.tasksStatus = resp.data.taskCountByStatus;
+        for(var i=0;i<$scope.tasksStatus.length; i++){
+          $scope.taskStatusCount = $scope.taskStatusCount + $scope.tasksStatus[i].taskCount;
+        }
+        $scope.isTasksStatusLoading = false;
+      }, function (err){
+        $scope.isTasksStatusLoading = false;
+      }
+    );
+
+    $scope.submittalStatus = {
+      approve:'',
+      submit:'',
+      all:''
+    };
+    $scope.isSubmittalStatusLoading = true;
+    documentFactory.getUserDocument($scope.mainProject.projectId).then(
+      function (resp){
+        $scope.submittalStatus.approve = resp.data.totalApprovals;
+        $scope.submittalStatus.submit = resp.data.totalSubmits;
+        $scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
+        $scope.isTasksStatusLoading = false;
+        //console.log($scope.submittalStatus);
+      }, function (err){
+        $scope.isTasksStatusLoading = false;
+      }
+    );
+
+    $scope.activityLogModel = {
+      pageNumber: 1,
+      perPageLimit: 50,
+      projectId: $scope.currentProject.projectId
+    };
+    $scope.activityLogs = [];
+    $scope.isActivityLogLoading = true;
+
+    activityFactory.getActivityLog($scope.activityLogModel).then(
+      function (resp){
+        $scope.activityLogs = resp.data.logs;
+        $scope.isActivityLogLoading = false;
+      }, function (err){
+        $scope.isActivityLogLoading = false;
+      }
+    );
+
 
     //_.each($scope.currentProject.projects, function(el) {
     //  _.each(el.taskList, function(t) {
