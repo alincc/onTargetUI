@@ -2,10 +2,11 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', '$timeout', function($scope, $rootScope, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, $timeout) {
+  var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout) {
     $scope.app = appConstant.app;
     $scope.currentProject = $rootScope.currentProjectInfo;
-    console.log($scope.currentProject);
+    $scope.mainProject = $rootScope.mainProjectInfo;
+    //console.log($scope.currentProject);
 
     // Project health
     $scope.isLoadingProjectHealth = true;
@@ -180,18 +181,119 @@ define(function(require) {
 
     // Tasks
     $scope.tasks = {
-      pastDue: [1, 2, 3, 4, 5, 6, 7, 8],
+      pastDue: [],
       active: [],
       completed: [],
       dueIn7Day: [],
       scheduled: [],
-      critical: []
+      critical: [],
+      all: []
     };
 
-    // fix scroll
-    $timeout(function() {
-      $scope.$broadcast('content.reload');
-    }, 1000);
+    var parseTask = function() {
+      var activities = $scope.currentProject.projects;
+      var currentDate = new Date();
+      var now = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+      if(activities.length > 0) {
+        _.each(activities, function(ac) {
+          var taskList = ac.taskList ? ac.taskList : [];
+          _.each(taskList, function(tsk) {
+            //$scope.tasks.scheduled.push(tsk);
+
+            var tskEndDate = new Date(tsk.endDate);
+            var diffDays = daydiff(now, tskEndDate);
+
+            if('3' === tsk.status) { // Completed
+              $scope.tasks.completed.push(tsk);
+            }
+            else if('1' === tsk.status || '2' === tsk.status) {
+              if('1' === tsk.status) { // Active
+                $scope.tasks.active.push(tsk);
+              }
+              if(diffDays <= 0) {
+                $scope.tasks.pastDue.push(tsk);
+              }
+              if(diffDays / (1000 * 60 * 60 * 24) <= 7) {
+                $scope.tasks.dueIn7Day.push(tsk);
+              }
+            }
+
+            if('1' === tsk.severity) {
+              $scope.tasks.critical.push(tsk);
+            }
+          });
+        });
+      }
+    };
+
+    parseTask();
+
+    $scope.taskTabSelect = function() {
+      $timeout(function() {
+        $scope.$broadcast('content.reload');
+      }, 200);
+    };
+
+    // Task status
+    $scope.tasksStatus = [];
+    $scope.taskStatusCount = 0;
+    $scope.isTasksStatusLoading = true;
+    projectFactory.getTaskCount($scope.currentProject.projectId).then(
+      function(resp) {
+        $scope.tasksStatus = resp.data.taskCountByStatus;
+        for(var i = 0; i < $scope.tasksStatus.length; i++) {
+          $scope.taskStatusCount = $scope.taskStatusCount + $scope.tasksStatus[i].taskCount;
+        }
+        $scope.isTasksStatusLoading = false;
+      }, function(err) {
+        $scope.isTasksStatusLoading = false;
+      }
+    );
+
+    // Document Submittal
+    $scope.submittalStatus = {
+      colours: [
+        '#c1d64c',
+        '#63b2db'
+      ],
+      options: {
+        animationEasing: "linear",
+        animationSteps: 10
+      },
+      data: [],
+      labels: ['Approval', 'Submittal']
+    };
+    $scope.isSubmittalStatusLoading = true;
+    documentFactory.getUserDocument($scope.mainProject.projectId).then(
+      function(resp) {
+        $scope.submittalStatus.data[0] = resp.data.totalApprovals;
+        $scope.submittalStatus.data[1] = resp.data.totalSubmits;
+        //$scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
+        $scope.isSubmittalStatusLoading = false;
+        //console.log($scope.submittalStatus);
+      }, function(err) {
+        $scope.isSubmittalStatusLoading = false;
+      }
+    );
+
+    // Activity
+    $scope.activityLogModel = {
+      pageNumber: 1,
+      perPageLimit: 50,
+      projectId: $scope.currentProject.projectId
+    };
+    $scope.activityLogs = [];
+    $scope.isActivityLogLoading = true;
+
+    activityFactory.getActivityLog($scope.activityLogModel).then(
+      function(resp) {
+        $scope.activityLogs = resp.data.logs;
+        $scope.isActivityLogLoading = false;
+      }, function(err) {
+        $scope.isActivityLogLoading = false;
+      }
+    );
+
 
     //_.each($scope.currentProject.projects, function(el) {
     //  _.each(el.taskList, function(t) {

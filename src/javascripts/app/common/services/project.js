@@ -52,6 +52,12 @@ define(function(require) {
             projectId: projectId
           });
         };
+
+        service.getTaskCount = function (projectId){
+          return $http.post(constant.resourceUrl + '/tasks/getTaskCountsOfProject', {
+            projectId: projectId
+          });
+        };
         return service;
       }
     ]

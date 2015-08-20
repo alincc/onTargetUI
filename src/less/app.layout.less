@@ -27,7 +27,7 @@ body {
 }
 
 .app-header-fixed {
-  padding-top: @app-header-height;
+  padding-top: @app-header-padding;
   .app-header {
     position: fixed;
     top: 0;
@@ -297,7 +297,7 @@ body {
     .navbar-collapse,
     .app-content,
     .app-footer {
-      margin-left: @app-aside-folded-width + @body-margin;
+      margin-left: @app-aside-folded-width;
       margin-right: @body-margin * 2;
     }
     .app-header {
@@ -538,7 +538,7 @@ body {
         }
         &.header {
           a {
-            padding: 20px 0;
+            padding: 23px 0;
           }
         }
       }

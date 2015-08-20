@@ -18,6 +18,9 @@ require.config({
   paths: {
     // end of network components
     jQuery: '../bower_components/jquery/dist/jquery',
+    jQueryMouseWheel: '../bower_components/jquery-mousewheel/jquery.mousewheel',
+    jQueryCustomScroll: '../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar',
+
     angular: '../bower_components/angular/angular',
     angularMocks: '../bower_components/angular-mocks/angular-mocks',
     angularAnimate: '../bower_components/angular-animate/angular-animate',
@@ -41,12 +44,21 @@ require.config({
     autosize: "../bower_components/autosize/dist/autosize",
     angularUtilsPagination: '../bower_components/angular-utils-pagination/dirPagination',
     angularUiMask: '../bower_components/angular-ui-mask/dist/mask',
-    ngScrollable: '../bower_components/ng-scrollable/src/ng-scrollable',
-    chartjs : '../bower_components/Chart.js/chart',
-    angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart'
+    chartjs: '../bower_components/Chart.js/chart',
+    angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart',
+    mentio: '../bower_components/ment.io/dist/mentio'
   },
 
   shim: {
+    "jQuery": {
+      exports: "jQuery"
+    },
+    "jQueryMouseWheel": {
+      deps: ["jQuery"]
+    },
+    "jQueryCustomScroll": {
+      deps: ["jQuery", "jQueryMouseWheel"]
+    },
     "angular": {
       deps: ["jQuery"],
       exports: "angular"
@@ -105,11 +117,11 @@ require.config({
     "angularUiMask": {
       deps: ['angular']
     },
-    "ngScrollable": {
-      deps: ['angular']
-    },
     "angularChartJS": {
       deps: ['chartjs', 'angular']
+    },
+    "mentio": {
+      deps: ['angular']
     }
   }
 });

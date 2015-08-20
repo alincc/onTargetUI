@@ -215,8 +215,12 @@ define(function(require) {
         asideFolded: false,
         asideDock: false,
         container: false,
-        hideAside: false
-      }
+        hideAside: false,
+        userNotificationsPageSize: 999,
+        //userNotificationsPageSize: 10,
+        userNotificationsInterval: 600000 // 10 minutes
+      },
+      dateFormat:'MM/dd/yyyy'
     }
   });
 

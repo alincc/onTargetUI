@@ -1,0 +1,27 @@
+<div ng-controller="LogisticsTaskController">
+    <div>
+    <ul class="nav navbar-nav">
+        <li><a href="#" ng-click="openAction(actions.owner)">Owner</a></li>
+        <li><a href="#" ng-click="openAction(actions.comment)">Comment</a></li>
+        <li><a href="#" ng-click="openAction(actions.budget)">Budget</a></li>
+        <li><a href="#" ng-click="openAction(actions.progress)">Progress</a></li>
+        <li><a href="#" ng-click="openAction(actions.attachment)">Attachments</a></li>
+    </ul>
+    </div>
+    <div ng-switch on="action.name">
+        <div ng-switch-when="owner"><div ng-include="'onTime/task/templates/owner.html'"></div></div>
+        <div ng-switch-when="comment"><div ng-include="'onTime/task/templates/comment.html'"></div></div>
+        <div ng-switch-when="budget"><div ng-include="'onTime/task/templates/budget.html'"></div></div>
+        <div ng-switch-when="progress">
+            <div>
+                <slider
+                        ng-model="cost"
+                        floor="1"
+                        ceiling="100">
+                </slider>
+            </div>
+        </div>
+        <div ng-switch-when="attachment"><div ng-include="'onTime/task/templates/attachment.html'"></div></div>
+        <div ng-switch-default><div ng-include="'onTime/task/templates/owner.html'"></div></div>
+    </div>
+</div>

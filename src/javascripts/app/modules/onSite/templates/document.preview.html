@@ -1,0 +1,37 @@
+<div class="doc-preview full-height wrapper-xs">
+    <div class="row preview-actions">
+        <button type="button" class="btn m-b-xs w-xs btn-info" ng-click="download(doc)">Download
+        </button>
+        <button type="button" class="btn m-b-xs m-xs close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="row full-height content-padding">
+        <div class="col-xs-8 full-height padding-bottom">
+            <div class="center-element wrapper-xs">{{doc.name}}</div>
+            <iframe class="full-height full-width" src="http://docs.google.com/gview?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true"
+                    frameborder="0" ng-if="doc.fileType==='application/pdf'">
+            </iframe>
+            <div class="image-wrapper center-element full-height full-width" ng-if="doc.fileType==='image/png'">
+                <img class="image-size wrapper-xs" src="https://placeimg.com/640/480/any">
+            </div>
+        </div>
+        <div class="col-xs-4 full-height padding-comment">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">Comments</div>
+                <div class="panel-body">
+                    <form role="form" class="ng-pristine ng-valid">
+                        <div class="form-group">
+                            <input type="text" class="form-control" mentio mentio-typed-text="typedUser"
+                                   mentio-items="users | filter:label:typedUser"
+                                   ng-model="mentionUser"/>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

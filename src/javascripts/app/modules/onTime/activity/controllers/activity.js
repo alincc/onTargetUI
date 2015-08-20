@@ -2,7 +2,7 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications) {
     var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
     var currentProjectId = $rootScope.currentProjectInfo.projectId;
     //$scope.currentProjectName = $rootScope.currentProjectInfo.projectName;
@@ -10,7 +10,7 @@ define(function(require) {
 
     $scope.currentProject = [];
     $scope.activities = [];
-    $scope.activitySelected = null;
+    $scope.activitySelected = $rootScope.activitySelected = null;
     $scope.model = {
       userId: userContext.authentication().userData.userId
     };
@@ -38,25 +38,14 @@ define(function(require) {
     $scope.getCurrentProjectActivities = function() {
       var currentProject = _.where($scope.projects, {projectId: currentProjectId})[0];
       if(currentProject) {
-        projectContext.setProject(currentProject, null);
-        $scope.activities = currentProject.projects;
         projectContext.setProject(currentProject);
+        $scope.activities = currentProject.projects;
       }
-      //for(var i = 0; i < $scope.projects.length; i++)
-      //{
-      //  if(currentProjectId === $scope.projects[i].projectId){
-      //    console.log($scope.projects[i]);
-      //    projectContext.setProject($scope.projects[i], null);
-      //    $scope.activities = $scope.projects[i].projects;
-      //    $scope.activitySelected = $scope.activities[0];
-      //    break;
-      //  }
-      //}
-
     };
 
     $scope.selectActiity = function(activity) {
-      $scope.activitySelected = activity;
+      $scope.activitySelected = $rootScope.activitySelected = activity;
+      notifications.activitySelection();
     };
 
     $scope.openCreateActivityModal = function() {
@@ -80,7 +69,6 @@ define(function(require) {
           });
         });
     };
-
 
     $scope.openEditActivityModal = function() {
       // prepare company list
@@ -121,12 +109,12 @@ define(function(require) {
         }
       });
 
-      deleteActivityModalInstance.result.then(function() {
-        //delete success
-        $scope.activitySelected = null;
-      }, function() {
-
-      });
+      deleteActivityModalInstance.result.then(
+        function() {
+          //delete success
+          $scope.activitySelected = null;
+          $scope.getUserProject();
+        });
     };
   }];
   return controller;

@@ -1,5 +1,5 @@
-<div class="row" ng-controller="ActivityController">
-    <div class="col-xs-3 activity-section">
+<div ng-controller="ActivityController">
+    <div class="activity-section">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="search">
@@ -14,7 +14,7 @@
                 <div class="heading">
                     <span class="text">{{currentProject.projectName}}</span>
                 </div>
-                <div class="activity-list" ng-scrollable="{scrollX:'none', scrollY:'right'}">
+                <div class="activity-list" custom-scroll>
                     <div class="activity-item" ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }" ng-repeat="activity in activities" ng-click="selectActiity(activity)">
                         <div class="info">
                             <div class="title">{{activity.projectName}}</div>
@@ -42,8 +42,5 @@
                 <button class="btn btn-primary" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><i class="fa fa-times"></i> Delete</button>
             </div>
         </div>
-    </div>
-    <div class="col-xs-9">
-
     </div>
 </div>

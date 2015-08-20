@@ -18,7 +18,11 @@
             </div>
         </div>
         <!-- / main header -->
-        <div class="wrapper-md p-r-none" ng-if="selectedTab==='taskManagement'" ng-include="'onTime/activity/templates/activity.html'">
+        <div class="wrapper-md p-r-none" ng-if="selectedTab==='taskManagement'">
+            <div class="row">
+                <div class="col-xs-12 col-md-3" ng-include="'onTime/activity/templates/activity.html'"></div>
+                <div class="col-xs-12 col-md-9 task-container" ng-include="'onTime/task/templates/task.html'" ng-if="activitySelected"></div>
+            </div>
         </div>
     </div>
 </div>

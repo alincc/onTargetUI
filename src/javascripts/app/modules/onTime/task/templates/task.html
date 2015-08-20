@@ -1,0 +1,112 @@
+<div class="row" ng-controller="TaskController">
+    <div class="col-xs-12 task-list-section" ng-class="{'col-md-8': taskSelected, 'col-md-12': !taskSelected}">
+        <div class="task-section">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="search">
+                        <div class="input-group m-b">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
+                          </button>
+                        </span>
+                            <input type="text" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="task-list" custom-scroll>
+                        <div class="task-item" ng-repeat="task in tasks" ng-class="{'task-selected-item': task.projectTaskId == taskSelected.projectTaskId }"
+                             ng-click="selectTask(task)">
+                            <div class="task-status">
+                                <div class="percentage">{{task.percentageComplete}}%</div>
+                                            <span
+                                                    round-progress
+                                                    max="100"
+                                                    current="task.percentageComplete"
+                                                    color="#00d8ff"
+                                                    bgcolor="#ececec"
+                                                    radius="25"
+                                                    stroke="5"
+                                                    semi="false"
+                                                    rounded="false"
+                                                    clockwise="true"
+                                                    responsive="false"
+                                                    iterations="10"
+                                                    animation="easeInOutQuart">
+                                            </span>
+                            </div>
+                            <div class="task-info">
+                                <div class="title">{{task.title}}</div>
+                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
+                                </div>
+                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                    priority
+                                </div>
+                            </div>
+                            <div class="task-update-date">
+                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
+                            </div>
+                            <div class="task-due-date">
+                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
+                            </div>
+                        </div>
+                        <div class="no-result text-center" ng-if="!tasks.length">
+                            No tasks was found
+                        </div><!--
+                        <div class="task-item"
+                             ng-class="{'task-selected-item': task.projectTaskId == taskSelected.projectTaskId }"
+                             ng-repeat="task in tasks" ng-click="selectTask(task)">
+                            <div class="info">
+                                <div>
+                                    <div class="title">{{task.title}}</div>
+                                    <div class="date pull-right">
+                                        <span>{{task.startDate|date:'MM/dd/yyyy'}}</span> - <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
+                                    </div>
+                                </div>
+                                <div class="assign">
+                                    <span>Assigned to: </span><span ng-repeat="assign in task.assignee">{{assign.contact.firstName}}&nbsp;{{assign.contact.lastName}}</span>
+                                </div>
+                                <div class="priority">
+                                    <span>{{task.severity|taskSeverityByCode}}</span>&nbsp;<span>priority</span>
+                                </div>
+                            </div>
+
+                        </div>-->
+                    </div>
+                </div>
+                <div class="panel-footer bg-light lter">
+                    <button class="btn btn-primary" ng-click="addTask()"><i class="fa fa-plus"></i> Add Task
+                    </button>
+                    <!--<button class="btn btn-primary" ng-click="openCreateTaskModal()"><i class="fa fa-plus"></i> Add Task
+                    </button>-->
+                    <!--<button class="btn btn-primary" ng-click="openEditTaskModal()"><i class="fa fa-pencil-square-o"></i>
+                        Edit
+                    </button>
+                    <button class="btn btn-primary" ng-click="openDeleteTaskModal()"><i class="fa fa-times"></i> Delete
+                    </button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-4 task-create-update-section" ng-if="taskSelected">
+        <div class="panel-right">
+            <div class="panel panel-default">
+                <div class="panel-heading bg-light lter">
+                    <span class="text">{{action.text}}</span>
+                </div>
+                <div class="panel-body">
+                    <div ng-switch on="action.name">
+                        <div ng-switch-when="addTask"><div ng-include="'onTime/task/templates/create.html'"></div></div>
+                        <div ng-switch-when="editTask"><div ng-include="'onTime/task/templates/edit.html'"></div></div>
+                        <div ng-switch-when="infoTask"><div ng-include="'onTime/task/templates/info.html'"></div></div>
+                        <div ng-switch-when="logisticTask"><div ng-include="'onTime/task/templates/logistics.html'"></div></div>
+                        <div ng-switch-default><div ng-include="'onTime/task/templates/info.html'"></div></div>
+                    </div>
+
+                </div>
+                <div class="panel-footer" ng-if="action.name=='infoTask'">
+                    <button class="btn btn-primary" ng-click="editTaskInformation()">Edit Task Infomation</button>
+                    <button class="btn btn-primary" ng-click="editTaskLogistics()">Edit Task Logistics</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

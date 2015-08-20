@@ -1,0 +1,186 @@
+// Actitivy
+.task-section {
+  .panel {
+    border-radius: 5px;
+    .panel-body {
+      padding: 0;
+      .search {
+        margin: 15px 15px 0 15px;
+      }
+      .heading {
+        margin: 15px 15px 0 15px;
+        .text {
+          font-weight: bold;
+        }
+      }
+      .task-list {
+        height: 535px;
+        .task-item {
+          display: table;
+          width: 100%;
+          border-bottom: solid 1px #ececec;
+          padding-bottom: 10px;
+          margin-bottom: 15px;
+          .task-status {
+            display: table-cell;
+            position: relative;
+            border-right: solid 1px #ececec;
+            padding: 0 10px;
+            vertical-align: middle;
+            .percentage {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              margin-left: -10px;
+              font-weight: 700;
+              margin-top: -12px;
+            }
+          }
+          .task-info {
+            display: table-cell;
+            vertical-align: top;
+            width: 100%;
+            padding: 0 10px;
+            .title {
+              color: #000000;
+              font-size: 16px;
+            }
+            .assignee {
+              color: #adadad;
+              span {
+                color: #000000;
+              }
+            }
+            .priority {
+              color: #000000;
+              span {
+                font-size: 20px;
+                &.hight {
+                  color: red;
+                }
+              }
+            }
+          }
+          .task-update-date {
+            display: table-cell;
+            white-space: nowrap;
+            vertical-align: middle;
+            color: #adadad;
+            padding: 0 20px 0 0;
+            span {
+              color: #000000;
+            }
+          }
+          .task-due-date {
+            white-space: nowrap;
+            display: table-cell;
+            vertical-align: middle;
+            color: #adadad;
+            span {
+              color: #000000;
+            }
+          }
+
+          &.last {
+            border-bottom: solid 1px #eeeeee;
+          }
+          &:hover {
+            background-color: #e1fcff;
+            cursor: pointer;
+          }
+        }
+
+        .task-selected-item {
+          background-color: #e1fcff;
+          display: table;
+          width: 100%;
+          border-bottom: solid 1px #ececec;
+          padding-bottom: 10px;
+          margin-bottom: 15px;
+          .task-status {
+            display: table-cell;
+            position: relative;
+            border-right: solid 1px #ececec;
+            padding: 0 10px;
+            vertical-align: middle;
+            .percentage {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              margin-left: -10px;
+              font-weight: 700;
+              margin-top: -12px;
+            }
+          }
+          .task-info {
+            display: table-cell;
+            vertical-align: top;
+            width: 100%;
+            padding: 0 10px;
+            .title {
+              color: #000000;
+              font-size: 16px;
+            }
+            .assignee {
+              color: #adadad;
+              span {
+                color: #000000;
+              }
+            }
+            .priority {
+              color: #000000;
+              span {
+                font-size: 20px;
+                &.hight {
+                  color: red;
+                }
+              }
+            }
+          }
+          .task-update-date {
+            display: table-cell;
+            white-space: nowrap;
+            vertical-align: middle;
+            color: #adadad;
+            padding: 0 20px 0 0;
+            span {
+              color: #000000;
+            }
+          }
+          .task-due-date {
+            white-space: nowrap;
+            display: table-cell;
+            vertical-align: middle;
+            color: #adadad;
+            span {
+              color: #000000;
+            }
+          }
+
+          &.last {
+            border-bottom: solid 1px #eeeeee;
+          }
+          &:hover {
+            background-color: #e1fcff;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+// Actitivy
+.panel-right {
+  .panel {
+    border-radius: 5px;
+    .panel-heading {
+      .text {
+        font-weight: bold;
+      }
+    }
+    .panel-body {
+      padding: 0;
+      height: 558px;
+    }
+  }
+}

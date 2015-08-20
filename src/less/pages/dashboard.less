@@ -82,9 +82,10 @@
     .desc {
       position: absolute;
       top: 89px;
-      left: 50%;
+      left: 0;
       white-space: nowrap;
-      margin-left: -32px;
+      width: 100%;
+      text-align: center;
       p {
         margin: 0;
         &.large {
@@ -161,8 +162,10 @@
     .icon {
       display: table-cell;
       vertical-align: middle;
+      width: 100%;
+      text-align: center;
       i {
-        font-size: 60px;
+        font-size: 80px;
         color: #4279bd;
       }
     }
@@ -173,6 +176,7 @@
       p {
         text-align: center;
         margin: 0;
+        white-space: nowrap;
         &.temp {
           font-size: 30px;
           color: #7a7b7a;
@@ -269,6 +273,9 @@
       .tab-content {
         .task-list {
           height: 400px;
+          .mCSB_outside + .mCSB_scrollTools{
+            right: -15px;
+          }
           .task-item {
             display: table;
             width: 100%;
@@ -283,11 +290,12 @@
               vertical-align: middle;
               .percentage {
                 position: absolute;
-                left: 50%;
                 top: 50%;
-                margin-left: -10px;
+                left:0;
                 font-weight: 700;
                 margin-top: -12px;
+                width: 100%;
+                text-align: center;
               }
             }
             .task-info {
@@ -396,6 +404,21 @@
       &:hover:before {
         background: #4279bd;
         border-color: #4279bd;
+      }
+      .tl-time {
+        height: 46px;
+        display: inline;
+        .tl-d {
+          font-size: 46px;
+          line-height: 1;
+          float: left;
+          margin-right: 10px;
+        }
+        .tl-dmy {
+          font-size: 18px;
+          line-height: 1;
+          padding-top: 5px;
+        }
       }
     }
 

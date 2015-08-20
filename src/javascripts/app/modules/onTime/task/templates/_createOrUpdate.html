@@ -1,0 +1,102 @@
+<div class="form-group">
+    <label class="col-xs-2 control-label">Title</label>
+    <div class="col-xs-10">
+        <input type="text" class="form-control" placeholder="Title" required ng-model="task.title"
+               name="title"/>
+        <ng-messages ng-if="task_form.title.$dirty"
+                     for="task_form.title.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Title is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Description</label>
+    <div class="col-xs-10">
+        <textarea type="text" class="form-control" placeholder="Description" required ng-model="task.description"
+               name="description"/>
+        <ng-messages ng-if="task_form.description.$dirty"
+                     for="task_form.description.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Description is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Status</label>
+    <div class="col-xs-10">
+        <select class="form-control" name="status" ng-model="task.status"
+                ng-options="status.id as status.name for status in taskStatuses" required>
+            <option value="">-- Select --</option>
+        </select>
+        <ng-messages ng-if="task_form.status.$dirty"
+                     for="task_form.status.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Status is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Severity</label>
+    <div class="col-xs-10">
+        <select class="form-control" name="severity" ng-model="task.severity"
+                ng-options="severity.id as severity.name for severity in taskSeverities" required>
+            <option value="">-- Select --</option>
+        </select>
+        <ng-messages ng-if="task_form.severity.$dirty"
+                     for="task_form.severity.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Severity is missing.</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Start date</label>
+
+    <div class="col-xs-10">
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="Start date" required ng-model="task.startDate"
+                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxDate" min-date="minDate2"
+                   datepicker-options="startDate.options"
+                   name="startDate" ng-click="startDate.isOpen = !startDate.isOpen"/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="startDate.open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+        <ng-messages ng-if="task_form.startDate.$dirty"
+                     for="task_form.startDate.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide task start date</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-2 control-label">End date</label>
+
+    <div class="col-xs-10">
+        <p class="input-group">
+            <input type="text" class="form-control" placeholder="End date" required ng-model="task.endDate"
+                   ng-click="endDate.isOpen = !endDate.isOpen"
+                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="minDate" max-date="maxDate2"
+                   datepicker-options="endDate.options"
+                   name="endDate"/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="endDate.open($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+        </p>
+        <ng-messages ng-if="task_form.endDate.$dirty"
+                     for="task_form.endDate.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide task end date</span>
+        </ng-messages>
+    </div>
+</div>
+<div class="form-group" ng-if="!editTask">
+    <label class="col-xs-2 control-label">Task Assignee</label>
+    <div class="col-xs-10">
+        <select class="form-control" name="assignees" ng-model="task.assignees"
+                ng-options="contact.contact.contactId as contact.contact.firstName for contact in contacts" required>
+            <option value="">-- Select --</option>
+        </select>
+        <ng-messages ng-if="task_form.assignees.$dirty"
+                     for="task_form.assignees.$error">
+            <span class="help-block m-b-none text-danger" ng-message when="required">Assignees is missing.</span>
+        </ng-messages>
+    </div>
+</div>

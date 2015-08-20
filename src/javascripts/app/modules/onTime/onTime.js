@@ -5,8 +5,9 @@ define(function (require){
     template = require('text!./onTime.html'),
     controller = require('./onTimeController'),
     activityModule = require('./activity/activity'),
+    taskModule = require('./task/task'),
     projectContextModule = require('app/common/context/project');
-  var module = angular.module('app.onTime', ['ui.router', 'app.config', 'common.context.project', 'app.activity']);
+  var module = angular.module('app.onTime', ['ui.router', 'app.config', 'common.context.project', 'app.activity', 'app.task']);
 
   module.run(['$templateCache', function ($templateCache){
     $templateCache.put('onTime/templates/onTime.html', template);

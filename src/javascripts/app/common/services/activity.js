@@ -22,6 +22,10 @@ define(function(require) {
           return $http.post(constant.resourceUrl + '/tasks/deleteProject', model);
         };
 
+        service.getActivityLog = function (model){
+          return $http.post(constant.resourceUrl + '/activitylog/getallactivitylogs', model);
+        };
+
         return service;
       }
     ]

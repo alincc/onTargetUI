@@ -14,8 +14,8 @@ define(function (){
       projectName: activity.projectName,
       projectDescription: activity.projectDescription,
       companyId: activity.companyId,
-      startDate: activity.startDate,
-      endDate: activity.endDate,
+      startDate: new Date(activity.startDate),
+      endDate: new Date(activity.endDate),
       status: activity.status
     };
 

@@ -26,8 +26,9 @@ define(function(require) {
     angularSvgRoundProgress = require('angularSvgRoundProgress'),
     utilServiceModule = require('app/common/services/util'),
     angularSanitize = require('angularSanitize'),
-    toaster = require('toaster');
-  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country']);
+    toaster = require('toaster'),
+    userNotificationsModule = require('app/common/services/userNotifications');
+  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('project/templates/list.html', template);

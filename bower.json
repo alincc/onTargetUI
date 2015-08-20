@@ -1,8 +1,7 @@
 {
   "name": "OnTarget",
   "private": "true",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "jquery": "~1.11.3",
     "angular": "~1.4.3",
@@ -33,7 +32,9 @@
     "autosize": "latest",
     "angular-utils-pagination": "latest",
     "ng-file-upload": "latest",
-    "ng-scrollable": "latest",
-    "angular-chart.js": "latest"
+    "angular-chart.js": "latest",
+    "malihu-custom-scrollbar-plugin": "latest",
+    "jquery-mousewheel": "latest",
+    "ment.io": "~0.9.23"
   }
 }

@@ -3,9 +3,13 @@ define(function(require) {
   var angular = require('angular'),
     config = require('app/config'),
     userContextModule = require('app/common/context/user'),
-    projectContextModule = require('app/common/context/project');
-  var module = angular.module('common.services.account', ['app.config', 'common.context.user', 'common.context.project']);
-  module.factory('accountFactory', ['$http', 'appConstant', 'userContext', '$q', '$rootScope', 'projectContext', function($http, constant, userContext, $q, $rootScope, projectContext) {
+    projectContextModule = require('app/common/context/project'),
+    userNotificationsModule = require('app/common/services/userNotifications');
+
+  var module = angular.module('common.services.account', ['app.config', 'common.context.user', 'common.context.project', 'common.services.userNotifications']);
+
+  module.factory('accountFactory', ['$http', 'appConstant', 'userContext', '$q', '$rootScope', 'projectContext', 'userNotificationsFactory',
+    function($http, constant, userContext, $q, $rootScope, projectContext, userNotificationsFactory) {
     var services = {};
     services.register = function(data) {
       return $http.post(constant.domain + '/collaborate/registernewuser', data);
@@ -34,6 +38,14 @@ define(function(require) {
                   username: userName
                 });
                 userContext.fillInfo(userData, true);
+
+                var requestPayload = {
+                  "pageNumber": 1,
+                  "perPageLimit": constant.app.settings.userNotificationsPageSize,
+                  "userId": $rootScope.currentUserInfo.userId
+                };
+                userNotificationsFactory.getAll(requestPayload);
+
                 deferred.resolve();
               }, function(err) {
                 deferred.reject(err);
@@ -58,6 +70,8 @@ define(function(require) {
         .then(function() {
           userContext.clearInfo();
           projectContext.clearInfo();
+
+          userNotificationsFactory.stopGetAll();
           deferred.resolve();
         }, function() {
           userContext.clearInfo();

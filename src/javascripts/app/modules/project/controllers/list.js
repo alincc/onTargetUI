@@ -5,7 +5,7 @@ define(function() {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory) {
+  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', 'userNotificationsFactory', 'appConstant', function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory, userNotificationsFactory, constant) {
     function arrangeData(data, itemPerRow) {
       var list = [];
       var row = [];
@@ -128,6 +128,16 @@ define(function() {
 
     $scope.goDashboard = function(pj) {
       projectContext.setProject(pj);
+
+      if($rootScope.currentUserInfo) {
+        var requestPayload = {
+          "pageNumber": 1,
+          "perPageLimit": constant.app.settings.userNotificationsPageSize,
+          "userId": $rootScope.currentUserInfo.userId
+        };
+        userNotificationsFactory.getAll(requestPayload);
+      }
+
       $state.go('app.dashboard');
     };
 

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "name": "ACTIVE"
+  },
+  {
+    "id": "2",
+    "name": "PENDING"
+  },
+  {
+    "id": "3",
+    "name": "COMPLETED"
+  },
+  {
+    "id": "4",
+    "name": "EXPIRED"
+  }
+]

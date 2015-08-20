@@ -14,8 +14,10 @@ define(function (require){
     project: require('./project/project'),
     resetpassword: require('./resetpassword/resetpassword'),
     onTime: require('./onTime/onTime'),
+    onSite: require('./onSite/onSite'),
     editprofile: require('./editprofile/editprofile'),
     company: require('./editCompany/company'),
-    changePassword: require('./changePassword/changePassword')
+    changePassword: require('./changePassword/changePassword'),
+    notification: require('./notifications/notifications')
   };
 });

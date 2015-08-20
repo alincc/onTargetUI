@@ -11,13 +11,39 @@ define(function(require) {
     ['$http', '$q',
       function($http, $q) {
         var service = {};
+        service.savedDate = {
+          countries: null,
+          states: []
+        };
         service.getCountryList = function() {
-          var countryListJson = angular.fromJson(countryListData);
-          return countryListJson;
+          if(service.savedDate.countries) {
+            return service.savedDate.countries;
+          } else {
+            var countryListJson = angular.fromJson(countryListData);
+            service.savedDate.countries = countryListJson;
+            return countryListJson;
+          }
         };
 
         service.getStateList = function(fileName) {
-          return $http.get('javascripts/app/common/resources/countries/' + fileName + '.json');
+          var deferred = $q.defer();
+          var savedState = _.where(service.savedDate.states, {fileName: fileName})[0];
+          if(savedState) {
+            deferred.resolve(savedState.states);
+          } else {
+            $http.get('javascripts/app/common/resources/countries/' + fileName + '.json')
+              .success(function(resp) {
+                service.savedDate.states.push({
+                  fileName: fileName,
+                  states: resp
+                });
+                deferred.resolve(resp);
+              })
+              .error(function() {
+                deferred.resolve([]);
+              });
+          }
+          return deferred.promise;
         };
 
         service.getCountryByCode = function(code) {

@@ -1,6 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular'),
+    //jQuery = require('jQuery'),
+    jQueryCustomScroll = require('jQueryCustomScroll'),
     config = require('app/config');
   var module = angular.module('common.directives.app', ['app.config']);
   module.directive("uiNav", ["$timeout",
@@ -144,6 +146,26 @@ define(function(require) {
             elem.removeClass('hide-aside');
             appConstant.app.settings.hideAside = false;
           }
+        });
+      }
+    };
+  }]);
+  module.directive('customScroll', [function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        elem.mCustomScrollbar({
+          axis: "y", // horizontal scrollbar
+          scrollInertia: 200,
+          scrollbarPosition: "outside"
+        });
+
+        scope.$on('content.reload', function() {
+          elem.mCustomScrollbar("update");
+        });
+
+        scope.$on('$destroy', function() {
+          elem.mCustomScrollbar("destroy");
         });
       }
     };

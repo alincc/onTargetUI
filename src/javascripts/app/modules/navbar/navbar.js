@@ -5,9 +5,10 @@ define(function (require){
     controller = require('./controllers/navbar'),
     accountServiceModule = require('app/common/services/account'),
     notificationsServiceModule = require('app/common/services/notifications'),
-    showHideCollaborateDirective = require('./directives/showHideCollaborate');
+    showHideCollaborateDirective = require('./directives/showHideCollaborate'),
+    angularMoment = require('angularMoment');
 
-  var module = angular.module('app.navbar', ['common.context.user', 'common.services.account', 'common.services.notifications']);
+  var module = angular.module('app.navbar', ['common.context.user', 'common.services.account', 'common.services.notifications', 'angularMoment']);
   module.run(['$templateCache', function ($templateCache){
     $templateCache.put('navbar/templates/navbar.html', template);
   }]);

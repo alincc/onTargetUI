@@ -14,7 +14,8 @@ define(function (require){
     angularBootstrap = require('angularBootstrap'),
     angularUiEvent = require('angularUiEvent'),
     angularSanitize = require('angularSanitize'),
-    angularLoadingBar = require('angularLoadingBar');
+    angularLoadingBar = require('angularLoadingBar'),
+    userNotificationModule = require('./common/services/userNotifications');
 
   var app = angular.module('app', [
     // libraries
@@ -31,6 +32,8 @@ define(function (require){
     'common.filters',
     'common.context.user',
     'common.context.project',
+    'common.services.userNotifications',
+
     // modules
     'app.main',
     'app.aside',
@@ -45,17 +48,28 @@ define(function (require){
     'app.project',
     'app.resetpassword',
     'app.onTime',
+    'app.onSite',
     'app.editprofile',
     'app.company',
-    'app.changePassword'
+    'app.changePassword',
+    'app.notifications'
   ]);
 
   app
-    .run(['$templateCache', 'userContext', 'projectContext',
-      function ($templateCache, userContext, projectContext){
+    .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant',
+      function ($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant) {
         // Load Authentication data from localstorage
         userContext.loadFromLocal();
         projectContext.loadProject();
+
+        if($rootScope.currentUserInfo) {
+          var requestPayload = {
+            "pageNumber": 1,
+            "perPageLimit": constant.app.settings.userNotificationsPageSize,
+            "userId": $rootScope.currentUserInfo.userId
+          };
+          userNotificationsFactory.startGetAll(requestPayload);
+        }
       }
     ]);
 

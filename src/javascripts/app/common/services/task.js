@@ -2,12 +2,14 @@ define(function (require){
   'use strict';
   var angular = require('angular'),
     userContext = require('app/common/context/user'),
+    taskStatuses = require('text!app/common/resources/taskStatuses.json'),
+    taskSeverities = require('text!app/common/resources/taskSeverities.json'),
     config = require('app/config');
   var module = angular.module('common.services.task', ['app.config', 'common.context.user']);
   module.factory('taskFactory', ['$http', 'appConstant', '$q', 'userContext', function ($http, constant, $q, userContext){
     var services = {};
     // get tasks
-    services.getTasks = function (){
+    /*services.getTasks = function (){
       return $http.get(constant.domain + '/api/tasks');
     };
 
@@ -40,6 +42,42 @@ define(function (require){
       return $http.post(constant.domain + 'api/Tasks/' + taskId + '/reassign', {
         to: to
       });
+    };*/
+
+    //project task
+    services.getProjectTasks = function (model){
+      //return $http.post(constant.domain + '/task/getProjectTask', model);
+      return $http.post(constant.resourceUrl + '/tasks/getProjectTasks', model);
+    };
+
+    services.addTask = function (model){
+      //return $http.post(constant.domain + '/task/addTask', model);
+      return $http.post(constant.resourceUrl + '/task/createnewtask', model);
+    };
+
+    services.updateTask = function (model){
+      return $http.post(constant.resourceUrl + '/task/createnewtask', model);
+    };
+
+    services.deleteTask = function (model){
+      //return $http.post(constant.domain + '/task/deleteTask', model);
+      return $http.post(constant.resourceUrl + '/tasks/deleteTask', model);
+    };
+
+    services.getContacts = function (model){
+      return $http.post(constant.resourceUrl + '/contact/getcontacts', model);
+    };
+
+    services.getTaskStatuses = function() {
+      return angular.fromJson(taskStatuses);
+    };
+
+    services.getTaskSeverities = function() {
+      return angular.fromJson(taskSeverities);
+    };
+
+    services.assignUserToTask = function (model){
+      return $http.post(constant.domain + '/task/assignUserToTask', model);
     };
 
     return services;

@@ -1,0 +1,67 @@
+<section class="notification-page">
+  <div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Notifications</h1>
+  </div>
+  <div class="wrapper-md">
+    <div class="panel panel-default">
+      <div class="table-responsive">
+        <table class="table b-t b-light">
+          <thead>
+          <tr>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Content</th>
+            <!--<th>Time</th>-->
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td colspan="3" class="text-center" ng-if="!isLoading && !notifications.length">
+              No pending request account.
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-center" ng-if="isLoading">
+              <spinner text="Loading..."></spinner>
+            </td>
+          </tr>
+          <tr dir-paginate="notification in notifications | itemsPerPage: 20" pagination-id="notifications-table"
+              total-items="totalNotifications" current-page="params.page" ng-class="{'new-notification': notification.status == 'NEW'}">
+            <td ng-bind="notification.notificationType"></td>
+            <td ng-bind="notification.status"></td>
+            <td ng-bind="notification.text"></td>
+            <!--<td am-time-ago="notification.tsInsert * 1000" am-preprocess="unix"></td>-->
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <footer class="panel-footer" ng-if="notifications.length">
+        <div class="row">
+          <div class="col-sm-8 text-center">
+            <small class="text-muted inline m-t-sm m-b-sm">
+              showing {{((params.page-1) * params.per_page) + 1}} -
+              {{params.page * params.per_page > totalNotifications ? totalNotifications : params.page * params.per_page}}
+              of {{totalNotifications}} items
+            </small>
+          </div>
+          <div class="col-sm-4 text-right text-center-xs">
+            <dir-pagination-controls
+              max-size="10"
+              direction-links="true"
+              boundary-links="false"
+              on-page-change="pageChange(newPageNumber)"
+              pagination-id="notifications-table"
+              auto-hide="true">
+            </dir-pagination-controls>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</section>
+
+<style>
+  .new-notification {
+    background-color: #ffffe5
+  }
+</style>

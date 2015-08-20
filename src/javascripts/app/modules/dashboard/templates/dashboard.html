@@ -43,7 +43,7 @@
                                             }}</p>
                                     </div>
                                     <div class="start-date">Start date: <span
-                                            ng-bind="currentProject.startDate | date"></span></div>
+                                            ng-bind="currentProject.startDate | date:app.dateFormat"></span></div>
                                     <span
                                             round-progress
                                             max="projectDate.total"
@@ -61,7 +61,7 @@
                                     </span>
 
                                     <div class="end-date">End date: <span
-                                            ng-bind="currentProject.endDate | date"></span></div>
+                                            ng-bind="currentProject.endDate | date:app.dateFormat"></span></div>
                                 </div>
                                 <div class="col-xs-8">
                                     chart
@@ -159,15 +159,15 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <tabset class="tab-container">
-                                <tab heading="Past due" class="task-past-due">
-                                    <div class="task-list" ng-scrollable="{scrollX:'none', scrollY:'right'}">
+                                <tab heading="Past due" class="task-past-due" select="taskTabSelect()">
+                                    <div class="task-list" custom-scroll>
                                         <div class="task-item" ng-repeat="task in tasks.pastDue">
                                             <div class="task-status">
-                                                <div class="percentage">50%</div>
+                                                <div class="percentage">{{task.percentageComplete}}%</div>
                                             <span
                                                     round-progress
                                                     max="100"
-                                                    current="50"
+                                                    current="task.percentageComplete"
                                                     color="#00d8ff"
                                                     bgcolor="#ececec"
                                                     radius="25"
@@ -181,33 +181,188 @@
                                             </span>
                                             </div>
                                             <div class="task-info">
-                                                <div class="title">Scaffolding</div>
-                                                <div class="assignee">Assigned to: <span>Sang Dao</span></div>
-                                                <div class="priority"><span class="hight">HIGHT</span> priority</div>
+                                                <div class="title">{{task.title}}</div>
+                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
+                                                </div>
+                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                    priority
+                                                </div>
                                             </div>
                                             <div class="task-update-date">
-                                                Updated On: <span>03/03/2015</span>
+                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
                                             </div>
                                             <div class="task-due-date">
-                                                Due Date: <span>03/03/2015</span>
+                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
                                             </div>
+                                        </div>
+                                        <div class="no-result text-center" ng-if="!tasks.pastDue.length">
+                                            No tasks was found
                                         </div>
                                     </div>
                                 </tab>
-                                <tab heading="Active" class="task-active">
-                                    Active
+                                <tab heading="Active" class="task-active" select="taskTabSelect()">
+                                    <div class="task-list" custom-scroll>
+                                        <div class="task-item" ng-repeat="task in tasks.active">
+                                            <div class="task-status">
+                                                <div class="percentage">{{task.percentageComplete}}%</div>
+                                            <span
+                                                    round-progress
+                                                    max="100"
+                                                    current="task.percentageComplete"
+                                                    color="#00d8ff"
+                                                    bgcolor="#ececec"
+                                                    radius="25"
+                                                    stroke="5"
+                                                    semi="false"
+                                                    rounded="false"
+                                                    clockwise="true"
+                                                    responsive="false"
+                                                    iterations="10"
+                                                    animation="easeInOutQuart">
+                                            </span>
+                                            </div>
+                                            <div class="task-info">
+                                                <div class="title">{{task.title}}</div>
+                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
+                                                </div>
+                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                    priority
+                                                </div>
+                                            </div>
+                                            <div class="task-update-date">
+                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                            <div class="task-due-date">
+                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="no-result text-center" ng-if="!tasks.active.length">
+                                            No tasks was found
+                                        </div>
+                                    </div>
                                 </tab>
-                                <tab heading="Completed" class="task-completed">
-                                    Completed
+                                <tab heading="Completed" class="task-completed" select="taskTabSelect()">
+                                    <div class="task-list" custom-scroll>
+                                        <div class="task-item" ng-repeat="task in tasks.completed">
+                                            <div class="task-status">
+                                                <div class="percentage">{{task.percentageComplete}}%</div>
+                                            <span
+                                                    round-progress
+                                                    max="100"
+                                                    current="task.percentageComplete"
+                                                    color="#00d8ff"
+                                                    bgcolor="#ececec"
+                                                    radius="25"
+                                                    stroke="5"
+                                                    semi="false"
+                                                    rounded="false"
+                                                    clockwise="true"
+                                                    responsive="false"
+                                                    iterations="10"
+                                                    animation="easeInOutQuart">
+                                            </span>
+                                            </div>
+                                            <div class="task-info">
+                                                <div class="title">{{task.title}}</div>
+                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
+                                                </div>
+                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                    priority
+                                                </div>
+                                            </div>
+                                            <div class="task-update-date">
+                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                            <div class="task-due-date">
+                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="no-result text-center" ng-if="!tasks.completed.length">
+                                            No tasks was found
+                                        </div>
+                                    </div>
                                 </tab>
-                                <tab heading="Due in 7 days" class="task-due-in-7-days">
-                                    Due in 7 days
+                                <tab heading="Due in 7 days" class="task-due-in-7-days" select="taskTabSelect()">
+                                    <div class="task-list" custom-scroll="{scrollX:'none', scrollY:'right'}">
+                                        <div class="task-item" ng-repeat="task in tasks.dueIn7Day">
+                                            <div class="task-status">
+                                                <div class="percentage">{{task.percentageComplete}}%</div>
+                                            <span
+                                                    round-progress
+                                                    max="100"
+                                                    current="task.percentageComplete"
+                                                    color="#00d8ff"
+                                                    bgcolor="#ececec"
+                                                    radius="25"
+                                                    stroke="5"
+                                                    semi="false"
+                                                    rounded="false"
+                                                    clockwise="true"
+                                                    responsive="false"
+                                                    iterations="10"
+                                                    animation="easeInOutQuart">
+                                            </span>
+                                            </div>
+                                            <div class="task-info">
+                                                <div class="title">{{task.title}}</div>
+                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
+                                                </div>
+                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                    priority
+                                                </div>
+                                            </div>
+                                            <div class="task-update-date">
+                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                            <div class="task-due-date">
+                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="no-result text-center" ng-if="!tasks.dueIn7Day.length">
+                                            No tasks was found
+                                        </div>
+                                    </div>
                                 </tab>
-                                <tab heading="Scheduled" class="task-scheduled">
-                                    Scheduled
-                                </tab>
-                                <tab heading="Critical" class="task-critical">
-                                    Critical
+                                <tab heading="Critical" class="task-critical" select="taskTabSelect()">
+                                    <div class="task-list" custom-scroll>
+                                        <div class="task-item" ng-repeat="task in tasks.critical">
+                                            <div class="task-status">
+                                                <div class="percentage">{{task.percentageComplete}}%</div>
+                                            <span
+                                                    round-progress
+                                                    max="100"
+                                                    current="task.percentageComplete"
+                                                    color="#00d8ff"
+                                                    bgcolor="#ececec"
+                                                    radius="25"
+                                                    stroke="5"
+                                                    semi="false"
+                                                    rounded="false"
+                                                    clockwise="true"
+                                                    responsive="false"
+                                                    iterations="10"
+                                                    animation="easeInOutQuart">
+                                            </span>
+                                            </div>
+                                            <div class="task-info">
+                                                <div class="title">{{task.title}}</div>
+                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
+                                                </div>
+                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                    priority
+                                                </div>
+                                            </div>
+                                            <div class="task-update-date">
+                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                            <div class="task-due-date">
+                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="no-result text-center" ng-if="!tasks.critical.length">
+                                            No tasks was found
+                                        </div>
+                                    </div>
                                 </tab>
                             </tabset>
 
@@ -218,31 +373,12 @@
                                             <h4>Task Status</h4>
 
                                             <div class="status-list">
-                                                <div class="status-item">
-                                                    <div class="title">Active - <span>10</span></div>
-                                                    <div class="progress">
-                                                        <progressbar class="progress-striped active m-b-sm" value="78"
-                                                                     type="success"></progressbar>
+                                                <div class="status-item" ng-repeat="taskStatus in tasksStatus">
+                                                    <div class="title">{{taskStatus.statusType}} - <span>{{taskStatus.taskCount}}</span>
                                                     </div>
-                                                </div>
-                                                <div class="status-item">
-                                                    <div class="title">Ongoing - <span>10</span></div>
                                                     <div class="progress">
-                                                        <progressbar class="progress-striped active m-b-sm" value="34"
-                                                                     type="success"></progressbar>
-                                                    </div>
-                                                </div>
-                                                <div class="status-item">
-                                                    <div class="title">Completed - <span>10</span></div>
-                                                    <div class="progress">
-                                                        <progressbar class="progress-striped active m-b-sm" value="50"
-                                                                     type="success"></progressbar>
-                                                    </div>
-                                                </div>
-                                                <div class="status-item">
-                                                    <div class="title">Pending - <span>10</span></div>
-                                                    <div class="progress">
-                                                        <progressbar class="progress-striped active m-b-sm" value="20"
+                                                        <progressbar class="progress-striped m-b-sm"
+                                                                     value="taskStatus.taskCount/taskStatusCount*100"
                                                                      type="success"></progressbar>
                                                     </div>
                                                 </div>
@@ -254,21 +390,12 @@
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <h4>Submittal Status</h4>
-                                    <span
-                                            round-progress
-                                            max="100"
-                                            current="50"
-                                            color="#c1d64c"
-                                            bgcolor="#63b2db"
-                                            radius="117"
-                                            stroke="40"
-                                            semi="false"
-                                            rounded="false"
-                                            clockwise="true"
-                                            responsive="true"
-                                            iterations="10"
-                                            animation="easeInOutQuart">
-                                            </span>
+                                            <canvas id="submittalStatus" height="138" class="chart chart-doughnut"
+                                                    options="submittalStatus.options"
+                                                    colours="submittalStatus.colours"
+                                                    data="submittalStatus.data"
+                                                    labels="submittalStatus.labels">
+                                            </canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -279,32 +406,29 @@
                 <div class="col-xs-12 col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <div class="timeline-container" ng-scrollable="{scrollX:'none', scrollY:'right'}">
+                            <div class="timeline-container" custom-scroll>
                                 <ul class="timeline timeline-center">
                                     <li class="tl-header">
                                         <div class="btn btn-info">Now</div>
                                     </li>
-                                    <li class="tl-item tl-left">
+                                    <li ng-repeat="activityLog in activityLogs"
+                                        ng-class="$index%2==0?'tl-item':'tl-item tl-left'">
                                         <div class="tl-wrap b-primary">
-                                            <span class="tl-date">17:00</span>
+                                            <span class="tl-date">{{activityLog.tsInsert|date:'hh:mm'}}</span>
+
                                             <div class="tl-content panel padder b-a block">
                                                 <span class="arrow left pull-up hidden-left"></span>
                                                 <span class="arrow right pull-up visible-left"></span>
-                                                <div>
-                                                    Hello
+
+                                                <div class="tl-time">
+                                                    <div class="tl-d">{{activityLog.tsInsert|date:'dd'}}</div>
+                                                    <div class="tl-dmy">
+                                                        <div>{{activityLog.tsInsert|date:'EEEE'}}</div>
+                                                        <div>{{activityLog.tsInsert|date:'MMM yyyy'}}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="tl-item">
-                                        <div class="tl-wrap b-primary">
-                                            <span class="tl-date">14:00</span>
-                                            <div class="tl-content panel padder b-a block">
-                                                <span class="arrow left pull-up hidden-left"></span>
-                                                <span class="arrow right pull-up visible-left"></span>
-                                                <div>
-                                                    Hallo
-                                                </div>
+                                                <div class="tl-content">{{activityLog.text}}</div>
+
                                             </div>
                                         </div>
                                     </li>
