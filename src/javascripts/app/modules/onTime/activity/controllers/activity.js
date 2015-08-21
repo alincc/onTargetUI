@@ -18,14 +18,24 @@ define(function(require) {
     $scope.currentProject = $rootScope.currentProjectInfo;
     $scope.activities = $scope.currentProject.projects;
 
+    $scope.mapData = function() {
+      _.map($scope.activities, function(el) {
+        var newEl = el;
+        newEl.activeTasks = _.where(el.taskList, {status: "1"}).length;
+        newEl.pendingTasks = _.where(el.taskList, {status: "2"}).length;
+        return newEl;
+      });
+    };
+
     //call api get projects
     $scope.getUserProject = function() {
       projectFactory.getUserProject($scope.model).then(
         function(resp) {
           $scope.projects = resp.data.mainProject.projects;
+
           $scope.getCurrentProjectActivities();
 
-          // save project to local storage
+          // save main project to local storage
           projectContext.setProject(null, resp.data.mainProject);
         },
         function() {
@@ -33,17 +43,20 @@ define(function(require) {
         }
       );
     };
-    //$scope.getUserProject();
 
     $scope.getCurrentProjectActivities = function() {
       var currentProject = _.where($scope.projects, {projectId: currentProjectId})[0];
       if(currentProject) {
-        projectContext.setProject(currentProject);
         $scope.activities = currentProject.projects;
+
+        // save current project to local storage
+        projectContext.setProject(currentProject);
+
+        $scope.mapData();
       }
     };
 
-    $scope.selectActiity = function(activity) {
+    $scope.selectActivity = function(activity) {
       $scope.activitySelected = $rootScope.activitySelected = activity;
       notifications.activitySelection();
     };
@@ -116,6 +129,9 @@ define(function(require) {
           $scope.getUserProject();
         });
     };
+
+    // remap data, add task active and pending counter
+    $scope.mapData();
   }];
   return controller;
 });

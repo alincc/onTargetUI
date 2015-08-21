@@ -15,7 +15,7 @@ define(function() {
       severity : $scope.currenttask.severity,
       startDate : new Date($scope.currenttask.startDate),
       endDate : new Date($scope.currenttask.endDate),
-      projectId : $scope.currenttask.projectId
+      projectId : $rootScope.activitySelected.projectId
     };
 
     $scope.model = {
@@ -62,9 +62,6 @@ define(function() {
       taskFactory.updateTask($scope.model).then(
         function(resp) {
           $scope.onSubmit = false;
-          /*$scope.currentProject.projects.push($scope.project);
-           projectContext.setProject($scope.currentProject, null);*/
-          toaster.pop('success', 'Success', resp.data.returnMessage);
           $scope.task_form.$setPristine();
           notifications.taskUpdated();
         }, function (err){

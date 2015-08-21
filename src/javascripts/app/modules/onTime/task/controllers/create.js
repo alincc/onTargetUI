@@ -1,9 +1,9 @@
 /**
  * Created by thophan on 8/17/2015.
  */
-define(function (){
+define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'taskFactory', 'toaster', 'projectContext', 'notifications', function ($scope, $rootScope, userContext, projectFactory, taskFactory, toaster, projectContext, notifications){
+  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'taskFactory', 'toaster', 'projectContext', 'notifications', function($scope, $rootScope, userContext, projectFactory, taskFactory, toaster, projectContext, notifications) {
     $scope.task = {
       projectTaskId: null,
       title: "",
@@ -13,12 +13,12 @@ define(function (){
       startDate: "",
       endDate: "",
       projectId: $rootScope.activitySelected.projectId,
-      assignees: []
+      selectedAssignees: []
     };
 
     $scope.minDate2 = $rootScope.activitySelected.startDate;
     $scope.maxDate2 = $rootScope.activitySelected.endDate;
-    $scope.$watchCollection('[task.startDate, task.endDate]', function(e){
+    $scope.$watchCollection('[task.startDate, task.endDate]', function(e) {
       $scope.minDate = $scope.task.startDate ? $scope.task.startDate : $rootScope.activitySelected.startDate;
       $scope.maxDate = $scope.task.endDate ? $scope.task.endDate : $rootScope.activitySelected.endDate;
     });
@@ -28,7 +28,7 @@ define(function (){
       task: $scope.task
     };
 
-    $scope.contacts = {};
+    $scope.contacts = $rootScope.contactList || [];
 
     $scope.taskStatuses = taskFactory.getTaskStatuses();
     $scope.taskSeverities = taskFactory.getTaskSeverities();
@@ -39,7 +39,7 @@ define(function (){
         startingDay: 1
       },
       isOpen: false,
-      open: function ($event){
+      open: function($event) {
         this.isOpen = true;
       }
     };
@@ -50,38 +50,34 @@ define(function (){
         startingDay: 1
       },
       isOpen: false,
-      open: function ($event){
+      open: function($event) {
         this.isOpen = true;
       }
     };
 
     $scope.onSubmit = false;
 
-    taskFactory.getContacts({projectId:$rootScope.currentProjectInfo.projectId}).then(
-      function (resp){
-        $scope.contacts = resp.data.projectMemberList;
-        console.log($scope.contacts);
-      }
-    );
-
-    $scope.save = function (){
+    $scope.save = function() {
       $scope.onSubmit = true;
+
+      // Filter assignees
+      $scope.model.task.assignees = _.map($scope.model.task.selectedAssignees, function(el) {
+        return el.userId;
+      });
+
       taskFactory.addTask($scope.model).then(
-        function (resp){
+        function(resp) {
           $scope.onSubmit = false;
-          /*$scope.currentProject.projects.push($scope.project);
-           projectContext.setProject($scope.currentProject, null);*/
-          toaster.pop('success', 'Success', resp.data.returnMessage);
           $scope.task_form.$setPristine();
           //$modalInstance.close({});
           notifications.taskCreated();
-        }, function (err){
+        }, function(err) {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();
         }
       );
     };
-    $scope.cancel = function (){
+    $scope.cancel = function() {
       notifications.taskCancel();
     };
   }];

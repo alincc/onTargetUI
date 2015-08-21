@@ -15,14 +15,22 @@ define(function(require) {
         var service = {};
 
         service.addActivity = function(model) {
-          return $http.post(constant.resourceUrl + '/project/createNewActivity', model);
+          return $http.post(constant.resourceUrl + '/project/createNewActivity', model, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
-        service.deleteActivity = function (model){
-          return $http.post(constant.resourceUrl + '/tasks/deleteProject', model);
+        service.deleteActivity = function(model) {
+          return $http.post(constant.resourceUrl + '/tasks/deleteProject', model, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
-        service.getActivityLog = function (model){
+        service.getActivityLog = function(model) {
           return $http.post(constant.resourceUrl + '/activitylog/getallactivitylogs', model);
         };
 

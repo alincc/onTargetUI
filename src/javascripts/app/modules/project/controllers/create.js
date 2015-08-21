@@ -65,20 +65,20 @@ define(function() {
       $scope.editProject = false;
       $scope.addProject = true;
       $scope.onSubmit = false;
-
+      $scope.app = appConstant.app;
 
       $scope.getStateList = function() {
         var fileName = getCountryFileName($scope.projectModel.projectAddress.country);
         if(fileName !== undefined) {
           countryFactory.getStateList(fileName).then(
             function(resp) {
-              $scope.states = resp.data;
+              $scope.states = resp;
             }, function(err) {
-              $scope.states = {};
+              $scope.states = [];
             }
           );
         } else {
-          $scope.states = {};
+          $scope.states = [];
         }
       };
 

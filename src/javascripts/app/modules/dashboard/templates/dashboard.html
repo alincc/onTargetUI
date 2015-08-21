@@ -37,7 +37,7 @@
                             <div class="row">
                                 <div class="col-xs-4 project-date">
                                     <div class="desc">
-                                        <p class="large" ng-bind="projectDate.remain"></p>
+                                        <p class="large" ng-bind="projectDate.remain >0?projectDate.remain:0"></p>
 
                                         <p class="small">{{ projectDate.remain > 1 ? 'days remaining' : 'day remaining'
                                             }}</p>
@@ -120,19 +120,24 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="weather-container">
-                                <div class="icon">
-                                    <i class="wi {{ getWeatherIcon() }}"></i>
-                                </div>
-                                <div class="info">
-                                    <p class="temp" ng-bind="weather.temp+' F'"></p>
+                                <section ng-if="weatherError" class="text-center text-danger">
+                                    Cannot get weather
+                                </section>
+                                <section ng-if="!weatherError">
+                                    <div class="icon">
+                                        <i class="wi {{ getWeatherIcon() }}"></i>
+                                    </div>
+                                    <div class="info">
+                                        <p class="temp" ng-bind="weather.temp+' F'"></p>
 
-                                    <p class="name" ng-bind="weather.name"></p>
+                                        <p class="name" ng-bind="weather.name"></p>
 
-                                    <p class="humidity">Humidity: <span ng-bind="weather.humidity+'%'"></span></p>
+                                        <p class="humidity">Humidity: <span ng-bind="weather.humidity+'%'"></span></p>
 
-                                    <p class="windspeed">Windspeed: <span ng-bind="weather.windSpeed+'MPM NW'"></span>
-                                    </p>
-                                </div>
+                                        <p class="windspeed">Windspeed: <span ng-bind="weather.windSpeed+'MPM NW'"></span>
+                                        </p>
+                                    </div>
+                                </section>
                             </div>
                         </div>
                     </div>
@@ -168,7 +173,7 @@
                                                     round-progress
                                                     max="100"
                                                     current="task.percentageComplete"
-                                                    color="#00d8ff"
+                                                    color="#{{task.percentageComplete | taskStatusColor}}"
                                                     bgcolor="#ececec"
                                                     radius="25"
                                                     stroke="5"
@@ -184,7 +189,7 @@
                                                 <div class="title">{{task.title}}</div>
                                                 <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
                                                 </div>
-                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                <div class="priority"><span class="task-severity-{{task.severity}}" ng-bind="task.severity|taskSeverity"></span>
                                                     priority
                                                 </div>
                                             </div>
@@ -209,7 +214,7 @@
                                                     round-progress
                                                     max="100"
                                                     current="task.percentageComplete"
-                                                    color="#00d8ff"
+                                                    color="#{{task.percentageComplete | taskStatusColor}}"
                                                     bgcolor="#ececec"
                                                     radius="25"
                                                     stroke="5"
@@ -225,7 +230,7 @@
                                                 <div class="title">{{task.title}}</div>
                                                 <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
                                                 </div>
-                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                <div class="priority"><span class="task-severity-{{task.severity}}" ng-bind="task.severity|taskSeverity"></span>
                                                     priority
                                                 </div>
                                             </div>
@@ -250,7 +255,7 @@
                                                     round-progress
                                                     max="100"
                                                     current="task.percentageComplete"
-                                                    color="#00d8ff"
+                                                    color="#{{task.percentageComplete | taskStatusColor}}"
                                                     bgcolor="#ececec"
                                                     radius="25"
                                                     stroke="5"
@@ -266,7 +271,7 @@
                                                 <div class="title">{{task.title}}</div>
                                                 <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
                                                 </div>
-                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                <div class="priority"><span class="task-severity-{{task.severity}}" ng-bind="task.severity|taskSeverity"></span>
                                                     priority
                                                 </div>
                                             </div>
@@ -291,7 +296,7 @@
                                                     round-progress
                                                     max="100"
                                                     current="task.percentageComplete"
-                                                    color="#00d8ff"
+                                                    color="#{{task.percentageComplete | taskStatusColor}}"
                                                     bgcolor="#ececec"
                                                     radius="25"
                                                     stroke="5"
@@ -307,7 +312,7 @@
                                                 <div class="title">{{task.title}}</div>
                                                 <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
                                                 </div>
-                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                <div class="priority"><span class="task-severity-{{task.severity}}" ng-bind="task.severity|taskSeverity"></span>
                                                     priority
                                                 </div>
                                             </div>
@@ -332,7 +337,7 @@
                                                     round-progress
                                                     max="100"
                                                     current="task.percentageComplete"
-                                                    color="#00d8ff"
+                                                    color="#{{task.percentageComplete | taskStatusColor}}"
                                                     bgcolor="#ececec"
                                                     radius="25"
                                                     stroke="5"
@@ -348,7 +353,7 @@
                                                 <div class="title">{{task.title}}</div>
                                                 <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
                                                 </div>
-                                                <div class="priority"><span class="hight">{{task.severity|taskSeverityByCode}}</span>
+                                                <div class="priority"><span class="task-severity-{{task.severity}}" ng-bind="task.severity|taskSeverity"></span>
                                                     priority
                                                 </div>
                                             </div>

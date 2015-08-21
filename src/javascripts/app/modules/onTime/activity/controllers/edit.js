@@ -57,7 +57,6 @@ define(function (){
       activityFactory.addActivity($scope.model).then(
         function (resp){
           $scope.onSubmit = false;
-          toaster.pop('success', 'Success', resp.data.returnMessage);
           $scope.form.$setPristine();
           $modalInstance.close({});
         }, function (err){

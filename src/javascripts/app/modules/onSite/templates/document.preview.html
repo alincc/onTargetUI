@@ -1,16 +1,18 @@
 <div class="doc-preview full-height wrapper-xs">
     <div class="row preview-actions">
-        <button type="button" class="btn m-b-xs w-xs btn-info" ng-click="download(doc)">Download
+        <button type="button" class="btn btn-info" ng-click="download(doc)">
+            <i class="fa fa-download"></i> Download
         </button>
-        <button type="button" class="btn m-b-xs m-xs close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
-            <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="cancel()">
+            <i class="fa fa-times"></i> Close
         </button>
     </div>
 
     <div class="row full-height content-padding">
-        <div class="col-xs-8 full-height padding-bottom">
+        <div class="col-xs-8 full-height padding-top">
             <div class="center-element wrapper-xs">{{doc.name}}</div>
-            <iframe class="full-height full-width" src="http://docs.google.com/gview?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true"
+            <iframe class="full-height full-width"
+                    src="http://docs.google.com/gview?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true"
                     frameborder="0" ng-if="doc.fileType==='application/pdf'">
             </iframe>
             <div class="image-wrapper center-element full-height full-width" ng-if="doc.fileType==='image/png'">

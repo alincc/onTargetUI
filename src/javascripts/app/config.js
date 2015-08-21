@@ -41,7 +41,25 @@ define(function(require) {
           response: function(response) {
             var defer = $q.defer();
 
-            if(response && response.data && response.data.returnVal === 'ERROR') {
+            //[{"message":"may not be null","messageTemplate":"{javax.validation.constraints.NotNull.message}","path":"task.projectId"},{"invalidValue":"com.ontarget.request.bean.TaskRequest@63b3e688","message":"Task date range must be between project date range","messageTemplate":"{task.date.range.not.between.project}","path":"0"}]
+            if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
+              var errorMessageHtml = '';
+              _.each(response.data, function(el) {
+                if(el.path !== '0') {
+                  errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
+                } else {
+                  errorMessageHtml += '- ' + el.message + ' </br>';
+                }
+              });
+              toaster.pop({
+                type: 'error',
+                title: 'Error',
+                body: errorMessageHtml,
+                bodyOutputType: 'trustedHtml'
+              });
+              defer.reject(response);
+            }
+            else if(response && response.data && response.data.returnVal === 'ERROR') {
               toaster.pop('error', 'Error', response.data.returnMessage);
               defer.reject(response);
             } else {
@@ -220,7 +238,13 @@ define(function(require) {
         //userNotificationsPageSize: 10,
         userNotificationsInterval: 600000 // 10 minutes
       },
-      dateFormat:'MM/dd/yyyy'
+      dateFormat: 'MM/dd/yyyy',
+      statusColours: [
+        '55d63c',
+        'e2df05',
+        'ffb56d',
+        'e25805'
+      ]
     }
   });
 

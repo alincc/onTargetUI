@@ -45,13 +45,13 @@ define(function() {
         {
           countryFactory.getStateList(fileName).then(
             function (resp) {
-              $scope.states = resp.data;
+              $scope.states = resp;
             }, function (err) {
-              $scope.states = {};
+              $scope.states = [];
             }
           );
         }else{
-          $scope.states = {};
+          $scope.states = [];
         }
       };
 

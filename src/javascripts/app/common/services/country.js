@@ -28,15 +28,30 @@ define(function(require) {
         service.getStateList = function(fileName) {
           var deferred = $q.defer();
           var savedState = _.where(service.savedDate.states, {fileName: fileName})[0];
+
           if(savedState) {
-            deferred.resolve(savedState.states);
+            if(savedState.isGetting) {
+              savedState.defers.push(deferred);
+            } else {
+              deferred.resolve(savedState.states);
+            }
           } else {
+            service.savedDate.states.push({
+              fileName: fileName,
+              states: [],
+              isGetting: true,
+              defers: []
+            });
+
             $http.get('javascripts/app/common/resources/countries/' + fileName + '.json')
               .success(function(resp) {
-                service.savedDate.states.push({
-                  fileName: fileName,
-                  states: resp
+                var cState = _.where(service.savedDate.states, {fileName: fileName})[0];
+                cState.isGetting = false;
+                cState.states = resp;
+                _.each(cState.defers, function(d) {
+                  d.resolve(resp);
                 });
+                cState.defers = [];
                 deferred.resolve(resp);
               })
               .error(function() {
@@ -54,7 +69,7 @@ define(function(require) {
         service.getStateByCode = function(fileName, code) {
           var deferred = $q.defer();
           var list = service.getStateList(fileName).then(function(resp) {
-            var state = _.where(resp.data, {code: code})[0];
+            var state = _.where(resp, {code: code})[0];
             deferred.resolve(state);
           }, function() {
             deferred.reject();

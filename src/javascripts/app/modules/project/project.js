@@ -27,8 +27,9 @@ define(function(require) {
     utilServiceModule = require('app/common/services/util'),
     angularSanitize = require('angularSanitize'),
     toaster = require('toaster'),
+    angularLocalStorage = require('angularLocalStorage'),
     userNotificationsModule = require('app/common/services/userNotifications');
-  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications']);
+  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('project/templates/list.html', template);

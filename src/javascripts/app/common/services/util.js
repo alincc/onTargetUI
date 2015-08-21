@@ -77,32 +77,8 @@ define(function(require) {
         if(addrObj.zip) {
           address += addrObj.zip;
         }
+
         deferred.resolve(address);
-      }
-      if(addrObj.country) {
-        country = countryFactory.getCountryByCode(addrObj.country);
-      }
-
-      if(country && addrObj.state) {
-        countryFactory.getStateByCode(country.filename, addrObj.state)
-          .then(function(resp) {
-            state = resp;
-            cont();
-          }, cont);
-      }
-
-
-
-      if(addrObj.country) {
-        country = countryFactory.getCountryByCode(addrObj.country);
-      }
-
-      if(country && addrObj.state) {
-        countryFactory.getStateByCode(country.filename, addrObj.state)
-          .then(function(resp) {
-            state = resp;
-            cont();
-          }, cont);
       }
 
       if(addrObj.country) {

@@ -1,10 +1,10 @@
 /**
  * Created by thophan on 8/17/2015.
  */
-define(function (){
+define(function (require){
   'use strict';
+  var moment = require('moment');
   var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'projectContext', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, projectContext){
-    console.log($scope.currentProject);
     $scope.currentProject = $rootScope.currentProjectInfo;
 
     $scope.project = {
@@ -55,9 +55,6 @@ define(function (){
       activityFactory.addActivity($scope.model).then(
         function (resp){
           $scope.onSubmit = false;
-          /*$scope.currentProject.projects.push($scope.project);
-          projectContext.setProject($scope.currentProject, null);*/
-          toaster.pop('success', 'Success', resp.data.returnMessage);
           $scope.form.$setPristine();
           $modalInstance.close({});
         }, function (err){
@@ -66,6 +63,7 @@ define(function (){
         }
       );
     };
+
     $scope.cancel = function (){
       $modalInstance.dismiss('cancel');
     };

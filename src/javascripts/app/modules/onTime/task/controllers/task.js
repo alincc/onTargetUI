@@ -3,149 +3,181 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'taskFactory', 'notifications', function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, taskFactory, notifications) {
-    var createTaskModalInstance, editTaskModalInstance, deleteTaskModalInstance;
-    $scope.model = {
-      projectId: $rootScope.activitySelected.projectId
-    };
-    $scope.taskSelected = null;
-    $scope.actions = {
-      infoTask: {
-        name: "infoTask",
-        text: "Information"
-      },
-      addTask: {
-        name: "addTask",
-        text: "Add Task"
-      },
-      editTask: {
-        name: "editTask",
-        text: "Edit Task"
-      },
-      logistic: {
-        name: "logisticTask",
-        text: "Logistics"
-      }
-    };
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'taskFactory', 'notifications', '$timeout', 'appConstant', '$q',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, taskFactory, notifications, $timeout, appConstant, $q) {
+      var createTaskModalInstance, editTaskModalInstance, deleteTaskModalInstance;
+      var canceler;
 
-    $scope.action = $scope.actions.infoTask;
-
-    $scope.editTaskInformation = function() {
-      $scope.action = $scope.actions.editTask;
-    };
-
-    $scope.editTaskLogistics = function() {
-      $scope.action = $scope.actions.logistic;
-    };
-
-    $scope.addTask = function() {
-      $scope.taskSelected = {};
-      $scope.action = $scope.actions.addTask;
-    };
-
-    $scope.tasks = [];
-    //$scope.tasks = $rootScope.activitySelected.taskList;
-
-    var loadProjectTasks = function() {
-      taskFactory.getProjectTasks($scope.model).then(
-        function(resp) {
-          $scope.tasks = resp.data.tasks;
+      var loadProjectTasks = function() {
+        if(canceler) {
+          canceler.resolve();
         }
-      );
-    };
-    loadProjectTasks();
-
-    notifications.onTaskCreated($scope, function() {
-      loadProjectTasks();
-      $scope.action = $scope.actions.infoTask;
-    });
-
-    notifications.onTaskUpdated($scope, function() {
-      loadProjectTasks();
-    });
-
-    notifications.onTaskCancel($scope, function() {
-      $scope.taskSelected = null;
-    });
-
-    var bindTasks = function() {
-      $scope.model.projectId = $rootScope.activitySelected.projectId;
-      loadProjectTasks();
-    };
-
-    notifications.onActivitySelection($scope, function() {
-      bindTasks();
-    });
-
-    $scope.selectTask = function(task) {
-      $scope.taskSelected = $rootScope.currentTask = task;
-      $scope.action = $scope.actions.infoTask;
-      notifications.taskSelection();
-    };
-
-    $scope.openCreateTaskModal = function() {
-      companyFactory.search()
-        .success(function(resp) {
-          createTaskModalInstance = $modal.open({
-            templateUrl: 'onTime/task/templates/create.html',
-            controller: 'CreateTaskController',
-            size: 'lg'
-          });
-
-          createTaskModalInstance.result.then(function() {
-            //add success
-            taskFactory.getProjectTasks($scope.model).then(
-              function(resp) {
-                $scope.tasks = resp.data.tasks;
-              }
-            );
-          }, function() {
-          });
-        });
-    };
-
-    $scope.openEditTaskModal = function() {
-      // prepare company list
-      companyFactory.search()
-        .success(function(resp) {
-          editTaskModalInstance = $modal.open({
-            templateUrl: 'onTime/task/templates/edit.html',
-            controller: 'EditTaskController',
-            size: 'lg',
-            resolve: {
-              task: function() {
-                return $scope.taskSelected;
-              }
-            }
-          });
-
-          editTaskModalInstance.result.then(function() {
-            //edit success
-            loadProjectTasks();
-          }, function() {
-
-          });
-        });
-    };
-
-    $scope.openDeleteTaskModal = function() {
-      deleteTaskModalInstance = $modal.open({
-        templateUrl: 'onTime/task/templates/delete.html',
-        controller: 'DeleteTaskController',
-        size: 'lg',
-        resolve: {
-          task: function() {
-            return $scope.taskSelected;
+        canceler = $q.defer();
+        $scope.isLoadingTasks = true;
+        taskFactory.getProjectTasks($scope.model, canceler).then(
+          function(resp) {
+            $scope.tasks = resp.data.tasks;
+            $scope.isLoadingTasks = false;
+            $timeout(function() {
+              $scope.$broadcast('content.reload');
+            }, 200);
+          },
+          function() {
+            $scope.isLoadingTasks = false;
           }
+        );
+      };
+
+      var bindTasks = function() {
+        $scope.model.projectId = $rootScope.activitySelected.projectId;
+        loadProjectTasks();
+      };
+
+      $scope.app = appConstant.app;
+
+      $scope.model = {
+        projectId: 0
+      };
+
+      $scope.taskSelected = null;
+
+      $scope.actions = {
+        infoTask: {
+          name: "infoTask",
+          text: "Information"
+        },
+        addTask: {
+          name: "addTask",
+          text: "Add Task"
+        },
+        editTask: {
+          name: "editTask",
+          text: "Edit Task"
+        },
+        logistic: {
+          name: "logisticTask",
+          text: "Logistics"
+        }
+      };
+
+      $scope.isLoadingTasks = false;
+
+      $scope.action = $scope.actions.infoTask;
+
+      $scope.addTask = function() {
+        taskFactory.getContacts({projectId: $rootScope.currentProjectInfo.projectId}).then(function(resp) {
+          $rootScope.contactList = resp.data.projectMemberList;
+          $scope.action = $scope.actions.addTask;
+          $scope.taskSelected = {};
+        });
+      };
+
+      $scope.tasks = [];
+
+      $scope.selectTask = function(task) {
+        $scope.taskSelected = $rootScope.currentTask = task;
+        $scope.action = $scope.actions.infoTask;
+        notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
+      };
+
+      $scope.openCreateTaskModal = function() {
+        companyFactory.search()
+          .success(function(resp) {
+            createTaskModalInstance = $modal.open({
+              templateUrl: 'onTime/task/templates/create.html',
+              controller: 'CreateTaskController',
+              size: 'lg'
+            });
+
+            createTaskModalInstance.result.then(function() {
+              //add success
+              loadProjectTasks();
+            }, function() {
+            });
+          });
+      };
+
+      $scope.openEditTaskModal = function() {
+        // prepare company list
+        companyFactory.search()
+          .success(function(resp) {
+            editTaskModalInstance = $modal.open({
+              templateUrl: 'onTime/task/templates/edit.html',
+              controller: 'EditTaskController',
+              size: 'lg',
+              resolve: {
+                task: function() {
+                  return $scope.taskSelected;
+                }
+              }
+            });
+
+            editTaskModalInstance.result.then(function() {
+              //edit success
+              loadProjectTasks();
+            }, function() {
+
+            });
+          });
+      };
+
+      $scope.openDeleteTaskModal = function() {
+        deleteTaskModalInstance = $modal.open({
+          templateUrl: 'onTime/task/templates/delete.html',
+          controller: 'DeleteTaskController',
+          size: 'lg',
+          resolve: {
+            task: function() {
+              return $scope.taskSelected;
+            }
+          }
+        });
+
+        deleteTaskModalInstance.result.then(function() {
+          loadProjectTasks();
+        }, function() {
+
+        });
+      };
+
+      bindTasks();
+
+      notifications.onTaskCreated($scope, function(args) {
+        loadProjectTasks();
+        $scope.taskSelected = null;
+      });
+
+      notifications.onTaskUpdated($scope, function() {
+        loadProjectTasks();
+        $scope.taskSelected = null;
+        /*$scope.taskSelected = $rootScope.currentTask = _.find($scope.tasks, 'projectTaskId', $scope.taskSelected.projectTaskId);
+        notifications.taskSelection();*/
+      });
+
+      notifications.onTaskCancel($scope, function() {
+        $scope.taskSelected = null;
+      });
+
+      notifications.onActivitySelection($scope, function() {
+        $scope.tasks = [];
+        $scope.taskSelected = null;
+        bindTasks();
+      });
+
+      notifications.onTaskSelection($scope, function(args) {
+        if(args.action === 'info') {
+          $scope.action = $scope.actions.infoTask;
+        }
+        else if(args.action === 'add') {
+          $scope.action = $scope.actions.addTask;
+        }
+        else if(args.action === 'edit') {
+          $scope.action = $scope.actions.editTask;
+        }
+        else if(args.action === 'logistic') {
+          $scope.action = $scope.actions.logistic;
         }
       });
-
-      deleteTaskModalInstance.result.then(function() {
-        loadProjectTasks();
-      }, function() {
-
-      });
-    };
-  }];
+    }];
   return controller;
 });

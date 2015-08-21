@@ -35,6 +35,8 @@
     "angular-chart.js": "latest",
     "malihu-custom-scrollbar-plugin": "latest",
     "jquery-mousewheel": "latest",
-    "ment.io": "~0.9.23"
+    "ment.io": "~0.9.23",
+    "angular-ui-select": "latest",
+    "venturocket-angular-slider": "latest"
   }
 }

@@ -6,20 +6,10 @@ define(function (){
   var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications',
     function ($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications){
       $scope.task = $rootScope.currentTask;
-      $scope.assignees = $scope.task.assignee;
+      //$scope.assignees = $scope.task.assignee;
       $scope.onAddOwner = false;
       $scope.contacts = [];
-
-      taskFactory.getContacts({projectId:$rootScope.currentProjectInfo.projectId}).then(
-        function (resp){
-          $scope.contacts = resp.data.projectMemberList;
-          console.log($scope.contacts);
-        }
-      );
-      $scope.addOwner = function(){
-        $scope.onAddOwner = true;
-        console.log($scope.onAddOwner);
-      };
+      $scope.assignees = [];
 
       $scope.model = {
         taskId : $scope.task.projectTaskId,
@@ -27,9 +17,56 @@ define(function (){
         members : []
       };
 
-      $scope.assignUserToTask = function (){
+      _.forEach($scope.task.assignee, function (assignee){
+        $scope.assignees.push(assignee.contact);
+        $scope.model.members.push(assignee.contact.contactId);
+      });
+
+      $scope.getContacts = function (){
+        taskFactory.getContacts({projectId:$rootScope.currentProjectInfo.projectId}).then(
+          function (resp){
+            var memberList = resp.data.projectMemberList;
+            _.forEach(memberList, function (assignee){
+              if(_.findIndex($scope.assignees, 'contactId', assignee.contact.contactId)<0) {
+                $scope.contacts.push(assignee.contact);
+              }
+            });
+           // _.difference($scope.contacts, $scope.assignees);
+          }
+        );
+      };
+      $scope.getContacts();
+
+
+      $scope.addOwner = function(){
+        $scope.onAddOwner = true;
+      };
+
+      $scope.removeUserFromTask = function (assignee){
+        _.remove($scope.model.members, function(n) {
+          return n === assignee.contactId;
+        });
         taskFactory.assignUserToTask($scope.model).then(
           function (resp){
+            _.remove($scope.assignees, function(n) {
+              return n === assignee;
+            });
+            $scope.contacts.push(assignee);
+            toaster.pop('success', 'Success', resp.data.returnMessage);
+          }
+        );
+      };
+
+      $scope.assignUserToTask = function (){
+        $scope.model.members.push($scope.assignee.contactId);
+        taskFactory.assignUserToTask($scope.model).then(
+          function (resp){
+            $scope.assignees.push($scope.assignee);
+            _.remove($scope.contacts, function(n) {
+              return n === $scope.assignee;
+            });
+            $scope.assignee = '';
+            $scope.onAddOwner = false;
             toaster.pop('success', 'Success', resp.data.returnMessage);
           }
         );

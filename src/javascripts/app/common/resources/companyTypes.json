@@ -1,0 +1,26 @@
+[
+  {
+    "value": 1,
+    "name": "GENERAL CONTRACTOR"
+  },
+  {
+    "value": 2,
+    "name": "CONSTRUCTION MANAGER"
+  },
+  {
+    "value": 3,
+    "name": "SUBCONTRACTOR"
+  },
+  {
+    "value": 4,
+    "name": "OWNER"
+  },
+  {
+    "value": 5,
+    "name": "SPECIALITY CONTRACTOR"
+  },
+  {
+    "value": 6,
+    "name": "ARCHITECTS/ENGINEERS"
+  }
+]

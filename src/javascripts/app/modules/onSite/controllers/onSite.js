@@ -1,23 +1,40 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', function($scope, $rootScope, $q, documentFactory, $modal) {
+  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', function($scope, $rootScope, $q, documentFactory, $modal, storage) {
 
-    $scope.isLoading = true;
+    $scope.isLoading = false;
     $scope.viewMode = "list";
+    $scope.uploadedDocumentList = [];
+    $scope.uploadedDocumentArrangedList = [];
+
+    function arrangeData(data, itemPerRow) {
+      var list = [];
+      var row = [];
+      _.forEach(data, function(dt, i) {
+        if(i > 0 && i % itemPerRow === 0) {
+          list.push(row);
+          row = [];
+        }
+        row.push(dt);
+        if(i === data.length - 1 && row.length > 0) {
+          list.push(row);
+        }
+      });
+      return list;
+    }
 
     //list all document
-    function getUploadedDocumentList(){
-
+    function getUploadedDocumentList() {
+      $scope.isLoading = true;
       documentFactory.getUploadedDocumentList($rootScope.currentProjectInfo.projectId).
-          then(function(content){
-            $scope.isLoading = false;
-            $scope.uploadedDocumentList = content.data.uploadedDocumentList;
-            console.log($scope.uploadedDocumentList);
-          }, function(error){
-            $scope.isLoading = false;
-            $scope.uploadedDocumentList = [];
-          });
+        then(function(content) {
+          $scope.isLoading = false;
+          $scope.uploadedDocumentList = content.data.uploadedDocumentList;
+          $scope.uploadedDocumentArrangedList = arrangeData($scope.uploadedDocumentList, 4);
+        }, function(error) {
+          $scope.isLoading = false;
+        });
     }
 
     getUploadedDocumentList();
@@ -40,8 +57,20 @@ define(function(require) {
     };
 
     //change view mode
-    $scope.changeMode = function(mode){
+    $scope.changeMode = function(mode) {
       $scope.viewMode = mode;
+    };
+
+    // View mode
+    var viewMode = storage.get('documentViewMode');
+    if(!viewMode) {
+      storage.set('documentViewMode', 'grid');
+    }
+    $scope.viewMode = viewMode || 'grid';
+    $scope.changeMode = function(mode) {
+      $scope.viewMode = mode;
+      storage.set('documentViewMode', mode);
+      $scope.uploadedDocumentArrangedList = arrangeData($scope.uploadedDocumentList, 4);
     };
 
   }];

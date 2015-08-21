@@ -14,13 +14,12 @@
         }
       }
       .task-list {
-        height: 535px;
+        height: @onTime-height + 35;
         .task-item {
           display: table;
           width: 100%;
           border-bottom: solid 1px #ececec;
-          padding-bottom: 10px;
-          margin-bottom: 15px;
+          padding: 10px 0;
           .task-status {
             display: table-cell;
             position: relative;
@@ -61,23 +60,27 @@
               }
             }
           }
-          .task-update-date {
+          .task-statistic {
             display: table-cell;
             white-space: nowrap;
-            vertical-align: middle;
-            color: #adadad;
-            padding: 0 20px 0 0;
-            span {
-              color: #000000;
+            padding-right: 15px;
+            position: relative;
+            vertical-align: bottom;
+            .date {
+              position: absolute;
+              width: 100%;
+              top: 0;
+              right: 15px;
+              text-align: right;
             }
-          }
-          .task-due-date {
-            white-space: nowrap;
-            display: table-cell;
-            vertical-align: middle;
-            color: #adadad;
-            span {
-              color: #000000;
+            .statistic {
+              .stat-icon {
+                display: inline-block;
+                padding: 0px 10px;
+                i {
+                  font-size: 18px;
+                }
+              }
             }
           }
 
@@ -92,87 +95,17 @@
 
         .task-selected-item {
           background-color: #e1fcff;
-          display: table;
-          width: 100%;
-          border-bottom: solid 1px #ececec;
-          padding-bottom: 10px;
-          margin-bottom: 15px;
-          .task-status {
-            display: table-cell;
-            position: relative;
-            border-right: solid 1px #ececec;
-            padding: 0 10px;
-            vertical-align: middle;
-            .percentage {
-              position: absolute;
-              left: 50%;
-              top: 50%;
-              margin-left: -10px;
-              font-weight: 700;
-              margin-top: -12px;
-            }
-          }
-          .task-info {
-            display: table-cell;
-            vertical-align: top;
-            width: 100%;
-            padding: 0 10px;
-            .title {
-              color: #000000;
-              font-size: 16px;
-            }
-            .assignee {
-              color: #adadad;
-              span {
-                color: #000000;
-              }
-            }
-            .priority {
-              color: #000000;
-              span {
-                font-size: 20px;
-                &.hight {
-                  color: red;
-                }
-              }
-            }
-          }
-          .task-update-date {
-            display: table-cell;
-            white-space: nowrap;
-            vertical-align: middle;
-            color: #adadad;
-            padding: 0 20px 0 0;
-            span {
-              color: #000000;
-            }
-          }
-          .task-due-date {
-            white-space: nowrap;
-            display: table-cell;
-            vertical-align: middle;
-            color: #adadad;
-            span {
-              color: #000000;
-            }
-          }
-
-          &.last {
-            border-bottom: solid 1px #eeeeee;
-          }
-          &:hover {
-            background-color: #e1fcff;
-            cursor: pointer;
-          }
         }
       }
     }
   }
 }
+
 // Actitivy
 .panel-right {
   .panel {
-    border-radius: 5px;
+    margin: 0;
+    height: 100%;
     .panel-heading {
       .text {
         font-weight: bold;
@@ -180,7 +113,15 @@
     }
     .panel-body {
       padding: 0;
-      height: 558px;
+    }
+  }
+  .add-edit-task {
+    height: @onTime-height + 58;
+    &.panel-body {
+      padding: 10px;
+    }
+    textarea {
+      resize: none;
     }
   }
 }

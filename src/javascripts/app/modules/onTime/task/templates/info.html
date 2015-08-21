@@ -1,30 +1,29 @@
-<div class="info-container" ng-controller="InfoTaskController">
-    <div class="info-element">
-        <div class="head">Title:</div>
-        <div class="content">{{task.title}}</div>
+<div ng-controller="InfoTaskController">
+    <div class="add-edit-task panel-body" custom-scroll>
+        <div class="form-group m-b-xs">
+            <label>Title:</label>
+            <p class="form-control-static text-muted no-padder" ng-bind="task.title"></p>
+        </div>
+        <div class="form-group m-b-xs">
+            <label>Description:</label>
+            <p class="form-control-static text-muted no-padder" ng-bind="task.description"></p>
+        </div>
+        <div class="form-group m-b-xs">
+            <label>Status:</label>
+            <p class="form-control-static text-muted no-padder" ng-bind="task.status|taskStatus"></p>
+        </div>
+        <div class="form-group m-b-xs">
+            <label>Severity:</label>
+            <p class="form-control-static text-muted no-padder" ng-bind="task.severity|taskSeverity"></p>
+        </div>
+        <div class="form-group m-b-xs">
+            <label>Date:</label>
+            <p class="form-control-static text-muted no-padder"><span>{{task.startDate|date:app.dateFormat}}</span> to <span>{{task.endDate|date:app.dateFormat}}</span></p>
+        </div>
     </div>
-    <div class="info-element">
-        <div class="head">Description:</div>
-        <div class="content">{{task.description}}</div>
-    </div>
-    <div class="info-element">
-        <div class="head">Company:</div>
-        <div class="content">{{task.title}}</div>
-    </div>
-    <div class="info-element">
-        <div class="head">Type:</div>
-        <div class="content">{{task.title}}</div>
-    </div>
-    <div class="info-element">
-        <div class="head">Status:</div>
-        <div class="content">{{task.status}}</div>
-    </div>
-    <div class="info-element">
-        <div class="head">Date:</div>
-        <div class="content"><span>{{task.startDate|date:'MM/dd/yyyy'}}</span> to <span>{{task.endDate|date:'MM/dd/yyyy'}}</span></div>
-    </div>
-    <div class="info-element">
-        <div class="head">Address:</div>
-        <div class="content">{{task.title}}</div>
+    <div class="panel-footer bg-light lter">
+        <button class="btn btn-primary" ng-click="editTaskInformation()">Edit Task Infomation</button>
+        <button class="btn btn-primary" ng-click="editTaskLogistics()">Edit Task Logistics</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
     </div>
 </div>

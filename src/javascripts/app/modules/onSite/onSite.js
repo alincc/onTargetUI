@@ -9,8 +9,9 @@ define(function(require) {
     previewController = require('./controllers/document.preview'),
     projectContextModule = require('app/common/context/project'),
     documentServiceModule = require('app/common/services/document'),
-    mentio = require('mentio');
-  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document']);
+    mentio = require('mentio'),
+    angularLocalStorage = require('angularLocalStorage');
+  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onSite/templates/onSite.html', template);

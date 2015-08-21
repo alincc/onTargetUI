@@ -1,0 +1,13 @@
+<div ng-controller="AttachmentTaskController">
+    <div class="item-list">
+        <div class="item" ng-repeat="attachment in attachments">
+            <span>{{attachment.fileName}}</span>
+            <span>{{attachment.contact.firstName}}&nbsp;{{attachment.contact.lastName}}</span>
+        </div>
+    </div>
+    <div>
+        <!--<input type="file" ng-file-select="onFileSelect($files)" multiple>-->
+        <input type="file" ng-file-select="onFileSelect($files)">
+        <button class="btn btn-primary" ng-click="saveTaskFile()">Save</button>
+    </div>
+</div>

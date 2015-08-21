@@ -15,7 +15,8 @@ define(function (require){
     angularUiEvent = require('angularUiEvent'),
     angularSanitize = require('angularSanitize'),
     angularLoadingBar = require('angularLoadingBar'),
-    userNotificationModule = require('./common/services/userNotifications');
+    userNotificationModule = require('./common/services/userNotifications'),
+    mockServiceModule = require('./common/services/mock');
 
   var app = angular.module('app', [
     // libraries
@@ -33,6 +34,7 @@ define(function (require){
     'common.context.user',
     'common.context.project',
     'common.services.userNotifications',
+    'common.services.mock',
 
     // modules
     'app.main',

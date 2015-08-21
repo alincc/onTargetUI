@@ -42,7 +42,7 @@ define(function(require) {
         };
 
         service.getBudgetMeterData = function(projectId) {
-          return $http.post(constant.resourceUrl + '/graphdata/getbudgetmeterdata', {
+          return $http.post(constant.domain + '/report/earnedValueReport', {
             projectId: projectId
           });
         };

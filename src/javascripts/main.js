@@ -44,9 +44,13 @@ require.config({
     autosize: "../bower_components/autosize/dist/autosize",
     angularUtilsPagination: '../bower_components/angular-utils-pagination/dirPagination',
     angularUiMask: '../bower_components/angular-ui-mask/dist/mask',
+    angularUiSelect: '../bower_components/angular-ui-select/dist/select',
     chartjs: '../bower_components/Chart.js/chart',
     angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart',
-    mentio: '../bower_components/ment.io/dist/mentio'
+    mentio: '../bower_components/ment.io/dist/mentio',
+    typeahead: '../bow',
+    angularSlider: '../bower_components/venturocket-angular-slider/build/angular-slider',
+    ngTouch: '../bower_components/angular-touch/angular-touch'
   },
 
   shim: {
@@ -121,6 +125,9 @@ require.config({
       deps: ['chartjs', 'angular']
     },
     "mentio": {
+      deps: ['angular']
+    },
+    "angularUiSelect": {
       deps: ['angular']
     }
   }

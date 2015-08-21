@@ -1,7 +1,7 @@
 define(function (){
   'use strict';
-  var controller = ['$scope', 'appConstant', 'accountFactory', '$state', '$location', 'notifications', '$rootScope',
-    function ($scope, appConstant, accountFactory, $state, $location, notifications, $rootScope){
+  var controller = ['$scope', 'appConstant', 'accountFactory', '$state', '$location', 'notifications', '$rootScope', '$modal', 'companyFactory',
+    function ($scope, appConstant, accountFactory, $state, $location, notifications, $rootScope, $modal, companyFactory){
       $scope.app = appConstant.app;
 
       function bindInfo(){
@@ -28,6 +28,21 @@ define(function (){
             notifications.logoutSuccess();
             $state.go('signin');
           });
+      };
+
+      $scope.inviteCollaborators = function() {
+        companyFactory.search().success(function(resp) {
+          $modal.open({
+            templateUrl: 'navbar/templates/inviteCollaborators.html',
+            controller: 'InviteCollaboratorsController',
+            size: 'md',
+            resolve: {
+              companies: function() {
+                return resp.companyList;
+              }
+            }
+          });
+        });
       };
 
       notifications.onLoginSuccess($scope, function (){

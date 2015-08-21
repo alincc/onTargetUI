@@ -5,6 +5,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <a class="btn btn-info pull-right">Upload</a>
+
                     <h1 class="m-n font-thin h3 text-black">onSite
                         <div class="buttons">
                             <button class="btn btn-sm" ng-click="changeMode('grid')"
@@ -20,65 +21,72 @@
         </div>
         <!-- / main header -->
         <div class="wrapper-md p-r-none">
-            <div class="row" ng-if="!isLoading && !uploadedDocumentList.length">
-                <div class="col-xs-12">
-                    <alert type="info" class="text-center">No uploads</alert>
-                </div>
-            </div>
-            <div class="row" ng-if="isLoading">
-                <div class="col-xs-12 text-center">
-                    <spinner text="Loading..."></spinner>
-                </div>
-            </div>
-
-            <div ng-if="!isLoading && uploadedDocumentList.length && viewMode === 'list'">
-                <div class="table-responsive">
-                    <table class="table table-striped b-t b-light">
-                        <thead>
-                        <tr>
-                            <th>Document Name</th>
-                            <th>Uploaded on</th>
-                            <th>Uploaded by</th>
-                            <th style="width: 310px;">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="doc in uploadedDocumentList">
-                            <td ng-bind="doc.name"></td>
-                            <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
-                            <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                            <td>
-                                <button type="button" class="btn m-b-xs w-xs btn-primary" ng-click="preview(doc)">Preview
-                                </button>
-                                <button type="button" class="btn m-b-xs w-xs btn-info" ng-click="download(doc)">Download
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div ng-if="!isLoading && uploadedDocumentList.length && viewMode === 'grid'">
-                <div class="col-md-3" data-ng-repeat="doc in uploadedDocumentList">
-                    <article>
-                        <div>
-                            <span ng-if="doc.fileType == 'application/pdf'" class="ng-scope"><i class="fa fa-file-pdf-o fa-5x document-icon"></i> </span>
-                            <span ng-if="doc.fileType =='image/png'" class="ng-scope"><i class="fa fa-file-image-o fa-5x document-icon"></i> </span>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="table-responsive" ng-if="viewMode === 'list'">
+                        <table class="table table-striped b-t b-light">
+                            <thead>
+                            <tr>
+                                <th>Document Name</th>
+                                <th>Uploaded on</th>
+                                <th>Uploaded by</th>
+                                <th style="width: 310px;">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-if="!isLoading && !uploadedDocumentList.length">
+                                <td colspan="4">
+                                    <alert type="info" class="text-center">No documents</alert>
+                                </td>
+                            </tr>
+                            <tr ng-if="isLoading">
+                                <td colspan="4" class="text-center">
+                                    <spinner text="Loading..."></spinner>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="doc in uploadedDocumentList">
+                                <td ng-bind="doc.name"></td>
+                                <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
+                                <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
+                                <td>
+                                    <button type="button" class="btn m-b-xs w-xs btn-primary" ng-click="preview(doc)">
+                                        Preview
+                                    </button>
+                                    <button type="button" class="btn m-b-xs w-xs btn-info" ng-click="download(doc)">
+                                        Download
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <section ng-if="!isLoading && uploadedDocumentList.length && viewMode === 'grid'">
+                        <div class="row" ng-repeat="docRow in uploadedDocumentArrangedList">
+                            <div class="col-md-3" data-ng-repeat="doc in docRow">
+                                <article>
+                                    <div>
+                            <span ng-if="doc.fileType == 'application/pdf'" class="ng-scope"><i
+                                    class="fa fa-file-pdf-o fa-5x document-icon"></i> </span>
+                            <span ng-if="doc.fileType =='image/png'" class="ng-scope"><i
+                                    class="fa fa-file-image-o fa-5x document-icon"></i> </span>
+                                    </div>
+                                    <div style="text-align:left">
+                                        <h5>
+                                            Document name:
+                                            <a ng-click="preview(doc)">{{doc.name}}</a>
+                                        </h5>
+                                        <h5>
+                                            Uploaded on: {{doc.createdDate | date:app.dateFormat}}
+                                        </h5>
+                                        <h5>
+                                            Uploaded by: {{doc.createdByContact.firstName + ' ' +
+                                            doc.createdByContact.lastName}}
+                                        </h5>
+                                    </div>
+                                </article>
+                            </div>
                         </div>
-                        <div style="text-align:left">
-                            <h5>
-                                Document name:
-                                <a  ng-click="preview(doc)">{{doc.name}}</a>
-                            </h5>
-                            <h5>
-                                Uploaded on: {{doc.createdDate | date:app.dateFormat}}
-                            </h5>
-                            <h5>
-                                Uploaded by: {{doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName}}
-                            </h5>
-                        </div>
-                    </article>
+                    </section>
                 </div>
             </div>
         </div>

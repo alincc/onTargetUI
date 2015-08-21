@@ -1,10 +1,10 @@
 <div ng-controller="EditTaskController">
-    <div class="add-project">
-        <form name="task_form" novalidate class="form-horizontal form-validation">
+    <div class="add-edit-task panel-body" custom-scroll>
+        <form name="task_form" no-validate class="form-validation">
             <div ng-include="'onTime/task/templates/_createOrUpdate.html'"></div>
         </form>
     </div>
-    <div class="footer">
+    <div class="panel-footer bg-light lter">
         <button class="btn btn-primary" ng-click="save()"
                 ng-disabled="task_form.$invalid || task_form.$submitted || onSubmit">Done
         </button>

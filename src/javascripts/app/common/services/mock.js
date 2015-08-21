@@ -9,11 +9,22 @@ define(function(require) {
     config = require('app/config'),
     angularMocks = require('angularMocks'),
     angularResource = require('angularResource'),
+    earnedValueReport = require('text!./../resources/mockData/earnedValueReport.json'),
     module;
 
   module = angular.module('common.services.mock', ['ngMockE2E', 'app.config', 'ngResource']);
 
   module.run(["$httpBackend", 'appConstant', '$resource', function($httpBackend, constant, $resource) {
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/report\/earnedValueReport/).respond(function(method, url, data) {
+      return [200, angular.fromJson(earnedValueReport)];
+    });
+
+    $httpBackend.whenGET(/.*/).passThrough();
+    $httpBackend.whenPOST(/.*/).passThrough();
+    $httpBackend.whenDELETE(/.*/).passThrough();
+    $httpBackend.whenPUT(/.*/).passThrough();
+    $httpBackend.whenPATCH(/.*/).passThrough();
 
     //// Ignore html files
     //$httpBackend.whenGET(/^.*\.html$/).passThrough();

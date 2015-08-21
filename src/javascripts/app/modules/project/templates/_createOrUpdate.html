@@ -85,7 +85,7 @@
             <input type="text" class="form-control" placeholder="Start date" required ng-model="projectModel.startDate"
                    datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="projectModel.endDate"
                    datepicker-options="startDate.options"
-                   name="startDate" ng-click="startDate.isOpen = !startDate.isOpen" ng-readonly="true"/>
+                   name="startDate" ng-click="startDate.isOpen = !startDate.isOpen"/>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="startDate.open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>
@@ -106,7 +106,7 @@
                    ng-click="endDate.isOpen = !endDate.isOpen"
                    datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="projectModel.startDate"
                    datepicker-options="endDate.options"
-                   name="endDate" ng-readonly="true"/>
+                   name="endDate"/>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="endDate.open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>

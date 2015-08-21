@@ -1,19 +1,27 @@
 define(function (require){
   'use strict';
   var angular = require('angular'),
-    template = require('text!./templates/navbar.html'),
-    controller = require('./controllers/navbar'),
+    navbarTemplate = require('text!./templates/navbar.html'),
+    inviteCollaboratorsTemplate = require('text!./templates/inviteCollaborators.html'),
+    navbarController = require('./controllers/navbar'),
+    inviteCollaboratorsController = require('./controllers/inviteCollaborators'),
+    userContextModule = require('app/common/context/user'),
     accountServiceModule = require('app/common/services/account'),
     notificationsServiceModule = require('app/common/services/notifications'),
+    companyServiceModule = require('app/common/services/company'),
+    inviteCollaboratorServiceModule = require('app/common/services/inviteCollaborator'),
     showHideCollaborateDirective = require('./directives/showHideCollaborate'),
-    angularMoment = require('angularMoment');
+    angularMoment = require('angularMoment'),
+    companyTypesData = require('text!app/common/resources/companyTypes.json');
 
-  var module = angular.module('app.navbar', ['common.context.user', 'common.services.account', 'common.services.notifications', 'angularMoment']);
+  var module = angular.module('app.navbar', ['common.context.user', 'common.services.account', 'common.services.notifications', 'common.services.inviteCollaborator', 'angularMoment', 'common.services.company']);
   module.run(['$templateCache', function ($templateCache){
-    $templateCache.put('navbar/templates/navbar.html', template);
+    $templateCache.put('navbar/templates/navbar.html', navbarTemplate);
+    $templateCache.put('navbar/templates/inviteCollaborators.html', inviteCollaboratorsTemplate);
   }]);
 
-  module.controller('NavbarController', controller);
+  module.controller('NavbarController', navbarController);
+  module.controller('InviteCollaboratorsController', inviteCollaboratorsController);
 
   module.directive('showHideCollaborate', showHideCollaborateDirective);
 
