@@ -4,10 +4,9 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <a class="btn btn-info pull-right">Upload</a>
-
-                    <h1 class="m-n font-thin h3 text-black">onSite
-                        <div class="buttons">
+                    <h1 class="m-n font-thin h3 text-black">
+                        onSite
+                        <div class="buttons" ng-show="!isPreview">
                             <button class="btn btn-sm" ng-click="changeMode('grid')"
                                     ng-class="{'btn-info': viewMode==='grid'}"><i
                                     class="fa fa-th-large"></i></button>
@@ -15,21 +14,30 @@
                                     ng-class="{'btn-info': viewMode==='list'}"><i
                                     class="fa fa-reorder"></i></button>
                         </div>
+                        <button ng-if="isPreview" class="btn btn-default pull-right" ng-click="backToList()"><i
+                                class="fa fa-arrow-left"></i> Back to list
+                        </button>
                     </h1>
                 </div>
             </div>
         </div>
         <!-- / main header -->
-        <div class="wrapper-md p-r-none">
+        <div class="wrapper-md p-r-none" ng-show="!isPreview">
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button class="btn btn-primary" ng-click="upload()"><i class="fa fa-cloud-upload"></i> Upload
+                    </button>
+                    <button class="btn btn-primary" ng-click="import()"><i class="fa fa-inbox"></i> Import</button>
+                </div>
                 <div class="panel-body">
                     <div class="table-responsive" ng-if="viewMode === 'list'">
                         <table class="table table-striped b-t b-light">
                             <thead>
                             <tr>
+                                <th style="width: 64px;"></th>
                                 <th>Document Name</th>
-                                <th>Uploaded on</th>
                                 <th>Uploaded by</th>
+                                <th>Uploaded on</th>
                                 <th style="width: 310px;">Action</th>
                             </tr>
                             </thead>
@@ -44,16 +52,17 @@
                                     <spinner text="Loading..."></spinner>
                                 </td>
                             </tr>
-                            <tr ng-repeat="doc in uploadedDocumentList">
-                                <td ng-bind="doc.name"></td>
-                                <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
+                            <tr ng-repeat="doc in uploadedDocumentList track by $index">
+                                <td class="file-icon"><img ng-src="{{doc.name | fileicon}}"/></td>
+                                <td><a href="javascript:void(0)" ng-click="preview(doc)" ng-bind="doc.name"></a></td>
                                 <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
+                                <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
                                 <td>
-                                    <button type="button" class="btn m-b-xs w-xs btn-primary" ng-click="preview(doc)">
-                                        Preview
+                                    <button type="button" class="btn btn-primary" ng-click="preview(doc)">
+                                        <i class="fa fa-comment"></i> Comment
                                     </button>
-                                    <button type="button" class="btn m-b-xs w-xs btn-info" ng-click="download(doc)">
-                                        Download
+                                    <button type="button" class="btn btn-info" ng-click="download(doc)">
+                                        <i class="fa fa-download"></i> Download
                                     </button>
                                 </td>
                             </tr>
@@ -61,8 +70,8 @@
                         </table>
                     </div>
                     <section ng-if="!isLoading && uploadedDocumentList.length && viewMode === 'grid'">
-                        <div class="row" ng-repeat="docRow in uploadedDocumentArrangedList">
-                            <div class="col-md-3" data-ng-repeat="doc in docRow">
+                        <div class="row" ng-repeat="docRow in uploadedDocumentArrangedList track by $index">
+                            <div class="col-md-3" data-ng-repeat="doc in docRow track by $index">
                                 <article>
                                     <div>
                             <span ng-if="doc.fileType == 'application/pdf'" class="ng-scope"><i
@@ -87,6 +96,62 @@
                             </div>
                         </div>
                     </section>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper-md p-r-none" ng-if="isPreview">
+            <div class="row">
+                <div class="col-xs-12 col-md-9 p-r-0 preview-section">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" ng-bind="selectedDoc.name"></div>
+                        <div class="panel-body">
+                            <iframe
+                                    ng-src="{{selectedDoc.previewPath}}"
+                                    frameborder="0" ng-if="!selectedDoc.isImage">
+                            </iframe>
+                            <div class="image-preview-wrapper"
+                                 ng-if="selectedDoc.isImage">
+                                <img class="image-size wrapper-xs" ng-src="{{selectedDoc.previewPath}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3 p-l-0 comment-section">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Comments</div>
+                        <div class="panel-body" custom-scroll>
+                            <div class="text-center" ng-if="isLoadingComment">
+                                <spinner text="Loading comments..."></spinner>
+                            </div>
+                            <ul class="list-group no-bg no-borders pull-in">
+                                <li class="list-group-item" ng-repeat="com in comments track by $index">
+                                    <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
+                                        <img ng-src="{{com.commenterContact.userImagePath}}" image-path alt="..."
+                                             class="img-circle">
+                                    </a>
+
+                                    <div class="clear comment-content">
+                                        <div class="commenter"><a href="javascript:void(0)"
+                                                                  ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
+                                            said:
+                                        </div>
+                                        <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
+                                        <small class="text-muted" ng-bind="com.comment"></small>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="add-comment" ng-show="!isLoadingComment">
+                                <form name="add_comment_frm" no-validate ng-submit="addComment(addCommentModel, add_comment_frm)">
+                                    <div class="textarea">
+                                        <textarea ng-model="addCommentModel.comment" auto-grow="" placeholder="Add a comment or reply here" rows="1" required></textarea>
+                                    </div>
+                                    <div class="button">
+                                        <button class="btn btn-primary" type="submit" ng-disabled="add_comment_frm.$invalid || add_comment_frm.$submitted">Send <i class="fa fa-paper-plan-o"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ define(function() {
           projectId: activity.projectId
         }).then(
           function(resp) {
-            toaster.pop('success', 'Success', resp.data.returnMessage);
+            //toaster.pop('success', 'Success', resp.data.returnMessage);
             //remove activity in local storage
             var index = $scope.currentProject.projects.indexOf(activity);
             $scope.currentProject.projects.splice(index, 1);

@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <h3 class="modal-title">Add document</h3>
+</div>
+<div class="modal-body on-site-upload-document-modal">
+    <form name="document_frm" no-validate class="form-horizontal form-validation">
+        <tabset class="tab-container" ng-init="steps={step1:true, step2:false}">
+            <tab heading="Choose Document" active="steps.step1">
+                <form name="step1" class="form-validation">
+                    <div class="btn btn-primary btn-block" ngf-select ng-model="uploadModel.file" ng-disabled="isUploading"><i class="fa fa-cloud-upload"></i> Choose Document</div>
+                    <div ngf-drop ng-model="uploadModel.file" class="drop-box"
+                         ngf-drag-over-class="dragover" ngf-multiple="false" ngf-allow-dir="false"
+                         ngf-pattern="'image/*,application/pdf'">or Drop Document file here</div>
+                    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+                    <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploading"></div>
+                    <p class="selected-file file-info" ng-if="uploadModel.filePath.length">
+                        <span class="file-icon">
+                            <img ng-src="{{uploadModel.fileName | fileicon}}" alt=""/>
+                        </span>
+                        <span class="file-name" ng-bind="uploadModel.fileName"></span>
+                        <span class="file-remove-icon" ng-click="removeFile()">
+                            <i class="fa fa-times"></i>
+                        </span>
+                    </p>
+                    <div class="m-t m-b text-right">
+                        <button type="submit" ng-disabled="step1.$invalid || isUploading || !uploadModel.filePath.length" class="btn btn-primary btn-rounded" ng-click="steps.step2=true">Next <i class="fa fa-arrow-right"></i></button>
+                    </div>
+                </form>
+            </tab>
+            <tab heading="Document information" disabled="step1.$invalid || isUploading || !uploadModel.filePath.length" active="steps.step2">
+                <form name="step2" class="form-validation" ng-submit="saveDocumentInfo(uploadModel)">
+                    <p>Category:</p>
+                    <ui-select ng-model="uploadModel.category"
+                               theme="bootstrap"
+                               ng-required="true"
+                               reset-search-input="false">
+                        <ui-select-match placeholder="Select category">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="cat in categories">
+                            <div ng-bind-html="cat.name"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    <p class="m-t">Description:</p>
+                    <textarea class="form-control" ng-model="uploadModel.description" required name="description"></textarea>
+                    <div class="m-t m-b text-right">
+                        <button type="submit" ng-disabled="step2.$invalid || step2.$submitted" class="btn btn-primary btn-rounded" ng-click="steps.step2=true"><i class="fa fa-info-circle"></i> Save document info</button>
+                    </div>
+                </form>
+            </tab>
+        </tabset>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

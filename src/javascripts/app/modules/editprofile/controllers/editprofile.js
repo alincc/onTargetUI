@@ -1,7 +1,7 @@
 define(function (){
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'uploadFile', '$timeout', 'appConstant', 'toaster',
-    function ($scope, $rootScope, userContext, $state, accountFactory, notifications, uploadFile, $timeout, appConstant, toaster){
+  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'uploadFactory', '$timeout', 'appConstant', 'toaster',
+    function ($scope, $rootScope, userContext, $state, accountFactory, notifications, uploadFactory, $timeout, appConstant, toaster){
 
       $scope.editUserData = {
         userId: $rootScope.currentUserInfo.userId,
@@ -48,7 +48,7 @@ define(function (){
 
       function upload(file){
         $scope.isUploadAvatar = true;
-        uploadFile.upload(file).progress(function (evt){
+        uploadFactory.upload(file, 'profile').progress(function (evt){
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.percentage = progressPercentage;
         }).success(function (data, status, headers, config){

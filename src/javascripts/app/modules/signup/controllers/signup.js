@@ -1,7 +1,7 @@
 define(function() {
   'use strict';
-  var controller = ['$scope', 'userContext', '$state', 'appConstant', 'accountFactory', 'uploadFile', '$timeout', 'registrationTokenData', 'toaster',
-    function($scope, userContext, $state, appConstant, accountFactory, uploadFile, $timeout, registrationTokenData, toaster) {
+  var controller = ['$scope', 'userContext', '$state', 'appConstant', 'accountFactory', 'uploadFactory', '$timeout', 'registrationTokenData', 'toaster',
+    function($scope, userContext, $state, appConstant, accountFactory, uploadFactory, $timeout, registrationTokenData, toaster) {
       $scope.user = {
         username: "",
         email: "",
@@ -23,7 +23,7 @@ define(function() {
           registrationToken: registrationTokenData.collaborateToken,
           firstName: registrationTokenData.userRegistration.firstName,
           lastName: registrationTokenData.userRegistration.lastName,
-          areaCode: registrationTokenData.userRegistration.companyZip
+          areaCode: registrationTokenData.userRegistration.companyZip ? registrationTokenData.userRegistration.companyZip : ''
         };
       }
       else if(registrationTokenData.returnVal) {
@@ -36,10 +36,12 @@ define(function() {
       $scope.isUploadAvatar = false;
 
       $scope.registerUser = function(user) {
+        console.log(user);
         if($scope.form.$invalid) {
           return false;
         }
         accountFactory.registerOntargetUser(user).success(function(data) {
+
           if(data.returnVal === "SUCCESS") {
             $state.go('signin');
           }
@@ -67,7 +69,7 @@ define(function() {
 
       function upload(file) {
         $scope.isUploadAvatar = true;
-        uploadFile.upload(file).progress(function(evt) {
+        uploadFactory.upload(file, 'profile').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           //$scope.log = 'progress: ' + progressPercentage + '% ' +
           //  evt.config.file.name + '\n' + $scope.log;

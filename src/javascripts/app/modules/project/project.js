@@ -22,12 +22,13 @@ define(function(require) {
     companyServiceModule = require('app/common/services/company'),
     countryServiceModule = require('app/common/services/country'),
     userContextModule = require('app/common/context/user'),
-    ngFileUpload = require('app/common/services/upload'),
+    uploadServiceModule = require('app/common/services/upload'),
     angularSvgRoundProgress = require('angularSvgRoundProgress'),
     utilServiceModule = require('app/common/services/util'),
     angularSanitize = require('angularSanitize'),
     toaster = require('toaster'),
     angularLocalStorage = require('angularLocalStorage'),
+    ngFileUpload = require('ngFileUpload'),
     userNotificationsModule = require('app/common/services/userNotifications');
   var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications']);
 

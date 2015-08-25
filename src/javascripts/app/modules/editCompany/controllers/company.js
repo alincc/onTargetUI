@@ -2,6 +2,7 @@ define(function() {
   'use strict';
   var controller = ['$scope', 'companyFactory', 'company', 'countryFactory',
     function($scope, companyFactory, company, countryFactory) {
+      console.log(company);
       $scope.company = company;
       $scope.countries = countryFactory.getCountryList();
 
@@ -24,8 +25,10 @@ define(function() {
 
         companyFactory.update(param)
           .success(function(response) {
+            $scope.form.$setPristine();
             console.info(response.returnMessage);
           }).error(function(response) {
+            $scope.form.$setPristine();
             console.error('update fail');
           });
       };

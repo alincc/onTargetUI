@@ -1,0 +1,20 @@
+{
+  "type": "projectFileCategoryListResponse",
+  "authenticated": false,
+  "returnMessage": "Successfully retrieved project category list",
+  "returnVal": "SUCCESS",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Drawing"
+    },
+    {
+      "id": 2,
+      "name": "Painting"
+    },
+    {
+      "id": 3,
+      "name": "Furnishing"
+    }
+  ]
+}

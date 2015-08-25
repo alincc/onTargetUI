@@ -23,6 +23,15 @@ define(function(require) {
             projectId:projectId
           });
         };
+
+        service.getCategories = function(){
+          return $http.post(constant.domain + '/upload/projectFileCategoryList', {});
+        };
+
+        service.saveUploadedDocsInfo = function(data){
+          return $http.post(constant.domain + '/upload/saveUploadedDocsInfo', data);
+        };
+
         return service;
       }
     ]

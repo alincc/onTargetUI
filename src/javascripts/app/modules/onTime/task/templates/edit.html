@@ -6,7 +6,7 @@
     </div>
     <div class="panel-footer bg-light lter">
         <button class="btn btn-primary" ng-click="save()"
-                ng-disabled="task_form.$invalid || task_form.$submitted || onSubmit">Done
+                ng-disabled="task_form.$error['required'] !== undefined || task_form.$submitted || onSubmit">Done
         </button>
         <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
     </div>

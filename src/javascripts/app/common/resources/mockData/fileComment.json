@@ -1,0 +1,47 @@
+{
+  "type" : "projectFileCommentListResponse",
+  "authenticated" : false,
+  "returnMessage" : "Successfully retrieved project file comments",
+  "returnVal" : "SUCCESS",
+  "comments" : [ {
+    "comment" : "This is another comment",
+    "commentedBy" : 1,
+    "commentedDate" : "2015-08-23T09:22:12.433",
+    "commenterContact" : {
+      "areaCode" : 971,
+      "contactId" : 1,
+      "email" : "santosh8pun@gmail.com",
+      "firstName" : "Sanjeev",
+      "lastName" : "Ghimire",
+      "phoneNumber" : "9801012345",
+      "title" : "Er",
+      "user" : {
+        "discipline" : 0,
+        "userId" : 1,
+        "userTypeId" : 0
+      },
+      "userImagePath" : "assets/profile/1111111.jpeg"
+    },
+    "projectFileCommentId" : 2
+  }, {
+    "comment" : "This is comment2",
+    "commentedBy" : 1,
+    "commentedDate" : "2015-08-23T09:22:12.472",
+    "commenterContact" : {
+      "areaCode" : 971,
+      "contactId" : 1,
+      "email" : "santosh8pun@gmail.com",
+      "firstName" : "Sanjeev",
+      "lastName" : "Ghimire",
+      "phoneNumber" : "9801012345",
+      "title" : "Er",
+      "user" : {
+        "discipline" : 0,
+        "userId" : 1,
+        "userTypeId" : 0
+      },
+      "userImagePath" : "assets/profile/1111111.jpeg"
+    },
+    "projectFileCommentId" : 1
+  } ]
+}

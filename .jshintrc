@@ -122,6 +122,7 @@
     "expect": true,
     "requirejs": true,
     "_": true,
-    "tinymce": true
+    "tinymce": true,
+    "gapi": true
   }
 }

@@ -3,19 +3,19 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', function ($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications){
+  var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', function($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications) {
 
     $scope.editTask = true;
     $scope.currenttask = $rootScope.currentTask;
     $scope.task = {
-      projectTaskId : $scope.currenttask.projectTaskId,
-      title : $scope.currenttask.title,
-      description : $scope.currenttask.description,
-      status : $scope.currenttask.status,
-      severity : $scope.currenttask.severity,
-      startDate : new Date($scope.currenttask.startDate),
-      endDate : new Date($scope.currenttask.endDate),
-      projectId : $rootScope.activitySelected.projectId
+      projectTaskId: $scope.currenttask.projectTaskId,
+      title: $scope.currenttask.title,
+      description: $scope.currenttask.description,
+      status: $scope.currenttask.status,
+      severity: $scope.currenttask.severity,
+      startDate: $scope.currenttask.startDate,
+      endDate: $scope.currenttask.endDate,
+      projectId: $rootScope.activitySelected.projectId
     };
 
     $scope.model = {
@@ -28,7 +28,7 @@ define(function() {
 
     $scope.minDate2 = $rootScope.activitySelected.startDate;
     $scope.maxDate2 = $rootScope.activitySelected.endDate;
-    $scope.$watchCollection('[task.startDate, task.endDate]', function(e){
+    $scope.$watchCollection('[task.startDate, task.endDate]', function(e) {
       $scope.minDate = $scope.task.startDate ? $scope.task.startDate : $rootScope.activitySelected.startDate;
       $scope.maxDate = $scope.task.endDate ? $scope.task.endDate : $rootScope.activitySelected.endDate;
     });
@@ -64,15 +64,17 @@ define(function() {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();
           notifications.taskUpdated();
-        }, function (err){
+        }, function(err) {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();
         }
       );
     };
 
-    $scope.cancel = function (){
-      notifications.taskCancel();
+    $scope.cancel = function() {
+      notifications.taskSelection({
+        action: 'info'
+      });
     };
   }];
   return controller;

@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/18/2015.
  */
-define(function(require) {
+define(function (require){
   'use strict';
   var angular = require('angular'),
     config = require('app/config'),
@@ -16,6 +16,7 @@ define(function(require) {
     commentController = require('./controllers/comment'),
     progressController = require('./controllers/progress'),
     attachmentController = require('./controllers/attachment'),
+    budgetController = require('./controllers/budget'),
     template = require('text!./templates/task.html'),
     createTemplate = require('text!./templates/create.html'),
     editTemplate = require('text!./templates/edit.html'),
@@ -27,6 +28,7 @@ define(function(require) {
     commentTemplate = require('text!./templates/comment.html'),
     progressTemplate = require('text!./templates/progress.html'),
     attachmentTemplate = require('text!./templates/attachment.html'),
+    budgetTemplate = require('text!./templates/budget.html'),
     projectServiceModule = require('app/common/services/project'),
     activityServiceModule = require('app/common/services/activity'),
     notificationServiceModule = require('app/common/services/notifications'),
@@ -38,11 +40,12 @@ define(function(require) {
     angularBootstrap = require('angularBootstrap'),
     angularMoment = require('moment'),
     angularSlider = require('angularSlider'),
-    ngTouch = require('ngTouch');
+    ngTouch = require('ngTouch'),
+    ngLetterAvatar = require('ngLetterAvatar');
 
-  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'ui.bootstrap.typeahead', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.upload', 'ui.select']);
+  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'ui.bootstrap.typeahead', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.upload', 'ui.select', 'ngLetterAvatar']);
 
-  module.run(['$templateCache', function($templateCache) {
+  module.run(['$templateCache', function ($templateCache){
     $templateCache.put('onTime/task/templates/task.html', template);
     $templateCache.put('onTime/task/templates/_createOrUpdate.html', createOrUpdateTemplate);
     $templateCache.put('onTime/task/templates/create.html', createTemplate);
@@ -54,6 +57,7 @@ define(function(require) {
     $templateCache.put('onTime/task/templates/comment.html', commentTemplate);
     $templateCache.put('onTime/task/templates/progress.html', progressTemplate);
     $templateCache.put('onTime/task/templates/attachment.html', attachmentTemplate);
+    $templateCache.put('onTime/task/templates/budget.html', budgetTemplate);
   }]);
 
   module.controller('TaskController', controller);
@@ -66,6 +70,7 @@ define(function(require) {
   module.controller('CommentTaskController', commentController);
   module.controller('ProgressTaskController', progressController);
   module.controller('AttachmentTaskController', attachmentController);
+  module.controller('BudgetTaskController', budgetController);
 
   return module;
 });

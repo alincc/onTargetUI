@@ -1,0 +1,15 @@
+<div ng-controller="BudgetTaskController" class="budget-task">
+    <div ng-show="task.costsByMonthYear">
+    <table >
+        <th></th>
+        <th>ACTUAL COST</th>
+        <th>PLANNED COST</th>
+        <tr ng-repeat="budget in task.costsByMonthYear">
+            <td>{{budget.taskInterval.month}}-{{budget.taskInterval.year}}</td>
+            <td><input type="text" ng-model="budget.costs[0].cost"/></td>
+            <td><input type="text" ng-model="budget.costs[1].cost"/></td>
+        </tr>
+    </table>
+    <button class="btn btn-primary" ng-click="addTaskBudget()">Save</button>
+    </div>
+</div>

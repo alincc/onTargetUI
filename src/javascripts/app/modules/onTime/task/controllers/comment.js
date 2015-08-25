@@ -1,10 +1,11 @@
 /**
  * Created by thophan on 8/20/2015.
  */
-define(function (){
+define(function(require) {
   'use strict';
+  var angular = require('angular');
   var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications',
-    function ($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications){
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications) {
       $scope.comments = $rootScope.currentTask.comments;
       console.log(userContext.authentication().userData.contact);
       var userInfo = userContext.authentication().userData.contact;
@@ -13,6 +14,8 @@ define(function (){
         commentedBy: userContext.authentication().userData.userId,
         commentedDate: '',
         commenterContact: {
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName
         },
         taskCommentId: 0,
         taskId: $rootScope.currentTask.projectTaskId
@@ -20,26 +23,24 @@ define(function (){
 
       console.log($scope.comments);
 
-      $scope.addComment = function (){
-        $scope.model.comment = $scope.comment;
-        $scope.comment = '';
+      $scope.addComment = function() {
         $scope.model.commentedDate = new Date();
         taskFactory.createNewComment($scope.model).then(
-          function (resp){
-            toaster.pop('success', 'Success', resp.data.returnMessage);
+          function(resp) {
+            var commentObject = angular.copy($scope.model);
+            $scope.comments.push(commentObject);
+            $scope.model.comment = '';
+            $scope.model.commentedDate = '';
             $scope.$broadcast("content.reload");
-            $scope.model.commenterContact = {
-              firstName: userInfo.firstName,
-              lastName: userInfo.lastName
-            };
-            $scope.comments.push($scope.model);
+            $scope.comment_form.$setPristine();
             //notifications.taskUpdated();
-          }, function (err){
+          }, function(err) {
             console.log(err);
+            $scope.comment_form.$setPristine();
           });
       };
 
-      notifications.onTaskSelection($scope, function (){
+      notifications.onTaskSelection($scope, function() {
         $scope.comments = $rootScope.currentTask.comments;
       });
     }];

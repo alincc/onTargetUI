@@ -1,13 +1,20 @@
 <div ng-controller="AttachmentTaskController">
-    <div class="item-list">
-        <div class="item" ng-repeat="attachment in attachments">
-            <span>{{attachment.fileName}}</span>
-            <span>{{attachment.contact.firstName}}&nbsp;{{attachment.contact.lastName}}</span>
-        </div>
-    </div>
+    <table ng-show="attachments.length > 0">
+        <tr>
+            <th>DOCUMENT</th>
+            <th>UPLOADED BY</th>
+            <th>ACTIONS</th>
+        </tr>
+        <tr ng-repeat="attachment in attachments">
+            <td>{{ attachment.fileName }}</td>
+            <td>{{attachment.contact.firstName}}&nbsp;{{attachment.contact.lastName}}</td>
+            <td><a href="">View</a> | <a task-attachment ttachment href="{{attachment.location + attachment.fileName}}">Download</a></td>
+        </tr>
+    </table>
     <div>
         <!--<input type="file" ng-file-select="onFileSelect($files)" multiple>-->
-        <input type="file" ng-file-select="onFileSelect($files)">
-        <button class="btn btn-primary" ng-click="saveTaskFile()">Save</button>
+        <input type="file" onchange="angular.element(this).scope().uploadFile(this)">
+
+        <!--<button class="btn btn-primary" ng-click="saveTaskFile()">Save</button>-->
     </div>
 </div>

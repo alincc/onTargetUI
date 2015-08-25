@@ -16,11 +16,13 @@ define([
         _TASK_SELECTION_ = '_TASK_SELECTION_',
         _TASK_CREATED_ = '_TASK_CREATED_',
         _TASK_UPDATED_ = '_TASK_UPDATED_',
+        _TASK_DELETED_ = _TASK_DELETED_,
         _TASK_CANCEL_ = '_TASK_CANCEL_',
         _ASSIGNEE_SELECTION_ = '_ASSIGNEE_SELECTION_',
         _UPDATE_PROFILE_SUCCESS_ = '_UPDATE_PROFILE_SUCCESS_',
         _GET_USER_NOTIFICATIONS_SUCCESS_ = '_GET_USER_NOTIFICATIONS_SUCCESS_',
         _ACTIVITY_SELECTION_ = '_ACTIVITY_SELECTION_',
+        _ACTIVITY_DELETED_ = '_ACTIVITY_DELETED_',
 
         requestStarted = function (){
           $rootScope.$broadcast(_START_REQUEST_);
@@ -78,6 +80,14 @@ define([
             handler(args);
           });
         },
+        taskDeleted = function (args){
+          $rootScope.$broadcast(_TASK_DELETED_, args);
+        },
+        onTaskDeleted = function ($scope, handler){
+          $scope.$on(_TASK_DELETED_, function (event, args){
+            handler(args);
+          });
+        },
         selectAssignee = function (args){
           $rootScope.$broadcast(_ASSIGNEE_SELECTION_, args);
         },
@@ -125,6 +135,14 @@ define([
           $scope.$on(_ACTIVITY_SELECTION_, function (event, args){
             handler(args);
           });
+        },
+        activityDeleted = function (args){
+          $rootScope.$broadcast(_ACTIVITY_DELETED_, args);
+        },
+        onActivityDeleted = function ($scope, handler){
+          $scope.$on(_ACTIVITY_DELETED_, function (event, args){
+            handler(args);
+          });
         };
 
       return {
@@ -144,6 +162,8 @@ define([
         onSelectAssignee: onSelectAssignee,
         taskUpdated: taskUpdated,
         onTaskUpdated: onTaskUpdated,
+        taskDeleted: taskDeleted,
+        onTaskDeleted: onTaskDeleted,
         taskCancel: taskCancel,
         onTaskCancel: onTaskCancel,
         logoutSuccess: logoutSuccess,
@@ -153,7 +173,9 @@ define([
         getNotificationSuccess: getNotificationSuccess,
         onGetNotificationSuccess: onGetNotificationSuccess,
         activitySelection: activitySelection,
-        onActivitySelection: onActivitySelection
+        onActivitySelection: onActivitySelection,
+        activityDeleted: activityDeleted,
+        onActivityDeleted: onActivityDeleted
       };
     }]);
 });

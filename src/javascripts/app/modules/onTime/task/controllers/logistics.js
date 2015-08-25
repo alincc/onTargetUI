@@ -28,6 +28,12 @@ define(function (){
       $scope.openAction = function (action){
         $scope.action = action;
       };
+
+      $scope.cancel = function() {
+        notifications.taskSelection({
+          action: 'info'
+        });
+      };
     }];
   return controller;
 });

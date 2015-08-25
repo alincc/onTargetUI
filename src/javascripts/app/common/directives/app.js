@@ -170,5 +170,14 @@ define(function(require) {
       }
     };
   }]);
+  module.directive('setFixedHeight', [function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        var height = attrs.setFixedHeight || 255;
+        elem.css('height', window.innerHeight - height);
+      }
+    };
+  }]);
   return module;
 });

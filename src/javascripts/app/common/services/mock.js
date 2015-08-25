@@ -10,6 +10,8 @@ define(function(require) {
     angularMocks = require('angularMocks'),
     angularResource = require('angularResource'),
     earnedValueReport = require('text!./../resources/mockData/earnedValueReport.json'),
+    documentCategory = require('text!./../resources/mockData/documentCategory.json'),
+    fileComment = require('text!./../resources/mockData/fileComment.json'),
     module;
 
   module = angular.module('common.services.mock', ['ngMockE2E', 'app.config', 'ngResource']);
@@ -19,6 +21,32 @@ define(function(require) {
     $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/report\/earnedValueReport/).respond(function(method, url, data) {
       return [200, angular.fromJson(earnedValueReport)];
     });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/projectFileCategoryList/).respond(function(method, url, data) {
+      return [200, angular.fromJson(documentCategory)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/projectFileCommentList/).respond(function(method, url, data) {
+      return [200, angular.fromJson(fileComment)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/saveUploadedDocsInfo/).respond(function(method, url, data) {
+      return [200, {
+        "authenticated" : false,
+        "responseCode" : "200",
+        "returnMessage" : "SUCCESS",
+        "returnVal" : "SUCCESS"
+      }];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/addComment/).respond(function(method, url, data) {
+      return [200, {
+        "authenticated" : false,
+        "returnMessage" : "Comment added successfully",
+        "returnVal" : "SUCCESS"
+      }];
+    });
+
 
     $httpBackend.whenGET(/.*/).passThrough();
     $httpBackend.whenPOST(/.*/).passThrough();

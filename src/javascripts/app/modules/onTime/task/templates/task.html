@@ -1,5 +1,5 @@
 <div class="row" ng-controller="TaskController">
-    <div class="col-xs-12 task-list-section" ng-class="{'col-md-8': taskSelected, 'col-md-12': !taskSelected}">
+    <div class="col-xs-12 task-list-section" ng-class="{'col-md-7': taskSelected, 'col-md-12': !taskSelected}">
         <div class="task-section">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -9,14 +9,14 @@
                           <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
                           </button>
                         </span>
-                            <input type="text" class="form-control"/>
+                            <input type="text" class="form-control" ng-model="search.title"/>
                         </div>
                     </div>
                     <div class="task-list" custom-scroll>
                         <div class="task-loading text-center" ng-if="isLoadingTasks">
                             <spinner text="Loading..."></spinner>
                         </div>
-                        <div class="task-item" ng-repeat="task in tasks" ng-class="{'task-selected-item': task.projectTaskId == taskSelected.projectTaskId }"
+                        <div class="task-item" ng-repeat="task in tasks | filter:search:title" ng-class="{'task-selected-item': task.projectTaskId == taskSelected.projectTaskId }"
                              ng-click="selectTask(task)">
                             <div class="task-status">
                                 <div class="percentage">{{task.percentageComplete}}%</div>
@@ -67,7 +67,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-md-4 task-create-update-section" ng-if="taskSelected">
+    <div class="col-xs-12 col-md-5 task-create-update-section" ng-if="taskSelected">
         <div class="panel-right">
             <div class="panel panel-default">
                 <div class="panel-heading bg-light lter">

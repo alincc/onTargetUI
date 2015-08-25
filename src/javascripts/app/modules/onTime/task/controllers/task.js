@@ -29,8 +29,10 @@ define(function() {
       };
 
       var bindTasks = function() {
-        $scope.model.projectId = $rootScope.activitySelected.projectId;
-        loadProjectTasks();
+        if($rootScope.activitySelected) {
+          $scope.model.projectId = $rootScope.activitySelected.projectId;
+          loadProjectTasks();
+        }
       };
 
       $scope.app = appConstant.app;
@@ -159,6 +161,12 @@ define(function() {
       });
 
       notifications.onActivitySelection($scope, function() {
+        $scope.tasks = [];
+        $scope.taskSelected = null;
+        bindTasks();
+      });
+
+      notifications.onActivityDeleted($scope, function() {
         $scope.tasks = [];
         $scope.taskSelected = null;
         bindTasks();

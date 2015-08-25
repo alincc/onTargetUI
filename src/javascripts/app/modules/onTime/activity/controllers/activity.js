@@ -125,10 +125,24 @@ define(function(require) {
       deleteActivityModalInstance.result.then(
         function() {
           //delete success
-          $scope.activitySelected = null;
+          $scope.activitySelected = $rootScope.activitySelected = null;
           $scope.getUserProject();
+          notifications.activityDeleted();
         });
     };
+
+    //when task added, or deleted
+    notifications.onTaskCreated($scope, function (){
+      $scope.getUserProject();
+    });
+
+    notifications.onTaskUpdated($scope, function (){
+      $scope.getUserProject();
+    });
+
+    notifications.onTaskCreated($scope, function (){
+      $scope.getUserProject();
+    });
 
     // remap data, add task active and pending counter
     $scope.mapData();

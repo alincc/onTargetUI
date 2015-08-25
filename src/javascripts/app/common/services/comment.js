@@ -10,6 +10,10 @@ define(function(require) {
     services.addComment = function(taskId, comment){
       return $http.post(constant.domain + '/api/tasks/' + taskId + '/comment', {
         text: comment
+      },{
+        headers: {
+          AutoAlert: true
+        }
       });
     };
 

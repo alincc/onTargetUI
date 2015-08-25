@@ -21,11 +21,11 @@ define(function(require) {
             templateUrl: "editCompany/templates/company.html",
             controller: 'CompanyController',
             resolve: {
-              company: ['companyFactory', '$q', function(companyFactory, $q) {
+              company: ['companyFactory', '$q', '$rootScope', function(companyFactory, $q, $rootScope) {
                 var deferred = $q.defer();
 
                 companyFactory.get({
-                  "companyId" : 1
+                  "companyId" : $rootScope.mainProjectInfo.companyId
                 }).success(function(response) {
                   deferred.resolve(response.company);
                 }).error(function(response) {

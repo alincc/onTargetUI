@@ -35,7 +35,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-xs-4 project-date">
+                                <div class="col-xs-12 project-date">
                                     <div class="desc">
                                         <p class="large" ng-bind="projectDate.remain >0?projectDate.remain:0"></p>
 
@@ -62,9 +62,6 @@
 
                                     <div class="end-date">End date: <span
                                             ng-bind="currentProject.endDate | date:app.dateFormat"></span></div>
-                                </div>
-                                <div class="col-xs-8">
-                                    chart
                                 </div>
                             </div>
                         </div>
@@ -381,7 +378,7 @@
                                                 <div class="status-item" ng-repeat="taskStatus in tasksStatus">
                                                     <div class="title">{{taskStatus.statusType}} - <span>{{taskStatus.taskCount}}</span>
                                                     </div>
-                                                    <div class="progress">
+                                                    <div class="progress task-status-{{taskStatus.statusType}}">
                                                         <progressbar class="progress-striped m-b-sm"
                                                                      value="taskStatus.taskCount/taskStatusCount*100"
                                                                      type="success"></progressbar>
@@ -411,6 +408,7 @@
                 <div class="col-xs-12 col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-body">
+                            <span>Actitivy Log</span>
                             <div class="timeline-container" custom-scroll>
                                 <ul class="timeline timeline-center">
                                     <li class="tl-header">
@@ -431,6 +429,9 @@
                                                         <div>{{activityLog.tsInsert|date:'EEEE'}}</div>
                                                         <div>{{activityLog.tsInsert|date:'MMM yyyy'}}</div>
                                                     </div>
+                                                </div>
+                                                <div class="tl-avatar">
+                                                    <img ng-src="{{activityLog.userImage}}" image-path />
                                                 </div>
                                                 <div class="tl-content">{{activityLog.text}}</div>
 

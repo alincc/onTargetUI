@@ -90,25 +90,53 @@ define(function(require) {
       return angular.fromJson(taskSeverities);
     };
 
-    services.assignUserToTask = function (model){
+    services.assignUserToTask = function(model) {
       //return $http.post(constant.domain + '/task/assignUserToTask', model);
-      return $http.post(constant.resourceUrl + '/contact/setTaskMember/', model);
+      return $http.post(constant.resourceUrl + '/contact/setTaskMember/', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
     };
 
-    services.createNewComment = function (model){
-      return $http.post(constant.resourceUrl + '/task/createnewtaskcomment', model);
+    services.createNewComment = function(model) {
+      return $http.post(constant.resourceUrl + '/task/createnewtaskcomment', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
     };
 
-    services.updateProgress = function (model){
-      return $http.post(constant.resourceUrl + '/tasks/createnewtaskpercentage', model);
+    services.updateProgress = function(model) {
+      return $http.post(constant.resourceUrl + '/tasks/createnewtaskpercentage', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
     };
 
-    services.getTaskAttachments = function (model){
+    services.getTaskAttachments = function(model) {
       return $http.post(constant.resourceUrl + '/tasks/getTaskAttachments', model);
     };
 
-    services.saveTaskFile = function (model){
-      return $http.post(constant.resourceUrl + '/ask/saveTaskFile', model);
+    services.saveTaskFile = function(model) {
+      return $http.post(constant.resourceUrl + '/task/saveTaskFile', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
+    };
+
+    services.getTaskBudget = function(model) {
+      return $http.post(constant.resourceUrl + '/tasks/getalltaskbudgets', model);
+    };
+
+    services.addTaskBudget = function(model) {
+      return $http.post(constant.resourceUrl + '/tasks/addtaskbudget', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
     };
 
     return services;

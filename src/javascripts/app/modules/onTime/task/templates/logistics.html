@@ -1,19 +1,42 @@
 <div ng-controller="LogisticsTaskController">
-    <div>
-    <ul>
-        <li><a ng-click="openAction(actions.owner)">Owner</a></li>
-        <li><a ng-click="openAction(actions.comment)">Comment</a></li>
-        <li><a ng-click="openAction(actions.budget)">Budget</a></li>
-        <li><a ng-click="openAction(actions.progress)">Progress</a></li>
-        <li><a ng-click="openAction(actions.attachment)">Attachments</a></li>
-    </ul>
+    <div class="task-logistic add-edit-task panel-body">
+        <div class="nav-container">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div>
+                        <ul class="nav nav-pills nav-justified text-muted">
+                            <li ng-class="{'active': action.name==='owner'}"><a href="javascript:void(0)" ng-click="openAction(actions.owner)">Owner</a></li>
+                            <li ng-class="{'active': action.name==='comment'}"><a href="javascript:void(0)" ng-click="openAction(actions.comment)">Comment</a></li>
+                            <li ng-class="{'active': action.name==='budget'}"><a href="javascript:void(0)" ng-click="openAction(actions.budget)">Budget</a></li>
+                            <li ng-class="{'active': action.name==='progress'}"><a href="javascript:void(0)" ng-click="openAction(actions.progress)">Progress</a></li>
+                            <li ng-class="{'active': action.name==='attachment'}"><a href="javascript:void(0)" ng-click="openAction(actions.attachment)">Attachments</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div ng-switch on="action.name">
+            <div ng-switch-when="owner">
+                <div ng-include="'onTime/task/templates/owner.html'"></div>
+            </div>
+            <div ng-switch-when="comment">
+                <div ng-include="'onTime/task/templates/comment.html'"></div>
+            </div>
+            <div ng-switch-when="budget">
+                <div ng-include="'onTime/task/templates/budget.html'"></div>
+            </div>
+            <div ng-switch-when="progress">
+                <div ng-include="'onTime/task/templates/progress.html'"></div>
+            </div>
+            <div ng-switch-when="attachment">
+                <div ng-include="'onTime/task/templates/attachment.html'"></div>
+            </div>
+            <div ng-switch-default>
+                <div ng-include="'onTime/task/templates/owner.html'"></div>
+            </div>
+        </div>
     </div>
-    <div ng-switch on="action.name">
-        <div ng-switch-when="owner"><div ng-include="'onTime/task/templates/owner.html'"></div></div>
-        <div ng-switch-when="comment"><div ng-include="'onTime/task/templates/comment.html'"></div></div>
-        <div ng-switch-when="budget"><div ng-include="'onTime/task/templates/budget.html'"></div></div>
-        <div ng-switch-when="progress"><div ng-include="'onTime/task/templates/progress.html'"></div></div>
-        <div ng-switch-when="attachment"><div ng-include="'onTime/task/templates/attachment.html'"></div></div>
-        <div ng-switch-default><div ng-include="'onTime/task/templates/owner.html'"></div></div>
+    <div class="panel-footer bg-light lter">
+        <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </div>

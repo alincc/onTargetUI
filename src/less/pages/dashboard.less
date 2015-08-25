@@ -273,7 +273,7 @@
       .tab-content {
         .task-list {
           height: 400px;
-          .mCSB_outside + .mCSB_scrollTools{
+          .mCSB_outside + .mCSB_scrollTools {
             right: -15px;
           }
           .task-item {
@@ -291,7 +291,7 @@
               .percentage {
                 position: absolute;
                 top: 50%;
-                left:0;
+                left: 0;
                 font-weight: 700;
                 margin-top: -12px;
                 width: 100%;
@@ -366,10 +366,29 @@
         .progress {
           background-color: #acb2be;
         }
-        .progress-bar {
-          background-color: #80d44b;
-
-          background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+        .task-status-Active {
+          .progress-bar {
+            background-color: #80d44b;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+          }
+        }
+        .task-status-Ongoing {
+          .progress-bar {
+            background-color: #449bc8;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+          }
+        }
+        .task-status-Completed {
+          .progress-bar {
+            background-color: #c6ac42;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+          }
+        }
+        .task-status-Pending {
+          .progress-bar {
+            background-color: #bc4242;
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+          }
         }
       }
     }
@@ -437,6 +456,17 @@
 
     .tl-date {
       top: 13px;
+    }
+
+    .tl-avatar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40px;
+      margin: 6px;
+      img {
+        width: 100%;
+      }
     }
 
     .tl-left {

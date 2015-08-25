@@ -4,9 +4,9 @@
 define(function (){
   'use strict';
   var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'activity', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, activity){
-    console.log(activity);
-    $scope.currentProject = $rootScope.currentProjectInfo;
 
+    $scope.currentProject = $rootScope.currentProjectInfo;
+    console.log($scope.currentProject);
     $scope.project = {
       projectParentId: activity.projectParentId,
       projectTypeId: activity.projectTypeId,
@@ -14,8 +14,8 @@ define(function (){
       projectName: activity.projectName,
       projectDescription: activity.projectDescription,
       companyId: activity.companyId,
-      startDate: new Date(activity.startDate),
-      endDate: new Date(activity.endDate),
+      startDate: activity.startDate,
+      endDate: activity.endDate,
       status: activity.status
     };
 
@@ -23,6 +23,13 @@ define(function (){
       userId: userContext.authentication().userData.userId,
       project: $scope.project
     };
+
+    $scope.minDate2 = $scope.currentProject.startDate;
+    $scope.maxDate2 = $scope.currentProject.endDate;
+    $scope.$watchCollection('[project.startDate, project.endDate]', function(e){
+      $scope.minDate = $scope.project.startDate ? $scope.project.startDate : $scope.currentProject.startDate;
+      $scope.maxDate = $scope.project.endDate ? $scope.project.endDate : $scope.currentProject.endDate;
+    });
 
     $scope.projectStatuses = projectFactory.getProjectStatuses();
     $scope.companies = companies;

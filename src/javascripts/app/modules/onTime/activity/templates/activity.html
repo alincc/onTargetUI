@@ -8,14 +8,14 @@
                           <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
                           </button>
                         </span>
-                        <input type="text" class="form-control"/>
+                        <input type="text" class="form-control" ng-model="search.projectName"/>
                     </div>
                 </div>
                 <div class="heading">
                     <span class="text">{{currentProject.projectName}}</span>
                 </div>
                 <div class="activity-list" custom-scroll>
-                    <div class="activity-item" ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }" ng-repeat="activity in activities" ng-click="selectActivity(activity)">
+                    <div class="activity-item" ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }" ng-repeat="activity in activities | filter:search:projectName" ng-click="selectActivity(activity)">
                         <div class="info">
                             <div class="title">{{activity.projectName}}</div>
                             <div class="date">

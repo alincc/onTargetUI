@@ -4,31 +4,43 @@ define(function(require) {
     uiRouter = require('uiRouter'),
     config = require('app/config'),
     template = require('text!./templates/onSite.html'),
-    previewTemplate = require('text!./templates/document.preview.html'),
+    uploadTemplate = require('text!./templates/upload.html'),
+    importTemplate = require('text!./templates/import.html'),
     controller = require('./controllers/onSite'),
-    previewController = require('./controllers/document.preview'),
+    uploadController = require('./controllers/upload'),
+    importController = require('./controllers/import'),
     projectContextModule = require('app/common/context/project'),
     documentServiceModule = require('app/common/services/document'),
     mentio = require('mentio'),
-    angularLocalStorage = require('angularLocalStorage');
-  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage']);
-
+    angularUiSelect = require('angularUiSelect'),
+    angularLocalStorage = require('angularLocalStorage'),
+    uploadServiceModule = require('app/common/services/upload'),
+    onSiteServiceModule = require('app/common/services/onSite'),
+    utilServiceModule = require('app/common/services/util'),
+    googleDriveServiceModule = require('app/common/services/googleDrive'),
+    boxServiceModule = require('app/common/services/box'),
+    angularSanitize = require('angularSanitize'),
+    toaster = require('toaster');
+  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.upload', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onSite/templates/onSite.html', template);
-    $templateCache.put('onSite/templates/document.preview.html', previewTemplate);
+    $templateCache.put('onSite/templates/upload.html', uploadTemplate);
+    $templateCache.put('onSite/templates/import.html', importTemplate);
   }]);
 
   module.controller('OnSiteController', controller);
-  module.controller('DocumentPreviewController', previewController);
+  module.controller('UploadDocumentController', uploadController);
+  module.controller('ImportDocumentController', importController);
 
   module.config(
     ['$stateProvider',
       function($stateProvider) {
         $stateProvider
           .state('app.onSite', {
-            url: '/onSite',
+            url: '/onSite?docId',
             templateUrl: 'onSite/templates/onSite.html',
             controller: 'OnSiteController',
+            reloadOnSearch: false,
             resolve: {
               projectValid: ['$location', 'projectContext', '$q', '$state', '$window', function($location, projectContext, $q, $state, $window) {
                 var deferred = $q.defer();

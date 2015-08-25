@@ -1,10 +1,10 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function (){
+define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'project', 'companies', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'uploadFile', 'appConstant', 'toaster', '$timeout',
-    function ($scope, $rootScope, $modalInstance, project, companies, countryFactory, projectFactory, userContext, projectContext, uploadFile, appConstant, toaster, $timeout){
+  var controller = ['$scope', '$rootScope', '$modalInstance', 'project', 'companies', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'uploadFactory', 'appConstant', 'toaster', '$timeout',
+    function($scope, $rootScope, $modalInstance, project, companies, countryFactory, projectFactory, userContext, projectContext, uploadFactory, appConstant, toaster, $timeout) {
 
       $scope.startDate = {
         options: {
@@ -47,8 +47,8 @@ define(function (){
         projectName: project.projectName,
         projectDescription: project.projectDescription,
         status: project.status,
-        startDate: new Date(project.startDate),
-        endDate: new Date(project.endDate),
+        startDate: project.startDate,
+        endDate: project.endDate,
         unitOfMeasurement: project.projectConfiguration[0].configValue,
         projectImagePath: project.projectImagePath
       };
@@ -70,13 +70,13 @@ define(function (){
       $scope.onSubmit = false;
 
 
-      $scope.getStateList = function (){
+      $scope.getStateList = function() {
         var fileName = getCountryFileName($scope.projectModel.projectAddress.country);
-        if (fileName !== undefined) {
+        if(fileName !== undefined) {
           countryFactory.getStateList(fileName).then(
-            function (resp){
+            function(resp) {
               $scope.states = resp.data;
-            }, function (err){
+            }, function(err) {
               $scope.states = {};
             }
           );
@@ -85,9 +85,9 @@ define(function (){
         }
       };
 
-      var getCountryFileName = function (countryCode){
+      var getCountryFileName = function(countryCode) {
         var fileName = _($scope.countries)
-          .filter(function (country){
+          .filter(function(country) {
             return country.code === countryCode;
           })
           .pluck('filename')
@@ -98,21 +98,21 @@ define(function (){
 
       $scope.getStateList();
 
-      $scope.save = function (){
+      $scope.save = function() {
         $scope.onSubmit = true;
         projectFactory.addProject($scope.model).then(
-          function (resp){
+          function(resp) {
             toaster.pop('success', 'Success', resp.data.returnMessage);
             $scope.project_form.$setPristine();
             $modalInstance.close({});
-          }, function (err){
+          }, function(err) {
             $scope.onSubmit = false;
             console.log(err);
           }
         );
       };
 
-      $scope.cancel = function (){
+      $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
       };
 
@@ -134,12 +134,12 @@ define(function (){
 
       function upload(file) {
         $scope.picture.isUploadPicture = true;
-        uploadFile.upload(file).progress(function(evt) {
+        uploadFactory.upload(file, 'project').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.picture.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
           $timeout(function() {
-            $scope.projectModel.projectImagePath = 'assets/profile/' + data.imageName;
+            $scope.projectModel.projectImagePath = 'assets/project/' + data.imageName;
             $scope.picture.isUploadPicture = false;
           });
         })

@@ -43,6 +43,7 @@ define(function (){
       };
 
       $scope.removeUserFromTask = function (assignee){
+        $scope.onAddOwner = false;
         _.remove($scope.model.members, function(n) {
           return n === assignee.contactId;
         });

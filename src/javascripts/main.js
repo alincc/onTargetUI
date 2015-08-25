@@ -35,6 +35,7 @@ require.config({
     uiRouter: '../bower_components/ui-router/release/angular-ui-router',
     lodash: '../bower_components/lodash/lodash',
     text: '../bower_components/requirejs-text/text',
+    async: '../bower_components/requirejs-plugins/src/async',
     moment: '../js/momentjs/moment',
     angularTouch: "../bower_components/angular-touch/angular-touch",
     toaster: "../bower_components/angularjs-toaster/toaster",
@@ -48,9 +49,15 @@ require.config({
     chartjs: '../bower_components/Chart.js/chart',
     angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart',
     mentio: '../bower_components/ment.io/dist/mentio',
-    typeahead: '../bow',
     angularSlider: '../bower_components/venturocket-angular-slider/build/angular-slider',
-    ngTouch: '../bower_components/angular-touch/angular-touch'
+    ngTouch: '../bower_components/angular-touch/angular-touch',
+    //jsXlsxShim: '../bower_components/js-xlsx/shim',
+    jszip: '../bower_components/js-xlsx/dist/jszip',
+    //jsXlsxOds: '../bower_components/js-xlsx/ods',
+    xlsx: '../bower_components/js-xlsx/dist/xlsx',
+    jsXlsx:'../bower_components/js-xlsx/dist/xlsx.full.min',
+    typeahead: '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
+    ngLetterAvatar: '../bower_components/ngletteravatar/ngletteravatar'
   },
 
   shim: {
@@ -129,6 +136,10 @@ require.config({
     },
     "angularUiSelect": {
       deps: ['angular']
+    },
+    "xlsx": {
+      deps: ['jszip'],
+      exports: "XLSX"
     }
   }
 });
@@ -145,14 +156,20 @@ if(!window.console) {
 }
 
 require([
-  'jQuery',
-  'angular',
-  'app/app'
-], function(jQuery, angular, app) {
-
-  var $html = angular.element(document.getElementsByTagName('html')[0]);
-  angular.element().ready(function() {
-    //$html.addClass('ng-app');
-    angular.bootstrap($html, [app.name]);
+  'jszip'
+], function(jszip) {
+  window.JSZip = jszip;
+  require([
+    'jQuery',
+    'angular',
+    'app/app'
+  ], function(jQuery, angular, app) {
+    var $html = angular.element(document.getElementsByTagName('html')[0]);
+    angular.element().ready(function() {
+      //$html.addClass('ng-app');
+      angular.bootstrap($html, [app.name]);
+    });
   });
 });
+
+

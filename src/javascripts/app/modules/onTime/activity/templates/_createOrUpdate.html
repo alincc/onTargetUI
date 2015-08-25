@@ -52,7 +52,7 @@
     <div class="col-xs-10">
         <p class="input-group">
             <input type="text" class="form-control" placeholder="Start date" required ng-model="project.startDate"
-                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="project.endDate"
+                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxDate" min-date = "minDate2"
                    datepicker-options="startDate.options"
                    name="startDate" ng-click="startDate.isOpen = !startDate.isOpen"/>
             <span class="input-group-btn">
@@ -73,7 +73,7 @@
         <p class="input-group">
             <input type="text" class="form-control" placeholder="End date" required ng-model="project.endDate"
                    ng-click="endDate.isOpen = !endDate.isOpen"
-                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="project.startDate"
+                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="minDate" max-date = "maxDate2"
                    datepicker-options="endDate.options"
                    name="endDate"/>
             <span class="input-group-btn">
