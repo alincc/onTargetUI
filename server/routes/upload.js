@@ -1,5 +1,4 @@
 var express = require('express');
-var router = express.Router();
 var path = require('path');
 var fs = require("fs");
 var mkdirp = require("mkdirp");
@@ -18,7 +17,6 @@ var fileInputName = "file",
 function uploadFile(req, res) {
   var file = req.files[fileInputName],
     uuid = req.body.uuid,
-    context = req.body.context,
     responseData = {
       success: false
     };
@@ -26,9 +24,12 @@ function uploadFile(req, res) {
   file.name = req.body.fileName;
 
   if(isValid(file.size)) {
-    moveUploadedFile(file, uuid, context, function() {
+    moveUploadedFile(file, uuid, function() {
         responseData.success = true;
-        responseData.url = imagePathRoot + context + '/' + uuid + "/" + file.name;
+        responseData.url = imagePathRoot + uuid + "/" + file.name;
+        responseData.name = file.name;
+        responseData.type = file.type;
+        responseData.size = file.size;
         res.send(responseData);
       },
       function() {
@@ -74,13 +75,13 @@ function moveFile(destinationDir, sourceFile, destinationFile, success, failure)
   });
 }
 
-function moveUploadedFile(file, uuid, context, success, failure) {
-  var destinationDir = uploadedFilesPath + context + '/' + uuid + "/",
+function moveUploadedFile(file, uuid, success, failure) {
+  var destinationDir = uploadedFilesPath + uuid + "/",
     fileDestination = destinationDir + file.name;
 
   moveFile(destinationDir, file.path, fileDestination, success, failure);
 }
 
-router.post('/upload', [multipartMiddleware], uploadFile);
-
-module.exports = router;
+module.exports = function(app){
+  app.post('/node/upload', [multipartMiddleware], uploadFile);
+};

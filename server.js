@@ -5,7 +5,7 @@ var app = express();
 var port = process.env.PORT || 9000;
 
 // modules
-var upload = require('./server/routes/upload');
+var upload = require('./server/routes/upload')(app);
 
 app.set('port', port);
 app.use(bodyParser.urlencoded({extended: true}));
@@ -27,8 +27,6 @@ app.use(express.static(__dirname + '/src'));
 //  }
 //  next();
 //});
-
-app.use('/node', upload);
 
 app.get('/', function(req, res) {
   res.sendfile("index.html");
