@@ -63,7 +63,16 @@ define(function() {
         function(resp) {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();
-          notifications.taskUpdated();
+          notifications.taskUpdated({
+            projectTaskId: $rootScope.currentTask.projectTaskId,
+            clear: true,
+            task: {
+              title: $scope.task.title,
+              severity: $scope.task.severity,
+              endDate: $scope.task.endDate,
+              startDate: $scope.task.startDate
+            }
+          });
         }, function(err) {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();

@@ -1,0 +1,11 @@
+<section class="project-chooser" dropdown on-toggle="toggled(open)">
+    <a href dropdown-toggle>
+        <span class="project-name" ng-transclude></span>
+        <i class="fa fa-sort"></i>
+    </a>
+    <ul class="dropdown-menu">
+        <li ng-repeat="pj in projects" ng-class="{'selected': pj.projectId === currentProject.projectId}">
+            <a href ng-bind="pj.projectName" ng-click="selectProject(pj)"></a>
+        </li>
+    </ul>
+</section>

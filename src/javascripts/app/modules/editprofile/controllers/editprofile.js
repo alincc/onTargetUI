@@ -1,7 +1,7 @@
-define(function (){
+define(function() {
   'use strict';
   var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'uploadFactory', '$timeout', 'appConstant', 'toaster',
-    function ($scope, $rootScope, userContext, $state, accountFactory, notifications, uploadFactory, $timeout, appConstant, toaster){
+    function($scope, $rootScope, userContext, $state, accountFactory, notifications, uploadFactory, $timeout, appConstant, toaster) {
 
       $scope.editUserData = {
         userId: $rootScope.currentUserInfo.userId,
@@ -14,10 +14,10 @@ define(function (){
         userImagePath: $rootScope.currentUserInfo.contact.userImagePath
       };
 
-      function submitUserProfile(model){
+      function submitUserProfile(model) {
 
         accountFactory.updateProfile(model)
-          .then(function (){
+          .then(function() {
             $scope.form.$setPristine();
 
             $rootScope.currentUserInfo.contact.firstName = $scope.editUserData.firstName;
@@ -25,9 +25,12 @@ define(function (){
             $rootScope.currentUserInfo.contact.email = $scope.editUserData.email;
             $rootScope.currentUserInfo.contact.userImagePath = $scope.editUserData.userImagePath;
 
+            // Save user info to local storage
+            userContext.fillInfo(angular.copy($rootScope.currentUserInfo), true);
+            
             notifications.updateProfileSuccess();
           },
-          function (er){
+          function(er) {
             console.log(er);
             $scope.form.$setPristine();
           });
@@ -35,9 +38,9 @@ define(function (){
 
       $scope.submitUserProfile = submitUserProfile;
 
-      $scope.$watch('file', function (){
-        if ($scope.file) {
-          if (appConstant.app.allowedImageExtension.test($scope.file.type)) {
+      $scope.$watch('file', function() {
+        if($scope.file) {
+          if(appConstant.app.allowedImageExtension.test($scope.file.type)) {
             $scope.upload([$scope.file]);
           }
           else {
@@ -46,19 +49,19 @@ define(function (){
         }
       });
 
-      function upload(file){
+      function upload(file) {
         $scope.isUploadAvatar = true;
-        uploadFactory.upload(file, 'profile').progress(function (evt){
+        uploadFactory.upload(file).progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.percentage = progressPercentage;
-        }).success(function (data, status, headers, config){
-          $timeout(function (){
+        }).success(function(data, status, headers, config) {
+          $timeout(function() {
             //$scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-            $scope.editUserData.userImagePath = 'assets/profile/' + data.imageName;
+            $scope.editUserData.userImagePath = data.url;
             $scope.isUploadAvatar = false;
           });
         })
-          .error(function (){
+          .error(function() {
             $scope.isUploadAvatar = false;
           });
       }
@@ -66,9 +69,9 @@ define(function (){
       $scope.isUploadAvatar = false;
       $scope.percentage = 0;
 
-      $scope.upload = function (files){
-        if (files && files.length) {
-          for (var i = 0; i < files.length; i++) {
+      $scope.upload = function(files) {
+        if(files && files.length) {
+          for(var i = 0; i < files.length; i++) {
             upload(files[i]);
           }
         }

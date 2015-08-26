@@ -207,6 +207,7 @@ define(function(require) {
     domain: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     baseUrl: 'http://app.ontargetcloud.com:8080',
     resourceUrl: 'http://app.ontargetcloud.com:9000',
+    //nodeServer: 'http://192.168.1.224:3214',
     nodeServer: 'http://localhost:9000',
     app: {
       name: "OnTarget",

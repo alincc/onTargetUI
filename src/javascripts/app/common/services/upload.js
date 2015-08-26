@@ -15,14 +15,14 @@ define(function(require) {
     ['Upload', 'appConstant', 'utilFactory',
       function(Upload, constant, utilFactory) {
         var service = {};
-        service.upload = function(file, context, newFileName) {
+        service.upload = function(file, newFileName) {
           newFileName = newFileName || file.name;
           return Upload.upload({
-            url: constant.resourceUrl + '/assets/upload',
-            //url: constant.nodeServer + '/node/upload',
+            //url: constant.resourceUrl + '/assets/upload',
+            url: constant.nodeServer + '/node/upload',
             file: file,
             //data: {context: context},
-            fields: {'context': context, 'uuid': utilFactory.newGuid(), 'fileName': newFileName },
+            fields: {'uuid': utilFactory.newGuid(), 'fileName': newFileName },
             headers: {
               'Authorization': false
             }

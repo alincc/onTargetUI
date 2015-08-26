@@ -12,17 +12,25 @@
                     </div>
                 </div>
                 <div class="heading">
-                    <span class="text">{{currentProject.projectName}}</span>
+                    <span class="text">
+                        <project-chooser>
+                            <span ng-bind="currentProject.projectName"></span>
+                        </project-chooser>
+                    </span>
                 </div>
                 <div class="activity-list" custom-scroll>
-                    <div class="activity-item" ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }" ng-repeat="activity in activities | filter:search:projectName" ng-click="selectActivity(activity)">
+                    <div class="activity-item"
+                         ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }"
+                         ng-repeat="activity in activities | filter:search:projectName"
+                         ng-click="selectActivity(activity)">
                         <div class="info">
                             <div class="title">{{activity.projectName}}</div>
                             <div class="date">
                                 <span>{{activity.startDate|date:'MM/dd/yyyy'}}</span> | <span>{{activity.endDate|date:'MM/dd/yyyy'}}</span>
                             </div>
                             <div class="tasks">
-                                <span>{{activity.activeTasks}} Active</span> | <span>{{activity.pendingTasks}} Pending</span>
+                                <span>{{activity.activeTasks}} Active</span> |
+                                <span>{{activity.pendingTasks}} Pending</span>
                             </div>
                         </div>
                         <div class="status">
@@ -37,9 +45,16 @@
                 </div>
             </div>
             <div class="panel-footer bg-light lter">
-                <button class="btn btn-primary" ng-click="openCreateActivityModal()"><i class="fa fa-plus"></i> Add Activity</button>
-                <button class="btn btn-primary" ng-click="openEditActivityModal()" ng-show="activitySelected"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                <button class="btn btn-primary" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><i class="fa fa-times"></i> Delete</button>
+                <button class="btn btn-primary" ng-click="import()"><i class="fa fa-inbox"></i> Import</button>
+                <button class="btn btn-primary" ng-click="openCreateActivityModal()"><i class="fa fa-plus"></i> Add
+                    Activity
+                </button>
+                <button class="btn btn-primary" ng-click="openEditActivityModal()" ng-show="activitySelected"><i
+                        class="fa fa-pencil-square-o"></i> Edit
+                </button>
+                <button class="btn btn-primary" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><i
+                        class="fa fa-times"></i> Delete
+                </button>
             </div>
         </div>
     </div>

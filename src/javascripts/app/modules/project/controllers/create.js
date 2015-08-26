@@ -132,12 +132,12 @@ define(function() {
 
       function upload(file) {
         $scope.picture.isUploadPicture = true;
-        uploadFactory.upload(file, 'project').progress(function(evt) {
+        uploadFactory.upload(file).progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.picture.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
           $timeout(function() {
-            $scope.projectModel.projectImagePath = 'assets/project/' + data.imageName;
+            $scope.projectModel.projectImagePath =  data.url;
             $scope.picture.isUploadPicture = false;
           });
         })

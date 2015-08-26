@@ -10,7 +10,22 @@
       .heading {
         margin: 15px 15px 0 15px;
         .text {
-          font-weight: bold;
+          display: inline-block;
+          &:hover {
+            cursor: pointer;
+          }
+          .project-name {
+            font-weight: bold;
+          }
+          .project-chooser {
+            display: inline-block;
+            .dropdown-toggle {
+              i {
+                font-size: 12px;
+                margin: 0 5px;
+              }
+            }
+          }
         }
       }
       .activity-list {

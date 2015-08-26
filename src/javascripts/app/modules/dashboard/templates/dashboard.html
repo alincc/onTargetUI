@@ -15,10 +15,14 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="project-image">
-                                <img image-path="project" ng-src="{{currentProject.projectImagePath}}"/>
+                                <img file-path="project" ng-src="{{currentProject.projectImagePath}}"/>
                             </div>
                             <div class="project-info">
-                                <h4 ng-bind="currentProject.projectName"></h4>
+                                <h4>
+                                    <project-chooser>
+                                        <span ng-bind="currentProject.projectName"></span>
+                                    </project-chooser>
+                                </h4>
 
                                 <div class="project-address">
                                     <p ng-bind-html="currentProject.fullAddress1"></p>
@@ -431,7 +435,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tl-avatar">
-                                                    <img ng-src="{{activityLog.userImage}}" image-path />
+                                                    <img ng-src="{{activityLog.userImage}}" file-path />
                                                 </div>
                                                 <div class="tl-content">{{activityLog.text}}</div>
 

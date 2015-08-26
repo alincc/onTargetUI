@@ -1,5 +1,8 @@
 <div ng-controller="AttachmentTaskController">
-    <table ng-show="attachments.length > 0">
+    <div class="text-center" ng-show="isLoadingAttachments">
+        <spinner text="Loading..."></spinner>
+    </div>
+    <table ng-show="attachments.length">
         <tr>
             <th>DOCUMENT</th>
             <th>UPLOADED BY</th>
@@ -8,13 +11,11 @@
         <tr ng-repeat="attachment in attachments">
             <td>{{ attachment.fileName }}</td>
             <td>{{attachment.contact.firstName}}&nbsp;{{attachment.contact.lastName}}</td>
-            <td><a href="">View</a> | <a task-attachment ttachment href="{{attachment.location + attachment.fileName}}">Download</a></td>
+            <td><a href="">View</a> | <a task-attachment ng-href="{{attachment.fileName | filePath}}">Download</a></td>
         </tr>
     </table>
-    <div>
-        <!--<input type="file" ng-file-select="onFileSelect($files)" multiple>-->
-        <input type="file" onchange="angular.element(this).scope().uploadFile(this)">
-
-        <!--<button class="btn btn-primary" ng-click="saveTaskFile()">Save</button>-->
+    <div class="uploader" ng-show="!isLoadingAttachments">
+        <button type="button" class="btn btn-primary btn-block" ngf-select ng-model="attachment.file" ngf-multiple="false" ng-disabled="isUploading"><i class="fa fa-cloud-upload"></i> Upload an attachment</button>
+        <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploading"></div>
     </div>
 </div>

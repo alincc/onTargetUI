@@ -42,8 +42,7 @@
                             <div class="project-image" align="center">
                                 <a href="javascript:void(0)"
                                    ng-click="goDashboard(project)">
-                                    <img image-path="project"
-                                         ng-src="{{project.projectImagePath}}" class="img-responsive"/>
+                                    <img file-path="project" ng-src="{{project.projectImagePath}}" class="img-responsive"/>
                                 </a>
                             </div>
                             <!--project name-->
@@ -85,7 +84,7 @@
                             <!--project image-->
                             <div class="project-image" >
                                 <a href="javascript:void(0)" ng-click="goDashboard(project)">
-                                    <img image-path="project" ng-src="{{project.projectImagePath}}" class="img-responsive"/>
+                                    <img file-path="project" ng-src="{{project.projectImagePath}}" class="img-responsive"/>
                                 </a>
                             </div>
                             <div class="project-info" ng-class="{'has-address': project.fullAddress1.length || project.fullAddress2.length}">

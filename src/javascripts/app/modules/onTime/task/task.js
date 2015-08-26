@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/18/2015.
  */
-define(function (require){
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     config = require('app/config'),
@@ -41,11 +41,12 @@ define(function (require){
     angularMoment = require('moment'),
     angularSlider = require('angularSlider'),
     ngTouch = require('ngTouch'),
-    ngLetterAvatar = require('ngLetterAvatar');
+    ngLetterAvatar = require('ngLetterAvatar'),
+    ngFileUpload = require('ngFileUpload');
 
-  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'ui.bootstrap.typeahead', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.upload', 'ui.select', 'ngLetterAvatar']);
+  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'ui.bootstrap.typeahead', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.upload', 'ui.select', 'ngLetterAvatar', 'ngFileUpload']);
 
-  module.run(['$templateCache', function ($templateCache){
+  module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onTime/task/templates/task.html', template);
     $templateCache.put('onTime/task/templates/_createOrUpdate.html', createOrUpdateTemplate);
     $templateCache.put('onTime/task/templates/create.html', createTemplate);

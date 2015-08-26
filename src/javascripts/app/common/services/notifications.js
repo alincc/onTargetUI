@@ -23,6 +23,7 @@ define([
         _GET_USER_NOTIFICATIONS_SUCCESS_ = '_GET_USER_NOTIFICATIONS_SUCCESS_',
         _ACTIVITY_SELECTION_ = '_ACTIVITY_SELECTION_',
         _ACTIVITY_DELETED_ = '_ACTIVITY_DELETED_',
+        _CURRENT_PROJECT_CHANGE_ = '_CURRENT_PROJECT_CHANGE_',
 
         requestStarted = function (){
           $rootScope.$broadcast(_START_REQUEST_);
@@ -143,6 +144,14 @@ define([
           $scope.$on(_ACTIVITY_DELETED_, function (event, args){
             handler(args);
           });
+        },
+        currentProjectChange = function (args){
+          $rootScope.$broadcast(_CURRENT_PROJECT_CHANGE_, args);
+        },
+        onCurrentProjectChange = function ($scope, handler){
+          $scope.$on(_CURRENT_PROJECT_CHANGE_, function (event, args){
+            handler(args);
+          });
         };
 
       return {
@@ -175,7 +184,9 @@ define([
         activitySelection: activitySelection,
         onActivitySelection: onActivitySelection,
         activityDeleted: activityDeleted,
-        onActivityDeleted: onActivityDeleted
+        onActivityDeleted: onActivityDeleted,
+        currentProjectChange: currentProjectChange,
+        onCurrentProjectChange: onCurrentProjectChange
       };
     }]);
 });

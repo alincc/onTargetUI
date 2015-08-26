@@ -149,11 +149,25 @@ define(function() {
         $scope.taskSelected = null;
       });
 
-      notifications.onTaskUpdated($scope, function() {
-        loadProjectTasks();
-        $scope.taskSelected = null;
-        /*$scope.taskSelected = $rootScope.currentTask = _.find($scope.tasks, 'projectTaskId', $scope.taskSelected.projectTaskId);
-        notifications.taskSelection();*/
+      notifications.onTaskUpdated($scope, function(obj) {
+        if(obj) {
+          if(obj.reload) {
+            loadProjectTasks();
+          }
+          if(obj.clear) {
+            $scope.taskSelected = null;
+          }
+          if(obj.task) {
+            var foundTaskInList = _.where($scope.tasks, {
+              projectTaskId: obj.projectTaskId
+            })[0];
+
+            console.log(foundTaskInList, obj.task);
+            if(foundTaskInList) {
+              foundTaskInList = angular.extend(foundTaskInList, obj.task);
+            }
+          }
+        }
       });
 
       notifications.onTaskCancel($scope, function() {

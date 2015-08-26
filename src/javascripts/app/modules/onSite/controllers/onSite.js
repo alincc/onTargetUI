@@ -89,16 +89,16 @@ define(function(require) {
         storage.set('documentViewMode', mode);
         $scope.uploadedDocumentArrangedList = arrangeData($scope.uploadedDocumentList, 4);
       };
-      boxFactory.loadFiles();
 
       // Upload doc
       var uploadModalInstance;
       $scope.upload = function() {
         //test
-        //googleDriveFactory.loadFiles()
-        //  .then(function(files) {
-        //    console.log(files);
-        //  });
+
+        googleDriveFactory.loadFiles()
+          .then(function(files) {
+            console.log(files);
+          });
 
         // get document categories
         documentFactory.getCategories()
@@ -175,24 +175,6 @@ define(function(require) {
       // Download
       $scope.download = function(doc) {
         $window.open(doc.filePath);
-      };
-
-      // Import
-      var importModalInstance;
-      $scope.import = function(){
-        // open modal
-        importModalInstance = $modal.open({
-          templateUrl: 'onSite/templates/import.html',
-          controller: 'ImportDocumentController',
-          size: 'lg'
-        });
-
-        // modal callbacks
-        importModalInstance.result.then(function() {
-
-        }, function() {
-
-        });
       };
     }];
   return controller;

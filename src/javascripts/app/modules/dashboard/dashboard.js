@@ -14,10 +14,12 @@ define(function(require) {
     utilServiceModule = require('app/common/services/util'),
     documentServiceModule = require('app/common/services/document'),
     activityServiceModule = require('app/common/services/activity'),
+    notificationsServiceModule = require('app/common/services/notifications'),
     taskFilterModule = require('app/common/filters/task'),
     Chart = require('chartjs'),
-    angularChartJS = require('angularChartJS');
-  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js', 'common.services.document', 'common.services.activity', 'common.filters.task']);
+    angularChartJS = require('angularChartJS'),
+    projectChooserDirective = require('app/common/directives/projectChooser/projectChooser');
+  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js', 'common.services.document', 'common.services.activity', 'common.filters.task', 'common.directives.projectChooser', 'common.services.notifications']);
 
   module.run(['$templateCache', function($templateCache) {
     Chart.defaults.global.colours=[

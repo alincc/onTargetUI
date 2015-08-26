@@ -69,7 +69,7 @@ define(function() {
 
       function upload(file) {
         $scope.isUploadAvatar = true;
-        uploadFactory.upload(file, 'profile').progress(function(evt) {
+        uploadFactory.upload(file).progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           //$scope.log = 'progress: ' + progressPercentage + '% ' +
           //  evt.config.file.name + '\n' + $scope.log;
@@ -77,7 +77,7 @@ define(function() {
         }).success(function(data, status, headers, config) {
           $timeout(function() {
             //$scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-            $scope.user.userImagePath = 'assets/profile/' + data.imageName;
+            $scope.user.userImagePath = data.url;
             $scope.isUploadAvatar = false;
           });
         })

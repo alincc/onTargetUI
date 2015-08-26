@@ -27,14 +27,14 @@ define(function() {
 
       $scope.upload = function(file) {
         $scope.isUploading = true;
-        uploadFactory.upload(file, 'onsite').progress(function(evt) {
+        uploadFactory.upload(file).progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
           $timeout(function() {
             //$scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-            $scope.uploadModel.filePath = 'assets/onsite/' + data.imageName;
-            $scope.uploadModel.fileName = data.imageName;
+            $scope.uploadModel.filePath = data.url;
+            $scope.uploadModel.fileName = data.name;
             $scope.uploadModel.fileType = file.type;
             $scope.isUploading = false;
           });
@@ -56,7 +56,7 @@ define(function() {
       $scope.saveDocumentInfo = function(model) {
         var data = {
           "projectId": $rootScope.currentProjectInfo.projectId,
-          "name": model.fileName,
+          "name": model.filePath,
           "fileType": model.fileType,
           "createdBy": $rootScope.currentUserInfo.userId,
           "modifiedBy": $rootScope.currentUserInfo.userId,

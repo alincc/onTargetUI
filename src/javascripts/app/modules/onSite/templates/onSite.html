@@ -27,7 +27,6 @@
                 <div class="panel-heading">
                     <button class="btn btn-primary" ng-click="upload()"><i class="fa fa-cloud-upload"></i> Upload
                     </button>
-                    <button class="btn btn-primary" ng-click="import()"><i class="fa fa-inbox"></i> Import</button>
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive" ng-if="viewMode === 'list'">
@@ -43,12 +42,12 @@
                             </thead>
                             <tbody>
                             <tr ng-if="!isLoading && !uploadedDocumentList.length">
-                                <td colspan="4">
+                                <td colspan="5">
                                     <alert type="info" class="text-center">No documents</alert>
                                 </td>
                             </tr>
                             <tr ng-if="isLoading">
-                                <td colspan="4" class="text-center">
+                                <td colspan="5" class="text-center">
                                     <spinner text="Loading..."></spinner>
                                 </td>
                             </tr>
@@ -126,7 +125,7 @@
                             <ul class="list-group no-bg no-borders pull-in">
                                 <li class="list-group-item" ng-repeat="com in comments track by $index">
                                     <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
-                                        <img ng-src="{{com.commenterContact.userImagePath}}" image-path alt="..."
+                                        <img ng-src="{{com.commenterContact.userImagePath}}" file-path alt="..."
                                              class="img-circle">
                                     </a>
 

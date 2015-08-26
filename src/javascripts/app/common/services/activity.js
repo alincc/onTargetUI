@@ -34,6 +34,10 @@ define(function(require) {
           return $http.post(constant.resourceUrl + '/activitylog/getallactivitylogs', model);
         };
 
+        service.import = function(data) {
+          return $http.post(constant.domain + '/uploadActivity', data);
+        };
+
         return service;
       }
     ]

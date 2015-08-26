@@ -130,6 +130,16 @@ gulp.task('watch', ['connect', 'serve'], function() {
   });
 });
 
+// Watch
+gulp.task('watchCSS', function() {
+  // Watch for changes in `app` folder
+  gulp.watch([
+    './src/less/**/*.css',
+    './src/less/**/*.less',
+    './src/less/*.less'
+  ], ['less']);
+});
+
 // Test task
 gulp.task('test', function() {
   // Be sure to return the stream

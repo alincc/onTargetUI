@@ -1,10 +1,21 @@
 define(function(require) {
   'use strict';
   var angular = require('angular'),
-    config = require('app/config');
-  var module = angular.module('common.services.onSite', ['app.config']);
-  module.factory('onSiteFactory', ['$http', 'appConstant', '$q', function($http, constant, $q) {
+    config = require('app/config'),
+    fileupload = require('ngFileUpload');
+  var module = angular.module('common.services.onSite', ['app.config', 'ngFileUpload']);
+  module.factory('onSiteFactory', ['$http', 'appConstant', 'Upload', function($http, constant, Upload) {
     var services = {};
+
+    services.parseXls=function(file){
+      return Upload.upload({
+        url: constant.nodeServer + '/node/xls-parser',
+        file: file,
+        headers: {
+          'Authorization': false
+        }
+      });
+    };
 
     services.getFileComment = function(fileId) {
       return $http.post(constant.domain + '/upload/projectFileCommentList', {

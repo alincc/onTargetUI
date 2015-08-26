@@ -4,19 +4,23 @@ define(function(require) {
     lodash = require('lodash');
   var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications) {
     var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
-    var currentProjectId = $rootScope.currentProjectInfo.projectId;
-    //$scope.currentProjectName = $rootScope.currentProjectInfo.projectName;
+    var currentProjectId;
 
+    function load() {
+      currentProjectId = $rootScope.currentProjectInfo.projectId;
+      $scope.currentProject = [];
+      $scope.activities = [];
+      $scope.activitySelected = $rootScope.activitySelected = null;
+      $scope.model = {
+        userId: userContext.authentication().userData.userId
+      };
 
-    $scope.currentProject = [];
-    $scope.activities = [];
-    $scope.activitySelected = $rootScope.activitySelected = null;
-    $scope.model = {
-      userId: userContext.authentication().userData.userId
-    };
+      $scope.currentProject = $rootScope.currentProjectInfo;
+      $scope.activities = $scope.currentProject.projects;
 
-    $scope.currentProject = $rootScope.currentProjectInfo;
-    $scope.activities = $scope.currentProject.projects;
+      // remap data, add task active and pending counter
+      $scope.mapData();
+    }
 
     $scope.mapData = function() {
       _.map($scope.activities, function(el) {
@@ -131,21 +135,45 @@ define(function(require) {
         });
     };
 
+    // Import
+    var importModalInstance;
+    $scope.import = function(){
+      // open modal
+      importModalInstance = $modal.open({
+        templateUrl: 'onTime/activity/templates/import.html',
+        controller: 'ImportActivityController',
+        size: 'lg'
+      });
+
+      // modal callbacks
+      importModalInstance.result.then(function() {
+
+      }, function() {
+
+      });
+    };
+
     //when task added, or deleted
-    notifications.onTaskCreated($scope, function (){
+    notifications.onTaskCreated($scope, function() {
       $scope.getUserProject();
     });
 
-    notifications.onTaskUpdated($scope, function (){
+    notifications.onTaskUpdated($scope, function(obj) {
+      if(!obj) {
+        $scope.getUserProject();
+      }
+    });
+
+    notifications.onTaskCreated($scope, function() {
       $scope.getUserProject();
     });
 
-    notifications.onTaskCreated($scope, function (){
-      $scope.getUserProject();
+    // Events
+    notifications.onCurrentProjectChange($scope, function(agrs) {
+      load();
     });
 
-    // remap data, add task active and pending counter
-    $scope.mapData();
+    load();
   }];
   return controller;
 });

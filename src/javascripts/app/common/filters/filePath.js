@@ -5,7 +5,7 @@ define(function(require) {
   var module = angular.module('common.filters.filePath', ['app.config'])
     .filter('filePath', ['appConstant', function(constant) {
       return function(value) {
-        return constant.resourceUrl + '/' + value;
+        return constant.nodeServer + '/' + value;
       };
     }]);
   return module;

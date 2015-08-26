@@ -2,17 +2,22 @@ var express = require("express");
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
-var port = process.env.PORT || 9000;
+var myArgs = process.argv.slice(2);
+var port = myArgs[0] || 3210;
+var folder = myArgs[1] || 'src';
+process.env.ROOT = __dirname + '/'+ folder;
 
 // modules
 var upload = require('./server/routes/upload')(app);
+var xlsParser = require('./server/routes/xls-parser')(app);
 
+// Config
 app.set('port', port);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use(express.static(__dirname + '/src'));
+app.use(express.static(process.env.ROOT));
 
 // CORS
 //app.all('/*', function(req, res, next) {
