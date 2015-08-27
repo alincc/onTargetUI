@@ -17,7 +17,7 @@ define(function(require) {
 
 
       $scope.updateProgress = function() {
-        taskFactory.updateProgress({
+        taskFactory.updateTaskPercentage({
           taskProgressList: $scope.model
         }).then(function(resp) {
             notifications.taskUpdated({

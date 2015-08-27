@@ -1,0 +1,47 @@
+{
+  "type": "projectResponse",
+  "authenticated": true,
+  "returnMessage": "Successfully retrieved project info",
+  "returnVal": "SUCCESS",
+  "project": {
+    "company": {
+      "address": {
+        "address1": "363 23rd st",
+        "address2": "Suite 2098",
+        "addressId": 0,
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "zip": "10001"
+      },
+      "companyId": 1,
+      "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+      "companyTypeId": 1
+    },
+    "endDate": "2015-06-26T00:00:00",
+    "percentageComplete": 15,
+    "projectAddress": {
+      "address1": "NY",
+      "address2": "NY",
+      "addressId": 2,
+      "addressType": "PROJECT",
+      "city": "NY",
+      "country": "NP",
+      "state": "Gandaki",
+      "zip": "1001"
+    },
+    "projectConfiguration": [
+      {
+        "configKey": "UNIT_OF_MEASUREMENT",
+        "configValue": "HOUR"
+      }
+    ],
+    "projectDescription": "project1 desc",
+    "projectId": 2,
+    "projectImagePath": "/assets/project/const3.jpeg",
+    "projectName": "project1",
+    "projectOwnerId": 1,
+    "projectTypeId": 1,
+    "startDate": "2015-06-01T00:00:00"
+  }
+}

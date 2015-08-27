@@ -15,11 +15,12 @@ define(function(require) {
     documentServiceModule = require('app/common/services/document'),
     activityServiceModule = require('app/common/services/activity'),
     notificationsServiceModule = require('app/common/services/notifications'),
+    permissionServiceModule = require('app/common/services/permission'),
     taskFilterModule = require('app/common/filters/task'),
     Chart = require('chartjs'),
     angularChartJS = require('angularChartJS'),
     projectChooserDirective = require('app/common/directives/projectChooser/projectChooser');
-  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js', 'common.services.document', 'common.services.activity', 'common.filters.task', 'common.directives.projectChooser', 'common.services.notifications']);
+  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js', 'common.services.document', 'common.services.activity', 'common.filters.task', 'common.directives.projectChooser', 'common.services.notifications', 'common.services.permission']);
 
   module.run(['$templateCache', function($templateCache) {
     Chart.defaults.global.colours=[
@@ -46,9 +47,10 @@ define(function(require) {
             controller: 'DashBoardController',
             authorization: true,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'utilFactory', '$rootScope', function($location, projectContext, $q, $state, $window, utilFactory, $rootScope) {
+              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'utilFactory', '$rootScope', 'permissionFactory',
+                function($location, projectContext, $q, $state, $window, utilFactory, $rootScope, permissionFactory) {
                 var deferred = $q.defer();
-                if(projectContext.valid()) {
+                if(projectContext.valid() && permissionFactory.checkPermission('DASHBOARD')) {
                   // prepare project address
                   utilFactory.generateAddress($rootScope.currentProjectInfo.projectAddress)
                     .then(function(add) {

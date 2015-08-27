@@ -1,0 +1,124 @@
+{
+  "type" : "projectMemberListResponse",
+  "authenticated" : false,
+  "returnMessage" : "Successfully retrieved project members",
+  "returnVal" : "SUCCESS",
+  "projectId" : 2,
+  "projectMemberList" : [ {
+    "companyAddress" : "363 23rd st",
+    "companyName" : "SIMON AND BARRON WEA RESIDENTIAL",
+    "contact" : {
+      "areaCode" : 971,
+      "contactId" : 1,
+      "email" : "santosh8pun@gmail.com",
+      "firstName" : "Sanjeev",
+      "lastName" : "Ghimire",
+      "phoneNumber" : "9801012345",
+      "title" : "Er",
+      "user" : {
+        "discipline" : 0,
+        "userId" : 1,
+        "userTypeId" : 0
+      },
+      "userImagePath" : "assets/profile/1111111.jpeg"
+    },
+    "discipline" : "Masonry",
+    "memberStatus" : "ACTIVE",
+    "phone" : {
+      "areaCode" : 971,
+      "phoneId" : 0,
+      "phoneNumber" : "9801012345",
+      "phoneType" : "CELL"
+    },
+    "projectId" : 2,
+    "projectMemberId" : 2,
+    "userId" : 1
+  }, {
+    "companyAddress" : "363 23rd st",
+    "companyName" : "SIMON AND BARRON WEA RESIDENTIAL",
+    "contact" : {
+      "areaCode" : 977,
+      "contactId" : 2,
+      "email" : "santosh8pun@gmail.com",
+      "firstName" : "Santosh",
+      "lastName" : "Pun",
+      "phoneNumber" : "9808639594",
+      "title" : "Mr",
+      "user" : {
+        "discipline" : 0,
+        "userId" : 2,
+        "userTypeId" : 0
+      },
+      "userImagePath" : "assets/profile/const2.jpg"
+    },
+    "discipline" : "Masonry",
+    "memberStatus" : "ACTIVE",
+    "phone" : {
+      "areaCode" : 977,
+      "phoneId" : 0,
+      "phoneNumber" : "9808639594",
+      "phoneType" : "CELL"
+    },
+    "projectId" : 2,
+    "projectMemberId" : 5,
+    "userId" : 2
+  }, {
+    "companyAddress" : "363 23rd st",
+    "companyName" : "SIMON AND BARRON WEA RESIDENTIAL",
+    "contact" : {
+      "areaCode" : 989,
+      "contactId" : 3,
+      "email" : "santosh8pun@gmail.com",
+      "firstName" : "Basanta",
+      "lastName" : "Rijal",
+      "phoneNumber" : "9991919",
+      "title" : "Mr",
+      "user" : {
+        "discipline" : 0,
+        "userId" : 3,
+        "userTypeId" : 0
+      },
+      "userImagePath" : "assets/profile/a1.jpeg"
+    },
+    "discipline" : "Plumbing",
+    "memberStatus" : "ACTIVE",
+    "phone" : {
+      "areaCode" : 989,
+      "phoneId" : 0,
+      "phoneNumber" : "9991919",
+      "phoneType" : "CELL"
+    },
+    "projectId" : 2,
+    "projectMemberId" : 7,
+    "userId" : 3
+  }, {
+    "companyAddress" : "363 23rd st",
+    "companyName" : "SIMON AND BARRON WEA RESIDENTIAL",
+    "contact" : {
+      "areaCode" : 980,
+      "contactId" : 5,
+      "email" : "nlalshrestha@gmail.com",
+      "firstName" : "Niran",
+      "lastName" : "Shrestha",
+      "phoneNumber" : "8639594",
+      "title" : "Mr",
+      "user" : {
+        "discipline" : 0,
+        "userId" : 6,
+        "userTypeId" : 0
+      },
+      "userImagePath" : "assets/profile/1111.jpeg"
+    },
+    "discipline" : "Plumbing",
+    "memberStatus" : "ACTIVE",
+    "phone" : {
+      "areaCode" : 980,
+      "phoneId" : 0,
+      "phoneNumber" : "8639594",
+      "phoneType" : "CELL"
+    },
+    "projectId" : 2,
+    "projectMemberId" : 22,
+    "userId" : 6
+  } ]
+}

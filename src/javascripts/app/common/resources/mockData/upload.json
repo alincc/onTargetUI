@@ -1,0 +1,32 @@
+{
+  "type": "fileUploadResponse",
+  "authenticated": false,
+  "responseCode": "200",
+  "returnMessage": "Request processed successfully",
+  "returnVal": "SUCCESS",
+  "projectId": 4,
+  "uploadedDocumentList": [
+    {
+      "createdBy": 1,
+      "createdByContact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "createdDate": "2015-07-26T20:15:53",
+      "fileId": 8,
+      "fileType": "application/pdf",
+      "name": "Details 3.pdf"
+    }
+  ]
+}

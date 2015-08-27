@@ -11,8 +11,7 @@ define(function(require) {
     ngMatch = require('./ngMatch'),
     noBreak = require('./noBreak'),
     loadingBar = require('./loadingBar'),
-    spinner = require('./spinner'),
-    taskAttachment = require('./taskAttachment');
+    spinner = require('./spinner');
 
   var module = angular.module('common.directives',
     [
@@ -26,8 +25,7 @@ define(function(require) {
       'common.directives.filePath',
       'common.directives.noBreak',
       'common.directives.loadingBar',
-      'common.directives.spinner',
-      'common.directives.taskAttachment'
+      'common.directives.spinner'
     ]);
   return module;
 });

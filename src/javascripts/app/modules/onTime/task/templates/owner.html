@@ -1,6 +1,6 @@
 <div ng-controller="OwnerTaskController" class="task-owner m-t-xs m-b-xs">
-    <div class="no-result text-muted m-b-xs" ng-if="!assignees.length">This task has not been assigned yet.</div>
-    <div ng-repeat="assignee in assignees" class="ow-item">
+    <div class="no-result text-muted m-b-xs" ng-if="!model.assignees.length">This task has not been assigned yet.</div>
+    <div ng-repeat="assignee in model.assignees" class="ow-item">
         <span><i class="fa fa-user"></i>&nbsp;&nbsp;<span class="name">{{assignee.contact.firstName}}&nbsp;{{assignee.contact.lastName}}</span></span>
         <button class="btn btn-xs btn-warning" ng-click="removeUserFromTask(assignee)"><i class="fa fa-minus"></i>
             Remove
@@ -10,12 +10,16 @@
         <div ng-show="onAddOwner" class="ow-add-box">
             <form>
                 <div class="input-group">
-                    <input type="text" ng-model="assignee"
-                           typeahead-append-to-body="true"
-                           typeahead="contact as contact.contact.firstName+' '+contact.contact.lastName for contact in contacts | filter:$viewValue | limitTo:8"
-                           class="form-control" placeholder="Enter Owner Name">
+                    <ui-select ng-model="model.selectedAssignee"
+                               theme="bootstrap"
+                               reset-search-input="true">
+                        <ui-select-match placeholder="Select or enter owner name">{{$select.selected.contact.firstName + ' ' + $select.selected.contact.lastName}}</ui-select-match>
+                        <ui-select-choices repeat="own in contacts track by $index">
+                            <div ng-bind="own.contact.firstName + ' ' + own.contact.lastName"></div>
+                        </ui-select-choices>
+                    </ui-select>
               <span class="input-group-btn">
-                <button class="btn btn-primary" ng-click="assignUserToTask()"><i class="fa fa-plus"></i> Add</button>
+                <button class="btn btn-primary" ng-click="assignUserToTask()" ng-disabled="!model.selectedAssignee"><i class="fa fa-plus"></i> Add</button>
                   <button class="btn btn-warning" ng-click="onAddOwner = false"><i class="fa fa-minus"></i> Cancel</button>
               </span>
                 </div>

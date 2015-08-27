@@ -15,7 +15,7 @@ define(function() {
         }
         canceler = $q.defer();
         $scope.isLoadingTasks = true;
-        taskFactory.getProjectTasks($scope.model, canceler).then(
+        taskFactory.getProjectTasksFull($scope.model, canceler).then(
           function(resp) {
             $scope.tasks = resp.data.tasks;
             $scope.isLoadingTasks = false;
@@ -68,7 +68,7 @@ define(function() {
       $scope.action = $scope.actions.infoTask;
 
       $scope.addTask = function() {
-        taskFactory.getContacts({projectId: $rootScope.currentProjectInfo.projectId}).then(function(resp) {
+        taskFactory.getContacts($rootScope.currentProjectInfo.projectId).then(function(resp) {
           $rootScope.contactList = resp.data.projectMemberList;
           $scope.action = $scope.actions.addTask;
           $scope.taskSelected = {};

@@ -48,7 +48,9 @@ define(function() {
 
       $scope.getUserProject = function() {
         $scope.isLoading = true;
-        projectFactory.getUserProject($scope.model).then(
+        projectFactory.getUserProject({
+          userId: userContext.authentication().userData.userId
+        }).then(
           function(resp) {
             var itemPerRow = $scope.viewMode === 'grid' ? 6 : 2;
             $scope.projects = $scope.reMapData(resp.data.mainProject.projects);
@@ -63,8 +65,6 @@ define(function() {
           }
         );
       };
-
-      $scope.getUserProject();
 
       var createProjectModalInstance, editProjectModalInstance, deleteProjectModalInstance;
 
@@ -84,8 +84,7 @@ define(function() {
 
       $scope.editProjectModal = function(project) {
         // prepare company list
-        companyFactory.search()
-          .success(function(resp) {
+        companyFactory.search().success(function(resp) {
             editProjectModalInstance = $modal.open({
               templateUrl: 'project/templates/edit.html',
               controller: 'ProjectEditController',
@@ -128,27 +127,31 @@ define(function() {
       };
 
       $scope.goDashboard = function(pj) {
-        projectContext.setProject(pj);
+        // get project details
+        projectFactory.getProjectById(pj.projectId)
+          .success(function(resp){
+            projectContext.setProject(resp.project);
 
-        // get notifications
-        if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-          var requestPayload = {
-            "pageNumber": 1,
-            "perPageLimit": constant.app.settings.userNotificationsPageSize,
-            "userId": $rootScope.currentUserInfo.userId
-          };
-          userNotificationsFactory.getAll(requestPayload);
+            // get notifications
+            if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
+              var requestPayload = {
+                "pageNumber": 1,
+                "perPageLimit": constant.app.settings.userNotificationsPageSize,
+                "userId": $rootScope.currentUserInfo.userId
+              };
+              userNotificationsFactory.getAll(requestPayload);
 
-          // get user details and permissions
-          accountFactory.getUserProfileDetails($rootScope.currentUserInfo.userId)
-            .success(function(resp) {
-              var newObj = angular.copy($rootScope.currentUserInfo);
-              newObj.menuProfile = resp.menuProfile;
-              newObj.permissionProfile = resp.permissionProfile;
-              userContext.fillInfo(newObj, true);
-              $state.go('app.dashboard');
-            });
-        }
+              // get user details and permissions
+              accountFactory.getUserProfileDetails($rootScope.currentUserInfo.userId)
+                .success(function(resp) {
+                  var newObj = angular.copy($rootScope.currentUserInfo);
+                  newObj.menuProfile = resp.menuProfile;
+                  newObj.permissionProfile = resp.permissionProfile;
+                  userContext.fillInfo(newObj, true);
+                  $state.go('app.dashboard');
+                });
+            }
+          });
       };
 
       $scope.reMapData = function(list) {
@@ -164,6 +167,7 @@ define(function() {
         });
       };
 
+      $scope.getUserProject();
     }];
   return controller;
 });

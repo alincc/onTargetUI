@@ -25,7 +25,7 @@ define(function(require) {
         };
 
         service.getUploadedDocumentList = function(projectId) {
-          return $http.post(constant.domain + '/documents/getalldocuments/', {
+          return $http.post(constant.domain + '/upload', {
             projectId: projectId
           });
         };

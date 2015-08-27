@@ -2,15 +2,24 @@
   textarea {
     resize: none;
   }
-  .drop-box {
-    text-align: center;
-    height: 150px;
-    line-height: 150px;
-    color: #999;
-    font-size: 20px;
-    border: dashed 3px #ccc;
-    margin-top: 10px;
+
+  .uploader-content {
+    .uploader-box {
+      max-height: 300px;
+      &.local-upload {
+        .drop-box {
+          text-align: center;
+          height: 150px;
+          line-height: 150px;
+          color: #999;
+          font-size: 20px;
+          border: dashed 3px #ccc;
+          margin-top: 10px;
+        }
+      }
+    }
   }
+
   .file-info {
     position: relative;
     height: auto;

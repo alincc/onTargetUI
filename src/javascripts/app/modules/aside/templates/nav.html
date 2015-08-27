@@ -5,7 +5,7 @@
             <img src="img/icons/hamburger-icon.png"/>
         </a>
     </li>
-    <li ui-sref-active="selected" class="item">
+    <li ui-sref-active="selected" class="item" ng-if="checkPermission('DASHBOARD')">
         <a ui-sref="app.dashboard">
             <img src="img/icons/dashboard-icon-white.png" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -13,7 +13,7 @@
             <span>Dashboard</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item">
+    <li ui-sref-active="selected"  class="item" ng-if="checkPermission('ONTIME')">
         <a ui-sref="app.onTime">
             <img src="img/icons/onTime-icon-white.PNG" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -21,7 +21,7 @@
             <span>onTIME</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item">
+    <li ui-sref-active="selected"  class="item" ng-if="checkPermission('ONSITE')">
         <a ui-sref="app.onSite">
             <img src="img/icons/onSite-icon-white.PNG" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -29,7 +29,7 @@
             <span>onSITE</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item">
+    <li ui-sref-active="selected"  class="item" ng-if="checkPermission('ONFILE')">
         <a ui-sref="app.onFile">
             <img src="img/icons/onFile-icon-white.PNG" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -37,7 +37,7 @@
             <span>onFILE</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item">
+    <li ui-sref-active="selected"  class="item" ng-if="checkPermission('ONTARGET')">
         <a ui-sref="app.onTarget">
             <img src="img/icons/onTarget-icon-white.PNG" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -45,7 +45,7 @@
             <span>onTARGET</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item">
+    <li ui-sref-active="selected"  class="item" ng-if="checkPermission('ONBIM')">
         <a ui-sref="app.onBim">
             <img src="img/icons/onBim-icon-white.PNG" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -53,7 +53,7 @@
             <span>onBIM</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item">
+    <li ui-sref-active="selected"  class="item" ng-if="checkPermission('ONCONTACT')">
         <a ui-sref="app.onContact">
             <img src="img/icons/onContact-icon-white.PNG" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -61,7 +61,7 @@
             <span>onCONTACT</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item">
+    <li ui-sref-active="selected"  class="item" ng-if="checkPermission('ONREPORT')">
         <a ui-sref="app.onReport">
             <img src="img/icons/onReport-icon-white.PNG" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />

@@ -20,15 +20,15 @@ define(function (){
     };
 
     //get date area of tasks
-    var maxStartDate = activity.taskList[0].startDate, minEndDate = activity.taskList[0].endDate;
-    _.forEach(activity.taskList, function(n) {
-      if(n.startDate < maxStartDate){
-        maxStartDate = n.startDate;
-      }
-      if(n.endDate > minEndDate) {
-        minEndDate = n.endDate;
-      }
-    });
+    var maxStartDate = activity.startDate, minEndDate = activity.endDate;
+    //_.forEach(activity.taskList, function(n) {
+    //  if(n.startDate < maxStartDate){
+    //    maxStartDate = n.startDate;
+    //  }
+    //  if(n.endDate > minEndDate) {
+    //    minEndDate = n.endDate;
+    //  }
+    //});
 
     $scope.model = {
       userId: userContext.authentication().userData.userId,

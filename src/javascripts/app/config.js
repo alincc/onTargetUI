@@ -63,7 +63,7 @@ define(function(require) {
               toaster.pop('error', 'Error', response.data.returnMessage);
               defer.reject(response);
             } else {
-              if((response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.resourceUrl) > -1) && response.config.headers['AutoAlert']) {
+              if((response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.domain) > -1) && response.config.headers['AutoAlert']) {
                 toaster.pop('success', 'Success', response.data.returnMessage);
               }
               defer.resolve(response);
@@ -226,7 +226,6 @@ define(function(require) {
   module.constant('appConstant', {
     domain: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     baseUrl: 'http://app.ontargetcloud.com:8080',
-    resourceUrl: 'http://app.ontargetcloud.com:9000',
     //nodeServer: 'http://192.168.1.224:3214',
     nodeServer: 'http://localhost:9000',
     app: {

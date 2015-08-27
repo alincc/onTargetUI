@@ -6,90 +6,81 @@ define(function() {
   var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications',
     function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications) {
       $scope.task = $rootScope.currentTask;
-      //$scope.assignees = $scope.task.assignee;
       $scope.onAddOwner = false;
       $scope.contacts = [];
-      $scope.assignees = [];
 
       $scope.model = {
+        selectedAssignee: null,
         taskId: $scope.task.projectTaskId,
         projectId: $rootScope.activitySelected.projectId,
-        members: []
+        assignees: $scope.task.assignee
       };
-      /*_.forEach($scope.task.assignee, function (assignee){
-        $scope.assignees.push(assignee.contact);
-        $scope.model.members.push(assignee.contact.contactId);
-      });*/
-      _.forEach($scope.task.assignee, function (assignee){
-        $scope.assignees.push(assignee);
-        $scope.model.members.push(assignee.userId);
-      });
+
+      console.log($scope.task);
 
       $scope.getContacts = function() {
-        taskFactory.getContacts({projectId: $rootScope.currentProjectInfo.projectId}).then(
+        taskFactory.getContacts($rootScope.currentProjectInfo.projectId).then(
           function(resp) {
-            var memberList = resp.data.projectMemberList;
-
-            _.forEach(memberList, function (assignee){
-              if(_.findIndex($scope.assignees, 'userId', assignee.userId)<0) {
-                $scope.contacts.push(assignee);
-              }
+            $scope.contacts = _.filter(resp.data.projectMemberList, function(el) {
+              return _.findIndex($scope.model.assignees, {userId: el.userId}) < 0;
             });
-            // _.difference($scope.contacts, $scope.assignees);
+            console.log(resp.data.projectMemberList, $scope.task.assignee, $scope.contacts);
           }
         );
       };
-
-      $scope.getContacts();
 
       $scope.addOwner = function() {
         $scope.onAddOwner = true;
       };
 
       $scope.updateTask = function() {
-        var newAssigness = [];
-        _.each($scope.assignees, function(el) {
-          newAssigness.push({contact: el});
-        });
         notifications.taskUpdated({
           projectTaskId: $rootScope.currentTask.projectTaskId,
           task: {
-            assignee: newAssigness
+            assignee: _.map($scope.model.assignees, function(el) {
+              return {contact: el};
+            })
           }
         });
       };
 
       $scope.removeUserFromTask = function(assignee) {
         $scope.onAddOwner = false;
-        _.remove($scope.model.members, function(n) {
-          return n === assignee.userId;
+        _.remove($scope.model.assignees, function(n) {
+          return n.userId === assignee.userId;
         });
-        taskFactory.assignUserToTask($scope.model).then(
-          function(resp) {
-            _.remove($scope.assignees, function(n) {
-              return n === assignee;
-            });
-            $scope.contacts.push(assignee);
-            $scope.updateTask();
-          }
-        );
+        $scope.contacts.push(assignee);
+        taskFactory.assignUserToTask({
+          taskId: $scope.task.projectTaskId,
+          projectId: $rootScope.activitySelected.projectId,
+          members: _.map($scope.model.assignees, function(el) {
+            return el.userId;
+          })
+        }).then(function(resp) {
+          $scope.model.selectedAssignee = null;
+          $scope.updateTask();
+        });
       };
 
-
-      $scope.assignUserToTask = function (){
-        $scope.model.members.push($scope.assignee.userId);
-        taskFactory.assignUserToTask($scope.model).then(
-          function(resp) {
-            $scope.assignees.push($scope.assignee);
-            _.remove($scope.contacts, function(n) {
-              return n === $scope.assignee;
-            });
-            $scope.assignee = '';
-            $scope.onAddOwner = false;
-            $scope.updateTask();
-          }
-        );
+      $scope.assignUserToTask = function() {
+        $scope.onAddOwner = false;
+        _.remove($scope.contacts, function(n) {
+          return n.userId === $scope.model.selectedAssignee.userId;
+        });
+        $scope.model.assignees.push($scope.model.selectedAssignee);
+        taskFactory.assignUserToTask({
+          taskId: $scope.task.projectTaskId,
+          projectId: $rootScope.activitySelected.projectId,
+          members: _.map($scope.model.assignees, function(el) {
+            return el.userId;
+          })
+        }).then(function(resp) {
+          $scope.model.selectedAssignee = null;
+          $scope.updateTask();
+        });
       };
+
+      $scope.getContacts();
     }];
   return controller;
 });

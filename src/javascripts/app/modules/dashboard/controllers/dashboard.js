@@ -2,8 +2,8 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', 'notifications',
-    function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout, notifications) {
+  var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', 'notifications', 'taskFactory',
+    function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout, notifications, taskFactory) {
       $scope.app = appConstant.app;
       $scope.currentProject = $rootScope.currentProjectInfo;
       $scope.mainProject = $rootScope.mainProjectInfo;
@@ -193,39 +193,48 @@ define(function(require) {
           dueIn7Day: [],
           critical: []
         };
-        var activities = $scope.currentProject.projects;
+
         var currentDate = new Date();
         var now = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-        if(activities.length > 0) {
-          _.each(activities, function(ac) {
-            var taskList = ac.taskList ? ac.taskList : [];
-            _.each(taskList, function(tsk) {
-              //$scope.tasks.scheduled.push(tsk);
+        $scope.loadTask = function() {
+          taskFactory.getProjectTasks($scope.currentProject.projectId)
+            .success(function(resp) {
 
-              var tskEndDate = new Date(tsk.endDate);
-              var diffDays = daydiff(now, tskEndDate);
+              if(resp.tasks.length > 0) {
+                _.each(resp.tasks, function(tsk) {
+                  //$scope.tasks.scheduled.push(tsk);
 
-              if('3' === tsk.status) { // Completed
-                $scope.tasks.completed.push(tsk);
-              }
-              else if('1' === tsk.status || '2' === tsk.status) {
-                if('1' === tsk.status) { // Active
-                  $scope.tasks.active.push(tsk);
-                }
-                if(diffDays <= 0) {
-                  $scope.tasks.pastDue.push(tsk);
-                }
-                if(diffDays / (1000 * 60 * 60 * 24) <= 7) {
-                  $scope.tasks.dueIn7Day.push(tsk);
-                }
+                  var tskEndDate = new Date(tsk.endDate);
+                  var diffDays = daydiff(now, tskEndDate);
+
+                  if('3' === tsk.status) { // Completed
+                    $scope.tasks.completed.push(tsk);
+                  }
+                  else if('1' === tsk.status || '2' === tsk.status) {
+                    if('1' === tsk.status) { // Active
+                      $scope.tasks.active.push(tsk);
+                    }
+                    if(diffDays <= 0) {
+                      $scope.tasks.pastDue.push(tsk);
+                    }
+                    if(diffDays / (1000 * 60 * 60 * 24) <= 7) {
+                      $scope.tasks.dueIn7Day.push(tsk);
+                    }
+                  }
+
+                  if('1' === tsk.severity) {
+                    $scope.tasks.critical.push(tsk);
+                  }
+                });
               }
 
-              if('1' === tsk.severity) {
-                $scope.tasks.critical.push(tsk);
-              }
+            })
+            .error(function(err) {
+
             });
-          });
-        }
+        };
+
+        $scope.loadTask();
 
         $scope.taskTabSelect = function() {
           $timeout(function() {
@@ -280,9 +289,9 @@ define(function(require) {
         $scope.isActivityLogLoading = true;
 
         projectFactory.getActivityLog({
-          "projectId" : $scope.currentProject.projectId,
-          "pageNumber" : 1,
-          "perPageLimit" : 10
+          "projectId": $scope.currentProject.projectId,
+          "pageNumber": 1,
+          "perPageLimit": 10
         }).then(
           function(resp) {
             $scope.activityLogs = resp.data.logs;

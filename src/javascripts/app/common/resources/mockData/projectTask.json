@@ -1,214 +1,14 @@
 {
-  "type": "projectTaskResponse",
+  "type": "taskListResponse",
   "authenticated": false,
   "returnMessage": "Successfully retrieved tasks",
   "returnVal": "SUCCESS",
   "tasks": [
     {
-      "assignee": [
-        {
-          "contact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "discipline": 0,
-          "userId": 1,
-          "userTypeId": 0
-        }
-      ],
-      "comments": [
-        {
-          "comment": "comment1",
-          "commentedBy": 1,
-          "commentedDate": "2015-06-29T07:52:50",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 3,
-          "taskId": 1
-        },
-        {
-          "comment": "test comment",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-05T22:31:50",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 5,
-          "taskId": 1
-        },
-        {
-          "comment": "santosh",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-05T22:34:14",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 7,
-          "taskId": 1
-        },
-        {
-          "comment": "test",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-05T22:34:45",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 8,
-          "taskId": 1
-        },
-        {
-          "comment": "s",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-21T20:19:55",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 12,
-          "taskId": 1
-        },
-        {
-          "comment": "test",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-21T21:55:51",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 13,
-          "taskId": 1
-        },
-        {
-          "comment": "abc",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-21T23:16:21",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 14,
-          "taskId": 1
-        },
-        {
-          "comment": "cde",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-21T23:16:32",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 15,
-          "taskId": 1
-        }
-      ],
       "completed": true,
       "description": "task desc",
       "endDate": "2015-06-15T00:00:00",
-      "percentageComplete": 59,
+      "percentageComplete": 10.0,
       "projectTaskId": 1,
       "severity": "1",
       "startDate": "2015-06-06T00:00:00",
@@ -216,70 +16,21 @@
       "title": "task1"
     },
     {
-      "assignee": [],
-      "comments": [
-        {
-          "comment": "hello",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-05T23:04:47",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 9,
-          "taskId": 3
-        },
-        {
-          "comment": "hi",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-05T23:15:07",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 10,
-          "taskId": 3
-        }
-      ],
       "completed": true,
       "description": "task2 desc",
       "endDate": "2015-06-18T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 20.0,
       "projectTaskId": 3,
       "severity": "1",
       "startDate": "2015-06-10T00:00:00",
-      "status": "3",
+      "status": "1",
       "title": "task2"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "task1111122 desc",
       "endDate": "2015-06-16T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 0.0,
       "projectTaskId": 13,
       "severity": "1",
       "startDate": "2015-06-03T00:00:00",
@@ -287,12 +38,10 @@
       "title": "task11111221"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "task22222 desc",
       "endDate": "2015-06-16T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 50.0,
       "projectTaskId": 14,
       "severity": "1",
       "startDate": "2015-06-03T00:00:00",
@@ -300,12 +49,10 @@
       "title": "task2222"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "task22222 desc",
       "endDate": "2015-06-16T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 40.0,
       "projectTaskId": 15,
       "severity": "1",
       "startDate": "2015-06-03T00:00:00",
@@ -313,12 +60,10 @@
       "title": "task222211"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "task323523535",
       "endDate": "2015-06-18T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 70.0,
       "projectTaskId": 16,
       "severity": "1",
       "startDate": "2015-06-03T00:00:00",
@@ -326,12 +71,10 @@
       "title": "task34343434"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "task4324234234",
       "endDate": "2015-06-18T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 12.0,
       "projectTaskId": 17,
       "severity": "1",
       "startDate": "2015-06-10T00:00:00",
@@ -339,12 +82,10 @@
       "title": "task32423432423"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "taaksdasd",
       "endDate": "2015-06-10T00:00:00",
-      "percentageComplete": 30,
+      "percentageComplete": 34.0,
       "projectTaskId": 18,
       "severity": "1",
       "startDate": "2015-06-04T00:00:00",
@@ -352,12 +93,10 @@
       "title": "task342423423"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "tadsasd",
       "endDate": "2015-06-17T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 0.0,
       "projectTaskId": 19,
       "severity": "1",
       "startDate": "2015-06-10T00:00:00",
@@ -365,12 +104,10 @@
       "title": "tasdsad2312312"
     },
     {
-      "assignee": [],
-      "comments": [],
       "completed": true,
       "description": "dasdas",
       "endDate": "2015-06-11T00:00:00",
-      "percentageComplete": 0,
+      "percentageComplete": 0.0,
       "projectTaskId": 20,
       "severity": "1",
       "startDate": "2015-06-10T00:00:00",
@@ -378,40 +115,15 @@
       "title": "dsadasd"
     },
     {
-      "assignee": [],
-      "comments": [
-        {
-          "comment": "test",
-          "commentedBy": 1,
-          "commentedDate": "2015-07-20T23:25:15",
-          "commenterContact": {
-            "areaCode": 911,
-            "contactId": 1,
-            "email": "santosh8pun@gmail.com",
-            "firstName": "Sanjeev",
-            "lastName": "Ghimire",
-            "phoneNumber": "9898999",
-            "title": "Mr",
-            "user": {
-              "discipline": 0,
-              "userId": 1,
-              "userTypeId": 0
-            },
-            "userImagePath": "assets/profile/a2.jpeg"
-          },
-          "taskCommentId": 11,
-          "taskId": 21
-        }
-      ],
       "completed": true,
-      "description": "ttrtttt32432",
-      "endDate": "2015-06-11T00:00:00",
-      "percentageComplete": 0,
-      "projectTaskId": 21,
+      "description": "task11",
+      "endDate": "2015-06-18T00:00:00",
+      "percentageComplete": 0.0,
+      "projectTaskId": 25,
       "severity": "1",
       "startDate": "2015-06-10T00:00:00",
       "status": "1",
-      "title": "ttttttt242423"
+      "title": "task225"
     }
   ]
 }

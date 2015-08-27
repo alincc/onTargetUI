@@ -18,7 +18,7 @@ define(function(require) {
         var service = {};
 
         service.getUserProject = function(model) {
-          return $http.post(constant.domain + '/project/getProjectsByUser/', model);
+          return $http.post(constant.domain + '/project/getProjectsByUser', model);
         };
 
         service.getProjectById = function(projectId){

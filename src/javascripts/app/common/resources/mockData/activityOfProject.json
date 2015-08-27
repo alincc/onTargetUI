@@ -1,0 +1,259 @@
+{
+  "type": "projectListResponse",
+  "authenticated": false,
+  "returnMessage": "Successfully retrieved project activities",
+  "returnVal": "SUCCESS",
+  "projects": [
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-06-27T00:00:00",
+      "percentageComplete": 21,
+      "projectDescription": "activity1 desc",
+      "projectId": 4,
+      "projectName": "activity1",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-06-02T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-06-22T00:00:00",
+      "percentageComplete": 10,
+      "projectDescription": "activity2 desc",
+      "projectId": 10,
+      "projectName": "activity2",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-06-02T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-06-25T00:00:00",
+      "percentageComplete": 0,
+      "projectDescription": "activity3 desc",
+      "projectId": 11,
+      "projectName": "activity3",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-06-10T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-07-26T00:00:00",
+      "percentageComplete": 0,
+      "projectAddress": {
+        "address1": "address1",
+        "address2": "address2",
+        "addressId": 17,
+        "addressType": "PROJECT",
+        "city": "city",
+        "country": "country",
+        "state": "state",
+        "zip": "zip"
+      },
+      "projectDescription": "project desc",
+      "projectId": 27,
+      "projectImagePath": "/home/santosh/project1.jpg",
+      "projectName": "project name",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-07-26T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-07-26T00:00:00",
+      "percentageComplete": 0,
+      "projectDescription": "activity desc",
+      "projectId": 28,
+      "projectName": "activity name",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-07-26T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-06-22T00:00:00",
+      "percentageComplete": 0,
+      "projectDescription": "activity1",
+      "projectId": 29,
+      "projectName": "activity1",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-06-17T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-11-19T00:00:00",
+      "percentageComplete": 0,
+      "projectDescription": "santosh activity desc",
+      "projectId": 30,
+      "projectName": "santosh activity",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-07-01T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-06-22T00:00:00",
+      "percentageComplete": 0,
+      "projectDescription": "activity1",
+      "projectId": 31,
+      "projectName": "activity1",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-06-17T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-06-22T00:00:00",
+      "percentageComplete": 0,
+      "projectDescription": "activity1",
+      "projectId": 32,
+      "projectName": "activity1",
+      "projectOwnerId": 1,
+      "projectTypeId": 1,
+      "startDate": "2015-06-17T00:00:00"
+    },
+    {
+      "company": {
+        "address": {
+          "address1": "363 23rd st",
+          "address2": "Suite 2098",
+          "addressId": 0,
+          "city": "New York",
+          "country": "USA",
+          "state": "NY",
+          "zip": "10001"
+        },
+        "companyId": 1,
+        "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+        "companyTypeId": 1
+      },
+      "endDate": "2015-07-16T00:00:00",
+      "percentageComplete": 0,
+      "projectDescription": "a",
+      "projectId": 33,
+      "projectName": "sa",
+      "projectOwnerId": 6,
+      "projectTypeId": 1,
+      "startDate": "2015-07-08T00:00:00"
+    }
+  ]
+}

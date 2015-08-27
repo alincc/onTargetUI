@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'googleDriveFactory', 'boxFactory',
-    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, googleDriveFactory, boxFactory) {
+  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window',
+    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window) {
       $scope.app = appConstant.app;
       $scope.isLoading = false;
       $scope.viewMode = "list";
@@ -93,13 +93,6 @@ define(function(require) {
       // Upload doc
       var uploadModalInstance;
       $scope.upload = function() {
-        //test
-
-        googleDriveFactory.loadFiles()
-          .then(function(files) {
-            console.log(files);
-          });
-
         // get document categories
         documentFactory.getCategories()
           .success(function(resp) {

@@ -10,21 +10,24 @@ define(function(require) {
     var services = {};
 
     //project task
-    services.getProjectTasks = function(model, canceler) {
-      return $http.post(constant.domain + '/task/getProjectTaskList', model, {
+    services.getProjectTasks = function(projectId, canceler) {
+      canceler = canceler || $q.defer();
+      return $http.post(constant.domain + '/task/getProjectTaskList', {
+        projectId: projectId
+      }, {
         timeout: canceler.promise
       });
     };
 
     services.getProjectTasksFull = function(projectId, canceler) {
       return $http.post(constant.domain + '/task/getProjectTask', {
-        projecId: projectId
+        projectId: projectId
       }, {
         timeout: canceler.promise
       });
     };
 
-    services.getTaskById = function(taskId, canceler){
+    services.getTaskById = function(taskId, canceler) {
       return $http.post(constant.domain + '/task/getTaskDetail', {
         taskId: taskId
       }, {
@@ -56,8 +59,10 @@ define(function(require) {
       });
     };
 
-    services.getContacts = function(model) {
-      return $http.post(constant.resourceUrl + '/contact/getcontacts', model);
+    services.getContacts = function(projectId) {
+      return $http.post(constant.domain + '/project/getProjectMembers', {
+        projectId: projectId
+      });
     };
 
     services.getTaskStatuses = function() {
@@ -84,8 +89,16 @@ define(function(require) {
       });
     };
 
-    services.updateProgress = function(model) {
-      return $http.post(constant.resourceUrl + '/tasks/createnewtaskpercentage', model, {
+    services.createTaskPercentage = function(model) {
+      return $http.post(constant.domain + '/task/percentage/add', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
+    };
+
+    services.updateTaskPercentage = function(model) {
+      return $http.post(constant.domain + '/task/percentage/update', model, {
         headers: {
           AutoAlert: true
         }
@@ -104,12 +117,22 @@ define(function(require) {
       });
     };
 
-    services.getTaskBudget = function(model) {
-      return $http.post(constant.resourceUrl + '/tasks/getalltaskbudgets', model);
+    services.getTaskBudget = function(taskId) {
+      return $http.post(constant.domain + '/tasks/budget/getTaskBudgetByTaskId', {
+        taskId: taskId
+      });
     };
 
-    services.addTaskBudget = function(model) {
-      return $http.post(constant.resourceUrl + '/tasks/addtaskbudget', model, {
+    services.addTaskBudget = function(data) {
+      return $http.post(constant.domain + '/tasks/budget/add', {taskBudgetEstimates: data}, {
+        headers: {
+          AutoAlert: true
+        }
+      });
+    };
+
+    services.updateTaskBudget = function(data) {
+      return $http.post(constant.domain + '/tasks/budget/add', {taskBudgetEstimates: data}, {
         headers: {
           AutoAlert: true
         }

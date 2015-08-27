@@ -2,13 +2,16 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory) {
     var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
     var currentProjectId;
+    $scope.isLoadingActivity = false;
 
     function load() {
       currentProjectId = $rootScope.currentProjectInfo.projectId;
       $scope.currentProject = [];
+      $scope.isLoadingActivity = false;
       $scope.activities = [];
       $scope.activitySelected = $rootScope.activitySelected = null;
       $scope.model = {
@@ -16,11 +19,24 @@ define(function(require) {
       };
 
       $scope.currentProject = $rootScope.currentProjectInfo;
-      $scope.activities = $scope.currentProject.projects;
+
+      $scope.loadActivity();
 
       // remap data, add task active and pending counter
       $scope.mapData();
     }
+
+    $scope.loadActivity = function() {
+      $scope.isLoadingActivity = true;
+      activityFactory.getActivityOfProject($scope.currentProject.projectId)
+        .success(function(resp) {
+          $scope.activities = resp.projects;
+          $scope.isLoadingActivity = false;
+        })
+        .error(function(err) {
+          $scope.isLoadingActivity = false;
+        });
+    };
 
     $scope.mapData = function() {
       _.map($scope.activities, function(el) {
@@ -137,7 +153,7 @@ define(function(require) {
 
     // Import
     var importModalInstance;
-    $scope.import = function(){
+    $scope.import = function() {
       // open modal
       importModalInstance = $modal.open({
         templateUrl: 'onTime/activity/templates/import.html',
@@ -163,7 +179,7 @@ define(function(require) {
         $scope.getUserProject();
       }
     });
-    notifications.onTaskDeleted($scope, function (){
+    notifications.onTaskDeleted($scope, function() {
       //$scope.getUserProject();
     });
 

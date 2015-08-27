@@ -37,14 +37,13 @@ define(function(require) {
     userContextModule = require('app/common/context/user'),
     taskFilterModule = require('app/common/filters/task'),
     angularUiSelect = require('angularUiSelect'),
-    angularBootstrap = require('angularBootstrap'),
     angularMoment = require('moment'),
     angularSlider = require('angularSlider'),
     ngTouch = require('ngTouch'),
     ngLetterAvatar = require('ngLetterAvatar'),
     ngFileUpload = require('ngFileUpload');
 
-  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'ui.bootstrap.typeahead', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.upload', 'ui.select', 'ngLetterAvatar', 'ngFileUpload']);
+  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.upload', 'ui.select', 'ngLetterAvatar', 'ngFileUpload']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onTime/task/templates/task.html', template);

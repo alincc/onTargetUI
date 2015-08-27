@@ -6,27 +6,78 @@
         <tabset class="tab-container" ng-init="steps={step1:true, step2:false}">
             <tab heading="Choose Document" active="steps.step1">
                 <form name="step1" class="form-validation">
-                    <div class="btn btn-primary btn-block" ngf-select ng-model="uploadModel.file" ng-disabled="isUploading"><i class="fa fa-cloud-upload"></i> Choose Document</div>
-                    <div ngf-drop ng-model="uploadModel.file" class="drop-box"
-                         ngf-drag-over-class="dragover" ngf-multiple="false" ngf-allow-dir="false"
-                         ngf-pattern="'image/*,application/pdf'">or Drop Document file here</div>
-                    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
-                    <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploading"></div>
+                    <ul class="nav nav-pills nav-justified">
+                        <li ng-class="{'active':uploadModel.source==='Local'}"><a href ng-click="selectSource('Local')"><i
+                                class="fa fa-cloud-upload"></i> My computer</a></li>
+                        <li ng-class="{'active':uploadModel.source==='GoogleDrive'}"><a href
+                                                                                        ng-click="selectSource('GoogleDrive')">Google
+                            Drive</a></li>
+                        <li ng-class="{'active':uploadModel.source==='Box'}"><a href
+                                                                                ng-click="selectSource('Box')">Box</a>
+                        </li>
+                        <li ng-class="{'active':uploadModel.source==='DropBox'}"><a href
+                                                                                    ng-click="selectSource('DropBox')">DropBox</a>
+                        </li>
+                    </ul>
+                    <div class="uploader-content" ng-switch="uploadModel.source">
+                        <section class="uploader-box local-upload m-t-md" ng-switch-when="Local">
+                            <div class="btn btn-primary btn-block" ngf-select ng-model="uploadModel.file"
+                                 ng-disabled="isUploading || uploadModel.filePath.length"><i class="fa fa-cloud-upload"></i> Choose Document
+                            </div>
+                            <div ngf-drop ng-model="uploadModel.file" class="drop-box"
+                                 ngf-drag-over-class="dragover" ngf-multiple="false" ngf-allow-dir="false"
+                                 ngf-pattern="'image/*,application/pdf'">or Drop Document file here
+                            </div>
+                            <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+                            <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploading"></div>
+                        </section>
+                        <section class="uploader-box google-drive-upload m-t-md" ng-switch-when="GoogleDrive" custom-scroll>
+                            <button class="btn btn-primary btn-block" ng-if="!extenalStorage.googleDrive.isAuth" ng-click="extenalStorage.googleDrive.connect()">Connect</button>
+                            <ul class="list-group">
+                                <li class="list-group-item" ng-repeat="item in uploadModel.fileList">
+                                    <span ng-bind="item.name"></span>
+                                    <button class="btn btn-primary btn-xs pull-right" ng-if="!item.isMultiple" ng-disabled="extenalStorage.googleDrive.isLeeching || uploadModel.filePath.length" ng-click="leechFile(item, uploadModel.source)"><i class="fa fa-plus"></i></button>
+                                    <div class="btn-group pull-right" dropdown dropdown-append-to-body="true" ng-if="item.isMultiple">
+                                        <button type="button" class="btn btn-primary btn-xs" dropdown-toggle ng-disabled="extenalStorage.googleDrive.isLeeching || uploadModel.filePath.length">
+                                            <i class="fa fa-plus m-r-xs"></i> <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                                            <li role="menuitem" ng-repeat="l in item.downloadUrls"><a href ng-click="leechFile(l, uploadModel.source)">Download as {{l.ext | uppercase}}</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="text-center m-t-md m-b-md" ng-if="extenalStorage.googleDrive.isLoading">
+                                    <spinner text="Loading..."></spinner>
+                                </li>
+                                <li class="m-top-md" ng-if="!extenalStorage.googleDrive.isLoading">
+                                    <button class="btn btn-primary btn-block" ng-click="loadGoogleFile('next')">Load more</button>
+                                </li>
+                            </ul>
+                        </section>
+                        <section class="uploader-box box-upload m-t-md" ng-switch-when="Box">Box</section>
+                        <section class="uploader-box dropbox-upload m-t-md" ng-switch-when="DropBox">DropBox</section>
+                    </div>
+
                     <p class="selected-file file-info" ng-if="uploadModel.filePath.length">
-                        <span class="file-icon">
-                            <img ng-src="{{uploadModel.fileName | fileicon}}" alt=""/>
-                        </span>
+                                <span class="file-icon">
+                                    <img ng-src="{{uploadModel.fileName | fileicon}}" alt=""/>
+                                </span>
                         <span class="file-name" ng-bind="uploadModel.fileName"></span>
-                        <span class="file-remove-icon" ng-click="removeFile()">
-                            <i class="fa fa-times"></i>
-                        </span>
+                                <span class="file-remove-icon" ng-click="removeFile()">
+                                    <i class="fa fa-times"></i>
+                                </span>
                     </p>
+
                     <div class="m-t m-b text-right">
-                        <button type="submit" ng-disabled="step1.$invalid || isUploading || !uploadModel.filePath.length" class="btn btn-primary btn-rounded" ng-click="steps.step2=true">Next <i class="fa fa-arrow-right"></i></button>
+                        <button type="submit"
+                                ng-disabled="step1.$invalid || isUploading || !uploadModel.filePath.length"
+                                class="btn btn-primary btn-rounded" ng-click="steps.step2=true">Next <i
+                                class="fa fa-arrow-right"></i></button>
                     </div>
                 </form>
             </tab>
-            <tab heading="Document information" disabled="step1.$invalid || isUploading || !uploadModel.filePath.length" active="steps.step2">
+            <tab heading="Document information" disabled="step1.$invalid || isUploading || !uploadModel.filePath.length"
+                 active="steps.step2">
                 <form name="step2" class="form-validation" ng-submit="saveDocumentInfo(uploadModel)">
                     <p>Category:</p>
                     <ui-select ng-model="uploadModel.category"
@@ -39,9 +90,14 @@
                         </ui-select-choices>
                     </ui-select>
                     <p class="m-t">Description:</p>
-                    <textarea class="form-control" ng-model="uploadModel.description" required name="description"></textarea>
+                    <textarea class="form-control" ng-model="uploadModel.description" required
+                              name="description"></textarea>
+
                     <div class="m-t m-b text-right">
-                        <button type="submit" ng-disabled="step2.$invalid || step2.$submitted" class="btn btn-primary btn-rounded" ng-click="steps.step2=true"><i class="fa fa-info-circle"></i> Save document info</button>
+                        <button type="submit" ng-disabled="step2.$invalid || step2.$submitted"
+                                class="btn btn-primary btn-rounded" ng-click="steps.step2=true"><i
+                                class="fa fa-info-circle"></i> Save document info
+                        </button>
                     </div>
                 </form>
             </tab>

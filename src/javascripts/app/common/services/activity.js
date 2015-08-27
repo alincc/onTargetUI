@@ -27,15 +27,11 @@ define(function(require) {
         };
 
         service.addActivity = function(model) {
-          return $http.post(constant.resourceUrl + '/project/createNewActivity', model, {
-            headers: {
-              AutoAlert: true
-            }
-          });
+          return $http.post(constant.domain + '/project/addProject', model);
         };
 
         service.deleteActivity = function(model) {
-          return $http.post(constant.resourceUrl + '/tasks/deleteProject', model, {
+          return $http.post(constant.domain + '/project/deleteProject', model, {
             headers: {
               AutoAlert: true
             }

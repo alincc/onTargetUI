@@ -7,10 +7,6 @@ var port = myArgs[0] || 3210;
 var folder = myArgs[1] || 'src';
 process.env.ROOT = __dirname + '/'+ folder;
 
-// modules
-var upload = require('./server/routes/upload')(app);
-var xlsParser = require('./server/routes/xls-parser')(app);
-
 // Config
 app.set('port', port);
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,6 +14,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(express.static(process.env.ROOT));
+
+// modules
+var upload = require('./server/routes/upload')(app);
+var download = require('./server/routes/download')(app);
+var xlsParser = require('./server/routes/xls-parser')(app);
 
 // CORS
 //app.all('/*', function(req, res, next) {
