@@ -23,6 +23,7 @@ define(function(require) {
         $scope.isLoading = true;
         taskFactory.getTaskBudget({taskId: $rootScope.currentTask.projectTaskId}).then(function(resp) {
           $scope.task = resp.data.task;
+          console.log(resp);
           _.forEach($scope.task.costsByMonthYear, function(n) {
             if(n.costs.length === 0) {
               var y = n.taskInterval.year, m = n.taskInterval.month;

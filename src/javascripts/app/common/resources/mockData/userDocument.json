@@ -1,0 +1,662 @@
+{
+  "type": "getDocumentsResponse",
+  "authenticated": false,
+  "returnMessage": "Success",
+  "returnVal": "SUCCESS",
+  "approvals": [
+    {
+      "createdBy": 1,
+      "creator": {
+        "contact": {
+          "areaCode": 971,
+          "contactId": 1,
+          "email": "santosh8pun@gmail.com",
+          "firstName": "Sanjeev",
+          "lastName": "Ghimire",
+          "phoneNumber": "9801012345",
+          "title": "Er",
+          "user": {
+            "discipline": 0,
+            "userId": 1,
+            "userTypeId": 0
+          },
+          "userImagePath": "sanjeev.jpg"
+        },
+        "discipline": 0,
+        "userId": 0,
+        "userTypeId": 0
+      },
+      "documentId": 14,
+      "documentTemplate": {
+        "documentTemplateId": 22,
+        "name": "Request For Information"
+      },
+      "dueDate": "2015-04-10T05:45:00",
+      "gridKeyValues": [
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 0,
+          "key": "workDescription",
+          "modifiedBy": 0,
+          "value": "cc1"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 0,
+          "key": "costCode",
+          "modifiedBy": 0,
+          "value": "ccode1"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 0,
+          "key": "amount",
+          "modifiedBy": 0,
+          "value": "100"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 1,
+          "key": "workDescription",
+          "modifiedBy": 0,
+          "value": "cc2"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 1,
+          "key": "costCode",
+          "modifiedBy": 0,
+          "value": "ccode2"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 1,
+          "key": "amount",
+          "modifiedBy": 0,
+          "value": "200"
+        }
+      ],
+      "keyValues": [
+        {
+          "createdBy": 0,
+          "key": "username",
+          "modifiedBy": 0,
+          "value": "1"
+        },
+        {
+          "createdBy": 0,
+          "key": "company_name",
+          "modifiedBy": 0,
+          "value": "1"
+        },
+        {
+          "createdBy": 0,
+          "key": "change_order",
+          "modifiedBy": 0,
+          "value": "CP-201"
+        },
+        {
+          "createdBy": 0,
+          "key": "location",
+          "modifiedBy": 0,
+          "value": "pkr"
+        },
+        {
+          "createdBy": 0,
+          "key": "subject",
+          "modifiedBy": 0,
+          "value": "subject"
+        },
+        {
+          "createdBy": 0,
+          "key": "description_of_scope",
+          "modifiedBy": 0,
+          "value": "scope1"
+        },
+        {
+          "createdBy": 0,
+          "key": "contract_no",
+          "modifiedBy": 0,
+          "value": "4342"
+        },
+        {
+          "createdBy": 0,
+          "key": "contract_title",
+          "modifiedBy": 0,
+          "value": "title"
+        },
+        {
+          "createdBy": 0,
+          "key": "date_created",
+          "modifiedBy": 0,
+          "value": "2015-04-10T18:15:00.000Z"
+        },
+        {
+          "createdBy": 0,
+          "key": "priority",
+          "modifiedBy": 0,
+          "value": "High"
+        },
+        {
+          "createdBy": 0,
+          "key": "discipline",
+          "modifiedBy": 0,
+          "value": "ELECTRICAL"
+        },
+        {
+          "createdBy": 0,
+          "key": "category",
+          "modifiedBy": 0,
+          "value": "ERRORS"
+        },
+        {
+          "createdBy": 0,
+          "key": "schedule_impact",
+          "modifiedBy": 0,
+          "value": "YES"
+        },
+        {
+          "createdBy": 0,
+          "key": "cost_impact",
+          "modifiedBy": 0,
+          "value": "YES"
+        },
+        {
+          "createdBy": 0,
+          "key": "time_impact",
+          "modifiedBy": 0,
+          "value": "y"
+        },
+        {
+          "createdBy": 0,
+          "key": "specification",
+          "modifiedBy": 0,
+          "value": "spec"
+        },
+        {
+          "createdBy": 0,
+          "key": "drawing_no",
+          "modifiedBy": 0,
+          "value": "3434"
+        },
+        {
+          "createdBy": 0,
+          "key": "cost_code",
+          "modifiedBy": 0,
+          "value": "cc"
+        },
+        {
+          "createdBy": 0,
+          "key": "total_change_order_amount",
+          "modifiedBy": 0,
+          "value": "300"
+        }
+      ],
+      "modifiedBy": 0,
+      "name": "RFI Document",
+      "projectId": 0,
+      "status": "SUBMITTED"
+    },
+    {
+      "createdBy": 1,
+      "creator": {
+        "contact": {
+          "areaCode": 971,
+          "contactId": 1,
+          "email": "santosh8pun@gmail.com",
+          "firstName": "Sanjeev",
+          "lastName": "Ghimire",
+          "phoneNumber": "9801012345",
+          "title": "Er",
+          "user": {
+            "discipline": 0,
+            "userId": 1,
+            "userTypeId": 0
+          },
+          "userImagePath": "sanjeev.jpg"
+        },
+        "discipline": 0,
+        "userId": 0,
+        "userTypeId": 0
+      },
+      "documentId": 15,
+      "documentTemplate": {
+        "documentTemplateId": 20,
+        "name": "Purchase Order"
+      },
+      "dueDate": "2015-07-26T00:00:00",
+      "gridKeyValues": [
+        {
+          "createdBy": 0,
+          "gridId": "C000",
+          "gridRowIndex": 1,
+          "key": "gridkey1",
+          "modifiedBy": 0,
+          "value": "gridkeyvalue"
+        }
+      ],
+      "keyValues": [
+        {
+          "createdBy": 0,
+          "key": "name",
+          "modifiedBy": 0,
+          "value": "Santosh Pun"
+        }
+      ],
+      "modifiedBy": 0,
+      "name": "test doc",
+      "projectId": 0,
+      "status": "SUBMITTED"
+    }
+  ],
+  "submittals": [
+    {
+      "createdBy": 1,
+      "creator": {
+        "contact": {
+          "areaCode": 971,
+          "contactId": 1,
+          "email": "santosh8pun@gmail.com",
+          "firstName": "Sanjeev",
+          "lastName": "Ghimire",
+          "phoneNumber": "9801012345",
+          "title": "Er",
+          "user": {
+            "discipline": 0,
+            "userId": 1,
+            "userTypeId": 0
+          },
+          "userImagePath": "sanjeev.jpg"
+        },
+        "discipline": 0,
+        "userId": 0,
+        "userTypeId": 0
+      },
+      "documentId": 4,
+      "documentTemplate": {
+        "documentTemplateId": 21,
+        "name": "Change Order"
+      },
+      "dueDate": "2015-03-13T00:00:00",
+      "gridKeyValues": [],
+      "keyValues": [
+        {
+          "createdBy": 0,
+          "key": "username",
+          "modifiedBy": 0,
+          "value": "1177202090"
+        },
+        {
+          "createdBy": 0,
+          "key": "company_name",
+          "modifiedBy": 0,
+          "value": "1"
+        },
+        {
+          "createdBy": 0,
+          "key": "change_order",
+          "modifiedBy": 0,
+          "value": "CP-201"
+        },
+        {
+          "createdBy": 0,
+          "key": "location",
+          "modifiedBy": 0,
+          "value": "np"
+        },
+        {
+          "createdBy": 0,
+          "key": "subject",
+          "modifiedBy": 0,
+          "value": "np"
+        },
+        {
+          "createdBy": 0,
+          "key": "description_of_scope",
+          "modifiedBy": 0,
+          "value": "np"
+        },
+        {
+          "createdBy": 0,
+          "key": "contract_no",
+          "modifiedBy": 0,
+          "value": "99"
+        },
+        {
+          "createdBy": 0,
+          "key": "contract_title",
+          "modifiedBy": 0,
+          "value": "99"
+        },
+        {
+          "createdBy": 0,
+          "key": "date_created",
+          "modifiedBy": 0,
+          "value": "2015-03-13T18:15:00.000Z"
+        },
+        {
+          "createdBy": 0,
+          "key": "priority",
+          "modifiedBy": 0,
+          "value": "High"
+        },
+        {
+          "createdBy": 0,
+          "key": "discipline",
+          "modifiedBy": 0,
+          "value": "MECHANICAL"
+        },
+        {
+          "createdBy": 0,
+          "key": "category",
+          "modifiedBy": 0,
+          "value": "ERRORS"
+        },
+        {
+          "createdBy": 0,
+          "key": "schedule_impact",
+          "modifiedBy": 0,
+          "value": "YES"
+        },
+        {
+          "createdBy": 0,
+          "key": "cost_impact",
+          "modifiedBy": 0,
+          "value": "YES"
+        },
+        {
+          "createdBy": 0,
+          "key": "time_impact",
+          "modifiedBy": 0,
+          "value": "9"
+        },
+        {
+          "createdBy": 0,
+          "key": "specification",
+          "modifiedBy": 0,
+          "value": "99"
+        },
+        {
+          "createdBy": 0,
+          "key": "drawing_no",
+          "modifiedBy": 0,
+          "value": "99"
+        },
+        {
+          "createdBy": 0,
+          "key": "cost_code",
+          "modifiedBy": 0,
+          "value": "99"
+        },
+        {
+          "createdBy": 0,
+          "key": "total_change_order_amount",
+          "modifiedBy": 0,
+          "value": "99"
+        }
+      ],
+      "modifiedBy": 0,
+      "name": "CO Document",
+      "projectId": 0,
+      "status": "APPROVED"
+    },
+    {
+      "createdBy": 1,
+      "creator": {
+        "contact": {
+          "areaCode": 971,
+          "contactId": 1,
+          "email": "santosh8pun@gmail.com",
+          "firstName": "Sanjeev",
+          "lastName": "Ghimire",
+          "phoneNumber": "9801012345",
+          "title": "Er",
+          "user": {
+            "discipline": 0,
+            "userId": 1,
+            "userTypeId": 0
+          },
+          "userImagePath": "sanjeev.jpg"
+        },
+        "discipline": 0,
+        "userId": 0,
+        "userTypeId": 0
+      },
+      "documentId": 14,
+      "documentTemplate": {
+        "documentTemplateId": 22,
+        "name": "Request For Information"
+      },
+      "dueDate": "2015-04-10T05:45:00",
+      "gridKeyValues": [
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 0,
+          "key": "workDescription",
+          "modifiedBy": 0,
+          "value": "cc1"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 0,
+          "key": "costCode",
+          "modifiedBy": 0,
+          "value": "ccode1"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 0,
+          "key": "amount",
+          "modifiedBy": 0,
+          "value": "100"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 1,
+          "key": "workDescription",
+          "modifiedBy": 0,
+          "value": "cc2"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 1,
+          "key": "costCode",
+          "modifiedBy": 0,
+          "value": "ccode2"
+        },
+        {
+          "createdBy": 0,
+          "gridId": "CO-COSTGRID",
+          "gridRowIndex": 1,
+          "key": "amount",
+          "modifiedBy": 0,
+          "value": "200"
+        }
+      ],
+      "keyValues": [
+        {
+          "createdBy": 0,
+          "key": "username",
+          "modifiedBy": 0,
+          "value": "1"
+        },
+        {
+          "createdBy": 0,
+          "key": "company_name",
+          "modifiedBy": 0,
+          "value": "1"
+        },
+        {
+          "createdBy": 0,
+          "key": "change_order",
+          "modifiedBy": 0,
+          "value": "CP-201"
+        },
+        {
+          "createdBy": 0,
+          "key": "location",
+          "modifiedBy": 0,
+          "value": "pkr"
+        },
+        {
+          "createdBy": 0,
+          "key": "subject",
+          "modifiedBy": 0,
+          "value": "subject"
+        },
+        {
+          "createdBy": 0,
+          "key": "description_of_scope",
+          "modifiedBy": 0,
+          "value": "scope1"
+        },
+        {
+          "createdBy": 0,
+          "key": "contract_no",
+          "modifiedBy": 0,
+          "value": "4342"
+        },
+        {
+          "createdBy": 0,
+          "key": "contract_title",
+          "modifiedBy": 0,
+          "value": "title"
+        },
+        {
+          "createdBy": 0,
+          "key": "date_created",
+          "modifiedBy": 0,
+          "value": "2015-04-10T18:15:00.000Z"
+        },
+        {
+          "createdBy": 0,
+          "key": "priority",
+          "modifiedBy": 0,
+          "value": "High"
+        },
+        {
+          "createdBy": 0,
+          "key": "discipline",
+          "modifiedBy": 0,
+          "value": "ELECTRICAL"
+        },
+        {
+          "createdBy": 0,
+          "key": "category",
+          "modifiedBy": 0,
+          "value": "ERRORS"
+        },
+        {
+          "createdBy": 0,
+          "key": "schedule_impact",
+          "modifiedBy": 0,
+          "value": "YES"
+        },
+        {
+          "createdBy": 0,
+          "key": "cost_impact",
+          "modifiedBy": 0,
+          "value": "YES"
+        },
+        {
+          "createdBy": 0,
+          "key": "time_impact",
+          "modifiedBy": 0,
+          "value": "y"
+        },
+        {
+          "createdBy": 0,
+          "key": "specification",
+          "modifiedBy": 0,
+          "value": "spec"
+        },
+        {
+          "createdBy": 0,
+          "key": "drawing_no",
+          "modifiedBy": 0,
+          "value": "3434"
+        },
+        {
+          "createdBy": 0,
+          "key": "cost_code",
+          "modifiedBy": 0,
+          "value": "cc"
+        },
+        {
+          "createdBy": 0,
+          "key": "total_change_order_amount",
+          "modifiedBy": 0,
+          "value": "300"
+        }
+      ],
+      "modifiedBy": 0,
+      "name": "RFI Document",
+      "projectId": 0,
+      "status": "SUBMITTED"
+    },
+    {
+      "createdBy": 1,
+      "creator": {
+        "contact": {
+          "areaCode": 971,
+          "contactId": 1,
+          "email": "santosh8pun@gmail.com",
+          "firstName": "Sanjeev",
+          "lastName": "Ghimire",
+          "phoneNumber": "9801012345",
+          "title": "Er",
+          "user": {
+            "discipline": 0,
+            "userId": 1,
+            "userTypeId": 0
+          },
+          "userImagePath": "sanjeev.jpg"
+        },
+        "discipline": 0,
+        "userId": 0,
+        "userTypeId": 0
+      },
+      "documentId": 15,
+      "documentTemplate": {
+        "documentTemplateId": 20,
+        "name": "Purchase Order"
+      },
+      "dueDate": "2015-07-26T00:00:00",
+      "gridKeyValues": [
+        {
+          "createdBy": 0,
+          "gridId": "C000",
+          "gridRowIndex": 1,
+          "key": "gridkey1",
+          "modifiedBy": 0,
+          "value": "gridkeyvalue"
+        }
+      ],
+      "keyValues": [
+        {
+          "createdBy": 0,
+          "key": "name",
+          "modifiedBy": 0,
+          "value": "Santosh Pun"
+        }
+      ],
+      "modifiedBy": 0,
+      "name": "test doc",
+      "projectId": 0,
+      "status": "SUBMITTED"
+    }
+  ],
+  "totalApprovals": 2,
+  "totalSubmits": 3
+}

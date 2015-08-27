@@ -130,16 +130,25 @@ define(function() {
       $scope.goDashboard = function(pj) {
         projectContext.setProject(pj);
 
-        if($rootScope.currentUserInfo) {
+        // get notifications
+        if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
           var requestPayload = {
             "pageNumber": 1,
             "perPageLimit": constant.app.settings.userNotificationsPageSize,
             "userId": $rootScope.currentUserInfo.userId
           };
           userNotificationsFactory.getAll(requestPayload);
-        }
 
-        $state.go('app.dashboard');
+          // get user details and permissions
+          accountFactory.getUserProfileDetails($rootScope.currentUserInfo.userId)
+            .success(function(resp) {
+              var newObj = angular.copy($rootScope.currentUserInfo);
+              newObj.menuProfile = resp.menuProfile;
+              newObj.permissionProfile = resp.permissionProfile;
+              userContext.fillInfo(newObj, true);
+              $state.go('app.dashboard');
+            });
+        }
       };
 
       $scope.reMapData = function(list) {

@@ -1,0 +1,24 @@
+{
+  "type": "taskListCountResponse",
+  "authenticated": false,
+  "returnMessage": "Successfully retrieved tasks and counts",
+  "returnVal": "SUCCESS",
+  "taskCountByStatus": [
+    {
+      "statusType": "Active",
+      "taskCount": 2
+    },
+    {
+      "statusType": "Ongoing",
+      "taskCount": 5
+    },
+    {
+      "statusType": "Completed",
+      "taskCount": 3
+    },
+    {
+      "statusType": "Pending",
+      "taskCount": 7
+    }
+  ]
+}

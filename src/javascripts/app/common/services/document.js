@@ -13,22 +13,28 @@ define(function(require) {
       function(constant, $http) {
         var service = {};
         service.getUserDocument = function(projectId) {
-          return $http.post(constant.resourceUrl + '/documents/getUserDocument', {
-            projectId:projectId
+          return $http.post(constant.domain + '/documents/getUserDocument', {
+            projectId: projectId
+          });
+        };
+
+        service.getDocumentById = function(docId) {
+          return $http.post(constant.domain + '/documents/getDocument', {
+            dcoumentId: docId
           });
         };
 
         service.getUploadedDocumentList = function(projectId) {
-          return $http.post(constant.resourceUrl + '/documents/getalldocuments/', {
-            projectId:projectId
+          return $http.post(constant.domain + '/documents/getalldocuments/', {
+            projectId: projectId
           });
         };
 
-        service.getCategories = function(){
+        service.getCategories = function() {
           return $http.post(constant.domain + '/upload/projectFileCategoryList', {});
         };
 
-        service.saveUploadedDocsInfo = function(data){
+        service.saveUploadedDocsInfo = function(data) {
           return $http.post(constant.domain + '/upload/saveUploadedDocsInfo', data);
         };
 

@@ -12,39 +12,26 @@ define(function(require) {
       var service = {}, intervalFunction;
 
       service.getByPage = function(page, size) {
-        //var deferred = $q.defer();
-
-        if ($rootScope.currentProjectInfo) {
+        if($rootScope.currentProjectInfo) {
           var requestPayload = {
             "pageNumber": page,
             "perPageLimit": size,
             "userId": $rootScope.currentUserInfo.userId
           };
 
-          //$http.post(constant.domain + '/notification/getNotifications', param); // error 401 405
           return $http.post('http://app.ontargetcloud.com:9000/notification/getNotifications/', requestPayload);
-            //.then(
-            //function (resp) {
-            //  deferred.resolve(resp.data.notificationList);
-            //}, function (err) {
-            //  deferred.reject(err);
-            //});
         }
-        //return deferred.promise;
       };
 
       service.getAll = function(param) {
         var deferred = $q.defer();
-
-        if ($rootScope.currentProjectInfo) {
-          //$http.post(constant.domain + '/notification/getNotifications', param); // error 401 405
-          $http.post('http://app.ontargetcloud.com:9000/notification/getNotifications/', param).then(
-            function (resp) {
+        if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
+          $http.post(constant.domain + '/notification/getNotifications', param)
+            .then(function(resp) {
               $rootScope.userNotifications = resp.data.notificationList;
               notifications.getNotificationSuccess();
-
-              deferred.resolve();
-            }, function (err) {
+              deferred.resolve(resp.notificationList);
+            }, function(err) {
               deferred.reject(err);
             });
         }

@@ -39,7 +39,7 @@ define(function(require) {
           elem.parent().children('[toggle-project-chooser]').off('click');
         });
       }
-    }
+    };
   }]);
   return module;
 });

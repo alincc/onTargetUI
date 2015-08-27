@@ -16,19 +16,23 @@ define(function() {
         projectId: $rootScope.activitySelected.projectId,
         members: []
       };
-
-      _.forEach($scope.task.assignee, function(assignee) {
+      /*_.forEach($scope.task.assignee, function (assignee){
         $scope.assignees.push(assignee.contact);
         $scope.model.members.push(assignee.contact.contactId);
+      });*/
+      _.forEach($scope.task.assignee, function (assignee){
+        $scope.assignees.push(assignee);
+        $scope.model.members.push(assignee.userId);
       });
 
       $scope.getContacts = function() {
         taskFactory.getContacts({projectId: $rootScope.currentProjectInfo.projectId}).then(
           function(resp) {
             var memberList = resp.data.projectMemberList;
-            _.forEach(memberList, function(assignee) {
-              if(_.findIndex($scope.assignees, 'contactId', assignee.contact.contactId) < 0) {
-                $scope.contacts.push(assignee.contact);
+
+            _.forEach(memberList, function (assignee){
+              if(_.findIndex($scope.assignees, 'userId', assignee.userId)<0) {
+                $scope.contacts.push(assignee);
               }
             });
             // _.difference($scope.contacts, $scope.assignees);
@@ -58,7 +62,7 @@ define(function() {
       $scope.removeUserFromTask = function(assignee) {
         $scope.onAddOwner = false;
         _.remove($scope.model.members, function(n) {
-          return n === assignee.contactId;
+          return n === assignee.userId;
         });
         taskFactory.assignUserToTask($scope.model).then(
           function(resp) {
@@ -71,8 +75,9 @@ define(function() {
         );
       };
 
-      $scope.assignUserToTask = function() {
-        $scope.model.members.push($scope.assignee.contactId);
+
+      $scope.assignUserToTask = function (){
+        $scope.model.members.push($scope.assignee.userId);
         taskFactory.assignUserToTask($scope.model).then(
           function(resp) {
             $scope.assignees.push($scope.assignee);

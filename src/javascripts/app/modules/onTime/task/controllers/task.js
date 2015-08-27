@@ -3,6 +3,7 @@
  */
 define(function() {
   'use strict';
+  var angular = require('angular');
   var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'taskFactory', 'notifications', '$timeout', 'appConstant', '$q',
     function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, taskFactory, notifications, $timeout, appConstant, $q) {
       var createTaskModalInstance, editTaskModalInstance, deleteTaskModalInstance;

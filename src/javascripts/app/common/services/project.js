@@ -21,6 +21,12 @@ define(function(require) {
           return $http.post(constant.domain + '/project/getProjectsByUser/', model);
         };
 
+        service.getProjectById = function(projectId){
+          return $http.post(constant.domain + '/project/getProject', {
+            projectId: projectId
+          });
+        };
+
         service.addProject = function(model) {
           return $http.post(constant.domain + '/project/addProject', model);
         };
@@ -48,15 +54,19 @@ define(function(require) {
         };
 
         service.getDashboardBi = function(projectId) {
-          return $http.post(constant.resourceUrl + '/dashboard/getDashboardBi', {
+          return $http.post(constant.domain + '/report/bireport', {
             projectId: projectId
           });
         };
 
         service.getTaskCount = function (projectId){
-          return $http.post(constant.resourceUrl + '/tasks/getTaskCountsOfProject', {
+          return $http.post(constant.domain + '/tasks/getTaskCountsOfProject', {
             projectId: projectId
           });
+        };
+
+        service.getActivityLog = function (data){
+          return $http.post(constant.domain + '/activityLog/getLog', data);
         };
         return service;
       }

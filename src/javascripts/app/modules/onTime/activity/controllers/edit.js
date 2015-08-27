@@ -6,7 +6,7 @@ define(function (){
   var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'activity', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, activity){
 
     $scope.currentProject = $rootScope.currentProjectInfo;
-    console.log($scope.currentProject);
+    console.log(activity);
     $scope.project = {
       projectParentId: activity.projectParentId,
       projectTypeId: activity.projectTypeId,
@@ -19,6 +19,17 @@ define(function (){
       status: activity.status
     };
 
+    //get date area of tasks
+    var maxStartDate = activity.taskList[0].startDate, minEndDate = activity.taskList[0].endDate;
+    _.forEach(activity.taskList, function(n) {
+      if(n.startDate < maxStartDate){
+        maxStartDate = n.startDate;
+      }
+      if(n.endDate > minEndDate) {
+        minEndDate = n.endDate;
+      }
+    });
+
     $scope.model = {
       userId: userContext.authentication().userData.userId,
       project: $scope.project
@@ -28,7 +39,9 @@ define(function (){
     $scope.maxDate2 = $scope.currentProject.endDate;
     $scope.$watchCollection('[project.startDate, project.endDate]', function(e){
       $scope.minDate = $scope.project.startDate ? $scope.project.startDate : $scope.currentProject.startDate;
+      $scope.minDate = $scope.minDate > minEndDate ? $scope.minDate : minEndDate;
       $scope.maxDate = $scope.project.endDate ? $scope.project.endDate : $scope.currentProject.endDate;
+      $scope.maxDate = $scope.maxDate < maxStartDate ? $scope.maxDate : maxStartDate;
     });
 
     $scope.projectStatuses = projectFactory.getProjectStatuses();

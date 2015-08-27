@@ -1,5 +1,6 @@
 define(function() {
   'use strict';
+  var angular = require('angular');
   var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'uploadFactory', '$timeout', 'appConstant', 'toaster',
     function($scope, $rootScope, userContext, $state, accountFactory, notifications, uploadFactory, $timeout, appConstant, toaster) {
 

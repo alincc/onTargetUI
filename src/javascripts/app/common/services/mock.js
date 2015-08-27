@@ -12,14 +12,38 @@ define(function(require) {
     earnedValueReport = require('text!./../resources/mockData/earnedValueReport.json'),
     documentCategory = require('text!./../resources/mockData/documentCategory.json'),
     fileComment = require('text!./../resources/mockData/fileComment.json'),
+    projectTask = require('text!./../resources/mockData/projectTask.json'),
+    taskCountOfProject = require('text!./../resources/mockData/taskCountOfProject.json'),
+    taskAttachment = require('text!./../resources/mockData/taskAttachment.json'),
+    addComment = require('text!./../resources/mockData/addComment.json'),
+    biReport = require('text!./../resources/mockData/biReport.json'),
+    notifications = require('text!./../resources/mockData/notifications.json'),
+    userDocument = require('text!./../resources/mockData/userDocument.json'),
+    activityLog = require('text!./../resources/mockData/activityLog.json'),
     module;
 
   module = angular.module('common.services.mock', ['ngMockE2E', 'app.config', 'ngResource']);
 
   module.run(["$httpBackend", 'appConstant', '$resource', function($httpBackend, constant, $resource) {
 
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/notification\/getNotifications/).respond(function(method, url, data) {
+      return [200, angular.fromJson(notifications)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/activityLog\/getLog/).respond(function(method, url, data) {
+      return [200, angular.fromJson(activityLog)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/documents\/getUserDocument/).respond(function(method, url, data) {
+      return [200, angular.fromJson(userDocument)];
+    });
+
     $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/report\/earnedValueReport/).respond(function(method, url, data) {
       return [200, angular.fromJson(earnedValueReport)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/report\/bireport/).respond(function(method, url, data) {
+      return [200, angular.fromJson(biReport)];
     });
 
     $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/projectFileCategoryList/).respond(function(method, url, data) {
@@ -46,6 +70,57 @@ define(function(require) {
         "returnVal" : "SUCCESS"
       }];
     });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/getProjectTaskList/).respond(function(method, url, data) {
+      return [200, angular.fromJson(projectTask)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/addTask/).respond(function(method, url, data) {
+      return [200, {
+        "authenticated": false,
+        "returnMessage": "Successfully added task",
+        "returnVal": "SUCCESS"
+      }];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/deleteTask/).respond(function(method, url, data) {
+      return [200, {
+        "type" : "taskDetailResponse",
+        "authenticated" : false,
+        "returnMessage" : "Task deleted successfully",
+        "returnVal" : "SUCCESS"
+      }];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/tasks\/getTaskCountsOfProject/).respond(function(method, url, data) {
+      return [200, angular.fromJson(taskCountOfProject)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/assignUserToTask/).respond(function(method, url, data) {
+      return [200, {
+        "authenticated": false,
+        "returnMessage": "Successfully assigned task",
+        "returnVal": "SUCCESS"
+      }];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/getTaskAttachments/).respond(function(method, url, data) {
+      return [200, angular.fromJson(taskAttachment)];
+    });
+
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/addComment/).respond(function(method, url, data) {
+      return [200, angular.fromJson(addComment)];
+    });
+    $httpBackend.whenPOST(/http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/saveTaskFile/).respond(function(method, url, data){
+      return [200, {
+        "type": "insertResponse",
+        "authenticated": false,
+        "returnMessage": "Successfully written",
+        "returnVal": "SUCCESS",
+        "id": 0
+      }];
+    });
+
 
 
     $httpBackend.whenGET(/.*/).passThrough();

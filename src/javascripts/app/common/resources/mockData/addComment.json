@@ -1,0 +1,26 @@
+{
+  "type": "userResponse",
+  "authenticated": false,
+  "returnMessage": "Successfully added Comment",
+  "returnVal": "SUCCESS",
+  "user": {
+    "contact": {
+      "areaCode": 911,
+      "contactId": 1,
+      "email": "santosh8pun@gmail.com",
+      "firstName": "Sanjeev",
+      "lastName": "Ghimire",
+      "phoneNumber": "9898999",
+      "title": "Mr",
+      "user": {
+        "discipline": 0,
+        "userId": 1,
+        "userTypeId": 0
+      },
+      "userImagePath": "assets/profile/a2.jpeg"
+    },
+    "discipline": 0,
+    "userId": 0,
+    "userTypeId": 0
+  }
+}

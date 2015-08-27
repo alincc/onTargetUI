@@ -10,159 +10,146 @@ define(function(require) {
 
   module.factory('accountFactory', ['$http', 'appConstant', 'userContext', '$q', '$rootScope', 'projectContext', 'userNotificationsFactory',
     function($http, constant, userContext, $q, $rootScope, projectContext, userNotificationsFactory) {
-    var services = {};
-    services.register = function(data) {
-      return $http.post(constant.domain + '/collaborate/registernewuser', data);
-    };
-    //login
-    services.login = function(userName, password) {
-      var deferred = $q.defer();
-      var loginUser = {
-        username: userName,
-        password: password
+      var services = {};
+      services.register = function(data) {
+        return $http.post(constant.domain + '/collaborate/registernewuser', data);
       };
-      $http.post(constant.domain + '/user/signin', loginUser)
-        .then(function(resp) {
-          // Save access token and refresh token
-          userContext.setToken(resp.data.token);
 
-          //Get user profile
-          if(resp.data.user) {
-            var user = {
-              userId: resp.data.user.userId,
-              accountStatus: null
-            };
-            services.getProfile(user).then(
-              function(resp) {
+      //login
+      services.login = function(userName, password) {
+        var deferred = $q.defer();
+        var loginUser = {
+          username: userName,
+          password: password
+        };
+        $http.post(constant.domain + '/user/signin', loginUser)
+          .then(function(resp) {
+            // Save access token and refresh token
+            userContext.setToken(resp.data.token);
+
+            //Get user profile
+            if(resp.data.user) {
+              services.userDetails({
+                "userId": resp.data.user.userId,
+                "accountStatus": null
+              }).then(function(resp) {
                 var userData = angular.extend(resp.data.user, {
                   username: userName
                 });
                 userContext.fillInfo(userData, true);
 
-                var requestPayload = {
-                  "pageNumber": 1,
-                  "perPageLimit": constant.app.settings.userNotificationsPageSize,
-                  "userId": $rootScope.currentUserInfo.userId
-                };
-                userNotificationsFactory.getAll(requestPayload);
-
                 deferred.resolve();
               }, function(err) {
                 deferred.reject(err);
               });
+            }
+            else {
+              deferred.reject(resp);
+            }
+          }, function(err) {
+            deferred.reject(err);
+          });
+        return deferred.promise;
+      };
+
+      services.logout = function() {
+        var deferred = $q.defer();
+        $http.post(constant.domain + '/user/logout', null, {
+          params: {
+            'username': $rootScope.currentUserInfo.username
           }
-          else {
-            deferred.reject(resp);
+        })
+          .then(function() {
+            userContext.clearInfo();
+            projectContext.clearInfo();
+
+            userNotificationsFactory.stopGetAll();
+            deferred.resolve();
+          }, function() {
+            userContext.clearInfo();
+            projectContext.clearInfo();
+            deferred.resolve();
           }
-        }, function(err) {
-          deferred.reject(err);
+        );
+        return deferred.promise;
+      };
+
+      services.changePassword = function(data) {
+        return $http.post(constant.domain + '/api/account/ChangePassword', data, {
+          headers: {
+            'Authorization': false
+          }
         });
-      return deferred.promise;
-    };
+      };
 
-    services.logout = function() {
-      var deferred = $q.defer();
-      $http.post(constant.domain + '/user/logout', null, {
-        params: {
-          'username': $rootScope.currentUserInfo.username
-        }
-      })
-        .then(function() {
-          userContext.clearInfo();
-          projectContext.clearInfo();
+      //get profile
+      services.userDetails = function(user) {
+        return $http.post(constant.domain + '/profile/getUserDetails', user);
+      };
 
-          userNotificationsFactory.stopGetAll();
-          deferred.resolve();
-        }, function() {
-          userContext.clearInfo();
-          projectContext.clearInfo();
-          deferred.resolve();
-        }
-      );
-      return deferred.promise;
-    };
+      services.getUserProfileDetails = function(userId) {
+        return $http.post(constant.domain + '/profile/userProfileInfo', {
+          userId: userId
+        });
+      };
 
-    //{
-    //  "OldPassword": "sample string 1",
-    //  "NewPassword": "sample string 2",
-    //  "ConfirmPassword": "sample string 3"
-    //}
+      //forgot password
+      services.forgotPassword = function(user) {
+        return $http.post(constant.domain + '/profile/forgotPasswordRequest', user, {
+          headers: {
+            'Authorization': false
+          }
+        });
+      };
 
-    services.changePassword = function(data) {
-      return $http.post(constant.domain + '/api/account/ChangePassword', data, {
-        headers: {
-          'Authorization': false
-        }
-      });
-    };
+      services.demoSignup = function(user) {
+        return $http.post(constant.domain + '/onTargetInvitation/inviteToNewAccount', user);
+      };
 
-    //get profile
-    services.getProfile = function(user) {
-      return $http.post(constant.domain + '/profile/getUserDetails', user);
-    };
+      services.validateSignupToken = function(tokendata) {
+        return $http.get(constant.domain + '/register/validateLink/?q=' + tokendata);
+      };
 
-    //forgot password
-    services.forgotPassword = function(user) {
-      return $http.post(constant.domain + '/profile/forgotPasswordRequest', user, {
-        headers: {
-          'Authorization': false
-        }
-      });
-    };
+      services.validateResetPasswordToken = function(tokendata) {
+        return $http.get(constant.domain + '/profile/validateForgotPassword/' + tokendata);
+      };
 
-    //
-    //services.resetPassword = function(token, password) {
-    //  return $http.post(constant.domain + '/api/account/resetpassword', {token: token, password: password});
-    //};
+      services.resetForgotPassword = function(model) {
+        return $http.post(constant.domain + "/profile/changeForgotPassword", model, {
+          headers: {
+            'Authorization': false
+          }
+        });
+      };
 
-    services.demoSignup = function(user) {
-      return $http.post(constant.domain + '/onTargetInvitation/inviteToNewAccount', user);
-    };
-
-    services.validateSignupToken = function(tokendata) {
-      return $http.post(constant.resourceUrl + '/collaborate/validatetoken/' + tokendata, null);
-    };
-
-    services.validateResetPasswordToken = function(tokendata) {
-      return $http.post(constant.resourceUrl + '/profile/validateForgotPasswordToken/' + tokendata, null);
-    };
-
-    services.resetForgotPassword = function(model) {
-      return $http.post(constant.domain + "/profile/changeForgotPassword", model, {
-        headers: {
-          'Authorization': false
-        }
-      });
-    };
-
-    services.registerOntargetUser = function(formdata) {
-      return $http.post(constant.domain + "/register/createUser/", formdata, {
-        headers: {
-          AutoAlert: true
-        }
-      });
-    };
-
-    services.updateProfile = function(userInfo) {
-      return $http.post(constant.domain + '/profile/updateUserProfile', {
-          userProfileInfo: userInfo
-        },
-        {
+      services.registerOntargetUser = function(formdata) {
+        return $http.post(constant.domain + "/register/createUser/", formdata, {
           headers: {
             AutoAlert: true
           }
         });
-    };
+      };
 
-    services.getSafety = function() {
-      return $http.get(constant.domain + '/profile/getSafetyInfoForUser', {
-        params: {
-          userId: $rootScope.currentUserInfo.userId
-        }
-      });
-    };
+      services.updateProfile = function(userInfo) {
+        return $http.post(constant.domain + '/profile/updateUserProfile', {
+            userProfileInfo: userInfo
+          },
+          {
+            headers: {
+              AutoAlert: true
+            }
+          });
+      };
 
-    return services;
-  }]);
+      services.getSafety = function() {
+        return $http.get(constant.domain + '/profile/getSafetyInfoForUser', {
+          params: {
+            userId: $rootScope.currentUserInfo.userId
+          }
+        });
+      };
+
+      return services;
+    }]);
   return module;
 });

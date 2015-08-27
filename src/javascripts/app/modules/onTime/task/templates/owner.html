@@ -1,7 +1,7 @@
 <div ng-controller="OwnerTaskController" class="task-owner m-t-xs m-b-xs">
     <div class="no-result text-muted m-b-xs" ng-if="!assignees.length">This task has not been assigned yet.</div>
     <div ng-repeat="assignee in assignees" class="ow-item">
-        <span><i class="fa fa-user"></i>&nbsp;&nbsp;<span class="name">{{assignee.firstName}}&nbsp;{{assignee.lastName}}</span></span>
+        <span><i class="fa fa-user"></i>&nbsp;&nbsp;<span class="name">{{assignee.contact.firstName}}&nbsp;{{assignee.contact.lastName}}</span></span>
         <button class="btn btn-xs btn-warning" ng-click="removeUserFromTask(assignee)"><i class="fa fa-minus"></i>
             Remove
         </button>
@@ -12,7 +12,7 @@
                 <div class="input-group">
                     <input type="text" ng-model="assignee"
                            typeahead-append-to-body="true"
-                           typeahead="contact as contact.firstName+' '+contact.lastName for contact in contacts | filter:$viewValue | limitTo:8"
+                           typeahead="contact as contact.contact.firstName+' '+contact.contact.lastName for contact in contacts | filter:$viewValue | limitTo:8"
                            class="form-control" placeholder="Enter Owner Name">
               <span class="input-group-btn">
                 <button class="btn btn-primary" ng-click="assignUserToTask()"><i class="fa fa-plus"></i> Add</button>

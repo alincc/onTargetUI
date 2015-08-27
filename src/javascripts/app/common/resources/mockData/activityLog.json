@@ -1,0 +1,23 @@
+{
+  "type": "activityLogResponse",
+  "authenticated": false,
+  "returnMessage": "Activity log read",
+  "returnVal": "SUCCESS",
+  "logs": [
+    {
+      "category": 2,
+      "id": 3,
+      "text": "Project project8 updated by Sanjeev Ghimire",
+      "tsInsert": 1436538813000,
+      "userImage": "assets/profile/a2.jpeg"
+    },
+    {
+      "category": 2,
+      "id": 2,
+      "text": "New Project project8 added by Sanjeev Ghimire",
+      "tsInsert": 1436538795000,
+      "userImage": "assets/profile/a2.jpeg"
+    }
+  ],
+  "totalActivity": 2
+}

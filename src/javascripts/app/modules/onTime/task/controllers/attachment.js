@@ -66,6 +66,30 @@ define(function(require) {
 
       $scope.getTaskAttachments();
 
+      /*$scope.uploadFile = function(upload) {
+        var file = upload.files[0];
+        $scope.isUploadAvatar = true;
+          uploadFactory.upload(file, 'task').progress(function (evt) {
+          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+          //$scope.log = 'progress: ' + progressPercentage + '% ' +
+          //  evt.config.file.name + '\n' + $scope.log;
+          $scope.percentage = progressPercentage;
+        }).success(function (data, status, headers, config) {
+          $timeout(function () {
+            console.log(data);
+            $scope.model.fileName = file.name;
+            taskFactory.saveTaskFile($scope.model).then(
+                function (resp) {
+                  uploadSuccess();
+                  //toaster.pop("success", "Success", resp.data.returnMessage);
+                });
+            $scope.isUploadAvatar = false;
+          });
+        })
+            .error(function () {
+              $scope.isUploadAvatar = false;
+            });
+      };*/
     }];
   return controller;
 });

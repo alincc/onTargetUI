@@ -276,15 +276,14 @@ define(function(require) {
         );
 
         // Activity
-        $scope.activityLogModel = {
-          pageNumber: 1,
-          perPageLimit: 50,
-          projectId: $scope.currentProject.projectId
-        };
         $scope.activityLogs = [];
         $scope.isActivityLogLoading = true;
 
-        activityFactory.getActivityLog($scope.activityLogModel).then(
+        projectFactory.getActivityLog({
+          "projectId" : $scope.currentProject.projectId,
+          "pageNumber" : 1,
+          "perPageLimit" : 10
+        }).then(
           function(resp) {
             $scope.activityLogs = resp.data.logs;
             $scope.isActivityLogLoading = false;

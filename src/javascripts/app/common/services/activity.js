@@ -14,6 +14,18 @@ define(function(require) {
       function(constant, $http) {
         var service = {};
 
+        service.getActivityOfProject = function(projectId){
+          return $http.post(constant.domain + '/project/getActivityOfProject', {
+            projectId: projectId
+          });
+        };
+
+        service.getActivityById = function(activityId){
+          return $http.post(constant.domain + '/project/getProject', {
+            projectId: activityId
+          });
+        };
+
         service.addActivity = function(model) {
           return $http.post(constant.resourceUrl + '/project/createNewActivity', model, {
             headers: {
@@ -28,10 +40,6 @@ define(function(require) {
               AutoAlert: true
             }
           });
-        };
-
-        service.getActivityLog = function(model) {
-          return $http.post(constant.resourceUrl + '/activitylog/getallactivitylogs', model);
         };
 
         service.import = function(data) {

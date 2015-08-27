@@ -1,0 +1,237 @@
+{
+  "type": "notificationResponse",
+  "authenticated": false,
+  "returnMessage": "notification read",
+  "returnVal": "SUCCESS",
+  "notificationList": [
+    {
+      "id": 77,
+      "notificationAttributes": [
+        {
+          "key": "activityId",
+          "value": "26"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "ACTIVITY",
+      "status": "NEW",
+      "text": "Activity activity4  updated by Sanjeev Ghimire",
+      "tsInsert": 1437500348000,
+      "userId": 1
+    },
+    {
+      "id": 76,
+      "notificationAttributes": [
+        {
+          "key": "activityId",
+          "value": "26"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "ACTIVITY",
+      "status": "NEW",
+      "text": "New Activity activity4 added by Sanjeev Ghimire",
+      "tsInsert": 1437500272000,
+      "userId": 1
+    },
+    {
+      "id": 75,
+      "notificationAttributes": [
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "ACTIVITY",
+      "status": "NEW",
+      "text": "Activity activity1  updated by Sanjeev Ghimire",
+      "tsInsert": 1437500206000,
+      "userId": 1
+    },
+    {
+      "id": 74,
+      "notificationAttributes": [
+        {
+          "key": "commentId",
+          "value": "15"
+        },
+        {
+          "key": "taskId",
+          "value": "1"
+        },
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "COMMENT",
+      "status": "NEW",
+      "text": "Comment cde added on task activity1 task1",
+      "tsInsert": 1437499892000,
+      "userId": 1
+    },
+    {
+      "id": 73,
+      "notificationAttributes": [
+        {
+          "key": "commentId",
+          "value": "14"
+        },
+        {
+          "key": "taskId",
+          "value": "1"
+        },
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "COMMENT",
+      "status": "NEW",
+      "text": "Comment abc added on task activity1 task1",
+      "tsInsert": 1437499881000,
+      "userId": 1
+    },
+    {
+      "id": 72,
+      "notificationAttributes": [
+        {
+          "key": "commentId",
+          "value": "13"
+        },
+        {
+          "key": "taskId",
+          "value": "1"
+        },
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "COMMENT",
+      "status": "NEW",
+      "text": "Comment test added on task activity1 task1",
+      "tsInsert": 1437495051000,
+      "userId": 1
+    },
+    {
+      "id": 71,
+      "notificationAttributes": [
+        {
+          "key": "commentId",
+          "value": "12"
+        },
+        {
+          "key": "taskId",
+          "value": "1"
+        },
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "COMMENT",
+      "status": "NEW",
+      "text": "Comment s added on task activity1 task1",
+      "tsInsert": 1437489295000,
+      "userId": 1
+    },
+    {
+      "id": 70,
+      "notificationAttributes": [
+        {
+          "key": "commentId",
+          "value": "11"
+        },
+        {
+          "key": "taskId",
+          "value": "21"
+        },
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "COMMENT",
+      "status": "NEW",
+      "text": "Comment test added on task ttttttt242423",
+      "tsInsert": 1437414015000,
+      "userId": 1
+    },
+    {
+      "id": 69,
+      "notificationAttributes": [
+        {
+          "key": "taskId",
+          "value": "21"
+        },
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "TASK",
+      "status": "NEW",
+      "text": "Task ttttttt242423 updated by Sanjeev Ghimire",
+      "tsInsert": 1437412935000,
+      "userId": 1
+    },
+    {
+      "id": 68,
+      "notificationAttributes": [
+        {
+          "key": "taskId",
+          "value": "22"
+        },
+        {
+          "key": "activityId",
+          "value": "4"
+        },
+        {
+          "key": "projectId",
+          "value": "2"
+        }
+      ],
+      "notificationType": "TASK",
+      "status": "NEW",
+      "text": "New task dsadasd added by Sanjeev Ghimire",
+      "tsInsert": 1437410330000,
+      "userId": 1
+    }
+  ],
+  "totalNotification": 71
+}

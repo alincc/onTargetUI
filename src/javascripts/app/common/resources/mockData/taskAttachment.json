@@ -1,0 +1,239 @@
+{
+  "type": "getTaskAttachmentResponse",
+  "authenticated": false,
+  "returnVal": "SUCCESS",
+  "taskAttachments": [
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "a2.jpeg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "3d-building-construction-image_1600x1200_78628.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "3d-building-construction-image_1600x1200_78628.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "1.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "1.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "3d-building-construction-image_1600x1200_78628.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "1111.jpeg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "1.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "office.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "const3.jpeg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    },
+    {
+      "contact": {
+        "areaCode": 911,
+        "contactId": 1,
+        "email": "santosh8pun@gmail.com",
+        "firstName": "Sanjeev",
+        "lastName": "Ghimire",
+        "phoneNumber": "9898999",
+        "title": "Mr",
+        "user": {
+          "discipline": 0,
+          "userId": 1,
+          "userTypeId": 0
+        },
+        "userImagePath": "assets/profile/a2.jpeg"
+      },
+      "fileName": "1.jpg",
+      "location": "/assets/task/",
+      "taskId": 1,
+      "userId": 1
+    }
+  ],
+  "taskId": 1
+}

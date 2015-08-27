@@ -1,0 +1,15 @@
+{
+  "type": "taskListCountResponse",
+  "authenticated": false,
+  "returnMessage": "Successfully retrieved dashboard bi report",
+  "returnVal": "SUCCESS",
+  "treesSaved": {
+    "treesSaved": 1
+  },
+  "timeSaved": {
+    "timeSavedValue": 1
+  },
+  "noAccidentReport": {
+    "noAccidentDays": 1
+  }
+}

@@ -103,6 +103,26 @@ define(function(require) {
           },
           responseError: function(response) {
             console.log(response);
+
+            if(response.status === 400) {
+              if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
+                var errorMessageHtml = '';
+                _.each(response.data, function(el) {
+                  if(el.path !== '0') {
+                    errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
+                  } else {
+                    errorMessageHtml += '- ' + el.message + ' </br>';
+                  }
+                });
+                toaster.pop({
+                  type: 'error',
+                  title: 'Error',
+                  body: errorMessageHtml,
+                  bodyOutputType: 'trustedHtml'
+                });
+              }
+            }
+
             //if(response.status === 401) {
             //  var deferred = $q.defer();
             //  if(!inflightAuthRequest) {

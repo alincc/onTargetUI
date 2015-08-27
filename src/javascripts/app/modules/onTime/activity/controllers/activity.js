@@ -163,9 +163,8 @@ define(function(require) {
         $scope.getUserProject();
       }
     });
-
-    notifications.onTaskCreated($scope, function() {
-      $scope.getUserProject();
+    notifications.onTaskDeleted($scope, function (){
+      //$scope.getUserProject();
     });
 
     // Events

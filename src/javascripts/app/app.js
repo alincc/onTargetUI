@@ -63,8 +63,7 @@ define(function (require){
         // Load Authentication data from localstorage
         userContext.loadFromLocal();
         projectContext.loadProject();
-
-        if($rootScope.currentUserInfo) {
+        if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
           var requestPayload = {
             "pageNumber": 1,
             "perPageLimit": constant.app.settings.userNotificationsPageSize,
