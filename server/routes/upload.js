@@ -6,6 +6,7 @@ var rimraf = require("rimraf");
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var rootPath = process.env.ROOT;
+//var cors = require('cors');
 
 // paths/constants
 var fileInputName = "file",

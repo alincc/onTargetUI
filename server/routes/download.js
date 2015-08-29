@@ -3,6 +3,8 @@ var fs = require("fs");
 var request = require('request');
 var mkdirp = require("mkdirp");
 var rootPath = process.env.ROOT;
+var mime = require('mime');
+//var cors = require('cors');
 
 // paths/constants
 var assetsPath = path.join(rootPath, 'assets'),
@@ -22,6 +24,8 @@ function downloadFile(req, res) {
   function success() {
     responseData.success = true;
     responseData.url = imagePathRoot + uuid + "/" + fileName;
+    responseData.name = fileName;
+    responseData.type = mime.lookup(fileName.substring(fileName.lastIndexOf('.') + 1));
     res.send(responseData);
   }
 
@@ -30,7 +34,7 @@ function downloadFile(req, res) {
     res.send(responseData);
   }
 
-  mkdirp(destinationDir, function(er){
+  mkdirp(destinationDir, function(er) {
     if(er) {
       error(er);
     }

@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'categories', 'uploadFactory', '$timeout', 'documentFactory', '$modalInstance', 'googleDriveFactory',
-    function($scope, $rootScope, categories, uploadFactory, $timeout, documentFactory, $modalInstance, googleDriveFactory) {
+  var controller = ['$scope', '$rootScope', 'categories', 'uploadFactory', '$timeout', 'documentFactory', '$modalInstance', 'googleDriveFactory', 'utilFactory',
+    function($scope, $rootScope, categories, uploadFactory, $timeout, documentFactory, $modalInstance, googleDriveFactory, utilFactory) {
       $scope.uploadModel = {
         category: null,
         description: '',
@@ -16,17 +16,21 @@ define(function(require) {
 
       $scope.extenalStorage = {
         googleDrive: {
-          isAuth: false,
+          isAuth: googleDriveFactory.isAuth(),
           isLoading: false,
           isLeeching: false,
           connect: function() {
             googleDriveFactory.authorize()
-              .success(function() {
+              .then(function() {
                 $scope.extenalStorage.googleDrive.isAuth = true;
                 $scope.loadGoogleFile();
               });
           }
         }
+      };
+
+      $scope.verifyAuthentication = function() {
+
       };
 
       $scope.progressGoogleDriveFile = function(list) {
@@ -37,22 +41,33 @@ define(function(require) {
           fileModel.mimeType = el.mimeType;
           fileModel.name = el.title;
           if(angular.isDefined(el.downloadUrl)) {
-            fileModel.downloadUrl = el.downloadUrl;
-            fileModel.fileName = encodeURIComponent(fileModel.name);
-            fileModel.ext = fileModel.fileName.substr(fileModel.fileName.lastIndexOf('=') + 1);
+            // File name
+            fileModel.fileName = fileModel.name.substring(fileModel.name.lastIndexOf('/') + 1);
+
+            // File extension
+            if(el.fileExtension) {
+              fileModel.ext = el.fileExtension;
+            }
+            else {
+              fileModel.ext = fileModel.name.substring(fileModel.name.lastIndexOf('.') + 1);
+            }
             fileModel.isMultiple = false;
+
+            // File url
+            fileModel.downloadUrl = el.downloadUrl;
           }
           else if(angular.isDefined(el.exportLinks)) {
             fileModel.isMultiple = true;
             fileModel.downloadUrls = [];
             for(var k in el.exportLinks) {
               if(el.exportLinks.hasOwnProperty(k)) {
-                fileModel.downloadUrls.push({
+                var obj = {
                   downloadUrl: el.exportLinks[k],
                   ext: el.exportLinks[k].substr(el.exportLinks[k].lastIndexOf('=') + 1),
                   name: fileModel.name,
-                  fileName: encodeURIComponent(fileModel.name + '.' + el.exportLinks[k].substr(el.exportLinks[k].lastIndexOf('=') + 1))
-                })
+                  fileName: fileModel.name.substring(fileModel.name.lastIndexOf('/') + 1) + '.' + el.exportLinks[k].substr(el.exportLinks[k].lastIndexOf('=') + 1)
+                };
+                fileModel.downloadUrls.push(obj);
               }
             }
           }
@@ -79,8 +94,8 @@ define(function(require) {
           googleDriveFactory.downloadFile(file.downloadUrl, file.fileName)
             .success(function(resp) {
               $scope.uploadModel.filePath = resp.url;
-              $scope.uploadModel.fileName = file.name + '.' + file.ext;
-              //$scope.uploadModel.fileType = file.type;
+              $scope.uploadModel.fileName = resp.name;
+              $scope.uploadModel.fileType = resp.type;
               $scope.extenalStorage.googleDrive.isLeeching = false;
             })
             .error(function(err) {
@@ -161,12 +176,17 @@ define(function(require) {
         documentFactory.saveUploadedDocsInfo(data)
           .success(function(resp) {
             $modalInstance.close(data);
+          })
+          .error(function() {
+            $scope.document_frm.$setPristine();
           });
       };
 
       $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
       };
+
+      $scope.verifyAuthentication();
     }];
   return controller;
 });

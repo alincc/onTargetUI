@@ -51,11 +51,10 @@ define(function(require) {
       }
 
       $scope.mapData = function() {
-
         $scope.uploadedDocumentList = _.map($scope.uploadedDocumentList, function(el) {
           var newEl = el;
           var fileExtension = utilFactory.getFileExtension(el.name);
-          var filePath = $filter('filePath')('assets/onsite/' + el.name);
+          var filePath = $filter('filePath')(el.name);
           el.filePath = filePath;
           el.previewPath = filePath;
           el.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
@@ -109,8 +108,8 @@ define(function(require) {
             });
 
             // modal callbacks
-            uploadModalInstance.result.then(function() {
-
+            uploadModalInstance.result.then(function(data) {
+              getUploadedDocumentList();
             }, function() {
 
             });

@@ -24,5 +24,8 @@
                 <div class="col-xs-12 col-md-9 task-container" ng-include="'onTime/task/templates/task.html'" ng-if="activitySelected"></div>
             </div>
         </div>
+        <div class="wrapper-md p-r-none activity-task-management" ng-if="selectedTab==='ganttChart'">
+            <div ng-include="'onTime/ganttChart/templates/ganttChart.html'"></div>
+        </div>
     </div>
 </div>

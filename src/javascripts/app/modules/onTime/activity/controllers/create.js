@@ -26,11 +26,14 @@ define(function (require){
     $scope.projectStatuses = projectFactory.getProjectStatuses();
     $scope.companies = companies;
 
+
     $scope.minDate2 = $scope.currentProject.startDate;
     $scope.maxDate2 = $scope.currentProject.endDate;
-    $scope.$watchCollection('[project.startDate, project.endDate]', function(e){
+    $scope.initStartDate = new Date($scope.minDate2);
+      $scope.$watchCollection('[project.startDate, project.endDate]', function(e){
       $scope.minDate = $scope.project.startDate ? $scope.project.startDate : $scope.currentProject.startDate;
       $scope.maxDate = $scope.project.endDate ? $scope.project.endDate : $scope.currentProject.endDate;
+        $scope.initEndDate = new Date($scope.minDate);
     });
 
     $scope.startDate = {

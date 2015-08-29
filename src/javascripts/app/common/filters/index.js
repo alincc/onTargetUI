@@ -6,7 +6,8 @@ define(function(require) {
     fileicon = require('./fileicon'),
     cut = require('./cut'),
     task = require('./task'),
-    filePath = require('./filePath');
+    filePath = require('./filePath'),
+  fileName = require('./fileName');
 
   var module = angular.module('common.filters',
     [
@@ -15,7 +16,8 @@ define(function(require) {
       'common.filters.newLines',
       'common.filters.cut',
       'common.filters.task',
-      'common.filters.filePath'
+      'common.filters.filePath',
+      'common.filters.fileName'
     ]);
   return module;
 });

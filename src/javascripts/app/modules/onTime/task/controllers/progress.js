@@ -8,16 +8,19 @@ define(function(require) {
 
   var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications',
     function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications) {
+      console.log($rootScope.currentTask);
       $scope.model = {
         percentageComplete: '',
         percentageType: "PERCENTAGE",
-        taskId: $rootScope.currentTask.projectTaskId
+        taskId: $rootScope.currentTask.projectTaskId,
+        taskPercentageLogId : ''
       };
       $scope.model.percentageComplete = $rootScope.currentTask.percentageComplete;
 
 
       $scope.updateProgress = function() {
-        taskFactory.updateTaskPercentage({
+        //taskProgressList[0].taskPercentageLogId
+        taskFactory.createTaskPercentage({
           taskProgressList: $scope.model
         }).then(function(resp) {
             notifications.taskUpdated({

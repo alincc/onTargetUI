@@ -15,7 +15,7 @@ define(function() {
         }
         canceler = $q.defer();
         $scope.isLoadingTasks = true;
-        taskFactory.getProjectTasksFull($scope.model, canceler).then(
+        taskFactory.getProjectTasksFull($rootScope.activitySelected.projectId, canceler).then(
           function(resp) {
             $scope.tasks = resp.data.tasks;
             $scope.isLoadingTasks = false;
@@ -75,12 +75,25 @@ define(function() {
         });
       };
 
-      $scope.tasks = [];
+      $scope.deleteTask = function() {
+        taskFactory.deleteTask($scope.taskSelected.projectTaskId);
+        _.remove($scope.tasks, {projectTaskId: $scope.taskSelected.projectTaskId});
+        $scope.taskSelected = null;
+      };
 
+      $scope.tasks = [];
+      var taskDetailsDefer;
       $scope.selectTask = function(task) {
-        $scope.taskSelected = $rootScope.currentTask = task;
-        $scope.action = $scope.actions.infoTask;
-        notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
+        if(taskDetailsDefer) {
+          taskDetailsDefer.resolve();
+        }
+        taskDetailsDefer = $q.defer();
+        taskFactory.getTaskById(task.projectTaskId, taskDetailsDefer)
+          .success(function(resp) {
+            $scope.taskSelected = $rootScope.currentTask = resp.task;
+            $scope.action = $scope.actions.infoTask;
+            notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
+          });
       };
 
       $scope.openCreateTaskModal = function() {

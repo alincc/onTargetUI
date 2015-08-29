@@ -19,6 +19,9 @@
                     </span>
                 </div>
                 <div class="activity-list" custom-scroll>
+                    <div class="activity-loading text-center" ng-if="isLoadingActivity">
+                        <spinner text="Loading..."></spinner>
+                    </div>
                     <div class="activity-item"
                          ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }"
                          ng-repeat="activity in activities | filter:search:projectName"
@@ -35,7 +38,7 @@
                         </div>
                         <div class="status">
                             <div class="percentage">
-                                32%
+                                {{activity.percentageComplete}}%
                             </div>
                         </div>
                         <div class="arrow-icon">
@@ -49,11 +52,11 @@
                 <button class="btn btn-primary" ng-click="openCreateActivityModal()"><i class="fa fa-plus"></i> Add
                     Activity
                 </button>
-                <button class="btn btn-primary" ng-click="openEditActivityModal()" ng-show="activitySelected"><i
+                <button class="btn btn-info" ng-click="openEditActivityModal()" ng-show="activitySelected"><i
                         class="fa fa-pencil-square-o"></i> Edit
                 </button>
-                <button class="btn btn-primary" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><i
-                        class="fa fa-times"></i> Delete
+                <button class="btn btn-danger" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><i
+                        class="fa fa-times"></i> Delete Activity
                 </button>
             </div>
         </div>

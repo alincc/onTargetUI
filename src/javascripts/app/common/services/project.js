@@ -13,12 +13,15 @@ define(function(require) {
   module = angular.module('common.services.project', ['app.config']);
 
   module.factory('projectFactory',
-    ['appConstant', '$http',
-      function(constant, $http) {
+    ['appConstant', '$http', '$q',
+      function(constant, $http, $q) {
         var service = {};
 
-        service.getUserProject = function(model) {
-          return $http.post(constant.domain + '/project/getProjectsByUser', model);
+        service.getUserProject = function(model, canceler) {
+          canceler = canceler || $q.defer();
+          return $http.post(constant.domain + '/project/getProjectsByUser', model, {
+            timeout: canceler.promise
+          });
         };
 
         service.getProjectById = function(projectId){
@@ -60,7 +63,7 @@ define(function(require) {
         };
 
         service.getTaskCount = function (projectId){
-          return $http.post(constant.domain + '/tasks/getTaskCountsOfProject', {
+          return $http.post(constant.domain + '/task/getTaskCountsOfProject', {
             projectId: projectId
           });
         };

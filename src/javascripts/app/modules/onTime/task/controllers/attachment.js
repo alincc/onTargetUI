@@ -7,8 +7,8 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'uploadFactory', '$timeout',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, uploadFactory, $timeout) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'uploadFactory', '$timeout', '$filter',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, uploadFactory, $timeout, $filter) {
       $scope.attachments = [];
       $scope.isUploading = false;
       $scope.percentage = 0;
@@ -19,7 +19,8 @@ define(function(require) {
       $scope.model = {
         fileName: '',
         taskId: $rootScope.currentTask.projectTaskId,
-        userId: userContext.authentication().userData.userId
+        userId: userContext.authentication().userData.userId,
+        location: ''
       };
 
       $scope.getTaskAttachments = function() {
@@ -28,6 +29,7 @@ define(function(require) {
           function(resp) {
             $scope.attachments = resp.data.taskAttachments;
             $scope.isLoadingAttachments = false;
+            $scope.$broadcast("content.reload");
           }, function(err) {
             console.log(err);
             $scope.isLoadingAttachments = false;
@@ -44,6 +46,7 @@ define(function(require) {
         }).success(function(data, status, headers, config) {
           $timeout(function() {
             $scope.model.fileName = data.url;
+            $scope.model.location = data.url;
             $scope.isUploading = false;
             $scope.saveTaskFile();
           });
@@ -52,9 +55,22 @@ define(function(require) {
         });
       };
 
+      $scope.download = function(att){
+        window.open($filter('filePath')(att.fileName));
+      };
+
       $scope.saveTaskFile = function() {
         taskFactory.saveTaskFile($scope.model).then(
           function(resp) {
+            $scope.attachments.push({
+              "contact" : $rootScope.currentUserInfo.contact,
+              "fileName" : $scope.model.fileName,
+              "location" : $scope.model.location,
+              "taskId" : $rootScope.currentTask.projectTaskId,
+              "userId" : $rootScope.currentUserInfo.userInfo
+            });
+
+            $scope.$broadcast("content.reload");
           });
       };
 
@@ -67,29 +83,29 @@ define(function(require) {
       $scope.getTaskAttachments();
 
       /*$scope.uploadFile = function(upload) {
-        var file = upload.files[0];
-        $scope.isUploadAvatar = true;
-          uploadFactory.upload(file, 'task').progress(function (evt) {
-          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          //$scope.log = 'progress: ' + progressPercentage + '% ' +
-          //  evt.config.file.name + '\n' + $scope.log;
-          $scope.percentage = progressPercentage;
-        }).success(function (data, status, headers, config) {
-          $timeout(function () {
-            console.log(data);
-            $scope.model.fileName = file.name;
-            taskFactory.saveTaskFile($scope.model).then(
-                function (resp) {
-                  uploadSuccess();
-                  //toaster.pop("success", "Success", resp.data.returnMessage);
-                });
-            $scope.isUploadAvatar = false;
-          });
-        })
-            .error(function () {
-              $scope.isUploadAvatar = false;
-            });
-      };*/
+       var file = upload.files[0];
+       $scope.isUploadAvatar = true;
+       uploadFactory.upload(file, 'task').progress(function (evt) {
+       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+       //$scope.log = 'progress: ' + progressPercentage + '% ' +
+       //  evt.config.file.name + '\n' + $scope.log;
+       $scope.percentage = progressPercentage;
+       }).success(function (data, status, headers, config) {
+       $timeout(function () {
+       console.log(data);
+       $scope.model.fileName = file.name;
+       taskFactory.saveTaskFile($scope.model).then(
+       function (resp) {
+       uploadSuccess();
+       //toaster.pop("success", "Success", resp.data.returnMessage);
+       });
+       $scope.isUploadAvatar = false;
+       });
+       })
+       .error(function () {
+       $scope.isUploadAvatar = false;
+       });
+       };*/
     }];
   return controller;
 });

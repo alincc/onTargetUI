@@ -28,9 +28,11 @@ define(function() {
 
     $scope.minDate2 = $rootScope.activitySelected.startDate;
     $scope.maxDate2 = $rootScope.activitySelected.endDate;
+    $scope.initStartDate = new Date($scope.minDate2);
     $scope.$watchCollection('[task.startDate, task.endDate]', function(e) {
       $scope.minDate = $scope.task.startDate ? $scope.task.startDate : $rootScope.activitySelected.startDate;
       $scope.maxDate = $scope.task.endDate ? $scope.task.endDate : $rootScope.activitySelected.endDate;
+      $scope.initEndDate = new Date($scope.minDate);
     });
 
     $scope.startDate = {

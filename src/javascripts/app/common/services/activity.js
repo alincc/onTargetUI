@@ -10,13 +10,16 @@ define(function(require) {
   module = angular.module('common.services.activity', ['app.config']);
 
   module.factory('activityFactory',
-    ['appConstant', '$http',
-      function(constant, $http) {
+    ['appConstant', '$http', '$q',
+      function(constant, $http, $q) {
         var service = {};
 
-        service.getActivityOfProject = function(projectId){
+        service.getActivityOfProject = function(projectId, canceler){
+          canceler = canceler || $q.defer();
           return $http.post(constant.domain + '/project/getActivityOfProject', {
             projectId: projectId
+          }, {
+            timeout: canceler.promise
           });
         };
 
@@ -27,7 +30,7 @@ define(function(require) {
         };
 
         service.addActivity = function(model) {
-          return $http.post(constant.domain + '/project/addProject', model);
+          return $http.post(constant.domain + '/project/addActivity', model);
         };
 
         service.deleteActivity = function(model) {

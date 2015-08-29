@@ -59,11 +59,11 @@ define(function(require) {
       return [200, angular.fromJson(userDocument)];
     });
 
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/report\/earnedValueReport$/).respond(function(method, url, data) {
+    $httpBackend.whenPOST(/^http:\/\/demo.newoceaninfosys.com:3214\/ontargetrs\/services\/report\/earnedValueReport$/).respond(function(method, url, data) {
       return [200, angular.fromJson(earnedValueReport)];
     });
 
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/report\/bireport$/).respond(function(method, url, data) {
+    $httpBackend.whenPOST(/^http:\/\/demo.newoceaninfosys.com:3214\/ontargetrs\/services\/report\/bireport$/).respond(function(method, url, data) {
       return [200, angular.fromJson(biReport)];
     });
 

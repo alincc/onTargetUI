@@ -1,0 +1,24 @@
+<div data-ng-controller="GanttChartController">
+    <div class="gantt-chart-section">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="text-center" ng-if="isLoadingGanttChart">
+                    <spinner text="Loading..."></spinner>
+                </div>
+                <div class="panel-footer bg-light lter" ng-show="data.length > 0">
+                    <div gantt data=data >
+                        <gantt-tree></gantt-tree>
+                        <gantt-groups></gantt-groups>
+                        <gantt-tooltips></gantt-tooltips>
+                        <gantt-bounds></gantt-bounds>
+                        <gantt-progress></gantt-progress>
+                        <!--<gantt-sortable></gantt-sortable>-->
+                        <gantt-movable></gantt-movable>
+                        <gantt-draw-task></gantt-draw-task>
+                        <!--<gantt-resize-sensor></gantt-resize-sensor>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

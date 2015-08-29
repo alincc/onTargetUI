@@ -36,7 +36,8 @@ require.config({
     lodash: '../bower_components/lodash/lodash',
     text: '../bower_components/requirejs-text/text',
     async: '../bower_components/requirejs-plugins/src/async',
-    moment: '../js/momentjs/moment',
+    //moment: '../js/momentjs/moment',
+    moment: '../bower_components/moment/moment',
     angularTouch: "../bower_components/angular-touch/angular-touch",
     toaster: "../bower_components/angularjs-toaster/toaster",
     angularUiEvent: "../bower_components/angular-ui-event/dist/event",
@@ -50,14 +51,16 @@ require.config({
     angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart',
     mentio: '../bower_components/ment.io/dist/mentio',
     angularSlider: '../bower_components/venturocket-angular-slider/build/angular-slider',
-    ngTouch: '../bower_components/angular-touch/angular-touch',
     //jsXlsxShim: '../bower_components/js-xlsx/shim',
     jszip: '../bower_components/js-xlsx/dist/jszip',
     //jsXlsxOds: '../bower_components/js-xlsx/ods',
     xlsx: '../bower_components/js-xlsx/dist/xlsx',
     jsXlsx:'../bower_components/js-xlsx/dist/xlsx.full.min',
     typeahead: '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
-    ngLetterAvatar: '../bower_components/ngletteravatar/ngletteravatar'
+    ngLetterAvatar: '../bower_components/ngletteravatar/ngletteravatar',
+    angularGantt: '../bower_components/angular-gantt/assets/angular-gantt',
+    angularGanttPlugin: '../bower_components/angular-gantt/assets/angular-gantt-plugins',
+    angularUiTree: '../bower_components/angular-ui-tree/dist/angular-ui-tree'
   },
 
   shim: {
@@ -93,7 +96,7 @@ require.config({
       deps: ["angular"]
     },
     "angularMoment": {
-      deps: ['moment', 'angular']
+      deps: ['angular', 'moment']
     },
     "angularAnimate": {
       deps: ['angular']
@@ -140,6 +143,21 @@ require.config({
     "xlsx": {
       deps: ['jszip'],
       exports: "XLSX"
+    },
+    "angularGantt": {
+      deps: ['angularMoment']
+    },
+    "angularGanttPlugin": {
+      deps: ['angularGantt']
+    },
+    "ngLetterAvatar": {
+      deps: ['angular']
+    },
+    "angularUiTree": {
+      deps: ['angular']
+    },
+    "angularSlider": {
+      deps: ['angular']
     }
   }
 });
@@ -156,8 +174,9 @@ if(!window.console) {
 }
 
 require([
-  'jszip'
-], function(jszip) {
+  'jszip',
+  'angular'
+], function(jszip, angular) {
   window.JSZip = jszip;
   require([
     'jQuery',
@@ -168,6 +187,7 @@ require([
     angular.element().ready(function() {
       //$html.addClass('ng-app');
       angular.bootstrap($html, [app.name]);
+
     });
   });
 });

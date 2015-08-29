@@ -2,10 +2,11 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory',
-    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q) {
     var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
     var currentProjectId;
+      var canceler;
     $scope.isLoadingActivity = false;
 
     function load() {
@@ -27,8 +28,9 @@ define(function(require) {
     }
 
     $scope.loadActivity = function() {
+      canceler = $q.defer();
       $scope.isLoadingActivity = true;
-      activityFactory.getActivityOfProject($scope.currentProject.projectId)
+      activityFactory.getActivityOfProject($scope.currentProject.projectId, canceler)
         .success(function(resp) {
           $scope.activities = resp.projects;
           $scope.isLoadingActivity = false;
@@ -49,7 +51,8 @@ define(function(require) {
 
     //call api get projects
     $scope.getUserProject = function() {
-      projectFactory.getUserProject($scope.model).then(
+      canceler = $q.defer();
+      projectFactory.getUserProject($scope.model, canceler).then(
         function(resp) {
           $scope.projects = resp.data.mainProject.projects;
 
@@ -187,6 +190,12 @@ define(function(require) {
     notifications.onCurrentProjectChange($scope, function(agrs) {
       load();
     });
+
+      $scope.$on('$destroy', function(){
+        if(canceler) {
+          canceler.resolve();
+        }
+      });
 
     load();
   }];

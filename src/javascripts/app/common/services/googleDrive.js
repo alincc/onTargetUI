@@ -17,11 +17,20 @@ define(function(require) {
           nextPageToken = null,
           token = null;
 
-        service.validateToken = function() {
-          var deferred = $q.defer();
+        function loadAuth() {
           var authData = storage.get('GoogleDriveAuthentication');
           isAuthorized = authData ? authData.isAuthorized : false;
           token = authData ? authData.token : null;
+        }
+
+        service.isAuth = function() {
+          loadAuth();
+          return isAuthorized;
+        };
+
+        service.validateToken = function() {
+          var deferred = $q.defer();
+          loadAuth();
 
           if(isAuthorized && token) {
             $http.get('https://www.googleapis.com/oauth2/v1/tokeninfo', {
@@ -70,7 +79,7 @@ define(function(require) {
             gapi.auth.authorize(
               {
                 client_id: '119225888070-pkccaemomn8ksb6i2nvdj8q124koomdm.apps.googleusercontent.com',
-                scope: ['https://www.googleapis.com/auth/drive.metadata.readonly'],
+                scope: ['https://www.googleapis.com/auth/drive'],
                 immediate: isAuthorized
               },
               handleAuthResult);
@@ -116,7 +125,7 @@ define(function(require) {
         service.downloadFile = function(url, fileName) {
           var downloadUrl = url;
           if(url.indexOf('?') > -1) {
-            downloadUrl = downloadUrl + '&access_token=' + token
+            downloadUrl = downloadUrl + '&access_token=' + token;
           }
           return $http.post(constant.nodeServer + '/node/download', {
             uuid: utilFactory.newGuid(),
@@ -125,6 +134,16 @@ define(function(require) {
           }, {
             headers: {
               'content-type': 'application/json'
+            }
+          });
+        };
+
+        service.getFileDetails = function(fileId) {
+          //https://www.googleapis.com/drive/v2/files/0B9kR5Xehes1jZlRWa0I1OEZ6R00?access_token=ya29.3gHY4HyQgcEZAZjF9ffxkcvPfvNHwixaxO1wz_aNwK7zV7MFMHS_sIFpUecJSf-CsLoGwQ
+          loadAuth();
+          return $http.get('https://www.googleapis.com/drive/v2/files/' + fileId, {
+            params: {
+              'access_token': token
             }
           });
         };

@@ -42,7 +42,7 @@
     <label>Start date</label>
     <p class="input-group">
         <input type="text" class="form-control" placeholder="Start date" required ng-model="task.startDate"
-               datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxDate" min-date="minDate2"
+               datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxDate" min-date="minDate2" init-date="initStartDate"
                datepicker-options="startDate.options"
                datepicker-append-to-body="true"
                name="startDate" ng-click="startDate.isOpen = !startDate.isOpen"/>
@@ -61,7 +61,7 @@
     <p class="input-group">
         <input type="text" class="form-control" placeholder="End date" required ng-model="task.endDate"
                ng-click="endDate.isOpen = !endDate.isOpen"
-               datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="minDate" max-date="maxDate2"
+               datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="minDate" max-date="maxDate2" init-date="initEndDate"
                datepicker-options="endDate.options"
                datepicker-append-to-body="true"
                name="endDate"/>

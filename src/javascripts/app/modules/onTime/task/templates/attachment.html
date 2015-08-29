@@ -1,21 +1,23 @@
-<div ng-controller="AttachmentTaskController">
+<div class="task-attachments" ng-controller="AttachmentTaskController">
     <div class="text-center" ng-show="isLoadingAttachments">
         <spinner text="Loading..."></spinner>
     </div>
-    <table ng-show="attachments.length">
-        <tr>
-            <th>DOCUMENT</th>
-            <th>UPLOADED BY</th>
-            <th>ACTIONS</th>
-        </tr>
-        <tr ng-repeat="attachment in attachments">
-            <td>{{ attachment.fileName }}</td>
-            <td>{{attachment.contact.firstName}}&nbsp;{{attachment.contact.lastName}}</td>
-            <td><a href="">View</a> | <a task-attachment ng-href="{{attachment.fileName | filePath}}">Download</a></td>
-        </tr>
-    </table>
-    <div class="uploader" ng-show="!isLoadingAttachments">
-        <button type="button" class="btn btn-primary btn-block" ngf-select ng-model="attachment.file" ngf-multiple="false" ng-disabled="isUploading"><i class="fa fa-cloud-upload"></i> Upload an attachment</button>
-        <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploading"></div>
+    <div class="item-list" custom-scroll>
+        <table class="table table-bordered" ng-show="attachments.length">
+            <tr>
+                <th>DOCUMENT</th>
+                <th>UPLOADED BY</th>
+                <th>ACTIONS</th>
+            </tr>
+            <tr ng-repeat="attachment in attachments">
+                <td valign="middle">{{ attachment.fileName }}</td>
+                <td valign="middle">{{attachment.contact.firstName}}&nbsp;{{attachment.contact.lastName}}</td>
+                <td class="nowrap" valign="middle"><button class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button> <button class="btn btn-xs btn-primary" ng-click="download(attachment)"><i class="fa fa-cloud-download"></i></button></td>
+            </tr>
+        </table>
+        <div class="uploader" ng-show="!isLoadingAttachments">
+            <button type="button" class="btn btn-primary btn-block" ngf-select ng-model="attachment.file" ngf-multiple="false" ng-disabled="isUploading"><i class="fa fa-cloud-upload"></i> Upload an attachment</button>
+            <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploading"></div>
+        </div>
     </div>
 </div>

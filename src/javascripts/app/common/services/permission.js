@@ -15,8 +15,13 @@ define(function(require) {
         var service = {};
 
         service.checkPermission = function(nav) {
-          var permissions = $rootScope.currentUserInfo.menuProfile.profileAssignedMenuList;
-          return angular.isDefined(_.find(permissions, {menuKey: nav}));
+          if($rootScope.currentUserInfo.menuProfile) {
+            var permissions = $rootScope.currentUserInfo.menuProfile.profileAssignedMenuList;
+            return angular.isDefined(_.find(permissions, {menuKey: nav}));
+          }
+          else {
+            return false;
+          }
         };
 
         return service;

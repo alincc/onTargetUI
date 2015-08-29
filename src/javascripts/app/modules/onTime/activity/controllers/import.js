@@ -2,12 +2,15 @@ define(function(require) {
   'use strict';
   var angular = require('angular');
   var XLSX = require('xlsx'),
+    moment = require('moment'),
     taskPriority = require('text!app/common/resources/taskSeverities.json');
 
   var controller = ['$scope', '$rootScope', '$modalInstance', 'toaster', 'parserFactory', 'activityFactory',
     function($scope, $rootScope, $modalInstance, toaster, parserFactory, activityFactory) {
+
       $scope.importModel = {
         file: null,
+        fileName: '',
         results: [],
         table: {
           headers: [],
@@ -45,6 +48,8 @@ define(function(require) {
         parserFactory.parseXls(f)
           .success(function(resp) {
             $scope.importModel.results = resp.records;
+            $scope.importModel.fileName = resp.name;
+            console.log(resp, $scope.importModel);
             $scope.parseTable();
           });
       };
@@ -54,7 +59,7 @@ define(function(require) {
         var priorities = angular.fromJson(taskPriority);
         var data = {
           "projectId": $rootScope.currentProjectInfo.projectId,
-          "fileName": "",
+          "filename": $scope.importModel.fileName,
           "activityTaskRecords": []
         };
         _.each($scope.importModel.table.rows, function(el, idx) {
@@ -62,19 +67,20 @@ define(function(require) {
             "index": idx,
             "activityCode": el[0],
             "activityName": el[1],
-            "activityStartDate": el[2],
-            "activityEndDate": el[3],
-            "taskCode": el[4],
-            "taskName": el[5],
-            "taskStartDate": el[6],
-            "taskEndDate": el[7],
+            "activityStartDate": moment(el[6], 'MM/DD/YYYY').toDate().toISOString(),
+            "activityEndDate": moment(el[7], 'MM/DD/YYYY').toDate().toISOString(),
+            "taskCode": el[2],
+            "taskName": el[3],
+            "taskStartDate": moment(el[6], 'MM/DD/YYYY').toDate().toISOString(),
+            "taskEndDate": moment(el[7], 'MM/DD/YYYY').toDate().toISOString(),
             "estimatedCost": el[8],
             "actualCost": el[9],
-            "percentageComplete": el[11],
+            "percentageComplete": el[11].replace('%', ''),
             "priority": el[10],
             "invalidMsg": null
           });
         });
+        console.log(data, $scope.importModel);
         activityFactory.import(data)
           .success(function(resp) {
             console.log(resp);

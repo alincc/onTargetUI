@@ -49,7 +49,7 @@
                                 <li class="text-center m-t-md m-b-md" ng-if="extenalStorage.googleDrive.isLoading">
                                     <spinner text="Loading..."></spinner>
                                 </li>
-                                <li class="m-top-md" ng-if="!extenalStorage.googleDrive.isLoading">
+                                <li class="m-top-md" ng-if="!extenalStorage.googleDrive.isLoading && extenalStorage.googleDrive.isAuth">
                                     <button class="btn btn-primary btn-block" ng-click="loadGoogleFile('next')">Load more</button>
                                 </li>
                             </ul>

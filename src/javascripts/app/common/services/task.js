@@ -20,6 +20,7 @@ define(function(require) {
     };
 
     services.getProjectTasksFull = function(projectId, canceler) {
+      canceler = canceler || $q.defer();
       return $http.post(constant.domain + '/task/getProjectTask', {
         projectId: projectId
       }, {
@@ -28,6 +29,7 @@ define(function(require) {
     };
 
     services.getTaskById = function(taskId, canceler) {
+      canceler = canceler || $q.defer();
       return $http.post(constant.domain + '/task/getTaskDetail', {
         taskId: taskId
       }, {
@@ -51,8 +53,10 @@ define(function(require) {
       });
     };
 
-    services.deleteTask = function(model) {
-      return $http.post(constant.domain + '/task/deleteTask', model, {
+    services.deleteTask = function(taskId) {
+      return $http.post(constant.domain + '/task/deleteTask', {
+        taskId: taskId
+      }, {
         headers: {
           AutoAlert: true
         }

@@ -19,7 +19,7 @@ define(function (require){
     mockServiceModule = require('./common/services/mock');
 
   var app = angular.module('app', [
-    // libraries
+    //libraries
     'ngAnimate',
     'ui.bootstrap',
     'ui.event',
@@ -59,11 +59,11 @@ define(function (require){
 
   app
     .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant',
-      function ($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant) {
+      function ($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant){
         // Load Authentication data from localstorage
         userContext.loadFromLocal();
         projectContext.loadProject();
-        if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
+        if ($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
           var requestPayload = {
             "pageNumber": 1,
             "perPageLimit": constant.app.settings.userNotificationsPageSize,

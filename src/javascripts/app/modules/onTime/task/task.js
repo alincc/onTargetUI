@@ -39,7 +39,7 @@ define(function(require) {
     angularUiSelect = require('angularUiSelect'),
     angularMoment = require('moment'),
     angularSlider = require('angularSlider'),
-    ngTouch = require('ngTouch'),
+    angularTouch = require('angularTouch'),
     ngLetterAvatar = require('ngLetterAvatar'),
     ngFileUpload = require('ngFileUpload');
 
