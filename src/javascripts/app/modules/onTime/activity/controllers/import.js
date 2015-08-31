@@ -23,8 +23,8 @@ define(function(require) {
       $scope.$watch('importModel.file', function(file) {
         console.log(file); // !file.$error
         if(file) {
-          if(file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-            toaster.pop('error', 'Error', 'Only accept .xlsx file');
+          if(file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && file.type !== 'application/vnd.ms-excel') {
+            toaster.pop('error', 'Error', 'Only accept .xlsx, .xls file');
           } else {
             $scope.progress($scope.importModel.file);
           }
@@ -64,20 +64,20 @@ define(function(require) {
         };
         _.each($scope.importModel.table.rows, function(el, idx) {
           data.activityTaskRecords.push({
-            "index": idx,
+            "index": idx+1,
             "activityCode": el[0],
             "activityName": el[1],
-            "activityStartDate": moment(el[6], 'MM/DD/YYYY').toDate().toISOString(),
-            "activityEndDate": moment(el[7], 'MM/DD/YYYY').toDate().toISOString(),
-            "taskCode": el[2],
-            "taskName": el[3],
-            "taskStartDate": moment(el[6], 'MM/DD/YYYY').toDate().toISOString(),
-            "taskEndDate": moment(el[7], 'MM/DD/YYYY').toDate().toISOString(),
+            "activityStartDate": moment(el[2], 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            "activityEndDate": moment(el[3], 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            "taskCode": el[4],
+            "taskName": el[5],
+            "taskStartDate": moment(el[6], 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            "taskEndDate": moment(el[7], 'DD/MM/YYYY').format('YYYY-MM-DD'),
             "estimatedCost": el[8],
             "actualCost": el[9],
-            "percentageComplete": el[11].replace('%', ''),
-            "priority": el[10],
-            "invalidMsg": null
+            "percentageComplete": el[11],
+            "priority": el[10]
+            //"invalidMsg": null
           });
         });
         console.log(data, $scope.importModel);

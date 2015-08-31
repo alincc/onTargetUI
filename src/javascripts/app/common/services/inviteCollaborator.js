@@ -12,8 +12,7 @@ define(function(require) {
         var service = {};
 
         service.invite = function(param) {
-          //return $http.post(constant.domain + '/register/inviteUserIntoProject', param); // cannot post for new comapny
-          return $http.post('http://app.ontargetcloud.com:9000/collaborate/new', param);
+          return $http.post(constant.domain + '/register/inviteUserIntoProject', param);
         };
 
         return service;

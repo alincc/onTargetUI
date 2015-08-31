@@ -21,6 +21,11 @@ define(function(require) {
           }
         }
 
+        service.isAuth = function() {
+          loadAuthData();
+          return angular.isDefined(token);
+        };
+
         service.revoke = function() {
           loadAuthData();
           if(token) {

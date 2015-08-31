@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'project', 'companies', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'uploadFactory', 'appConstant', 'toaster', '$timeout',
-    function($scope, $rootScope, $modalInstance, project, companies, countryFactory, projectFactory, userContext, projectContext, uploadFactory, appConstant, toaster, $timeout) {
+  var controller = ['$scope', '$rootScope', '$modalInstance', 'project', 'companies', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'uploadFactory', 'appConstant', 'toaster', '$timeout', '$filter',
+    function($scope, $rootScope, $modalInstance, project, companies, countryFactory, projectFactory, userContext, projectContext, uploadFactory, appConstant, toaster, $timeout, $filter) {
 
       $scope.startDate = {
         options: {
@@ -155,6 +155,12 @@ define(function() {
           }
         }
       };
+
+      $scope.$watchCollection('[projectModel.startDate, projectModel.endDate]', function(e){
+        $scope.projectModel.startDate= $filter('date')($scope.projectModel.startDate, 'yyyy-MM-dd');
+        $scope.projectModel.endDate= $filter('date')($scope.projectModel.endDate, 'yyyy-MM-dd');
+      });
+
     }];
   return controller;
 });

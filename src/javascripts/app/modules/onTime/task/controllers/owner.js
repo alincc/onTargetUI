@@ -38,7 +38,7 @@ define(function() {
           projectTaskId: $rootScope.currentTask.projectTaskId,
           task: {
             assignee: _.map($scope.model.assignees, function(el) {
-              return {contact: el};
+              return {contact: el.contact};
             })
           }
         });

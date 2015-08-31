@@ -22,7 +22,11 @@ define(function(require) {
           username: userName,
           password: password
         };
-        $http.post(constant.domain + '/user/signin', loginUser)
+        $http.post(constant.domain + '/user/signin', loginUser, {
+          headers: {
+            Authorization: false
+          }
+        })
           .then(function(resp) {
             // Save access token and refresh token
             userContext.setToken(resp.data.token);

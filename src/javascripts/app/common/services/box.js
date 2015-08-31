@@ -1,14 +1,15 @@
 define(function(require) {
   'use strict';
   var angular = require('angular'),
+    utilServiceModule = require('app/common/services/util'),
     angularLocalStorage = require('angularLocalStorage'),
     module;
 
-  module = angular.module('common.services.box', ['app.config', 'angularLocalStorage']);
+  module = angular.module('common.services.box', ['app.config', 'angularLocalStorage', 'common.services.util']);
 
   module.factory('boxFactory',
-    ['appConstant', '$q', '$http', 'storage',
-      function(constant, $q, $http, storage) {
+    ['appConstant', '$q', '$http', 'storage', 'utilFactory',
+      function(constant, $q, $http, storage, utilFactory) {
         var service = {},
           token, refreshToken,
           clientId = 't5sfo0x515refc4tx9e13xy7p9n48v7q',
@@ -22,6 +23,11 @@ define(function(require) {
             refreshToken = authData.refresh_token;
           }
         }
+
+        service.isAuth = function() {
+          loadAuthData();
+          return angular.isDefined(token);
+        };
 
         service.revoke = function() {
           loadAuthData();
@@ -46,6 +52,7 @@ define(function(require) {
           window.open('https://app.box.com/api/oauth2/authorize?response_type=code&client_id=' + clientId + '&redirect_uri=' + returnUrl + '&state=onTarget', 'Box Authentication', 'height=500,width=500');
           window.addEventListener('OauthReturn', function(e, a) {
             window.removeEventListener('OauthReturn');
+            console.log(e);
             var code = e.detail.access_token;
             var data = "grant_type=authorization_code&code=" + code + "&client_id=" + clientId + "&client_secret=" + clientSecret;
             $http.post('https://api.box.com/oauth2/token', data, {
@@ -96,7 +103,7 @@ define(function(require) {
           return deferred.promise;
         };
 
-        service.loadData = function(folderId, from, take) {
+        service.loadData = function(folderId, from, take, df) {
           var deferred = $q.defer();
           service.authorize()
             .then(function() {
@@ -109,14 +116,42 @@ define(function(require) {
                   "Authorization": "Bearer " + token
                 }
               })
-                .success(function(resp) {
-                  deferred.resolve(resp);
-                })
-                .error(function(err) {
-                  deferred.reject(err);
+                .then(function(resp) {
+                  console.log(resp);
+                  if(df) {
+                    df.resolve(resp.data);
+                  } else {
+                    deferred.resolve(resp.data);
+                  }
+                }, function(err) {
+                  if(err.status === 401) {
+                    service.refreshToken()
+                      .then(function() {
+                        service.loadData(folderId, from, take, deferred);
+                      }, function() {
+                        token = undefined;
+                        refreshToken = undefined;
+                        storage.set('BoxAuthentication', null);
+                        deferred.reject(err);
+                      });
+                  }
                 });
             });
           return deferred.promise;
+        };
+
+        service.downloadFile = function(url, fileName) {
+          var downloadUrl = url;
+          downloadUrl = downloadUrl + '?access_token=' + token;
+          return $http.post(constant.nodeServer + '/node/download', {
+            uuid: utilFactory.newGuid(),
+            fileName: fileName,
+            url: downloadUrl
+          }, {
+            headers: {
+              'content-type': 'application/json'
+            }
+          });
         };
 
         return service;

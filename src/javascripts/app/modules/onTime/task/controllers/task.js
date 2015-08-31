@@ -1,15 +1,12 @@
-/**
- * Created by thophan on 8/18/2015.
- */
 define(function() {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'taskFactory', 'notifications', '$timeout', 'appConstant', '$q',
-    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, taskFactory, notifications, $timeout, appConstant, $q) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'taskFactory', 'notifications', '$timeout', 'appConstant', '$q', '$location', '$stateParams',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, taskFactory, notifications, $timeout, appConstant, $q, $location, $stateParams) {
       var createTaskModalInstance, editTaskModalInstance, deleteTaskModalInstance;
       var canceler;
 
-      var loadProjectTasks = function() {
+      var loadProjectTasks = function(cb) {
         if(canceler) {
           canceler.resolve();
         }
@@ -22,6 +19,9 @@ define(function() {
             $timeout(function() {
               $scope.$broadcast('content.reload');
             }, 200);
+            if(cb) {
+              cb();
+            }
           },
           function() {
             $scope.isLoadingTasks = false;
@@ -29,10 +29,10 @@ define(function() {
         );
       };
 
-      var bindTasks = function() {
+      var bindTasks = function(cb) {
         if($rootScope.activitySelected) {
           $scope.model.projectId = $rootScope.activitySelected.projectId;
-          loadProjectTasks();
+          loadProjectTasks(cb);
         }
       };
 
@@ -72,6 +72,8 @@ define(function() {
           $rootScope.contactList = resp.data.projectMemberList;
           $scope.action = $scope.actions.addTask;
           $scope.taskSelected = {};
+          // update route
+          $location.search('taskId', null);
         });
       };
 
@@ -79,6 +81,8 @@ define(function() {
         taskFactory.deleteTask($scope.taskSelected.projectTaskId);
         _.remove($scope.tasks, {projectTaskId: $scope.taskSelected.projectTaskId});
         $scope.taskSelected = null;
+        // update route
+        $location.search('taskId', null);
       };
 
       $scope.tasks = [];
@@ -93,6 +97,8 @@ define(function() {
             $scope.taskSelected = $rootScope.currentTask = resp.task;
             $scope.action = $scope.actions.infoTask;
             notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
+            // update route
+            $location.search('taskId', $scope.taskSelected.projectTaskId);
           });
       };
 
@@ -156,20 +162,35 @@ define(function() {
         });
       };
 
-      bindTasks();
+      bindTasks(function() {
+        if($stateParams.taskId) {
+          var foundTask = _.find($scope.tasks, {projectTaskId: parseInt($stateParams.taskId)});
+          if(foundTask) {
+            $scope.selectTask(foundTask);
+          } else {
+            // Update route
+            $location.search('taskId', null);
+          }
+        }
+      });
 
       notifications.onTaskCreated($scope, function(args) {
         loadProjectTasks();
         $scope.taskSelected = null;
+        // update route
+        $location.search('taskId', null);
       });
 
       notifications.onTaskUpdated($scope, function(obj) {
+        console.log(obj);
         if(obj) {
           if(obj.reload) {
             loadProjectTasks();
           }
           if(obj.clear) {
             $scope.taskSelected = null;
+            // update route
+            $location.search('taskId', null);
           }
           if(obj.task) {
             var foundTaskInList = _.where($scope.tasks, {
@@ -186,17 +207,23 @@ define(function() {
 
       notifications.onTaskCancel($scope, function() {
         $scope.taskSelected = null;
+        // update route
+        $location.search('taskId', null);
       });
 
       notifications.onActivitySelection($scope, function() {
         $scope.tasks = [];
         $scope.taskSelected = null;
+        // update route
+        $location.search('taskId', null);
         bindTasks();
       });
 
       notifications.onActivityDeleted($scope, function() {
         $scope.tasks = [];
         $scope.taskSelected = null;
+        // update route
+        $location.search('taskId', null);
         bindTasks();
       });
 

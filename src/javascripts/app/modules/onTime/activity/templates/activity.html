@@ -22,6 +22,9 @@
                     <div class="activity-loading text-center" ng-if="isLoadingActivity">
                         <spinner text="Loading..."></spinner>
                     </div>
+                    <div class="text-center" ng-if="!isLoadingActivity && !activities.length">
+                        No activities
+                    </div>
                     <div class="activity-item"
                          ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }"
                          ng-repeat="activity in activities | filter:search:projectName"
@@ -32,8 +35,8 @@
                                 <span>{{activity.startDate|date:'MM/dd/yyyy'}}</span> | <span>{{activity.endDate|date:'MM/dd/yyyy'}}</span>
                             </div>
                             <div class="tasks">
-                                <span>{{activity.activeTasks}} Active</span> |
-                                <span>{{activity.pendingTasks}} Pending</span>
+                                <span>{{activity.activeTasks ? activity.activeTasks : 0}} Active</span> |
+                                <span>{{activity.pendingTasks ? activity.pendingTasks : 0}} Pending</span>
                             </div>
                         </div>
                         <div class="status">
@@ -56,7 +59,7 @@
                         class="fa fa-pencil-square-o"></i> Edit
                 </button>
                 <button class="btn btn-danger" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><i
-                        class="fa fa-times"></i> Delete Activity
+                        class="fa fa-times"></i> Delete
                 </button>
             </div>
         </div>

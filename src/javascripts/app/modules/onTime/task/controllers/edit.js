@@ -3,7 +3,7 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', function($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications) {
+  var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', '$filter', function($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications, $filter) {
 
     $scope.editTask = true;
     $scope.currenttask = $rootScope.currentTask;
@@ -33,6 +33,8 @@ define(function() {
       $scope.minDate = $scope.task.startDate ? $scope.task.startDate : $rootScope.activitySelected.startDate;
       $scope.maxDate = $scope.task.endDate ? $scope.task.endDate : $rootScope.activitySelected.endDate;
       $scope.initEndDate = new Date($scope.minDate);
+      $scope.task.startDate= $filter('date')($scope.task.startDate, 'yyyy-MM-dd');
+      $scope.task.endDate= $filter('date')($scope.task.endDate, 'yyyy-MM-dd');
     });
 
     $scope.startDate = {

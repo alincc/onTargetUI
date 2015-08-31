@@ -12,6 +12,7 @@ var uglify = require('gulp-uglify');
 var replace = require('gulp-replace');
 var shell = require('gulp-shell');
 var del = require('del');
+var ftp = require('vinyl-ftp');
 
 var paths = {
   less: ['./src/less/**/*.less']
@@ -206,4 +207,29 @@ gulp.task('start', ['lint', 'less'], function() {
   });
 
   open("http://localhost:9000");
+});
+
+// deploy
+gulp.task('deploy:build', ['build'], function() {
+  process.stdout.write('Transfering files...\n');
+
+  var conn = ftp.create({
+    host: '',
+    user: '',
+    password: '',
+    parallel: 2
+  });
+
+  var globs = [
+    'build/**',
+    'server/**',
+    'server.js',
+    'package.json'
+  ];
+
+  return gulp.src(globs, {base: '.', buffer: false})
+    .pipe(conn.newer('/www'))
+    .pipe(conn.dest('/www'));
+
+  process.stdout.write('Transfer complete...\n');
 });

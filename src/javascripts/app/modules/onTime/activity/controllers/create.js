@@ -4,7 +4,7 @@
 define(function (require){
   'use strict';
   var moment = require('moment');
-  var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'projectContext', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, projectContext){
+  var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'projectContext', '$filter', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, projectContext, $filter){
     $scope.currentProject = $rootScope.currentProjectInfo;
 
     $scope.project = {
@@ -34,6 +34,8 @@ define(function (require){
       $scope.minDate = $scope.project.startDate ? $scope.project.startDate : $scope.currentProject.startDate;
       $scope.maxDate = $scope.project.endDate ? $scope.project.endDate : $scope.currentProject.endDate;
         $scope.initEndDate = new Date($scope.minDate);
+        $scope.project.startDate= $filter('date')($scope.project.startDate, 'yyyy-MM-dd');
+        $scope.project.endDate= $filter('date')($scope.project.endDate, 'yyyy-MM-dd');
     });
 
     $scope.startDate = {

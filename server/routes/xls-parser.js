@@ -53,17 +53,33 @@ function uploadFile(req, res) {
             responseData.records = records;
             for(var i = 0; i < responseData.records.length; i++) {
               var el = responseData.records[i];
+              // activity start date
+              if(/^\d{1,2}\-\d{1,2}\-\d{2}$/.test(el[2])) {
+                el[2] = moment(el[2], 'DD-MM-YYYY').format('DD/MM/YYYY');
+              }
+              else if(/^\d{1,2}\-\d{1,2}\-\d{4}$/.test(el[2])) {
+                el[2] = moment(el[2], 'DD-MM-YY').format('DD/MM/YYYY');
+              }
+              // activity end date
+              if(/^\d{1,2}\-\d{1,2}\-\d{2}$/.test(el[3])) {
+                el[3] = moment(el[3], 'DD-MM-YYYY').format('DD/MM/YYYY');
+              }
+              else if(/^\d{1,2}\-\d{1,2}\-\d{4}$/.test(el[3])) {
+                el[3] = moment(el[3], 'DD-MM-YY').format('DD/MM/YYYY');
+              }
+              // task start date
               if(/^\d{1,2}\-\d{1,2}\-\d{2}$/.test(el[6])) {
-                el[6] = moment(el[6], 'MM-DD-YY').format('MM/DD/YYYY');
+                el[6] = moment(el[6], 'DD-MM-YYYY').format('DD/MM/YYYY');
               }
               else if(/^\d{1,2}\-\d{1,2}\-\d{4}$/.test(el[6])) {
-                el[6] = moment(el[6], 'MM-DD-YYYY').format('MM/DD/YYYY');
+                el[6] = moment(el[6], 'DD-MM-YY').format('DD/MM/YYYY');
               }
+              // task end date
               if(/^\d{1,2}\-\d{1,2}\-\d{2}$/.test(el[7])) {
-                el[7] = moment(el[7], 'MM-DD-YY').format('MM/DD/YYYY');
+                el[7] = moment(el[7], 'DD-MM-YYYY').format('DD/MM/YYYY');
               }
               else if(/^\d{1,2}\-\d{1,2}\-\d{4}$/.test(el[7])) {
-                el[7] = moment(el[7], 'MM-DD-YYYY').format('MM/DD/YYYY');
+                el[7] = moment(el[7], 'DD-MM-YY').format('DD/MM/YYYY');
               }
             }
             res.send(responseData);

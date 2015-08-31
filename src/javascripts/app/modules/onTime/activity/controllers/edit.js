@@ -3,17 +3,17 @@
  */
 define(function (){
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'activity', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, activity){
+  var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'activity', '$filter', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, activity, $filter){
 
     $scope.currentProject = $rootScope.currentProjectInfo;
-    console.log(activity);
+
     $scope.project = {
-      projectParentId: activity.projectParentId,
+      projectParentId: $scope.currentProject.projectId,
       projectTypeId: activity.projectTypeId,
       projectId: activity.projectId,
       projectName: activity.projectName,
       projectDescription: activity.projectDescription,
-      companyId: activity.companyId,
+      companyId: activity.company.companyId,
       startDate: activity.startDate,
       endDate: activity.endDate,
       status: activity.status
@@ -44,6 +44,8 @@ define(function (){
       $scope.maxDate = $scope.project.endDate ? $scope.project.endDate : $scope.currentProject.endDate;
       $scope.maxDate = $scope.maxDate < maxStartDate ? $scope.maxDate : maxStartDate;
       $scope.initEndDate = new Date($scope.minDate);
+      $scope.project.startDate= $filter('date')($scope.project.startDate, 'yyyy-MM-dd');
+      $scope.project.endDate= $filter('date')($scope.project.endDate, 'yyyy-MM-dd');
     });
 
 

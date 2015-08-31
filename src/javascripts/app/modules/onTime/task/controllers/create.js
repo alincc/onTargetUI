@@ -3,7 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'taskFactory', 'toaster', 'projectContext', 'notifications', function($scope, $rootScope, userContext, projectFactory, taskFactory, toaster, projectContext, notifications) {
+  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'taskFactory', 'toaster', 'projectContext', 'notifications', '$filter',
+    function($scope, $rootScope, userContext, projectFactory, taskFactory, toaster, projectContext, notifications, $filter) {
     $scope.task = {
       projectTaskId: null,
       title: "",
@@ -23,7 +24,10 @@ define(function() {
       $scope.minDate = $scope.task.startDate ? $scope.task.startDate : $rootScope.activitySelected.startDate;
       $scope.maxDate = $scope.task.endDate ? $scope.task.endDate : $rootScope.activitySelected.endDate;
       $scope.initEndDate = new Date($scope.minDate);
+      $scope.task.startDate= $filter('date')($scope.task.startDate, 'yyyy-MM-dd');
+      $scope.task.endDate= $filter('date')($scope.task.endDate, 'yyyy-MM-dd');
     });
+
 
     $scope.model = {
       userId: userContext.authentication().userData.userId,
@@ -61,6 +65,9 @@ define(function() {
 
     $scope.save = function() {
       $scope.onSubmit = true;
+
+      /*$scope.task.startDate= "2015-08-10T00:00:00.000Z";
+      $scope.task.endDate= "2015-08-11T00:00:00.000Z";*/
 
       // Filter assignees
       $scope.model.task.assignees = _.map($scope.model.task.selectedAssignees, function(el) {

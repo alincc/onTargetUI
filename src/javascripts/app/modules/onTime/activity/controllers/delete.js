@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'activity', 'userContext', 'projectContext', 'activityFactory', 'toaster',
-    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, activity, userContext, projectContext, activityFactory, toaster) {
+  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'activity', 'userContext', 'projectContext', 'activityFactory',
+    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, activity, userContext, projectContext, activityFactory) {
       $scope.currentProject = $rootScope.currentProjectInfo;
       $scope.isDeleting = false;
       console.log(activity);
@@ -16,10 +16,11 @@ define(function() {
           function(resp) {
             //toaster.pop('success', 'Success', resp.data.returnMessage);
             //remove activity in local storage
-            var index = $scope.currentProject.projects.indexOf(activity);
-            $scope.currentProject.projects.splice(index, 1);
-            projectContext.setProject($scope.currentProject);
+            ///var index = $scope.currentProject.projects.indexOf(activity);
+            //$scope.currentProject.projects.splice(index, 1);
+            //projectContext.setProject($scope.currentProject);
 
+            console.log('Close modal');
             $modalInstance.close({});
           },
           function(err) {
