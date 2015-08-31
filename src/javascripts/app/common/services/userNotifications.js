@@ -19,7 +19,7 @@ define(function(require) {
             "userId": $rootScope.currentUserInfo.userId
           };
 
-          return $http.post('http://app.ontargetcloud.com:9000/notification/getNotifications/', requestPayload);
+          return $http.post(constant.domain + '/notification/getNotifications', requestPayload);
         }
       };
 
