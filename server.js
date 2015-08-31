@@ -30,36 +30,42 @@ var xlsParser = require('./server/routes/xls-parser')(app);
 app.post('/ontargetrs/services*', function(req, res) {
   //var r = request.post({headers: req.headers, uri: PROXY_SERVER + req.params[0], json: req.body});
   //req.pipe(r).pipe(res);
-var url = PROXY_SERVER + req.params[0];
-  url += '?' + qs.stringify(req.query);
-  req.pipe( request({
+  var url = PROXY_SERVER + req.params[0];
+  if(qs.stringify(req.query) !== "") {
+    url += '?' + qs.stringify(req.query);
+  }
+
+  req.pipe(request({
     url: url,
     method: req.method,
-    json: req.body
-  }, function(error, response, body){
-    if (error && error.code === 'ECONNREFUSED'){
+    json: req.body//,
+    //headers: req.headers
+  }, function(error, response, body) {
+    if(error && error.code === 'ECONNREFUSED') {
       console.error('Refused connection');
     } else {
       throw error;
     }
-  })).pipe( res );
+  })).pipe(res);
 });
 
 app.get('/ontargetrs/services*', function(req, res) {
   var url = PROXY_SERVER + req.params[0];
-  url += '?' + qs.stringify(req.query);
-  //req.pipe(request(url)).pipe(res);
+  if(qs.stringify(req.query) !== "") {
+    url += '?' + qs.stringify(req.query);
+  }
 
   req.pipe(request({
     url: url,
-    method: req.method
-  }, function(error, response, body){
-    if (error && error.code === 'ECONNREFUSED'){
+    method: req.method//,
+    //headers: req.headers
+  }, function(error, response, body) {
+    if(error && error.code === 'ECONNREFUSED') {
       console.error('Refused connection');
     } else {
       throw error;
     }
-  })).pipe( res );
+  })).pipe(res);
 });
 
 app.get('/', function(req, res) {
@@ -72,8 +78,8 @@ app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-process.on('uncaughtException', function(err){
-  if(err){
+process.on('uncaughtException', function(err) {
+  if(err) {
     console.error('uncaughtException: ' + err.message);
     console.error(err.stack);
     process.exit(1);             // exit with error

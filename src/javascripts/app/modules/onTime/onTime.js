@@ -22,9 +22,10 @@ define(function(require) {
       function($stateProvider) {
         $stateProvider
           .state('app.onTime', {
-            url: '/onTime',
+            url: '/onTime?activityId&taskId',
             templateUrl: 'onTime/templates/onTime.html',
             controller: 'OnTimeController',
+            reloadOnSearch: false,
             resolve: {
               projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory) {
                 var deferred = $q.defer();

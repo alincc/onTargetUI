@@ -30,7 +30,11 @@ define(function(require) {
         };
 
         service.addActivity = function(model) {
-          return $http.post(constant.domain + '/project/addActivity', model);
+          return $http.post(constant.domain + '/project/addActivity', model, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
         service.deleteActivity = function(model) {
@@ -42,7 +46,11 @@ define(function(require) {
         };
 
         service.import = function(data) {
-          return $http.post(constant.domain + '/uploadActivity', data);
+          return $http.post(constant.domain + '/uploadActivity', data, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
         return service;

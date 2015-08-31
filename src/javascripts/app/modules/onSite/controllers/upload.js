@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'categories', 'uploadFactory', '$timeout', 'documentFactory', '$modalInstance', 'googleDriveFactory', 'utilFactory',
-    function($scope, $rootScope, categories, uploadFactory, $timeout, documentFactory, $modalInstance, googleDriveFactory, utilFactory) {
+  var controller = ['$scope', '$rootScope', 'categories', 'uploadFactory', '$timeout', 'documentFactory', '$modalInstance', 'googleDriveFactory', 'boxFactory', 'dropBoxFactory',
+    function($scope, $rootScope, categories, uploadFactory, $timeout, documentFactory, $modalInstance, googleDriveFactory, boxFactory, dropBoxFactory) {
       $scope.uploadModel = {
         category: null,
         description: '',
@@ -15,9 +15,12 @@ define(function(require) {
       };
 
       $scope.extenalStorage = {
+        isLeeching: false,
         googleDrive: {
           isAuth: googleDriveFactory.isAuth(),
           isLoading: false,
+          isValidating: false,
+          isHaveMore: false,
           isLeeching: false,
           connect: function() {
             googleDriveFactory.authorize()
@@ -26,13 +29,34 @@ define(function(require) {
                 $scope.loadGoogleFile();
               });
           }
+        },
+        box: {
+          page: 0,
+          isHaveMore: false,
+          isAuth: boxFactory.isAuth(),
+          isLoading: false,
+          isLeeching: false,
+          connect: function() {
+            boxFactory.authorize()
+              .then(function() {
+                $scope.loadBoxFile();
+              });
+          }
+        },
+        dropBox: {
+          isAuth: dropBoxFactory.isAuth(),
+          isLoading: false,
+          isLeeching: false,
+          connect: function() {
+            dropBoxFactory.authorize()
+              .then(function() {
+                $scope.loadDropBoxFile();
+              });
+          }
         }
       };
 
-      $scope.verifyAuthentication = function() {
-
-      };
-
+      // Google Drive
       $scope.progressGoogleDriveFile = function(list) {
         return _.map(_.filter(list, function(el) {
           return angular.isDefined(el.downloadUrl) || angular.isDefined(el.exportLinks);
@@ -80,7 +104,10 @@ define(function(require) {
         $scope.extenalStorage.googleDrive.isLoading = true;
         googleDriveFactory.loadFiles(dir)
           .then(function(files) {
-            $scope.uploadModel.fileList = $scope.uploadModel.fileList.concat($scope.progressGoogleDriveFile(files));
+            $scope.extenalStorage.googleDrive.isHaveMore = files.length !== 0;
+            if(files.length > 0) {
+              $scope.uploadModel.fileList = $scope.uploadModel.fileList.concat($scope.progressGoogleDriveFile(files));
+            }
             $scope.extenalStorage.googleDrive.isLoading = false;
             $scope.$broadcast('content.reload');
           }, function() {
@@ -88,18 +115,129 @@ define(function(require) {
           });
       };
 
+      // Box.com
+      $scope.progressBoxFile = function(list) {
+        return _.map(_.filter(list, function(el) {
+          return el.type !== 'folder';
+        }), function(el) {
+          var fileModel = {};
+          //fileModel.mimeType = el.mimeType;
+          fileModel.name = el.name;
+
+          // File name
+          fileModel.fileName = fileModel.name.substring(fileModel.name.lastIndexOf('/') + 1);
+
+          // File extension
+          fileModel.ext = fileModel.name.substring(fileModel.name.lastIndexOf('.') + 1);
+
+          // File url
+          fileModel.downloadUrl = 'https://api.box.com/2.0/files/' + el.id + '/content';
+
+          return fileModel;
+        });
+      };
+
+      $scope.loadBoxFile = function(loadMore) {
+        if(loadMore) {
+          $scope.extenalStorage.box.page = $scope.extenalStorage.box.page + 1;
+        }
+        else {
+          $scope.extenalStorage.box.page = 0;
+        }
+        $scope.extenalStorage.box.isLoading = true;
+        boxFactory.loadData(0, $scope.extenalStorage.box.page * 10, 10)
+          .then(function(resp) {
+            $scope.extenalStorage.box.isHaveMore = resp.total_count > (($scope.extenalStorage.box.page + 1) * 10);
+            $scope.uploadModel.fileList = $scope.uploadModel.fileList.concat($scope.progressBoxFile(resp.entries));
+            $scope.extenalStorage.box.isLoading = false;
+            $scope.$broadcast('content.reload');
+          }, function() {
+            $scope.extenalStorage.box.isLoading = false;
+          });
+      };
+
+      // DropBox.com
+      $scope.progressDropBoxFile = function(list) {
+        return _.map(_.filter(list, function(el) {
+          return el.icon !== 'folder';
+        }), function(el) {
+          var fileModel = {};
+          //fileModel.mimeType = el.mimeType;
+          fileModel.name = el.path.substring(el.path.lastIndexOf('/') + 1);
+
+          // File name
+          fileModel.fileName = fileModel.name;
+
+          // File extension
+          fileModel.ext = fileModel.name.substring(fileModel.name.lastIndexOf('.') + 1);
+
+          // File url
+          fileModel.downloadUrl = 'https://content.dropboxapi.com/1/files/auto' + el.path;
+
+          return fileModel;
+        });
+      };
+
+      $scope.loadDropBoxFile = function(dir) {
+        $scope.extenalStorage.dropBox.isLoading = true;
+        dropBoxFactory.loadData('', 100)
+          .then(function(resp) {
+            console.log(resp);
+            $scope.uploadModel.fileList = $scope.uploadModel.fileList.concat($scope.progressDropBoxFile(resp.contents));
+            $scope.extenalStorage.dropBox.isLoading = false;
+            $scope.$broadcast('content.reload');
+          }, function() {
+            $scope.extenalStorage.dropBox.isLoading = false;
+          });
+      };
+
+      // Common fn
       $scope.leechFile = function(file, source) {
+        $scope.extenalStorage.isLeeching = true;
+
+        function done(resp) {
+          if(resp) {
+            $scope.uploadModel.filePath = resp.url;
+            $scope.uploadModel.fileName = resp.name;
+            $scope.uploadModel.fileType = resp.type;
+          }
+          $scope.extenalStorage.isLeeching = false;
+        }
+
         if(source === 'GoogleDrive') {
           $scope.extenalStorage.googleDrive.isLeeching = true;
           googleDriveFactory.downloadFile(file.downloadUrl, file.fileName)
             .success(function(resp) {
-              $scope.uploadModel.filePath = resp.url;
-              $scope.uploadModel.fileName = resp.name;
-              $scope.uploadModel.fileType = resp.type;
               $scope.extenalStorage.googleDrive.isLeeching = false;
+              done(resp);
             })
             .error(function(err) {
               $scope.extenalStorage.googleDrive.isLeeching = false;
+              done();
+            });
+        }
+        else if(source === 'Box') {
+          $scope.extenalStorage.box.isLeeching = true;
+          boxFactory.downloadFile(file.downloadUrl, file.fileName)
+            .success(function(resp) {
+              $scope.extenalStorage.box.isLeeching = false;
+              done(resp);
+            })
+            .error(function(err) {
+              $scope.extenalStorage.box.isLeeching = false;
+              done();
+            });
+        }
+        else if(source === 'DropBox') {
+          $scope.extenalStorage.dropBox.isLeeching = true;
+          boxFactory.downloadFile(file.downloadUrl, file.fileName)
+            .success(function(resp) {
+              $scope.extenalStorage.dropBox.isLeeching = false;
+              done(resp);
+            })
+            .error(function(err) {
+              $scope.extenalStorage.dropBox.isLeeching = false;
+              done();
             });
         }
       };
@@ -107,20 +245,39 @@ define(function(require) {
       $scope.selectSource = function(s) {
         $scope.uploadModel.fileList = [];
         if(s === 'GoogleDrive') {
+          $scope.extenalStorage.googleDrive.isValidating = true;
+          $scope.extenalStorage.googleDrive.isLoading = true;
           googleDriveFactory.validateToken()
             .then(function() {
               $scope.extenalStorage.googleDrive.isAuth = true;
+              $scope.extenalStorage.googleDrive.isValidating = false;
               $scope.loadGoogleFile();
-              $scope.uploadModel.source = s;
             }, function() {
-              $scope.uploadModel.source = s;
+              $scope.extenalStorage.googleDrive.isAuth = false;
+              $scope.extenalStorage.googleDrive.isValidating = false;
+              $scope.extenalStorage.googleDrive.isLoading = false;
             });
-        } else {
+          $scope.uploadModel.source = s;
+        }
+        else if(s === 'Box') {
+          if($scope.extenalStorage.box.isAuth) {
+            $scope.loadBoxFile();
+          }
+          $scope.uploadModel.source = s;
+        }
+        else if(s === 'DropBox') {
+          if($scope.extenalStorage.dropBox.isAuth) {
+            $scope.loadDropBoxFile();
+          }
+          $scope.uploadModel.source = s;
+        }
+        else {
           $scope.uploadModel.source = s;
         }
       };
 
       $scope.isUploading = false;
+
       $scope.percentage = 0;
 
       $scope.categories = categories;
@@ -185,8 +342,6 @@ define(function(require) {
       $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
       };
-
-      $scope.verifyAuthentication();
     }];
   return controller;
 });

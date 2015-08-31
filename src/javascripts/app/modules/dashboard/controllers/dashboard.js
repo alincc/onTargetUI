@@ -15,7 +15,7 @@ define(function(require) {
 
       function getCurrentDate() {
         var currentDate = new Date();
-        return new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+        return new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
       }
 
       function load() {
