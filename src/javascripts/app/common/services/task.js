@@ -12,7 +12,7 @@ define(function(require) {
     //project task
     services.getProjectTasks = function(projectId, canceler) {
       canceler = canceler || $q.defer();
-      return $http.post(constant.domain + '/task/getProjectTaskList', {
+      return $http.post(constant.domain + '/task/getProjectTaskByMainProject', {
         projectId: projectId
       }, {
         timeout: canceler.promise
@@ -21,7 +21,7 @@ define(function(require) {
 
     services.getProjectTasksFull = function(projectId, canceler) {
       canceler = canceler || $q.defer();
-      return $http.post(constant.domain + '/task/getProjectTask', {
+      return $http.post(constant.domain + '/task/getProjectTaskByActivity', {
         projectId: projectId
       }, {
         timeout: canceler.promise
