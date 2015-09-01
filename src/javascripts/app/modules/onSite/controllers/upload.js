@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'categories', 'uploadFactory', '$timeout', 'documentFactory', '$modalInstance', 'googleDriveFactory', 'boxFactory', 'dropBoxFactory',
-    function($scope, $rootScope, categories, uploadFactory, $timeout, documentFactory, $modalInstance, googleDriveFactory, boxFactory, dropBoxFactory) {
+  var controller = ['$scope', '$rootScope', 'categories', 'fileFactory', '$timeout', 'documentFactory', '$modalInstance', 'googleDriveFactory', 'boxFactory', 'dropBoxFactory',
+    function($scope, $rootScope, categories, fileFactory, $timeout, documentFactory, $modalInstance, googleDriveFactory, boxFactory, dropBoxFactory) {
       $scope.uploadModel = {
         category: null,
         description: '',
@@ -294,7 +294,7 @@ define(function(require) {
 
       $scope.upload = function(file) {
         $scope.isUploading = true;
-        uploadFactory.upload(file).progress(function(evt) {
+        fileFactory.upload(file, null, 'temp').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
@@ -321,21 +321,27 @@ define(function(require) {
       };
 
       $scope.saveDocumentInfo = function(model) {
-        var data = {
-          "projectId": $rootScope.currentProjectInfo.projectId,
-          "name": model.filePath,
-          "fileType": model.fileType,
-          "createdBy": $rootScope.currentUserInfo.userId,
-          "modifiedBy": $rootScope.currentUserInfo.userId,
-          "categoryId": model.category.id,
-          "description": model.description
-        };
-        documentFactory.saveUploadedDocsInfo(data)
-          .success(function(resp) {
-            $modalInstance.close(data);
-          })
-          .error(function() {
-            $scope.document_frm.$setPristine();
+        fileFactory.move($scope.uploadModel.filePath, null, 'projects', $rootScope.currentProjectInfo.projectId, 'onsite')
+          .success(function(resp){
+            model.filePath = resp.url;
+            model.fileName = resp.name;
+            model.fileType = resp.type;
+            var data = {
+              "projectId": $rootScope.currentProjectInfo.projectId,
+              "name": model.filePath,
+              "fileType": model.fileType,
+              "createdBy": $rootScope.currentUserInfo.userId,
+              "modifiedBy": $rootScope.currentUserInfo.userId,
+              "categoryId": model.category.id,
+              "description": model.description
+            };
+            documentFactory.saveUploadedDocsInfo(data)
+              .success(function(resp) {
+                $modalInstance.close(data);
+              })
+              .error(function() {
+                $scope.document_frm.$setPristine();
+              });
           });
       };
 

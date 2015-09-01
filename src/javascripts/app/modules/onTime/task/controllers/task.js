@@ -12,7 +12,7 @@ define(function() {
         }
         canceler = $q.defer();
         $scope.isLoadingTasks = true;
-        taskFactory.getProjectTasksFull($rootScope.activitySelected.projectId, canceler).then(
+        taskFactory.getProjectTaskByActivity($rootScope.activitySelected.projectId, canceler).then(
           function(resp) {
             $scope.tasks = resp.data.tasks;
             $scope.isLoadingTasks = false;

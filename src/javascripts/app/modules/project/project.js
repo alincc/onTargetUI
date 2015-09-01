@@ -22,7 +22,7 @@ define(function(require) {
     companyServiceModule = require('app/common/services/company'),
     countryServiceModule = require('app/common/services/country'),
     userContextModule = require('app/common/context/user'),
-    uploadServiceModule = require('app/common/services/upload'),
+    uploadServiceModule = require('app/common/services/file'),
     angularSvgRoundProgress = require('angularSvgRoundProgress'),
     utilServiceModule = require('app/common/services/util'),
     angularSanitize = require('angularSanitize'),

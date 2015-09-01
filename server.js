@@ -26,6 +26,7 @@ app.use(express.static(process.env.ROOT));
 var upload = require('./server/routes/upload')(app);
 var download = require('./server/routes/download')(app);
 var xlsParser = require('./server/routes/xls-parser')(app);
+var move = require('./server/routes/move')(app);
 
 app.post('/ontargetrs/services*', function(req, res) {
   //var r = request.post({headers: req.headers, uri: PROXY_SERVER + req.params[0], json: req.body});
@@ -34,7 +35,7 @@ app.post('/ontargetrs/services*', function(req, res) {
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }
-
+  console.log(PROXY_SERVER + req.params[0]);
   req.pipe(request({
     url: url,
     method: req.method,
@@ -54,7 +55,7 @@ app.get('/ontargetrs/services*', function(req, res) {
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }
-
+  console.log(PROXY_SERVER + req.params[0]);
   req.pipe(request({
     url: url,
     method: req.method//,

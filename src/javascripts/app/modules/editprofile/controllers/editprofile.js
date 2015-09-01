@@ -1,8 +1,8 @@
 define(function() {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'uploadFactory', '$timeout', 'appConstant', 'toaster',
-    function($scope, $rootScope, userContext, $state, accountFactory, notifications, uploadFactory, $timeout, appConstant, toaster) {
+  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'fileFactory', '$timeout', 'appConstant', 'toaster',
+    function($scope, $rootScope, userContext, $state, accountFactory, notifications, fileFactory, $timeout, appConstant, toaster) {
 
       $scope.editUserData = {
         userId: $rootScope.currentUserInfo.userId,
@@ -15,8 +15,7 @@ define(function() {
         userImagePath: $rootScope.currentUserInfo.contact.userImagePath
       };
 
-      function submitUserProfile(model) {
-
+      function updateUserProfile(model) {
         accountFactory.updateProfile(model)
           .then(function() {
             $scope.form.$setPristine();
@@ -28,13 +27,26 @@ define(function() {
 
             // Save user info to local storage
             userContext.fillInfo(angular.copy($rootScope.currentUserInfo), true);
-            
+
             notifications.updateProfileSuccess();
           },
           function(er) {
             console.log(er);
             $scope.form.$setPristine();
           });
+      }
+
+      function submitUserProfile(model) {
+        if($scope.isAvatarChanged) {
+          fileFactory.move($scope.editUserData.userImagePath, null, 'profile')
+            .success(function(resp) {
+              model.userImagePath = resp.url;
+              $scope.editUserData.userImagePath = resp.url;
+              updateUserProfile(model);
+            });
+        } else {
+          updateUserProfile(model);
+        }
       }
 
       $scope.submitUserProfile = submitUserProfile;
@@ -52,22 +64,24 @@ define(function() {
 
       function upload(file) {
         $scope.isUploadAvatar = true;
-        uploadFactory.upload(file).progress(function(evt) {
-          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.percentage = progressPercentage;
-        }).success(function(data, status, headers, config) {
-          $timeout(function() {
-            //$scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-            $scope.editUserData.userImagePath = data.url;
-            $scope.isUploadAvatar = false;
-          });
-        })
+        fileFactory.upload(file, null, 'temp')
+          .progress(function(evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            $scope.percentage = progressPercentage;
+          }).success(function(data, status, headers, config) {
+            $timeout(function() {
+              $scope.editUserData.userImagePath = data.url;
+              $scope.isUploadAvatar = false;
+              $scope.isAvatarChanged = true;
+            });
+          })
           .error(function() {
             $scope.isUploadAvatar = false;
           });
       }
 
       $scope.isUploadAvatar = false;
+      $scope.isAvatarChanged = false;
       $scope.percentage = 0;
 
       $scope.upload = function(files) {

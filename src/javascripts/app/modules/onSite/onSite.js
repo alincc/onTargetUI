@@ -12,7 +12,7 @@ define(function(require) {
     mentio = require('mentio'),
     angularUiSelect = require('angularUiSelect'),
     angularLocalStorage = require('angularLocalStorage'),
-    uploadServiceModule = require('app/common/services/upload'),
+    uploadServiceModule = require('app/common/services/file'),
     onSiteServiceModule = require('app/common/services/onSite'),
     utilServiceModule = require('app/common/services/util'),
     googleDriveServiceModule = require('app/common/services/googleDrive'),
@@ -21,7 +21,7 @@ define(function(require) {
     permissionServiceModule = require('app/common/services/permission'),
     angularSanitize = require('angularSanitize'),
     toaster = require('toaster');
-  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.upload', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox']);
+  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);

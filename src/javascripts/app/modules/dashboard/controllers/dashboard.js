@@ -199,7 +199,6 @@ define(function(require) {
         $scope.loadTask = function() {
           taskFactory.getProjectTasks($scope.currentProject.projectId)
             .success(function(resp) {
-
               if(resp.tasks.length > 0) {
                 _.each(resp.tasks, function(tsk) {
                   //$scope.tasks.scheduled.push(tsk);
@@ -217,12 +216,12 @@ define(function(require) {
                     if(diffDays <= 0) {
                       $scope.tasks.pastDue.push(tsk);
                     }
-                    if(diffDays / (1000 * 60 * 60 * 24) <= 7) {
+                    if(diffDays <= 7) {
                       $scope.tasks.dueIn7Day.push(tsk);
                     }
                   }
 
-                  if('1' === tsk.severity) {
+                  if('CRITICAL' === tsk.severity) {
                     $scope.tasks.critical.push(tsk);
                   }
                 });

@@ -8,8 +8,8 @@ var mime = require('mime');
 
 // paths/constants
 var assetsPath = path.join(rootPath, 'assets'),
-  uploadedFilesPath = assetsPath + "/uploads/",
-  imagePathRoot = 'assets/uploads/';
+  uploadedFilesPath = assetsPath + "/temp/",
+  imagePathRoot = 'assets/temp/';
 
 function downloadFile(req, res) {
   var responseData = {

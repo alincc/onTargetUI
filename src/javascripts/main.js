@@ -47,7 +47,7 @@ require.config({
     angularUtilsPagination: '../bower_components/angular-utils-pagination/dirPagination',
     angularUiMask: '../bower_components/angular-ui-mask/dist/mask',
     angularUiSelect: '../bower_components/angular-ui-select/dist/select',
-    chartjs: '../bower_components/Chart.js/chart',
+    chartjs: '../bower_components/Chart.js/Chart',
     angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart',
     mentio: '../bower_components/ment.io/dist/mentio',
     angularSlider: '../bower_components/venturocket-angular-slider/build/angular-slider',

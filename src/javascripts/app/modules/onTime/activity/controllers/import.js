@@ -64,15 +64,15 @@ define(function(require) {
         };
         _.each($scope.importModel.table.rows, function(el, idx) {
           data.activityTaskRecords.push({
-            "index": idx+1,
+            "index": idx,
             "activityCode": el[0],
             "activityName": el[1],
-            "activityStartDate": moment(el[2], 'DD/MM/YYYY').format('YYYY-MM-DD'),
-            "activityEndDate": moment(el[3], 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            "activityStartDate": el[2],
+            "activityEndDate": el[3],
             "taskCode": el[4],
             "taskName": el[5],
-            "taskStartDate": moment(el[6], 'DD/MM/YYYY').format('YYYY-MM-DD'),
-            "taskEndDate": moment(el[7], 'DD/MM/YYYY').format('YYYY-MM-DD'),
+            "taskStartDate": el[6],
+            "taskEndDate": el[7],
             "estimatedCost": el[8],
             "actualCost": el[9],
             "percentageComplete": el[11],

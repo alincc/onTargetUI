@@ -11,24 +11,44 @@ var rootPath = process.env.ROOT;
 // paths/constants
 var fileInputName = "file",
   assetsPath = path.join(rootPath, 'assets'),
-  uploadedFilesPath = assetsPath + "/uploads/",
-  imagePathRoot = 'assets/uploads/',
-  maxFileSize = 10000000; // in bytes
+  uploadedFilesPath = assetsPath + '/',
+  imagePathRoot = 'assets/',
+  maxFileSize = 10000000, // in bytes
+  fileName = '';
 
 function uploadFile(req, res) {
   var file = req.files[fileInputName],
     uuid = req.body.uuid,
+    rootFolder = req.body.folder,
+    projectId = req.body.projectId,
+    context = req.body.context,
     responseData = {
       success: false
     };
+  fileName = req.body.fileName;
 
-  file.name = req.body.fileName;
+  file.name = fileName;
 
   if(isValid(file.size)) {
-    moveUploadedFile(file, uuid, function() {
+    moveUploadedFile(file, uuid, rootFolder, projectId, context, function() {
+        var url = imagePathRoot + rootFolder + '/';
+        if(rootFolder === 'projects') {
+          if(context === '') {
+            url += 'projects-' + projectId + '/' + fileName;
+          }
+          else {
+            url += 'projects-' + projectId + '/' + context + '/' + fileName;
+          }
+        }
+        else if(rootFolder === 'profile') {
+          url += fileName; // profile
+        }
+        else {
+          url += uuid + '/' + fileName; // temp
+        }
         responseData.success = true;
-        responseData.url = imagePathRoot + uuid + "/" + file.name;
-        responseData.name = file.name;
+        responseData.url = url;
+        responseData.name = fileName;
         responseData.type = file.type;
         responseData.size = file.size;
         res.send(responseData);
@@ -76,13 +96,77 @@ function moveFile(destinationDir, sourceFile, destinationFile, success, failure)
   });
 }
 
-function moveUploadedFile(file, uuid, success, failure) {
-  var destinationDir = uploadedFilesPath + uuid + "/",
-    fileDestination = destinationDir + file.name;
+function moveUploadedFile(file, uuid, rootFolder, projectId, context, success, failure) {
+  var url = uploadedFilesPath + rootFolder,
+    destinationDir,
+    fileDestination;
 
-  moveFile(destinationDir, file.path, fileDestination, success, failure);
+  if(rootFolder === 'projects') {
+    mkdirp(url, function(error) {
+      if(error) {
+        console.error("Problem creating directory " + url + ": " + error);
+        failure();
+      }
+      else {
+        url += '/projects-' + projectId;
+        if(context === '') {
+          destinationDir = url;
+          fileDestination = destinationDir + '/' + fileName;
+          // Check if file exist, then change file name
+          if(path.existsSync(fileDestination)) {
+            fileName = new Date().getTime() + '-' + fileName;
+            fileDestination = destinationDir + '/' + fileName;
+          }
+          moveFile(destinationDir, file.path, fileDestination, success, failure);
+        }
+        else {
+          mkdirp(url, function(error) {
+            if(error) {
+              console.error("Problem creating directory " + url + ": " + error);
+              failure();
+            }
+            else {
+              url += '/' + context;
+              destinationDir = url;
+              fileDestination = destinationDir + '/' + fileName;
+
+              // Check if file exist, then change file name
+              if(path.existsSync(fileDestination)) {
+                fileName = new Date().getTime() + '-' + fileName;
+                fileDestination = destinationDir + '/' + fileName;
+              }
+
+              moveFile(destinationDir, file.path, fileDestination, success, failure);
+            }
+          });
+        }
+      }
+    });
+  }
+  else if(rootFolder === 'profile') {
+    destinationDir = url;
+    fileDestination = destinationDir + '/' + fileName;
+    if(path.existsSync(fileDestination)) {
+      fileName = new Date().getTime() + '-' + fileName;
+      fileDestination = destinationDir + '/' + fileName;
+    }
+    moveFile(destinationDir, file.path, fileDestination, success, failure);
+  }
+  else {
+    mkdirp(url, function(error) {
+      if(error) {
+        console.error("Problem creating directory " + url + ": " + error);
+        failure();
+      }
+      else {
+        destinationDir = url + '/' + uuid + '/';
+        fileDestination = destinationDir + fileName;
+        moveFile(destinationDir, file.path, fileDestination, success, failure);
+      }
+    });
+  }
 }
 
-module.exports = function(app){
+module.exports = function(app) {
   app.post('/node/upload', [multipartMiddleware], uploadFile);
 };

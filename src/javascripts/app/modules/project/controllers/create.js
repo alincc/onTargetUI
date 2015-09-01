@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'uploadFactory', 'appConstant', 'toaster', '$timeout', '$filter',
-    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, uploadFactory, appConstant, toaster, $timeout, $filter) {
+  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter',
+    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter) {
 
       $scope.projectModel = {
         projectId: null,
@@ -132,7 +132,7 @@ define(function() {
 
       function upload(file) {
         $scope.picture.isUploadPicture = true;
-        uploadFactory.upload(file).progress(function(evt) {
+        fileFactory.upload(file, null, 'projects', $rootScope.currentProjectInfo.projectId).progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.picture.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {

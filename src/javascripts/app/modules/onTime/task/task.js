@@ -33,7 +33,7 @@ define(function(require) {
     activityServiceModule = require('app/common/services/activity'),
     notificationServiceModule = require('app/common/services/notifications'),
     taskServiceModule = require('app/common/services/task'),
-    uploadServiceModule = require('app/common/services/upload'),
+    uploadServiceModule = require('app/common/services/file'),
     userContextModule = require('app/common/context/user'),
     taskFilterModule = require('app/common/filters/task'),
     angularUiSelect = require('angularUiSelect'),
@@ -44,7 +44,7 @@ define(function(require) {
     ngFileUpload = require('ngFileUpload'),
     requireMultiple = require('app/common/validators/requireMultiple');
 
-  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.upload', 'ui.select', 'ngLetterAvatar', 'ngFileUpload', 'common.validators.requireMultiple']);
+  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'angularMoment', 'vr.directives.slider', 'ngTouch', 'common.services.file', 'ui.select', 'ngLetterAvatar', 'ngFileUpload', 'common.validators.requireMultiple']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onTime/task/templates/task.html', template);

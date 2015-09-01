@@ -7,10 +7,10 @@ define(function (require){
     accountServiceModule = require('app/common/services/account'),
     template = require('text!./templates/signup.html'),
     uimask = require('angularUiMask'),
-    fileupload = require('app/common/services/upload'),
+    fileupload = require('app/common/services/file'),
     toaster = require('toaster'),
     ngFileUpload = require('ngFileUpload');
-  var module = angular.module('app.signup', ['ui.router', 'app.config', 'common.services.account', 'common.context.user', 'ui.mask', 'common.services.upload', 'toaster', 'ngFileUpload', 'ngMessages']);
+  var module = angular.module('app.signup', ['ui.router', 'app.config', 'common.services.account', 'common.context.user', 'ui.mask', 'common.services.file', 'toaster', 'ngFileUpload', 'ngMessages']);
   module.run(['$templateCache', function ($templateCache){
     $templateCache.put('signup/templates/signup.html', template);
   }]);

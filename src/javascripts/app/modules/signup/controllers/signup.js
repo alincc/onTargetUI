@@ -1,7 +1,7 @@
 define(function() {
   'use strict';
-  var controller = ['$scope', 'userContext', '$state', 'appConstant', 'accountFactory', 'uploadFactory', '$timeout', 'registrationTokenData', 'toaster',
-    function($scope, userContext, $state, appConstant, accountFactory, uploadFactory, $timeout, registrationTokenData, toaster) {
+  var controller = ['$scope', 'userContext', '$state', 'appConstant', 'accountFactory', 'fileFactory', '$timeout', 'registrationTokenData', 'toaster',
+    function($scope, userContext, $state, appConstant, accountFactory, fileFactory, $timeout, registrationTokenData, toaster) {
       $scope.user = {
         username: "",
         email: "",
@@ -69,7 +69,7 @@ define(function() {
 
       function upload(file) {
         $scope.isUploadAvatar = true;
-        uploadFactory.upload(file).progress(function(evt) {
+        fileFactory.upload(file, null, 'profile').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           //$scope.log = 'progress: ' + progressPercentage + '% ' +
           //  evt.config.file.name + '\n' + $scope.log;

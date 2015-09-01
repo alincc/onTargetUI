@@ -224,11 +224,9 @@ define(function(require) {
   }]);
 
   module.constant('appConstant', {
-    domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',
-    //domain: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
-    baseUrl: 'http://demo.newoceaninfosys.com:3214',
-    nodeServer: 'http://demo.newoceaninfosys.com:3214',
-    //nodeServer: 'http://localhost:9000',
+    domain: 'http://localhost:9000/ontargetrs/services',
+    baseUrl: 'http://localhost:9000',
+    nodeServer: 'http://localhost:9000',
     app: {
       name: "OnTarget",
       id: "OnTarget",

@@ -139,6 +139,7 @@ define(function() {
                 "perPageLimit": constant.app.settings.userNotificationsPageSize,
                 "userId": $rootScope.currentUserInfo.userId
               };
+
               userNotificationsFactory.getAll(requestPayload);
 
               // get user details and permissions

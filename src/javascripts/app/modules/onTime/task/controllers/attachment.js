@@ -7,8 +7,8 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'uploadFactory', '$timeout', '$filter',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, uploadFactory, $timeout, $filter) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'fileFactory', '$timeout', '$filter',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, fileFactory, $timeout, $filter) {
       $scope.attachments = [];
       $scope.isUploading = false;
       $scope.percentage = 0;
@@ -40,7 +40,7 @@ define(function(require) {
         $scope.isUploading = true;
         //$files: an array of files selected, each file has name, size, and type.
         var $file = $files[0];
-        uploadFactory.upload($file).progress(function(evt) {
+        fileFactory.upload($file, null, 'projects', $rootScope.currentProjectInfo.projectId, 'task').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
@@ -85,7 +85,7 @@ define(function(require) {
       /*$scope.uploadFile = function(upload) {
        var file = upload.files[0];
        $scope.isUploadAvatar = true;
-       uploadFactory.upload(file, 'task').progress(function (evt) {
+       fileFactory.upload(file, 'task').progress(function (evt) {
        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
        //$scope.log = 'progress: ' + progressPercentage + '% ' +
        //  evt.config.file.name + '\n' + $scope.log;
