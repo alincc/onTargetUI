@@ -22,6 +22,9 @@ define(function(require) {
           return $http.post(constant.domain + '/project/getProjectsByUser', model, {
             timeout: canceler.promise
           });
+          //return $http.post(constant.domain + '/project/getUserProjectList', model, {
+          //  timeout: canceler.promise
+          //});
         };
 
         service.getProjectById = function(projectId){

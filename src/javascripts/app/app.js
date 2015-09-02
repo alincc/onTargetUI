@@ -54,7 +54,8 @@ define(function (require){
     'app.editprofile',
     'app.company',
     'app.changePassword',
-    'app.notifications'
+    'app.notifications',
+    'app.onContact'
   ]);
 
   app
