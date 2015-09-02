@@ -122,13 +122,13 @@ define(function(require) {
     };
 
     services.getTaskBudget = function(taskId) {
-      return $http.post(constant.domain + '/tasks/budget/getTaskBudgetByTaskId', {
+      return $http.post(constant.domain + '/task/budget/getTaskBudgetByTaskId', {
         taskId: taskId
       });
     };
 
     services.addTaskBudget = function(data) {
-      return $http.post(constant.domain + '/tasks/budget/add', {taskBudgetEstimates: data}, {
+      return $http.post(constant.domain + '/task/budget/add', {taskBudgetEstimates: data}, {
         headers: {
           AutoAlert: true
         }
@@ -136,7 +136,7 @@ define(function(require) {
     };
 
     services.updateTaskBudget = function(data) {
-      return $http.post(constant.domain + '/tasks/budget/add', {taskBudgetEstimates: data}, {
+      return $http.post(constant.domain + '/task/budget/add', {taskBudgetEstimates: data}, {
         headers: {
           AutoAlert: true
         }
