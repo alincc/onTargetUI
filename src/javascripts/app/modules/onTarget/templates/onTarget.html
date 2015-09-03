@@ -4,13 +4,32 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-4">
-                    <h4>Time Complete {{SPI}}</h4>
-                    <canvas id="TimeComplete" height="" class="chart chart-polar-area"
+                    <h4>Time Complete </h4>
+                    <div class='desc'>
+                        <p class='large'>25 %</p>
+                        <p class='small'>25 %</p>
+                        <span
+			                round-progress
+			                max="100"
+			                current="25"
+			                color="#00d8ff"
+			                bgcolor="#ececec"
+			                radius="80"
+			                stroke="25"
+			                semi="false"
+			                rounded="false"
+			                clockwise="true"
+			                responsive="false"
+			                iterations="10"
+			                animation="easeInOutQuart">
+	                    </span>
+                    </div>
+                    <!--<canvas id="TimeComplete" height="" class="chart chart-polar-area"
                             options="TimeComplete.options"
                             colours="TimeComplete.colours"
                             data="TimeComplete.data"
                             labels="TimeComplete.labels">
-                    </canvas>
+                    </canvas>-->
                 </div>
                 <div class="col-lg-4">
                     <h4>Cost Complete {{SPI}}</h4>
