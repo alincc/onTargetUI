@@ -147,7 +147,10 @@ define(function(require) {
 
                     //SPI
                     //CV = 20; //TEST DATA
-
+                    CPI     = 25;
+                    SPI     = 60;
+                    CV      = 30;
+                    SV      = 2;
                     $scope.TimeComplete.data[0] = SPI; //SPI
                     $scope.CostComplete.data[0] = CPI; //CPI
                     $scope.CostVariance.data[0] = CV; //CV
