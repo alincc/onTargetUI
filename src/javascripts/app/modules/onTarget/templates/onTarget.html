@@ -1,0 +1,47 @@
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> ONTARGET</strong></div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h4>Time Complete {{SPI}}</h4>
+                    <canvas id="TimeComplete" height="" class="chart chart-polar-area"
+                            options="TimeComplete.options"
+                            colours="TimeComplete.colours"
+                            data="TimeComplete.data"
+                            labels="TimeComplete.labels">
+                    </canvas>
+                </div>
+                <div class="col-lg-4">
+                    <h4>Cost Complete {{SPI}}</h4>
+                    <canvas id="CostComplete" height="" class="chart chart-polar-area"
+                            options="CostComplete.options"
+                            colours="CostComplete.colours"
+                            data="CostComplete.data"
+                            labels="CostComplete.labels">
+                    </canvas>
+                </div>
+                <div class="col-lg-4">
+                    <h4>Cost Variance {{CV}}</h4>
+                    <canvas id="CostVariance" height="" class="chart chart-polar-area"
+                            options="CostVariance.options"
+                            colours="CostVariance.colours"
+                            data="CostVariance.data"
+                            labels="CostVariance.labels">
+                    </canvas>
+                </div>
+                <div class="col-lg-4">
+                    <h4>Schedule Variance {{SV}}</h4>
+                    <canvas id="scheduleVariance" height="" class="chart chart-polar-area"
+                            options="scheduleVariance.options"
+                            colours="scheduleVariance.colours"
+                            data="scheduleVariance.data"
+                            labels="scheduleVariance.labels">
+                    </canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

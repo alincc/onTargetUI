@@ -1,9 +1,6 @@
 /**
  * Created by aashiskhanal on 9/2/15.
  */
-/**
- * Created by aashiskhanal on 9/1/15.
- */
 define(function(require) {
     'use strict';
     var angular = require('angular');
