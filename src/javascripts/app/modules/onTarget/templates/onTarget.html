@@ -4,37 +4,17 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-4 ">
-                    <h4>Time Complete </h4>
-                    <div class="desc">
-		                <p class="large" ng-bind="CPI"></p>
-		                <p class="small">{{CPI}}</p>
-                    </div>
-                    <span
-		                round-progress
-		                max="100"
-		                current=25
-		                color="#00d8ff"
-		                bgcolor="#ececec"
-		                radius="80"
-		                stroke="25"
-		                semi="false"
-		                rounded="false"
-		                clockwise="true"
-		                responsive="false"
-		                iterations="10"
-		                animation="easeInOutQuart">
-                    </span>
-
-                    <!--<canvas id="TimeComplete" height="" class="chart chart-polar-area"
+                    <h4>Time Complete {{SPI}}</h4>
+                    <canvas id="TimeComplete" height="" class="chart chart-doughnut"
                             options="TimeComplete.options"
                             colours="TimeComplete.colours"
                             data="TimeComplete.data"
                             labels="TimeComplete.labels">
-                    </canvas>-->
+                    </canvas>
                 </div>
                 <div class="col-lg-4">
-                    <h4>Cost Complete {{SPI}}</h4>
-                    <canvas id="CostComplete" height="" class="chart chart-chart-pie"
+                    <h4>Cost Complete {{CPI}}</h4>
+                    <canvas id="CostComplete" height="" class="chart chart-doughnut"
                             options="CostComplete.options"
                             colours="CostComplete.colours"
                             data="CostComplete.data"
@@ -43,7 +23,7 @@
                 </div>
                 <div class="col-lg-4">
                     <h4>Cost Variance {{CV}}</h4>
-                    <canvas id="CostVariance" height="" class="chart chart-polar-area"
+                    <canvas id="CostVariance" height="" class="chart chart-doughnut"
                             options="CostVariance.options"
                             colours="CostVariance.colours"
                             data="CostVariance.data"
@@ -52,7 +32,7 @@
                 </div>
                 <div class="col-lg-4">
                     <h4>Schedule Variance {{SV}}</h4>
-                    <canvas id="scheduleVariance" height="" class="chart chart-polar-area"
+                    <canvas id="scheduleVariance" height="" class="chart chart-doughnut"
                             options="scheduleVariance.options"
                             colours="scheduleVariance.colours"
                             data="scheduleVariance.data"
