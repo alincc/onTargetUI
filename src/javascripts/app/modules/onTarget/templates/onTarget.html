@@ -3,27 +3,28 @@
         <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> ONTARGET</strong></div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-4 ">
                     <h4>Time Complete </h4>
-                    <div class='desc'>
-                        <p class='large'>25 %</p>
-                        <p class='small'>25 %</p>
-                        <span
-			                round-progress
-			                max="100"
-			                current="25"
-			                color="#00d8ff"
-			                bgcolor="#ececec"
-			                radius="80"
-			                stroke="25"
-			                semi="false"
-			                rounded="false"
-			                clockwise="true"
-			                responsive="false"
-			                iterations="10"
-			                animation="easeInOutQuart">
-	                    </span>
+                    <div class="desc">
+		                <p class="large" ng-bind="CPI"></p>
+		                <p class="small">{{CPI}}</p>
                     </div>
+                    <span
+		                round-progress
+		                max="100"
+		                current=25
+		                color="#00d8ff"
+		                bgcolor="#ececec"
+		                radius="80"
+		                stroke="25"
+		                semi="false"
+		                rounded="false"
+		                clockwise="true"
+		                responsive="false"
+		                iterations="10"
+		                animation="easeInOutQuart">
+                    </span>
+
                     <!--<canvas id="TimeComplete" height="" class="chart chart-polar-area"
                             options="TimeComplete.options"
                             colours="TimeComplete.colours"
