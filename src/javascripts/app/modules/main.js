@@ -16,6 +16,7 @@ define(function (require){
     onTime: require('./onTime/onTime'),
     onSite: require('./onSite/onSite'),
     onContact: require('./onContact/onContact'),
+    onTarget: require('./onTarget/onTarget'),
     editprofile: require('./editprofile/editprofile'),
     company: require('./editCompany/company'),
     changePassword: require('./changePassword/changePassword'),

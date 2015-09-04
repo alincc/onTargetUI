@@ -57,7 +57,8 @@ define(function(require) {
     'app.company',
     'app.changePassword',
     'app.notifications',
-    'app.onContact'
+    'app.onContact',
+    'app.onTarget'
   ]);
 
   app
