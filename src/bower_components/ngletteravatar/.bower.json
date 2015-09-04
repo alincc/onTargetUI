@@ -20,7 +20,6 @@
     "commit": "85285901eb60d31959d1de1fce93e379b6798d22"
   },
   "_source": "git://github.com/uttesh/ngletteravatar.git",
-  "_target": "~2.0.3",
-  "_originalSource": "ngletteravatar",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "ngletteravatar"
 }

@@ -46,11 +46,7 @@ define(function(require) {
         };
 
         service.import = function(data) {
-          return $http.post(constant.domain + '/uploadActivity', data, {
-            headers: {
-              AutoAlert: true
-            }
-          });
+          return $http.post(constant.domain + '/uploadActivity', data);
         };
 
         return service;

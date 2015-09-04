@@ -1,4 +1,4 @@
-define(function (require){
+define(function(require) {
   'use strict';
 
   var angular = require('angular'),
@@ -16,7 +16,8 @@ define(function (require){
     angularSanitize = require('angularSanitize'),
     angularLoadingBar = require('angularLoadingBar'),
     userNotificationModule = require('./common/services/userNotifications'),
-    mockServiceModule = require('./common/services/mock');
+    mockServiceModule = require('./common/services/mock'),
+    pushServiceModule = require('./common/services/push');
 
   var app = angular.module('app', [
     //libraries
@@ -35,6 +36,7 @@ define(function (require){
     'common.context.project',
     'common.services.userNotifications',
     'common.services.mock',
+    'common.services.push',
 
     // modules
     'app.main',
@@ -60,23 +62,30 @@ define(function (require){
   ]);
 
   app
-    .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant',
-      function ($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant){
+    .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant', 'pushFactory',
+      function($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant, pushFactory) {
         // Load Authentication data from localstorage
         userContext.loadFromLocal();
+
+        // Load project context
         projectContext.loadProject();
-        if ($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-          var requestPayload = {
-            "pageNumber": 1,
-            "perPageLimit": constant.app.settings.userNotificationsPageSize,
-            "userId": $rootScope.currentUserInfo.userId
-          };
-          userNotificationsFactory.startGetAll(requestPayload);
-        }
+
+        // Initialize notifications service
+        pushFactory.initialize();
+
+        // Load notifications
+        //if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
+        //  var requestPayload = {
+        //    "pageNumber": 1,
+        //    "perPageLimit": constant.app.settings.userNotificationsPageSize,
+        //    "userId": $rootScope.currentUserInfo.userId
+        //  };
+        //  userNotificationsFactory.startGetAll(requestPayload);
+        //}
       }
     ]);
 
-  app.controller('AppController', ['$scope', 'appConstant', function ($scope, appConstant){
+  app.controller('AppController', ['$scope', 'appConstant', function($scope, appConstant) {
     $scope.app = appConstant.app;
   }]);
 

@@ -6,32 +6,28 @@ define(function(require) {
   module.factory('projectContext', ['storage', '$q', '$rootScope', function(storage, $q, $rootScope) {
     var service = {},
       project = {},
-      mainProject = {};
+      allProjects = [];
 
     $rootScope.currentProjectInfo = project;
+    $rootScope.allProjects = [];
 
-    $rootScope.mainProjectInfo = mainProject;
-
-    service.setProject = function(pj, mJ) {
+    service.setProject = function(pj, allPj) {
       if(pj) {
         project = $rootScope.currentProjectInfo = pj;
       }
 
-      if(mJ) {
-        mainProject = $rootScope.mainProjectInfo = mJ;
-      }
-
       service.saveLocal({
         project: project,
-        mainProject: mainProject
+        allProjects: allPj || allProjects
       });
     };
 
     service.clearInfo = function() {
-      project = $rootScope.currentProjectInfo = mainProject = $rootScope.mainProjectInfo = {};
+      project = $rootScope.currentProjectInfo = {};
+      allProjects = $rootScope.allProjects = [];
       service.saveLocal({
         project: project,
-        mainProject: mainProject
+        allProjects: allProjects
       });
     };
 
@@ -43,19 +39,19 @@ define(function(require) {
     service.loadProject = function() {
       var data = storage.get('projectData');
       data = data || {};
-      service.setProject(data.project || {}, data.mainProject || {});
+      service.setProject(data.project || {}, data.allProjects || []);
     };
 
     service.project = function() {
       return project;
     };
 
-    service.mainProject = function() {
-      return mainProject;
+    service.allProjects = function() {
+      return allProjects;
     };
 
     service.valid = function() {
-      return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId) && $rootScope.mainProjectInfo && angular.isDefined($rootScope.mainProjectInfo.projectId);
+      return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId);
     };
 
     return service;

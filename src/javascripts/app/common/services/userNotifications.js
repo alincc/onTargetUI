@@ -38,25 +38,25 @@ define(function(require) {
         return deferred.promise;
       };
 
-      service.startGetAll = function(param, interval) {
-        if(!interval) {
-          interval = constant.app.settings.userNotificationsInterval;
-        }
-        if(intervalFunction) {
-          return;
-        }
-        service.getAll(param);
-        intervalFunction = $interval(function() {
-          service.getAll(param);
-        }, interval);
-      };
-
-      service.stopGetAll = function() {
-        if(intervalFunction) {
-          $interval.cancel(intervalFunction);
-          intervalFunction = undefined;
-        }
-      };
+      //service.startGetAll = function(param, interval) {
+      //  if(!interval) {
+      //    interval = constant.app.settings.userNotificationsInterval;
+      //  }
+      //  if(intervalFunction) {
+      //    return;
+      //  }
+      //  service.getAll(param);
+      //  intervalFunction = $interval(function() {
+      //    service.getAll(param);
+      //  }, interval);
+      //};
+      //
+      //service.stopGetAll = function() {
+      //  if(intervalFunction) {
+      //    $interval.cancel(intervalFunction);
+      //    intervalFunction = undefined;
+      //  }
+      //};
 
       return service;
     }]);

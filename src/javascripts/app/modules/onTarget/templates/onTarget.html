@@ -3,9 +3,9 @@
         <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> ONTARGET</strong></div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-4 ">
                     <h4>Time Complete {{SPI}}</h4>
-                    <canvas id="TimeComplete" height="" class="chart chart-polar-area"
+                    <canvas id="TimeComplete" height="" class="chart chart-doughnut"
                             options="TimeComplete.options"
                             colours="TimeComplete.colours"
                             data="TimeComplete.data"
@@ -13,8 +13,8 @@
                     </canvas>
                 </div>
                 <div class="col-lg-4">
-                    <h4>Cost Complete {{SPI}}</h4>
-                    <canvas id="CostComplete" height="" class="chart chart-polar-area"
+                    <h4>Cost Complete {{CPI}}</h4>
+                    <canvas id="CostComplete" height="" class="chart chart-doughnut"
                             options="CostComplete.options"
                             colours="CostComplete.colours"
                             data="CostComplete.data"
@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-lg-4">
                     <h4>Cost Variance {{CV}}</h4>
-                    <canvas id="CostVariance" height="" class="chart chart-polar-area"
+                    <canvas id="CostVariance" height="" class="chart chart-doughnut"
                             options="CostVariance.options"
                             colours="CostVariance.colours"
                             data="CostVariance.data"
@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-lg-4">
                     <h4>Schedule Variance {{SV}}</h4>
-                    <canvas id="scheduleVariance" height="" class="chart chart-polar-area"
+                    <canvas id="scheduleVariance" height="" class="chart chart-doughnut"
                             options="scheduleVariance.options"
                             colours="scheduleVariance.colours"
                             data="scheduleVariance.data"

@@ -61,11 +61,7 @@ define(function(require) {
         projectFactory.getUserProject($scope.model, canceler).then(
           function(resp) {
             $scope.projects = resp.data.mainProject.projects;
-
             $scope.getCurrentProjectActivities();
-
-            // save main project to local storage
-            projectContext.setProject(null, resp.data.mainProject);
           },
           function() {
             $scope.isLoading = false;
@@ -185,7 +181,10 @@ define(function(require) {
 
         // modal callbacks
         importModalInstance.result.then(function() {
-
+          console.log('Reload activity');
+          $location.search('activityId', null);
+          $scope.loadActivity();
+          $scope.activitySelected = $rootScope.activitySelected = null;
         }, function() {
 
         });

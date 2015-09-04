@@ -15,7 +15,7 @@ define(function(require) {
       transclude: true,
       templateUrl: 'projectChooserTemplate',
       controller: ['$scope', function($scope) {
-        $scope.projects = $rootScope.mainProjectInfo.projects;
+        $scope.projects = $rootScope.allProjects;
         $scope.currentProject = $rootScope.currentProjectInfo;
         $scope.selectProject = function(pj) {
           if(pj.projectId !== $scope.currentProject.projectId) {

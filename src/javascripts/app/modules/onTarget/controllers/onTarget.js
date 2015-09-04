@@ -14,7 +14,7 @@ define(function(require) {
 
                     $scope.TimeComplete = {
                         colours: [
-                            '#c1d64c',
+                            '#B22222',
                             '#efefef'
                         ],
                         options: {
@@ -22,7 +22,7 @@ define(function(require) {
                             animationSteps: 10
                         },
                         data:[],
-                        labels: ['Time Complete']
+                        labels: ['Time Complete','']
                     }; //SPI
                     $scope.CostComplete = {
                         colours: [
@@ -34,7 +34,7 @@ define(function(require) {
                             animationSteps: 10
                         },
                         data:[],
-                        labels: ['Cost Complete']
+                        labels: ['Cost Complete','']
                     }; //CPI
 
                     $scope.CostVariance = {
@@ -47,12 +47,12 @@ define(function(require) {
                             animationSteps: 10
                         },
                         data:[],
-                        labels: ['Cost Variance']
+                        labels: ['Cost Variance','']
                     }; //CV
 
                     $scope.scheduleVariance = {
                         colours: [
-                            '#c1d64c',
+                            '#63b2db',
                             '#efefef'
                         ],
                         options: {
@@ -60,7 +60,7 @@ define(function(require) {
                             animationSteps: 10
                         },
                         data:[],
-                        labels: ['Schedule Variance']
+                        labels: ['Schedule Variance','']
                     }; //SV
 
                     /*================STARTING CALCULATION==============*/
@@ -147,11 +147,18 @@ define(function(require) {
 
                     //SPI
                     //CV = 20; //TEST DATA
-
+                    CPI     = 25;
+                    SPI     = 60;
+                    CV      = 30;
+                    SV      = 2;
                     $scope.TimeComplete.data[0] = SPI; //SPI
+                    $scope.TimeComplete.data[1] = 100-SPI; //SPI
                     $scope.CostComplete.data[0] = CPI; //CPI
+                    $scope.CostComplete.data[1] = 100-CPI; //CPI
                     $scope.CostVariance.data[0] = CV; //CV
+                    $scope.CostVariance.data[1] = 100-CV; //CV
                     $scope.scheduleVariance.data[0] = SV; //SV
+                    $scope.scheduleVariance.data[1] = SV; //SV
 
                     $scope.SPI = SPI+" %";
                     $scope.CPI = CPI+" %";

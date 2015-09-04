@@ -4,7 +4,16 @@ var request = require('request');
 var mkdirp = require("mkdirp");
 var rootPath = process.env.ROOT;
 var mime = require('mime');
-//var cors = require('cors');
+var crypto = require('crypto'),
+  algorithm = 'aes-256-ctr',
+  password = 'd6F3Efeq';
+
+function encrypt(text) {
+  var cipher = crypto.createCipher(algorithm, password)
+  var crypted = cipher.update(text, 'utf8', 'hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
 
 // paths/constants
 var assetsPath = path.join(rootPath, 'assets'),
@@ -21,6 +30,7 @@ function moveFile(req, res) {
   var context = req.body.context;
   var fileName = req.body.fileName;
   var sourceFilePath = path.join(rootPath, filePath);
+  var encryptedProjectFolderName = '';
 
   var url = uploadedFilesPath + rootFolder,
     destinationDir,
@@ -30,10 +40,10 @@ function moveFile(req, res) {
     var url = imagePathRoot + rootFolder + '/';
     if(rootFolder === 'projects') {
       if(context === '') {
-        url += 'projects-' + projectId + '/' + fileName;
+        url += encryptedProjectFolderName + '/' + fileName;
       }
       else {
-        url += 'projects-' + projectId + '/' + context + '/' + fileName;
+        url += encryptedProjectFolderName + '/' + context + '/' + fileName;
       }
     }
     else if(rootFolder === 'profile') {
@@ -92,7 +102,8 @@ function moveFile(req, res) {
           failure();
         }
         else {
-          url += '/projects-' + projectId;
+          encryptedProjectFolderName = encrypt('projects-' + projectId);
+          url += '/' + encryptedProjectFolderName;
           if(context === '') {
             destinationDir = url;
             fileDestination = destinationDir + '/' + fileName;

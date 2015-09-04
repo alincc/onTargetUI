@@ -123,6 +123,7 @@
     "requirejs": true,
     "_": true,
     "tinymce": true,
-    "gapi": true
+    "gapi": true,
+    "Pusher": true
   }
 }
