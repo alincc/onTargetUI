@@ -23,6 +23,6 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="import()" ng-disabled="!importModel.results.length"><i class="fa fa-inbox"></i> Import</button>
+    <button class="btn btn-primary" type="button" ng-click="import()" ng-disabled="!importModel.results.length || isImporting"><i class="fa fa-inbox"></i> Import</button>
     <button class="btn btn-warning" type="button" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
 </div>

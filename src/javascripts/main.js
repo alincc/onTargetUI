@@ -55,12 +55,14 @@ require.config({
     jszip: '../bower_components/js-xlsx/dist/jszip',
     //jsXlsxOds: '../bower_components/js-xlsx/ods',
     xlsx: '../bower_components/js-xlsx/dist/xlsx',
-    jsXlsx:'../bower_components/js-xlsx/dist/xlsx.full.min',
+    jsXlsx: '../bower_components/js-xlsx/dist/xlsx.full.min',
     typeahead: '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
     ngLetterAvatar: '../bower_components/ngletteravatar/ngletteravatar',
     angularGantt: '../bower_components/angular-gantt/assets/angular-gantt',
     angularGanttPlugin: '../bower_components/angular-gantt/assets/angular-gantt-plugins',
-    angularUiTree: '../bower_components/angular-ui-tree/dist/angular-ui-tree'
+    angularUiTree: '../bower_components/angular-ui-tree/dist/angular-ui-tree',
+    pusher: '../bower_components/pusher/dist/pusher',
+    pushAngular: '../bower_components/pusher-angular/lib/pusher-angular'
   },
 
   shim: {
@@ -158,6 +160,9 @@ require.config({
     },
     "angularSlider": {
       deps: ['angular']
+    },
+    "pushAngular": {
+      deps: ['pusher', 'angular']
     }
   }
 });

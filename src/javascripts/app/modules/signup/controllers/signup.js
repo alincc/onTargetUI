@@ -40,16 +40,21 @@ define(function() {
         if($scope.form.$invalid) {
           return false;
         }
-        accountFactory.registerOntargetUser(user).success(function(data) {
 
-          if(data.returnVal === "SUCCESS") {
-            $state.go('signin');
-          }
-          $scope.form.$setPristine();
-        })
-          .error(function(data) {
-            console.log(data);
-            $scope.form.$setPristine();
+        fileFactory.move($scope.user.userImagePath, null, 'profile')
+          .success(function(resp){
+            $scope.user.userImagePath = resp.url;
+            user.userImagePath = resp.url;
+            accountFactory.registerOntargetUser(user).success(function(data) {
+              if(data.returnVal === "SUCCESS") {
+                $state.go('signin');
+              }
+              $scope.form.$setPristine();
+            })
+              .error(function(data) {
+                console.log(data);
+                $scope.form.$setPristine();
+              });
           });
       };
 
@@ -69,14 +74,11 @@ define(function() {
 
       function upload(file) {
         $scope.isUploadAvatar = true;
-        fileFactory.upload(file, null, 'profile').progress(function(evt) {
+        fileFactory.upload(file, null, 'temp').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          //$scope.log = 'progress: ' + progressPercentage + '% ' +
-          //  evt.config.file.name + '\n' + $scope.log;
           $scope.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
           $timeout(function() {
-            //$scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
             $scope.user.userImagePath = data.url;
             $scope.isUploadAvatar = false;
           });

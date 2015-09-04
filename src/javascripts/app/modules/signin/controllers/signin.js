@@ -1,7 +1,7 @@
 define(function() {
   'use strict';
-  var controller = ['$scope', '$state', 'appConstant', 'accountFactory', 'dropBoxFactory',
-    function($scope, $state, appConstant, accountFactory, dropBoxFactory) {
+  var controller = ['$scope', '$state', 'appConstant', 'accountFactory',
+    function($scope, $state, appConstant, accountFactory) {
       $scope.user = {
         username: '',
         password: ''
@@ -25,8 +25,6 @@ define(function() {
             $scope.form.$setPristine();
           });
       };
-
-      //dropBoxFactory.authorize();
     }];
   return controller;
 });

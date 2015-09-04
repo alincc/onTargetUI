@@ -1,0 +1,31 @@
+{
+  "name": "OnTarget",
+  "description": "OnTarget Web App",
+  "version": "1.0.0",
+  "homepage": "http://www.ontargetcloud.com/",
+  "author": {
+    "name": "Niran Shrestha",
+    "email": "niran@ontargetcloud.com"
+  },
+  "repository": {
+    "type": "bitbucket",
+    "url": "https://bitbucket.org/daominhsang/ontarget"
+  },
+  "bugs": {
+    "url": "https://asana.com"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "dependencies": {
+    "connect": "^3.4.0",
+    "serve-static": "^1.10.0"
+  },
+  "devDependencies": {
+  },
+  "bundleDependencies": [],
+  "private": true
+}

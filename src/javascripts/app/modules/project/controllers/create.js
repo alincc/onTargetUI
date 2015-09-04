@@ -94,20 +94,19 @@ define(function() {
       };
 
       $scope.save = function() {
-        /* if ($scope.project_form.$invalid) {
-         return false;
-         }*/
         $scope.onSubmit = true;
-        projectFactory.addProject($scope.model).then(
-          function(resp) {
-            toaster.pop('success', 'Success', resp.data.returnMessage);
-            $scope.project_form.$setPristine();
-            $modalInstance.close({});
-          }, function(err) {
-            $scope.onSubmit = false;
-            console.log(err);
-          }
-        );
+        fileFactory.move($scope.projectModel.projectImagePath, null, 'projects', $rootScope.currentProjectInfo.projectId)
+          .success(function(resp) {
+            $scope.model.project.projectImagePath = resp.url;
+            projectFactory.addProject($scope.model).then(function(resp) {
+              toaster.pop('success', 'Success', resp.data.returnMessage);
+              $scope.project_form.$setPristine();
+              $modalInstance.close({});
+            }, function(err) {
+              $scope.onSubmit = false;
+              console.log(err);
+            });
+          });
       };
 
       $scope.cancel = function() {
@@ -132,12 +131,12 @@ define(function() {
 
       function upload(file) {
         $scope.picture.isUploadPicture = true;
-        fileFactory.upload(file, null, 'projects', $rootScope.currentProjectInfo.projectId).progress(function(evt) {
+        fileFactory.upload(file, null, 'temp').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.picture.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
           $timeout(function() {
-            $scope.projectModel.projectImagePath =  data.url;
+            $scope.projectModel.projectImagePath = data.url;
             $scope.picture.isUploadPicture = false;
           });
         })
@@ -154,9 +153,9 @@ define(function() {
         }
       };
 
-      $scope.$watchCollection('[projectModel.startDate, projectModel.endDate]', function(e){
-        $scope.projectModel.startDate= $filter('date')($scope.projectModel.startDate, 'yyyy-MM-dd');
-        $scope.projectModel.endDate= $filter('date')($scope.projectModel.endDate, 'yyyy-MM-dd');
+      $scope.$watchCollection('[projectModel.startDate, projectModel.endDate]', function(e) {
+        $scope.projectModel.startDate = $filter('date')($scope.projectModel.startDate, 'yyyy-MM-dd');
+        $scope.projectModel.endDate = $filter('date')($scope.projectModel.endDate, 'yyyy-MM-dd');
       });
 
     }];

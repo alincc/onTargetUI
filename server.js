@@ -9,11 +9,19 @@ var app = express();
 var myArgs = process.argv.slice(2);
 var port = myArgs[0] || 3210;
 var folder = myArgs[1] || 'src';
+var config = require('./server/config');
+var PROXY_SERVER = config.PROXY_URL;
 process.env.ROOT = __dirname + '/' + folder;
-var PROXY_SERVER = 'http://app.ontargetcloud.com:8080/ontargetrs/services';
+
+// routes
+var upload = require('./server/routes/upload')(app);
+var download = require('./server/routes/download')(app);
+var xlsParser = require('./server/routes/xls-parser')(app);
+
+// modules
+var pushModule = require('./server/modules/push')(app);
 
 // Config
-//app.configure(function() {
 app.set('port', port);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -22,11 +30,13 @@ app.use(methodOverride());
 app.use(cors());
 app.use(express.static(process.env.ROOT));
 
-// modules
+// routes
 var upload = require('./server/routes/upload')(app);
 var download = require('./server/routes/download')(app);
 var xlsParser = require('./server/routes/xls-parser')(app);
 var move = require('./server/routes/move')(app);
+// modules
+var pushModule = require('./server/modules/push')(app);
 
 app.post('/ontargetrs/services*', function(req, res) {
   //var r = request.post({headers: req.headers, uri: PROXY_SERVER + req.params[0], json: req.body});
@@ -72,8 +82,6 @@ app.get('/ontargetrs/services*', function(req, res) {
 app.get('/', function(req, res) {
   res.sendfile("index.html");
 });
-//});
-
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));

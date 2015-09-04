@@ -2,9 +2,9 @@ var gulp = require('gulp');
 var path = require('path');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
+var connect = require('gulp-connect');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
-var connect = require('gulp-connect');
 var open = require('open');
 var jshint = require('gulp-jshint');
 var karma = require('gulp-karma');
@@ -13,6 +13,15 @@ var replace = require('gulp-replace');
 var shell = require('gulp-shell');
 var del = require('del');
 var ftp = require('vinyl-ftp');
+
+var config = {
+  local: {
+    port: 3214,
+    domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
+    baseUrl: 'http://demo.newoceaninfosys.com:3214',
+    nodeServer: 'http://demo.newoceaninfosys.com:3215'
+  }
+};
 
 var paths = {
   less: ['./src/less/**/*.less']
@@ -92,16 +101,6 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter('fail'));
 });
 
-// Connect build version
-gulp.task('runbuild', function() {
-  connect.server({
-    root: ['build'],
-    port: 9000,
-    livereload: true
-  });
-  open("http://localhost:9000");
-});
-
 // RequireJS Optimization
 // Window r.js command line fix (It conflict between r.js and r.cmd.js)
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
@@ -144,15 +143,17 @@ gulp.task('test', ['lint'], function() {
     });
 });
 
-// build task
+////////////////////////////////////
+///////// BUILD TASKS //////////////
+///////////////////////////////////
+
 gulp.task('build', ['requireJsOptimizer'], function() {
   // Move css file
   gulp.src('src/css/main.min.css')
     .pipe(gulp.dest('build/css'));
 
-  // Minify js
+  // move main script file
   gulp.src('src/javascripts/main.min.js')
-    //.pipe(uglify())
     .pipe(gulp.dest('build/javascripts'));
 
   del([
@@ -163,8 +164,32 @@ gulp.task('build', ['requireJsOptimizer'], function() {
   ]);
 });
 
-// start task
-gulp.task('start', ['watch'], function() {
+gulp.task('build:local', ['build'], function() {
+  gulp.src('src/javascripts/main.min.js')
+    .pipe(replace("domain: 'http://localhost:9000/ontargetrs/services'", "domain: '" + config.local.domain + "'")) // domain
+    .pipe(replace("baseUrl: 'http://localhost:9000'", "baseUrl: '" + config.local.baseUrl + "'")) // base url
+    .pipe(replace("nodeServer: 'http://localhost:9000'", "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
+    .pipe(gulp.dest('build/javascripts'));
+
+  gulp.src(['./build/**/*'])
+    //.pipe(uglify())
+    .pipe(gulp.dest('./build-local/app'));
+
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace("9000", config.local.port))
+    .pipe(gulp.dest('./build-local'));
+
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-local'));
+});
+
+////////////////////////////////////
+///////// SERVE TASKS //////////////
+///////////////////////////////////
+
+gulp.task('serve', ['watch'], function() {
   connect.server({
     root: ['src'],
     port: 9000,
@@ -173,8 +198,63 @@ gulp.task('start', ['watch'], function() {
   open("http://localhost:9000");
 });
 
-// deploy
-gulp.task('deploy:build', ['build'], function() {
+gulp.task('serve:local', function() {
+  connect.server({
+    root: ['build-local'],
+    port: config.local.port
+  });
+  open("http://localhost:9000");
+});
+
+////////////////////////////////////
+///////// DEPLOY TASKS /////////////
+///////////////////////////////////
+
+gulp.task('deploy:ui:local', ['build:local'], function() {
+  process.stdout.write('Transfering files...\n');
+
+  var conn = ftp.create({
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
+    parallel: 2
+  });
+
+  var globs = [
+    'build-local/**'
+  ];
+
+  return gulp.src(globs, {base: './build-local/', buffer: false})
+    .pipe(conn.newer('/www/onTargetUI'))
+    .pipe(conn.dest('/www/onTargetUI'));
+});
+
+gulp.task('deploy:node:local', function() {
+  process.stdout.write('Transfering files...\n');
+
+  var conn = ftp.create({
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
+    parallel: 2
+  });
+
+  var globs = [
+    'server/**',
+    'server.js',
+    'package.json'
+  ];
+
+  return gulp.src(globs, {base: '.', buffer: false})
+    .pipe(conn.newer('/www/onTargetNodeServer'))
+    .pipe(conn.dest('/www/onTargetNodeServer'));
+});
+
+gulp.task('deploy:local', ['deploy:ui:local', 'deploy:local'], function() {
+
+});
+
+gulp.task('deploy', ['build'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
@@ -194,6 +274,4 @@ gulp.task('deploy:build', ['build'], function() {
   return gulp.src(globs, {base: '.', buffer: false})
     .pipe(conn.newer('/www/onTarget/ontarget/Code'))
     .pipe(conn.dest('/www/onTarget/ontarget/Code'));
-
-  process.stdout.write('Transfer complete...\n');
 });

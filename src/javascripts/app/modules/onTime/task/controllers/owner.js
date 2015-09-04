@@ -8,6 +8,7 @@ define(function() {
       $scope.task = $rootScope.currentTask;
       $scope.onAddOwner = false;
       $scope.contacts = [];
+      $scope.isAddOwner = false;
 
       $scope.model = {
         selectedAssignee: null,
@@ -55,7 +56,8 @@ define(function() {
           projectId: $rootScope.activitySelected.projectId,
           members: _.map($scope.model.assignees, function(el) {
             return el.userId;
-          })
+          }),
+          ownerId: assignee.userId
         }).then(function(resp) {
           $scope.model.selectedAssignee = null;
           $scope.updateTask();
@@ -73,7 +75,8 @@ define(function() {
           projectId: $rootScope.activitySelected.projectId,
           members: _.map($scope.model.assignees, function(el) {
             return el.userId;
-          })
+          }),
+          ownerId: $scope.model.selectedAssignee.userId
         }).then(function(resp) {
           $scope.model.selectedAssignee = null;
           $scope.updateTask();

@@ -8,7 +8,7 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var excelParser = require('excel-parser');
 var moment = require('moment');
-//var cors = require('cors');
+
 // paths/constants
 var fileInputName = "file",
   assetsPath = path.join(rootPath, 'assets'),
@@ -53,7 +53,19 @@ function uploadFile(req, res) {
             responseData.records = records;
             for(var i = 0; i < responseData.records.length; i++) {
               var el = responseData.records[i];
-              // activity start date
+              if(moment(el[2], 'DD/MM/YYYY').isValid()) {
+                el[2] = moment(el[2], 'DD/MM/YYYY').format('MM/DD/YYYY');
+              }
+              if(moment(el[3], 'DD/MM/YYYY').isValid()) {
+                el[3] = moment(el[3], 'DD/MM/YYYY').format('MM/DD/YYYY');
+              }
+              if(moment(el[7], 'DD/MM/YYYY').isValid()) {
+                el[7] = moment(el[7], 'DD/MM/YYYY').format('MM/DD/YYYY');
+              }
+              if(moment(el[8], 'DD/MM/YYYY').isValid()) {
+                el[8] = moment(el[8], 'DD/MM/YYYY').format('MM/DD/YYYY');
+              }
+              //// activity start date
               //if(/^\d{1,2}\-\d{1,2}\-\d{2}$/.test(el[2])) {
               //  el[2] = moment(el[2], 'DD-MM-YYYY').format('DD/MM/YYYY');
               //}

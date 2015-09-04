@@ -70,13 +70,14 @@ define(function(require) {
             "activityStartDate": el[2],
             "activityEndDate": el[3],
             "taskCode": el[4],
-            "taskName": el[5],
-            "taskStartDate": el[6],
-            "taskEndDate": el[7],
-            "estimatedCost": el[8],
-            "actualCost": el[9],
-            "percentageComplete": el[11],
-            "priority": el[10]
+            "taskDescription": el[5],
+            "taskName": el[6],
+            "taskStartDate": el[7],
+            "taskEndDate": el[8],
+            "estimatedCost": el[9],
+            "actualCost": el[10],
+            "percentageComplete": el[12],
+            "priority": el[11]
             //"invalidMsg": null
           });
         });
@@ -84,6 +85,23 @@ define(function(require) {
         activityFactory.import(data)
           .success(function(resp) {
             console.log(resp);
+            if(resp.invalidActivityRecords.length > 0) {
+              var html = '';
+              _.each(resp.invalidActivityRecords, function(el) {
+                html += '- Row ' + el.index + ': ' + el.invalidMsg + '</br>';
+              });
+              toaster.pop({
+                type: 'error',
+                title: 'Error',
+                body: html,
+                bodyOutputType: 'trustedHtml'
+              });
+            }
+            else {
+              toaster.pop('success', 'Success', resp.returnMessage);
+              $modalInstance.close({});
+            }
+            $scope.isImporting = false;
           })
           .error(function(err) {
             console.log(err);

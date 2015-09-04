@@ -6,8 +6,6 @@ define(function(require) {
     function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout, notifications, taskFactory) {
       $scope.app = appConstant.app;
       $scope.currentProject = $rootScope.currentProjectInfo;
-      $scope.mainProject = $rootScope.mainProjectInfo;
-      //console.log($scope.currentProject);
 
       function daydiff(first, second) {
         return (second - first) / (1000 * 60 * 60 * 24);
@@ -271,7 +269,7 @@ define(function(require) {
           labels: ['Approval', 'Submittal']
         };
         $scope.isSubmittalStatusLoading = true;
-        documentFactory.getUserDocument($scope.mainProject.projectId).then(
+        documentFactory.getUserDocument($scope.currentProject.projectId).then(
           function(resp) {
             $scope.submittalStatus.data[0] = resp.data.totalApprovals;
             $scope.submittalStatus.data[1] = resp.data.totalSubmits;

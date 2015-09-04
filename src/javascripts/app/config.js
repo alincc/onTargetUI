@@ -27,7 +27,7 @@ define(function(require) {
             if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
-                "loggedInUserProjectId": $rootScope.mainProjectInfo.projectId
+                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : 1
               };
             }
             return config;
@@ -265,6 +265,10 @@ define(function(require) {
         'ffb56d',
         'e25805'
       ]
+    },
+    push:{
+      API_KEY:'c2f5de73a4caa3763726',
+      channel:'onTarget'
     }
   });
 
