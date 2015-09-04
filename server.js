@@ -10,7 +10,7 @@ var myArgs = process.argv.slice(2);
 var port = myArgs[0] || 3210;
 var folder = myArgs[1] || 'src';
 process.env.ROOT = __dirname + '/' + folder;
-var PROXY_SERVER = 'http://app.ontargetcloud.com:8080/ontargetrs/services';
+var PROXY_SERVER = 'http://localhost:8080/ontargetrs/services';
 
 // Config
 //app.configure(function() {
