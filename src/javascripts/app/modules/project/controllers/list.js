@@ -78,7 +78,8 @@ define(function() {
             $scope.isLoading = false;
 
             // save projects to local storage
-            projectContext.setProject(null, resp.data.projects);
+            // projectContext.setProject(null, resp.data.projects);
+            projectContext.setProject(null, resp.data.mainProject);
           },
           function() {
             $scope.isLoading = false;

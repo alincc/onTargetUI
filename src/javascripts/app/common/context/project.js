@@ -9,10 +9,12 @@ define(function(require) {
       parentProject = {
         projectId: 1
       },
-      allProjects = [];
+      allProjects = [],
+      mainProject = {};
 
     $rootScope.currentProjectInfo = project;
     $rootScope.allProjects = [];
+    $rootScope.mainProjectInfo = mainProject;
 
     service.getMainProject = function() {
       return parentProject;
@@ -24,11 +26,14 @@ define(function(require) {
       }
 
       if(allPj) {
+		mainProject = $rootScope.mainProjectInfo = allPj;
         allProjects = $rootScope.allProjects = allPj;
       }
+	  
       service.saveLocal({
         project: project,
-        allProjects: allProjects
+        allProjects: allPj.projects || allProjects,
+        mainProject: mainProject
       });
     };
 
@@ -37,7 +42,8 @@ define(function(require) {
       allProjects = $rootScope.allProjects = [];
       service.saveLocal({
         project: project,
-        allProjects: allProjects
+        allProjects: allProjects,
+        mainProject: mainProject
       });
     };
 
@@ -60,9 +66,14 @@ define(function(require) {
       return allProjects;
     };
 
-    service.valid = function() {
-      return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId);
+    service.mainProject = function() {
+      return mainProject;
     };
+
+    service.valid = function() {
+      return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId) && $rootScope.mainProjectInfo && angular.isDefined($rootScope.mainProjectInfo.projectId);
+    };
+
 
     return service;
   }]);
