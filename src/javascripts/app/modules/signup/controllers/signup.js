@@ -74,7 +74,8 @@ define(function() {
 
       function upload(file) {
         $scope.isUploadAvatar = true;
-        fileFactory.upload(file, null, 'temp').progress(function(evt) {
+        fileFactory.upload(file, null, 'temp', null, null, true)
+          .progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {

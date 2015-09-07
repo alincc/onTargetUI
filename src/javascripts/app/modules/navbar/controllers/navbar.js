@@ -73,7 +73,7 @@ define(function() {
           "userId": $rootScope.currentUserInfo.userId
         });
 
-        toaster.pop('success', 'Success', data.message);
+        toaster.pop('info', 'Info', data.message);
       });
     }];
   return controller;

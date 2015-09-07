@@ -3,16 +3,29 @@
         <spinner text="Loading..."></spinner>
     </div>
     <div ng-show="task.costsByMonthYear">
-        <table class="table table-bordered">
-            <th></th>
-            <th>ACTUAL COST</th>
-            <th>PLANNED COST</th>
-            <tr ng-repeat="budget in task.costsByMonthYear">
-                <td>{{budget.taskInterval.month}}-{{budget.taskInterval.year}}</td>
-                <td><input type="text" ng-model="budget.costs[0].cost"/></td>
-                <td><input type="text" ng-model="budget.costs[1].cost"/></td>
+        <table class="table table-hover .table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th class="table-head">Actuals</th>
+                <th class="table-head">Planned</th>
             </tr>
+            </thead>
+            <tbody class="table-bordered">
+            <tr ng-repeat="budget in task.costsByMonthYear">
+                <td>{{budget.taskInterval.month|date:'MMM'}}-{{budget.taskInterval.year}}</td>
+                <td class="budget-cost" ng-dblclick="edit()">
+                    <span ng-hide="isEdit">{{budget.costs[0].cost | currency: '$' : 0}}</span>
+                    <input ng-show="isEdit" type="text" ng-model="budget.costs[0].cost"/>
+                </td>
+                <td class="budget-cost" ng-dblclick="edit()">
+                    <span ng-hide="isEdit">{{budget.costs[1].cost| currency: '$' : 0}}</span>
+                    <input ng-show="isEdit" type="text" ng-model="budget.costs[1].cost"/>
+                </td>
+            </tr>
+            </tbody>
         </table>
-        <button class="btn btn-primary" ng-disabled="isSubmitting" ng-click="updateTaskBudget()">Save</button>
+        <button class="btn btn-primary" ng-disabled="isSubmitting" ng-click="updateTaskBudget()" ng-show="isEdit">Save</button>
+        <button class="btn btn-default" ng-show="isEdit" ng-click="isEdit = false">Cancel</button>
     </div>
 </div>

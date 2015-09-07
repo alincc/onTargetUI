@@ -35,7 +35,7 @@
             </div>
             <div class="row project-grid" ng-repeat="r in arrangedProjects" ng-if="viewMode==='grid'">
                 <div ng-repeat="project in r"
-                     class="col-xs-4 col-md-2 project-box">
+                     class="col-xs-1 col-md-3 project-box">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <!--project image-->
@@ -69,7 +69,7 @@
                                     </ul>
                                 </div>
                                 <!--project description-->
-                                <div ng-bind="project.projectDescription | cut:true:80">
+                                <div class="project-description" ng-bind="project.projectDescription">
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
             </div>
             <div class="row project-list" ng-repeat="r in arrangedProjects" ng-if="viewMode==='list'">
                 <div ng-repeat="project in r"
-                     class="col-xs-6 project-box">
+                     class="col-xs-1 col-md-6 project-box">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <!--project image-->
@@ -114,12 +114,12 @@
                                     </div>
                                 </div>
                                 <div class="project-status">
-                                    <div class="pert" ng-bind="project.percentage+'%'"></div>
+                                    <div class="pert" ng-bind="project.percentageComplete+'%'"></div>
                                     <span
                                             round-progress
                                             max="100"
-                                            current="project.percentage"
-                                            color="#{{project.percentage | taskStatusColor}}"
+                                            current="project.percentageComplete"
+                                            color="#{{project.percentageComplete | taskStatusColor}}"
                                             bgcolor="#e9e9e9"
                                             radius="40"
                                             stroke="7"
@@ -132,7 +132,7 @@
                                     </span>
                                 </div>
                                 <div class="project-description">
-                                    <span ng-bind="project.projectDescription | cut:true:150"></span><a class="more"
+                                    <p ng-bind="project.projectDescription" project-description-width></p><a class="more"
                                                                                                        href="javascript:void(0)"
                                                                                                        ng-click="goDashboard(project)">more</a>
                                 </div>

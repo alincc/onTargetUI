@@ -19,12 +19,12 @@ define(function(require) {
 
         service.getUserProject = function(model, canceler) {
           canceler = canceler || $q.defer();
-          return $http.post(constant.domain + '/project/getProjectsByUser', model, {
-            timeout: canceler.promise
-          });
-          //return $http.post(constant.domain + '/project/getUserProjectList', model, {
+          //return $http.post(constant.domain + '/project/getProjectsByUser', model, {
           //  timeout: canceler.promise
           //});
+          return $http.post(constant.domain + '/project/getUserProjectList', model, {
+            timeout: canceler.promise
+          });
         };
 
         service.getProjectById = function(projectId){
@@ -34,11 +34,19 @@ define(function(require) {
         };
 
         service.addProject = function(model) {
-          return $http.post(constant.domain + '/project/addProject', model);
+          return $http.post(constant.domain + '/project/addProject', model, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
         service.deleteProject = function(model) {
-          return $http.post(constant.domain + '/project/deleteProject', model);
+          return $http.post(constant.domain + '/project/deleteProject', model, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
         service.getProjectStatuses = function() {
@@ -73,6 +81,10 @@ define(function(require) {
 
         service.getActivityLog = function (data){
           return $http.post(constant.domain + '/activityLog/getLog', data);
+        };
+
+        service.getUserProjectList = function (model) {
+          return $http.post(constant.domain + '/project/getUserProjectList', model);
         };
         return service;
       }

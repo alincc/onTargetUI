@@ -160,8 +160,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12 col-md-8 task-container">
+            <div class="row row-height">
+                <div class="col-xs-12 col-md-8 task-container col-height">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <tabset class="tab-container">
@@ -372,12 +372,12 @@
                                 </tab>
                             </tabset>
 
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6 task-status-section">
+                            <div class="row row-height">
+                                <div class="col-xs-12 col-md-6 task-status-section col-height">
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <h4>Task Status</h4>
-
+                                            <div class="status-container">
                                             <div class="status-list">
                                                 <div class="status-item" ng-repeat="taskStatus in tasksStatus">
                                                     <div class="title">{{taskStatus.statusType}} - <span>{{taskStatus.taskCount}}</span>
@@ -390,18 +390,21 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-md-6 submittal-status-section">
+                                <div class="col-xs-12 col-md-6 submittal-status-section col-height">
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <h4>Submittal Status</h4>
-                                            <canvas id="submittalStatus" height="138" class="chart chart-doughnut"
-                                                    options="submittalStatus.options"
-                                                    colours="submittalStatus.colours"
-                                                    data="submittalStatus.data"
-                                                    labels="submittalStatus.labels">
-                                            </canvas>
+                                            <div class="doughnut-container">
+                                                <canvas id="submittalStatus" height="160" class="chart chart-doughnut"
+                                                        options="submittalStatus.options"
+                                                        colours="submittalStatus.colours"
+                                                        data="submittalStatus.data"
+                                                        labels="submittalStatus.labels">
+                                                </canvas>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -409,7 +412,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4">
+                <div class="col-xs-12 col-md-4 time-line col-height">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <span>Actitivy Log</span>
@@ -435,7 +438,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tl-avatar">
-                                                    <img ng-src="{{activityLog.userImage}}" file-path />
+                                                    <img ng-src="{{activityLog.userImage}}" class="image-circle" file-path />
                                                 </div>
                                                 <div class="tl-content">{{activityLog.text}}</div>
 

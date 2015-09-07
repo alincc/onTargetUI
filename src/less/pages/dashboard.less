@@ -211,6 +211,7 @@
     }
   }
   .task-container {
+    padding-left: 0px;
     .tab-container {
       .nav-tabs {
         li {
@@ -302,7 +303,7 @@
               .percentage {
                 position: absolute;
                 top: 50%;
-                left: 0;
+                margin-left: -10px;
                 font-weight: 700;
                 margin-top: -12px;
                 width: 100%;
@@ -359,61 +360,117 @@
     }
   }
   .task-status-section {
-    .status-list {
-      .status-item {
-        .title {
-          text-align: center;
-          color: #b3b3b3;
-          span {
-            font-weight: 700;
-            color: #000;
-          }
-        }
-        .progress, .progress-bar {
-          -webkit-border-radius: 15px;
-          -moz-border-radius: 15px;
-          border-radius: 15px;
-        }
-        .progress {
-          background-color: #acb2be;
-        }
-        .task-status-Active {
-          .progress-bar {
-            background-color: #80d44b;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
-          }
-        }
-        .task-status-Ongoing {
-          .progress-bar {
-            background-color: #449bc8;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
-          }
-        }
-        .task-status-Completed {
-          .progress-bar {
-            background-color: #c6ac42;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
-          }
-        }
-        .task-status-Pending {
-          .progress-bar {
-            background-color: #bc4242;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+    padding-left: 0px;
+    padding-right: 10px;
+    .panel-default {
+      height: 100%;
+      margin-bottom: 0px;
+      .panel-body {
+        height: 100%;
+        .status-container {
+          display: table;
+          width: 100%;
+          height: 100%;
+          .status-list {
+            display: table-cell;
+            vertical-align: middle;
+            .status-item {
+              .title {
+                text-align: center;
+                color: #b3b3b3;
+                span {
+                  font-weight: 700;
+                  color: #000;
+                }
+              }
+              .progress, .progress-bar {
+                -webkit-border-radius: 15px;
+                -moz-border-radius: 15px;
+                border-radius: 15px;
+              }
+              .progress {
+                background-color: #acb2be;
+              }
+              .task-status-Active {
+                .progress-bar {
+                  background-color: #80d44b;
+                  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+                }
+              }
+              .task-status-Ongoing {
+                .progress-bar {
+                  background-color: #449bc8;
+                  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+                }
+              }
+              .task-status-Completed {
+                .progress-bar {
+                  background-color: #c6ac42;
+                  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+                }
+              }
+              .task-status-Pending {
+                .progress-bar {
+                  background-color: #bc4242;
+                  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+                }
+              }
+            }
           }
         }
       }
     }
   }
   .submittal-status-section {
-    .panel-body {
-      text-align: center;
-      h4 {
-        text-align: left;
+    padding-right: 0px;
+    padding-left: 10px;
+    .panel-default {
+      height: 100%;
+      margin-bottom: 0px;
+      .panel-body {
+        text-align: center;
+        .doughnut-container {
+          height: 240px;
+          display: table;
+          width: 100%;
+          .chart-container {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            .chart-doughnut {
+              width: 100% !important;
+              height: auto !important;
+            }
+          }
+        }
+
+        h4 {
+          text-align: left;
+        }
       }
     }
   }
+  .row-height {
+    display: table;
+    table-layout: fixed;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+  }
+  .col-height {
+    display: table-cell;
+    float: none;
+    height: 100%;
+  }
+  .time-line{
+    padding-right: 0px;
+    padding-bottom: 18px;
+    .panel-default{
+      height: 100%;
+    }
+  }
   .timeline-container {
-    height: 815px;
+    //height: 794px;
     .tl-header {
       .btn {
         background-color: #4279bd;
@@ -448,6 +505,7 @@
           font-size: 18px;
           line-height: 1;
           padding-top: 5px;
+          margin-right: 37px;
         }
       }
     }
@@ -471,8 +529,8 @@
 
     .tl-avatar {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 2px;
+      right: 2px;
       width: 40px;
       margin: 6px;
       img {

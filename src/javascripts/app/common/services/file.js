@@ -12,7 +12,7 @@ define(function(require) {
       function(Upload, constant, utilFactory, $http) {
         var service = {};
 
-        service.upload = function(file, newFileName, rootFolder, projectId, context) {
+        service.upload = function(file, newFileName, rootFolder, projectId, context, crop) {
           newFileName = newFileName || file.name;
           return Upload.upload({
             url: constant.nodeServer + '/node/upload',
@@ -22,7 +22,8 @@ define(function(require) {
               'fileName': newFileName,
               'folder': rootFolder,
               'projectId': projectId,
-              context: context || ''
+              'context': context || '',
+              'crop': crop || false
             },
             headers: {
               'Authorization': false
