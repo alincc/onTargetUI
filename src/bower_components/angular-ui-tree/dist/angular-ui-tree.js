@@ -1,5 +1,5 @@
 /**
- * @license Angular UI Tree v2.8.0
+ * @license Angular UI Tree v2.9.0
  * (c) 2010-2015. https://github.com/angular-ui-tree/angular-ui-tree
  * License: MIT
  */
@@ -550,7 +550,8 @@
               dragCancelEvent,
               dragDelay,
               bindDrag,
-              keydownHandler;
+              keydownHandler,
+              outOfBounds;
             angular.extend(config, treeConfig);
             if (config.nodeClass) {
               element.addClass(config.nodeClass);
@@ -771,6 +772,49 @@
                   return;
                 }
 
+                // check if add it as a child node first
+                // todo decrease is unused
+                decrease = (UiTreeHelper.offset(dragElm).left - UiTreeHelper.offset(placeElm).left) >= config.threshold;
+                targetX = eventObj.pageX - $window.document.body.scrollLeft;
+                targetY = eventObj.pageY - (window.pageYOffset || $window.document.documentElement.scrollTop);
+
+                // Select the drag target. Because IE does not support CSS 'pointer-events: none', it will always
+                // pick the drag element itself as the target. To prevent this, we hide the drag element while
+                // selecting the target.
+                if (angular.isFunction(dragElm.hide)) {
+                  dragElm.hide();
+                } else {
+                  displayElm = dragElm[0].style.display;
+                  dragElm[0].style.display = 'none';
+                }
+
+                // when using elementFromPoint() inside an iframe, you have to call
+                // elementFromPoint() twice to make sure IE8 returns the correct value
+                $window.document.elementFromPoint(targetX, targetY);
+
+                targetElm = angular.element($window.document.elementFromPoint(targetX, targetY));
+
+                if (angular.isFunction(dragElm.show)) {
+                  dragElm.show();
+                } else {
+                  dragElm[0].style.display = displayElm;
+                }
+
+                outOfBounds = !(targetElm.scope().$type);
+
+                // Detect out of bounds condition, update drop target display, and prevent drop
+                if (outOfBounds) {
+
+                  // Remove the placeholder
+                  placeElm.remove();
+
+                  // If the target was an empty tree, replace the empty element placeholder
+                  if (treeScope) {
+                    treeScope.resetEmptyElement();
+                    treeScope = null;
+                  }
+                }
+
                 // move horizontal
                 if (pos.dirAx && pos.distAxX >= config.levelThreshold) {
                   pos.distAxX = 0;
@@ -798,33 +842,6 @@
                       }
                     }
                   }
-                }
-
-                // check if add it as a child node first
-                // todo decrease is unused
-                decrease = (UiTreeHelper.offset(dragElm).left - UiTreeHelper.offset(placeElm).left) >= config.threshold;
-                targetX = eventObj.pageX - $window.document.body.scrollLeft;
-                targetY = eventObj.pageY - (window.pageYOffset || $window.document.documentElement.scrollTop);
-
-                // Select the drag target. Because IE does not support CSS 'pointer-events: none', it will always
-                // pick the drag element itself as the target. To prevent this, we hide the drag element while
-                // selecting the target.
-                if (angular.isFunction(dragElm.hide)) {
-                  dragElm.hide();
-                } else {
-                  displayElm = dragElm[0].style.display;
-                  dragElm[0].style.display = 'none';
-                }
-
-                // when using elementFromPoint() inside an iframe, you have to call
-                // elementFromPoint() twice to make sure IE8 returns the correct value
-                $window.document.elementFromPoint(targetX, targetY);
-
-                targetElm = angular.element($window.document.elementFromPoint(targetX, targetY));
-                if (angular.isFunction(dragElm.show)) {
-                  dragElm.show();
-                } else {
-                  dragElm[0].style.display = displayElm;
                 }
 
                 // move vertical
@@ -883,9 +900,10 @@
                     } else if (!targetBefore && targetNode.accept(scope, targetNode.childNodesCount())) { // we have to check if it can add the dragging node as a child
                       targetNode.$childNodesScope.$element.append(placeElm);
                       dragInfo.moveTo(targetNode.$childNodesScope, targetNode.childNodes(), targetNode.childNodesCount());
+                    } else {
+                      outOfBounds = true;
                     }
                   }
-
                 }
 
                 scope.$apply(function () {
@@ -895,6 +913,7 @@
             };
 
             dragEnd = function (e) {
+
               e.preventDefault();
 
               if (dragElm) {
@@ -907,7 +926,7 @@
 
                 dragElm.remove();
                 dragElm = null;
-                if (scope.$$apply) {
+                if (scope.$$apply && !outOfBounds) {
                   scope.$treeScope.$apply(function () {
                     dragInfo.apply();
                     scope.$treeScope.$callbacks.dropped(dragInfo.eventArgs(elements, pos));
@@ -920,7 +939,6 @@
                 });
                 scope.$$apply = false;
                 dragInfo = null;
-
               }
 
               // Restore cursor in Opera 12.16 and IE
@@ -1040,9 +1058,6 @@
 
             if (ngModel) {
               ngModel.$render = function () {
-                if (!ngModel.$modelValue || !angular.isArray(ngModel.$modelValue)) {
-                  scope.$modelValue = [];
-                }
                 scope.$modelValue = ngModel.$modelValue;
               };
             }
@@ -1316,24 +1331,38 @@
            * @returns {Object} Object with properties offsetX, offsetY, startX, startY, nowX and dirX.
            */
           positionStarted: function (e, target) {
-            var pos = {};
-            pos.offsetX = e.pageX - this.offset(target).left;
-            pos.offsetY = e.pageY - this.offset(target).top;
-            pos.startX = pos.lastX = e.pageX;
-            pos.startY = pos.lastY = e.pageY;
+            var pos = {},
+              pageX = e.pageX,
+              pageY = e.pageY;
+
+            if (e.originalEvent && e.originalEvent.touches && (e.originalEvent.touches.length > 0)) {
+              pageX = e.originalEvent.touches[0].pageX;
+              pageY = e.originalEvent.touches[0].pageY;
+            }
+            pos.offsetX = pageX - this.offset(target).left;
+            pos.offsetY = pageY - this.offset(target).top;
+            pos.startX = pos.lastX = pageX;
+            pos.startY = pos.lastY = pageY;
             pos.nowX = pos.nowY = pos.distX = pos.distY = pos.dirAx = 0;
             pos.dirX = pos.dirY = pos.lastDirX = pos.lastDirY = pos.distAxX = pos.distAxY = 0;
             return pos;
           },
 
           positionMoved: function (e, pos, firstMoving) {
+            var pageX = e.pageX,
+              pageY = e.pageY,
+              newAx;
+            if (e.originalEvent && e.originalEvent.touches && (e.originalEvent.touches.length > 0)) {
+              pageX = e.originalEvent.touches[0].pageX;
+              pageY = e.originalEvent.touches[0].pageY;
+            }
             // mouse position last events
             pos.lastX = pos.nowX;
             pos.lastY = pos.nowY;
 
             // mouse position this events
-            pos.nowX = e.pageX;
-            pos.nowY = e.pageY;
+            pos.nowX = pageX;
+            pos.nowY = pageY;
 
             // distance mouse moved between events
             pos.distX = pos.nowX - pos.lastX;
@@ -1348,7 +1377,7 @@
             pos.dirY = pos.distY === 0 ? 0 : pos.distY > 0 ? 1 : -1;
 
             // axis mouse is now moving on
-            var newAx = Math.abs(pos.distX) > Math.abs(pos.distY) ? 1 : 0;
+            newAx = Math.abs(pos.distX) > Math.abs(pos.distY) ? 1 : 0;
 
             // do nothing on first move
             if (firstMoving) {
