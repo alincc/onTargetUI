@@ -19,12 +19,12 @@ define(function(require) {
 
         service.getUserProject = function(model, canceler) {
           canceler = canceler || $q.defer();
-          return $http.post(constant.domain + '/project/getProjectsByUser', model, {
-            timeout: canceler.promise
-          });
-          //return $http.post(constant.domain + '/project/getUserProjectList', model, {
+          //return $http.post(constant.domain + '/project/getProjectsByUser', model, {
           //  timeout: canceler.promise
           //});
+          return $http.post(constant.domain + '/project/getUserProjectList', model, {
+            timeout: canceler.promise
+          });
         };
 
         service.getProjectById = function(projectId){
