@@ -17,15 +17,15 @@ var ftp = require('vinyl-ftp');
 var config = {
   default: {
     port: 3214,
-    domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
+    domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',
     baseUrl: 'http://demo.newoceaninfosys.com:3214',
-    nodeServer: 'http://demo.newoceaninfosys.com:3215'
+    nodeServer: 'http://demo.newoceaninfosys.com:3214'
   },
   local: {
     port: 3214,
-    domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
+    domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',
     baseUrl: 'http://demo.newoceaninfosys.com:3214',
-    nodeServer: 'http://demo.newoceaninfosys.com:3215'
+    nodeServer: 'http://demo.newoceaninfosys.com:3214'
   }
 };
 
@@ -245,9 +245,9 @@ gulp.task('deploy:ui:local', ['build:local'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
-    host: '192.168.1.224',
-    user: 'nois_node',
-    password: 'Nois2015',
+    host: '',
+    user: '',
+    password: '',
     parallel: 2
   });
 
@@ -256,17 +256,17 @@ gulp.task('deploy:ui:local', ['build:local'], function() {
   ];
 
   return gulp.src(globs, {base: './build-local/', buffer: false})
-    .pipe(conn.newer('/www/onTargetUI'))
-    .pipe(conn.dest('/www/onTargetUI'));
+    .pipe(conn.newer('/onTargetUI'))
+    .pipe(conn.dest('/onTargetUI'));
 });
 
 gulp.task('deploy:node:local', function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
-    host: '192.168.1.224',
-    user: 'nois_node',
-    password: 'Nois2015',
+    host: '',
+    user: '',
+    password: '',
     parallel: 2
   });
 
@@ -277,8 +277,8 @@ gulp.task('deploy:node:local', function() {
   ];
 
   return gulp.src(globs, {base: '.', buffer: false})
-    .pipe(conn.newer('/www/onTargetNodeServer'))
-    .pipe(conn.dest('/www/onTargetNodeServer'));
+    .pipe(conn.newer('/onTargetNodeServer'))
+    .pipe(conn.dest('/onTargetNodeServer'));
 });
 
 gulp.task('deploy:local', ['deploy:ui:local', 'deploy:local'], function() {
@@ -289,9 +289,9 @@ gulp.task('deploy', ['build'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
-    host: '192.168.1.224',
-    user: 'nois_node',
-    password: 'Nois2015',
+    host: '',
+    user: '',
+    password: '',
     parallel: 2
   });
 
@@ -303,6 +303,6 @@ gulp.task('deploy', ['build'], function() {
   ];
 
   return gulp.src(globs, {base: '.', buffer: false})
-    .pipe(conn.newer('/www/onTarget/ontarget/Code'))
-    .pipe(conn.dest('/www/onTarget/ontarget/Code'));
+    .pipe(conn.newer('/onTarget/ontarget/Code'))
+    .pipe(conn.dest('/onTarget/ontarget/Code'));
 });
