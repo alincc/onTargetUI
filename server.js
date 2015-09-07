@@ -7,19 +7,12 @@ var methodOverride = require('method-override');
 var cors = require('cors');
 var app = express();
 var myArgs = process.argv.slice(2);
-var port = myArgs[0] || 3210;
+var port = myArgs[0] || 9000;
 var folder = myArgs[1] || 'src';
-var config = require('./server/config');
-var PROXY_SERVER = config.PROXY_URL;
 process.env.ROOT = __dirname + '/' + folder;
 
-// routes
-var upload = require('./server/routes/upload')(app);
-var download = require('./server/routes/download')(app);
-var xlsParser = require('./server/routes/xls-parser')(app);
-
-// modules
-var pushModule = require('./server/modules/push')(app);
+var config = require('./server/config');
+var PROXY_SERVER = config.PROXY_URL;
 
 // Config
 app.set('port', port);
@@ -35,6 +28,7 @@ var upload = require('./server/routes/upload')(app);
 var download = require('./server/routes/download')(app);
 var xlsParser = require('./server/routes/xls-parser')(app);
 var move = require('./server/routes/move')(app);
+
 // modules
 var pushModule = require('./server/modules/push')(app);
 

@@ -6,19 +6,29 @@ define(function(require) {
   module.factory('projectContext', ['storage', '$q', '$rootScope', function(storage, $q, $rootScope) {
     var service = {},
       project = {},
+      parentProject = {
+        projectId: 1
+      },
       allProjects = [];
 
     $rootScope.currentProjectInfo = project;
     $rootScope.allProjects = [];
+
+    service.getMainProject = function() {
+      return parentProject;
+    };
 
     service.setProject = function(pj, allPj) {
       if(pj) {
         project = $rootScope.currentProjectInfo = pj;
       }
 
+      if(allPj) {
+        allProjects = $rootScope.allProjects = allPj;
+      }
       service.saveLocal({
         project: project,
-        allProjects: allPj || allProjects
+        allProjects: allProjects
       });
     };
 

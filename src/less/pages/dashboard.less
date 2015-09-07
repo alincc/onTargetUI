@@ -302,7 +302,7 @@
               .percentage {
                 position: absolute;
                 top: 50%;
-                left: 0;
+                margin-left: -10px;
                 font-weight: 700;
                 margin-top: -12px;
                 width: 100%;
@@ -407,13 +407,28 @@
   .submittal-status-section {
     .panel-body {
       text-align: center;
+      .doughnut-container {
+        height: 240px;
+        display: table;
+        width: 100%;
+        .chart-container {
+          display: table-cell;
+          vertical-align: middle;
+          text-align: center;
+          .chart-doughnut {
+            width: 100% !important;
+            height: auto !important;
+          }
+        }
+      }
+
       h4 {
         text-align: left;
       }
     }
   }
   .timeline-container {
-    height: 815px;
+    height: 794px;
     .tl-header {
       .btn {
         background-color: #4279bd;
@@ -448,6 +463,7 @@
           font-size: 18px;
           line-height: 1;
           padding-top: 5px;
+          margin-right: 37px;
         }
       }
     }
@@ -471,8 +487,8 @@
 
     .tl-avatar {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 2px;
+      right: 2px;
       width: 40px;
       margin: 6px;
       img {

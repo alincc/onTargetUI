@@ -197,6 +197,7 @@ define(function(require) {
         $scope.loadTask = function() {
           taskFactory.getProjectTasks($scope.currentProject.projectId)
             .success(function(resp) {
+              console.log(resp);
               if(resp.tasks.length > 0) {
                 _.each(resp.tasks, function(tsk) {
                   //$scope.tasks.scheduled.push(tsk);
@@ -214,7 +215,7 @@ define(function(require) {
                     if(diffDays <= 0) {
                       $scope.tasks.pastDue.push(tsk);
                     }
-                    if(diffDays <= 7) {
+                    else if(diffDays <= 7) {
                       $scope.tasks.dueIn7Day.push(tsk);
                     }
                   }
@@ -249,6 +250,7 @@ define(function(require) {
             for(var i = 0; i < $scope.tasksStatus.length; i++) {
               $scope.taskStatusCount = $scope.taskStatusCount + $scope.tasksStatus[i].taskCount;
             }
+            $scope.taskStatusCount = $scope.taskStatusCount > 0 ? $scope.taskStatusCount : 1;
             $scope.isTasksStatusLoading = false;
           }, function(err) {
             $scope.isTasksStatusLoading = false;
@@ -271,8 +273,8 @@ define(function(require) {
         $scope.isSubmittalStatusLoading = true;
         documentFactory.getUserDocument($scope.currentProject.projectId).then(
           function(resp) {
-            $scope.submittalStatus.data[0] = resp.data.totalApprovals;
-            $scope.submittalStatus.data[1] = resp.data.totalSubmits;
+            /*$scope.submittalStatus.data[0] = resp.data.totalApprovals;
+            $scope.submittalStatus.data[1] = resp.data.totalSubmits;*/
             //$scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
             $scope.isSubmittalStatusLoading = false;
             //console.log($scope.submittalStatus);
@@ -280,6 +282,9 @@ define(function(require) {
             $scope.isSubmittalStatusLoading = false;
           }
         );
+
+        $scope.submittalStatus.data[0] = 2;
+        $scope.submittalStatus.data[1] = 3;
 
         // Activity
         $scope.activityLogs = [];

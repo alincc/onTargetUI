@@ -58,7 +58,7 @@ define(function() {
         }
       };
 
-      if(!!$scope.company.address.country) {
+      if($scope.company.address.country) {
         $scope.getStateList();
       }
     }];

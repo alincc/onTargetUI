@@ -74,6 +74,10 @@ define(function(require) {
         service.getActivityLog = function (data){
           return $http.post(constant.domain + '/activityLog/getLog', data);
         };
+
+        service.getUserProjectList = function (model) {
+          return $http.post(constant.domain + '/project/getUserProjectList', model);
+        };
         return service;
       }
     ]

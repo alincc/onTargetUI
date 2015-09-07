@@ -32,7 +32,7 @@ define(function() {
       $scope.changeMode = function(mode) {
         $scope.viewMode = mode;
         storage.set('projectViewMode', mode);
-        var itemPerRow = $scope.viewMode === 'grid' ? 6 : 2;
+        var itemPerRow = $scope.viewMode === 'grid' ? 4 : 2;
         $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
       };
 
@@ -46,14 +46,34 @@ define(function() {
       $scope.projects = [];
       $scope.arrangedProjects = [];
 
-      $scope.getUserProject = function() {
+      /*$scope.getUserProject = function() {
+       $scope.isLoading = true;
+       projectFactory.getUserProject({
+       userId: userContext.authentication().userData.userId
+       }).then(
+       function(resp) {
+       var itemPerRow = $scope.viewMode === 'grid' ? 6 : 2;
+       $scope.projects = $scope.reMapData(resp.data.mainProject.projects);
+       $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
+       $scope.isLoading = false;
+
+       // save projects to local storage
+       projectContext.setProject(null, resp.data.projects);
+       },
+       function() {
+       $scope.isLoading = false;
+       }
+       );
+       };*/
+
+      $scope.getUserProjectList = function() {
         $scope.isLoading = true;
-        projectFactory.getUserProject({
+        projectFactory.getUserProjectList({
           userId: userContext.authentication().userData.userId
         }).then(
           function(resp) {
-            var itemPerRow = $scope.viewMode === 'grid' ? 6 : 2;
-            $scope.projects = $scope.reMapData(resp.data.mainProject.projects);
+            var itemPerRow = $scope.viewMode === 'grid' ? 4 : 2;
+            $scope.projects = $scope.reMapData(resp.data.projects);
             $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
             $scope.isLoading = false;
 
@@ -127,6 +147,7 @@ define(function() {
       };
 
       $scope.goDashboard = function(pj) {
+        projectContext.setProject(pj);
         // get project details
         projectFactory.getProjectById(pj.projectId)
           .success(function(resp){
@@ -158,7 +179,7 @@ define(function() {
       $scope.reMapData = function(list) {
         return _.map(list, function(el) {
           var newEl = el;
-          newEl.percentage = 50;
+          //newEl.percentage = el.percentageComplete;
           utilFactory.generateAddress(el.projectAddress)
             .then(function(add) {
               newEl.fullAddress1 = add;
@@ -168,7 +189,8 @@ define(function() {
         });
       };
 
-      $scope.getUserProject();
+      //$scope.getUserProject();
+      $scope.getUserProjectList();
     }];
   return controller;
 });

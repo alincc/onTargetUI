@@ -8,7 +8,7 @@ define(function() {
 
       $scope.projectModel = {
         projectId: null,
-        projectParentId: projectContext.mainProject().projectId,
+        projectParentId: projectContext.getMainProject().projectId,
         projectTypeId: "",
         projectAddress: {
           address1: "",
@@ -19,7 +19,7 @@ define(function() {
           zip: "",
           addressId: ""
         },
-        companyId: projectContext.mainProject().companyId,
+        //companyId: projectContext.getMainProject().companyId,
         projectName: "",
         projectDescription: "",
         status: "",
@@ -131,7 +131,8 @@ define(function() {
 
       function upload(file) {
         $scope.picture.isUploadPicture = true;
-        fileFactory.upload(file, null, 'temp').progress(function(evt) {
+        fileFactory.upload(file, null, 'temp', null, null, true)
+          .progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.picture.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
