@@ -34,11 +34,19 @@ define(function(require) {
         };
 
         service.addProject = function(model) {
-          return $http.post(constant.domain + '/project/addProject', model);
+          return $http.post(constant.domain + '/project/addProject', model, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
         service.deleteProject = function(model) {
-          return $http.post(constant.domain + '/project/deleteProject', model);
+          return $http.post(constant.domain + '/project/deleteProject', model, {
+            headers: {
+              AutoAlert: true
+            }
+          });
         };
 
         service.getProjectStatuses = function() {

@@ -73,12 +73,11 @@ define(function() {
         }).then(
           function(resp) {
             var itemPerRow = $scope.viewMode === 'grid' ? 4 : 2;
-            $scope.projects = $scope.reMapData(resp.data.projects);
+            $scope.projects = $scope.reMapData(resp.data.mainProject.projects);
             $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
             $scope.isLoading = false;
 
             // save projects to local storage
-            // projectContext.setProject(null, resp.data.projects);
             projectContext.setProject(null, resp.data.mainProject);
           },
           function() {

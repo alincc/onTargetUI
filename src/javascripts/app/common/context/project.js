@@ -17,29 +17,30 @@ define(function(require) {
     $rootScope.mainProjectInfo = mainProject;
 
     service.getMainProject = function() {
-      return parentProject;
+      return mainProject;
     };
 
-    service.setProject = function(pj, allPj) {
+    service.setProject = function(pj, mj) {
       if(pj) {
         project = $rootScope.currentProjectInfo = pj;
       }
 
-      if(allPj) {
-		mainProject = $rootScope.mainProjectInfo = allPj;
-        allProjects = $rootScope.allProjects = allPj;
+      if(mj) {
+		    mainProject = $rootScope.mainProjectInfo = mj;
+        allProjects = $rootScope.allProjects = mj.projects;
       }
 	  
       service.saveLocal({
         project: project,
-        allProjects: allPj.projects || allProjects,
-        mainProject: mainProject
+        allProjects: allProjects || [],
+        mainProject: mainProject || {}
       });
     };
 
     service.clearInfo = function() {
       project = $rootScope.currentProjectInfo = {};
       allProjects = $rootScope.allProjects = [];
+      mainProject = $rootScope.mainProjectInfo = {};
       service.saveLocal({
         project: project,
         allProjects: allProjects,

@@ -8,7 +8,7 @@ define(function() {
 
       $scope.projectModel = {
         projectId: null,
-        projectParentId: projectContext.getMainProject().projectId,
+        projectParentId: $rootScope.mainProjectInfo.projectId,
         projectTypeId: "",
         projectAddress: {
           address1: "",
@@ -19,7 +19,7 @@ define(function() {
           zip: "",
           addressId: ""
         },
-        //companyId: projectContext.getMainProject().companyId,
+        companyId: $rootScope.mainProjectInfo.companyId,
         projectName: "",
         projectDescription: "",
         status: "",
@@ -53,8 +53,8 @@ define(function() {
 
       $scope.model = {
         project: $scope.projectModel,
-        userId: userContext.authentication().userData.userId,
-        accountStatus: userContext.authentication().userData.accountStatus
+        userId: $rootScope.currentUserInfo.userId,
+        accountStatus: $rootScope.currentUserInfo.accountStatus
       };
 
       $scope.countries = countryFactory.getCountryList();
@@ -99,7 +99,6 @@ define(function() {
           .success(function(resp) {
             $scope.model.project.projectImagePath = resp.url;
             projectFactory.addProject($scope.model).then(function(resp) {
-              toaster.pop('success', 'Success', resp.data.returnMessage);
               $scope.project_form.$setPristine();
               $modalInstance.close({});
             }, function(err) {
