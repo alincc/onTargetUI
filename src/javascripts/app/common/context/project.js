@@ -6,19 +6,27 @@ define(function(require) {
   module.factory('projectContext', ['storage', '$q', '$rootScope', function(storage, $q, $rootScope) {
     var service = {},
       project = {},
-      allProjects = [];
+      allProjects = [],
+      mainProject = {};
 
     $rootScope.currentProjectInfo = project;
     $rootScope.allProjects = [];
+    $rootScope.mainProjectInfo = mainProject;
 
     service.setProject = function(pj, allPj) {
       if(pj) {
         project = $rootScope.currentProjectInfo = pj;
       }
 
+      if(allPj) {
+        mainProject = $rootScope.mainProjectInfo = allPj;
+        allProjects= $rootScope.allProjects = allPj.projects;
+      }
+
       service.saveLocal({
         project: project,
-        allProjects: allPj || allProjects
+        allProjects: allPj.projects || allProjects,
+        mainProject: mainProject
       });
     };
 
@@ -27,7 +35,8 @@ define(function(require) {
       allProjects = $rootScope.allProjects = [];
       service.saveLocal({
         project: project,
-        allProjects: allProjects
+        allProjects: allProjects,
+        mainProject: mainProject
       });
     };
 
@@ -50,9 +59,14 @@ define(function(require) {
       return allProjects;
     };
 
-    service.valid = function() {
-      return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId);
+    service.mainProject = function() {
+      return mainProject;
     };
+
+    service.valid = function() {
+      return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId) && $rootScope.mainProjectInfo && angular.isDefined($rootScope.mainProjectInfo.projectId);
+    };
+
 
     return service;
   }]);

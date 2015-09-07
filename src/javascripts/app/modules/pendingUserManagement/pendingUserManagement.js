@@ -21,7 +21,7 @@ define(function(require) {
             url: '/pending-account-request',
             templateUrl: "pendingUserManagement/templates/pendingUserManagement.html",
             controller: 'PendingUserManagementController',
-            authorization: true
+            authorization: false
           });
       }
     ]
