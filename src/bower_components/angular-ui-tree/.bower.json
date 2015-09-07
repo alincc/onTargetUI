@@ -1,6 +1,6 @@
 {
-  "name": "AngularJS UI Tree",
-  "version": "2.8.0",
+  "name": "angular-ui-tree",
+  "version": "2.9.0",
   "homepage": "https://github.com/angular-ui-tree/angular-ui-tree",
   "authors": [
     "Jim Liu <https://github.com/JimLiu>",
@@ -45,14 +45,13 @@
     "karma.conf.js",
     "package.json"
   ],
-  "_release": "2.8.0",
+  "_release": "2.9.0",
   "_resolution": {
     "type": "version",
-    "tag": "v2.8.0",
-    "commit": "c17ce8596a85816d2ad8f7f820ab16096ab40294"
+    "tag": "v2.9.0",
+    "commit": "b4da660571e5ad98c5de1410f51c6ae9e79f3fa3"
   },
   "_source": "git://github.com/JimLiu/angular-ui-tree.git",
-  "_target": "~2.8.0",
-  "_originalSource": "angular-ui-tree",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "angular-ui-tree"
 }

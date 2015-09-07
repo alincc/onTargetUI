@@ -3,7 +3,7 @@ var rootPath = process.env.ROOT;
 var assetsPath = path.join(rootPath, 'assets');
 
 module.exports = {
-  PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
+  PROXY_URL: 'http://localhost:8080/ontargetrs/services',
   fileInputName: "file",
   assetsPath: assetsPath,
   uploadedFilesPath: assetsPath + '/',

@@ -18386,6 +18386,9 @@ a.text-black:hover {
 .m-b-n-xxl {
   margin-bottom: -50px;
 }
+.image-circle {
+  border-radius: 50%;
+}
 .avatar {
   position: relative;
   display: block;
@@ -19531,7 +19534,7 @@ a.text-black:hover {
 .dashboard-page .task-container .tab-container .tab-content .task-list .task-item .task-status .percentage {
   position: absolute;
   top: 50%;
-  left: 0;
+  margin-left: -10px;
   font-weight: 700;
   margin-top: -12px;
   width: 100%;
@@ -19617,11 +19620,25 @@ a.text-black:hover {
 .dashboard-page .submittal-status-section .panel-body {
   text-align: center;
 }
+.dashboard-page .submittal-status-section .panel-body .doughnut-container {
+  height: 240px;
+  display: table;
+  width: 100%;
+}
+.dashboard-page .submittal-status-section .panel-body .doughnut-container .chart-container {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.dashboard-page .submittal-status-section .panel-body .doughnut-container .chart-container .chart-doughnut {
+  width: 100% !important;
+  height: auto !important;
+}
 .dashboard-page .submittal-status-section .panel-body h4 {
   text-align: left;
 }
 .dashboard-page .timeline-container {
-  height: 815px;
+  height: 794px;
 }
 .dashboard-page .timeline-container .tl-header .btn {
   background-color: #4279bd;
@@ -19657,6 +19674,7 @@ a.text-black:hover {
   font-size: 18px;
   line-height: 1;
   padding-top: 5px;
+  margin-right: 37px;
 }
 .dashboard-page .timeline-container .tl-left .tl-wrap {
   border-left-width: -1px;
@@ -19673,8 +19691,8 @@ a.text-black:hover {
 }
 .dashboard-page .timeline-container .tl-avatar {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2px;
+  right: 2px;
   width: 40px;
   margin: 6px;
 }
@@ -19707,39 +19725,30 @@ a.text-black:hover {
 .projectlist-page .project-grid .project-box .panel-body .description-container .list-inline li {
   display: table-cell;
 }
-.projectlist-page .project-grid .project-box .panel-body .project-image {
-  height: 180px;
+.projectlist-page .project-grid .project-box .panel-body .description-container .project-description {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .projectlist-page .project-grid .project-box .panel-body .project-image a {
-  height: 100%;
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  display: block;
 }
 .projectlist-page .project-grid .project-box .panel-body .project-image a img {
-  max-height: 100%;
-  margin: auto;
-}
-.projectlist-page .project-list .panel-body {
-  display: table;
   width: 100%;
 }
+.projectlist-page .project-list .panel-body {
+  position: relative;
+  overflow: hidden;
+}
 .projectlist-page .project-list .panel-body .project-image {
-  padding-right: 15px;
-  display: table-cell;
-  width: 300px;
-  vertical-align: middle;
+  width: 205px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 15px;
 }
 .projectlist-page .project-list .panel-body .project-info {
-  display: table-cell;
-  vertical-align: top;
+  margin-left: 220px;
 }
 .projectlist-page .project-list .panel-body .project-info .project-name {
   font-size: 18px;
@@ -19775,9 +19784,20 @@ a.text-black:hover {
   top: 50%;
   margin-top: -18px;
 }
-.projectlist-page .project-list .panel-body .project-info .project-description a.more {
+.projectlist-page .project-list .panel-body .project-info .project-description {
+  position: relative;
+  padding-right: 35px;
   display: inline-block;
-  margin-left: 5px;
+}
+.projectlist-page .project-list .panel-body .project-info .project-description p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.projectlist-page .project-list .panel-body .project-info .project-description a.more {
+  position: absolute;
+  top: 0;
+  right: 0;
   color: #3476fb;
 }
 @media (min-width: 992px) and (max-width: 1224px) {
@@ -20202,11 +20222,12 @@ a.text-black:hover {
 }
 .task-list-section .task-section .panel .panel-body .task-list .task-item .task-status .percentage {
   position: absolute;
-  left: 50%;
   top: 50%;
   margin-left: -10px;
   font-weight: 700;
   margin-top: -12px;
+  width: 100%;
+  text-align: center;
 }
 .task-list-section .task-section .panel .panel-body .task-list .task-item .task-info {
   display: table-cell;
