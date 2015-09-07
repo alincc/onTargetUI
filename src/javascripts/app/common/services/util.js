@@ -65,15 +65,23 @@ define(function(require) {
         if(addrObj.address1) {
           address += addrObj.address1 + ', ';
         }
+
         if(addrObj.city) {
           address += addrObj.city + ', ';
         }
+
         if(state) {
           address += state.name + ', ';
+        } else {
+          address += addrObj.state + ' ';
         }
+
         if(country) {
           address += country.name + ' ';
+        } else {
+          address += addrObj.country + ' ';
         }
+
         if(addrObj.zip) {
           address += addrObj.zip;
         }
@@ -91,6 +99,8 @@ define(function(require) {
             state = resp;
             cont();
           }, cont);
+      } else {
+        cont();
       }
 
       return deferred.promise;

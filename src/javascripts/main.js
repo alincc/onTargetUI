@@ -50,7 +50,6 @@ require.config({
     chartjs: '../bower_components/Chart.js/Chart',
     angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart',
     mentio: '../bower_components/ment.io/dist/mentio',
-    angularSlider: '../bower_components/venturocket-angular-slider/build/angular-slider',
     //jsXlsxShim: '../bower_components/js-xlsx/shim',
     jszip: '../bower_components/js-xlsx/dist/jszip',
     //jsXlsxOds: '../bower_components/js-xlsx/ods',
@@ -156,9 +155,6 @@ require.config({
       deps: ['angular']
     },
     "angularUiTree": {
-      deps: ['angular']
-    },
-    "angularSlider": {
       deps: ['angular']
     },
     "pushAngular": {

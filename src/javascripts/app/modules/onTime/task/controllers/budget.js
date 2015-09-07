@@ -18,6 +18,7 @@ define(function(require) {
         },
         taskBudgetEstimates: []
       };
+      $scope.isEdit = false;
 
       $scope.getTaskBudget = function() {
         $scope.isLoading = true;
@@ -74,6 +75,10 @@ define(function(require) {
           function() {
             $scope.isSubmitting = false;
           });
+      };
+
+      $scope.edit = function (){
+        $scope.isEdit = true;
       };
 
       $scope.getTaskBudget();

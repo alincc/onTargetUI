@@ -273,18 +273,15 @@ define(function(require) {
         $scope.isSubmittalStatusLoading = true;
         documentFactory.getUserDocument($scope.currentProject.projectId).then(
           function(resp) {
-            /*$scope.submittalStatus.data[0] = resp.data.totalApprovals;
-            $scope.submittalStatus.data[1] = resp.data.totalSubmits;*/
+            $scope.submittalStatus.data[0] = resp.data.totalApprovals;
+            $scope.submittalStatus.data[1] = resp.data.totalSubmits;
             //$scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
             $scope.isSubmittalStatusLoading = false;
-            //console.log($scope.submittalStatus);
+            console.log($scope.submittalStatus);
           }, function(err) {
             $scope.isSubmittalStatusLoading = false;
           }
         );
-
-        $scope.submittalStatus.data[0] = 2;
-        $scope.submittalStatus.data[1] = 3;
 
         // Activity
         $scope.activityLogs = [];
