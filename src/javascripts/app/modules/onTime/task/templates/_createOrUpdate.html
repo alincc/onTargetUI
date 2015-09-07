@@ -1,6 +1,6 @@
 <div class="form-group">
     <label>Title</label>
-    <input type="text" class="form-control" placeholder="Title" required ng-model="task.title"
+    <input type="text" class="form-control" placeholder="Task Title" required ng-model="task.title"
            name="title"/>
     <ng-messages ng-if="task_form.title.$dirty"
                  for="task_form.title.$error">
@@ -9,7 +9,7 @@
 </div>
 <div class="form-group">
     <label>Description</label>
-    <textarea type="text" class="form-control" placeholder="Description" required ng-model="task.description"
+    <textarea type="text" class="form-control" placeholder="Description of task" required ng-model="task.description"
               name="description"/>
     <ng-messages ng-if="task_form.description.$dirty"
                  for="task_form.description.$error">

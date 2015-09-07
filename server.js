@@ -8,8 +8,14 @@ var cors = require('cors');
 var app = express();
 var myArgs = process.argv.slice(2);
 var port = myArgs[0] || 9000;
-var folder = myArgs[1] || 'src';
-process.env.ROOT = __dirname + '/' + folder;
+var folder = myArgs[1];
+//process.env.ROOT = __dirname + '/' + folder;
+if(folder) {
+  process.env.ROOT = __dirname + '/' + folder;
+} else {
+  process.env.ROOT = __dirname;
+}
+
 
 var config = require('./server/config');
 var PROXY_SERVER = config.PROXY_URL;

@@ -66,8 +66,6 @@ define(function(require) {
           .then(function() {
             userContext.clearInfo();
             projectContext.clearInfo();
-
-            userNotificationsFactory.stopGetAll();
             deferred.resolve();
           }, function() {
             userContext.clearInfo();

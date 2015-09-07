@@ -95,17 +95,25 @@ define(function() {
 
       $scope.save = function() {
         $scope.onSubmit = true;
-        fileFactory.move($scope.projectModel.projectImagePath, null, 'projects', $rootScope.currentProjectInfo.projectId)
-          .success(function(resp) {
-            $scope.model.project.projectImagePath = resp.url;
-            projectFactory.addProject($scope.model).then(function(resp) {
-              $scope.project_form.$setPristine();
-              $modalInstance.close({});
-            }, function(err) {
-              $scope.onSubmit = false;
-              console.log(err);
-            });
-          });
+        //fileFactory.move($scope.projectModel.projectImagePath, null, 'projects', $rootScope.currentProjectInfo.projectId)
+        //  .success(function(resp) {
+        //    $scope.model.project.projectImagePath = resp.url;
+        //    projectFactory.addProject($scope.model).then(function(resp) {
+        //      $scope.project_form.$setPristine();
+        //      $modalInstance.close({});
+        //    }, function(err) {
+        //      $scope.onSubmit = false;
+        //      console.log(err);
+        //    });
+        //  });
+
+        projectFactory.addProject($scope.model).then(function(resp) {
+          $scope.project_form.$setPristine();
+          $modalInstance.close({});
+        }, function(err) {
+          $scope.onSubmit = false;
+          console.log(err);
+        });
       };
 
       $scope.cancel = function() {

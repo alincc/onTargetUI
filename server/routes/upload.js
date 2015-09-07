@@ -73,6 +73,7 @@ function uploadFile(req, res) {
         });
     }
 
+    // Create assets folder
     if(crop) {
       imageService.crop(file.path, fileName, upload, function(err) {
         res.status(400);

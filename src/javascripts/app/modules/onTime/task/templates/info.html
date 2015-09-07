@@ -13,7 +13,7 @@
             <p class="form-control-static text-muted no-padder" ng-bind="task.status|taskStatus"></p>
         </div>
         <div class="form-group m-b-xs">
-            <label>Severity:</label>
+            <label>Priority:</label>
             <p class="form-control-static text-muted no-padder" ng-bind="task.severity|taskSeverity"></p>
         </div>
         <div class="form-group m-b-xs">
@@ -22,8 +22,8 @@
         </div>
     </div>
     <div class="panel-footer bg-light lter">
-        <button class="btn btn-info" ng-click="editTaskInformation()">Edit Task Infomation</button>
-        <button class="btn btn-info" ng-click="editTaskLogistics()">Edit Task Logistics</button>
-        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-xs btn-info" ng-click="editTaskInformation()">Edit Task Infomation</button>
+        <button class="btn btn-xs btn-info" ng-click="editTaskLogistics()">Edit Task Logistics</button>
+        <button class="btn btn-xs btn-default" ng-click="cancel()">Cancel</button>
     </div>
 </div>
