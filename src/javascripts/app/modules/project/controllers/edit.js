@@ -28,7 +28,6 @@ define(function() {
         }
       };
 
-      console.log(project);
 
       $scope.projectModel = {
         projectId: project.projectId,

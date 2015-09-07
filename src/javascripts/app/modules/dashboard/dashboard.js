@@ -24,9 +24,9 @@ define(function(require) {
 
   module.run(['$templateCache', function($templateCache) {
     Chart.defaults.global.colours=[
+      '#4279bd', // blue
       '#06bf3f', // green
       '#ff7e00', // orange
-      '#4279bd', // blue
       '#46BFBD', // green
       '#FDB45C', // yellow
       '#949FB1', // grey

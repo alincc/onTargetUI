@@ -24,6 +24,8 @@ define(function() {
             $rootScope.currentUserInfo.contact.lastName = $scope.editUserData.lastName;
             $rootScope.currentUserInfo.contact.email = $scope.editUserData.email;
             $rootScope.currentUserInfo.contact.userImagePath = $scope.editUserData.userImagePath;
+            $rootScope.currentUserInfo.contact.title = $scope.editUserData.title;
+            $rootScope.currentUserInfo.contact.userImagePath = $scope.editUserData.phoneNumber;
 
             // Save user info to local storage
             userContext.fillInfo(angular.copy($rootScope.currentUserInfo), true);
@@ -31,7 +33,6 @@ define(function() {
             notifications.updateProfileSuccess();
           },
           function(er) {
-            console.log(er);
             $scope.form.$setPristine();
           });
       }
@@ -64,7 +65,7 @@ define(function() {
 
       function upload(file) {
         $scope.isUploadAvatar = true;
-        fileFactory.upload(file, null, 'temp')
+        fileFactory.upload(file, null, 'temp', null, null, true)
           .progress(function(evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             $scope.percentage = progressPercentage;

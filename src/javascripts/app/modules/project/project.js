@@ -17,6 +17,7 @@ define(function(require) {
     editTemplate = require('text!./templates/edit.html'),
     deleteTemplate = require('text!./templates/delete.html'),
     createOrUpdateTemplate = require('text!./templates/_createOrUpdate.html'),
+    projectDescriptionWidthDirective = require('./directives/projectDescriptionWidth'),
     projectServiceModule = require('app/common/services/project'),
     accountServiceModule = require('app/common/services/account'),
     companyServiceModule = require('app/common/services/company'),
@@ -44,6 +45,8 @@ define(function(require) {
   module.controller('ProjectCreateController', createController);
   module.controller('ProjectEditController', editController);
   module.controller('ProjectDeleteController', deleteController);
+
+  module.directive('projectDescriptionWidth', projectDescriptionWidthDirective);
 
   module.config(
     ['$stateProvider',

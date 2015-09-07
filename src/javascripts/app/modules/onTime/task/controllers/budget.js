@@ -24,7 +24,6 @@ define(function(require) {
         taskFactory.getTaskBudget($rootScope.currentTask.projectTaskId).then(function(resp) {
           console.log(resp);
           $scope.task = resp.data.task;
-          console.log(resp);
           _.forEach($scope.task.costsByMonthYear, function(n) {
             if(n.costs.length === 0) {
               var y = n.taskInterval.year, m = n.taskInterval.month;
@@ -32,9 +31,9 @@ define(function(require) {
                 cost: 0,
                 costType: "ACTUAL",
                 createdBy: $scope.task.creatorId,
-                fromDate: new Date(y, m, 1) > $scope.task.startDate ? new Date(y, m, 1) : $scope.task.startDate,
-                toDate: new Date(y, m + 1, 0) < $scope.task.endDate ? new Date(y, m + 1, 0) : $scope.task.endDate,
-                id: 0,
+                fromDate: new Date(y, m - 1, 1) > $scope.task.startDate ? new Date(y, m - 1, 1) : $scope.task.startDate,
+                toDate: new Date(y, m, 0) < $scope.task.endDate ? new Date(y, m, 0) : $scope.task.endDate,
+                id: null,
                 month: m,
                 year: y
               };
@@ -44,7 +43,7 @@ define(function(require) {
                 createdBy: cost1.createdBy,
                 fromDate: cost1.fromDate,
                 toDate: cost1.toDate,
-                id: 0,
+                id: null,
                 month: m,
                 year: y
               };
@@ -52,6 +51,7 @@ define(function(require) {
               n.costs.push(cost2);
             }
           });
+          console.log($scope.task.costsByMonthYear);
           $scope.isLoading = false;
         }, function() {
           $scope.isLoading = false;

@@ -396,12 +396,14 @@
                                     <div class="panel panel-default">
                                         <div class="panel-body">
                                             <h4>Submittal Status</h4>
-                                            <canvas id="submittalStatus" height="138" class="chart chart-doughnut"
-                                                    options="submittalStatus.options"
-                                                    colours="submittalStatus.colours"
-                                                    data="submittalStatus.data"
-                                                    labels="submittalStatus.labels">
-                                            </canvas>
+                                            <div class="doughnut-container">
+                                                <canvas id="submittalStatus" height="160" class="chart chart-doughnut"
+                                                        options="submittalStatus.options"
+                                                        colours="submittalStatus.colours"
+                                                        data="submittalStatus.data"
+                                                        labels="submittalStatus.labels">
+                                                </canvas>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -435,7 +437,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tl-avatar">
-                                                    <img ng-src="{{activityLog.userImage}}" file-path />
+                                                    <img ng-src="{{activityLog.userImage}}" class="image-circle" file-path />
                                                 </div>
                                                 <div class="tl-content">{{activityLog.text}}</div>
 

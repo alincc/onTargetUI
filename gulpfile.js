@@ -15,6 +15,12 @@ var del = require('del');
 var ftp = require('vinyl-ftp');
 
 var config = {
+  default: {
+    port: 3214,
+    domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
+    baseUrl: 'http://demo.newoceaninfosys.com:3214',
+    nodeServer: 'http://demo.newoceaninfosys.com:3215'
+  },
   local: {
     port: 3214,
     domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
@@ -29,6 +35,18 @@ var paths = {
 
 // Combine lesses
 gulp.task('less', ['lint'], function(done) {
+  gulp.src('./src/less/main.less')
+    .pipe(less())
+    .pipe(gulp.dest('./src/css/'))
+    .pipe(minifyCss({
+      keepSpecialComments: 0
+    }))
+    .pipe(rename({extname: '.min.css'}))
+    .pipe(gulp.dest('./src/css/'))
+    .on('end', done);
+});
+
+gulp.task('lessOnly', function(done) {
   gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
@@ -127,6 +145,16 @@ gulp.task('watch', function() {
   ], ['lint', 'less']);
 });
 
+// Watch CSS
+gulp.task('watchCSS', function() {
+  // Watch for changes in `app` folder
+  gulp.watch([
+    './src/less/**/*.css',
+    './src/less/**/*.less',
+    './src/less/*.less'
+  ], ['lessOnly']);
+});
+
 // Test task
 gulp.task('test', ['lint'], function() {
   // Be sure to return the stream
@@ -154,6 +182,9 @@ gulp.task('build', ['requireJsOptimizer'], function() {
 
   // move main script file
   gulp.src('src/javascripts/main.min.js')
+    .pipe(replace("domain: 'http://localhost:9000/ontargetrs/services'", "domain: '" + config.default.domain + "'")) // domain
+    .pipe(replace("baseUrl: 'http://localhost:9000'", "baseUrl: '" + config.default.baseUrl + "'")) // base url
+    .pipe(replace("nodeServer: 'http://localhost:9000'", "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
     .pipe(gulp.dest('build/javascripts'));
 
   del([
@@ -166,9 +197,9 @@ gulp.task('build', ['requireJsOptimizer'], function() {
 
 gulp.task('build:local', ['build'], function() {
   gulp.src('src/javascripts/main.min.js')
-    .pipe(replace("domain: 'http://localhost:9000/ontargetrs/services'", "domain: '" + config.local.domain + "'")) // domain
-    .pipe(replace("baseUrl: 'http://localhost:9000'", "baseUrl: '" + config.local.baseUrl + "'")) // base url
-    .pipe(replace("nodeServer: 'http://localhost:9000'", "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
+    .pipe(replace("domain: '" + config.default.domain + "'", "domain: '" + config.local.domain + "'")) // domain
+    .pipe(replace("baseUrl: '" + config.default.baseUrl + "'", "baseUrl: '" + config.local.baseUrl + "'")) // base url
+    .pipe(replace("nodeServer: '" + config.default.nodeServer + "'", "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
     .pipe(gulp.dest('build/javascripts'));
 
   gulp.src(['./build/**/*'])
