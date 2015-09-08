@@ -19,14 +19,14 @@ define(function(require) {
             "userId": $rootScope.currentUserInfo.userId
           };
 
-          return $http.post(constant.domain + '/notification/getNotifications', requestPayload);
+          return $http.post(constant.domain + '/notification/getNotificationsByUserByProject', requestPayload);
         }
       };
 
       service.getAll = function(param) {
         var deferred = $q.defer();
         if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-          $http.post(constant.domain + '/notification/getNotifications', param)
+          $http.post(constant.domain + '/notification/getNotificationsByUserByProject', param)
             .then(function(resp) {
               $rootScope.userNotifications = resp.data.notificationList;
               notifications.getNotificationSuccess();
