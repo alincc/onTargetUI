@@ -61,6 +61,8 @@ define(function(require) {
     services.generateAddress = function(addrObj) {
       var address = '', state, country, deferred = $q.defer();
 
+      console.log(addrObj);
+
       function cont() {
         if(addrObj.address1) {
           address += addrObj.address1 + ', ';
@@ -92,6 +94,8 @@ define(function(require) {
       if(addrObj.country) {
         country = countryFactory.getCountryByCode(addrObj.country);
       }
+
+      console.log(country);
 
       if(country && addrObj.state) {
         countryFactory.getStateByCode(country.filename, addrObj.state)

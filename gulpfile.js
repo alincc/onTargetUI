@@ -16,10 +16,10 @@ var ftp = require('vinyl-ftp');
 
 var config = {
   default: {
-    port: 3214,
-    domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
-    baseUrl: 'http://demo.newoceaninfosys.com:3214',
-    nodeServer: 'http://demo.newoceaninfosys.com:3215'
+    port: 9000,
+    domain: 'http://localhost:9000/ontargetrs/services',
+    baseUrl: 'http://localhost:8080',
+    nodeServer: 'http://localhost:9000'
   },
   local: {
     port: 3214,

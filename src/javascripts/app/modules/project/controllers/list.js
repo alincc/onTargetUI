@@ -77,10 +77,6 @@ define(function() {
             $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
             $scope.isLoading = false;
 
-
-            console.log("Arranged Projects::");
-            console.log($scope.arrangedProjects);
-
             // save projects to local storage
             projectContext.setProject(null, resp.data.mainProject);
           },
