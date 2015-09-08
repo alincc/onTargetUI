@@ -1,7 +1,6 @@
 define(function(require) {
   'use strict';
-  var angular = require('angular');
-  var XLSX = require('xlsx'),
+  var angular = require('angular'),
     moment = require('moment'),
     taskPriority = require('text!app/common/resources/taskSeverities.json');
 

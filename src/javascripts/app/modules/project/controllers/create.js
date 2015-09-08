@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter',
-    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter) {
+  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', 'utilFactory',
+    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, utilFactory) {
 
       $scope.projectModel = {
         projectId: null,
@@ -26,7 +26,8 @@ define(function() {
         startDate: "",
         endDate: "",
         unitOfMeasurement: "",
-        projectImagePath: ""
+        projectImagePath: "",
+        projectAssetFolderName: utilFactory.makeId(20)
       };
 
       $scope.startDate = {
@@ -95,25 +96,26 @@ define(function() {
 
       $scope.save = function() {
         $scope.onSubmit = true;
-        //fileFactory.move($scope.projectModel.projectImagePath, null, 'projects', $rootScope.currentProjectInfo.projectId)
-        //  .success(function(resp) {
-        //    $scope.model.project.projectImagePath = resp.url;
-        //    projectFactory.addProject($scope.model).then(function(resp) {
-        //      $scope.project_form.$setPristine();
-        //      $modalInstance.close({});
-        //    }, function(err) {
-        //      $scope.onSubmit = false;
-        //      console.log(err);
-        //    });
-        //  });
 
-        projectFactory.addProject($scope.model).then(function(resp) {
-          $scope.project_form.$setPristine();
-          $modalInstance.close({});
-        }, function(err) {
-          $scope.onSubmit = false;
-          console.log(err);
-        });
+        var createProject = function() {
+          projectFactory.addProject($scope.model).then(function(resp) {
+            $scope.project_form.$setPristine();
+            $modalInstance.close({});
+          }, function(err) {
+            $scope.onSubmit = false;
+            console.log(err);
+          });
+        };
+
+        if($scope.picture.isUploadedPicture) {
+          fileFactory.move($scope.projectModel.projectImagePath, null, 'projects', $scope.model.project.projectAssetFolderName)
+            .success(function(resp) {
+              $scope.model.project.projectImagePath = resp.url;
+              createProject();
+            });
+        } else {
+          createProject();
+        }
       };
 
       $scope.cancel = function() {
@@ -123,7 +125,8 @@ define(function() {
       $scope.picture = {
         file: null,
         percentage: 0,
-        isUploadPicture: false
+        isUploadPicture: false,
+        isUploadedPicture: false
       };
       $scope.$watch('picture.file', function() {
         if($scope.picture.file) {
@@ -140,14 +143,15 @@ define(function() {
         $scope.picture.isUploadPicture = true;
         fileFactory.upload(file, null, 'temp', null, null, true)
           .progress(function(evt) {
-          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.picture.percentage = progressPercentage;
-        }).success(function(data, status, headers, config) {
-          $timeout(function() {
-            $scope.projectModel.projectImagePath = data.url;
-            $scope.picture.isUploadPicture = false;
-          });
-        })
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            $scope.picture.percentage = progressPercentage;
+          }).success(function(data, status, headers, config) {
+            $timeout(function() {
+              $scope.projectModel.projectImagePath = data.url;
+              $scope.picture.isUploadPicture = false;
+              $scope.picture.isUploadedPicture = true;
+            });
+          })
           .error(function() {
             $scope.picture.isUploadPicture = false;
           });

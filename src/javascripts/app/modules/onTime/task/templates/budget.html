@@ -7,20 +7,20 @@
             <thead>
             <tr>
                 <th></th>
-                <th class="table-head">Actuals</th>
                 <th class="table-head">Planned</th>
+                <th class="table-head">Actuals</th>
             </tr>
             </thead>
             <tbody class="table-bordered">
             <tr ng-repeat="budget in task.costsByMonthYear">
-                <td>{{budget.taskInterval.month|date:'MMM'}}-{{budget.taskInterval.year}}</td>
-                <td class="budget-cost" ng-dblclick="edit()">
-                    <span ng-hide="isEdit">{{budget.costs[0].cost | currency: '$' : 0}}</span>
-                    <input ng-show="isEdit" type="text" ng-model="budget.costs[0].cost"/>
-                </td>
+                <td class="interval">{{budget.taskInterval.month | monthName}}-{{budget.taskInterval.year}}</td>
                 <td class="budget-cost" ng-dblclick="edit()">
                     <span ng-hide="isEdit">{{budget.costs[1].cost| currency: '$' : 0}}</span>
                     <input ng-show="isEdit" type="text" ng-model="budget.costs[1].cost"/>
+                </td>
+                <td class="budget-cost" ng-dblclick="edit()">
+                    <span ng-hide="isEdit">{{budget.costs[0].cost | currency: '$' : 0}}</span>
+                    <input ng-show="isEdit" type="text" ng-model="budget.costs[0].cost"/>
                 </td>
             </tr>
             </tbody>

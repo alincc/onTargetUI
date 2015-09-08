@@ -6,7 +6,7 @@
         ng-show="!sentSuccess">
     <div class="modal-body">
       <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">First Name</label>
+        <label class="col-xs-3 col-xs-offset-1 control-label">First Name <span class="label-required" ng-show="form.firstName.$error.required">*</span></label>
 
         <div class="col-xs-7">
           <input name="firstName" type="text" class="form-control" placeholder="First Name"
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">Last Name</label>
+        <label class="col-xs-3 col-xs-offset-1 control-label">Last Name <span class="label-required" ng-show="form.lastName.$error.required">*</span></label>
 
         <div class="col-xs-7">
           <input name="lastName" type="text" class="form-control" placeholder="Last Name"
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">Email</label>
+        <label class="col-xs-3 col-xs-offset-1 control-label">Email <span class="label-required" ng-show="form.email.$error.required">*</span></label>
 
         <div class="col-xs-7">
           <input name="email" type="email" class="form-control" placeholder="Email"
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="form-group" ng-if="addNewCompany == false">
-        <label class="col-xs-3 col-xs-offset-1 control-label">Company Name</label>
+        <label class="col-xs-3 col-xs-offset-1 control-label">Company Name <span class="label-required" ng-show="form.existingCompanyName.$error.required">*</span></label>
 
         <div class="col-xs-7">
           <select class="form-control" name="existingCompanyName" ng-model="existingCompany.id"
@@ -49,14 +49,14 @@
       <div class="form-group">
         <div class="col-xs-7 col-xs-offset-4">
           <a ng-click="addNewCompany = !addNewCompany">
-            <span ng-if="!addNewCompany"><i class="fa fa-plus"></i> Add New Company</span>
+            <span ng-if="!addNewCompany"><i class="fa fa-plus"></i> Add New Company </span>
             <span ng-if="addNewCompany">Use Existing Company</span>
           </a>
         </div>
       </div>
       <div ng-if="addNewCompany == true">
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">Company Name</label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">Company Name <span class="label-required" ng-show="form.newCompanyName.$error.required">*</span></label>
 
           <div class="col-xs-7">
             <input name="newCompanyName" type="text" class="form-control" placeholder="Company Name"
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">Company Type</label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">Company Type <span class="label-required" ng-show="form.newCompanyType.$error.required">*</span></label>
 
           <div class="col-xs-7">
             <select class="form-control" name="newCompanyType" ng-model="newCollaborator.companyType"
@@ -78,7 +78,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">Address 1</label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">Address 1 <span class="label-required" ng-show="form.newAddress1.$error.required">*</span></label>
 
           <div class="col-xs-7">
             <input name="newAddress1" type="text" class="form-control" placeholder="Address 1"
@@ -96,7 +96,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">City</label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">City <span class="label-required" ng-show="form.newCity.$error.required">*</span></label>
 
           <div class="col-xs-7">
             <input name="newCity" type="text" class="form-control" placeholder="City" ng-model="newCollaborator.city"
@@ -105,7 +105,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">Country</label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">Country <span class="label-required" ng-show="form.newCountry.$error.required">*</span></label>
 
           <div class="col-xs-7">
             <select name="newCountry" class="form-control" ng-model="newCollaborator.country" placeholder="Country"
@@ -119,7 +119,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">State</label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">State <span class="label-required" ng-show="form.newState.$error.required">*</span></label>
 
           <div class="col-xs-7">
             <select name="newState" class="form-control" ng-model="newCollaborator.state" placeholder="State"
@@ -131,7 +131,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">Zip</label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">Zip <span class="label-required" ng-show="form.newZip.$error.required">*</span></label>
 
           <div class="col-xs-7">
             <input name="newZip" type="text" class="form-control" placeholder="Zip" ng-model="newCollaborator.zip"

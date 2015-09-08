@@ -321,7 +321,7 @@ define(function(require) {
       };
 
       $scope.saveDocumentInfo = function(model) {
-        fileFactory.move($scope.uploadModel.filePath, null, 'projects', $rootScope.currentProjectInfo.projectId, 'onsite')
+        fileFactory.move($scope.uploadModel.filePath, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'onsite')
           .success(function(resp){
             model.filePath = resp.url;
             model.fileName = resp.name;

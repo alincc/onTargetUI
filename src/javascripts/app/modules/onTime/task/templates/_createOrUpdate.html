@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label>Title</label>
+    <label>Title <span class="label-required-task" ng-show="task_form.title.$error.required">*</span></label>
     <input type="text" class="form-control" placeholder="Task Title" required ng-model="task.title"
            name="title"/>
     <ng-messages ng-if="task_form.title.$dirty"
@@ -8,7 +8,7 @@
     </ng-messages>
 </div>
 <div class="form-group">
-    <label>Description</label>
+    <label>Description <span class="label-required-task" ng-show="task_form.description.$error.required">*</span></label>
     <textarea type="text" class="form-control" placeholder="Description of task" required ng-model="task.description"
               name="description"/>
     <ng-messages ng-if="task_form.description.$dirty"
@@ -17,7 +17,7 @@
     </ng-messages>
 </div>
 <div class="form-group">
-    <label>Status</label>
+    <label>Status <span class="label-required-task" ng-show="task_form.status.$error.required">*</span></label>
     <select class="form-control" name="status" ng-model="task.status"
             ng-options="status.id as status.name for status in taskStatuses" required>
         <option value="">-- Select --</option>
@@ -28,7 +28,7 @@
     </ng-messages>
 </div>
 <div class="form-group">
-    <label>Priority</label>
+    <label>Priority <span class="label-required-task" ng-show="task_form.severity.$error.required">*</span></label>
     <select class="form-control" name="severity" ng-model="task.severity"
             ng-options="severity.id as severity.name for severity in taskSeverities" required>
         <option value="">-- Select --</option>
@@ -39,7 +39,7 @@
     </ng-messages>
 </div>
 <div class="form-group">
-    <label>Start date</label>
+    <label>Start date <span class="label-required-task" ng-show="task_form.startDate.$error.required">*</span></label>
     <p class="input-group">
         <input type="text" class="form-control" placeholder="Start date" required ng-model="task.startDate"
                datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxDate" min-date="minDate2" init-date="initStartDate"
@@ -57,7 +57,7 @@
     </ng-messages>
 </div>
 <div class="form-group">
-    <label>End date</label>
+    <label>End date <span class="label-required-task" ng-show="task_form.endDate.$error.required">*</span></label>
     <p class="input-group">
         <input type="text" class="form-control" placeholder="End date" required ng-model="task.endDate"
                ng-click="endDate.isOpen = !endDate.isOpen"
@@ -77,7 +77,7 @@
 
 </div>
 <div class="form-group" ng-if="!editTask">
-    <label>Task Assignee</label>
+    <label>Task Assignee <span class="label-required-task" ng-show="task_form.assignees.$error.required">*</span></label>
     <ui-select append-to-body="true" multiple tagging ng-model="task.selectedAssignees" theme="bootstrap" require-multiple name="assignees">
         <ui-select-match placeholder="Select assignees">{{$item.contact.firstName}} {{$item.contact.lastName}}</ui-select-match>
         <ui-select-choices repeat="ct in contacts">

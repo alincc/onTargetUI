@@ -73,17 +73,68 @@ define(function(require) {
               });
             }
 
-            $scope.options = {
-              animation: false,
-              legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li style=\"color:<%=datasets[i].strokeColor%>\"><span style=\"border-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-              //scaleOverride: true,
-              //scaleStepWidth: 1,
-              //scaleStartValue: 0,
-              //scaleSteps: 6
+            var earnedValueData = [];
+            _.each(labels, function(el, idx) {
+              earnedValueData.push([
+                el,
+                EV[idx]
+              ]);
+            });
+
+            var actualValueData = [];
+            _.each(labels, function(el, idx) {
+              actualValueData.push([
+                el,
+                AC[idx]
+              ]);
+            });
+
+            var plannedValueData = [];
+            _.each(labels, function(el, idx) {
+              plannedValueData.push([
+                el,
+                PV[idx]
+              ]);
+            });
+
+            $scope.plot = {
+              data: [
+                {
+                  data: earnedValueData, // [bottom, left]
+                  label: 'Earned',
+                  points: {show: true, radius: 4},
+                  lines: {show: true, fill: false, fillColor: {colors: [{opacity: 0.1}, {opacity: 0.1}]}}
+                },
+                {
+                  data: actualValueData, // [bottom, left]
+                  label: 'Actual',
+                  points: {show: true, radius: 4},
+                  lines: {show: true, fill: false, fillColor: {colors: [{opacity: 0.1}, {opacity: 0.1}]}}
+                },
+                {
+                  data: plannedValueData, // [bottom, left]
+                  label: 'Planned',
+                  points: {show: true, radius: 4},
+                  lines: {show: true, fill: false, fillColor: {colors: [{opacity: 0.1}, {opacity: 0.1}]}}
+                }
+              ],
+              options: {
+                colors: appConstant.app.projectHealthColours,
+                series: {shadowSize: 2},
+                xaxis: {font: {color: '#ccc'}, mode: "categories", tickLength: 0},
+                yaxis: {font: {color: '#ccc'}},
+                grid: {hoverable: true, clickable: true, borderWidth: 0, color: '#ccc'},
+                tooltip: true,
+                tooltipOpts: {content: '%y', defaultTheme: false, shifts: {x: 10, y: -20}},
+                legend: {
+                  show: true,
+                  noColumns: 3,
+                  labelFormatter: function(label, series) {
+                    return '<span style="color:'+series.color+';">' + label + '</span>';
+                  }
+                }
+              }
             };
-            $scope.series = ['Planned', 'Earned', 'Actual']; // legend
-            $scope.data = [PV, EV, AC]; // vertical line
-            $scope.labels = labels; // horizontal line
 
             $scope.isLoadingProjectHealth = false;
           })
