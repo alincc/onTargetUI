@@ -26,28 +26,28 @@
                             <form class="bs-example form-horizontal form-validation" name="form"
                                   ng-submit="submitUserProfile(editUserData)" novalidate autocomplete="false">
                                 <div class="form-group">
-                                    <label class="col-xs-2 control-label">Title</label>
+                                    <label class="col-xs-2 control-label">Title <span class="label-required" ng-show="form.title.$error.required">*</span></label>
                                     <div class="col-xs-10">
                                         <input type="text" class="form-control" name="title" placeholder="Title" ng-model="editUserData.title" required="">
                                         <span class="text-danger help-block m-b-none" ng-show="form.title.$error.required">Please provide Title</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-xs-2 control-label">First Name</label>
+                                    <label class="col-xs-2 control-label">First Name <span class="label-required" ng-show="form.firstName.$error.required">*</span></label>
                                     <div class="col-xs-10">
                                         <input type="text" class="form-control" name="firstName" placeholder="First Name" ng-model="editUserData.firstName" required="">
                                         <span class="text-danger help-block m-b-none" ng-show="form.firstName.$error.required">Please provide First Name</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-xs-2 control-label">Last Name</label>
+                                    <label class="col-xs-2 control-label">Last Name <span class="label-required" ng-show="form.lastName.$error.required">*</span></label>
                                     <div class="col-xs-10">
                                         <input type="text" class="form-control" name="lastName" placeholder="Last Name" ng-model="editUserData.lastName" required="">
                                         <span class="text-danger help-block m-b-none" ng-show="form.lastName.$error.required">Please provide Last Name</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-xs-2 control-label">Email</label>
+                                    <label class="col-xs-2 control-label">Email <span class="label-required" ng-show="form.email.$error.required">*</span></label>
                                     <div class="col-xs-10">
                                         <input type="email" class="form-control" placeholder="Email" name="email" ng-model="editUserData.email" required="">
                                         <span class="text-danger help-block m-b-none" ng-show="form.email.$error.required">Please provide Email</span>
@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-xs-2 control-label">Phone Number</label>
+                                    <label class="col-xs-2 control-label">Phone Number <span class="label-required" ng-show="form.phoneNumber.$error.required">*</span></label>
                                     <div class="col-xs-10">
                                         <input name="phoneNumber" type="text" id="phoneNumber" ng-model="editUserData.phoneNumber"
                                                class="form-control" ui-mask="{{'(999)-999-9999'}}"

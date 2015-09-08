@@ -149,13 +149,14 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <h4>Project Health</h4>
-                            <canvas id="projectHealth" class="chart chart-line"
-                                    options="options"
-                                    data="data"
-                                    labels="labels"
-                                    legend="true"
-                                    series="series">
-                            </canvas>
+                            <!--<canvas id="projectHealth" class="chart chart-line"-->
+                                    <!--options="options"-->
+                                    <!--data="data"-->
+                                    <!--labels="labels"-->
+                                    <!--legend="true"-->
+                                    <!--series="series">-->
+                            <!--</canvas>-->
+                            <div j-plot class="chart-container" data="plot.data" options="plot.options" style="height:240px"></div>
                         </div>
                     </div>
                 </div>
@@ -415,7 +416,7 @@
                 <div class="col-xs-12 col-md-4 time-line col-height">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <span>Actitivy Log</span>
+                            <span>Activity Log</span>
                             <div class="timeline-container" custom-scroll>
                                 <ul class="timeline timeline-center">
                                     <li class="tl-header">

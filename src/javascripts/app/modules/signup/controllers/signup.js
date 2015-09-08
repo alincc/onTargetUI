@@ -34,6 +34,7 @@ define(function() {
       $scope.authError = '';
       $scope.displayForm = false;
       $scope.isUploadAvatar = false;
+      $scope.isUploadedAvatar = false;
 
       $scope.registerUser = function(user) {
         console.log(user);
@@ -41,23 +42,30 @@ define(function() {
           return false;
         }
 
-        fileFactory.move($scope.user.userImagePath, null, 'profile')
-          .success(function(resp){
-            $scope.user.userImagePath = resp.url;
-            user.userImagePath = resp.url;
-            accountFactory.registerOntargetUser(user).success(function(data) {
-              if(data.returnVal === "SUCCESS") {
-                $state.go('signin');
-              }
+        var createUser = function() {
+          accountFactory.registerOntargetUser(user).success(function(data) {
+            if(data.returnVal === "SUCCESS") {
+              $state.go('signin');
+            }
+            $scope.form.$setPristine();
+          })
+            .error(function(data) {
+              console.log(data);
               $scope.form.$setPristine();
-            })
-              .error(function(data) {
-                console.log(data);
-                $scope.form.$setPristine();
-              });
-          });
-      };
+            });
+        };
 
+        if($scope.isUploadedAvatar) {
+          fileFactory.move($scope.user.userImagePath, null, 'profile')
+            .success(function(resp) {
+              $scope.user.userImagePath = resp.url;
+              user.userImagePath = resp.url;
+              createUser();
+            });
+        } else {
+          createUser();
+        }
+      };
 
       $scope.$watch('file', function() {
         if($scope.file) {
@@ -76,14 +84,15 @@ define(function() {
         $scope.isUploadAvatar = true;
         fileFactory.upload(file, null, 'temp', null, null, true)
           .progress(function(evt) {
-          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.percentage = progressPercentage;
-        }).success(function(data, status, headers, config) {
-          $timeout(function() {
-            $scope.user.userImagePath = data.url;
-            $scope.isUploadAvatar = false;
-          });
-        })
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            $scope.percentage = progressPercentage;
+          }).success(function(data, status, headers, config) {
+            $timeout(function() {
+              $scope.user.userImagePath = data.url;
+              $scope.isUploadAvatar = false;
+              $scope.isUploadedAvatar = true;
+            });
+          })
           .error(function() {
             $scope.isUploadAvatar = false;
           });

@@ -259,9 +259,9 @@ gulp.task('deploy:ui:local', ['build:local'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
-    host: '',
-    user: '',
-    password: '',
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
     parallel: 2
   });
 
@@ -270,7 +270,7 @@ gulp.task('deploy:ui:local', ['build:local'], function() {
   ];
 
   return gulp.src(globs, {base: './build-local/', buffer: false})
-    .pipe(conn.newer('/onTargetUI'))
+    //.pipe(conn.newer('/onTargetUI'))
     .pipe(conn.dest('/onTargetUI'));
 });
 
@@ -278,9 +278,9 @@ gulp.task('deploy:node:local', ['build:server'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
-    host: '',
-    user: '',
-    password: '',
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
     parallel: 2
   });
 
@@ -289,7 +289,7 @@ gulp.task('deploy:node:local', ['build:server'], function() {
   ];
 
   return gulp.src(globs, {base: './build-server/', buffer: false})
-    .pipe(conn.newer('/onTargetNodeServer'))
+    //.pipe(conn.newer('/onTargetNodeServer'))
     .pipe(conn.dest('/onTargetNodeServer'));
 });
 
@@ -301,9 +301,9 @@ gulp.task('deploy', ['build'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
-    host: '',
-    user: '',
-    password: '',
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
     parallel: 2
   });
 
@@ -315,6 +315,6 @@ gulp.task('deploy', ['build'], function() {
   ];
 
   return gulp.src(globs, {base: '.', buffer: false})
-    .pipe(conn.newer('/onTarget/ontarget/Code'))
+    //.pipe(conn.newer('/onTarget/ontarget/Code'))
     .pipe(conn.dest('/onTarget/ontarget/Code'));
 });

@@ -105,7 +105,10 @@ define(function(require) {
             console.log(response);
 
             if(response.status === 400) {
-              if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
+              if(angular.isString(response.data)){
+                toaster.pop('error', "Error", response.data);
+              }
+              else if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
                 var errorMessageHtml = '';
                 _.each(response.data, function(el) {
                   if(el.path !== '0') {
@@ -224,9 +227,9 @@ define(function(require) {
   }]);
 
   module.constant('appConstant', {
-    domain: 'http://localhost:9000/ontargetrs/services',
-    baseUrl: 'http://localhost:9000',
-    nodeServer: 'http://localhost:9000',
+    domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
+    baseUrl: 'http://demo.newoceaninfosys.com:3215',
+    nodeServer: 'http://demo.newoceaninfosys.com:3215',
     app: {
       name: "OnTarget",
       id: "OnTarget",
@@ -264,6 +267,15 @@ define(function(require) {
         'e2df05',
         'ffb56d',
         'e25805'
+      ],
+      projectHealthColours:[
+        '#06bf3f', // green
+        '#ff7e00', // orange
+        '#4279bd', // blue
+        '#46BFBD', // green
+        '#FDB45C', // yellow
+        '#949FB1', // grey
+        '#4D5360'  // dark grey
       ]
     },
     push:{

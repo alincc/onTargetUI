@@ -53,35 +53,43 @@
         color: #7a7b7a;
       }
       .chart-container {
-        .line-legend {
-          position: absolute;
-          top: 16px;
-          right: 0;
-          li {
-            display: inline-block;
-            position: relative;
-            margin-right: 35px;
-            font-weight: 600;
-            //&:before {
-            //  position: absolute;
-            //  width: 10px;
-            //  height: 10px;
-            //  display: block;
-            //  background-color: #fff;
-            //  left: 0;
-            //  top: 0;
-            //}
-            span {
-              display: block;
-              width: 12px;
-              height: 12px;
-              border-radius: 50%;
-              position: absolute;
-              left: -15px;
-              top: 3px;
-              border-width: 2px;
-              border-style: solid;
+        .legend {
+          table {
+            position: absolute;
+            top: -30px !important;
+            right: 0 !important;
+
+            .legendColorBox {
+              > div {
+                > div {
+                  width: 12px !important;
+                  height: 12px !important;
+                  border-width: 3px !important;
+                }
+              }
             }
+            .legendLabel {
+              span {
+                font-weight: 600;
+                font-size: 14px;
+                margin: 1px 10px 0 0;
+                display: block;
+              }
+            }
+
+            //.wrapper {
+            //  span {
+            //    display: block;
+            //    width: 12px;
+            //    height: 12px;
+            //    border-radius: 50%;
+            //    position: absolute;
+            //    left: -15px;
+            //    top: 3px;
+            //    border-width: 2px;
+            //    border-style: solid;
+            //  }
+            //}
           }
         }
       }
@@ -212,6 +220,9 @@
   }
   .task-container {
     padding-left: 0px;
+    .panel-default {
+      background-color: #FAFAFA;
+    }
     .tab-container {
       .nav-tabs {
         li {
@@ -365,6 +376,7 @@
     .panel-default {
       height: 100%;
       margin-bottom: 0px;
+      background-color: white;
       .panel-body {
         height: 100%;
         .status-container {
@@ -427,6 +439,7 @@
     .panel-default {
       height: 100%;
       margin-bottom: 0px;
+      background-color: white;
       .panel-body {
         text-align: center;
         .doughnut-container {
@@ -462,11 +475,12 @@
     float: none;
     height: 100%;
   }
-  .time-line{
+  .time-line {
     padding-right: 0px;
     padding-bottom: 18px;
-    .panel-default{
+    .panel-default {
       height: 100%;
+      background-color: #FAFAFA;
     }
   }
   .timeline-container {

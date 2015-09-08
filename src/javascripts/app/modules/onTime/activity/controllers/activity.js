@@ -107,7 +107,9 @@ define(function(require) {
 
             createActivityModalInstance.result.then(function() {
               //add success
-              $scope.getUserProject();
+              //$scope.getUserProject();
+              //load();
+              $scope.loadActivity();
             }, function() {
             });
           });
@@ -134,7 +136,9 @@ define(function(require) {
 
             editActivityModalInstance.result.then(function() {
               //edit success
-              $scope.getUserProject();
+              //$scope.getUserProject();
+              //load();
+              $scope.loadActivity();
             }, function() {
 
             });
@@ -192,17 +196,22 @@ define(function(require) {
 
       //when task added, or deleted
       notifications.onTaskCreated($scope, function() {
-        $scope.getUserProject();
+        //$scope.getUserProject();
+        $scope.loadActivity();
       });
 
       notifications.onTaskUpdated($scope, function(obj) {
-        if(!obj) {
-          $scope.getUserProject();
-        }
+        /*if(!obj) {
+          //$scope.getUserProject();
+          //load();
+          $scope.loadActivity();
+        }*/
+        $scope.loadActivity();
       });
 
       notifications.onTaskDeleted($scope, function() {
         //$scope.getUserProject();
+        $scope.loadActivity();
       });
 
       // Events
@@ -213,6 +222,7 @@ define(function(require) {
           canceler.resolve();
         }
         load();
+        //$scope.loadActivity();
       });
 
       $scope.$on('$destroy', function() {

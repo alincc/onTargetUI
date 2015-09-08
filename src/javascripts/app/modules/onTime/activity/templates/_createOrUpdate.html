@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label class="col-xs-2 control-label">Name</label>
+    <label class="col-xs-2 control-label">Name <span class="label-required" ng-show="form.projectName.$error.required">*</span></label>
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Name" required ng-model="project.projectName"
                name="projectName"/>
@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Description</label>
+    <label class="col-xs-2 control-label">Description <span class="label-required" ng-show="form.projectDescription.$error.required">*</span></label>
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Description" required ng-model="project.projectDescription"
                name="projectDescription"/>
@@ -21,7 +21,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Company Name</label>
+    <label class="col-xs-2 control-label">Company Name <span class="label-required" ng-show="form.companyId.$error.required">*</span></label>
     <div class="col-xs-10">
         <select class="form-control" name="companyId" ng-model="project.companyId" required
                 ng-options="company.companyId as company.companyName for company in companies">
@@ -34,7 +34,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Status</label>
+    <label class="col-xs-2 control-label">Status <span class="label-required" ng-show="form.status.$error.required">*</span></label>
     <div class="col-xs-10">
         <select class="form-control" name="status" ng-model="project.status"
                 ng-options="projectStatus.id as projectStatus.name for projectStatus in projectStatuses" required>
@@ -47,7 +47,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Start date</label>
+    <label class="col-xs-2 control-label">Start date <span class="label-required" ng-show="form.startDate.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <p class="input-group">
@@ -67,7 +67,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">End date</label>
+    <label class="col-xs-2 control-label">End date <span class="label-required" ng-show="form.endDate.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <p class="input-group">

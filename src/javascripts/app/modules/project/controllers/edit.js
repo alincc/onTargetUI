@@ -133,7 +133,7 @@ define(function() {
 
       function upload(file) {
         $scope.picture.isUploadPicture = true;
-        fileFactory.upload(file, null, 'projects', $rootScope.currentProjectInfo.projectId).progress(function(evt) {
+        fileFactory.upload(file, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName).progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.picture.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {
