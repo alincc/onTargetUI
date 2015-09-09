@@ -158,8 +158,7 @@ define(function() {
             if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
               var requestPayload = {
                 "pageNumber": 1,
-                "perPageLimit": constant.app.settings.userNotificationsPageSize,
-                "userId": $rootScope.currentUserInfo.userId
+                "perPageLimit": constant.app.settings.userNotificationsPageSize
               };
 
               userNotificationsFactory.getAll(requestPayload);

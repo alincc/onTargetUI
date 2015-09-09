@@ -35,8 +35,8 @@
                                 <span>{{activity.startDate|date:'MM/dd/yyyy'}}</span> | <span>{{activity.endDate|date:'MM/dd/yyyy'}}</span>
                             </div>
                             <div class="tasks">
-                                <span>{{activity.activeTasks ? activity.activeTasks : 0}} Active</span> |
-                                <span>{{activity.pendingTasks ? activity.pendingTasks : 0}} Pending</span>
+                                <span ng-repeat="taskCount in activity.taskCountByStatus | filter : {statusType : 'Active'}">{{taskCount.taskCount}} Active</span> |
+                                <span ng-repeat="taskCount in activity.taskCountByStatus | filter : {statusType : 'Pending'}">{{taskCount.taskCount}} Pending</span>
                             </div>
                         </div>
                         <div class="status">
@@ -52,10 +52,10 @@
             </div>
             <div class="panel-footer bg-light lter">
                 <button class="btn btn-xs btn-primary" ng-click="import()"><!--<i class="fa fa-inbox"></i>--> Import</button>
-                <button class="btn btn-xs btn-primary" ng-click="openCreateActivityModal()"><!--<i class="fa fa-plus"></i>--> Add
+                <button class="btn btn-xs btn-primary" ng-click="createActivity()"><!--<i class="fa fa-plus"></i>--> Add
                     Activity
                 </button>
-                <button class="btn btn-xs btn-info" ng-click="openEditActivityModal()" ng-show="activitySelected"><!--<i
+                <button class="btn btn-xs btn-info" ng-click="editActivity()" ng-show="activitySelected"><!--<i
                         class="fa fa-pencil-square-o"></i>--> Edit Activity
                 </button>
                 <button class="btn btn-xs btn-danger" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><!--<i

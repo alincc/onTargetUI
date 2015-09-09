@@ -125,7 +125,7 @@ function moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, contex
           destinationDir = url;
           fileDestination = destinationDir + '/' + fileName;
           // Check if file exist, then change file name
-          if(path.existsSync(fileDestination)) {
+          if(fs.existsSync(fileDestination)) {
             fileName = new Date().getTime() + '-' + fileName;
             fileDestination = destinationDir + '/' + fileName;
           }
@@ -143,7 +143,7 @@ function moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, contex
               fileDestination = destinationDir + '/' + fileName;
 
               // Check if file exist, then change file name
-              if(path.existsSync(fileDestination)) {
+              if(fs.existsSync(fileDestination)) {
                 fileName = new Date().getTime() + '-' + fileName;
                 fileDestination = destinationDir + '/' + fileName;
               }
@@ -158,7 +158,7 @@ function moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, contex
   else if(rootFolder === 'profile') {
     destinationDir = url;
     fileDestination = destinationDir + '/' + fileName;
-    if(path.existsSync(fileDestination)) {
+    if(fs.existsSync(fileDestination)) {
       fileName = new Date().getTime() + '-' + fileName;
       fileDestination = destinationDir + '/' + fileName;
     }

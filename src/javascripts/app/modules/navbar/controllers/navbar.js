@@ -69,8 +69,7 @@ define(function() {
         // Reload notifications
         userNotificationsFactory.getAll({
           "pageNumber": 1,
-          "perPageLimit": appConstant.app.settings.userNotificationsPageSize,
-          "userId": $rootScope.currentUserInfo.userId
+          "perPageLimit": appConstant.app.settings.userNotificationsPageSize
         });
 
         toaster.pop('info', 'Info', data.message);

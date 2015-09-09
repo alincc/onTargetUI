@@ -4,7 +4,8 @@
 define(function (require){
   'use strict';
   var moment = require('moment');
-  var controller = ['$scope', '$rootScope', '$modal', 'userContext', 'projectFactory', 'companies', 'activityFactory', '$modalInstance', 'toaster', 'projectContext', '$filter', function ($scope, $rootScope, $modal, userContext, projectFactory, companies, activityFactory, $modalInstance, toaster, projectContext, $filter){
+  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'activityFactory', 'toaster', 'projectContext', '$filter', 'notifications',
+    function ($scope, $rootScope, userContext, projectFactory, activityFactory, toaster, projectContext, $filter, notifications){
     $scope.currentProject = $rootScope.currentProjectInfo;
 
     $scope.project = {
@@ -24,7 +25,7 @@ define(function (require){
     };
 
     $scope.projectStatuses = projectFactory.getProjectStatuses();
-    $scope.companies = companies;
+    $scope.companies = $rootScope.companies;
 
 
     $scope.minDate2 = $scope.currentProject.startDate;
@@ -68,7 +69,8 @@ define(function (require){
         function (resp){
           $scope.onSubmit = false;
           $scope.form.$setPristine();
-          $modalInstance.close({});
+          //$modalInstance.close({});
+          notifications.activityCreated();
         }, function (err){
           $scope.onSubmit = false;
           $scope.form.$setPristine();
@@ -77,7 +79,8 @@ define(function (require){
     };
 
     $scope.cancel = function (){
-      $modalInstance.dismiss('cancel');
+      //$modalInstance.dismiss('cancel');
+      notifications.cancelActivity();
     };
   }];
   return controller;

@@ -24,6 +24,11 @@ define([
         _ACTIVITY_SELECTION_ = '_ACTIVITY_SELECTION_',
         _ACTIVITY_DELETED_ = '_ACTIVITY_DELETED_',
         _CURRENT_PROJECT_CHANGE_ = '_CURRENT_PROJECT_CHANGE_',
+        _CREATE_ACTIVITY_ = '_ADD_ACTIVITY_',
+        _EDIT_ACTIVITY_ = '_EDIT_ACTIVITY_',
+        _CANCEL_ACTIVITY_ = 'CANCEL_ACTIVITY',
+        _ACTIVITY_CREATED_ = '_ACTIVITY_CREATED_',
+        _ACTIVITY_UPDATED_ = '_ACTIVITY_UPDATED_',
 
         requestStarted = function (){
           $rootScope.$broadcast(_START_REQUEST_);
@@ -152,6 +157,46 @@ define([
           $scope.$on(_CURRENT_PROJECT_CHANGE_, function (event, args){
             handler(args);
           });
+        },
+        createActivity = function (args){
+          $rootScope.$broadcast(_CREATE_ACTIVITY_, args);
+        },
+        onCreateActivity = function ($scope, handler){
+          $scope.$on(_CREATE_ACTIVITY_, function (event, args){
+            handler(args);
+          });
+        },
+        editActivity = function (args){
+          $rootScope.$broadcast(_EDIT_ACTIVITY_, args);
+        },
+        onEditActivity = function ($scope, handler){
+          $scope.$on(_EDIT_ACTIVITY_, function (event, args){
+            handler(args);
+          });
+        },
+        cancelActivity = function (args){
+          $rootScope.$broadcast(_CANCEL_ACTIVITY_, args);
+        },
+        onCancelActivity = function ($scope, handler){
+          $scope.$on(_CANCEL_ACTIVITY_, function (event, args){
+            handler(args);
+          });
+        },
+        activityCreated = function (args){
+          $rootScope.$broadcast(_ACTIVITY_CREATED_, args);
+        },
+        onActivityCreated = function ($scope, handler){
+          $scope.$on(_ACTIVITY_CREATED_, function (event, args){
+            handler(args);
+          });
+        },
+        activityEdited = function (args){
+          $rootScope.$broadcast(_ACTIVITY_UPDATED_, args);
+        },
+        onActivityEdited = function ($scope, handler){
+          $scope.$on(_ACTIVITY_UPDATED_, function (event, args){
+            handler(args);
+          });
         };
 
       return {
@@ -186,7 +231,17 @@ define([
         activityDeleted: activityDeleted,
         onActivityDeleted: onActivityDeleted,
         currentProjectChange: currentProjectChange,
-        onCurrentProjectChange: onCurrentProjectChange
+        onCurrentProjectChange: onCurrentProjectChange,
+        createActivity: createActivity,
+        onCreateActivity: onCreateActivity,
+        editActivity: editActivity,
+        onEditActivity: onEditActivity,
+        cancelActivity: cancelActivity,
+        onCancelActivity: onCancelActivity,
+        activityCreated: activityCreated,
+        onActivityCreated: onActivityCreated,
+        activityEdited: activityEdited,
+        onActivityEdited: onActivityEdited
       };
     }]);
 });

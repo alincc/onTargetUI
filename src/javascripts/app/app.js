@@ -74,14 +74,10 @@ define(function(require) {
         pushFactory.initialize();
 
         // Load notifications
-        //if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-        //  var requestPayload = {
-        //    "pageNumber": 1,
-        //    "perPageLimit": constant.app.settings.userNotificationsPageSize,
-        //    "userId": $rootScope.currentUserInfo.userId
-        //  };
-        //  userNotificationsFactory.startGetAll(requestPayload);
-        //}
+        userNotificationsFactory.getAll({
+          "pageNumber": 1,
+          "perPageLimit": constant.app.settings.userNotificationsPageSize
+        });
       }
     ]);
 

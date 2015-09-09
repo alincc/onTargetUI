@@ -83,7 +83,7 @@ function moveFile(req, res) {
     });
   }
 
-  if(path.existsSync(sourceFilePath)) {
+  if(fs.existsSync(sourceFilePath)) {
     if(rootFolder === 'projects') {
       mkdirp(url, function(error) {
         if(error) {
@@ -96,7 +96,7 @@ function moveFile(req, res) {
             destinationDir = url;
             fileDestination = destinationDir + '/' + fileName;
             // Check if file exist, then change file name
-            if(path.existsSync(fileDestination)) {
+            if(fs.existsSync(fileDestination)) {
               fileName = new Date().getTime() + '-' + fileName;
               fileDestination = destinationDir + '/' + fileName;
             }
@@ -114,7 +114,7 @@ function moveFile(req, res) {
                 fileDestination = destinationDir + '/' + fileName;
 
                 // Check if file exist, then change file name
-                if(path.existsSync(fileDestination)) {
+                if(fs.existsSync(fileDestination)) {
                   fileName = new Date().getTime() + '-' + fileName;
                   fileDestination = destinationDir + '/' + fileName;
                 }
@@ -129,7 +129,7 @@ function moveFile(req, res) {
     else if(rootFolder === 'profile') {
       destinationDir = url;
       fileDestination = destinationDir + '/' + fileName;
-      if(path.existsSync(fileDestination)) {
+      if(fs.existsSync(fileDestination)) {
         fileName = new Date().getTime() + '-' + fileName;
         fileDestination = destinationDir + '/' + fileName;
       }

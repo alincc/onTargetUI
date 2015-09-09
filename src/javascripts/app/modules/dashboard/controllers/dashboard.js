@@ -359,6 +359,16 @@ define(function(require) {
         $scope.currentProject = $rootScope.currentProjectInfo;
         load();
       });
+
+      //timeline height
+      $scope.$on("$stateChangeSuccess", function(event, current, previous) {
+
+        $timeout(function() {
+          var height = document.getElementById('task-container').offsetHeight;
+
+          document.getElementById('time-line').setAttribute("style","height:" + (height - 52)  + "px");
+        });
+      });
     }];
   return controller;
 });

@@ -101,7 +101,7 @@ define(function() {
         $scope.onSubmit = true;
         projectFactory.addProject($scope.model).then(
           function(resp) {
-            toaster.pop('success', 'Success', resp.data.returnMessage);
+            //toaster.pop('success', 'Success', resp.data.returnMessage);
             $scope.project_form.$setPristine();
             $modalInstance.close({});
           }, function(err) {

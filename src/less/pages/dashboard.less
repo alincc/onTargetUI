@@ -54,6 +54,9 @@
       }
       .chart-container {
         .legend {
+          > div {
+            display: none;
+          }
           table {
             position: absolute;
             top: -30px !important;
@@ -485,6 +488,8 @@
   }
   .timeline-container {
     //height: 794px;
+    position: relative;
+    overflow: visible;
     .tl-header {
       .btn {
         background-color: #4279bd;

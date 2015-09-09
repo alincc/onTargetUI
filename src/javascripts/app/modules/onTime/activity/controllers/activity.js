@@ -91,7 +91,7 @@ define(function(require) {
       };
 
       // Create activity
-      $scope.openCreateActivityModal = function() {
+      /*$scope.openCreateActivityModal = function() {
         companyFactory.search()
           .success(function(resp) {
             createActivityModalInstance = $modal.open({
@@ -113,10 +113,26 @@ define(function(require) {
             }, function() {
             });
           });
+      };*/
+
+      $scope.createActivity = function (){
+        companyFactory.search()
+          .success(function(resp) {
+            $rootScope.companies = resp.companyList;
+            notifications.createActivity();
+          });
+      };
+
+      $scope.editActivity = function (){
+        companyFactory.search()
+          .success(function(resp) {
+            $rootScope.companies = resp.companyList;
+            notifications.editActivity();
+          });
       };
 
       // Edit activity
-      $scope.openEditActivityModal = function() {
+     /* $scope.openEditActivityModal = function() {
         // prepare company list
         companyFactory.search()
           .success(function(resp) {
@@ -143,7 +159,7 @@ define(function(require) {
 
             });
           });
-      };
+      };*/
 
       // Delete activity
       $scope.openDeleteActivityModal = function() {
@@ -242,6 +258,15 @@ define(function(require) {
           }
         }
       });
+
+      notifications.onActivityCreated($scope, function() {
+        $scope.loadActivity();
+      });
+
+      notifications.onActivityEdited($scope, function() {
+        $scope.loadActivity();
+      });
+
     }];
   return controller;
 });
