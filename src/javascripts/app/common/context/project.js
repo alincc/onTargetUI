@@ -72,11 +72,19 @@ define(function(require) {
     };
 
     service.valid = function() {
+
+      console.log($rootScope.currentProjectInfo , angular.isDefined($rootScope.currentProjectInfo.projectId) , $rootScope.mainProjectInfo , angular.isDefined($rootScope.mainProjectInfo.projectId));
+
       return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId) && $rootScope.mainProjectInfo && angular.isDefined($rootScope.mainProjectInfo.projectId);
     };
 
 
     return service;
   }]);
+
+
+
+
+
   return module;
 });

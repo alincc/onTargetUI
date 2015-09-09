@@ -382,9 +382,9 @@ gulp.task('deploy:ui:local', ['build:local'], function () {
     process.stdout.write('Transfering files...\n');
 
     var conn = ftp.create({
-        host: '192.168.1.224',
-        user: 'nois_node',
-        password: 'Nois2015',
+        host: '',
+        user: '',
+        password: '',
         parallel: 2
     });
 
@@ -401,9 +401,9 @@ gulp.task('deploy:node:local', ['build:server'], function () {
     process.stdout.write('Transfering files...\n');
 
     var conn = ftp.create({
-        host: '192.168.1.224',
-        user: 'nois_node',
-        password: 'Nois2015',
+        host: '',
+        user: '',
+        password: '',
         parallel: 2
     });
 
@@ -424,9 +424,9 @@ gulp.task('deploy', ['build'], function () {
     process.stdout.write('Transfering files...\n');
 
     var conn = ftp.create({
-        host: '192.168.1.224',
-        user: 'nois_node',
-        password: 'Nois2015',
+        host: '',
+        user: '',
+        password: '',
         parallel: 2
     });
 

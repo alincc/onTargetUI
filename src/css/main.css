@@ -12062,79 +12062,6 @@ body > .ui-select-bootstrap.open {
 .ui-select-container[theme="bootstrap"].direction-up .ui-select-dropdown {
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.25);
 }
-slider {
-  display: inline-block;
-  position: relative;
-  height: 8px;
-  width: 100%;
-  margin: 25px 5px 25px 5px;
-  vertical-align: middle;
-}
-slider span {
-  white-space: nowrap;
-  position: absolute;
-  display: inline-block;
-}
-slider span.base {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-}
-slider span.bar {
-  height: 100%;
-  z-index: 0;
-  -webkit-border-radius: 1em;
-  border-radius: 1em;
-  background-color: #e4eaec;
-}
-slider span.bar.selection {
-  width: 0%;
-  z-index: 1;
-  background-color: #00a8f3;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-slider span.pointer {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  top: -6px;
-  background-color: #fff;
-  border: 1px solid #dee5e7;
-  z-index: 2;
-  -webkit-border-radius: 1em;
-  border-radius: 1em;
-}
-slider span.pointer:after {
-  content: '';
-  background-color: #dee5e7;
-  width: 8px;
-  height: 8px;
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  -webkit-border-radius: 1em;
-  border-radius: 1em;
-}
-slider span.pointer:hover:after {
-  background-color: #000;
-}
-slider span.pointer.active:after {
-  background-color: #00a8f3;
-}
-slider span.bubble {
-  cursor: default;
-  top: -22px;
-  padding: 1px 3px 1px 3px;
-  font-size: 0.7em;
-  display: none !important;
-}
-slider span.bubble.selection {
-  top: 15px;
-}
-slider span.bubble.limit {
-  color: #808080;
-}
 .gantt {
   line-height: normal;
 }
@@ -18386,6 +18313,9 @@ a.text-black:hover {
 .m-b-n-xxl {
   margin-bottom: -50px;
 }
+.image-circle {
+  border-radius: 50%;
+}
 .avatar {
   position: relative;
   display: block;
@@ -18920,6 +18850,12 @@ a.text-black:hover {
 .project-chooser .dropdown-menu li a:hover {
   background: #5b90bf !important;
   color: #fff;
+}
+.progress-box .progress-bar-slider .inner:after {
+  width: 20px;
+  height: 20px;
+  top: -5px;
+  right: -10px;
 }
 .sign-in-page .logo {
   margin: 0 auto 50px auto;
@@ -19470,6 +19406,9 @@ a.text-black:hover {
   color: #a5a5a5;
   line-height: 18px;
 }
+.dashboard-page .task-container {
+  padding-left: 0px;
+}
 .dashboard-page .task-container .tab-container .nav-tabs li a {
   background-color: #ececec;
   padding: 10px 15px 5px 15px;
@@ -19531,7 +19470,7 @@ a.text-black:hover {
 .dashboard-page .task-container .tab-container .tab-content .task-list .task-item .task-status .percentage {
   position: absolute;
   top: 50%;
-  left: 0;
+  margin-left: -10px;
   font-weight: 700;
   margin-top: -12px;
   width: 100%;
@@ -19581,47 +19520,105 @@ a.text-black:hover {
 .dashboard-page .task-container .tab-container .tab-content .task-list .task-item .task-due-date span {
   color: #000000;
 }
-.dashboard-page .task-status-section .status-list .status-item .title {
+.dashboard-page .task-status-section {
+  padding-left: 0px;
+  padding-right: 10px;
+}
+.dashboard-page .task-status-section .panel-default {
+  height: 100%;
+  margin-bottom: 0px;
+}
+.dashboard-page .task-status-section .panel-default .panel-body {
+  height: 100%;
+}
+.dashboard-page .task-status-section .panel-default .panel-body .status-container {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list {
+  display: table-cell;
+  vertical-align: middle;
+}
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .title {
   text-align: center;
   color: #b3b3b3;
 }
-.dashboard-page .task-status-section .status-list .status-item .title span {
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .title span {
   font-weight: 700;
   color: #000;
 }
-.dashboard-page .task-status-section .status-list .status-item .progress,
-.dashboard-page .task-status-section .status-list .status-item .progress-bar {
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .progress,
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .progress-bar {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
   border-radius: 15px;
 }
-.dashboard-page .task-status-section .status-list .status-item .progress {
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .progress {
   background-color: #acb2be;
 }
-.dashboard-page .task-status-section .status-list .status-item .task-status-Active .progress-bar {
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .task-status-Active .progress-bar {
   background-color: #80d44b;
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
 }
-.dashboard-page .task-status-section .status-list .status-item .task-status-Ongoing .progress-bar {
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .task-status-Ongoing .progress-bar {
   background-color: #449bc8;
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
 }
-.dashboard-page .task-status-section .status-list .status-item .task-status-Completed .progress-bar {
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .task-status-Completed .progress-bar {
   background-color: #c6ac42;
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
 }
-.dashboard-page .task-status-section .status-list .status-item .task-status-Pending .progress-bar {
+.dashboard-page .task-status-section .panel-default .panel-body .status-container .status-list .status-item .task-status-Pending .progress-bar {
   background-color: #bc4242;
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
 }
-.dashboard-page .submittal-status-section .panel-body {
+.dashboard-page .submittal-status-section {
+  padding-right: 0px;
+  padding-left: 10px;
+}
+.dashboard-page .submittal-status-section .panel-default {
+  height: 100%;
+  margin-bottom: 0px;
+}
+.dashboard-page .submittal-status-section .panel-default .panel-body {
   text-align: center;
 }
-.dashboard-page .submittal-status-section .panel-body h4 {
+.dashboard-page .submittal-status-section .panel-default .panel-body .doughnut-container {
+  height: 240px;
+  display: table;
+  width: 100%;
+}
+.dashboard-page .submittal-status-section .panel-default .panel-body .doughnut-container .chart-container {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.dashboard-page .submittal-status-section .panel-default .panel-body .doughnut-container .chart-container .chart-doughnut {
+  width: 100% !important;
+  height: auto !important;
+}
+.dashboard-page .submittal-status-section .panel-default .panel-body h4 {
   text-align: left;
 }
-.dashboard-page .timeline-container {
-  height: 815px;
+.dashboard-page .row-height {
+  display: table;
+  table-layout: fixed;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+}
+.dashboard-page .col-height {
+  display: table-cell;
+  float: none;
+  height: 100%;
+}
+.dashboard-page .time-line {
+  padding-right: 0px;
+  padding-bottom: 18px;
+}
+.dashboard-page .time-line .panel-default {
+  height: 100%;
 }
 .dashboard-page .timeline-container .tl-header .btn {
   background-color: #4279bd;
@@ -19657,6 +19654,7 @@ a.text-black:hover {
   font-size: 18px;
   line-height: 1;
   padding-top: 5px;
+  margin-right: 37px;
 }
 .dashboard-page .timeline-container .tl-left .tl-wrap {
   border-left-width: -1px;
@@ -19673,8 +19671,8 @@ a.text-black:hover {
 }
 .dashboard-page .timeline-container .tl-avatar {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2px;
+  right: 2px;
   width: 40px;
   margin: 6px;
 }
@@ -19707,39 +19705,30 @@ a.text-black:hover {
 .projectlist-page .project-grid .project-box .panel-body .description-container .list-inline li {
   display: table-cell;
 }
-.projectlist-page .project-grid .project-box .panel-body .project-image {
-  height: 180px;
+.projectlist-page .project-grid .project-box .panel-body .description-container .project-description {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .projectlist-page .project-grid .project-box .panel-body .project-image a {
-  height: 100%;
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  display: block;
 }
 .projectlist-page .project-grid .project-box .panel-body .project-image a img {
-  max-height: 100%;
-  margin: auto;
-}
-.projectlist-page .project-list .panel-body {
-  display: table;
   width: 100%;
 }
+.projectlist-page .project-list .panel-body {
+  position: relative;
+  overflow: hidden;
+}
 .projectlist-page .project-list .panel-body .project-image {
-  padding-right: 15px;
-  display: table-cell;
-  width: 300px;
-  vertical-align: middle;
+  width: 205px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 15px;
 }
 .projectlist-page .project-list .panel-body .project-info {
-  display: table-cell;
-  vertical-align: top;
+  margin-left: 220px;
 }
 .projectlist-page .project-list .panel-body .project-info .project-name {
   font-size: 18px;
@@ -19775,9 +19764,20 @@ a.text-black:hover {
   top: 50%;
   margin-top: -18px;
 }
-.projectlist-page .project-list .panel-body .project-info .project-description a.more {
+.projectlist-page .project-list .panel-body .project-info .project-description {
+  position: relative;
+  padding-right: 35px;
   display: inline-block;
-  margin-left: 5px;
+}
+.projectlist-page .project-list .panel-body .project-info .project-description p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.projectlist-page .project-list .panel-body .project-info .project-description a.more {
+  position: absolute;
+  top: 0;
+  right: 0;
   color: #3476fb;
 }
 @media (min-width: 992px) and (max-width: 1224px) {
@@ -20202,11 +20202,12 @@ a.text-black:hover {
 }
 .task-list-section .task-section .panel .panel-body .task-list .task-item .task-status .percentage {
   position: absolute;
-  left: 50%;
   top: 50%;
   margin-left: -10px;
   font-weight: 700;
   margin-top: -12px;
+  width: 100%;
+  text-align: center;
 }
 .task-list-section .task-section .panel .panel-body .task-list .task-item .task-info {
   display: table-cell;
@@ -20269,7 +20270,6 @@ a.text-black:hover {
 }
 .task-create-update-section .panel-right .panel-default {
   margin: 0;
-  height: 656px;
   border-radius: 5px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
@@ -20457,15 +20457,71 @@ a.text-black:hover {
   font-size: 36px;
   font-weight: bold;
 }
-.budget-task table th {
-  padding: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.progress-box {
+  width: 100%;
+  margin: 20px 0;
 }
-.budget-task table td {
-  padding: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.progress-box .percentage-cur .num {
+  margin-right: 5px;
+}
+.progress-box .progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #f2f1f1;
+  margin-bottom: 3px;
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 0 2px #D5D4D4 inset;
+  position: relative;
+  border-radius: 10px;
+}
+.progress-box .progress-bar .inner {
+  position: relative;
+  width: 0;
+  height: 100%;
+  background: #239bd6;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.progress-bar .inner {
+  height: 0;
+  width: 0;
+  transition: all 1s ease-out;
+}
+.progress-bar-slider .inner {
+  transition: none;
+}
+.progress-bar-slider .inner:after {
+  content: " ";
+  width: 14px;
+  height: 14px;
+  background-color: #ccc;
+  position: absolute;
+  right: -7px;
+  top: -2px;
+  border: 1px solid #bbb;
+  border-radius: 14px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+  margin: 0px;
+}
+.progress-slider {
+  opacity: 0;
+  width: 100%;
+  height: 15px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  cursor: pointer;
+  z-index: 1;
+}
+.budget-task table .table-head {
+  text-align: center;
+  background-color: #ECECEC;
+  border-left: 2px solid white;
+  border-right: 2px solid white;
+}
+.budget-task table .budget-cost {
+  text-align: center;
+  border-left: 1px solid #eaeff0;
 }
 .task-attachments .item-list {
   max-height: 487px;
