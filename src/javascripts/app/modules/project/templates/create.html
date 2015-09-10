@@ -1,12 +1,22 @@
-<div class="modal-header">
-    <h3 class="modal-title">Add Project</h3>
+<div class="bg-light lter b-b wrapper-md">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="m-n font-thin h3 text-black">Create Project</h1>
+        </div>
+    </div>
 </div>
-<div class="modal-body add-project">
-    <form name="project_form" novalidate class="form-horizontal form-validation">
-        <div ng-include="'project/templates/_createOrUpdate.html'"></div>
-    </form>
-</div>
-<div class="modal-footer">
-    <button ng-disabled="project_form.$invalid || project_form.$submitted || picture.isUploadPicture || onSubmit" class="btn btn-primary" type="button" ng-click="save()">Save</button>
-    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+<div class="wrapper-md p-r-none">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form name="project_form" novalidate class="form-horizontal form-validation">
+                <div ng-include="'project/templates/_createOrUpdate.html'" class="add-project"></div>
+            </form>
+        </div>
+        <div class="panel-footer">
+            <button ng-disabled="project_form.$invalid || project_form.$submitted || picture.isUploadPicture || onSubmit"
+                    class="btn btn-primary" type="button" ng-click="save()">Save
+            </button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>
 </div>

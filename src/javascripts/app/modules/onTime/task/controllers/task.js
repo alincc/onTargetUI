@@ -1,4 +1,4 @@
-define(function() {
+define(function(require) {
   'use strict';
   var angular = require('angular');
   var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'taskFactory', 'notifications', '$timeout', 'appConstant', '$q', '$location', '$stateParams',

@@ -16,93 +16,93 @@ var ftp = require('vinyl-ftp');
 var config = require('./config');
 
 var paths = {
-    less: ['./src/less/**/*.less']
+  less: ['./src/less/**/*.less']
 };
 
 // Combine lesses
-gulp.task('less', ['lint'], function (done) {
-    gulp.src('./src/less/main.less')
-        .pipe(less())
-        .pipe(gulp.dest('./src/css/'))
-        .pipe(minifyCss({
-            keepSpecialComments: 0
-        }))
-        .pipe(rename({extname: '.min.css'}))
-        .pipe(gulp.dest('./src/css/'))
-        .on('end', done);
+gulp.task('less', ['lint'], function(done){
+  gulp.src('./src/less/main.less')
+    .pipe(less())
+    .pipe(gulp.dest('./src/css/'))
+    .pipe(minifyCss({
+      keepSpecialComments: 0
+    }))
+    .pipe(rename({extname: '.min.css'}))
+    .pipe(gulp.dest('./src/css/'))
+    .on('end', done);
 });
 
-gulp.task('lessOnly', function (done) {
-    gulp.src('./src/less/main.less')
-        .pipe(less())
-        .pipe(gulp.dest('./src/css/'))
-        .pipe(minifyCss({
-            keepSpecialComments: 0
-        }))
-        .pipe(rename({extname: '.min.css'}))
-        .pipe(gulp.dest('./src/css/'))
-        .on('end', done);
+gulp.task('lessOnly', function(done){
+  gulp.src('./src/less/main.less')
+    .pipe(less())
+    .pipe(gulp.dest('./src/css/'))
+    .pipe(minifyCss({
+      keepSpecialComments: 0
+    }))
+    .pipe(rename({extname: '.min.css'}))
+    .pipe(gulp.dest('./src/css/'))
+    .on('end', done);
 });
 
 // Copy Fonts
-gulp.task('fonts', ['less'], function () {
-    gulp.src([
-        './src/fonts/*',
-        './src/fonts/*/*'])
-        .pipe(gulp.dest('./build/fonts/'));
+gulp.task('fonts', ['less'], function(){
+  gulp.src([
+    './src/fonts/*',
+    './src/fonts/*/*'])
+    .pipe(gulp.dest('./build/fonts/'));
 
-    // font-awesome fonts
-    gulp.src([
-        './src/bower_components/components-font-awesome/fonts/*'
-    ]).pipe(gulp.dest('./build/fonts/'));
+  // font-awesome fonts
+  gulp.src([
+    './src/bower_components/components-font-awesome/fonts/*'
+  ]).pipe(gulp.dest('./build/fonts/'));
 
-    // glyphicon font
-    gulp.src([
-        './src/bower_components/bootstrap-css-only/fonts/*'
-    ]).pipe(gulp.dest('./build/fonts/'));
+  // glyphicon font
+  gulp.src([
+    './src/bower_components/bootstrap-css-only/fonts/*'
+  ]).pipe(gulp.dest('./build/fonts/'));
 });
 
 // Copy Images
-gulp.task('images', ['fonts'], function () {
-    return gulp.src([
-        './src/img/**/*'])
-        .pipe(gulp.dest('./build/img/'));
+gulp.task('images', ['fonts'], function(){
+  return gulp.src([
+    './src/img/**/*'])
+    .pipe(gulp.dest('./build/img/'));
 });
 
 // Copy js to build
-gulp.task('script', ['images'], function () {
-    gulp.src([
-        './src/bower_components/requirejs/*',
-        './src/bower_components/requirejs/**/*.*'])
-        .pipe(gulp.dest('./build/bower_components/requirejs'));
+gulp.task('script', ['images'], function(){
+  gulp.src([
+    './src/bower_components/requirejs/*',
+    './src/bower_components/requirejs/**/*.*'])
+    .pipe(gulp.dest('./build/bower_components/requirejs'));
 
-    gulp.src([
-        './src/javascripts/app/common/resources/**/*.json'])
-        .pipe(gulp.dest('./build/javascripts/app/common/resources'));
+  gulp.src([
+    './src/javascripts/app/common/resources/**/*.json'])
+    .pipe(gulp.dest('./build/javascripts/app/common/resources'));
 
 });
 
 // Copy index.html, rename main and css file
-gulp.task('html', ['script'], function () {
-    return gulp.src([
-        './src/index.html'])
-        .pipe(replace('javascripts/main', 'javascripts/main.min'))
-        .pipe(replace('css/main.css', 'css/main.min.css'))
-        .pipe(gulp.dest('./build/'));
+gulp.task('html', ['script'], function(){
+  return gulp.src([
+    './src/index.html'])
+    .pipe(replace('javascripts/main', 'javascripts/main.min'))
+    .pipe(replace('css/main.css', 'css/main.min.css'))
+    .pipe(gulp.dest('./build/'));
 });
 
 // Jshint
-gulp.task('lint', function () {
-    return gulp.src([
-        './src/javascripts/app/common/**/*.js',
-        './src/javascripts/app/common/**/**/*.js',
-        './src/javascripts/app/modules/*.js',
-        './src/javascripts/app/modules/**/*.js',
-        './src/javascripts/app/modules/**/**/*.js'
-    ])
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(jshint.reporter('fail'));
+gulp.task('lint', function(){
+  return gulp.src([
+    './src/javascripts/app/common/**/*.js',
+    './src/javascripts/app/common/**/**/*.js',
+    './src/javascripts/app/modules/*.js',
+    './src/javascripts/app/modules/**/*.js',
+    './src/javascripts/app/modules/**/**/*.js'
+  ])
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
 });
 
 // RequireJS Optimization
@@ -110,51 +110,51 @@ gulp.task('lint', function () {
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
 // del node_modules\.bin\r.js
 gulp.task('requireJsOptimizer', ['html'], shell.task([
-    // This is the command
-    'r.js -o src/javascripts/build.js'
+  // This is the command
+  'r.js -o src/javascripts/build.js'
 ]));
 
 // Watch
-gulp.task('watch', function () {
-    // Watch for changes in `app` folder
-    gulp.watch([
-        './src/less/**/*.css',
-        './src/less/**/*.less',
-        './src/less/*.less',
-        './src/javascripts/app/common/**/*.js',
-        './src/javascripts/app/common/**/**/*.js',
-        './src/javascripts/app/modules/*.js',
-        './src/javascripts/app/modules/**/*.js',
-        './src/javascripts/app/modules/**/**/*.js',
-        './src/javascripts/app/modules/**/*.html',
-        './src/javascripts/app/modules/**/**/*.html'
-    ], ['lint', 'less']);
+gulp.task('watch', function(){
+  // Watch for changes in `app` folder
+  gulp.watch([
+    './src/less/**/*.css',
+    './src/less/**/*.less',
+    './src/less/*.less',
+    './src/javascripts/app/common/**/*.js',
+    './src/javascripts/app/common/**/**/*.js',
+    './src/javascripts/app/modules/*.js',
+    './src/javascripts/app/modules/**/*.js',
+    './src/javascripts/app/modules/**/**/*.js',
+    './src/javascripts/app/modules/**/*.html',
+    './src/javascripts/app/modules/**/**/*.html'
+  ], ['lint', 'less']);
 });
 
 // Watch CSS
-gulp.task('watchCSS', function () {
-    // Watch for changes in `app` folder
-    gulp.watch([
-        './src/less/**/*.css',
-        './src/less/**/*.less',
-        './src/less/*.less'
-    ], ['lessOnly']);
+gulp.task('watchCSS', function(){
+  // Watch for changes in `app` folder
+  gulp.watch([
+    './src/less/**/*.css',
+    './src/less/**/*.less',
+    './src/less/*.less'
+  ], ['lessOnly']);
 });
 
 // Test task
-gulp.task('test', ['lint'], function () {
-    // Be sure to return the stream
-    return gulp.src([
-        'undefined.js' // https://github.com/lazd/gulp-karma/issues/7
-    ])
-        .pipe(karma({
-            configFile: './karma.conf.js',
-            action: 'run'
-        }))
-        .on('error', function (err) {
-            // Make sure failed tests cause gulp to exit non-zero
-            throw err;
-        });
+gulp.task('test', ['lint'], function(){
+  // Be sure to return the stream
+  return gulp.src([
+    'undefined.js' // https://github.com/lazd/gulp-karma/issues/7
+  ])
+    .pipe(karma({
+      configFile: './karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', function(err){
+      // Make sure failed tests cause gulp to exit non-zero
+      throw err;
+    });
 });
 
 ////////////////////////////////////
@@ -162,175 +162,144 @@ gulp.task('test', ['lint'], function () {
 ///////////////////////////////////
 
 // Common build
-gulp.task('build', ['requireJsOptimizer'], function () {
-    // Move css file
-    gulp.src('src/css/main.min.css')
-        .pipe(gulp.dest('build/css'));
+gulp.task('build', ['requireJsOptimizer'], function(){
+  // Move css file
+  gulp.src('src/css/main.min.css')
+    .pipe(gulp.dest('build/css'));
 
-    // move main script file
-    gulp.src('src/javascripts/main.min.js')
-        .pipe(replace("domain: '(.*)'", "domain: '" + config.default.domain + "'")) // domain
-        .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.default.baseUrl + "'")) // base url
-        .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
-        .pipe(gulp.dest('build/javascripts'));
+  // move main script file
+  gulp.src('src/javascripts/main.min.js')
+    .pipe(replace("domain: '(.*)'", "domain: '" + config.default.domain + "'")) // domain
+    .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.default.baseUrl + "'")) // base url
+    .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
+    .pipe(gulp.dest('build/javascripts'));
 
-    del([
-        'build/javascripts/main.js',
-        'build/javascripts/build.js',
-        'src/javascripts/main.min.js',
-        'src/javascripts/main.min.js.map'
-    ]);
+  del([
+    'build/javascripts/main.js',
+    'build/javascripts/build.js'
+  ]);
 });
 
 // Environment builds
 
 // ---- Local -----
-gulp.task('build:local:modify', ['build'], function () {
-    return gulp.src('src/javascripts/main.min.js')
-        .pipe(replace("domain: '(.*)'", "domain: '" + config.local.domain + "'")) // domain
-        .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.local.baseUrl + "'")) // base url
-        .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
-        .pipe(gulp.dest('build/javascripts'));
-});
+gulp.task('build:local', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-local/app'));
 
-gulp.task('build:local', ['build:local:modify'], function () {
-    // Copy all file in build folder
-    gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-        .pipe(gulp.dest('./build-local/app'));
+  // modify and minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.local.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.local.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-local/app/javascripts'));
 
-    // minify
-    gulp.src(['./build/javascripts/main.min.js'])
-        .pipe(uglify())
-        .pipe(gulp.dest('./build-local/app/javascripts'));
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace("9000", config.local.port))
+    .pipe(gulp.dest('./build-local'));
 
-    // Copy app.js and modify value
-    gulp.src('./app.js')
-        .pipe(replace("9000", config.local.port))
-        .pipe(gulp.dest('./build-local'));
-
-    gulp.src('./package.app.json')
-        .pipe(rename('./package.json'))
-        .pipe(gulp.dest('./build-local'));
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-local'));
 });
 
 // ---- Integration -----
+gulp.task('build:integration', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-integration/app'));
 
-gulp.task('build:integration:modify', ['build'], function () {
-    return gulp.src('src/javascripts/main.min.js')
-        .pipe(replace("domain: '(.*)'", "domain: '" + config.integration.domain + "'")) // domain
-        .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.integration.baseUrl + "'")) // base url
-        .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.integration.nodeServer + "'")) // node server domain
-        .pipe(gulp.dest('build/javascripts'));
-});
+  // minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.integration.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.integration.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.integration.nodeServer + "'")) // node server domain
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-integration/app/javascripts'));
 
-gulp.task('build:integration', ['build:integration:modify'], function () {
-    // Copy all file in build folder
-    gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-        .pipe(gulp.dest('./build-integration/app'));
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace("9000", config.integration.port))
+    .pipe(gulp.dest('./build-integration'));
 
-    // minify
-    gulp.src(['./build/javascripts/main.min.js'])
-        .pipe(uglify())
-        .pipe(gulp.dest('./build-integration/app/javascripts'));
-
-    // Copy app.js and modify value
-    gulp.src('./app.js')
-        .pipe(replace("9000", config.integration.port))
-        .pipe(gulp.dest('./build-integration'));
-
-    gulp.src('./package.app.json')
-        .pipe(rename('./package.json'))
-        .pipe(gulp.dest('./build-integration'));
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-integration'));
 });
 
 // ---- Testing -----
+gulp.task('build:testing', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-testing/app'));
 
-gulp.task('build:testing:modify', ['build'], function () {
-    return gulp.src('src/javascripts/main.min.js')
-        .pipe(replace("domain: '(.*)'", "domain: '" + config.testing.domain + "'")) // domain
-        .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.testing.baseUrl + "'")) // base url
-        .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.testing.nodeServer + "'")) // node server domain
-        .pipe(gulp.dest('build/javascripts'));
-});
+  // minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.testing.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.testing.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.testing.nodeServer + "'")) // node server domain
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-testing/app/javascripts'));
 
-gulp.task('build:testing', ['build:testing:modify'], function () {
-    // Copy all file in build folder
-    gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-        .pipe(gulp.dest('./build-testing/app'));
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace("9000", config.testing.port))
+    .pipe(gulp.dest('./build-testing'));
 
-    // minify
-    gulp.src(['./build/javascripts/main.min.js'])
-        .pipe(uglify())
-        .pipe(gulp.dest('./build-testing/app/javascripts'));
-
-    // Copy app.js and modify value
-    gulp.src('./app.js')
-        .pipe(replace("9000", config.testing.port))
-        .pipe(gulp.dest('./build-testing'));
-
-    gulp.src('./package.app.json')
-        .pipe(rename('./package.json'))
-        .pipe(gulp.dest('./build-testing'));
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-testing'));
 });
 
 // ---- Staging -----
+gulp.task('build:staging', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-staging/app'));
 
-gulp.task('build:staging:modify', ['build'], function () {
-    return gulp.src('src/javascripts/main.min.js')
-        .pipe(replace("domain: '(.*)'", "domain: '" + config.staging.domain + "'")) // domain
-        .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.staging.baseUrl + "'")) // base url
-        .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.staging.nodeServer + "'")) // node server domain
-        .pipe(gulp.dest('build/javascripts'));
-});
+  // minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.staging.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.staging.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.staging.nodeServer + "'")) // node server domain
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-staging/app/javascripts'));
 
-gulp.task('build:staging', ['build:staging:modify'], function () {
-    // Copy all file in build folder
-    gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-        .pipe(gulp.dest('./build-staging/app'));
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace("9000", config.staging.port))
+    .pipe(gulp.dest('./build-staging'));
 
-    // minify
-    gulp.src(['./build/javascripts/main.min.js'])
-        .pipe(uglify())
-        .pipe(gulp.dest('./build-staging/app/javascripts'));
-
-    // Copy app.js and modify value
-    gulp.src('./app.js')
-        .pipe(replace("9000", config.staging.port))
-        .pipe(gulp.dest('./build-staging'));
-
-    gulp.src('./package.app.json')
-        .pipe(rename('./package.json'))
-        .pipe(gulp.dest('./build-staging'));
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-staging'));
 });
 
 // ---- Production -----
+gulp.task('build:production', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-production/app'));
 
-gulp.task('build:production:modify', ['build'], function () {
-    return gulp.src('src/javascripts/main.min.js')
-        .pipe(replace("domain: '(.*)'", "domain: '" + config.production.domain + "'")) // domain
-        .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.production.baseUrl + "'")) // base url
-        .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.production.nodeServer + "'")) // node server domain
-        .pipe(gulp.dest('build/javascripts'));
-});
+  // minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.production.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.production.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.production.nodeServer + "'")) // node server domain
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-production/app/javascripts'));
 
-gulp.task('build:production', ['build:production:modify'], function () {
-    // Copy all file in build folder
-    gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-        .pipe(gulp.dest('./build-production/app'));
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace("9000", config.production.port))
+    .pipe(gulp.dest('./build-production'));
 
-    // minify
-    gulp.src(['./build/javascripts/main.min.js'])
-        .pipe(uglify())
-        .pipe(gulp.dest('./build-production/app/javascripts'));
-
-    // Copy app.js and modify value
-    gulp.src('./app.js')
-        .pipe(replace("9000", config.production.port))
-        .pipe(gulp.dest('./build-production'));
-
-    gulp.src('./package.app.json')
-        .pipe(rename('./package.json'))
-        .pipe(gulp.dest('./build-production'));
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-production'));
 });
 
 // Server build default
@@ -385,99 +354,99 @@ gulp.task('build:serverint', function () {
         .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegrtion.assetLocation + '\''))
         .pipe(gulp.dest('build-server'));
 
-    return gulp.src([
-        'server/**/*',
-        '!server/config.js',
-        'server.js'
-    ], {"base": "."})
-        .pipe(gulp.dest('build-server'));
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+    .pipe(gulp.dest('build-server'));
 });
 
 ////////////////////////////////////
 ///////// SERVE TASKS //////////////
 ///////////////////////////////////
 
-gulp.task('serve', ['watch'], function () {
-    connect.server({
-        root: ['src'],
-        port: 9000,
-        livereload: true
-    });
-    open("http://localhost:9000");
+gulp.task('serve', ['watch'], function(){
+  connect.server({
+    root: ['src'],
+    port: 9000,
+    livereload: true
+  });
+  open("http://localhost:9000");
 });
 
-gulp.task('serve:local', function () {
-    connect.server({
-        root: ['build-local'],
-        port: config.local.port
-    });
-    open("http://localhost:9000");
+gulp.task('serve:local', function(){
+  connect.server({
+    root: ['build-local'],
+    port: config.local.port
+  });
+  open("http://localhost:9000");
 });
 
 ////////////////////////////////////
 ///////// DEPLOY TASKS /////////////
 ///////////////////////////////////
 
-gulp.task('deploy:ui:local', ['build:local'], function () {
-    process.stdout.write('Transfering files...\n');
+gulp.task('deploy:ui:local', ['build:local'], function(){
+  process.stdout.write('Transfering files...\n');
 
-    var conn = ftp.create({
-        host: '',
-        user: '',
-        password: '',
-        parallel: 2
-    });
+  var conn = ftp.create({
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
+    parallel: 2
+  });
 
-    var globs = [
-        'build-local/**/*'
-    ];
+  var globs = [
+    'build-local/**/*'
+  ];
 
-    return gulp.src(globs, {base: './build-local/', buffer: false})
-        //.pipe(conn.newer('/onTargetUI'))
-        .pipe(conn.dest('/onTargetUI'));
+  return gulp.src(globs, {base: './build-local/', buffer: false})
+    //.pipe(conn.newer('/onTargetUI'))
+    .pipe(conn.dest('/onTargetUI'));
 });
 
-gulp.task('deploy:node:local', ['build:server'], function () {
-    process.stdout.write('Transfering files...\n');
+gulp.task('deploy:node:local', ['build:server'], function(){
+  process.stdout.write('Transfering files...\n');
 
-    var conn = ftp.create({
-        host: '',
-        user: '',
-        password: '',
-        parallel: 2
-    });
+  var conn = ftp.create({
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
+    parallel: 2
+  });
 
-    var globs = [
-        'build-server/**/*'
-    ];
+  var globs = [
+    'build-server/**/*'
+  ];
 
-    return gulp.src(globs, {base: './build-server/', buffer: false})
-        //.pipe(conn.newer('/onTargetNodeServer'))
-        .pipe(conn.dest('/onTargetNodeServer'));
+  return gulp.src(globs, {base: './build-server/', buffer: false})
+    //.pipe(conn.newer('/onTargetNodeServer'))
+    .pipe(conn.dest('/onTargetNodeServer'));
 });
 
-gulp.task('deploy:local', ['deploy:ui:local', 'deploy:node:local'], function () {
+gulp.task('deploy:local', ['deploy:ui:local', 'deploy:node:local'], function(){
 
 });
 
-gulp.task('deploy', ['build'], function () {
-    process.stdout.write('Transfering files...\n');
+gulp.task('deploy', ['build'], function(){
+  process.stdout.write('Transfering files...\n');
 
-    var conn = ftp.create({
-        host: '',
-        user: '',
-        password: '',
-        parallel: 2
-    });
+  var conn = ftp.create({
+    host: '192.168.1.224',
+    user: 'nois_node',
+    password: 'Nois2015',
+    parallel: 2
+  });
 
-    var globs = [
-        'build/**',
-        'server/**',
-        'server.js',
-        'package.json'
-    ];
+  var globs = [
+    'build/**',
+    'server/**',
+    'server.js',
+    'package.json'
+  ];
 
-    return gulp.src(globs, {base: '.', buffer: false})
-        //.pipe(conn.newer('/onTarget/ontarget/Code'))
-        .pipe(conn.dest('/onTarget/ontarget/Code'));
+  return gulp.src(globs, {base: '.', buffer: false})
+    //.pipe(conn.newer('/onTarget/ontarget/Code'))
+    .pipe(conn.dest('/onTarget/ontarget/Code'));
 });

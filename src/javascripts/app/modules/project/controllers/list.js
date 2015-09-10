@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function() {
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
@@ -88,7 +88,7 @@ define(function() {
 
       var createProjectModalInstance, editProjectModalInstance, deleteProjectModalInstance;
 
-      $scope.openCreateProjectModal = function() {
+      /*$scope.openCreateProjectModal = function() {
         createProjectModalInstance = $modal.open({
           templateUrl: 'project/templates/create.html',
           controller: 'ProjectCreateController',
@@ -124,6 +124,16 @@ define(function() {
           }, function() {
 
           });
+        });
+      };*/
+
+      //edit project
+      $scope.editProject = function (project){
+        companyFactory.search().success(function(resp) {
+          $rootScope.editProject = project;
+          $rootScope.companies = resp.companyList;
+
+          $state.go('app.editProject');
         });
       };
 

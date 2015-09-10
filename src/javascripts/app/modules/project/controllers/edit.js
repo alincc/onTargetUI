@@ -3,9 +3,11 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'project', 'companies', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter',
-    function($scope, $rootScope, $modalInstance, project, companies, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', '$state',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, $state) {
 
+      var project = $rootScope.editProject;
+      var companies = $rootScope.companies;
       $scope.startDate = {
         options: {
           formatYear: 'yyyy',
@@ -103,7 +105,10 @@ define(function() {
           function(resp) {
             //toaster.pop('success', 'Success', resp.data.returnMessage);
             $scope.project_form.$setPristine();
-            $modalInstance.close({});
+            //$modalInstance.close({});
+            delete $rootScope.editProject;
+            delete $rootScope.companies;
+            $state.go('app.projectlist');
           }, function(err) {
             $scope.onSubmit = false;
             console.log(err);
@@ -112,7 +117,10 @@ define(function() {
       };
 
       $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+        //$modalInstance.dismiss('cancel');
+        delete $rootScope.editProject;
+        delete $rootScope.companies;
+        $state.go('app.projectlist');
       };
 
       $scope.picture = {
