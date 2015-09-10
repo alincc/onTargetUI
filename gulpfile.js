@@ -333,7 +333,7 @@ gulp.task('build:production', ['build:production:modify'], function () {
         .pipe(gulp.dest('./build-production'));
 });
 
-// Server build
+// Server build default
 gulp.task('build:server', function () {
     gulp.src('package.json', {"base": "."})
         .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
@@ -343,6 +343,46 @@ gulp.task('build:server', function () {
         .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.server.PROXY_URL + '\''))
         .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
         .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
+        .pipe(gulp.dest('build-server'));
+
+    return gulp.src([
+        'server/**/*',
+        '!server/config.js',
+        'server.js'
+    ], {"base": "."})
+        .pipe(gulp.dest('build-server'));
+});
+
+// Server build local
+gulp.task('build:serverlocal', function () {
+    gulp.src('package.json', {"base": "."})
+        .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+        .pipe(gulp.dest('build-server'));
+
+    gulp.src('server/config.js', {"base": "."})
+        .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+        .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+        .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+        .pipe(gulp.dest('build-server'));
+
+    return gulp.src([
+        'server/**/*',
+        '!server/config.js',
+        'server.js'
+    ], {"base": "."})
+        .pipe(gulp.dest('build-server'));
+});
+
+// Server build integration
+gulp.task('build:serverint', function () {
+    gulp.src('package.json', {"base": "."})
+        .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+        .pipe(gulp.dest('build-server'));
+
+    gulp.src('server/config.js', {"base": "."})
+        .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegrtion.PROXY_URL + '\''))
+        .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegrtion.assetLocation + '\')'))
+        .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegrtion.assetLocation + '\''))
         .pipe(gulp.dest('build-server'));
 
     return gulp.src([
