@@ -19770,6 +19770,9 @@ a.text-black:hover {
   margin-bottom: 10px;
   color: #777777;
   font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .projectlist-page .project-list .panel-body .project-info .project-buttons {
   margin: 10px 0;
@@ -20513,7 +20516,7 @@ a.text-black:hover {
   position: relative;
   width: 0;
   height: 100%;
-  background: #239bd6;
+  background: #7EACE5;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
