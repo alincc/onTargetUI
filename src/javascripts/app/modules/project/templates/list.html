@@ -4,7 +4,7 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <a href="" class="btn btn-info pull-right" ng-click="openCreateProjectModal()"><i
+                    <a ui-sref="app.createProject" class="btn btn-info pull-right" <!--ng-click="openCreateProjectModal()-->"><i
                             class="fa fa-plus-circle"></i>
                         Add Project</a>
 
@@ -54,7 +54,7 @@
                                 <div align="center">
                                     <ul class="list-inline">
                                         <li class="text-left"><a href="javascript:void(0)"
-                                                                 ng-click="editProjectModal(project)"><i
+                                                                 ng-click="editProject(project)"><i
                                                 class="fa fa-pencil-square-o"></i>
                                             Edit</a>
                                         </li>
@@ -96,7 +96,7 @@
                                 <div class="project-buttons">
                                     <div class="button button-edit">
                                         <a href="javascript:void(0)"
-                                           ng-click="editProjectModal(project)"><i
+                                           ng-click="editProject(project)"><i
                                                 class="fa fa-pencil-square-o"></i>
                                             Edit</a>
                                     </div>

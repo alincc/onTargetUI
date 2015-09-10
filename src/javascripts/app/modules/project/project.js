@@ -58,6 +58,18 @@ define(function(require) {
             controller: 'ProjectListController',
             authorization: true,
             fullWidth: true
+          })
+          .state('app.createProject', {
+            url: '/create-project',
+            templateUrl: 'project/templates/create.html',
+            controller: 'ProjectCreateController',
+            authorization: true
+          })
+          .state('app.editProject', {
+            url: '/edit-project',
+            templateUrl: 'project/templates/edit.html',
+            controller: 'ProjectEditController',
+            authorization: true
           });
       }
     ]

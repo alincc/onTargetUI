@@ -24,8 +24,6 @@ define(function(require) {
           }
         };
 
-
-
         return service;
       }
     ]

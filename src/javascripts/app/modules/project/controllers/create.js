@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', 'utilFactory',
-    function($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, utilFactory) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', 'utilFactory', '$state',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, utilFactory, $state) {
 
       $scope.projectModel = {
         projectId: null,
@@ -100,7 +100,8 @@ define(function() {
         var createProject = function() {
           projectFactory.addProject($scope.model).then(function(resp) {
             $scope.project_form.$setPristine();
-            $modalInstance.close({});
+            //$modalInstance.close({});
+            $state.go('app.projectlist');
           }, function(err) {
             $scope.onSubmit = false;
             console.log(err);
@@ -119,7 +120,8 @@ define(function() {
       };
 
       $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+        //$modalInstance.dismiss('cancel');
+        $state.go('app.projectlist');
       };
 
       $scope.picture = {

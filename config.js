@@ -37,6 +37,6 @@ module.exports = {
   },
   server: {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
-    assetLocation: '' // empty is root
+    assetLocation: 'assets/' // empty is root
   }
 };

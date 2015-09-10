@@ -47,8 +47,6 @@ define(function(require) {
                       $rootScope.currentProjectInfo.fullAddress1 = add;
                       $rootScope.currentProjectInfo.fullAddress2 = $rootScope.currentProjectInfo.address2;
                       projectContext.setProject(angular.copy($rootScope.currentProjectInfo));
-                        console.log("Dashboard:::");
-                        console.log($rootScope.currentProjectInfo);
                       deferred.resolve();
                     });
                 } else {
