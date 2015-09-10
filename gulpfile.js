@@ -168,7 +168,7 @@ gulp.task('build', ['requireJsOptimizer'], function(){
     .pipe(gulp.dest('build/css'));
 
   // move main script file
-  gulp.src('src/javascripts/main.min.js')
+  return gulp.src('src/javascripts/main.min.js')
     .pipe(replace("domain: '(.*)'", "domain: '" + config.default.domain + "'")) // domain
     .pipe(replace("baseUrl: '(.*)'", "baseUrl: '" + config.default.baseUrl + "'")) // base url
     .pipe(replace("nodeServer: '(.*)'", "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
@@ -312,6 +312,7 @@ gulp.task('build:server', function(){
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.server.PROXY_URL + '\''))
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.server.maxFileSize))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([

@@ -20,7 +20,6 @@ define(function(require) {
       link: function(scope, elem, attrs) {
         scope.$watch('data', function(e) {
           if(e){
-            console.log(angular.fromJson(scope.data), angular.fromJson(scope.options));
             jQuery.plot(elem, angular.fromJson(scope.data), angular.fromJson(scope.options));
           }
         });

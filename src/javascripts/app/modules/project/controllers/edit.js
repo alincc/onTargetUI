@@ -3,11 +3,31 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', '$state',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, $state) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', '$state', 'companyFactory', 'project', 'companies', 'activityFactory',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, $state, companyFactory, project, companies, activityFactory) {
 
-      var project = $rootScope.editProject;
-      var companies = $rootScope.companies;
+      var dateDiff = function (startDate, endDate){
+        return new Date(endDate) - new Date(startDate);
+      };
+      $scope.maxStartDate = project.endDate;
+      $scope.minEndDate = project.startDate;
+      var getActivityDateRange = function (){
+        activityFactory.getActivityOfProject(project.projectId)
+          .success(function (resp){
+            var activities = resp.projects;
+            _.forEach(activities, function (activity){
+              if (dateDiff(activity.startDate, $scope.maxStartDate) > 0) {
+                $scope.maxStartDate = activity.startDate;
+              }
+              if (dateDiff(activity.endDate, $scope.minEndDate) < 0) {
+                $scope.minEndDate = activity.endDate;
+              }
+            });
+          }
+        );
+      };
+      getActivityDateRange();
+
       $scope.startDate = {
         options: {
           formatYear: 'yyyy',

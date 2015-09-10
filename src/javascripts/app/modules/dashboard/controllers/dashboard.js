@@ -248,7 +248,6 @@ define(function(require) {
         $scope.loadTask = function() {
           taskFactory.getProjectTasks($scope.currentProject.projectId)
             .success(function(resp) {
-              console.log(resp);
               if(resp.tasks.length > 0) {
                 _.each(resp.tasks, function(tsk) {
                   //$scope.tasks.scheduled.push(tsk);
@@ -328,7 +327,6 @@ define(function(require) {
             $scope.submittalStatus.data[1] = resp.data.totalSubmits;
             //$scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
             $scope.isSubmittalStatusLoading = false;
-            console.log($scope.submittalStatus);
           }, function(err) {
             $scope.isSubmittalStatusLoading = false;
           }

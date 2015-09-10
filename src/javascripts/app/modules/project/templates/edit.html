@@ -10,13 +10,15 @@
         <div class="panel-body">
             <form name="project_form" novalidate class="form-horizontal form-validation">
                 <div ng-include="'project/templates/_createOrUpdate.html'" class="edit-project"></div>
+                <div class="form-group">
+                    <div class="col-xs-10 pull-right">
+                        <button ng-disabled="project_form.$error['required'] !== undefined || project_form.$submitted || picture.isUploadPicture || onSubmit"
+                                class="btn btn-primary" type="button" ng-click="save()">Save
+                        </button>
+                        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+                    </div>
+                </div>
             </form>
-        </div>
-        <div class="panel-footer">
-            <button ng-disabled="project_form.$error['required'] !== undefined || project_form.$submitted || picture.isUploadPicture || onSubmit"
-                    class="btn btn-primary" type="button" ng-click="save()">Save
-            </button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
     </div>
 </div>
