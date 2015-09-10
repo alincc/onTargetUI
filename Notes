@@ -1,6 +1,16 @@
+-- NodeJS
 NodeJS: 0.10.36
 
+-- Python and excel parser
 Python: www.activestate.com/activepython/downloads
 Python excel: https://pypi.python.org/pypi/xlrd
 
+-- GraphicsMagick
++ MAC OSX:
+  - Grant permission: 'sudo chown -R $USER:admin /usr/local'
+  - do 'brew uninstall graphicsmagick libpng jpeg libtool'
+  - do 'brew cleanup -s'
+  - do 'brew install graphicsmagick'
+
++ Other:
 ImageProcressing: https://github.com/aheckmann/gm

@@ -129,12 +129,8 @@ define(function(require) {
 
       //edit project
       $scope.editProject = function (project){
-        companyFactory.search().success(function(resp) {
-          $rootScope.editProject = project;
-          $rootScope.companies = resp.companyList;
-
-          $state.go('app.editProject');
-        });
+        $rootScope.editProject = project;
+        $state.go('app.editProject');
       };
 
       $scope.deleteProject = function(project) {
