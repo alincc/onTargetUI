@@ -168,6 +168,14 @@ define(function(require) {
       $scope.download = function(doc) {
         $window.open(doc.filePath);
       };
+
+      $scope.deleteDocument = function (doc){
+        onSiteFactory.deleteDocument(doc.fileId).success(
+          function (resp){
+            getUploadedDocumentList();
+          }
+        );
+      };
     }];
   return controller;
 });

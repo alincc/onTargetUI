@@ -18,6 +18,7 @@ define(function(require) {
     deleteTemplate = require('text!./templates/delete.html'),
     createOrUpdateTemplate = require('text!./templates/_createOrUpdate.html'),
     projectDescriptionWidthDirective = require('./directives/projectDescriptionWidth'),
+    changeProjectImageDirective = require('app/common/directives/changeProjectImage'),
     projectServiceModule = require('app/common/services/project'),
     accountServiceModule = require('app/common/services/account'),
     companyServiceModule = require('app/common/services/company'),
@@ -32,7 +33,7 @@ define(function(require) {
     ngFileUpload = require('ngFileUpload'),
     userNotificationsModule = require('app/common/services/userNotifications'),
     activityServiceModule = require('app/common/services/activity');
-  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications', 'common.services.activity']);
+  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications', 'common.services.activity', 'common.directives.changeProjectImage']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('project/templates/list.html', template);

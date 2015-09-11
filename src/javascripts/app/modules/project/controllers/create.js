@@ -170,6 +170,8 @@ define(function() {
       $scope.$watchCollection('[projectModel.startDate, projectModel.endDate]', function(e) {
         $scope.projectModel.startDate = $filter('date')($scope.projectModel.startDate, 'yyyy-MM-dd');
         $scope.projectModel.endDate = $filter('date')($scope.projectModel.endDate, 'yyyy-MM-dd');
+        $scope.maxStartDate = $scope.projectModel.endDate;
+        $scope.minEndDate = $scope.projectModel.startDate;
       });
 
     }];

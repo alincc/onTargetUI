@@ -1,25 +1,25 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function() {
+define(function(){
   'use strict';
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', '$state', 'companyFactory', 'project', 'companies', 'activityFactory',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, $state, companyFactory, project, companies, activityFactory) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', '$state', 'companyFactory', 'project', 'companies', 'activityFactory', 'utilFactory',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, $state, companyFactory, project, companies, activityFactory, utilFactory){
 
-      var dateDiff = function (startDate, endDate){
+      var dateDiff = function(startDate, endDate){
         return new Date(endDate) - new Date(startDate);
       };
       $scope.maxStartDate = project.endDate;
       $scope.minEndDate = project.startDate;
-      var getActivityDateRange = function (){
+      var getActivityDateRange = function(){
         activityFactory.getActivityOfProject(project.projectId)
-          .success(function (resp){
+          .success(function(resp){
             var activities = resp.projects;
-            _.forEach(activities, function (activity){
-              if (dateDiff(activity.startDate, $scope.maxStartDate) > 0) {
+            _.forEach(activities, function(activity){
+              if(dateDiff(activity.startDate, $scope.maxStartDate) > 0) {
                 $scope.maxStartDate = activity.startDate;
               }
-              if (dateDiff(activity.endDate, $scope.minEndDate) < 0) {
+              if(dateDiff(activity.endDate, $scope.minEndDate) < 0) {
                 $scope.minEndDate = activity.endDate;
               }
             });
@@ -34,7 +34,7 @@ define(function() {
           startingDay: 1
         },
         isOpen: false,
-        open: function($event) {
+        open: function($event){
           this.isOpen = true;
         }
       };
@@ -45,7 +45,7 @@ define(function() {
           startingDay: 1
         },
         isOpen: false,
-        open: function($event) {
+        open: function($event){
           this.isOpen = true;
         }
       };
@@ -71,7 +71,8 @@ define(function() {
         startDate: project.startDate,
         endDate: project.endDate,
         unitOfMeasurement: project.projectConfiguration[0].configValue,
-        projectImagePath: project.projectImagePath
+        projectImagePath: project.projectImagePath,
+        projectAssetFolderName: project.projectAssetFolderName || utilFactory.makeId(20)
       };
 
       $scope.model = {
@@ -91,13 +92,13 @@ define(function() {
       $scope.onSubmit = false;
 
 
-      $scope.getStateList = function() {
+      $scope.getStateList = function(){
         var fileName = getCountryFileName($scope.projectModel.projectAddress.country);
         if(fileName !== undefined) {
           countryFactory.getStateList(fileName).then(
-            function(resp) {
+            function(resp){
               $scope.states = resp;
-            }, function(err) {
+            }, function(err){
               $scope.states = {};
             }
           );
@@ -106,9 +107,9 @@ define(function() {
         }
       };
 
-      var getCountryFileName = function(countryCode) {
+      var getCountryFileName = function(countryCode){
         var fileName = _($scope.countries)
-          .filter(function(country) {
+          .filter(function(country){
             return country.code === countryCode;
           })
           .pluck('filename')
@@ -119,24 +120,35 @@ define(function() {
 
       $scope.getStateList();
 
-      $scope.save = function() {
+      $scope.save = function(){
         $scope.onSubmit = true;
-        projectFactory.addProject($scope.model).then(
-          function(resp) {
-            //toaster.pop('success', 'Success', resp.data.returnMessage);
-            $scope.project_form.$setPristine();
-            //$modalInstance.close({});
-            delete $rootScope.editProject;
-            delete $rootScope.companies;
-            $state.go('app.projectlist');
-          }, function(err) {
-            $scope.onSubmit = false;
-            console.log(err);
-          }
-        );
+
+        var updateProject = function(){
+          projectFactory.addProject($scope.model).then(
+            function(resp){
+              $scope.project_form.$setPristine();
+              delete $rootScope.editProject;
+              delete $rootScope.companies;
+              $state.go('app.projectlist');
+            }, function(err){
+              $scope.onSubmit = false;
+              console.log(err);
+            }
+          );
+        };
+
+        if($scope.picture.isUploadedPicture) {
+          fileFactory.move($scope.projectModel.projectImagePath, null, 'projects', $scope.model.project.projectAssetFolderName)
+            .success(function(resp){
+              $scope.model.project.projectImagePath = resp.url;
+              updateProject();
+            });
+        } else {
+          updateProject();
+        }
       };
 
-      $scope.cancel = function() {
+      $scope.cancel = function(){
         //$modalInstance.dismiss('cancel');
         delete $rootScope.editProject;
         delete $rootScope.companies;
@@ -146,9 +158,10 @@ define(function() {
       $scope.picture = {
         file: null,
         percentage: 0,
-        isUploadPicture: false
+        isUploadPicture: false,
+        isUploadedPicture: false
       };
-      $scope.$watch('picture.file', function() {
+      $scope.$watch('picture.file', function(){
         if($scope.picture.file) {
           if(appConstant.app.allowedImageExtension.test($scope.picture.file.type)) {
             $scope.upload([$scope.picture.file]);
@@ -159,23 +172,24 @@ define(function() {
         }
       });
 
-      function upload(file) {
+      function upload(file){
         $scope.picture.isUploadPicture = true;
-        fileFactory.upload(file, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName).progress(function(evt) {
+        fileFactory.upload(file, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName).progress(function(evt){
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.picture.percentage = progressPercentage;
-        }).success(function(data, status, headers, config) {
-          $timeout(function() {
-            $scope.projectModel.projectImagePath =  data.url;
+        }).success(function(data, status, headers, config){
+          $timeout(function(){
+            $scope.projectModel.projectImagePath = data.url;
             $scope.picture.isUploadPicture = false;
+            $scope.picture.isUploadedPicture = true;
           });
         })
-          .error(function() {
+          .error(function(){
             $scope.picture.isUploadPicture = false;
           });
       }
 
-      $scope.upload = function(files) {
+      $scope.upload = function(files){
         if(files && files.length) {
           for(var i = 0; i < files.length; i++) {
             upload(files[i]);
@@ -184,8 +198,8 @@ define(function() {
       };
 
       $scope.$watchCollection('[projectModel.startDate, projectModel.endDate]', function(e){
-        $scope.projectModel.startDate= $filter('date')($scope.projectModel.startDate, 'yyyy-MM-dd');
-        $scope.projectModel.endDate= $filter('date')($scope.projectModel.endDate, 'yyyy-MM-dd');
+        $scope.projectModel.startDate = $filter('date')($scope.projectModel.startDate, 'yyyy-MM-dd');
+        $scope.projectModel.endDate = $filter('date')($scope.projectModel.endDate, 'yyyy-MM-dd');
       });
 
     }];

@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/18/2015.
  */
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular'),
     config = require('app/config'),
@@ -42,11 +42,13 @@ define(function(require) {
     ngLetterAvatar = require('ngLetterAvatar'),
     ngFileUpload = require('ngFileUpload'),
     requireMultiple = require('app/common/validators/requireMultiple'),
-    monthName = require('app/common/filters/monthName');
+    monthName = require('app/common/filters/monthName'),
+    budgetEditorDirective = require('./directives/budgetEditor'),
+    budgetEditorTemplate = require('text!./templates/budgetEditor.html');
 
   var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'angularMoment', 'ngTouch', 'common.services.file', 'ui.select', 'ngLetterAvatar', 'ngFileUpload', 'common.validators.requireMultiple', 'common.filters.monthName']);
 
-  module.run(['$templateCache', function($templateCache) {
+  module.run(['$templateCache', function($templateCache){
     $templateCache.put('onTime/task/templates/task.html', template);
     $templateCache.put('onTime/task/templates/_createOrUpdate.html', createOrUpdateTemplate);
     $templateCache.put('onTime/task/templates/create.html', createTemplate);
@@ -59,8 +61,10 @@ define(function(require) {
     $templateCache.put('onTime/task/templates/progress.html', progressTemplate);
     $templateCache.put('onTime/task/templates/attachment.html', attachmentTemplate);
     $templateCache.put('onTime/task/templates/budget.html', budgetTemplate);
+    $templateCache.put('budgetEditorTemplate', budgetEditorTemplate);
   }]);
 
+  // Controllers
   module.controller('TaskController', controller);
   module.controller('CreateTaskController', createController);
   module.controller('EditTaskController', editController);
@@ -72,6 +76,9 @@ define(function(require) {
   module.controller('ProgressTaskController', progressController);
   module.controller('AttachmentTaskController', attachmentController);
   module.controller('BudgetTaskController', budgetController);
+
+  // Directives
+  module.directive('budgetEditor', budgetEditorDirective);
 
   return module;
 });

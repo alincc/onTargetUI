@@ -5,7 +5,7 @@ define(function(require) {
   var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', 'notifications', 'taskFactory',
     function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout, notifications, taskFactory) {
       $scope.app = appConstant.app;
-      $scope.currentProject = $rootScope.currentProjectInfo;
+      $scope.project = $rootScope.currentProjectInfo;
 
       function daydiff(first, second) {
         return (second - first) / (1000 * 60 * 60 * 24);
@@ -19,7 +19,7 @@ define(function(require) {
       function load() {
         // Project health
         $scope.isLoadingProjectHealth = true;
-        projectFactory.getBudgetMeterData($scope.currentProject.projectId)
+        projectFactory.getBudgetMeterData($scope.project.projectId)
           .success(function(resp) {
             var lineValues = resp.earnedValueAnalysisReportMap;
             var today = new Date();
@@ -149,7 +149,7 @@ define(function(require) {
           treesSaved: null,
           noAccident: null
         };
-        projectFactory.getDashboardBi($scope.currentProject.projectId)
+        projectFactory.getDashboardBi($scope.project.projectId)
           .success(function(resp) {
             $scope.dashboardBi.treesSaved = resp.treesSaved;
             $scope.dashboardBi.timeSaved = resp.timeSaved;
@@ -166,9 +166,9 @@ define(function(require) {
           });
 
         $scope.projectDate = {
-          total: daydiff(new Date($scope.currentProject.startDate), new Date($scope.currentProject.endDate)),
-          spent: Math.floor(daydiff(new Date($scope.currentProject.startDate), getCurrentDate())),
-          remain: Math.ceil(daydiff(getCurrentDate(), new Date($scope.currentProject.endDate)))
+          total: daydiff(new Date($scope.project.startDate), new Date($scope.project.endDate)),
+          spent: Math.floor(daydiff(new Date($scope.project.startDate), getCurrentDate())),
+          remain: Math.ceil(daydiff(getCurrentDate(), new Date($scope.project.endDate)))
         };
         // Weather
         $scope.weather = {
@@ -220,7 +220,7 @@ define(function(require) {
         };
         $scope.weatherError = false;
         $scope.isLoadingWeather = true;
-        utilFactory.getWeather($scope.currentProject.projectAddress.zip)
+        utilFactory.getWeather($scope.project.projectAddress.zip)
           .success(function(resp) {
             if(angular.isDefined(resp.cod) && angular.isDefined(resp.message)) {
               $scope.weatherError = true;
@@ -246,8 +246,9 @@ define(function(require) {
         var currentDate = new Date();
         var now = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
         $scope.loadTask = function() {
-          taskFactory.getProjectTasks($scope.currentProject.projectId)
+          taskFactory.getProjectTasks($scope.project.projectId)
             .success(function(resp) {
+              console.log(resp);
               if(resp.tasks.length > 0) {
                 _.each(resp.tasks, function(tsk) {
                   //$scope.tasks.scheduled.push(tsk);
@@ -294,7 +295,7 @@ define(function(require) {
         $scope.tasksStatus = [];
         $scope.taskStatusCount = 0;
         $scope.isTasksStatusLoading = true;
-        projectFactory.getTaskCount($scope.currentProject.projectId).then(
+        projectFactory.getTaskCount($scope.project.projectId).then(
           function(resp) {
             $scope.tasksStatus = resp.data.taskCountByStatus;
             for(var i = 0; i < $scope.tasksStatus.length; i++) {
@@ -321,12 +322,13 @@ define(function(require) {
           labels: ['Approval', 'Submittal']
         };
         $scope.isSubmittalStatusLoading = true;
-        documentFactory.getUserDocument($scope.currentProject.projectId).then(
+        documentFactory.getUserDocument($scope.project.projectId).then(
           function(resp) {
             $scope.submittalStatus.data[0] = resp.data.totalApprovals;
             $scope.submittalStatus.data[1] = resp.data.totalSubmits;
             //$scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
             $scope.isSubmittalStatusLoading = false;
+            console.log($scope.submittalStatus);
           }, function(err) {
             $scope.isSubmittalStatusLoading = false;
           }
@@ -337,7 +339,7 @@ define(function(require) {
         $scope.isActivityLogLoading = true;
 
         projectFactory.getActivityLog({
-          "projectId": $scope.currentProject.projectId,
+          "projectId": $scope.project.projectId,
           "pageNumber": 1,
           "perPageLimit": 10
         }).then(
@@ -354,7 +356,7 @@ define(function(require) {
 
       // Events
       notifications.onCurrentProjectChange($scope, function(agrs) {
-        $scope.currentProject = $rootScope.currentProjectInfo;
+        $scope.project = $rootScope.currentProjectInfo;
         load();
       });
 

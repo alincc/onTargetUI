@@ -89,6 +89,13 @@ define(function() {
         action: 'info'
       });
     };
+
+    var setTaskListHeight = function (){
+      var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
+      document.getElementById('task-edit-panel').setAttribute("style","height:" + (activityHeadingHeight + 539)  + "px");
+    };
+
+    setTaskListHeight();
   }];
   return controller;
 });

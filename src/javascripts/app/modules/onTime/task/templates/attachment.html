@@ -10,9 +10,9 @@
                 <th>ACTIONS</th>
             </tr>
             <tr ng-repeat="attachment in attachments">
-                <td valign="middle">{{ attachment.fileName }}</td>
-                <td valign="middle">{{attachment.contact.firstName}}&nbsp;{{attachment.contact.lastName}}</td>
-                <td class="nowrap" valign="middle"><button class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button> <button class="btn btn-xs btn-primary" ng-click="download(attachment)"><i class="fa fa-cloud-download"></i></button></td>
+                <td valign="middle" class="file-name">{{ attachment.fileName | fileName}}</td>
+                <td valign="middle" class="upload-by">{{attachment.contact.firstName}} {{attachment.contact.lastName}}</td>
+                <td class="nowrap action" valign="middle"><button class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button> <button class="btn btn-xs btn-primary" ng-click="download(attachment)"><i class="fa fa-cloud-download"></i></button></td>
             </tr>
         </table>
         <div class="uploader" ng-show="!isLoadingAttachments">
