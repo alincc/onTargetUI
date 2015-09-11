@@ -15326,8 +15326,6 @@ body {
   color: #5b90bf;
 }
 .navbar-nav li a .badge {
-  background: none;
-  color: #5b90bf;
   right: -6px;
 }
 .navbar-form .form-group .input-group {
@@ -18625,6 +18623,7 @@ a.text-black:hover {
 .mCSB_scrollTools .mCSB_draggerRail {
   background-color: #fff;
   background-color: rgba(255, 255, 255, 0.75);
+  display: none;
 }
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
   background-color: #000;
@@ -18793,6 +18792,14 @@ a.text-black:hover {
     background-color: #5b90bf;
   }
 }
+.label-required {
+  color: #d00;
+  position: absolute;
+  margin-left: 2px;
+}
+.label-required-task {
+  color: #d00;
+}
 .has-background {
   margin: 0;
 }
@@ -18843,9 +18850,18 @@ a.text-black:hover {
 .priority .task-severity-MINOR {
   color: #55d63c;
 }
+.project-chooser .dropdown-menu {
+  max-width: 300px;
+  max-height: 350px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
 .project-chooser .dropdown-menu li.selected a {
   background: #5b90bf;
   color: #fff;
+}
+.project-chooser .dropdown-menu li a {
+  white-space: normal;
 }
 .project-chooser .dropdown-menu li a:hover {
   background: #5b90bf !important;
@@ -19261,27 +19277,24 @@ a.text-black:hover {
   margin-top: 0;
   color: #7a7b7a;
 }
-.dashboard-page .project-heath .panel-body .chart-container .line-legend {
-  position: absolute;
-  top: 16px;
-  right: 0;
+.dashboard-page .project-heath .panel-body .chart-container .legend > div {
+  display: none;
 }
-.dashboard-page .project-heath .panel-body .chart-container .line-legend li {
-  display: inline-block;
-  position: relative;
-  margin-right: 35px;
+.dashboard-page .project-heath .panel-body .chart-container .legend table {
+  position: absolute;
+  top: -30px !important;
+  right: 0 !important;
+}
+.dashboard-page .project-heath .panel-body .chart-container .legend table .legendColorBox > div > div {
+  width: 12px !important;
+  height: 12px !important;
+  border-width: 3px !important;
+}
+.dashboard-page .project-heath .panel-body .chart-container .legend table .legendLabel span {
   font-weight: 600;
-}
-.dashboard-page .project-heath .panel-body .chart-container .line-legend li span {
+  font-size: 14px;
+  margin: 1px 10px 0 0;
   display: block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  position: absolute;
-  left: -15px;
-  top: 3px;
-  border-width: 2px;
-  border-style: solid;
 }
 .dashboard-page .project-date {
   position: relative;
@@ -19409,6 +19422,9 @@ a.text-black:hover {
 .dashboard-page .task-container {
   padding-left: 0px;
 }
+.dashboard-page .task-container .panel-default {
+  background-color: #FAFAFA;
+}
 .dashboard-page .task-container .tab-container .nav-tabs li a {
   background-color: #ececec;
   padding: 10px 15px 5px 15px;
@@ -19527,6 +19543,7 @@ a.text-black:hover {
 .dashboard-page .task-status-section .panel-default {
   height: 100%;
   margin-bottom: 0px;
+  background-color: white;
 }
 .dashboard-page .task-status-section .panel-default .panel-body {
   height: 100%;
@@ -19580,6 +19597,7 @@ a.text-black:hover {
 .dashboard-page .submittal-status-section .panel-default {
   height: 100%;
   margin-bottom: 0px;
+  background-color: white;
 }
 .dashboard-page .submittal-status-section .panel-default .panel-body {
   text-align: center;
@@ -19619,6 +19637,11 @@ a.text-black:hover {
 }
 .dashboard-page .time-line .panel-default {
   height: 100%;
+  background-color: #FAFAFA;
+}
+.dashboard-page .timeline-container {
+  position: relative;
+  overflow: visible;
 }
 .dashboard-page .timeline-container .tl-header .btn {
   background-color: #4279bd;
@@ -19694,6 +19717,9 @@ a.text-black:hover {
   margin-bottom: 10px;
   font-size: initial;
   font-weight: 600;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .projectlist-page .project-grid .project-box .panel-body .description-container {
   margin: 0 10px 10px 10px;
@@ -19735,12 +19761,18 @@ a.text-black:hover {
   text-align: center;
   color: #000;
   margin-bottom: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .projectlist-page .project-list .panel-body .project-info .project-address {
   text-align: center;
   margin-bottom: 10px;
   color: #777777;
   font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .projectlist-page .project-list .panel-body .project-info .project-buttons {
   margin: 10px 0;
@@ -20095,6 +20127,12 @@ a.text-black:hover {
 .activity-section .panel .panel-body .activity-list .activity-selected-item:hover {
   background-color: #e1fcff;
   cursor: pointer;
+}
+.activity-create-update-section .create-edit {
+  height: 558px;
+}
+.activity-create-update-section .create-edit.panel-body {
+  padding: 10px;
 }
 .add-project .picture-container {
   width: 120px;
@@ -20478,7 +20516,7 @@ a.text-black:hover {
   position: relative;
   width: 0;
   height: 100%;
-  background: #239bd6;
+  background: #7EACE5;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
@@ -20519,9 +20557,18 @@ a.text-black:hover {
   border-left: 2px solid white;
   border-right: 2px solid white;
 }
+.budget-task table th {
+  font-weight: normal;
+}
 .budget-task table .budget-cost {
   text-align: center;
   border-left: 1px solid #eaeff0;
+}
+.budget-task table .budget-cost input {
+  width: 100%;
+}
+.budget-task table .interval {
+  width: 150px;
 }
 .task-attachments .item-list {
   max-height: 487px;

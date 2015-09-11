@@ -323,6 +323,61 @@ gulp.task('build:server', function(){
     .pipe(gulp.dest('build-server'));
 });
 
+
+// Server build local
+gulp.task('build:serverlocal', function () {
+  gulp.src('package.json', {"base": "."})
+      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+      .pipe(gulp.dest('build-server'));
+
+  gulp.src('server/config.js', {"base": "."})
+      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+      .pipe(gulp.dest('build-server'));
+
+  gulp.src('server/config.js', {"base": "."})
+      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
+      .pipe(gulp.dest('build-server'));
+
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+      .pipe(gulp.dest('build-server'));
+});
+
+// Server build integration
+gulp.task('build:serverint', function () {
+  gulp.src('package.json', {"base": "."})
+      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+      .pipe(gulp.dest('build-server'));
+
+  gulp.src('server/config.js', {"base": "."})
+      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegrtion.PROXY_URL + '\''))
+      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegrtion.assetLocation + '\')'))
+      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegrtion.assetLocation + '\''))
+      .pipe(gulp.dest('build-server'));
+
+      gulp.src('server/config.js', {"base": "."})
+          .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
+          .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
+          .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
+          .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
+          .pipe(gulp.dest('build-server'));
+
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+      .pipe(gulp.dest('build-server'));
+});
+
 ////////////////////////////////////
 ///////// SERVE TASKS //////////////
 ///////////////////////////////////
