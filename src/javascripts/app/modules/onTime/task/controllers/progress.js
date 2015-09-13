@@ -23,6 +23,7 @@ define(function(require) {
         taskFactory.createTaskPercentage({
           taskProgressList: $scope.model
         }).then(function(resp) {
+            $rootScope.currentTask.percentageComplete = $scope.model.percentageComplete;
             notifications.taskUpdated({
               projectTaskId: $rootScope.currentTask.projectTaskId,
               task: {

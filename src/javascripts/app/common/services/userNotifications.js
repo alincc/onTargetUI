@@ -45,6 +45,10 @@ define(function(require){
         return deferred.promise;
       };
 
+      service.maskAsRead = function (projectId){
+        return $http.post(constant.domain + '/notification/viewall', {projectId: projectId});
+      };
+
       //service.startGetAll = function(param, interval) {
       //  if(!interval) {
       //    interval = constant.app.settings.userNotificationsInterval;

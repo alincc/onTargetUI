@@ -27,7 +27,7 @@ define(function(require) {
       $scope.getTaskBudget = function() {
         $scope.isLoading = true;
         taskFactory.getTaskBudget($rootScope.currentTask.projectTaskId).then(function(resp) {
-          console.log(resp);
+          //console.log(resp);
           $scope.task = resp.data.task;
           _.forEach($scope.task.costsByMonthYear, function(n) {
             if(n.costs.length === 0) {
@@ -56,34 +56,11 @@ define(function(require) {
               n.costs.push(cost2);
             }
           });
-          console.log($scope.task.costsByMonthYear);
+          //console.log($scope.task.costsByMonthYear);
           $scope.isLoading = false;
         }, function() {
           $scope.isLoading = false;
         });
-      };
-
-      $scope.updateTaskBudget = function() {
-        _.forEach($scope.task.costsByMonthYear, function(n) {
-          _.forEach(n.costs, function(cost) {
-            cost.taskId = $rootScope.currentTask.projectTaskId;
-            $scope.model.taskBudgetEstimates.push(cost);
-          });
-        });
-        $scope.isSubmitting = true;
-        taskFactory.updateTaskBudget($scope.model.taskBudgetEstimates).then(function(resp) {
-            //notifications.taskUpdated();
-            $scope.isSubmitting = false;
-            $scope.model.taskBudgetEstimates = [];
-            $scope.isEdit = false;
-          },
-          function() {
-            $scope.isSubmitting = false;
-          });
-      };
-
-      $scope.edit = function (){
-        $scope.isEdit = true;
       };
 
       $scope.getTaskBudget();

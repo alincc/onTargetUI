@@ -74,6 +74,14 @@ define(function() {
 
         toaster.pop('info', 'Info', data.message);
       });
+
+      $scope.maskAsRead = function (){
+        userNotificationsFactory.maskAsRead($rootScope.currentProjectInfo.projectId).success(
+          function (resp){
+            //console.log(resp);
+          }
+        );
+      };
     }];
   return controller;
 });

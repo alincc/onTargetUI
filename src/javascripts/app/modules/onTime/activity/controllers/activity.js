@@ -2,12 +2,13 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams',
-    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams', 'appConstant',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams, appConstant) {
       var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
       var currentProjectId;
       var canceler;
       $scope.isLoadingActivity = false;
+      $scope.app = appConstant.app;
 
       function load(cb) {
         currentProjectId = $rootScope.currentProjectInfo.projectId;

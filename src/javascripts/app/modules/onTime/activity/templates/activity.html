@@ -11,7 +11,7 @@
                         <input type="text" class="form-control" ng-model="search.projectName" placeholder="Search Activities"/>
                     </div>
                 </div>
-                <div class="heading">
+                <div class="heading" id="activity-list-heading">
                     <span class="text">
                         <project-chooser>
                             <span ng-bind="currentProject.projectName"></span>
@@ -32,7 +32,7 @@
                         <div class="info">
                             <div class="title">{{activity.projectName}}</div>
                             <div class="date">
-                                <span>{{activity.startDate|date:'MM/dd/yyyy'}}</span> | <span>{{activity.endDate|date:'MM/dd/yyyy'}}</span>
+                                <span>{{activity.startDate|date:'MM-dd-yyyy'}}</span> | <span>{{activity.endDate|date:'MM-dd-yyyy'}}</span>
                             </div>
                             <div class="tasks">
                                 <span ng-repeat="taskCount in activity.taskCountByStatus | filter : {statusType : 'Active'}">{{taskCount.taskCount}} Active</span> |
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-footer bg-light lter">
+            <div class="panel-footer bg-light lter" id="activity-panel-footer">
                 <button class="btn btn-xs btn-primary" ng-click="import()"><!--<i class="fa fa-inbox"></i>--> Import</button>
                 <button class="btn btn-xs btn-primary" ng-click="createActivity()"><!--<i class="fa fa-plus"></i>--> Add
                     Activity

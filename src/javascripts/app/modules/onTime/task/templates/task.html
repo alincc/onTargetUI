@@ -12,7 +12,7 @@
                             <input type="text" class="form-control" ng-model="search.title" placeholder="Search Tasks"/>
                         </div>
                     </div>
-                    <div class="task-list" custom-scroll>
+                    <div class="task-list" custom-scroll id="task-list">
                         <div class="task-loading text-center" ng-if="isLoadingTasks">
                             <spinner text="Loading..."></spinner>
                         </div>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer bg-light lter">
+                <div class="panel-footer bg-light lter" id="task-panel-footer">
                     <button class="btn btn-xs btn-primary" ng-click="addTask()"><!--<i class="fa fa-plus"></i> -->Add Task
                     </button>
                     <button class="btn btn-xs btn-danger" ng-click="deleteTask()" ng-if="taskSelected"><!--<i class="fa fa-times"></i> -->Delete Task

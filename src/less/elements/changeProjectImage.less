@@ -1,0 +1,27 @@
+.change-project-image {
+  > a {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    .overlay {
+      display: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.3);
+      p {
+        position: absolute;
+        top: 50%;
+        margin-top: -10px;
+        text-align: center;
+        width: 100%;
+        color: #fff;
+      }
+    }
+    &:hover .overlay {
+      display: block;
+    }
+  }
+}

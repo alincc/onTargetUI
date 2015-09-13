@@ -8,7 +8,7 @@
     "name": "HIGH"
   },
   {
-    "id": "MINOR",
-    "name": "MINOR"
+    "id": "LOW",
+    "name": "LOW"
   }
 ]
