@@ -17,6 +17,12 @@ module.exports = {
     // Proxy settings
     API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
+  local1: {
+    port: 9002,
+    domain: 'http://localhost:9003/ontargetrs/services',
+    baseUrl: 'http://localhost:8080',
+    nodeServer: 'http://localhost:9003'
+  },
   integration: {
     port: 3214,
     domain: 'http://localhost:3214/ontargetrs/services',
