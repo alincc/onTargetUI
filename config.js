@@ -15,6 +15,12 @@ module.exports = {
     baseUrl: 'http://localhost:8080',
     nodeServer: 'http://localhost:9001'
   },
+  local1: {
+    port: 9002,
+    domain: 'http://localhost:9003/ontargetrs/services',
+    baseUrl: 'http://localhost:8080',
+    nodeServer: 'http://localhost:9003'
+  },
   integration: {
     port: 9000,
     domain: 'int.app.ontargetcloud.com:9001/ontargetrs/services',
