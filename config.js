@@ -23,9 +23,9 @@ module.exports = {
   },
   integration: {
     port: 9000,
-    domain: 'int.app.ontargetcloud.com:9001/ontargetrs/services',
-    baseUrl: 'int.api.ontargetcloud.com:8080',
-    nodeServer: 'int.app.ontargetcloud.com:9001'
+    domain: 'http://int.app.ontargetcloud.com:9001/ontargetrs/services',
+    baseUrl: 'http://int.api.ontargetcloud.com:8080',
+    nodeServer: 'http://int.app.ontargetcloud.com:9001'
   },
   testing: {
     port: 0,
