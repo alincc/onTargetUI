@@ -13,13 +13,13 @@ module.exports = {
     API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
   local: {
-    port: 3214,
-    domain: 'http://localhost:3214/ontargetrs/services',
-    baseUrl: 'http://localhost.com:3214',
-    nodeServer: 'http://int.app.ontargetcloud.com:9001',
-    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    port: 9000,
+    domain: 'http://localhost:9000/ontargetrs/services',
+    baseUrl: 'http://localhost.com:9000',
+    nodeServer: 'http://localhost:9001',
+    resourceUrl: 'http://localhost:9001',
     // Proxy settings
-    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
+    API_SERVER: 'http://localhost:8080/ontargetrs/services'
   },
   local1: {
     port: 9002,
@@ -28,7 +28,7 @@ module.exports = {
     nodeServer: 'http://localhost:9003',
     resourceUrl: 'http://localhost:9003',
     // Proxy settings
-    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
+    API_SERVER: 'http://localhost:8080/ontargetrs/services'
   },
   integration: {
     port: 9000,
@@ -37,7 +37,7 @@ module.exports = {
     nodeServer: 'http://int.app.ontargetcloud.com:9001', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
     // Proxy settings
-    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'		// API
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services'		// API
   },
   testing: {
     port: 0,
