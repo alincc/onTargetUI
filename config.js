@@ -1,8 +1,12 @@
+/**
+ * NOTE:: For local testing either make use of default or local and don't commit that changes.
+ *
+ */
 module.exports = {
   default: {
     port: 3214,
-    domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',
-    baseUrl: 'http://demo.newoceaninfosys.com:3214',
+    domain: 'http://localhost:3214/ontargetrs/services',
+    baseUrl: 'http://localhost:3214',
     nodeServer: 'http://int.app.ontargetcloud.com:9001',
     resourceUrl: 'http://int.app.ontargetcloud.com:9001',
     // Proxy settings
@@ -10,19 +14,28 @@ module.exports = {
   },
   local: {
     port: 3214,
-    domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',
-    baseUrl: 'http://demo.newoceaninfosys.com:3214',
+    domain: 'http://localhost:3214/ontargetrs/services',
+    baseUrl: 'http://localhost.com:3214',
     nodeServer: 'http://int.app.ontargetcloud.com:9001',
     resourceUrl: 'http://int.app.ontargetcloud.com:9001',
     // Proxy settings
     API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
+  local1: {
+    port: 9002,
+    domain: 'http://localhost:9002/ontargetrs/services',
+    baseUrl: 'http://localhost:9002',
+    nodeServer: 'http://localhost:9003',
+    resourceUrl: 'http://localhost:9003',
+    // Proxy settings
+    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
+  },
   integration: {
-    port: 3214,
-    domain: 'http://localhost:3214/ontargetrs/services',
-    baseUrl: 'http://localhost:3214',
-    nodeServer: 'http://localhost:9001',
-    resourceUrl: 'http://localhost:9001',
+    port: 9000,
+    domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services',
+    baseUrl: 'http://int.app.ontargetcloud.com:9000',
+    nodeServer: 'http://int.app.ontargetcloud.com:9001',
+    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
     // Proxy settings
     API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
@@ -56,6 +69,31 @@ module.exports = {
   server: {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root and the location should end with slash '/' if not empty
-    maxFileSize: 1000000 // in bytes
+    maxFileSize: 5000000 // in bytes
+  },
+  serverlocal: {
+    PROXY_URL: 'http://localhost:8080/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root
+    maxFileSize: 5000000 // in bytes
+  },
+  serverintegration: {
+    PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root
+    maxFileSize: 5000000 // in bytes
+  },
+  servertesting: {
+    PROXY_URL: 'http://hostname:port/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root
+    maxFileSize: 5000000 // in bytes
+  },
+  serverstaging: {
+    PROXY_URL: 'http://hostname:port/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root
+    maxFileSize: 5000000 // in bytes
+  },
+  serverproduction: {
+    PROXY_URL: 'http://hostname:port/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root
+    maxFileSize: 5000000 // in bytes
   }
 };

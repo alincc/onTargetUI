@@ -209,6 +209,31 @@ gulp.task('build:local', ['build'], function(){
     .pipe(gulp.dest('./build-local'));
 });
 
+
+// ---- Local -----
+gulp.task('build:local1', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-local1/app'));
+
+  // modify and minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.local1.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.local1.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.local1.nodeServer + "'")) // node server domain
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-local1/app/javascripts'));
+
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace("9000", config.local1.port))
+    .pipe(gulp.dest('./build-local1'));
+
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-local1'));
+});
+
 // ---- Integration -----
 gulp.task('build:integration', ['build'], function(){
   // Copy all file in build folder
@@ -324,6 +349,87 @@ gulp.task('build:server', function(){
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.server.maxFileSize))
+    .pipe(gulp.dest('build-server'));
+
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+    .pipe(gulp.dest('build-server'));
+});
+
+// Server build local
+gulp.task('build:serverlocal', function () {
+  gulp.src('package.json', {"base": "."})
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server'));
+
+  gulp.src('server/config.js', {"base": "."})
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+    .pipe(gulp.dest('build-server'));
+
+  gulp.src('server/config.js', {"base": "."})
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
+    .pipe(gulp.dest('build-server'));
+
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+    .pipe(gulp.dest('build-server'));
+});
+
+// Server build local 2
+gulp.task('build:serverlocal1', function () {
+  gulp.src('package.json', {"base": "."})
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server1'));
+
+  gulp.src('server/config.js', {"base": "."})
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+    .pipe(gulp.dest('build-server1'));
+
+  gulp.src('server/config.js', {"base": "."})
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
+    .pipe(gulp.dest('build-server1'));
+
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+    .pipe(gulp.dest('build-server1'));
+});
+
+// Server build integration
+gulp.task('build:serverint', function () {
+  gulp.src('package.json', {"base": "."})
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server'));
+
+  gulp.src('server/config.js', {"base": "."})
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
+    .pipe(gulp.dest('build-server'));
+
+  gulp.src('server/config.js', {"base": "."})
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
