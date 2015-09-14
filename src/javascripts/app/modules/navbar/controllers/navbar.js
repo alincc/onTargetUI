@@ -76,9 +76,13 @@ define(function() {
       });
 
       $scope.maskAsRead = function (){
-        userNotificationsFactory.maskAsRead($rootScope.currentProjectInfo.projectId).success(
+        userNotificationsFactory.maskAsRead().success(
           function (resp){
             //console.log(resp);
+            userNotificationsFactory.getAll({
+              "pageNumber": 1,
+              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            });
           }
         );
       };

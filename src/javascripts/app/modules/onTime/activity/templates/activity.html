@@ -32,7 +32,7 @@
                         <div class="info">
                             <div class="title">{{activity.projectName}}</div>
                             <div class="date">
-                                <span>{{activity.startDate|date:'MM-dd-yyyy'}}</span> | <span>{{activity.endDate|date:'MM-dd-yyyy'}}</span>
+                                <span>{{activity.startDate|date:app.dateFormat}}</span> - <span>{{activity.endDate|date:app.dateFormat}}</span>
                             </div>
                             <div class="tasks">
                                 <span ng-repeat="taskCount in activity.taskCountByStatus | filter : {statusType : 'Active'}">{{taskCount.taskCount}} Active</span> |

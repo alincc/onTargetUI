@@ -44,9 +44,10 @@ define(function(require){
     requireMultiple = require('app/common/validators/requireMultiple'),
     monthName = require('app/common/filters/monthName'),
     budgetEditorDirective = require('./directives/budgetEditor'),
-    budgetEditorTemplate = require('text!./templates/budgetEditor.html');
+    budgetEditorTemplate = require('text!./templates/budgetEditor.html'),
+    userNotification = require('app/common/services/userNotifications');
 
-  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'angularMoment', 'ngTouch', 'common.services.file', 'ui.select', 'ngLetterAvatar', 'ngFileUpload', 'common.validators.requireMultiple', 'common.filters.monthName']);
+  var module = angular.module('app.task', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.activity', 'common.services.task', 'common.filters.task', 'common.services.notifications', 'angularMoment', 'ngTouch', 'common.services.file', 'ui.select', 'ngLetterAvatar', 'ngFileUpload', 'common.validators.requireMultiple', 'common.filters.monthName', 'common.services.userNotifications']);
 
   module.run(['$templateCache', function($templateCache){
     $templateCache.put('onTime/task/templates/task.html', template);

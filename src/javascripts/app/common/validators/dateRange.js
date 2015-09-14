@@ -11,17 +11,23 @@ define(function(require){
         ngModel.$validators.gtMaxDate = function(modelValue){
           if(attrs.minDate) {
             var maxDateValue = angular.copy($parse(attrs.minDate)(scope));
+            if(!maxDateValue) {
+              return true;
+            }
             return moment(modelValue).isValid() && moment(maxDateValue).isValid() && moment(modelValue).diff(moment(maxDateValue), 'days') >= 0;
           }
-          return false;
+          return true;
         };
 
         ngModel.$validators.ltMinDate = function(modelValue){
           if(attrs.maxDate) {
             var minDateValue = angular.copy($parse(attrs.maxDate)(scope));
+            if(!minDateValue) {
+              return true;
+            }
             return moment(modelValue).isValid() && moment(minDateValue).isValid() && moment(minDateValue).diff(moment(modelValue), 'days') >= 0;
           }
-          return false;
+          return true;
         };
       }
     };

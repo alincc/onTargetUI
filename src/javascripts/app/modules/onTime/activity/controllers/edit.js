@@ -3,8 +3,8 @@
  */
 define(function (){
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'activityFactory', 'toaster', '$filter', 'notifications', 'taskFactory',
-    function ($scope, $rootScope, userContext, projectFactory, activityFactory, toaster, $filter, notifications, taskFactory){
+  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'activityFactory', 'toaster', '$filter', 'notifications', 'taskFactory', 'userNotificationsFactory', 'appConstant',
+    function ($scope, $rootScope, userContext, projectFactory, activityFactory, toaster, $filter, notifications, taskFactory, userNotificationsFactory, appConstant){
 
       $scope.currentProject = $rootScope.currentProjectInfo;
       var activity = $rootScope.activitySelected;
@@ -115,7 +115,6 @@ define(function (){
       $scope.onSubmit = false;
 
       $scope.save = function (){
-        console.log($scope.model);
         $scope.onSubmit = true;
         activityFactory.addActivity($scope.model).then(
           function (resp){
@@ -123,6 +122,10 @@ define(function (){
             $scope.form.$setPristine();
             //$modalInstance.close({});
             notifications.activityEdited();
+            userNotificationsFactory.getAll({
+              "pageNumber": 1,
+              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            });
           }, function (err){
             $scope.onSubmit = false;
             $scope.form.$setPristine();

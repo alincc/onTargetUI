@@ -85,7 +85,7 @@
             <input type="text" class="form-control" placeholder="Start date" required ng-model="projectModel.startDate"
                    datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxStartDate"
                    datepicker-options="startDate.options"
-                   name="startDate" ng-click="startDate.isOpen = !startDate.isOpen"/>
+                   name="startDate" ng-click="startDate.isOpen = !startDate.isOpen" date-range/>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="startDate.open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>
@@ -94,6 +94,7 @@
         <ng-messages ng-if="project_form.startDate.$dirty"
                      for="project_form.startDate.$error">
             <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project start date</span>
+            <p class="help-block m-b-none text-danger" ng-message when="ltMinDate">Start date must less than or equals <span ng-bind="maxStartDate | date:app.dateFormat"></span></p>
         </ng-messages>
     </div>
 </div>
@@ -106,7 +107,7 @@
                    ng-click="endDate.isOpen = !endDate.isOpen"
                    datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="minEndDate"
                    datepicker-options="endDate.options"
-                   name="endDate"/>
+                   name="endDate" date-range/>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="endDate.open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>
@@ -115,6 +116,7 @@
         <ng-messages ng-if="project_form.endDate.$dirty"
                      for="project_form.endDate.$error">
             <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project end date</span>
+            <p class="help-block m-b-none text-danger" ng-message when="gtMaxDate">End date must greater than or equals <span ng-bind="minEndDate | date:app.dateFormat"></span></p>
         </ng-messages>
     </div>
 </div>
@@ -126,7 +128,7 @@
                 <div class="overlay">
                     <p>Change picture</p>
                 </div>
-                <img file-path="project" ng-src="{{projectModel.projectImagePath}}"/>
+                <img file-path="project" path="{{projectModel.projectImagePath}}"/>
             </a>
             <div loading-bar="{{picture.percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="picture.isUploadPicture"></div>
         </div>

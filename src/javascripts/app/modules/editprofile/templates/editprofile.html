@@ -4,7 +4,11 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1 class="m-n font-thin h3 text-black">Edit Profile</h1>
+                    <h1 class="m-n font-thin h3 text-black">Edit Profile
+                        <a class="btn btn-default pull-right" href="#/app/projectlist"><i
+                                class="fa fa-arrow-left"></i> Back to projects list
+                        </a>
+                    </h1>
                 </div>
             </div>
         </div>
@@ -18,7 +22,7 @@
                                 <div class="overlay image-circle">
                                     <p>Change picture</p>
                                 </div>
-                                <img file-path class="image-circle" ng-src="{{editUserData.userImagePath}}"/>
+                                <img file-path class="image-circle" path="{{editUserData.userImagePath}}"/>
                             </a>
                             <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploadAvatar"></div>
                         </div>

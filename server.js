@@ -31,6 +31,9 @@ var upload = require('./server/routes/upload')(app);
 var download = require('./server/routes/download')(app);
 var xlsParser = require('./server/routes/xls-parser')(app);
 var move = require('./server/routes/move')(app);
+var googleDriveFiles = require('./server/routes/googleDriveFile')(app);
+var boxFiles = require('./server/routes/boxFile')(app);
+var dropBoxFiles = require('./server/routes/dropBoxFile')(app);
 
 // modules
 var pushModule = require('./server/modules/push')(app);

@@ -4,8 +4,8 @@
 define(function (require){
   'use strict';
   var moment = require('moment');
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'activityFactory', 'toaster', 'projectContext', '$filter', 'notifications',
-    function ($scope, $rootScope, userContext, projectFactory, activityFactory, toaster, projectContext, $filter, notifications){
+  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'activityFactory', 'toaster', 'projectContext', '$filter', 'notifications', 'userNotificationsFactory', 'appConstant',
+    function ($scope, $rootScope, userContext, projectFactory, activityFactory, toaster, projectContext, $filter, notifications, userNotificationsFactory, appConstant){
       $scope.currentProject = $rootScope.currentProjectInfo;
 
       $scope.project = {
@@ -71,6 +71,10 @@ define(function (require){
             $scope.form.$setPristine();
             //$modalInstance.close({});
             notifications.activityCreated();
+            userNotificationsFactory.getAll({
+              "pageNumber": 1,
+              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            });
           }, function (err){
             $scope.onSubmit = false;
             $scope.form.$setPristine();

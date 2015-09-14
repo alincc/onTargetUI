@@ -4,18 +4,21 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var qs = require('querystring');
 var methodOverride = require('method-override');
+var myArgs = process.argv.slice(2);
+var folder = myArgs[0] || 'app';
+var port = myArgs[1] || 3214;
 //var cors = require('cors');
 var app = express();
-var API_SERVER = 'http://localhost:9000/ontargetrs/services';
+var API_SERVER = 'http://app.ontargetcloud.com:8080/ontargetrs/services';
 
 // Config
-app.set('port', 3214);
+app.set('port', port);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(methodOverride());
 //app.use(cors());
-app.use(express.static(__dirname + '/app'));
+app.use(express.static(__dirname + '/' + folder));
 
 app.post('/ontargetrs/services*', function(req, res){
   //var r = request.post({headers: req.headers, uri: API_SERVER + req.params[0], json: req.body});
