@@ -32,12 +32,12 @@ module.exports = {
   },
   integration: {
     port: 9000,
-    domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services',
-    baseUrl: 'http://int.app.ontargetcloud.com:9000',
-    nodeServer: 'http://int.app.ontargetcloud.com:9001',
-    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services', 	// The domain should be same as the baseUrl because the proxy server was moved to the same Front-End web server
+    baseUrl: 'http://int.app.ontargetcloud.com:9000', 						// Site domain
+    nodeServer: 'http://int.app.ontargetcloud.com:9001', 					// Node server domain
+    resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
     // Proxy settings
-    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
+    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'		// API
   },
   testing: {
     port: 0,
