@@ -19,7 +19,7 @@ define(function(require){
             "userId": $rootScope.currentUserInfo.userId
           };
 
-          return $http.post(constant.domain + '/notification/getNotificationsByUserByProject', requestPayload);
+          return $http.post(constant.domain + '/notification/getNotifications', requestPayload);
         }
       };
 
@@ -33,7 +33,7 @@ define(function(require){
             "userId": $rootScope.currentUserInfo.userId
           };
 
-          $http.post(constant.domain + '/notification/getNotificationsByUserByProject', data)
+          $http.post(constant.domain + '/notification/getNotifications', data)
             .then(function(resp){
               $rootScope.userNotifications = resp.data.notificationList;
               notifications.getNotificationSuccess();

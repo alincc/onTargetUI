@@ -6,10 +6,10 @@ define(function(require) {
     .filter('filePath', ['appConstant', function(constant) {
       return function(value) {
         if(/^\//.test(value)) {
-          return constant.nodeServer + value;
+          return constant.resourceUrl + value;
         }
         else {
-          return constant.nodeServer + '/' + value;
+          return constant.resourceUrl + '/' + value;
         }
       };
     }]);

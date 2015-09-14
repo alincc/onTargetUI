@@ -22,9 +22,9 @@ define(function(require) {
             showNoImage();
           } else {
             $timeout(function() {
-              var avatarUrl = constant.nodeServer + '/' + attrs.src;
+              var avatarUrl = constant.resourceUrl + '/' + attrs.src;
               if(/^\//.test(attrs.src)) {
-                avatarUrl = constant.nodeServer + attrs.src;
+                avatarUrl = constant.resourceUrl + attrs.src;
               }
               var img = $document[0].createElement('img');
               img.onerror = function() {
