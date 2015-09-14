@@ -238,6 +238,7 @@ define(function(require){
     domain: 'http://localhost:9000/ontargetrs/services',
     baseUrl: 'http://localhost:9000',
     nodeServer: 'http://localhost:9000',
+    resourceUrl: 'http://localhost:9000',
     app: {
       name: "OnTarget",
       id: "OnTarget",
