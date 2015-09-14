@@ -5,27 +5,39 @@
 module.exports = {
   default: {
     port: 3214,
-    domain: 'http://demo.newoceaninfosys.com:3215/ontargetrs/services',
-    baseUrl: 'http://demo.newoceaninfosys.com:3214',
-    nodeServer: 'http://demo.newoceaninfosys.com:3215'
+    domain: 'http://localhost:3214/ontargetrs/services',
+    baseUrl: 'http://localhost:3214',
+    nodeServer: 'http://int.app.ontargetcloud.com:9001',
+    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    // Proxy settings
+    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
   local: {
-    port: 9000,
-    domain: 'http://localhost:9001/ontargetrs/services',
-    baseUrl: 'http://localhost:8080',
-    nodeServer: 'http://localhost:9001'
+    port: 3214,
+    domain: 'http://localhost:3214/ontargetrs/services',
+    baseUrl: 'http://localhost.com:3214',
+    nodeServer: 'http://int.app.ontargetcloud.com:9001',
+    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    // Proxy settings
+    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
   local1: {
     port: 9002,
-    domain: 'http://localhost:9003/ontargetrs/services',
-    baseUrl: 'http://localhost:8080',
-    nodeServer: 'http://localhost:9003'
+    domain: 'http://localhost:9002/ontargetrs/services',
+    baseUrl: 'http://localhost:9002',
+    nodeServer: 'http://localhost:9003',
+    resourceUrl: 'http://localhost:9003',
+    // Proxy settings
+    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
   integration: {
     port: 9000,
-    domain: 'http://int.app.ontargetcloud.com:9001/ontargetrs/services',
-    baseUrl: 'http://int.api.ontargetcloud.com:8080',
-    nodeServer: 'http://int.app.ontargetcloud.com:9001'
+    domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services',
+    baseUrl: 'http://int.app.ontargetcloud.com:9000',
+    nodeServer: 'http://int.app.ontargetcloud.com:9001',
+    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    // Proxy settings
+    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
   },
   testing: {
     port: 0,

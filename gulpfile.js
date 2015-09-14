@@ -214,24 +214,24 @@ gulp.task('build:local', ['build'], function(){
 gulp.task('build:local1', ['build'], function(){
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-      .pipe(gulp.dest('./build-local1/app'));
+    .pipe(gulp.dest('./build-local1/app'));
 
   // modify and minify
   gulp.src(['./src/javascripts/main.min.js'])
-      .pipe(replace(/domain: '.*'/, "domain: '" + config.local1.domain + "'")) // domain
-      .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.local1.baseUrl + "'")) // base url
-      .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.local1.nodeServer + "'")) // node server domain
-      .pipe(uglify())
-      .pipe(gulp.dest('./build-local1/app/javascripts'));
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.local1.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.local1.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.local1.nodeServer + "'")) // node server domain
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-local1/app/javascripts'));
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-      .pipe(replace("9000", config.local1.port))
-      .pipe(gulp.dest('./build-local1'));
+    .pipe(replace("9000", config.local1.port))
+    .pipe(gulp.dest('./build-local1'));
 
   gulp.src('./package.app.json')
-      .pipe(rename('./package.json'))
-      .pipe(gulp.dest('./build-local1'));
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-local1'));
 });
 
 // ---- Integration -----
@@ -386,7 +386,6 @@ gulp.task('build:serverlocal', function () {
     .pipe(gulp.dest('build-server'));
 });
 
-
 // Server build local 2
 gulp.task('build:serverlocal1', function () {
   gulp.src('package.json', {"base": "."})
@@ -413,9 +412,6 @@ gulp.task('build:serverlocal1', function () {
   ], {"base": "."})
     .pipe(gulp.dest('build-server1'));
 });
-
-
-
 
 // Server build integration
 gulp.task('build:serverint', function () {
