@@ -47,21 +47,21 @@ require.config({
     angularUtilsPagination: '../bower_components/angular-utils-pagination/dirPagination',
     angularUiMask: '../bower_components/angular-ui-mask/dist/mask',
     angularUiSelect: '../bower_components/angular-ui-select/dist/select',
-    chartjs: '../bower_components/Chart.js/Chart',
-    angularChartJS: '../bower_components/angular-chart.js/dist/angular-chart',
     mentio: '../bower_components/ment.io/dist/mentio',
-    //jsXlsxShim: '../bower_components/js-xlsx/shim',
-    jszip: '../bower_components/js-xlsx/dist/jszip',
-    //jsXlsxOds: '../bower_components/js-xlsx/ods',
-    xlsx: '../bower_components/js-xlsx/dist/xlsx',
-    jsXlsx: '../bower_components/js-xlsx/dist/xlsx.full.min',
     typeahead: '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
     ngLetterAvatar: '../bower_components/ngletteravatar/ngletteravatar',
     angularGantt: '../bower_components/angular-gantt/assets/angular-gantt',
     angularGanttPlugin: '../bower_components/angular-gantt/assets/angular-gantt-plugins',
     angularUiTree: '../bower_components/angular-ui-tree/dist/angular-ui-tree',
     pusher: '../bower_components/pusher/dist/pusher',
-    pushAngular: '../bower_components/pusher-angular/lib/pusher-angular'
+    pushAngular: '../bower_components/pusher-angular/lib/pusher-angular',
+    jPlot: '../bower_components/flot/jquery.flot',
+    jPlotPie: '../bower_components/flot/jquery.flot.pie',
+    jPlotResize: '../bower_components/flot/jquery.flot.resize',
+    jPlotCategories: '../bower_components/flot/jquery.flot.categories',
+    jPlotToolTip: '../bower_components/flot.tooltip/js/jquery.flot.tooltip',
+    jPlotOrderBar: '../bower_components/flot.orderbars/js/jquery.flot.orderBars',
+    jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline'
   },
 
   shim: {
@@ -73,6 +73,27 @@ require.config({
     },
     "jQueryCustomScroll": {
       deps: ["jQuery", "jQueryMouseWheel"]
+    },
+    "jPlot": {
+      deps: ["jQuery"]
+    },
+    "jPlotPie": {
+      deps: ["jPlot"]
+    },
+    "jPlotResize": {
+      deps: ["jPlot"]
+    },
+    "jPlotCategories": {
+      deps: ["jPlot"]
+    },
+    "jPlotToolTip": {
+      deps: ["jPlot"]
+    },
+    "jPlotOrderBar": {
+      deps: ["jPlot"]
+    },
+    "jPlotSpline": {
+      deps: ["jPlot"]
     },
     "angular": {
       deps: ["jQuery"],
@@ -132,18 +153,11 @@ require.config({
     "angularUiMask": {
       deps: ['angular']
     },
-    "angularChartJS": {
-      deps: ['chartjs', 'angular']
-    },
     "mentio": {
       deps: ['angular']
     },
     "angularUiSelect": {
       deps: ['angular']
-    },
-    "xlsx": {
-      deps: ['jszip'],
-      exports: "XLSX"
     },
     "angularGantt": {
       deps: ['angularMoment']
@@ -175,21 +189,15 @@ if(!window.console) {
 }
 
 require([
-  'jszip',
-  'angular'
-], function(jszip, angular) {
-  window.JSZip = jszip;
-  require([
-    'jQuery',
-    'angular',
-    'app/app'
-  ], function(jQuery, angular, app) {
-    var $html = angular.element(document.getElementsByTagName('html')[0]);
-    angular.element().ready(function() {
-      //$html.addClass('ng-app');
-      angular.bootstrap($html, [app.name]);
+  'jQuery',
+  'angular',
+  'app/app'
+], function(jQuery, angular, app) {
+  var $html = angular.element(document.getElementsByTagName('html')[0]);
+  angular.element().ready(function() {
+    //$html.addClass('ng-app');
+    angular.bootstrap($html, [app.name]);
 
-    });
   });
 });
 

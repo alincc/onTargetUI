@@ -22,8 +22,9 @@ define(function(require) {
     parserServiceModule= require('app/common/services/parser'),
     userContextModule = require('app/common/context/user'),
     projectChooserDirective = require('app/common/directives/projectChooser/projectChooser'),
-    ngFileUpload = require('ngFileUpload');
-  var module = angular.module('app.activity', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.company', 'common.services.activity', 'common.services.notifications', 'common.directives.projectChooser', 'ngFileUpload', 'common.services.parser', 'toaster']);
+    ngFileUpload = require('ngFileUpload'),
+    notification = require('app/common/services/notifications');
+  var module = angular.module('app.activity', ['ui.router', 'app.config', 'common.context.user', 'common.services.project', 'common.services.company', 'common.services.activity', 'common.services.notifications', 'common.directives.projectChooser', 'ngFileUpload', 'common.services.parser', 'toaster', 'common.services.notifications']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onTime/activity/templates/activity.html', template);

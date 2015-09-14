@@ -9,6 +9,8 @@ define(function (require){
           return $location.path();
         }, function (e){
           switch (e) {
+            case '/app/create-project':
+            case '/app/edit-project':
             case '/app/projectlist':
               elem.hide();
               break;

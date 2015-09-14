@@ -12,7 +12,7 @@ define(function(require) {
       function(Upload, constant, utilFactory, $http) {
         var service = {};
 
-        service.upload = function(file, newFileName, rootFolder, projectId, context, crop) {
+        service.upload = function(file, newFileName, rootFolder, projectAssetFolderName, context, crop) {
           newFileName = newFileName || file.name;
           return Upload.upload({
             url: constant.nodeServer + '/node/upload',
@@ -21,7 +21,7 @@ define(function(require) {
               'uuid': utilFactory.newGuid(),
               'fileName': newFileName,
               'folder': rootFolder,
-              'projectId': projectId,
+              'projectAssetFolderName': projectAssetFolderName,
               'context': context || '',
               'crop': crop || false
             },
@@ -31,14 +31,14 @@ define(function(require) {
           });
         };
 
-        service.move = function(filePath, newFileName, rootFolder, projectId, context) {
+        service.move = function(filePath, newFileName, rootFolder, projectAssetFolderName, context) {
           newFileName = newFileName || filePath.substring(filePath.lastIndexOf('/') + 1);
           return $http.post(constant.nodeServer + '/node/move', {
             'path': filePath,
             'uuid': utilFactory.newGuid(),
             'fileName': newFileName,
             'folder': rootFolder,
-            'projectId': projectId,
+            'projectAssetFolderName': projectAssetFolderName,
             context: context || ''
           }, {
             headers: {

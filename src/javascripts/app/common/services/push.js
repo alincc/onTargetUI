@@ -14,7 +14,6 @@ define(function(require) {
         pusher;
 
       services.initialize = function() {
-        console.log(Pusher);
         client = new Pusher(constant.push.API_KEY, {
           encrypted: true
         });
@@ -29,7 +28,6 @@ define(function(require) {
         });
 
         pusher.connection.bind_all(function(eventName, data) {
-          console.log(eventName, data);
           // if (eventName == 'state_change') { ...
         });
       };

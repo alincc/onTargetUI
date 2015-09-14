@@ -14,6 +14,9 @@
           margin-bottom: 10px;
           font-size: initial;
           font-weight: 600;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
         .description-container {
           margin: 0 10px 10px 10px;
@@ -51,6 +54,9 @@
         top: 0;
         left: 0;
         margin: 15px;
+        img {
+          margin: 0 auto
+        }
       }
       .project-info {
         margin-left: 220px;
@@ -59,12 +65,20 @@
           text-align: center;
           color: #000;
           margin-bottom: 10px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
         .project-address {
           text-align: center;
           margin-bottom: 10px;
           color: #777777;
           font-size: 15px;
+          p {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
         }
         .project-buttons {
           margin: 10px 0;

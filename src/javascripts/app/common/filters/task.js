@@ -11,7 +11,12 @@ define(function(require) {
   var module = angular.module('common.filters.task', ['app.config'])
     .filter('taskSeverity', function() {
       return function(input) {
-        return _.result(_.find(angular.fromJson(taskSeverities), {id: input}), 'name');
+        switch (input) {
+          case '1': return 'CRITICAL';
+          case '2': return 'HIGH';
+          case '3':return 'LOW';
+          default: return _.result(_.find(angular.fromJson(taskSeverities), {id: input}), 'name');
+        }
       };
     })
     .filter('taskStatus', function() {

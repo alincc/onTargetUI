@@ -20,8 +20,23 @@
         <!-- / main header -->
         <div class="wrapper-md p-r-none activity-task-management" ng-if="selectedTab==='taskManagement'">
             <div class="row">
-                <div class="col-xs-12 col-md-3" ng-include="'onTime/activity/templates/activity.html'"></div>
-                <div class="col-xs-12 col-md-9 task-container" ng-include="'onTime/task/templates/task.html'" ng-if="activitySelected"></div>
+                <div class="col-xs-12 col-md-12 col-lg-3" ng-include="'onTime/activity/templates/activity.html'"></div>
+                <!--<div class="col-xs-12 col-md-9 task-container" ng-include="'onTime/task/templates/task.html'" ng-if="activitySelected && !onAddActivity && !onEditActivity"></div>
+                <div class="col-xs-12 col-md-9 task-container" ng-include="'onTime/activity/templates/create.html'" ng-if="onAddActivity"></div>
+                <div class="col-xs-12 col-md-9 task-container" ng-include="'onTime/activity/templates/edit.html'" ng-if="onEditActivity"></div>-->
+                <div class="col-xs-12 col-md-12 col-lg-9 task-container">
+                    <div ng-switch on="activityAction">
+                        <div ng-switch-when="addActivity">
+                            <div ng-include="'onTime/activity/templates/create.html'"></div>
+                        </div>
+                        <div ng-switch-when="editActivity">
+                            <div ng-include="'onTime/activity/templates/edit.html'"></div>
+                        </div>
+                        <div ng-switch-when="selectActivity">
+                            <div ng-include="'onTime/task/templates/task.html'" ng-if="activitySelected"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="wrapper-md p-r-none activity-task-management" ng-if="selectedTab==='ganttChart'">

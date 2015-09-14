@@ -26,10 +26,10 @@ define(function(require) {
       }
 
       if(mj) {
-		    mainProject = $rootScope.mainProjectInfo = mj;
+        mainProject = $rootScope.mainProjectInfo = mj;
         allProjects = $rootScope.allProjects = mj.projects;
       }
-	  
+
       service.saveLocal({
         project: project,
         allProjects: allProjects || [],
@@ -56,7 +56,7 @@ define(function(require) {
     service.loadProject = function() {
       var data = storage.get('projectData');
       data = data || {};
-      service.setProject(data.project || {}, data.allProjects || []);
+      service.setProject(data.project || null, data.mainProject || null);
     };
 
     service.project = function() {

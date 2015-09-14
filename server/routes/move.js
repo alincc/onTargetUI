@@ -4,16 +4,6 @@ var request = require('request');
 var mkdirp = require("mkdirp");
 var rootPath = process.env.ROOT;
 var mime = require('mime');
-var crypto = require('crypto'),
-  algorithm = 'aes-256-ctr',
-  password = 'd6F3Efeq';
-
-function encrypt(text) {
-  var cipher = crypto.createCipher(algorithm, password)
-  var crypted = cipher.update(text, 'utf8', 'hex')
-  crypted += cipher.final('hex');
-  return crypted;
-}
 
 // paths/constants
 var assetsPath = path.join(rootPath, 'assets'),
@@ -26,11 +16,10 @@ function moveFile(req, res) {
   };
   var filePath = req.body.path;
   var rootFolder = req.body.folder;
-  var projectId = req.body.projectId;
+  var projectAssetFolderName = req.body.projectAssetFolderName;
   var context = req.body.context;
   var fileName = req.body.fileName;
   var sourceFilePath = path.join(rootPath, filePath);
-  var encryptedProjectFolderName = '';
 
   var url = uploadedFilesPath + rootFolder,
     destinationDir,
@@ -40,10 +29,10 @@ function moveFile(req, res) {
     var url = imagePathRoot + rootFolder + '/';
     if(rootFolder === 'projects') {
       if(context === '') {
-        url += encryptedProjectFolderName + '/' + fileName;
+        url += projectAssetFolderName + '/' + fileName;
       }
       else {
-        url += encryptedProjectFolderName + '/' + context + '/' + fileName;
+        url += projectAssetFolderName + '/' + context + '/' + fileName;
       }
     }
     else if(rootFolder === 'profile') {
@@ -94,7 +83,7 @@ function moveFile(req, res) {
     });
   }
 
-  if(path.existsSync(sourceFilePath)) {
+  if(fs.existsSync(sourceFilePath)) {
     if(rootFolder === 'projects') {
       mkdirp(url, function(error) {
         if(error) {
@@ -102,13 +91,12 @@ function moveFile(req, res) {
           failure();
         }
         else {
-          encryptedProjectFolderName = encrypt('projects-' + projectId);
-          url += '/' + encryptedProjectFolderName;
+          url += '/' + projectAssetFolderName;
           if(context === '') {
             destinationDir = url;
             fileDestination = destinationDir + '/' + fileName;
             // Check if file exist, then change file name
-            if(path.existsSync(fileDestination)) {
+            if(fs.existsSync(fileDestination)) {
               fileName = new Date().getTime() + '-' + fileName;
               fileDestination = destinationDir + '/' + fileName;
             }
@@ -126,7 +114,7 @@ function moveFile(req, res) {
                 fileDestination = destinationDir + '/' + fileName;
 
                 // Check if file exist, then change file name
-                if(path.existsSync(fileDestination)) {
+                if(fs.existsSync(fileDestination)) {
                   fileName = new Date().getTime() + '-' + fileName;
                   fileDestination = destinationDir + '/' + fileName;
                 }
@@ -141,7 +129,7 @@ function moveFile(req, res) {
     else if(rootFolder === 'profile') {
       destinationDir = url;
       fileDestination = destinationDir + '/' + fileName;
-      if(path.existsSync(fileDestination)) {
+      if(fs.existsSync(fileDestination)) {
         fileName = new Date().getTime() + '-' + fileName;
         fileDestination = destinationDir + '/' + fileName;
       }

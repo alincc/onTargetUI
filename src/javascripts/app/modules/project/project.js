@@ -18,6 +18,7 @@ define(function(require) {
     deleteTemplate = require('text!./templates/delete.html'),
     createOrUpdateTemplate = require('text!./templates/_createOrUpdate.html'),
     projectDescriptionWidthDirective = require('./directives/projectDescriptionWidth'),
+    changeProjectImageDirective = require('app/common/directives/changeProjectImage'),
     projectServiceModule = require('app/common/services/project'),
     accountServiceModule = require('app/common/services/account'),
     companyServiceModule = require('app/common/services/company'),
@@ -30,8 +31,9 @@ define(function(require) {
     toaster = require('toaster'),
     angularLocalStorage = require('angularLocalStorage'),
     ngFileUpload = require('ngFileUpload'),
-    userNotificationsModule = require('app/common/services/userNotifications');
-  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications']);
+    userNotificationsModule = require('app/common/services/userNotifications'),
+    activityServiceModule = require('app/common/services/activity');
+  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications', 'common.services.activity', 'common.directives.changeProjectImage']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('project/templates/list.html', template);
@@ -58,6 +60,38 @@ define(function(require) {
             controller: 'ProjectListController',
             authorization: true,
             fullWidth: true
+          })
+          .state('app.createProject', {
+            url: '/create-project',
+            templateUrl: 'project/templates/create.html',
+            controller: 'ProjectCreateController',
+            authorization: true,
+            fullWidth: true
+          })
+          .state('app.editProject', {
+            url: '/edit-project',
+            templateUrl: 'project/templates/edit.html',
+            controller: 'ProjectEditController',
+            authorization: true,
+            fullWidth: true,
+            resolve: {
+              project: ['$q', 'projectFactory', '$rootScope', '$location', function($q, projectFactory, $rootScope, $location) {
+                var project = $rootScope.editProject;
+                if(!project) {
+                  $location.path("/app/projectlist");
+                }
+                delete $rootScope.editProject;
+                return project;
+              }],
+              companies: ['$q', 'companyFactory', function($q, companyFactory) {
+                var deferred = $q.defer();
+                companyFactory.search()
+                  .success(function(resp) {
+                    deferred.resolve(resp.companyList);
+                  });
+                return deferred.promise;
+              }]
+            }
           });
       }
     ]

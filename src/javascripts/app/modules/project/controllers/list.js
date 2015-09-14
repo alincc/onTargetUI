@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function() {
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
@@ -88,7 +88,7 @@ define(function() {
 
       var createProjectModalInstance, editProjectModalInstance, deleteProjectModalInstance;
 
-      $scope.openCreateProjectModal = function() {
+      /*$scope.openCreateProjectModal = function() {
         createProjectModalInstance = $modal.open({
           templateUrl: 'project/templates/create.html',
           controller: 'ProjectCreateController',
@@ -96,7 +96,7 @@ define(function() {
         });
 
         createProjectModalInstance.result.then(function() {
-          $scope.getUserProject();
+          $scope.getUserProjectList();
         }, function() {
 
         });
@@ -105,26 +105,32 @@ define(function() {
       $scope.editProjectModal = function(project) {
         // prepare company list
         companyFactory.search().success(function(resp) {
-            editProjectModalInstance = $modal.open({
-              templateUrl: 'project/templates/edit.html',
-              controller: 'ProjectEditController',
-              size: 'lg',
-              resolve: {
-                project: function() {
-                  return project;
-                },
-                companies: function() {
-                  return resp.companyList;
-                }
+          editProjectModalInstance = $modal.open({
+            templateUrl: 'project/templates/edit.html',
+            controller: 'ProjectEditController',
+            size: 'lg',
+            resolve: {
+              project: function() {
+                return project;
+              },
+              companies: function() {
+                return resp.companyList;
               }
-            });
-
-            editProjectModalInstance.result.then(function() {
-              $scope.getUserProject();
-            }, function() {
-
-            });
+            }
           });
+
+          editProjectModalInstance.result.then(function() {
+            $scope.getUserProjectList();
+          }, function() {
+
+          });
+        });
+      };*/
+
+      //edit project
+      $scope.editProject = function (project){
+        $rootScope.editProject = project;
+        $state.go('app.editProject');
       };
 
       $scope.deleteProject = function(project) {
@@ -140,25 +146,25 @@ define(function() {
         });
 
         deleteProjectModalInstance.result.then(function() {
-          $scope.getUserProject();
+          $scope.getUserProjectList();
         }, function() {
 
         });
       };
 
       $scope.goDashboard = function(pj) {
+        console.log(pj);
         projectContext.setProject(pj);
         // get project details
         projectFactory.getProjectById(pj.projectId)
-          .success(function(resp){
+          .success(function(resp) {
             projectContext.setProject(resp.project);
 
             // get notifications
             if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
               var requestPayload = {
                 "pageNumber": 1,
-                "perPageLimit": constant.app.settings.userNotificationsPageSize,
-                "userId": $rootScope.currentUserInfo.userId
+                "perPageLimit": constant.app.settings.userNotificationsPageSize
               };
 
               userNotificationsFactory.getAll(requestPayload);

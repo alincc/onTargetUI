@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label class="col-xs-2 control-label">Name</label>
+    <label class="col-xs-2 control-label">Name <span class="label-required" ng-show="project_form.projectName.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Name" required ng-model="projectModel.projectName"
@@ -11,7 +11,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Description</label>
+    <label class="col-xs-2 control-label">Description <span class="label-required" ng-show="project_form.projectDescription.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <textarea class="form-control" placeholder="Description" required
@@ -36,7 +36,7 @@
     <!--</div>-->
 <!--</div>-->
 <div class="form-group">
-    <label class="col-xs-2 control-label">Type</label>
+    <label class="col-xs-2 control-label">Type <span class="label-required" ng-show="project_form.projectTypeId.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <select class="form-control" name="projectTypeId" ng-model="projectModel.projectTypeId" required
@@ -49,8 +49,8 @@
         </ng-messages>
     </div>
 </div>
-<div class="form-group" ng-if="addProject">
-    <label class="col-xs-2 control-label">Unit Of Measurement</label>
+<div class="form-group">
+    <label class="col-xs-2 control-label">Unit Of Measurement <span class="label-required" ng-show="project_form.unitOfMeasurement.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <select class="form-control" name="unitOfMeasurement" ng-model="projectModel.unitOfMeasurement" required
@@ -64,7 +64,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Status</label>
+    <label class="col-xs-2 control-label">Status <span class="label-required" ng-show="project_form.status.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <select class="form-control" name="status" ng-model="projectModel.status"
@@ -78,12 +78,12 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Start date</label>
+    <label class="col-xs-2 control-label">Start date <span class="label-required" ng-show="project_form.startDate.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <p class="input-group">
             <input type="text" class="form-control" placeholder="Start date" required ng-model="projectModel.startDate"
-                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="projectModel.endDate"
+                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxStartDate"
                    datepicker-options="startDate.options"
                    name="startDate" ng-click="startDate.isOpen = !startDate.isOpen"/>
             <span class="input-group-btn">
@@ -98,13 +98,13 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">End date</label>
+    <label class="col-xs-2 control-label">End date <span class="label-required" ng-show="project_form.endDate.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <p class="input-group">
             <input type="text" class="form-control" placeholder="End date" required ng-model="projectModel.endDate"
                    ng-click="endDate.isOpen = !endDate.isOpen"
-                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="projectModel.startDate"
+                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="minEndDate"
                    datepicker-options="endDate.options"
                    name="endDate"/>
             <span class="input-group-btn">
@@ -118,7 +118,7 @@
         </ng-messages>
     </div>
 </div>
-<div class="form-group" ng-if="!editProject">
+<div class="form-group">
     <label class="col-xs-2 control-label">Project image</label>
     <div class="col-xs-10">
         <div class="picture-container">
@@ -133,7 +133,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Address 1</label>
+    <label class="col-xs-2 control-label">Address 1 <span class="label-required" ng-show="project_form.address1.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Address 1" required
@@ -153,7 +153,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">City</label>
+    <label class="col-xs-2 control-label">City <span class="label-required" ng-show="project_form.city.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="City" required ng-model="projectModel.projectAddress.city"
@@ -165,7 +165,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Country</label>
+    <label class="col-xs-2 control-label">Country <span class="label-required" ng-show="project_form.country.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <select class="form-control" name="country" ng-model="projectModel.projectAddress.country" required
@@ -179,7 +179,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">State</label>
+    <label class="col-xs-2 control-label">State <span class="label-required" ng-show="project_form.state.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <select class="form-control" name="state" ng-model="projectModel.projectAddress.state"
@@ -193,7 +193,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Zip code</label>
+    <label class="col-xs-2 control-label">Zip code <span class="label-required" ng-show="project_form.zip.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Zip code" required

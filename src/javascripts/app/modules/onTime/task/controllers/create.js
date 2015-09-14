@@ -89,6 +89,13 @@ define(function() {
     $scope.cancel = function() {
       notifications.taskCancel();
     };
+
+      var setTaskListHeight = function (){
+        var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
+        document.getElementById('task-create-panel').setAttribute("style","height:" + (activityHeadingHeight + 539)  + "px");
+      };
+
+      setTaskListHeight();
   }];
   return controller;
 });

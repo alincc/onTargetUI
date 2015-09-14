@@ -2,12 +2,13 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams',
-    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams', 'appConstant',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams, appConstant) {
       var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
       var currentProjectId;
       var canceler;
       $scope.isLoadingActivity = false;
+      $scope.app = appConstant.app;
 
       function load(cb) {
         currentProjectId = $rootScope.currentProjectInfo.projectId;
@@ -91,7 +92,7 @@ define(function(require) {
       };
 
       // Create activity
-      $scope.openCreateActivityModal = function() {
+      /*$scope.openCreateActivityModal = function() {
         companyFactory.search()
           .success(function(resp) {
             createActivityModalInstance = $modal.open({
@@ -107,14 +108,32 @@ define(function(require) {
 
             createActivityModalInstance.result.then(function() {
               //add success
-              $scope.getUserProject();
+              //$scope.getUserProject();
+              //load();
+              $scope.loadActivity();
             }, function() {
             });
+          });
+      };*/
+
+      $scope.createActivity = function (){
+        companyFactory.search()
+          .success(function(resp) {
+            $rootScope.companies = resp.companyList;
+            notifications.createActivity();
+          });
+      };
+
+      $scope.editActivity = function (){
+        companyFactory.search()
+          .success(function(resp) {
+            $rootScope.companies = resp.companyList;
+            notifications.editActivity();
           });
       };
 
       // Edit activity
-      $scope.openEditActivityModal = function() {
+     /* $scope.openEditActivityModal = function() {
         // prepare company list
         companyFactory.search()
           .success(function(resp) {
@@ -134,12 +153,14 @@ define(function(require) {
 
             editActivityModalInstance.result.then(function() {
               //edit success
-              $scope.getUserProject();
+              //$scope.getUserProject();
+              //load();
+              $scope.loadActivity();
             }, function() {
 
             });
           });
-      };
+      };*/
 
       // Delete activity
       $scope.openDeleteActivityModal = function() {
@@ -192,17 +213,22 @@ define(function(require) {
 
       //when task added, or deleted
       notifications.onTaskCreated($scope, function() {
-        $scope.getUserProject();
+        //$scope.getUserProject();
+        $scope.loadActivity();
       });
 
       notifications.onTaskUpdated($scope, function(obj) {
-        if(!obj) {
-          $scope.getUserProject();
-        }
+        /*if(!obj) {
+          //$scope.getUserProject();
+          //load();
+          $scope.loadActivity();
+        }*/
+        $scope.loadActivity();
       });
 
       notifications.onTaskDeleted($scope, function() {
         //$scope.getUserProject();
+        $scope.loadActivity();
       });
 
       // Events
@@ -213,6 +239,7 @@ define(function(require) {
           canceler.resolve();
         }
         load();
+        //$scope.loadActivity();
       });
 
       $scope.$on('$destroy', function() {
@@ -232,6 +259,15 @@ define(function(require) {
           }
         }
       });
+
+      notifications.onActivityCreated($scope, function() {
+        $scope.loadActivity();
+      });
+
+      notifications.onActivityEdited($scope, function() {
+        $scope.loadActivity();
+      });
+
     }];
   return controller;
 });

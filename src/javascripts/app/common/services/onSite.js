@@ -45,6 +45,12 @@ define(function(require) {
       });
     };
 
+    services.deleteDocument = function (projectFileId){
+      return $http.post(constant.domain + '/upload/delete', {
+        projectFileId: projectFileId
+      });
+    };
+
     return services;
   }]);
   return module;

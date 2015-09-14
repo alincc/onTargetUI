@@ -8,16 +8,6 @@ var multipartMiddleware = multipart();
 var gm = require('gm');
 var config = require('./../config');
 var imageService = require('./../services/image');
-var crypto = require('crypto'),
-  algorithm = 'aes-256-ctr',
-  password = 'd6F3Efeq';
-
-function encrypt(text) {
-  var cipher = crypto.createCipher(algorithm, password);
-  var crypted = cipher.update(text, 'utf8', 'hex');
-  crypted += cipher.final('hex');
-  return crypted;
-}
 
 // paths/constants
 var fileInputName = config.fileInputName,
@@ -31,9 +21,9 @@ function uploadFile(req, res) {
   var file = req.files[fileInputName],
     uuid = req.body.uuid,
     rootFolder = req.body.folder,
-    projectId = req.body.projectId,
+    projectAssetFolderName = req.body.projectAssetFolderName,
     context = req.body.context,
-    crop = req.body.crop || false,
+    crop = req.body.crop === "true" ? true : false,
     responseData = {
       success: false
     };
@@ -43,15 +33,14 @@ function uploadFile(req, res) {
 
   if(isValid(file.size)) {
     function upload(file) {
-      encryptedProjectFolderName = encrypt('projects-' + projectId);
-      moveUploadedFile(file, uuid, rootFolder, projectId, context, function() {
+      moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, context, function() {
           var url = imagePathRoot + rootFolder + '/';
           if(rootFolder === 'projects') {
             if(context === '') {
-              url += encryptedProjectFolderName + '/' + fileName;
+              url += projectAssetFolderName + '/' + fileName;
             }
             else {
-              url += encryptedProjectFolderName + '/' + context + '/' + fileName;
+              url += projectAssetFolderName + '/' + context + '/' + fileName;
             }
           }
           else if(rootFolder === 'profile') {
@@ -68,12 +57,11 @@ function uploadFile(req, res) {
           res.send(responseData);
         },
         function() {
-          responseData.error = "Problem copying the file!";
-          res.send(responseData);
+          res.status(400);
+          res.send('Problem copying the file!');
         });
     }
 
-    // Create assets folder
     if(crop) {
       imageService.crop(file.path, fileName, upload, function(err) {
         res.status(400);
@@ -89,9 +77,8 @@ function uploadFile(req, res) {
 }
 
 function failWithTooBigFile(responseData, res) {
-  responseData.error = "Too big!";
-  responseData.preventRetry = true;
-  res.send(responseData);
+  res.status(400);
+  res.send('File too big, please update file < ' + (maxFileSize / 1000000).toFixed(2) + 'MB');
 }
 
 function isValid(size) {
@@ -121,7 +108,7 @@ function moveFile(destinationDir, sourceFile, destinationFile, success, failure)
   });
 }
 
-function moveUploadedFile(file, uuid, rootFolder, projectId, context, success, failure) {
+function moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, context, success, failure) {
   var url = uploadedFilesPath + rootFolder,
     destinationDir,
     fileDestination;
@@ -133,12 +120,12 @@ function moveUploadedFile(file, uuid, rootFolder, projectId, context, success, f
         failure();
       }
       else {
-        url += '/' + encryptedProjectFolderName;
+        url += '/' + projectAssetFolderName;
         if(context === '') {
           destinationDir = url;
           fileDestination = destinationDir + '/' + fileName;
           // Check if file exist, then change file name
-          if(path.existsSync(fileDestination)) {
+          if(fs.existsSync(fileDestination)) {
             fileName = new Date().getTime() + '-' + fileName;
             fileDestination = destinationDir + '/' + fileName;
           }
@@ -156,7 +143,7 @@ function moveUploadedFile(file, uuid, rootFolder, projectId, context, success, f
               fileDestination = destinationDir + '/' + fileName;
 
               // Check if file exist, then change file name
-              if(path.existsSync(fileDestination)) {
+              if(fs.existsSync(fileDestination)) {
                 fileName = new Date().getTime() + '-' + fileName;
                 fileDestination = destinationDir + '/' + fileName;
               }
@@ -171,7 +158,7 @@ function moveUploadedFile(file, uuid, rootFolder, projectId, context, success, f
   else if(rootFolder === 'profile') {
     destinationDir = url;
     fileDestination = destinationDir + '/' + fileName;
-    if(path.existsSync(fileDestination)) {
+    if(fs.existsSync(fileDestination)) {
       fileName = new Date().getTime() + '-' + fileName;
       fileDestination = destinationDir + '/' + fileName;
     }

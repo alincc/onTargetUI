@@ -7,8 +7,8 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', '$filter',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, $filter) {
       $scope.task = {};
       $scope.isLoading = false;
       $scope.isSubmitting = false;
@@ -20,20 +20,25 @@ define(function(require) {
       };
       $scope.isEdit = false;
 
+      function daydiff(first, second) {
+        return (second - first) / (1000 * 60 * 60 * 24);
+      }
+
       $scope.getTaskBudget = function() {
         $scope.isLoading = true;
         taskFactory.getTaskBudget($rootScope.currentTask.projectTaskId).then(function(resp) {
-          console.log(resp);
+          //console.log(resp);
           $scope.task = resp.data.task;
           _.forEach($scope.task.costsByMonthYear, function(n) {
             if(n.costs.length === 0) {
               var y = n.taskInterval.year, m = n.taskInterval.month;
+              var firstDate = $filter('date')(new Date(y, m - 1, 1), 'yyyy-MM-dd');
+              var lastDate = $filter('date')(new Date(y, m, 0), 'yyyy-MM-dd');
               var cost1 = {
                 cost: 0,
                 costType: "ACTUAL",
-                createdBy: $scope.task.creatorId,
-                fromDate: new Date(y, m - 1, 1) > $scope.task.startDate ? new Date(y, m - 1, 1) : $scope.task.startDate,
-                toDate: new Date(y, m, 0) < $scope.task.endDate ? new Date(y, m, 0) : $scope.task.endDate,
+                fromDate: daydiff(firstDate, new Date($scope.task.startDate)) > 0 ? $scope.task.startDate : firstDate,
+                toDate: daydiff(new Date($scope.task.endDate), lastDate) ? $scope.task.endDate : lastDate,
                 id: null,
                 month: m,
                 year: y
@@ -41,7 +46,6 @@ define(function(require) {
               var cost2 = {
                 cost: 0,
                 costType: "PLANNED",
-                createdBy: cost1.createdBy,
                 fromDate: cost1.fromDate,
                 toDate: cost1.toDate,
                 id: null,
@@ -52,33 +56,11 @@ define(function(require) {
               n.costs.push(cost2);
             }
           });
-          console.log($scope.task.costsByMonthYear);
+          //console.log($scope.task.costsByMonthYear);
           $scope.isLoading = false;
         }, function() {
           $scope.isLoading = false;
         });
-      };
-
-      $scope.updateTaskBudget = function() {
-        _.forEach($scope.task.costsByMonthYear, function(n) {
-          _.forEach(n.costs, function(cost) {
-            cost.taskId = $rootScope.currentTask.projectTaskId;
-            $scope.model.taskBudgetEstimates.push(cost);
-          });
-        });
-        $scope.isSubmitting = true;
-        taskFactory.updateTaskBudget($scope.model.taskBudgetEstimates).then(function(resp) {
-            //notifications.taskUpdated();
-            $scope.isSubmitting = false;
-            $scope.model.taskBudgetEstimates = [];
-          },
-          function() {
-            $scope.isSubmitting = false;
-          });
-      };
-
-      $scope.edit = function (){
-        $scope.isEdit = true;
       };
 
       $scope.getTaskBudget();

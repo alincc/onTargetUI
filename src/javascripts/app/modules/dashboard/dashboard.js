@@ -17,21 +17,11 @@ define(function(require) {
     notificationsServiceModule = require('app/common/services/notifications'),
     permissionServiceModule = require('app/common/services/permission'),
     taskFilterModule = require('app/common/filters/task'),
-    Chart = require('chartjs'),
-    angularChartJS = require('angularChartJS'),
+    jPlotDirective = require('app/common/directives/jPlot/jPlot'),
     projectChooserDirective = require('app/common/directives/projectChooser/projectChooser');
-  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'chart.js', 'common.services.document', 'common.services.activity', 'common.filters.task', 'common.directives.projectChooser', 'common.services.notifications', 'common.services.permission']);
+  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'common.services.document', 'common.services.activity', 'common.filters.task', 'common.directives.projectChooser', 'common.services.notifications', 'common.services.permission', 'common.directives.jPlot']);
 
   module.run(['$templateCache', function($templateCache) {
-    Chart.defaults.global.colours=[
-      '#4279bd', // blue
-      '#06bf3f', // green
-      '#ff7e00', // orange
-      '#46BFBD', // green
-      '#FDB45C', // yellow
-      '#949FB1', // grey
-      '#4D5360'  // dark grey
-    ];
     $templateCache.put('dashboard/templates/dashboard.html', template);
   }]);
 

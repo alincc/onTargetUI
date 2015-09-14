@@ -3,29 +3,25 @@
         <spinner text="Loading..."></spinner>
     </div>
     <div ng-show="task.costsByMonthYear">
-        <table class="table table-hover .table-striped">
+        <table class="table .table-striped">
             <thead>
             <tr>
                 <th></th>
-                <th class="table-head">Actuals</th>
                 <th class="table-head">Planned</th>
+                <th class="table-head">Actuals</th>
             </tr>
             </thead>
             <tbody class="table-bordered">
-            <tr ng-repeat="budget in task.costsByMonthYear">
-                <td>{{budget.taskInterval.month|date:'MMM'}}-{{budget.taskInterval.year}}</td>
-                <td class="budget-cost" ng-dblclick="edit()">
-                    <span ng-hide="isEdit">{{budget.costs[0].cost | currency: '$' : 0}}</span>
-                    <input ng-show="isEdit" type="text" ng-model="budget.costs[0].cost"/>
+            <tr ng-repeat="budget in task.costsByMonthYear | orderBy: ['taskInterval.year', 'taskInterval.month']">
+                <td class="interval"><span ng-bind="budget.taskInterval.month | monthName"></span>-<span ng-bind="budget.taskInterval.year"></span></td>
+                <td class="budget-cost">
+                    <budget-editor model="budget.costs[1]" task="task" type="PLANNED" interval="budget.taskInterval"></budget-editor>
                 </td>
-                <td class="budget-cost" ng-dblclick="edit()">
-                    <span ng-hide="isEdit">{{budget.costs[1].cost| currency: '$' : 0}}</span>
-                    <input ng-show="isEdit" type="text" ng-model="budget.costs[1].cost"/>
+                <td class="budget-cost">
+                    <budget-editor model="budget.costs[0]" task="task" type="ACTUAL" interval="budget.taskInterval"></budget-editor>
                 </td>
             </tr>
             </tbody>
         </table>
-        <button class="btn btn-primary" ng-disabled="isSubmitting" ng-click="updateTaskBudget()" ng-show="isEdit">Save</button>
-        <button class="btn btn-default" ng-show="isEdit" ng-click="isEdit = false">Cancel</button>
     </div>
 </div>

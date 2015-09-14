@@ -13,17 +13,17 @@
                 <div class="form-group">
                     <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-envelope-o"></span>
+                                    <span class="fa fa-envelope-o"></span><!--<span class="label-required" ng-show="form.email.$error.required">*</span>-->
                                 </span>
                         <input name="email" type="email" id="email" ng-model="user.email"
                                class="form-control input-lg"
                                placeholder="Email" required>
-                        <ng-messages ng-if="form.email.$dirty"
-                                     for="form.email.$error">
-                            <span class="help-block m-b-none text-danger" ng-message when="required">Email is missing.</span>
-                            <span class="help-block m-b-none text-danger" ng-message when="email">Invalid email format.</span>
-                        </ng-messages>
                     </div>
+                    <ng-messages ng-if="form.email.$dirty"
+                                 for="form.email.$error">
+                        <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Email is missing.</span>
+                        <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="email">Invalid email format.</span>
+                    </ng-messages>
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-disabled="form.$submitted || form.$invalid">Request demo
                 </button>

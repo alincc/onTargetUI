@@ -40,7 +40,7 @@ define(function(require) {
         $scope.isUploading = true;
         //$files: an array of files selected, each file has name, size, and type.
         var $file = $files[0];
-        fileFactory.upload($file, null, 'projects', $rootScope.currentProjectInfo.projectId, 'task').progress(function(evt) {
+        fileFactory.upload($file, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'task').progress(function(evt) {
           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
           $scope.percentage = progressPercentage;
         }).success(function(data, status, headers, config) {

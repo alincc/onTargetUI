@@ -1,5 +1,9 @@
 .project-chooser {
   .dropdown-menu {
+    max-width: 300px;
+    max-height: 350px;
+    overflow-x: hidden;
+    overflow-y: scroll;
     li {
       &.selected {
         a {
@@ -8,6 +12,7 @@
         }
       }
       a {
+        white-space: normal;
         &:hover {
           background: @brand-primary !important;
           color: #fff;

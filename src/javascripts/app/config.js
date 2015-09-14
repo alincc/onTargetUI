@@ -1,16 +1,17 @@
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash'),
     paginationTemplate = require('text!app/common/templates/dirPagination.tpl.html'),
     angularUtilsPagination = require('angularUtilsPagination'),
     toaster = require('toaster'),
-    userServiceModule = require('app/common/context/user');
+    userContextModule = require('app/common/context/user'),
+    projectContextModule = require('app/common/context/project');
 
 
-  var module = angular.module('app.config', ['ui.router', 'angularUtils.directives.dirPagination', 'common.context.user', 'toaster']);
+  var module = angular.module('app.config', ['ui.router', 'angularUtils.directives.dirPagination', 'common.context.user', 'common.context.project', 'toaster']);
   module.config(['$locationProvider', '$urlRouterProvider', '$httpProvider', 'paginationTemplateProvider',
-    function($locationProvider, $urlRouterProvider, $httpProvider, paginationTemplateProvider) {
+    function($locationProvider, $urlRouterProvider, $httpProvider, paginationTemplateProvider){
 
       //Enable cross domain calls
       $httpProvider.defaults.useXDomain = true;
@@ -21,9 +22,9 @@ define(function(require) {
 
 
       // Authorization header
-      $httpProvider.interceptors.push(['userContext', '$rootScope', function(userContext, $rootScope) {
+      $httpProvider.interceptors.push(['userContext', '$rootScope', function(userContext, $rootScope){
         return {
-          request: function(config) {
+          request: function(config){
             if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
@@ -36,15 +37,15 @@ define(function(require) {
       }]);
 
       // Error handler
-      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', function($q, toaster, constant) {
+      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', 'pushFactory', '$location', '$rootScope', 'userContext', 'projectContext', function($q, toaster, constant, pushFactory, $location, userContext, projectContext){
         return {
-          response: function(response) {
+          response: function(response){
             var defer = $q.defer();
 
             //[{"message":"may not be null","messageTemplate":"{javax.validation.constraints.NotNull.message}","path":"task.projectId"},{"invalidValue":"com.ontarget.request.bean.TaskRequest@63b3e688","message":"Task date range must be between project date range","messageTemplate":"{task.date.range.not.between.project}","path":"0"}]
             if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
               var errorMessageHtml = '';
-              _.each(response.data, function(el) {
+              _.each(response.data, function(el){
                 if(el.path !== '0') {
                   errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
                 } else {
@@ -101,13 +102,16 @@ define(function(require) {
 
             return defer.promise;
           },
-          responseError: function(response) {
+          responseError: function(response){
             console.log(response);
 
             if(response.status === 400) {
-              if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
+              if(angular.isString(response.data)) {
+                toaster.pop('error', "Error", response.data);
+              }
+              else if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
                 var errorMessageHtml = '';
-                _.each(response.data, function(el) {
+                _.each(response.data, function(el){
                   if(el.path !== '0') {
                     errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
                   } else {
@@ -121,6 +125,13 @@ define(function(require) {
                   bodyOutputType: 'trustedHtml'
                 });
               }
+            }
+            else if(response.status === 401) {
+              pushFactory.unbind('onTargetAll');
+              pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
+              userContext.clearInfo();
+              projectContext.clearInfo();
+              $location.path('/signin');
             }
 
             //if(response.status === 401) {
@@ -207,9 +218,9 @@ define(function(require) {
     }
   ]);
 
-  module.run(['$rootScope', 'userContext', '$location', function($rootScope, userContext, $location) {
+  module.run(['$rootScope', 'userContext', '$location', function($rootScope, userContext, $location){
     // Validate Authorization Page
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
       if(userContext.authentication().isAuth || toState.authorization === false) {
 
       } else {
@@ -264,11 +275,20 @@ define(function(require) {
         'e2df05',
         'ffb56d',
         'e25805'
+      ],
+      projectHealthColours: [
+        '#06bf3f', // green
+        '#ff7e00', // orange
+        '#4279bd', // blue
+        '#46BFBD', // green
+        '#FDB45C', // yellow
+        '#949FB1', // grey
+        '#4D5360'  // dark grey
       ]
     },
-    push:{
-      API_KEY:'c2f5de73a4caa3763726',
-      channel:'onTarget'
+    push: {
+      API_KEY: 'c2f5de73a4caa3763726',
+      channel: 'onTarget'
     }
   });
 

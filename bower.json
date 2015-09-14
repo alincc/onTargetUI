@@ -32,17 +32,18 @@
     "autosize": "latest",
     "angular-utils-pagination": "latest",
     "ng-file-upload": "latest",
-    "angular-chart.js": "latest",
     "malihu-custom-scrollbar-plugin": "latest",
     "jquery-mousewheel": "latest",
     "ment.io": "~0.9.23",
     "angular-ui-select": "0.12.1",
-    "js-xlsx":"0.8.0",
     "ngletteravatar": "latest",
     "angular-gantt": "latest",
     "angular-ui-tree": "latest",
-    "ngletteravatar": "latest",
     "pusher-angular": "~0.1.6",
-    "pusher": "~2.2.4"
+    "pusher": "~2.2.4",
+    "flot": "~0.8.3",
+    "flot.tooltip": "~0.8.4",
+    "flot.orderbars": "*",
+    "flot-spline": "~0.0.1"
   }
 }

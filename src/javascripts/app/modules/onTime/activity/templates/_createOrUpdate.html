@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label class="col-xs-2 control-label">Name</label>
+    <label class="col-xs-2 control-label">Name <span class="label-required" ng-show="form.projectName.$error.required">*</span></label>
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Name" required ng-model="project.projectName"
                name="projectName"/>
@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Description</label>
+    <label class="col-xs-2 control-label">Description <span class="label-required" ng-show="form.projectDescription.$error.required">*</span></label>
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Description" required ng-model="project.projectDescription"
                name="projectDescription"/>
@@ -21,7 +21,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Company Name</label>
+    <label class="col-xs-2 control-label">Company Name <span class="label-required" ng-show="form.companyId.$error.required">*</span></label>
     <div class="col-xs-10">
         <select class="form-control" name="companyId" ng-model="project.companyId" required
                 ng-options="company.companyId as company.companyName for company in companies">
@@ -34,7 +34,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Status</label>
+    <label class="col-xs-2 control-label">Status <span class="label-required" ng-show="form.status.$error.required">*</span></label>
     <div class="col-xs-10">
         <select class="form-control" name="status" ng-model="project.status"
                 ng-options="projectStatus.id as projectStatus.name for projectStatus in projectStatuses" required>
@@ -47,13 +47,13 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">Start date</label>
+    <label class="col-xs-2 control-label">Start date <span class="label-required" ng-show="form.startDate.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <p class="input-group">
             <input type="text" class="form-control" placeholder="Start date" required ng-model="project.startDate"
-                   datepicker-popup="MM/dd/yyyy" is-open="startDate.isOpen" max-date="maxDate" min-date = "minDate2" init-date = "initStartDate"
-                   datepicker-options="startDate.options"
+                   datepicker-popup="{{app.dateFormat}}" is-open="startDate.isOpen" max-date="maxDate" min-date="minDate2" init-date = "initStartDate"
+                   datepicker-options="startDate.options" date-range
                    name="startDate" ng-click="startDate.isOpen = !startDate.isOpen"/>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="startDate.open($event)"><i
@@ -62,19 +62,21 @@
         </p>
         <ng-messages ng-if="form.startDate.$dirty"
                      for="form.startDate.$error">
-            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project start date</span>
+            <p class="help-block m-b-none text-danger" ng-message when="required">Please provide project start date</p>
+            <p class="help-block m-b-none text-danger" ng-message when="gtMaxDate">Start date must greater than or equals <span ng-bind="minDate2 | date:app.dateFormat"></span></p>
+            <p class="help-block m-b-none text-danger" ng-message when="ltMinDate">Start date must less than or equals <span ng-bind="maxDate | date:app.dateFormat"></span></p>
         </ng-messages>
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-2 control-label">End date</label>
+    <label class="col-xs-2 control-label">End date <span class="label-required" ng-show="form.endDate.$error.required">*</span></label>
 
     <div class="col-xs-10">
         <p class="input-group">
             <input type="text" class="form-control" placeholder="End date" required ng-model="project.endDate"
                    ng-click="endDate.isOpen = !endDate.isOpen"
-                   datepicker-popup="MM/dd/yyyy" is-open="endDate.isOpen" min-date="minDate" max-date = "maxDate2" init-date = "initEndDate"
-                   datepicker-options="endDate.options"
+                   datepicker-popup="{{app.dateFormat}}" is-open="endDate.isOpen" min-date="minDate" max-date = "maxDate2" init-date = "initEndDate"
+                   datepicker-options="endDate.options" date-range
                    name="endDate"/>
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="endDate.open($event)"><i
@@ -83,7 +85,9 @@
         </p>
         <ng-messages ng-if="form.endDate.$dirty"
                      for="form.endDate.$error">
-            <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project end date</span>
+            <p class="help-block m-b-none text-danger" ng-message when="required">Please provide project end date</p>
+            <p class="help-block m-b-none text-danger" ng-message when="gtMaxDate">End date must greater than or equals <span ng-bind="minDate | date:app.dateFormat"></span></p>
+            <p class="help-block m-b-none text-danger" ng-message when="ltMinDate">End date must less than or equals <span ng-bind="maxDate2 | date:app.dateFormat"></span></p>
         </ng-messages>
     </div>
 </div>

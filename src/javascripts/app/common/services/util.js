@@ -65,15 +65,23 @@ define(function(require) {
         if(addrObj.address1) {
           address += addrObj.address1 + ', ';
         }
+
         if(addrObj.city) {
           address += addrObj.city + ', ';
         }
+
         if(state) {
           address += state.name + ', ';
+        } else {
+          address += addrObj.state + ' ';
         }
+
         if(country) {
           address += country.name + ' ';
+        } else {
+          address += addrObj.country + ' ';
         }
+
         if(addrObj.zip) {
           address += addrObj.zip;
         }
@@ -91,6 +99,8 @@ define(function(require) {
             state = resp;
             cont();
           }, cont);
+      } else {
+        cont();
       }
 
       return deferred.promise;
@@ -275,6 +285,17 @@ define(function(require) {
         "zip": "application/zip"
       };
       return extTypes[fileType] ? extTypes[fileType] : '';
+    };
+
+    services.makeId = function(l) {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for(var i = 0; i < l; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+
+      return text;
     };
 
     return services;
