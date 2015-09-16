@@ -3,9 +3,13 @@
         <div class="no-result text-muted m-t-xs m-b-xs text-center" ng-if="!comments.length">No comments</div>
         <div class="item-list" custom-scroll>
             <div class="item" ng-repeat="comment in comments">
-                <div class="avatar">
+                <!--<div class="avatar">
                     <ng-letter-avatar data="{{comment.commenterContact.firstName}}"></ng-letter-avatar>
-                </div>
+                </div>-->
+                <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
+                    <img path="{{comment.commenterContact.userImagePath}}" file-path alt="..."
+                         class="img-circle">
+                </a>
                 <div class="cm-content text-muted">
                     <span class="cm-name">{{comment.commenterContact.firstName}}&nbsp;{{comment.commenterContact.lastName}}</span>&nbsp;<span>said:</span>
                     <span class="pull-right" am-time-ago="comment.commentedDate"></span>

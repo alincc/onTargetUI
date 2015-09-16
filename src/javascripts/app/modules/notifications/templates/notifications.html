@@ -8,10 +8,11 @@
         <table class="table b-t b-light">
           <thead>
           <tr>
-            <th>Type</th>
+            <!--<th>Type</th>-->
             <th>Status</th>
             <th>Content</th>
             <!--<th>Time</th>-->
+            <th>Date</th>
           </tr>
           </thead>
           <tbody>
@@ -27,10 +28,11 @@
           </tr>
           <tr dir-paginate="notification in notifications | itemsPerPage: 20" pagination-id="notifications-table"
               total-items="totalNotifications" current-page="params.page" ng-class="{'new-notification': notification.status == 'NEW'}">
-            <td ng-bind="notification.notificationType"></td>
+            <!--<td ng-bind="notification.notificationType"></td>-->
             <td ng-bind="notification.status"></td>
             <td ng-bind="notification.text"></td>
             <!--<td am-time-ago="notification.tsInsert * 1000" am-preprocess="unix"></td>-->
+            <td>{{notification.tsInsert | date: app.dateFormat}}</td>
           </tr>
           </tbody>
         </table>

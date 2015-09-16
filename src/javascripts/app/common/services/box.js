@@ -12,8 +12,8 @@ define(function(require) {
       function(constant, $q, $http, storage, utilFactory) {
         var service = {},
           token, refreshToken,
-          clientId = constant.app.externalFiles.box.client_id,
-          clientSecret = constant.app.externalFiles.box.client_secret,
+          clientId = constant.externalFiles.box.client_id,
+          clientSecret = constant.externalFiles.box.client_secret,
           returnUrl = encodeURIComponent('http://' + window.location.host);
 
         function loadAuthData() {

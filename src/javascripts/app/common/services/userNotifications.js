@@ -26,22 +26,14 @@ define(function(require){
       service.getAll = function(param){
         var deferred = $q.defer();
         if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-
           var data = {
             "pageNumber": param.pageNumber,
             "perPageLimit": param.perPageLimit,
             "userId": $rootScope.currentUserInfo.userId
           };
-
-          $http.post(constant.domain + '/notification/getNotifications', data)
-            .then(function(resp){
-              $rootScope.userNotifications = resp.data.notificationList;
-              notifications.getNotificationSuccess();
-              deferred.resolve(resp.notificationList);
-            }, function(err){
-              deferred.reject(err);
-            });
+          return $http.post(constant.domain + '/notification/getNotifications', data);
         }
+        deferred.reject();
         return deferred.promise;
       };
 

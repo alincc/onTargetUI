@@ -3,8 +3,8 @@
  */
 define(function (){
   'use strict';
-  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'task',
-    function ($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, task){
+  var controller = ['$scope', '$rootScope', '$modalInstance', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'task', 'userNotificationsFactory', 'appConstant', 'notifications',
+    function ($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, task, userNotificationsFactory, appConstant, notifications){
 
       $scope.delete = function (){
         taskFactory.deleteTask({
@@ -12,6 +12,13 @@ define(function (){
         }).then(
           function (resp){
             toaster.pop('success', 'Success', resp.data.returnMessage);
+            userNotificationsFactory.getAll({
+              "pageNumber": 1,
+              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            }).then(function (resp){
+              $rootScope.userNotifications = resp.data;
+              notifications.getNotificationSuccess();
+            });
             $modalInstance.close({});
           }
         );
