@@ -18850,6 +18850,18 @@ a.text-black:hover {
 .priority .task-severity-MINOR {
   color: #55d63c;
 }
+.priority .task-severity-LOW {
+  color: #55d63c;
+}
+.priority .task-severity-1 {
+  color: #ff2424;
+}
+.priority .task-severity-2 {
+  color: #ff2424;
+}
+.priority .task-severity-3 {
+  color: #55d63c;
+}
 .project-chooser .dropdown-menu {
   max-width: 300px;
   max-height: 350px;
@@ -18872,6 +18884,31 @@ a.text-black:hover {
   height: 20px;
   top: -5px;
   right: -10px;
+}
+.change-project-image > a {
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+.change-project-image > a .overlay {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+.change-project-image > a .overlay p {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  text-align: center;
+  width: 100%;
+  color: #fff;
+}
+.change-project-image > a:hover .overlay {
+  display: block;
 }
 .sign-in-page .logo {
   margin: 0 auto 50px auto;
@@ -19753,6 +19790,9 @@ a.text-black:hover {
   left: 0;
   margin: 15px;
 }
+.projectlist-page .project-list .panel-body .project-image img {
+  margin: 0 auto;
+}
 .projectlist-page .project-list .panel-body .project-info {
   margin-left: 220px;
 }
@@ -19770,6 +19810,8 @@ a.text-black:hover {
   margin-bottom: 10px;
   color: #777777;
   font-size: 15px;
+}
+.projectlist-page .project-list .panel-body .project-info .project-address p {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -20134,6 +20176,11 @@ a.text-black:hover {
 .activity-create-update-section .create-edit.panel-body {
   padding: 10px;
 }
+@media (min-width: 1200px) and (max-width: 1521px) {
+  .activity-create-update-section .footer-height {
+    height: 65px;
+  }
+}
 .add-project .picture-container {
   width: 120px;
 }
@@ -20328,6 +20375,14 @@ a.text-black:hover {
 .task-create-update-section .panel-right .add-edit-task textarea {
   resize: none;
 }
+@media (min-width: 1200px) and (max-width: 1521px) {
+  .task-list-section .task-section .panel-default .panel-footer {
+    height: 65px;
+  }
+  .task-create-update-section .panel-right .panel-default .panel-footer {
+    height: 65px;
+  }
+}
 .info-container {
   padding: 15px;
 }
@@ -20427,7 +20482,8 @@ a.text-black:hover {
 }
 .task-logistic .nav-container .navbar-default .container-fluid ul li a {
   font-weight: 600;
-  padding: 10px;
+  padding: 10px 5px;
+  font-size: 12px;
 }
 .task-logistic .nav-container .navbar-default .container-fluid ul li a:hover {
   color: #4984b8;
@@ -20447,6 +20503,7 @@ a.text-black:hover {
 }
 .task-comment .item-list .item .avatar {
   width: 50px;
+  height: 50px;
   float: left;
 }
 .task-comment .item-list .item .avatar img {
@@ -20554,22 +20611,62 @@ a.text-black:hover {
 .budget-task table .table-head {
   text-align: center;
   background-color: #ECECEC;
-  border-left: 2px solid white;
-  border-right: 2px solid white;
+  border-left: 1px solid white;
+  border-right: 0;
 }
 .budget-task table th {
   font-weight: normal;
 }
-.budget-task table .budget-cost {
+.budget-task table td {
+  width: 33.3333%;
+}
+.budget-task table td.budget-cost {
   text-align: center;
   border-left: 1px solid #eaeff0;
+  padding: 0 !important;
 }
-.budget-task table .budget-cost input {
+.budget-task table td.budget-cost:hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+.budget-task table td.budget-cost .budget-editor {
+  padding: 8px 15px;
   width: 100%;
+  min-height: 42px;
+}
+.budget-task table td.budget-cost .budget-editor input {
+  width: 100%;
+  text-align: center;
+}
+.budget-task table td.budget-cost .budget-editor.disabled {
+  background: #E4E4E4;
+}
+.budget-task table td.budget-cost .budget-editor .budget-text {
+  position: relative;
+  top: 4px;
 }
 .budget-task table .interval {
   width: 150px;
+  vertical-align: middle;
 }
 .task-attachments .item-list {
   max-height: 487px;
+}
+.task-attachments .item-list table {
+  font-size: 13px;
+}
+.task-attachments .item-list table td {
+  vertical-align: middle;
+  padding: 8px 5px;
+}
+.task-attachments .item-list table th {
+  font-weight: 600;
+}
+.task-attachments .item-list table .file-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 150px;
+}
+.task-attachments .item-list table .upload-by {
+  max-width: 100px;
 }
