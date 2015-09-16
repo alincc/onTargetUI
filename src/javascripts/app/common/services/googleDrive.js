@@ -1,4 +1,4 @@
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular'),
     angularLocalStorage = require('angularLocalStorage'),
@@ -10,25 +10,25 @@ define(function(require) {
 
   module.factory('googleDriveFactory',
     ['appConstant', '$q', 'storage', '$http', 'utilFactory',
-      function(constant, $q, storage, $http, utilFactory) {
+      function(constant, $q, storage, $http, utilFactory){
         var service = {},
           isAuthorized = false,
           isLogged = false,
           nextPageToken = null,
           token = null;
 
-        function loadAuth() {
+        function loadAuth(){
           var authData = storage.get('GoogleDriveAuthentication');
           isAuthorized = authData ? authData.isAuthorized : false;
           token = authData ? authData.token : null;
         }
 
-        service.isAuth = function() {
+        service.isAuth = function(){
           loadAuth();
           return isAuthorized;
         };
 
-        service.validateToken = function() {
+        service.validateToken = function(){
           var deferred = $q.defer();
           loadAuth();
 
@@ -38,14 +38,14 @@ define(function(require) {
                 access_token: token
               }
             })
-              .success(function(resp) {
+              .success(function(resp){
                 if(angular.isDefined(resp.expires_in)) {
                   deferred.resolve();
                 } else {
                   deferred.reject();
                 }
               })
-              .error(function(err) {
+              .error(function(err){
                 console.log(err);
                 deferred.reject();
               });
@@ -56,10 +56,10 @@ define(function(require) {
           return deferred.promise;
         };
 
-        service.authorize = function() {
+        service.authorize = function(){
           var deferred = $q.defer();
 
-          function handleAuthResult(authResult) {
+          function handleAuthResult(authResult){
             console.log(authResult);
             if(authResult && !authResult.error) {
               // Hide auth UI, then load client library.
@@ -78,8 +78,8 @@ define(function(require) {
           if(!isLogged) {
             gapi.auth.authorize(
               {
-                client_id: '119225888070-pkccaemomn8ksb6i2nvdj8q124koomdm.apps.googleusercontent.com',
-                scope: ['https://www.googleapis.com/auth/drive'],
+                client_id: constant.app.externalFiles.googleDrive.client_id,
+                scope: constant.app.externalFiles.googleDrive.scope,
                 immediate: isAuthorized
               },
               handleAuthResult);
@@ -91,10 +91,10 @@ define(function(require) {
           return deferred.promise;
         };
 
-        service.loadFiles = function(dir, kw) {
+        service.loadFiles = function(dir, kw){
           var deferred = $q.defer();
 
-          function listFiles() {
+          function listFiles(){
             var payload = {
               'maxResults': 10
             };
@@ -107,22 +107,35 @@ define(function(require) {
               payload.q = "title contains '" + kw + "'";
             }
 
-            var request = gapi.client.drive.files.list(payload);
+            payload.access_token = token;
 
-            request.execute(function(resp) {
-              nextPageToken = resp.nextPageToken;
-              deferred.resolve(resp.items);
-            });
+            $http.get(constant.nodeServer + '/node/files/googledrive', {
+              params: payload
+            })
+              .success(function(resp){
+                nextPageToken = resp.nextPageToken;
+                deferred.resolve(resp.items);
+              })
+              .error(function(err){
+                deferred.reject(err);
+              });
+
+            //var request = gapi.client.drive.files.list(payload);
+            //
+            //request.execute(function(resp) {
+            //  nextPageToken = resp.nextPageToken;
+            //  deferred.resolve(resp.items);
+            //});
           }
 
           service.authorize()
-            .then(function() {
+            .then(function(){
               gapi.client.load('drive', 'v2', listFiles);
             });
           return deferred.promise;
         };
 
-        service.downloadFile = function(url, fileName) {
+        service.downloadFile = function(url, fileName){
           var downloadUrl = url;
           if(url.indexOf('?') > -1) {
             downloadUrl = downloadUrl + '&access_token=' + token;
@@ -138,8 +151,7 @@ define(function(require) {
           });
         };
 
-        service.getFileDetails = function(fileId) {
-          //https://www.googleapis.com/drive/v2/files/0B9kR5Xehes1jZlRWa0I1OEZ6R00?access_token=ya29.3gHY4HyQgcEZAZjF9ffxkcvPfvNHwixaxO1wz_aNwK7zV7MFMHS_sIFpUecJSf-CsLoGwQ
+        service.getFileDetails = function(fileId){
           loadAuth();
           return $http.get('https://www.googleapis.com/drive/v2/files/' + fileId, {
             params: {

@@ -30,7 +30,8 @@ define(function(require) {
                         url: '/editprofile',
                         templateUrl: "editprofile/templates/editprofile.html",
                         controller: 'EditProfileController',
-                        authorization: true
+                        authorization: true,
+                        fullWidth: true
                     });
             }
         ]

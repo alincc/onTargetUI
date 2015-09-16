@@ -3,7 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', '$filter', function($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications, $filter) {
+  var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', '$filter', 'userNotificationsFactory', 'appConstant',
+    function($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications, $filter, userNotificationsFactory, appConstant) {
 
     $scope.editTask = true;
     $scope.currenttask = $rootScope.currentTask;
@@ -77,6 +78,12 @@ define(function() {
               startDate: $scope.task.startDate
             }
           });
+
+          userNotificationsFactory.getAll({
+            "pageNumber": 1,
+            "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+          });
+
         }, function(err) {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();

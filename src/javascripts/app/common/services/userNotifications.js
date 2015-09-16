@@ -45,8 +45,8 @@ define(function(require){
         return deferred.promise;
       };
 
-      service.maskAsRead = function (projectId){
-        return $http.post(constant.domain + '/notification/viewall', {projectId: projectId});
+      service.maskAsRead = function (){
+        return $http.post(constant.domain + '/notification/markAllAsSeen', {});
       };
 
       //service.startGetAll = function(param, interval) {

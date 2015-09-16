@@ -19386,7 +19386,7 @@ a.text-black:hover {
   text-align: center;
   background-color: #ececec;
   border-right: solid 1px #d5d5d5;
-  width: 60px;
+  width: 50px;
   height: 60px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -19404,13 +19404,13 @@ a.text-black:hover {
   border-bottom-right-radius: 5px;
 }
 .dashboard-page .info-left-icon .text .number {
-  font-size: 30px;
+  font-size: 26px;
   color: #7a7b7a;
   font-weight: 600;
   padding-right: 10px;
 }
 .dashboard-page .info-left-icon .text .desc {
-  font-size: 19px;
+  font-size: 17px;
   color: #adadad;
 }
 .dashboard-page .weather-container {
@@ -19424,7 +19424,7 @@ a.text-black:hover {
   text-align: center;
 }
 .dashboard-page .weather-container .icon i {
-  font-size: 80px;
+  font-size: 60px;
   color: #4279bd;
 }
 .dashboard-page .weather-container .info {
@@ -19455,9 +19455,6 @@ a.text-black:hover {
 .dashboard-page .weather-container .info p.windspeed {
   color: #a5a5a5;
   line-height: 18px;
-}
-.dashboard-page .task-container {
-  padding-left: 0px;
 }
 .dashboard-page .task-container .panel-default {
   background-color: #FAFAFA;
@@ -19669,7 +19666,6 @@ a.text-black:hover {
   height: 100%;
 }
 .dashboard-page .time-line {
-  padding-right: 0px;
   padding-bottom: 18px;
 }
 .dashboard-page .time-line .panel-default {
@@ -19722,6 +19718,7 @@ a.text-black:hover {
   margin-right: 0px;
   padding-left: 0;
   padding-right: 20px;
+  float: none;
 }
 .dashboard-page .timeline-container .tl-left .tl-wrap:before {
   margin-right: -29px;

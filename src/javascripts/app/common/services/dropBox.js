@@ -11,7 +11,7 @@ define(function(require) {
       function(constant, $q, $http, storage) {
         var service = {},
           token,
-          clientId = 'qmrfotonkpkkwh8',
+          clientId = constant.app.externalFiles.dropBox.client_id,
           returnUrl = encodeURIComponent('http://'+window.location.host);
 
         function loadAuthData(){
@@ -60,12 +60,11 @@ define(function(require) {
           var deferred = $q.defer();
           service.authorize()
             .then(function() {
-              $http.get('https://api.dropboxapi.com/1/metadata/auto'+path, {
+              $http.get(constant.nodeServer + '/node/files/dropbox', {
                 params: {
-                  file_limit: take
-                },
-                headers: {
-                  "Authorization": "Bearer " + token
+                  file_limit: take,
+                  path: encodeURIComponent(path),
+                  access_token: token
                 }
               })
                 .success(function(resp) {

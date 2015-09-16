@@ -8,7 +8,8 @@ define(function(require) {
     task = require('./task'),
     filePath = require('./filePath'),
     fileName = require('./fileName'),
-    number = require('./number');
+    number = require('./number'),
+    fileThumbnail = require('./fileThumbnail');
 
   var module = angular.module('common.filters',
     [
@@ -19,7 +20,8 @@ define(function(require) {
       'common.filters.task',
       'common.filters.filePath',
       'common.filters.fileName',
-      'common.filters.number'
+      'common.filters.number',
+      'common.filters.fileThumbnail'
     ]);
   return module;
 });

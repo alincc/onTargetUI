@@ -7,6 +7,8 @@ define(function(require) {
     return {
       restrict: "A",
       link: function(scope, elem, attrs) {
+
+
         function showNoImage() {
           if(attrs.filePath === 'project') {
             elem.attr("src", 'img/no-image.png');
@@ -16,20 +18,25 @@ define(function(require) {
         }
 
         scope.$watch(function() {
-          return attrs.src;
+          return attrs.path;
         }, function(n, o) {
           if(!angular.isDefined(n)) {
             showNoImage();
           } else {
             $timeout(function() {
-              var avatarUrl = constant.nodeServer + '/' + attrs.src;
-              if(/^\//.test(attrs.src)) {
-                avatarUrl = constant.nodeServer + attrs.src;
+              var avatarUrl = constant.resourceUrl + '/' + attrs.path;
+              if(/^\//.test(attrs.path)) {
+                avatarUrl = constant.resourceUrl + attrs.path;
               }
               var img = $document[0].createElement('img');
               img.onerror = function() {
                 showNoImage();
               };
+              //img.onload = function() {
+              //  elem.removeClass('no-avatar non-pixelate');
+              //  var $this = this;
+              //  elem.attr("src", $this.src);
+              //};
               img.src = avatarUrl;
               elem.attr('src', avatarUrl);
             });

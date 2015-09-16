@@ -25,7 +25,7 @@ define(function(require) {
             $rootScope.currentUserInfo.contact.email = $scope.editUserData.email;
             $rootScope.currentUserInfo.contact.userImagePath = $scope.editUserData.userImagePath;
             $rootScope.currentUserInfo.contact.title = $scope.editUserData.title;
-            $rootScope.currentUserInfo.contact.userImagePath = $scope.editUserData.phoneNumber;
+            $rootScope.currentUserInfo.contact.phoneNumber = $scope.editUserData.phoneNumber;
 
             // Save user info to local storage
             userContext.fillInfo(angular.copy($rootScope.currentUserInfo), true);

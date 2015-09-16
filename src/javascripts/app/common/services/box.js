@@ -12,8 +12,8 @@ define(function(require) {
       function(constant, $q, $http, storage, utilFactory) {
         var service = {},
           token, refreshToken,
-          clientId = 't5sfo0x515refc4tx9e13xy7p9n48v7q',
-          clientSecret = 'mnIGltu4VmpzAHSYNaPQCNt2ZpEMmG5Z',
+          clientId = constant.app.externalFiles.box.client_id,
+          clientSecret = constant.app.externalFiles.box.client_secret,
           returnUrl = encodeURIComponent('http://' + window.location.host);
 
         function loadAuthData() {
@@ -107,14 +107,25 @@ define(function(require) {
           var deferred = $q.defer();
           service.authorize()
             .then(function() {
-              $http.get('https://api.box.com/2.0/folders/' + folderId + '/items', {
+              //$http.get('https://api.box.com/2.0/folders/' + folderId + '/items', {
+              //  params: {
+              //    limit: take,
+              //    offset: from
+              //  },
+              //  headers: {
+              //    "Authorization": "Bearer " + token
+              //  }
+              //})
+              $http.get(constant.nodeServer + '/node/files/box', {
                 params: {
                   limit: take,
-                  offset: from
-                },
-                headers: {
-                  "Authorization": "Bearer " + token
-                }
+                  offset: from,
+                  folderId: folderId,
+                  access_token: token
+                }//,
+                //headers: {
+                //  "Authorization": "Bearer " + token
+                //}
               })
                 .then(function(resp) {
                   console.log(resp);

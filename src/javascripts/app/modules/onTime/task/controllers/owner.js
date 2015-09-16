@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'userNotificationsFactory', 'appConstant',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, userNotificationsFactory, constant) {
       $scope.task = $rootScope.currentTask;
       $scope.onAddOwner = false;
       $scope.contacts = [];
@@ -61,6 +61,11 @@ define(function() {
         }).then(function(resp) {
           $scope.model.selectedAssignee = null;
           $scope.updateTask();
+
+          userNotificationsFactory.getAll({
+            "pageNumber": 1,
+            "perPageLimit": constant.app.settings.userNotificationsPageSize
+          });
         });
       };
 
@@ -80,6 +85,11 @@ define(function() {
         }).then(function(resp) {
           $scope.model.selectedAssignee = null;
           $scope.updateTask();
+          //load notification
+          userNotificationsFactory.getAll({
+            "pageNumber": 1,
+            "perPageLimit": constant.app.settings.userNotificationsPageSize
+          });
         });
       };
 

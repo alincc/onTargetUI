@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'taskFactory', 'toaster', 'projectContext', 'notifications', '$filter',
-    function($scope, $rootScope, userContext, projectFactory, taskFactory, toaster, projectContext, notifications, $filter) {
+  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'taskFactory', 'toaster', 'projectContext', 'notifications', '$filter', 'userNotificationsFactory', 'appConstant',
+    function($scope, $rootScope, userContext, projectFactory, taskFactory, toaster, projectContext, notifications, $filter, userNotificationsFactory, appConstant) {
     $scope.task = {
       projectTaskId: null,
       title: "",
@@ -80,6 +80,11 @@ define(function() {
           $scope.task_form.$setPristine();
           //$modalInstance.close({});
           notifications.taskCreated();
+          //load notification
+          userNotificationsFactory.getAll({
+            "pageNumber": 1,
+            "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+          });
         }, function(err) {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();

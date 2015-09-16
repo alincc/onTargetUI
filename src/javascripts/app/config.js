@@ -37,7 +37,7 @@ define(function(require){
       }]);
 
       // Error handler
-      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', 'pushFactory', '$location', '$rootScope', 'userContext', 'projectContext', function($q, toaster, constant, pushFactory, $location, userContext, projectContext){
+      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', 'pushFactory', '$location', '$rootScope', 'userContext', 'projectContext', function($q, toaster, constant, pushFactory, $location, $rootScope, userContext, projectContext){
         return {
           response: function(response){
             var defer = $q.defer();
@@ -105,33 +105,35 @@ define(function(require){
           responseError: function(response){
             console.log(response);
 
-            if(response.status === 400) {
-              if(angular.isString(response.data)) {
-                toaster.pop('error', "Error", response.data);
+            if(response.config.url.indexOf(constant.domain) > -1) {
+              if(response.status === 400) {
+                if(angular.isString(response.data)) {
+                  toaster.pop('error', "Error", response.data);
+                }
+                else if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
+                  var errorMessageHtml = '';
+                  _.each(response.data, function(el){
+                    if(el.path !== '0') {
+                      errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
+                    } else {
+                      errorMessageHtml += '- ' + el.message + ' </br>';
+                    }
+                  });
+                  toaster.pop({
+                    type: 'error',
+                    title: 'Error',
+                    body: errorMessageHtml,
+                    bodyOutputType: 'trustedHtml'
+                  });
+                }
               }
-              else if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
-                var errorMessageHtml = '';
-                _.each(response.data, function(el){
-                  if(el.path !== '0') {
-                    errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
-                  } else {
-                    errorMessageHtml += '- ' + el.message + ' </br>';
-                  }
-                });
-                toaster.pop({
-                  type: 'error',
-                  title: 'Error',
-                  body: errorMessageHtml,
-                  bodyOutputType: 'trustedHtml'
-                });
+              else if(response.status === 401) {
+                pushFactory.unbind('onTargetAll');
+                pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
+                userContext.clearInfo();
+                projectContext.clearInfo();
+                $location.path('/signin');
               }
-            }
-            else if(response.status === 401) {
-              pushFactory.unbind('onTargetAll');
-              pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
-              userContext.clearInfo();
-              projectContext.clearInfo();
-              $location.path('/signin');
             }
 
             //if(response.status === 401) {
@@ -237,7 +239,8 @@ define(function(require){
   module.constant('appConstant', {
     domain: 'http://localhost:9000/ontargetrs/services',
     baseUrl: 'http://localhost:9000',
-    nodeServer: 'http://localhost:9000',
+    nodeServer: 'http://localhost:9001',
+    resourceUrl: 'http://localhost:9001',
     app: {
       name: "OnTarget",
       id: "OnTarget",
@@ -289,6 +292,22 @@ define(function(require){
     push: {
       API_KEY: 'c2f5de73a4caa3763726',
       channel: 'onTarget'
+    },
+    externalFiles: {
+      // https://developers.google.com/drive/web/quickstart/js - Follow this instruction to get client_id, DO NOT change the scope if you know what are you doing
+      googleDrive: {
+        client_id: '119225888070-pkccaemomn8ksb6i2nvdj8q124koomdm.apps.googleusercontent.com',
+        scope: ['https://www.googleapis.com/auth/drive']
+      },
+      // https://auth0.com/docs/connections/social/box - Follow this instruction to get client_id and client_secret.
+      box: {
+        client_id: 't5sfo0x515refc4tx9e13xy7p9n48v7q',
+        client_secret: 'mnIGltu4VmpzAHSYNaPQCNt2ZpEMmG5Z'
+      },
+      // https://www.dropbox.com/developers/support - check this out to get client_id
+      dropBox: {
+        client_id: 'qmrfotonkpkkwh8'
+      }
     }
   });
 

@@ -52,7 +52,7 @@
                                 </td>
                             </tr>
                             <tr ng-repeat="doc in uploadedDocumentList track by $index">
-                                <td class="file-icon"><img ng-src="{{doc.name | fileicon}}"/></td>
+                                <td class="file-icon"><a href="javascript:void(0)" ng-click="preview(doc)"><img ng-src="{{doc.name | fileThumbnail}}"/></a></td>
                                 <td><a href="javascript:void(0)" ng-click="preview(doc)" ng-bind="doc.name | fileName"></a></td>
                                 <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
                                 <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
@@ -73,7 +73,7 @@
                             <div class="col-md-3" data-ng-repeat="doc in docRow track by $index">
                                 <article>
                                     <div>
-                                        <img ng-src="{{doc.name | fileicon}}"/>
+                                        <a href="javascript:void(0)" ng-click="preview(doc)"><img ng-src="{{doc.name | fileThumbnail}}" height="64px"/></a>
                                     </div>
                                     <div style="text-align:left">
                                         <h5>
@@ -97,7 +97,7 @@
         </div>
         <div class="wrapper-md p-r-none" ng-if="isPreview">
             <div class="row">
-                <div class="col-xs-12 col-md-9 p-r-0 preview-section">
+                <div class="col-xs-12 col-md-8 p-r-0 preview-section">
                     <div class="panel panel-default">
                         <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
                         <div class="panel-body">
@@ -112,7 +112,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-3 p-l-0 comment-section">
+                <div class="col-xs-12 col-md-4 p-l-0 comment-section">
                     <div class="panel panel-default">
                         <div class="panel-heading">Comments</div>
                         <div class="panel-body" custom-scroll>
@@ -125,7 +125,7 @@
                             <ul class="list-group no-bg no-borders pull-in">
                                 <li class="list-group-item" ng-repeat="com in comments track by $index">
                                     <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
-                                        <img ng-src="{{com.commenterContact.userImagePath}}" file-path alt="..."
+                                        <img path="{{com.commenterContact.userImagePath}}" file-path alt="..."
                                              class="img-circle">
                                     </a>
 
@@ -142,7 +142,7 @@
                             <div class="add-comment" ng-show="!isLoadingComment">
                                 <form name="add_comment_frm" no-validate ng-submit="addComment(addCommentModel, add_comment_frm)">
                                     <div class="textarea">
-                                        <textarea ng-model="addCommentModel.comment" auto-grow="" placeholder="Add a comment or reply here" rows="1" required></textarea>
+                                        <textarea ng-model="addCommentModel.comment" auto-grow="" placeholder="Add a comment or reply here" rows="1" required novalidate></textarea>
                                     </div>
                                     <div class="button">
                                         <button class="btn btn-primary" type="submit" ng-disabled="add_comment_frm.$invalid || add_comment_frm.$submitted">Send <i class="fa fa-paper-plan-o"></i></button>
