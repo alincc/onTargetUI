@@ -78,8 +78,8 @@ define(function(require){
           if(!isLogged) {
             gapi.auth.authorize(
               {
-                client_id: constant.app.externalFiles.googleDrive.client_id,
-                scope: constant.app.externalFiles.googleDrive.scope,
+                client_id: constant.externalFiles.googleDrive.client_id,
+                scope: constant.externalFiles.googleDrive.scope,
                 immediate: isAuthorized
               },
               handleAuthResult);

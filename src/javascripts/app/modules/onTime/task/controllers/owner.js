@@ -4,7 +4,7 @@
 define(function() {
   'use strict';
   var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'userNotificationsFactory', 'appConstant',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, userNotificationsFactory, constant) {
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, userNotificationsFactory, appConstant) {
       $scope.task = $rootScope.currentTask;
       $scope.onAddOwner = false;
       $scope.contacts = [];
@@ -45,6 +45,16 @@ define(function() {
         });
       };
 
+      var getAllNotifications = function (){
+        userNotificationsFactory.getAll({
+          "pageNumber": 1,
+          "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+        }).then(function (resp){
+          $rootScope.userNotifications = resp.data;
+          notifications.getNotificationSuccess();
+        });
+      };
+
       $scope.removeUserFromTask = function(assignee) {
         $scope.onAddOwner = false;
         _.remove($scope.model.assignees, function(n) {
@@ -62,10 +72,7 @@ define(function() {
           $scope.model.selectedAssignee = null;
           $scope.updateTask();
 
-          userNotificationsFactory.getAll({
-            "pageNumber": 1,
-            "perPageLimit": constant.app.settings.userNotificationsPageSize
-          });
+          getAllNotifications();
         });
       };
 
@@ -86,10 +93,7 @@ define(function() {
           $scope.model.selectedAssignee = null;
           $scope.updateTask();
           //load notification
-          userNotificationsFactory.getAll({
-            "pageNumber": 1,
-            "perPageLimit": constant.app.settings.userNotificationsPageSize
-          });
+          getAllNotifications();
         });
       };
 

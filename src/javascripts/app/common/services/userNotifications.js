@@ -26,12 +26,13 @@ define(function(require){
       service.getAll = function(param){
         var deferred = $q.defer();
         if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-
           var data = {
             "pageNumber": param.pageNumber,
             "perPageLimit": param.perPageLimit,
             "userId": $rootScope.currentUserInfo.userId
           };
+
+          //return $http.post(constant.domain + '/notification/getNotifications', data);
 
           $http.post(constant.domain + '/notification/getNotificationsByUserByProject', data)
             .then(function(resp){
@@ -42,6 +43,7 @@ define(function(require){
               deferred.reject(err);
             });
         }
+        deferred.reject();
         return deferred.promise;
       };
 

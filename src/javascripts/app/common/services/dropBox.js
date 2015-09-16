@@ -11,7 +11,7 @@ define(function(require) {
       function(constant, $q, $http, storage) {
         var service = {},
           token,
-          clientId = constant.app.externalFiles.dropBox.client_id,
+          clientId = constant.externalFiles.dropBox.client_id,
           returnUrl = encodeURIComponent('http://'+window.location.host);
 
         function loadAuthData(){

@@ -28,6 +28,7 @@ define(function(require) {
         taskFactory.createNewComment($scope.model).then(
           function(resp) {
             var commentObject = angular.copy($scope.model);
+            commentObject.commenterContact = resp.data.user.contact;
             $scope.comments.push(commentObject);
             $scope.model.comment = '';
             $scope.model.commentedDate = '';
@@ -37,6 +38,9 @@ define(function(require) {
             userNotificationsFactory.getAll({
               "pageNumber": 1,
               "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            }).then(function (resp){
+              $rootScope.userNotifications = resp.data;
+              notifications.getNotificationSuccess();
             });
           }, function(err) {
             console.log(err);

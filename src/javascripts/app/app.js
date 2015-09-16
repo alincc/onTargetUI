@@ -62,8 +62,8 @@ define(function(require) {
   ]);
 
   app
-    .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant', 'pushFactory',
-      function($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant, pushFactory) {
+    .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant', 'pushFactory', 'notifications', 'appConstant',
+      function($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant, pushFactory, notifications, appConstant) {
         // Load Authentication data from localstorage
         userContext.loadFromLocal();
 
@@ -76,7 +76,10 @@ define(function(require) {
         // Load notifications
         userNotificationsFactory.getAll({
           "pageNumber": 1,
-          "perPageLimit": constant.app.settings.userNotificationsPageSize
+          "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+        }).then(function (resp){
+          $rootScope.userNotifications = resp.data;
+          notifications.getNotificationSuccess();
         });
       }
     ]);

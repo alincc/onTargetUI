@@ -6,7 +6,7 @@
         ng-show="!sentSuccess">
     <div class="modal-body">
       <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">First Name <span class="label-required" ng-show="form.firstName.$error.required">*</span></label>
+        <label class="col-xs-3 col-xs-offset-1 control-label">First Name <span class="label-required" ng-if="form.firstName.$error.required">*</span></label>
 
         <div class="col-xs-7">
           <input name="firstName" type="text" class="form-control" placeholder="First Name"
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">Last Name <span class="label-required" ng-show="form.lastName.$error.required">*</span></label>
+        <label class="col-xs-3 col-xs-offset-1 control-label">Last Name <span class="label-required" ng-if="form.lastName.$error.required">*</span></label>
 
         <div class="col-xs-7">
           <input name="lastName" type="text" class="form-control" placeholder="Last Name"
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">Email <span class="label-required" ng-show="form.email.$error.required">*</span></label>
+        <label class="col-xs-3 col-xs-offset-1 control-label">Email <span class="label-required" ng-if="form.email.$error.required">*</span></label>
 
         <div class="col-xs-7">
           <input name="email" type="email" class="form-control" placeholder="Email"
@@ -131,10 +131,10 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-3 col-xs-offset-1 control-label">Zip <span class="label-required" ng-show="form.newZip.$error.required">*</span></label>
+          <label class="col-xs-3 col-xs-offset-1 control-label">Zip code <span class="label-required" ng-show="form.newZip.$error.required">*</span></label>
 
           <div class="col-xs-7">
-            <input name="newZip" type="text" class="form-control" placeholder="Zip" ng-model="newCollaborator.zip"
+            <input name="newZip" type="text" class="form-control" placeholder="Zip code" ng-model="newCollaborator.zip"
                    required>
             <span class="text-danger help-block m-b-none" ng-show="form.newZip.$error.required && form.newZip.$dirty">Zip is missing</span>
           </div>

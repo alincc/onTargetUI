@@ -5,8 +5,8 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', 'userNotificationsFactory', 'appConstant',
-    function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory, userNotificationsFactory, constant) {
+  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', 'userNotificationsFactory', 'notifications',
+    function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory, userNotificationsFactory, notifications) {
       function arrangeData(data, itemPerRow) {
         var list = [];
         var row = [];
@@ -162,12 +162,13 @@ define(function(require) {
 
             // get notifications
             if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-              var requestPayload = {
+              userNotificationsFactory.getAll({
                 "pageNumber": 1,
-                "perPageLimit": constant.app.settings.userNotificationsPageSize
-              };
-
-              userNotificationsFactory.getAll(requestPayload);
+                "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+              }).then(function (resp){
+                $rootScope.userNotifications = resp.data;
+                notifications.getNotificationSuccess();
+              });
 
               // get user details and permissions
               accountFactory.getUserProfileDetails($rootScope.currentUserInfo.userId)
