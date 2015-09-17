@@ -23,12 +23,19 @@ define(function(require) {
             notifications.currentProjectChange({project: pj});
           }
         };
+
         $scope.status = {
           isopen: false
         };
+
         $scope.toggleDropdown = function() {
           $scope.status.isopen = !$scope.status.isopen;
         };
+
+        notifications.onCurrentProjectChange($scope, function(agrs) {
+          $scope.currentProject = $rootScope.currentProjectInfo;
+          $scope.projects = $rootScope.allProjects;
+        });
       }],
       link: function(scope, elem, attrs) {
         elem.parent().children('[toggle-project-chooser]').on('click', function(e) {

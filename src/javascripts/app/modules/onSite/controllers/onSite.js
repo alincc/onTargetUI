@@ -1,21 +1,22 @@
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window',
-    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window) {
+  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications',
+    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications){
       $scope.app = appConstant.app;
       $scope.isLoading = false;
       $scope.viewMode = "list";
       $scope.uploadedDocumentList = [];
       $scope.uploadedDocumentArrangedList = [];
       $scope.isPreview = angular.isDefined($stateParams.docId);
+      $scope.currentProject = $rootScope.currentProjectInfo;
 
       $scope.selectedDoc = null;
 
-      function arrangeData(data, itemPerRow) {
+      function arrangeData(data, itemPerRow){
         var list = [];
         var row = [];
-        _.forEach(data, function(dt, i) {
+        _.forEach(data, function(dt, i){
           if(i > 0 && i % itemPerRow === 0) {
             list.push(row);
             row = [];
@@ -29,10 +30,10 @@ define(function(require) {
       }
 
       //list all document
-      function getUploadedDocumentList() {
+      function getUploadedDocumentList(){
         $scope.isLoading = true;
         documentFactory.getUploadedDocumentList($rootScope.currentProjectInfo.projectId).
-          then(function(content) {
+          then(function(content){
             $scope.isLoading = false;
             $scope.uploadedDocumentList = content.data.uploadedDocumentList;
             $scope.mapData();
@@ -45,13 +46,13 @@ define(function(require) {
                 $scope.preview(found);
               }
             }
-          }, function(error) {
+          }, function(error){
             $scope.isLoading = false;
           });
       }
 
-      $scope.mapData = function() {
-        $scope.uploadedDocumentList = _.map($scope.uploadedDocumentList, function(el) {
+      $scope.mapData = function(){
+        $scope.uploadedDocumentList = _.map($scope.uploadedDocumentList, function(el){
           var newEl = el;
           var fileExtension = utilFactory.getFileExtension(el.name);
           var filePath = $filter('filePath')(el.name);
@@ -68,7 +69,7 @@ define(function(require) {
       getUploadedDocumentList();
 
       //preview document
-      $scope.preview = function(doc) {
+      $scope.preview = function(doc){
         console.log(doc);
         $scope.selectedDoc = doc;
         $scope.comments = [];
@@ -83,7 +84,7 @@ define(function(require) {
         storage.set('documentViewMode', 'grid');
       }
       $scope.viewMode = viewMode || 'grid';
-      $scope.changeMode = function(mode) {
+      $scope.changeMode = function(mode){
         $scope.viewMode = mode;
         storage.set('documentViewMode', mode);
         $scope.uploadedDocumentArrangedList = arrangeData($scope.uploadedDocumentList, 4);
@@ -91,33 +92,33 @@ define(function(require) {
 
       // Upload doc
       var uploadModalInstance;
-      $scope.upload = function() {
+      $scope.upload = function(){
         // get document categories
         documentFactory.getCategories()
-          .success(function(resp) {
+          .success(function(resp){
             // open modal
             uploadModalInstance = $modal.open({
               templateUrl: 'onSite/templates/upload.html',
               controller: 'UploadDocumentController',
               size: 'lg',
               resolve: {
-                categories: function() {
+                categories: function(){
                   return resp.categories; // resolve categories to modal
                 }
               }
             });
 
             // modal callbacks
-            uploadModalInstance.result.then(function(data) {
+            uploadModalInstance.result.then(function(data){
               getUploadedDocumentList();
-            }, function() {
+            }, function(){
 
             });
           });
       };
 
       // Preview
-      $scope.backToList = function() {
+      $scope.backToList = function(){
         $location.search('docId', null);
         $scope.isPreview = false;
         $scope.selectedDoc = null;
@@ -129,24 +130,24 @@ define(function(require) {
       $scope.addCommentModel = {
         comment: ''
       };
-      $scope.loadComment = function() {
+      $scope.loadComment = function(){
         $scope.isLoadingComment = true;
         onSiteFactory.getFileComment($scope.selectedDoc.fileId)
-          .success(function(resp) {
+          .success(function(resp){
             $scope.comments = resp.comments;
             // update scroll
             $scope.$broadcast('content.reload');
             $scope.isLoadingComment = false;
           })
-          .error(function(err) {
+          .error(function(err){
             console.log(err);
             $scope.isLoadingComment = false;
           });
       };
-      $scope.addComment = function(model, form) {
+      $scope.addComment = function(model, form){
         if($scope.selectedDoc) {
           onSiteFactory.addComment($scope.selectedDoc.fileId, model.comment)
-            .success(function(resp) {
+            .success(function(resp){
               $scope.comments.push({
                 "comment": model.comment,
                 "commentedBy": $rootScope.currentUserInfo.userId,
@@ -158,24 +159,33 @@ define(function(require) {
               form.$setPristine();
               $scope.$broadcast('autosize:update');
             })
-            .error(function(err) {
+            .error(function(err){
               console.log(err);
             });
         }
       };
 
       // Download
-      $scope.download = function(doc) {
+      $scope.download = function(doc){
         $window.open(doc.filePath);
       };
 
-      $scope.deleteDocument = function (doc){
+      $scope.deleteDocument = function(doc){
         onSiteFactory.deleteDocument(doc.fileId).success(
-          function (resp){
+          function(resp){
             getUploadedDocumentList();
           }
         );
       };
+
+      // Events
+      notifications.onCurrentProjectChange($scope, function(agrs){
+        $scope.isPreview = false;
+        $scope.selectedDoc = null;
+        $scope.comments = [];
+        $scope.uploadedDocumentList = $scope.uploadedDocumentArrangedList = [];
+        getUploadedDocumentList();
+      });
     }];
   return controller;
 });

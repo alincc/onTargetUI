@@ -12,6 +12,7 @@ define(function(require){
       var service = {}, intervalFunction;
 
       service.getByPage = function(page, size){
+        var deferred = $q.defer();
         if($rootScope.currentProjectInfo) {
           var requestPayload = {
             "pageNumber": page,
@@ -21,6 +22,8 @@ define(function(require){
 
           return $http.post(constant.domain + '/notification/getNotificationsByUserByProject', requestPayload);
         }
+        deferred.reject();
+        return deferred.promise;
       };
 
       service.getAll = function(param){
@@ -34,14 +37,7 @@ define(function(require){
 
           //return $http.post(constant.domain + '/notification/getNotifications', data);
 
-          $http.post(constant.domain + '/notification/getNotificationsByUserByProject', data)
-            .then(function(resp){
-              $rootScope.userNotifications = resp.data.notificationList;
-              notifications.getNotificationSuccess();
-              deferred.resolve(resp.notificationList);
-            }, function(err){
-              deferred.reject(err);
-            });
+          return $http.post(constant.domain + '/notification/getNotificationsByUserByProject', data);
         }
         deferred.reject();
         return deferred.promise;

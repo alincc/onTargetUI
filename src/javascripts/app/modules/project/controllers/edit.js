@@ -174,17 +174,18 @@ define(function(){
 
       function upload(file){
         $scope.picture.isUploadPicture = true;
-        fileFactory.upload(file, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName).progress(function(evt){
-          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          $scope.picture.percentage = progressPercentage;
-        }).success(function(data, status, headers, config){
-          $timeout(function(){
-            $scope.projectModel.projectImagePath = data.url;
-            $scope.picture.isUploadPicture = false;
-            $scope.picture.isUploadedPicture = true;
-          });
-        })
-          .error(function(){
+        fileFactory.upload(file, null, 'temp', null, null, true)
+          .progress(function(evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            $scope.picture.percentage = progressPercentage;
+          }).success(function(data, status, headers, config) {
+            $timeout(function() {
+              $scope.projectModel.projectImagePath = data.url;
+              $scope.picture.isUploadPicture = false;
+              $scope.picture.isUploadedPicture = true;
+            });
+          })
+          .error(function() {
             $scope.picture.isUploadPicture = false;
           });
       }

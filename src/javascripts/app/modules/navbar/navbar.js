@@ -15,9 +15,10 @@ define(function (require){
     showHideCollaborateDirective = require('./directives/showHideCollaborate'),
     angularMoment = require('angularMoment'),
     toaster = require('toaster'),
-    companyTypesData = require('text!app/common/resources/companyTypes.json');
+    companyTypesData = require('text!app/common/resources/companyTypes.json'),
+    projectChooserDirective = require('app/common/directives/projectChooser/projectChooser');
 
-  var module = angular.module('app.navbar', ['common.context.user', 'common.services.account', 'common.services.notifications', 'common.services.inviteCollaborator', 'angularMoment', 'common.services.company', 'common.services.push', 'common.services.userNotifications', 'toaster']);
+  var module = angular.module('app.navbar', ['common.context.user', 'common.services.account', 'common.services.notifications', 'common.services.inviteCollaborator', 'angularMoment', 'common.services.company', 'common.services.push', 'common.services.userNotifications', 'toaster', 'common.directives.projectChooser']);
 
   module.run(['$templateCache', function ($templateCache){
     $templateCache.put('navbar/templates/navbar.html', navbarTemplate);

@@ -12,15 +12,13 @@ define(function(require) {
 
       function load(cb) {
         currentProjectId = $rootScope.currentProjectInfo.projectId;
-        $scope.currentProject = [];
+        $scope.currentProject = $rootScope.currentProjectInfo;
         $scope.isLoadingActivity = false;
         $scope.activities = [];
         $scope.activitySelected = $rootScope.activitySelected = null;
         $scope.model = {
           userId: userContext.authentication().userData.userId
         };
-
-        $scope.currentProject = $rootScope.currentProjectInfo;
 
         $scope.loadActivity(cb);
 

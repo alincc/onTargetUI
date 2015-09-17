@@ -170,6 +170,8 @@ define(function(require) {
                 notifications.getNotificationSuccess();
               });
 
+              notifications.currentProjectChange({project: pj});
+
               // get user details and permissions
               accountFactory.getUserProfileDetails($rootScope.currentUserInfo.userId)
                 .success(function(resp) {

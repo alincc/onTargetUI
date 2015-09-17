@@ -21,8 +21,9 @@ define(function(require) {
     permissionServiceModule = require('app/common/services/permission'),
     angularSanitize = require('angularSanitize'),
     toaster = require('toaster'),
-    fileThumbnail = require('app/common/filters/fileThumbnail');
-  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail']);
+    fileThumbnail = require('app/common/filters/fileThumbnail'),
+    notificationServiceModule = require('app/common/services/notifications');
+  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);

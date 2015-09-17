@@ -14,11 +14,11 @@
             <tbody class="table-bordered">
             <tr ng-repeat="budget in task.costsByMonthYear | orderBy: ['taskInterval.year', 'taskInterval.month']">
                 <td class="interval"><span ng-bind="budget.taskInterval.month | monthName"></span>-<span ng-bind="budget.taskInterval.year"></span></td>
-                <td class="budget-cost">
-                    <budget-editor model="budget.costs[1]" task="task" type="PLANNED" interval="budget.taskInterval"></budget-editor>
+                <td class="budget-cost" ng-repeat="cost in budget.costs | filter: {costType:'PLANNED'} | limitTo:1">
+                    <budget-editor model="cost" task="task" type="PLANNED" interval="budget.taskInterval"></budget-editor>
                 </td>
-                <td class="budget-cost">
-                    <budget-editor model="budget.costs[0]" task="task" type="ACTUAL" interval="budget.taskInterval"></budget-editor>
+                <td class="budget-cost" ng-repeat="cost in budget.costs | filter: {costType:'ACTUAL'} | limitTo:1">
+                    <budget-editor model="cost" task="task" type="ACTUAL" interval="budget.taskInterval"></budget-editor>
                 </td>
             </tr>
             </tbody>

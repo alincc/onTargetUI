@@ -29,6 +29,7 @@ define([
         _CANCEL_ACTIVITY_ = 'CANCEL_ACTIVITY',
         _ACTIVITY_CREATED_ = '_ACTIVITY_CREATED_',
         _ACTIVITY_UPDATED_ = '_ACTIVITY_UPDATED_',
+        _BUDGET_UPDATED_ = '_BUDGET_UPDATED_',
 
         requestStarted = function (){
           $rootScope.$broadcast(_START_REQUEST_);
@@ -197,6 +198,14 @@ define([
           $scope.$on(_ACTIVITY_UPDATED_, function (event, args){
             handler(args);
           });
+        },
+        budgetUpdated = function (args){
+          $rootScope.$broadcast(_BUDGET_UPDATED_, args);
+        },
+        onBudgetUpdated = function ($scope, handler){
+          $scope.$on(_BUDGET_UPDATED_, function (event, args){
+            handler(args);
+          });
         };
 
       return {
@@ -241,7 +250,9 @@ define([
         activityCreated: activityCreated,
         onActivityCreated: onActivityCreated,
         activityEdited: activityEdited,
-        onActivityEdited: onActivityEdited
+        onActivityEdited: onActivityEdited,
+        budgetUpdated: budgetUpdated,
+        onBudgetUpdated: onBudgetUpdated
       };
     }]);
 });

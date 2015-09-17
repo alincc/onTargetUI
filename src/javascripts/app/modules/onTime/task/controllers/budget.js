@@ -30,31 +30,36 @@ define(function(require) {
           //console.log(resp);
           $scope.task = resp.data.task;
           _.forEach($scope.task.costsByMonthYear, function(n) {
-            if(n.costs.length === 0) {
               var y = n.taskInterval.year, m = n.taskInterval.month;
               var firstDate = $filter('date')(new Date(y, m - 1, 1), 'yyyy-MM-dd');
               var lastDate = $filter('date')(new Date(y, m, 0), 'yyyy-MM-dd');
-              var cost1 = {
-                cost: 0,
-                costType: "ACTUAL",
-                fromDate: daydiff(firstDate, new Date($scope.task.startDate)) > 0 ? $scope.task.startDate : firstDate,
-                toDate: daydiff(new Date($scope.task.endDate), lastDate) ? $scope.task.endDate : lastDate,
-                id: null,
-                month: m,
-                year: y
-              };
-              var cost2 = {
-                cost: 0,
-                costType: "PLANNED",
-                fromDate: cost1.fromDate,
-                toDate: cost1.toDate,
-                id: null,
-                month: m,
-                year: y
-              };
-              n.costs.push(cost1);
-              n.costs.push(cost2);
-            }
+              var fromDate = daydiff(firstDate, new Date($scope.task.startDate)) > 0 ? $scope.task.startDate : firstDate,
+                toDate = daydiff(new Date($scope.task.endDate), lastDate) ? $scope.task.endDate : lastDate;
+              if(_.findIndex(n.costs, { 'costType': 'ACTUAL'}) < 0) {
+                var cost1 = {
+                  cost: '',
+                  costType: "ACTUAL",
+                  fromDate: fromDate,
+                  toDate: toDate,
+                  id: null,
+                  month: m,
+                  year: y
+                };
+                n.costs.push(cost1);
+              }
+              if(_.findIndex(n.costs, { 'costType': 'PLANNED'}) < 0) {
+                var cost2 = {
+                  cost: '',
+                  costType: "PLANNED",
+                  fromDate: fromDate,
+                  toDate: toDate,
+                  id: null,
+                  month: m,
+                  year: y
+                };
+
+                n.costs.push(cost2);
+              }
           });
           //console.log($scope.task.costsByMonthYear);
           $scope.isLoading = false;
@@ -64,6 +69,10 @@ define(function(require) {
       };
 
       $scope.getTaskBudget();
+
+      notifications.onBudgetUpdated($scope, function(args) {
+        $scope.getTaskBudget();
+      });
     }];
   return controller;
 });

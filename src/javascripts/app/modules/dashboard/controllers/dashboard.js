@@ -5,7 +5,7 @@ define(function(require) {
   var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', 'notifications', 'taskFactory',
     function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout, notifications, taskFactory) {
       $scope.app = appConstant.app;
-      $scope.project = $rootScope.currentProjectInfo;
+      $scope.project = $scope.currentProject = $rootScope.currentProjectInfo;
 
       function daydiff(first, second) {
         return (second - first) / (1000 * 60 * 60 * 24);

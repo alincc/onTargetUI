@@ -89,6 +89,7 @@ define(function (){
 
       $scope.maskAsRead = function (){
         $scope.viewNotifications = $scope.allNotifications;
+        $scope.totalUnreadNotification = 0;
         userNotificationsFactory.maskAsRead().success(
           function (resp){
             //console.log(resp);

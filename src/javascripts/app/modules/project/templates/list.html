@@ -39,8 +39,8 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <!--project image-->
-                            <div class="project-image" align="center" ng-click="goDashboard(project)">
-                                <a href="javascript:void(0)">
+                            <div class="project-image" align="center">
+                                <a href="javascript:void(0)" ng-click="goDashboard(project)">
                                     <img file-path="project" path="{{project.projectImagePath}}" class="img-responsive"/>
                                 </a>
                             </div>
@@ -82,10 +82,8 @@
                         <div class="panel-body">
                             <!--project image-->
                             <div class="project-image" align="center">
-                                <a href="javascript:void(0)"
-                                   ng-click="goDashboard(project)">
-                                    <img image-path="project"
-                                         ng-src="{{project.projectImagePath}}" class="img-responsive"/>
+                                <a href="javascript:void(0)" ng-click="goDashboard(project)">
+                                    <img file-path="project" path="{{project.projectImagePath}}" class="img-responsive"/>
                                 </a>
                             </div>
                             <div class="project-info" ng-class="{'has-address': project.fullAddress1.length || project.fullAddress2.length}">

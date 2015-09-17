@@ -19,7 +19,11 @@
 
     <!-- navbar collapse -->
     <div class="collapse pos-rlt navbar-collapse {{app.settings.navbarCollapseColor}}">
-
+        <div class="nav navbar-nav" style="margin-left: 35px;" show-hide-collaborate>
+            <project-chooser>
+                <span ng-bind="currentProject.projectName"></span>
+            </project-chooser>
+        </div>
         <!-- nabar right -->
         <ul class="nav navbar-nav navbar-right">
             <!--<li show-hide-collaborate class="dropdown" dropdown>
@@ -62,8 +66,8 @@
             <li show-hide-collaborate class="dropdown" dropdown ng-click="maskAsRead()">
                 <a href class="dropdown-toggle" dropdown-toggle>
                     <i class="fa fa-bell"></i>
-                        <span class="visible-xs-inline">Notifications</span>
-                        <span class="badge badge-sm up bg-danger pull-right-xs" ng-if = "totalUnreadNotification > 0">{{totalUnreadNotification}}</span>
+                    <span class="visible-xs-inline">Notifications</span>
+                    <span class="badge badge-sm up bg-danger pull-right-xs" ng-if="totalUnreadNotification > 0">{{totalUnreadNotification}}</span>
                 </a>
                 <!-- dropdown -->
                 <div class="dropdown-menu w-xl animated fadeInUp notifications-dropdown">
@@ -72,7 +76,8 @@
                             <strong>You have <span>{{viewNotifications.length}}</span> {{viewNotifications.length > 1 ? 'notifications' : 'notification'}}</strong>
                         </div>-->
                         <div class="list-group">
-                            <a ng-repeat="notification in viewNotifications | limitTo: 5" class="media list-group-item" ng-class="{'new-notification': notification.status == 'NEW'}">
+                            <a ng-repeat="notification in viewNotifications | limitTo: 5" class="media list-group-item"
+                               ng-class="{'new-notification': notification.status == 'NEW'}">
                                 <div class="pull-left text-center thumb-sm">
                           <span class="fa fa-bell-o">
                           </span>
@@ -135,12 +140,4 @@
         </form>
         <!-- / search form -->
     </div>
-    <!-- / navbar collapse -->
-
 </section>
-
-<style>
-    .new-notification {
-        background-color: #ffffe5
-    }
-</style>

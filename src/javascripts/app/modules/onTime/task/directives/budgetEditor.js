@@ -12,7 +12,7 @@ define(function(require){
       },
       templateUrl: 'budgetEditorTemplate',
       replace: true,
-      controller: ['$scope', '$rootScope', 'taskFactory', function($scope, $rootScope, taskFactory){
+      controller: ['$scope', '$rootScope', 'taskFactory', 'notifications', function($scope, $rootScope, taskFactory, notifications){
 
         function updateBudget(){
           taskFactory.updateTaskBudget($scope.model.taskBudgetEstimates).then(function(resp){
@@ -20,6 +20,7 @@ define(function(require){
             $scope.budgetBak = angular.copy($scope.budget);
             $scope.budgetEditor.isUpdating = false;
             $scope.cancel();
+            notifications.budgetUpdated();
           }, function(){
             $scope.budgetEditor.isUpdating = false;
             $scope.cancel();
