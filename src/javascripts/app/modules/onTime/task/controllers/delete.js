@@ -7,18 +7,15 @@ define(function (){
     function ($scope, $rootScope, $modalInstance, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, task, userNotificationsFactory, appConstant, notifications){
 
       $scope.delete = function (){
-        taskFactory.deleteTask({
-          taskId: task.projectTaskId
-        }).then(
+        taskFactory.deleteTask(task.projectTaskId).then(
           function (resp){
-            toaster.pop('success', 'Success', resp.data.returnMessage);
-            userNotificationsFactory.getAll({
-              "pageNumber": 1,
-              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
-            }).then(function (resp){
-              $rootScope.userNotifications = resp.data;
-              notifications.getNotificationSuccess();
-            });
+            //userNotificationsFactory.getAll({
+            //  "pageNumber": 1,
+            //  "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            //}).then(function (resp){
+            //  $rootScope.userNotifications = resp.data;
+            //  notifications.getNotificationSuccess();
+            //});
             $modalInstance.close({});
           }
         );

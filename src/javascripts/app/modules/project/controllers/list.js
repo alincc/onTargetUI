@@ -164,7 +164,7 @@ define(function(require) {
             if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
               userNotificationsFactory.getAll({
                 "pageNumber": 1,
-                "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+                "perPageLimit": 5
               }).then(function (resp){
                 $rootScope.userNotifications = resp.data;
                 notifications.getNotificationSuccess();

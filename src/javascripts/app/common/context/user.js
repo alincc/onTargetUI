@@ -1,10 +1,10 @@
 define([
   'angular',
   'angularLocalStorage'
-], function(angular) {
+], function(angular){
   'use strict';
   var module = angular.module('common.context.user', ['angularLocalStorage']);
-  module.factory('userContext', ['storage', '$q', '$rootScope', function(storage, $q, $rootScope) {
+  module.factory('userContext', ['storage', '$q', '$rootScope', function(storage, $q, $rootScope){
     var service = {},
       authentication = {
         isAuth: false,
@@ -13,7 +13,7 @@ define([
       };
     $rootScope.currentUserInfo = authentication.userData;
 
-    service.setToken = function(token) {
+    service.setToken = function(token){
       if(!token) {
         authentication.isAuth = false;
         authentication.token = undefined;
@@ -25,7 +25,7 @@ define([
       service.saveLocal(authentication);
     };
 
-    service.fillInfo = function(obj, rememberMe) {
+    service.fillInfo = function(obj, rememberMe){
       authentication.userData = angular.extend(authentication.userData, obj);
       $rootScope.currentUserInfo = authentication.userData;
       // Save data to local storage
@@ -34,19 +34,20 @@ define([
       }
     };
 
-    service.clearInfo = function() {
-      authentication.userData = $rootScope.currentUserInfo = {};
+    service.clearInfo = function(){
+      authentication.userData = {};
+      $rootScope.currentUserInfo = {};
       authentication.token = '';
       authentication.isAuth = false;
       service.saveLocal(authentication);
     };
 
-    service.saveLocal = function(obj) {
+    service.saveLocal = function(obj){
       obj = obj || {};
       storage.set('authenticationData', obj);
     };
 
-    service.loadFromLocal = function() {
+    service.loadFromLocal = function(){
       var data = storage.get('authenticationData');
       data = data || {};
       authentication = data;
@@ -54,14 +55,14 @@ define([
       service.setToken(data.token);
     };
 
-    service.signOut = function() {
+    service.signOut = function(){
       var deferred = $q.defer();
       service.clearInfo();
       deferred.resolve();
       return deferred.promise;
     };
 
-    service.authentication = function() {
+    service.authentication = function(){
       return authentication;
     };
 

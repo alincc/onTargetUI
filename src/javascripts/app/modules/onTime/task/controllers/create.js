@@ -81,13 +81,13 @@ define(function() {
           //$modalInstance.close({});
           notifications.taskCreated();
           //load notification
-          userNotificationsFactory.getAll({
-            "pageNumber": 1,
-            "perPageLimit": appConstant.app.settings.userNotificationsPageSize
-          }).then(function (resp){
-            $rootScope.userNotifications = resp.data;
-            notifications.getNotificationSuccess();
-          });
+          //userNotificationsFactory.getAll({
+          //  "pageNumber": 1,
+          //  "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+          //}).then(function (resp){
+          //  $rootScope.userNotifications = resp.data;
+          //  notifications.getNotificationSuccess();
+          //});
         }, function(err) {
           $scope.onSubmit = false;
           $scope.task_form.$setPristine();

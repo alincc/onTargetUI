@@ -147,7 +147,7 @@ define(function(require) {
         deleteTaskModalInstance = $modal.open({
           templateUrl: 'onTime/task/templates/delete.html',
           controller: 'DeleteTaskController',
-          size: 'lg',
+          size: 'sm',
           resolve: {
             task: function() {
               return $scope.taskSelected;
@@ -156,7 +156,7 @@ define(function(require) {
         });
 
         deleteTaskModalInstance.result.then(function() {
-          loadProjectTasks();
+          _.remove($scope.tasks, {projectTaskId: $scope.taskSelected.projectTaskId});
         }, function() {
 
         });

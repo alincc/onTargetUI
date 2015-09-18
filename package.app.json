@@ -27,7 +27,9 @@
     "express": "^4.13.3",
     "method-override": "^2.3.5",
     "querystring": "^0.2.0",
-    "request": "^2.61.0"
+    "request": "^2.61.0",
+    "pusher": "^1.0.6",
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
   },

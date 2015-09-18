@@ -73,14 +73,16 @@ define(function(require) {
         // Initialize notifications service
         pushFactory.initialize();
 
-        // Load notifications
-        userNotificationsFactory.getAll({
-          "pageNumber": 1,
-          "perPageLimit": appConstant.app.settings.userNotificationsPageSize
-        }).then(function (resp){
-          $rootScope.userNotifications = resp.data;
-          notifications.getNotificationSuccess();
-        });
+        if($rootScope.currentProjectInfo.projectId){
+          // Load notifications
+          userNotificationsFactory.getAll({
+            "pageNumber": 1,
+            "perPageLimit": 5
+          }).then(function (resp){
+            $rootScope.userNotifications = resp.data;
+            notifications.getNotificationSuccess();
+          });
+        }
       }
     ]);
 

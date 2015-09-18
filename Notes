@@ -13,4 +13,4 @@ Python excel: https://pypi.python.org/pypi/xlrd
   - do 'brew install graphicsmagick'
 
 + Other:
-ImageProcressing: https://github.com/aheckmann/gm
+ - https://github.com/aheckmann/gm

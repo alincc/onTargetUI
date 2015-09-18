@@ -46,13 +46,13 @@ define(function() {
       };
 
       var getAllNotifications = function (){
-        userNotificationsFactory.getAll({
-          "pageNumber": 1,
-          "perPageLimit": appConstant.app.settings.userNotificationsPageSize
-        }).then(function (resp){
-          $rootScope.userNotifications = resp.data;
-          notifications.getNotificationSuccess();
-        });
+        //userNotificationsFactory.getAll({
+        //  "pageNumber": 1,
+        //  "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+        //}).then(function (resp){
+        //  $rootScope.userNotifications = resp.data;
+        //  notifications.getNotificationSuccess();
+        //});
       };
 
       $scope.removeUserFromTask = function(assignee) {

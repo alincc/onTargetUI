@@ -1,7 +1,7 @@
 define(function() {
   'use strict';
-  var controller = ['$scope', '$state', 'appConstant', 'accountFactory',
-    function($scope, $state, appConstant, accountFactory) {
+  var controller = ['$scope', '$state', 'appConstant', 'accountFactory', 'notifications',
+    function($scope, $state, appConstant, accountFactory, notifications) {
       $scope.user = {
         username: '',
         password: ''
@@ -17,6 +17,7 @@ define(function() {
         }
         accountFactory.login(model.username, model.password)
           .then(function() {
+            notifications.loginSuccess();
             $scope.form.$setPristine();
             $state.go('app.projectlist');
           },

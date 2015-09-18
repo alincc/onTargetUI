@@ -5,8 +5,8 @@
                 <div class="text-center" ng-if="isLoadingGanttChart">
                     <spinner text="Loading..."></spinner>
                 </div>
-                <div class="panel-footer bg-light lter" ng-show="data.length > 0">
-                    <div gantt data=data >
+                <div class="panel-footer bg-light lter" ng-show="data.length > 0" ng-hide="isLoadingGanttChart">
+                    <div gantt data=data view-scale="options.scale" column-width="30">
                         <gantt-tree></gantt-tree>
                         <gantt-groups></gantt-groups>
                         <gantt-tooltips></gantt-tooltips>
