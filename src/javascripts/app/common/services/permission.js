@@ -16,7 +16,7 @@ define(function(require) {
 
         service.checkPermission = function(nav) {
           if($rootScope.currentUserInfo.menuProfile) {
-            var permissions = $rootScope.currentUserInfo.menuProfile.profileAssignedMenuList;
+            var permissions = $rootScope.currentUserInfo.menuProfile;
             return angular.isDefined(_.find(permissions, {menuKey: nav}));
           }
           else {

@@ -19672,6 +19672,9 @@ a.text-black:hover {
   height: 100%;
   background-color: #FAFAFA;
 }
+.dashboard-page .time-line .mCSB_outside + .mCSB_scrollTools {
+  right: -18px;
+}
 .dashboard-page .timeline-container {
   position: relative;
   overflow: visible;
@@ -19711,6 +19714,11 @@ a.text-black:hover {
   line-height: 1;
   padding-top: 5px;
   margin-right: 37px;
+}
+.dashboard-page .timeline-container .tl-wrap .tl-log-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
 }
 .dashboard-page .timeline-container .tl-left .tl-wrap {
   border-left-width: -1px;
@@ -19988,6 +19996,20 @@ a.text-black:hover {
   text-decoration: underline;
   color: #5b90bf;
 }
+.on-site-page .file-thumbnail {
+  display: inline-block;
+  position: relative;
+}
+.on-site-page .file-thumbnail .delete-button {
+  top: -5px;
+  right: -5px;
+  position: absolute;
+  cursor: pointer;
+}
+.on-site-page .file-thumbnail .delete-button .fa {
+  font-size: 18px;
+  color: red;
+}
 .on-site-page .preview-section .panel-body {
   height: 690px;
 }
@@ -20057,6 +20079,14 @@ a.text-black:hover {
 }
 .on-site-page .comment-section .panel-body .add-comment form .button button {
   padding: 3px 10px;
+}
+.on-site-page .search {
+  width: 300px;
+}
+.on-site-page .doc-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 250px;
 }
 .activity-section .panel {
   border-radius: 5px;
@@ -20284,10 +20314,10 @@ a.text-black:hover {
 }
 .task-list-section .task-section .panel .panel-body .task-list .task-item .task-status .percentage {
   position: absolute;
-  top: 50%;
+  top: -12px;
   margin-left: -10px;
   font-weight: 700;
-  margin-top: -12px;
+  margin-top: 50%;
   width: 100%;
   text-align: center;
 }
@@ -20467,6 +20497,7 @@ a.text-black:hover {
   text-align: center;
 }
 .task-logistic .nav-container .navbar-default {
+  width: 100%;
   border: 1px solid;
   border-radius: 5px;
   border-color: #dee5e7;
@@ -20502,9 +20533,6 @@ a.text-black:hover {
   width: 50px;
   height: 50px;
   float: left;
-}
-.task-comment .item-list .item .avatar img {
-  border-radius: 5px;
 }
 .task-comment .item-list .item .cm-content {
   border: 1px solid;
@@ -20666,4 +20694,22 @@ a.text-black:hover {
 }
 .task-attachments .item-list table .upload-by {
   max-width: 100px;
+}
+.app-header .navbar-nav .open > a {
+  background: none;
+}
+.app-header .navbar-nav .project-chooser {
+  display: inline-block;
+  margin: 10px 6px 0 12px;
+}
+.app-header .navbar-nav .project-chooser .dropdown-toggle {
+  display: inline-block;
+  font-size: 18px;
+}
+.app-header .navbar-nav .project-chooser .dropdown-toggle i {
+  margin: 0 5px;
+  font-size: 15px;
+}
+.app-header .new-notification {
+  background-color: #ffffe5;
 }

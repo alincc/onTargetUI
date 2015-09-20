@@ -239,6 +239,35 @@ gulp.task('build:integration', ['build'], function(){
     .pipe(gulp.dest('./build-integration'));
 });
 
+
+// ---- Integration -----
+gulp.task('build:beta', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+      .pipe(gulp.dest('./build-beta/app'));
+
+  // minify
+  gulp.src(['./src/javascripts/main.min.js'])
+      .pipe(replace(/domain: '.*'/, "domain: '" + config.integration.domain + "'")) // domain
+      .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.integration.baseUrl + "'")) // base url
+      .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.integration.nodeServer + "'")) // node server domain
+      .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.integration.resourceUrl + "'"))
+      .pipe(uglify())
+      .pipe(gulp.dest('./build-beta/app/javascripts'));
+
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+      .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.integration.port + ")"))
+      .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.integration.API_SERVER + "'"))
+      .pipe(gulp.dest('./build-beta'));
+
+  gulp.src('./package.app.json')
+      .pipe(rename('./package.json'))
+      .pipe(gulp.dest('./build-beta'));
+});
+
+
+
 // ---- Testing -----
 gulp.task('build:testing', ['build'], function(){
   // Copy all file in build folder
@@ -379,6 +408,28 @@ gulp.task('build:serverintegration', function(){
     'server.js'
   ], {"base": "."})
       .pipe(gulp.dest('build-server'));
+});
+
+
+// Server build local
+gulp.task('build:serverbeta', function(){
+  gulp.src('package.json', {"base": "."})
+      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+      .pipe(gulp.dest('build-server-beta'));
+
+  gulp.src('server/config.js', {"base": "."})
+      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverbeta.PROXY_URL + '\''))
+      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
+      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
+      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
+      .pipe(gulp.dest('build-server-beta'));
+
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+      .pipe(gulp.dest('build-server-beta'));
 });
 
 ////////////////////////////////////
