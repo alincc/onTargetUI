@@ -5,8 +5,10 @@ define(function(require) {
     config = require('app/config'),
     template = require('text!./templates/onSite.html'),
     uploadTemplate = require('text!./templates/upload.html'),
+    deleteTemplate = require('text!./templates/delete.html'),
     controller = require('./controllers/onSite'),
     uploadController = require('./controllers/upload'),
+    deleteController = require('./controllers/delete'),
     projectContextModule = require('app/common/context/project'),
     documentServiceModule = require('app/common/services/document'),
     mentio = require('mentio'),
@@ -27,10 +29,12 @@ define(function(require) {
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);
+    $templateCache.put('onSite/templates/delete.html', deleteTemplate);
   }]);
 
   module.controller('OnSiteController', controller);
   module.controller('UploadDocumentController', uploadController);
+  module.controller('DeleteDocumentController', deleteController);
 
   module.config(
     ['$stateProvider',

@@ -21,13 +21,13 @@ define(function() {
             //projectContext.setProject($scope.currentProject);
 
             console.log('Close modal');
-            userNotificationsFactory.getAll({
-              "pageNumber": 1,
-              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
-            }).then(function (resp){
-              $rootScope.userNotifications = resp.data;
-              notifications.getNotificationSuccess();
-            });
+            //userNotificationsFactory.getAll({
+            //  "pageNumber": 1,
+            //  "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            //}).then(function (resp){
+            //  $rootScope.userNotifications = resp.data;
+            //  notifications.getNotificationSuccess();
+            //});
             $modalInstance.close({});
           },
           function(err) {

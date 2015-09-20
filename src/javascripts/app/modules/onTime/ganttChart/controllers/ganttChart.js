@@ -5,12 +5,15 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', 'projectFactory', 'userContext', '$q',
-    function($scope, $rootScope, projectFactory, userContext, $q) {
+  var controller = ['$scope', '$rootScope', 'projectFactory', 'userContext', '$q', 'notifications',
+    function($scope, $rootScope, projectFactory, userContext, $q, notifications) {
 
     $scope.activities = [];
     $scope.isLoadingGanttChart = false;
     var canceler;
+      $scope.options = {
+        scale: 'day'
+      };
 
     var load = function() {
       var project_data = [];
@@ -46,7 +49,7 @@ define(function(require) {
       console.log($scope.data);
     };
 
-    var currentProjectId = $rootScope.currentProjectInfo.projectId;
+    //var currentProjectId = $rootScope.currentProjectInfo.projectId;
     $scope.model = {
       userId: userContext.authentication().userData.userId
     };
@@ -54,7 +57,7 @@ define(function(require) {
     $scope.projects = [];
 
     $scope.getCurrentProjectActivities = function() {
-      var currentProject = _.where($scope.projects, {projectId: currentProjectId})[0];
+      var currentProject = _.where($scope.projects, {projectId: $rootScope.currentProjectInfo.projectId})[0];
       if(currentProject) {
         $scope.activities = currentProject.projects;
       }
@@ -63,7 +66,7 @@ define(function(require) {
     $scope.getUserProject = function() {
       canceler = $q.defer();
       $scope.isLoadingGanttChart = true;
-      projectFactory.getUserProject($scope.model, canceler).then(
+      projectFactory.getProjectByUser($scope.model, canceler).then(
         function(resp) {
           $scope.projects = resp.data.mainProject.projects;
 
@@ -98,6 +101,10 @@ define(function(require) {
         canceler.resolve();
       }
     });
+
+      notifications.onCurrentProjectChange($scope, function(agrs){
+        $scope.getUserProject();
+      });
   }];
   return controller;
 });

@@ -170,12 +170,31 @@ define(function(require){
         $window.open(doc.filePath);
       };
 
-      $scope.deleteDocument = function(doc){
+      /*$scope.deleteDocument = function(doc){
         onSiteFactory.deleteDocument(doc.fileId).success(
           function(resp){
             getUploadedDocumentList();
           }
         );
+      };*/
+
+      var deleteActivityModalInstance;
+      $scope.deleteDocument = function(doc) {
+        deleteActivityModalInstance = $modal.open({
+          templateUrl: 'onSite/templates/delete.html',
+          controller: 'DeleteDocumentController',
+          size: 'sm',
+          resolve: {
+            document: function() {
+              return doc;
+            }
+          }
+        });
+
+        deleteActivityModalInstance.result.then(
+          function() {
+            getUploadedDocumentList();
+          });
       };
 
       // Events

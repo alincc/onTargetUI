@@ -71,13 +71,13 @@ define(function (require){
             $scope.form.$setPristine();
             //$modalInstance.close({});
             notifications.activityCreated();
-            userNotificationsFactory.getAll({
-              "pageNumber": 1,
-              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
-            }).then(function (resp){
-              $rootScope.userNotifications = resp.data;
-              notifications.getNotificationSuccess();
-            });
+            //userNotificationsFactory.getAll({
+            //  "pageNumber": 1,
+            //  "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            //}).then(function (resp){
+            //  $rootScope.userNotifications = resp.data;
+            //  notifications.getNotificationSuccess();
+            //});
           }, function (err){
             $scope.onSubmit = false;
             $scope.form.$setPristine();

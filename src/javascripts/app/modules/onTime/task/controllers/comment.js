@@ -35,13 +35,13 @@ define(function(require) {
             $scope.$broadcast("content.reload");
             $scope.comment_form.$setPristine();
             //notifications.taskUpdated();
-            userNotificationsFactory.getAll({
-              "pageNumber": 1,
-              "perPageLimit": appConstant.app.settings.userNotificationsPageSize
-            }).then(function (resp){
-              $rootScope.userNotifications = resp.data;
-              notifications.getNotificationSuccess();
-            });
+            //userNotificationsFactory.getAll({
+            //  "pageNumber": 1,
+            //  "perPageLimit": appConstant.app.settings.userNotificationsPageSize
+            //}).then(function (resp){
+            //  $rootScope.userNotifications = resp.data;
+            //  notifications.getNotificationSuccess();
+            //});
           }, function(err) {
             console.log(err);
             $scope.comment_form.$setPristine();

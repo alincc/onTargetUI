@@ -26,8 +26,9 @@ define(function(require){
         return deferred.promise;
       };
 
-      service.getAll = function(param){
+      service.getAll = function(param, canceler){
         var deferred = $q.defer();
+        canceler = canceler || $q.defer();
         if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
           var data = {
             "pageNumber": param.pageNumber,
@@ -37,7 +38,9 @@ define(function(require){
 
           //return $http.post(constant.domain + '/notification/getNotifications', data);
 
-          return $http.post(constant.domain + '/notification/getNotificationsByUserByProject', data);
+          return $http.post(constant.domain + '/notification/getNotificationsByUserByProject', data,{
+            timeout: canceler.promise
+          });
         }
         deferred.reject();
         return deferred.promise;

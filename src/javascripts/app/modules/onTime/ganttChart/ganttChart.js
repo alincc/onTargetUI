@@ -13,8 +13,9 @@ define(function(require) {
     ganttChartTemplate = require('text!./templates/ganttChart.html'),
     angularGantt = require('angularGantt'),
     angularGanttPlugin = require('angularGanttPlugin'),
-    angularUiTree = require('angularUiTree');
-  var module = angular.module('app.ganttChart', ['ui.router', 'app.config', 'common.services.project', 'common.context.user', 'common.context.project', 'common.services.activity',
+    angularUiTree = require('angularUiTree'),
+    notificationServiceModule= require('app/common/services/notifications');
+  var module = angular.module('app.ganttChart', ['ui.router', 'app.config', 'common.services.project', 'common.context.user', 'common.context.project', 'common.services.activity','common.services.notifications',
     'ui.tree',
     'gantt',
     'gantt.movable',
