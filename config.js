@@ -41,7 +41,7 @@ module.exports = {
   },
   beta: {
     port: 9004,
-    domain: 'http://int.app.ontargetcloud.com:9004/ontargetrsbeta/services', 	// The domain should be same as the baseUrl because the proxy server was moved to the same Front-End web server
+    domain: 'http://int.app.ontargetcloud.com:9004/ontargetrs/services', 	// The domain should be same as the baseUrl because the proxy server was moved to the same Front-End web server
     baseUrl: 'http://int.app.ontargetcloud.com:9004', 						// Site domain
     nodeServer: 'http://int.app.ontargetcloud.com:9005', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9005', 					// This should be same as the node server because the resources are storing on the node server
