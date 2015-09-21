@@ -172,7 +172,7 @@ gulp.task('build', ['requireJsOptimizer'], function(){
     .pipe(gulp.dest('build/css'));
 
   // move main script file
-  return gulp.src('src/javascripts/main.min.js')
+  gulp.src('src/javascripts/main.min.js')
     .pipe(replace(/domain: '.*'/, "domain: '" + config.default.domain + "'")) // domain
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.default.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
@@ -248,17 +248,17 @@ gulp.task('build:beta', ['build'], function(){
 
   // minify
   gulp.src(['./src/javascripts/main.min.js'])
-      .pipe(replace(/domain: '.*'/, "domain: '" + config.integration.domain + "'")) // domain
-      .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.integration.baseUrl + "'")) // base url
-      .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.integration.nodeServer + "'")) // node server domain
-      .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.integration.resourceUrl + "'"))
+      .pipe(replace(/domain: '.*'/, "domain: '" + config.beta.domain + "'")) // domain
+      .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.beta.baseUrl + "'")) // base url
+      .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.beta.nodeServer + "'")) // node server domain
+      .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.beta.resourceUrl + "'"))
       .pipe(uglify())
       .pipe(gulp.dest('./build-beta/app/javascripts'));
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-      .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.integration.port + ")"))
-      .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.integration.API_SERVER + "'"))
+      .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.beta.port + ")"))
+      .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
       .pipe(gulp.dest('./build-beta'));
 
   gulp.src('./package.app.json')
