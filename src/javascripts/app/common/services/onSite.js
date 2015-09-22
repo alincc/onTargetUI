@@ -23,11 +23,13 @@ define(function(require) {
       });
     };
 
-    services.addComment = function(fileId, comment) {
+    services.addComment = function(fileId, comment, fileName, fileOwnerId) {
       return $http.post(constant.domain + '/upload/addComment', {
         projectFileId: fileId,
         commentId: null,
-        comment: comment
+        comment: comment,
+        fileName: fileName,
+        fileOwnerId: fileOwnerId
       });
     };
 

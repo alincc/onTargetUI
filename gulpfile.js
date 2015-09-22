@@ -204,7 +204,7 @@ gulp.task('build:local', ['build'], function(){
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-    .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.local.port + ")"))
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.local.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.local.API_SERVER + "'"))
     .pipe(gulp.dest('./build-local'));
 
@@ -230,7 +230,7 @@ gulp.task('build:integration', ['build'], function(){
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-    .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.integration.port + ")"))
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.integration.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.integration.API_SERVER + "'"))
     .pipe(gulp.dest('./build-integration'));
 
@@ -257,7 +257,7 @@ gulp.task('build:beta', ['build'], function(){
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-      .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.beta.port + ")"))
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.beta.port))
       .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
       .pipe(gulp.dest('./build-beta'));
 
@@ -285,7 +285,7 @@ gulp.task('build:testing', ['build'], function(){
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-    .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.testing.port + ")"))
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.testing.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.testing.API_SERVER + "'"))
     .pipe(gulp.dest('./build-testing'));
 
@@ -311,7 +311,7 @@ gulp.task('build:staging', ['build'], function(){
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-    .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.staging.port + ")"))
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.staging.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.staging.API_SERVER + "'"))
     .pipe(gulp.dest('./build-staging'));
 
@@ -337,7 +337,7 @@ gulp.task('build:production', ['build'], function(){
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-    .pipe(replace("myArgs\[1\] || 3214", "('port', " + config.production.port + ")"))
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.production.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.production.API_SERVER + "'"))
     .pipe(gulp.dest('./build-production'));
 

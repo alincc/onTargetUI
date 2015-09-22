@@ -28,7 +28,7 @@ define(function(require){
             if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
-                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : $rootScope.mainProjectInfo.projectId
+                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : 1
               };
             }
             return config;
@@ -241,8 +241,8 @@ define(function(require){
     baseUrl: 'http://localhost:9000',
     //nodeServer: 'http://localhost:9001',
     //resourceUrl: 'http://localhost:9001',
-    nodeServer: 'http://localhost:9001',
-    resourceUrl: 'http://localhost:9001',
+    nodeServer: 'http://int.app.ontargetcloud.com:9001',
+    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
     app: {
       name: "OnTarget",
       id: "OnTarget",

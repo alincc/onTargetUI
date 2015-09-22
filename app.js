@@ -271,22 +271,35 @@ app.post('/ontargetrs/services/upload/saveUploadedDocsInfo', function(req, res){
       });
   }
 
+  function getProjectMembers(projectId, cb){
+    request({
+        method: 'POST',
+        body: {baseRequest: baseRequest, projectId: projectId},
+        json: true,
+        url: API_SERVER + '/project/getProjectMembers'
+      },
+      function(error, response, body){
+        if(!error && response.statusCode == 200) {
+          cb(response.body);
+        }
+      });
+  }
+
   saveUploadedDocsInfo();
 
-  //getUserDetails(baseRequest.loggedInUserId, function(user1){
-  //  var assignees = task.assignee;
-  //  _.each(assignees, function(el){
-  //    getUserDetails(el.userId, function(user2){
-  //      pusher.trigger('onTarget', 'private-user-' + el.userId, {
-  //        "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has uploaded ' + data.name.substring(data.name.lastIndexOf('/') + 1)
-  //      });
-  //    });
-  //  });
-  //});
+  getUserDetails(baseRequest.loggedInUserId, function(user1){
+    getProjectMembers(baseRequest.loggedInUserProjectId, function(pmData){
+      _.each(pmData.projectMemberList, function(el){
+        pusher.trigger('onTarget', 'private-user-' + el.userId, {
+          "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has uploaded ' + data.name.substring(data.name.lastIndexOf('/') + 1)
+        });
+      })
+    });
+  });
 });
 
 // Add onSite document comment
-app.post('/ontargetrs/services/task/addComment', function(req, res){
+app.post('/ontargetrs/services/upload/addComment', function(req, res){
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
@@ -295,7 +308,7 @@ app.post('/ontargetrs/services/task/addComment', function(req, res){
         method: 'POST',
         body: req.body,
         json: true,
-        url: API_SERVER + '/task/addComment'
+        url: API_SERVER + '/upload/addComment'
       },
       function(error, response, body){
         if(!error && response.statusCode == 200) {
@@ -306,12 +319,12 @@ app.post('/ontargetrs/services/task/addComment', function(req, res){
       });
   }
 
-  function getTaskAttachments(cb){
+  function getTaskComments(cb){
     request({
         method: 'POST',
-        body: {"taskId": data.taskId, "baseRequest": baseRequest},
+        body: {"projectFileId": data.projectFileId, "baseRequest": baseRequest},
         json: true,
-        url: API_SERVER + '/task/getTaskAttachments'
+        url: API_SERVER + '/upload/projectFileCommentList'
       },
       function(error, response, body){
         if(!error && response.statusCode == 200) {
@@ -336,29 +349,31 @@ app.post('/ontargetrs/services/task/addComment', function(req, res){
 
   addComment();
 
-  // Missing task id
-  //getTaskAttachments(function(taskAttachments){
-  //  // commentters
-  //  var userList = _.map(taskAttachments, function(el){
-  //    return el.userId;
-  //  });
-  //
-  //  // current user
-  //  userList.push(baseRequest.loggedInUserId);
-  //
-  //  getProjectDetails(baseRequest.loggedInUserProjectId, function(project){
-  //    userList.push(project.projectOwnerId);
-  //    getUserDetails(baseRequest.loggedInUserId, function(user1){
-  //      var d = _.uniq(userList);
-  //      _.each(d, function(el){
-  //        pusher.trigger('onTarget', 'private-user-' + el, {
-  //          "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has commented on the [document name]'
-  //        });
-  //      });
-  //    });
-  //  })
-  //});
+  getTaskComments(function(taskComments){
+    // commenters
+    var userList = _.map(taskComments.comments, function(el){
+      return el.commentedBy;
+    });
 
+    // current user
+    userList.push(baseRequest.loggedInUserId);
+
+    // File owner id
+    userList.push(data.fileOwnerId);
+
+    getProjectDetails(baseRequest.loggedInUserProjectId, function(project){
+      // Project owner
+      userList.push(project.projectOwnerId);
+      getUserDetails(baseRequest.loggedInUserId, function(user1){
+        var d = _.uniq(userList);
+        _.each(d, function(el){
+          pusher.trigger('onTarget', 'private-user-' + el, {
+            "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has commented on the ' + data.fileName.substring(data.fileName.lastIndexOf('/') + 1)
+          });
+        });
+      });
+    })
+  });
 });
 
 app.post('/ontargetrs/services*', function(req, res){
