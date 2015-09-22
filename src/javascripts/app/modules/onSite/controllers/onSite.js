@@ -130,6 +130,7 @@ define(function(require){
       $scope.addCommentModel = {
         comment: ''
       };
+
       $scope.loadComment = function(){
         $scope.isLoadingComment = true;
         onSiteFactory.getFileComment($scope.selectedDoc.fileId)
@@ -144,9 +145,10 @@ define(function(require){
             $scope.isLoadingComment = false;
           });
       };
+
       $scope.addComment = function(model, form){
         if($scope.selectedDoc) {
-          onSiteFactory.addComment($scope.selectedDoc.fileId, model.comment)
+          onSiteFactory.addComment($scope.selectedDoc.fileId, model.comment, $scope.selectedDoc.name, $scope.selectedDoc.createdBy)
             .success(function(resp){
               $scope.comments.push({
                 "comment": model.comment,

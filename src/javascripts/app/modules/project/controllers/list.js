@@ -176,8 +176,8 @@ define(function(require) {
               accountFactory.getUserProfileDetails($rootScope.currentUserInfo.userId)
                 .success(function(resp) {
                   var newObj = angular.copy($rootScope.currentUserInfo);
-                  newObj.menuProfile = $rootScope.currentUserInfo.menuProfile = resp.menuProfile;
-                  newObj.permissionProfile = $rootScope.currentUserInfo.permissionProfile = resp.permissionProfile;
+                  newObj.menuProfile = $rootScope.currentUserInfo.menuProfile = resp.menuList;
+                  newObj.permissionProfile = $rootScope.currentUserInfo.permissionProfile = resp.featureList;
                   userContext.fillInfo(newObj, true);
                   $state.go('app.dashboard');
                 });

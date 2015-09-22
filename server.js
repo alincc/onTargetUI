@@ -36,7 +36,7 @@ var boxFiles = require('./server/routes/boxFile')(app);
 var dropBoxFiles = require('./server/routes/dropBoxFile')(app);
 
 // modules
-var pushModule = require('./server/modules/push')(app);
+//var pushModule = require('./server/modules/push')(app);
 
 app.get('/', function(req, res){
   res.sendfile("index.html");

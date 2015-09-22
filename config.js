@@ -39,6 +39,15 @@ module.exports = {
     // Proxy settings
     API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services'		// API
   },
+  beta: {
+    port: 9004,
+    domain: 'http://int.app.ontargetcloud.com:9004/ontargetrs/services', 	// The domain should be same as the baseUrl because the proxy server was moved to the same Front-End web server
+    baseUrl: 'http://int.app.ontargetcloud.com:9004', 						// Site domain
+    nodeServer: 'http://int.app.ontargetcloud.com:9005', 					// Node server domain
+    resourceUrl: 'http://int.app.ontargetcloud.com:9005', 					// This should be same as the node server because the resources are storing on the node server
+    // Proxy settings
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services'		// API
+  },
   testing: {
     port: 0,
     domain: 'http://hostname:port/ontargetrs/services',
@@ -69,6 +78,11 @@ module.exports = {
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root
+    maxFileSize: 5000000 // in bytes
+  },
+  serverbeta: {
+    PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 5000000 // in bytes
   },
