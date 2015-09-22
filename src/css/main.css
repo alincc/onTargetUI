@@ -19309,25 +19309,30 @@ a.text-black:hover {
 }
 .dashboard-page .project-heath .panel-body {
   position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 .dashboard-page .project-heath .panel-body h4 {
   margin-top: 0;
   color: #7a7b7a;
 }
-.dashboard-page .project-heath .panel-body .chart-container .legend > div {
+.dashboard-page .project-heath .panel-body .outer-chart .chart-container {
+  min-width: 800px;
+}
+.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend > div {
   display: none;
 }
-.dashboard-page .project-heath .panel-body .chart-container .legend table {
+.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend table {
   position: absolute;
   top: -30px !important;
   right: 0 !important;
 }
-.dashboard-page .project-heath .panel-body .chart-container .legend table .legendColorBox > div > div {
+.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend table .legendColorBox > div > div {
   width: 12px !important;
   height: 12px !important;
   border-width: 3px !important;
 }
-.dashboard-page .project-heath .panel-body .chart-container .legend table .legendLabel span {
+.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend table .legendLabel span {
   font-weight: 600;
   font-size: 14px;
   margin: 1px 10px 0 0;
@@ -20088,6 +20093,9 @@ a.text-black:hover {
   overflow: hidden;
   max-width: 250px;
 }
+.on-site-page .panel-default .panel-heading {
+  height: 55px;
+}
 .activity-section .panel {
   border-radius: 5px;
 }
@@ -20208,6 +20216,16 @@ a.text-black:hover {
     height: 65px;
   }
 }
+@media (min-width: 1200px) and (max-width: 1521px) {
+  .activity-section .panel-default .panel-footer {
+    height: 65px;
+  }
+}
+@media (max-width: 1200px), (min-width: 1521px) {
+  .activity-section .panel-default .panel-footer {
+    height: 43px;
+  }
+}
 .add-project .picture-container {
   width: 120px;
 }
@@ -20314,10 +20332,9 @@ a.text-black:hover {
 }
 .task-list-section .task-section .panel .panel-body .task-list .task-item .task-status .percentage {
   position: absolute;
-  top: -12px;
   margin-left: -10px;
   font-weight: 700;
-  margin-top: 50%;
+  margin-top: 15px;
   width: 100%;
   text-align: center;
 }
@@ -20408,6 +20425,14 @@ a.text-black:hover {
   }
   .task-create-update-section .panel-right .panel-default .panel-footer {
     height: 65px;
+  }
+}
+@media (max-width: 1200px), (min-width: 1521px) {
+  .task-list-section .task-section .panel-default .panel-footer {
+    height: 43px;
+  }
+  .task-create-update-section .panel-right .panel-default .panel-footer {
+    height: 43px;
   }
 }
 .info-container {
@@ -20670,6 +20695,10 @@ a.text-black:hover {
   position: relative;
   top: 4px;
 }
+.budget-task table td.budget-cost-read {
+  text-align: center;
+  border-left: 1px solid #eaeff0;
+}
 .budget-task table .interval {
   width: 150px;
   vertical-align: middle;
@@ -20712,4 +20741,74 @@ a.text-black:hover {
 }
 .app-header .new-notification {
   background-color: #ffffe5;
+}
+.preview-section .panel-body {
+  height: 690px;
+}
+.preview-section .panel-body iframe {
+  width: 100%;
+  height: 100%;
+}
+.preview-section .panel-body .image-preview-wrapper {
+  height: 100%;
+  text-align: center;
+}
+.preview-section .panel-body .image-preview-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.comment-section {
+  margin-left: -1px;
+}
+.comment-section .panel-body {
+  height: 690px;
+}
+.comment-section .panel-body .comment-content {
+  border: solid 1px #d5d5d5;
+  padding: 5px;
+  border-radius: 5px;
+}
+.comment-section .panel-body .comment-content .commenter {
+  color: #98a6ad;
+}
+.comment-section .panel-body .comment-content .commenter a {
+  color: #58666e;
+  font-weight: bold;
+}
+.comment-section .panel-body .comment-content .date {
+  position: absolute;
+  right: 25px;
+  top: 17px;
+  font-size: 12px;
+  color: #98a6ad;
+}
+.comment-section .panel-body .add-comment {
+  position: relative;
+  border: solid 1px #d5d5d5;
+  border-radius: 5px;
+  padding: 5px 5px 0px 5px;
+}
+.comment-section .panel-body .add-comment form {
+  display: table;
+  width: 100%;
+}
+.comment-section .panel-body .add-comment form .textarea {
+  display: table-cell;
+  vertical-align: top;
+  width: 100%;
+}
+.comment-section .panel-body .add-comment form .textarea textarea {
+  width: 100%;
+  border: 0;
+  resize: none;
+  min-height: 29px;
+  border-radius: 5px;
+  padding-top: 5px;
+}
+.comment-section .panel-body .add-comment form .button {
+  display: table-cell;
+  vertical-align: top;
+}
+.comment-section .panel-body .add-comment form .button button {
+  padding: 3px 10px;
 }
