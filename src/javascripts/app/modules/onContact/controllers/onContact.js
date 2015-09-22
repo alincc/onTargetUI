@@ -30,6 +30,8 @@ define(function(require) {
                 return list;
             }
 
+
+
             //list all document
             function getContactList() {
                 $scope.isLoading = true;
@@ -51,13 +53,14 @@ define(function(require) {
                     });
             }
 
-
-
             getContactList();
+
 
 
         }];
     return controller;
+
+
 });
 
 

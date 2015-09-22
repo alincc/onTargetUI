@@ -43,16 +43,17 @@
                             <tbody>
 
                             <tr ng-if="isLoading">
-                                <td colspan="5" class="text-center">
+                                <td colspan="6" class="text-center">
                                     <spinner text="Loading..."></spinner>
                                 </td>
                             </tr>
                             <tr ng-repeat="projectmember in oncontacts | filter:searchText">
-                                <td class="file-icon"><a href="javascript:void(0)" ><img ng-src="{{projectmember.contact.userImagePath | fileThumbnail}}"/></a></td>
+                                <td class="file-icon"><a href="javascript:void(0)" >
+                                    <img ng-src="{{projectmember.contact.userImagePath}}" class="image-circle" file-path/></a></td>
 
                                 <td >{{projectmember.contact.firstName}}&nbsp;{{projectmember.contact.lastName}}</td>
                                 <td >{{projectmember.discipline}}</td>
-                                <td >{{projectmember.phone.areaCode}}-{{projectmember.phone.phoneNumber}}</td>
+                                <td >{{projectmember.phone.phoneNumber}}</td>
                                 <td >{{projectmember.companyName}}</td>
                                 <td >{{projectmember.companyAddress}}</td>
                             </tr>
