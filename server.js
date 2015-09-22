@@ -39,7 +39,7 @@ var dropBoxFiles = require('./server/routes/dropBoxFile')(app);
 //var pushModule = require('./server/modules/push')(app);
 
 app.get('/', function(req, res){
-  res.sendfile("index.html");
+  res.sendFile("index.html");
 });
 
 app.listen(app.get('port'), function(){

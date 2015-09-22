@@ -38,6 +38,10 @@ define(function(require) {
           return $http.post(constant.domain + '/upload/saveUploadedDocsInfo', data);
         };
 
+        service.getDocumentDetail = function (model){
+          return $http.post(constant.domain + '/upload/getDocumentById', model);
+        };
+
         return service;
       }
     ]

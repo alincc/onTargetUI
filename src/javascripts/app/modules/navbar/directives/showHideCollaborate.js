@@ -12,6 +12,8 @@ define(function (require){
             case '/app/create-project':
             case '/app/edit-project':
             case '/app/projectlist':
+            case '/app/editprofile':
+            case '/app/changePassword':
               elem.hide();
               break;
             default:

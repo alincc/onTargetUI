@@ -14,10 +14,22 @@ define(function(require) {
       function(constant, $rootScope) {
         var service = {};
 
-        service.checkPermission = function(nav) {
-          if($rootScope.currentUserInfo.menuProfile) {
-            var permissions = $rootScope.currentUserInfo.menuProfile;
+        service.checkMenuPermission = function(nav) {
+          //return true;
+          if($rootScope.currentUserInfo.menuListPermission) {
+            var permissions = $rootScope.currentUserInfo.menuListPermission;
             return angular.isDefined(_.find(permissions, {menuKey: nav}));
+          }
+          else {
+            return false;
+          }
+        };
+
+        service.checkFeaturePermission = function(nav) {
+          //return true;
+          if($rootScope.currentUserInfo.featureListPermission) {
+            var permissions = $rootScope.currentUserInfo.featureListPermission;
+            return angular.isDefined(_.find(permissions, {featureKey: nav}));
           }
           else {
             return false;

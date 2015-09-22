@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <div class="row" ng-controller="TaskController">
     <div class="col-xs-12 task-list-section" ng-class="{'col-md-7': taskSelected, 'col-md-12': !taskSelected}">
         <div class="task-section">
@@ -61,9 +62,9 @@
                     </div>
                 </div>
                 <div class="panel-footer bg-light lter" id="task-panel-footer">
-                    <button class="btn btn-xs btn-primary" ng-click="addTask()"><!--<i class="fa fa-plus"></i> -->Add Task
+                    <button class="btn btn-xs btn-primary" ng-click="addTask()" permission="ADD_TASK"><!--<i class="fa fa-plus"></i> -->Add Task
                     </button>
-                    <button class="btn btn-xs btn-danger" ng-click="openDeleteTaskModal()" ng-if="taskSelected"><!--<i class="fa fa-times"></i> -->Delete Task
+                    <button class="btn btn-xs btn-danger" ng-click="openDeleteTaskModal()" ng-if="taskSelected" permission="DELETE_TASK"><!--<i class="fa fa-times"></i> -->Delete Task
                     </button>
                 </div>
             </div>

@@ -2,8 +2,8 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams', 'appConstant',
-    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams, appConstant) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams', 'appConstant', 'permissionFactory',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams, appConstant, permissionFactory) {
       var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
       var currentProjectId;
       var canceler;
@@ -81,6 +81,9 @@ define(function(require) {
       };
 
       $scope.selectActivity = function(activity) {
+        if(!permissionFactory.checkFeaturePermission('VIEW_TASK')) {
+          return;
+        }
         $scope.activitySelected = $rootScope.activitySelected = activity;
 
         // Update route

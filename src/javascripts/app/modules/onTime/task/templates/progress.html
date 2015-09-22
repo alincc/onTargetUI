@@ -9,7 +9,7 @@
     <!--<button class="btn btn-primary" ng-click="updateProgress()">Save</button>-->
     <div class="progress-box">
         <div class="progress-bar progress-bar-slider">
-            <input class="progress-slider" type="range" min="0" max="100" ng-model="model.percentageComplete" ng-mouseup="updateProgress()">
+            <input class="progress-slider" type="range" min="0" max="100" ng-model="model.percentageComplete" ng-mouseup="updateProgress()" ng-readonly="!isEdit">
             <div class="inner" ng-style="{ width: model.percentageComplete + '%' || '0%' }"></div>
         </div>
     </div>

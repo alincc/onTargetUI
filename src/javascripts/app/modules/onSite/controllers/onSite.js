@@ -1,14 +1,14 @@
 define(function(require){
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications',
-    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications){
+  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state',
+    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state){
       $scope.app = appConstant.app;
       $scope.isLoading = false;
       $scope.viewMode = "list";
       $scope.uploadedDocumentList = [];
       $scope.uploadedDocumentArrangedList = [];
-      $scope.isPreview = angular.isDefined($stateParams.docId);
+      //$scope.isPreview = angular.isDefined($stateParams.docId);
       $scope.currentProject = $rootScope.currentProjectInfo;
 
       $scope.selectedDoc = null;
@@ -31,7 +31,6 @@ define(function(require){
 
       //list all document
       function getUploadedDocumentList(){
-        $scope.isLoading = true;
         documentFactory.getUploadedDocumentList($rootScope.currentProjectInfo.projectId).
           then(function(content){
             $scope.isLoading = false;
@@ -40,12 +39,12 @@ define(function(require){
             $scope.uploadedDocumentArrangedList = arrangeData($scope.uploadedDocumentList, 4);
 
             // get current preview doc
-            if($scope.isPreview) {
+            /*if($scope.isPreview) {
               var found = _.where($scope.uploadedDocumentList, {fileId: parseInt($stateParams.docId)})[0];
               if(found) {
                 $scope.preview(found);
               }
-            }
+            }*/
           }, function(error){
             $scope.isLoading = false;
           });
@@ -66,16 +65,67 @@ define(function(require){
         });
       };
 
-      getUploadedDocumentList();
+      /*var getDocumentDetail = function (cb){
+        if($stateParams.docId) {
+          documentFactory.getDocumentDetail({
+            projectId: $rootScope.currentProjectInfo.projectId,
+            projectFileId: Number($stateParams.docId)
+          }).then(
+            function (resp){
+              if(resp.data.projectFile){
+                //map data
+                var doc = resp.data.projectFile;
+                var fileExtension = utilFactory.getFileExtension(doc.name);
+                var filePath = $filter('filePath')(doc.name);
+                doc.filePath = filePath;
+                doc.previewPath = filePath;
+                doc.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
+                if(!doc.isImage) {
+                  doc.previewPath = $sce.trustAsResourceUrl('http://docs.google.com/gview?url=' + filePath + '&embedded=true');
+                }
+
+                //call preview
+                $scope.setPreview(doc);
+                $scope.isLoading = false;
+              } else {
+                $location.search('docId', null);
+              }
+            }, function (err){
+              $location.search('docId', null);
+            }
+          );
+          /!*var found = _.where($scope.uploadedDocumentList, {fileId: parseInt($stateParams.docId)})[0];
+          if(found) {
+            $scope.preview(found);
+          }
+          else {
+            $location.search('docId', null);
+          }*!/
+        } else {
+          if(cb) {
+            cb();
+          }
+        }
+      };*/
 
       //preview document
-      $scope.preview = function(doc){
+      /*$scope.setPreview = function(doc){
         console.log(doc);
         $scope.selectedDoc = doc;
         $scope.comments = [];
         $scope.isPreview = true;
         $scope.loadComment();
-        $location.search('docId', doc.fileId);
+      };*/
+      
+      $scope.preview = function (doc){
+        //$location.search('docId', doc.fileId);
+        $state.go('app.previewDocument', {docId: doc.fileId});
+      };
+
+      var load = function (){
+        $scope.isLoading = true;
+        //getDocumentDetail(getUploadedDocumentList);
+        getUploadedDocumentList();
       };
 
       // View mode
@@ -207,6 +257,10 @@ define(function(require){
         $scope.uploadedDocumentList = $scope.uploadedDocumentArrangedList = [];
         getUploadedDocumentList();
       });
+
+      load();
+
+
     }];
   return controller;
 });

@@ -48,51 +48,56 @@
   .project-heath {
     .panel-body {
       position: relative;
+      overflow-x: scroll;
+      overflow-y: hidden;
       h4 {
         margin-top: 0;
         color: #7a7b7a;
       }
-      .chart-container {
-        .legend {
-          > div {
-            display: none;
-          }
-          table {
-            position: absolute;
-            top: -30px !important;
-            right: 0 !important;
+      .outer-chart {
+        .chart-container {
+          min-width: 800px;
+          .legend {
+            > div {
+              display: none;
+            }
+            table {
+              position: absolute;
+              top: -30px !important;
+              right: 0 !important;
 
-            .legendColorBox {
-              > div {
+              .legendColorBox {
                 > div {
-                  width: 12px !important;
-                  height: 12px !important;
-                  border-width: 3px !important;
+                  > div {
+                    width: 12px !important;
+                    height: 12px !important;
+                    border-width: 3px !important;
+                  }
                 }
               }
-            }
-            .legendLabel {
-              span {
-                font-weight: 600;
-                font-size: 14px;
-                margin: 1px 10px 0 0;
-                display: block;
+              .legendLabel {
+                span {
+                  font-weight: 600;
+                  font-size: 14px;
+                  margin: 1px 10px 0 0;
+                  display: block;
+                }
               }
-            }
 
-            //.wrapper {
-            //  span {
-            //    display: block;
-            //    width: 12px;
-            //    height: 12px;
-            //    border-radius: 50%;
-            //    position: absolute;
-            //    left: -15px;
-            //    top: 3px;
-            //    border-width: 2px;
-            //    border-style: solid;
-            //  }
-            //}
+              //.wrapper {
+              //  span {
+              //    display: block;
+              //    width: 12px;
+              //    height: 12px;
+              //    border-radius: 50%;
+              //    position: absolute;
+              //    left: -15px;
+              //    top: 3px;
+              //    border-width: 2px;
+              //    border-style: solid;
+              //  }
+              //}
+            }
           }
         }
       }

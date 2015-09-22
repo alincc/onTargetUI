@@ -11,7 +11,9 @@ define(function(require) {
     ngMatch = require('./ngMatch'),
     noBreak = require('./noBreak'),
     loadingBar = require('./loadingBar'),
-    spinner = require('./spinner');
+    spinner = require('./spinner'),
+    permission = require('./permission'),
+    menuPermission = require('./menuPermission');
 
   var module = angular.module('common.directives',
     [
@@ -25,7 +27,9 @@ define(function(require) {
       'common.directives.filePath',
       'common.directives.noBreak',
       'common.directives.loadingBar',
-      'common.directives.spinner'
+      'common.directives.spinner',
+      'common.directives.permission',
+      'common.directives.menuPermission'
     ]);
   return module;
 });

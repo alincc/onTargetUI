@@ -105,7 +105,7 @@ define(function(require){
           responseError: function(response){
             console.log(response);
 
-            if(response.config.url.indexOf(constant.domain) > -1) {
+            if(response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.nodeServer) > -1) {
               if(response.status === 400) {
                 if(angular.isString(response.data)) {
                   toaster.pop('error', "Error", response.data);

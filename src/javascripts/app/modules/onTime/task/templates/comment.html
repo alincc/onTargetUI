@@ -16,7 +16,7 @@
                     <p>{{comment.comment}}</p>
                 </div>
             </div>
-            <div class="comment-box item">
+            <div class="comment-box item" permission="ADD_TASK_COMMENT">
                 <form name="comment_form" no-validate ng-submit="addComment()">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Add a comment or reply here" ng-model="model.comment" name="comment" required />

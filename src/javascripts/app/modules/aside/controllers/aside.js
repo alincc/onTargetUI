@@ -8,7 +8,7 @@ define(function() {
     };
 
     $scope.checkPermission = function(nav) {
-      return permissionFactory.checkPermission(nav);
+      return permissionFactory.checkMenuPermission(nav);
     };
   }];
   return controller;

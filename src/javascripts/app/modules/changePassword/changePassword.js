@@ -19,7 +19,9 @@ define(function(require) {
           .state('app.changePassword', {
             url: '/changePassword',
             templateUrl: "changePassword/templates/changePassword.html",
-            controller: 'ChangePasswordController'
+            controller: 'ChangePasswordController',
+            authorization: true,
+            fullWidth: true
           });
       }
     ]

@@ -37,7 +37,7 @@ define(function(require) {
                         resolve: {
                             projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory) {
                                 var deferred = $q.defer();
-                                if(projectContext.valid() && permissionFactory.checkPermission('ONTARGET')) {
+                                if(projectContext.valid() && permissionFactory.checkMenuPermission('ONTARGET')) {
                                     deferred.resolve();
                                 } else {
                                     $window.location.href = $state.href('app.projectlist');

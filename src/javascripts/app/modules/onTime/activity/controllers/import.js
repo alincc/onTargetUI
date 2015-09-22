@@ -1,11 +1,11 @@
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular'),
     moment = require('moment'),
     taskPriority = require('text!app/common/resources/taskSeverities.json');
 
   var controller = ['$scope', '$rootScope', '$modalInstance', 'toaster', 'parserFactory', 'activityFactory',
-    function($scope, $rootScope, $modalInstance, toaster, parserFactory, activityFactory) {
+    function($scope, $rootScope, $modalInstance, toaster, parserFactory, activityFactory){
 
       $scope.importModel = {
         file: null,
@@ -19,7 +19,7 @@ define(function(require) {
 
       $scope.isImporting = false;
 
-      $scope.$watch('importModel.file', function(file) {
+      $scope.$watch('importModel.file', function(file){
         console.log(file); // !file.$error
         if(file) {
           if(file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' && file.type !== 'application/vnd.ms-excel') {
@@ -30,22 +30,24 @@ define(function(require) {
         }
       });
 
-      $scope.parseTable = function() {
+      $scope.parseTable = function(){
         var records = $scope.importModel.results;
-        // parse header
-        var header = records[0];
-        if(header) {
-          $scope.importModel.table.headers = header;
-          if(records.length > 1) {
-            $scope.importModel.table.rows = records.splice(1);
+        if(records) {
+          // parse header
+          var header = records[0];
+          if(header) {
+            $scope.importModel.table.headers = header;
+            if(records.length > 1) {
+              $scope.importModel.table.rows = records.splice(1);
+            }
           }
+          console.log($scope.importModel.table);
         }
-        console.log($scope.importModel.table);
       };
 
-      $scope.progress = function(f) {
+      $scope.progress = function(f){
         parserFactory.parseXls(f)
-          .success(function(resp) {
+          .success(function(resp){
             $scope.importModel.results = resp.records;
             $scope.importModel.fileName = resp.name;
             console.log(resp, $scope.importModel);
@@ -53,7 +55,7 @@ define(function(require) {
           });
       };
 
-      $scope.import = function() {
+      $scope.import = function(){
         $scope.isImporting = true;
         var priorities = angular.fromJson(taskPriority);
         var data = {
@@ -61,7 +63,7 @@ define(function(require) {
           "filename": $scope.importModel.fileName,
           "activityTaskRecords": []
         };
-        _.each($scope.importModel.table.rows, function(el, idx) {
+        _.each($scope.importModel.table.rows, function(el, idx){
           data.activityTaskRecords.push({
             "index": idx,
             "activityCode": el[0],
@@ -82,11 +84,11 @@ define(function(require) {
         });
         console.log(data, $scope.importModel);
         activityFactory.import(data)
-          .success(function(resp) {
+          .success(function(resp){
             console.log(resp);
             if(resp.invalidActivityRecords.length > 0) {
               var html = '';
-              _.each(resp.invalidActivityRecords, function(el) {
+              _.each(resp.invalidActivityRecords, function(el){
                 html += '- Row ' + el.index + ': ' + el.invalidMsg + '</br>';
               });
               toaster.pop({
@@ -102,13 +104,13 @@ define(function(require) {
             }
             $scope.isImporting = false;
           })
-          .error(function(err) {
+          .error(function(err){
             console.log(err);
           });
       };
 
       //$modalInstance.close(data);
-      $scope.cancel = function() {
+      $scope.cancel = function(){
         $modalInstance.dismiss('cancel');
       };
     }];

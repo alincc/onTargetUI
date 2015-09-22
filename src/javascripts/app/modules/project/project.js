@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular'),
     angularBootstrap = require('angularBootstrap'),
@@ -23,6 +23,7 @@ define(function(require) {
     accountServiceModule = require('app/common/services/account'),
     companyServiceModule = require('app/common/services/company'),
     countryServiceModule = require('app/common/services/country'),
+    permissionServiceModule = require('app/common/services/permission'),
     userContextModule = require('app/common/context/user'),
     uploadServiceModule = require('app/common/services/file'),
     angularSvgRoundProgress = require('angularSvgRoundProgress'),
@@ -33,9 +34,9 @@ define(function(require) {
     ngFileUpload = require('ngFileUpload'),
     userNotificationsModule = require('app/common/services/userNotifications'),
     activityServiceModule = require('app/common/services/activity');
-  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications', 'common.services.activity', 'common.directives.changeProjectImage']);
+  var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications', 'common.services.activity', 'common.directives.changeProjectImage', 'common.services.permission']);
 
-  module.run(['$templateCache', function($templateCache) {
+  module.run(['$templateCache', function($templateCache){
     $templateCache.put('project/templates/list.html', template);
     $templateCache.put('project/templates/_createOrUpdate.html', createOrUpdateTemplate);
     $templateCache.put('project/templates/create.html', createTemplate);
@@ -52,21 +53,45 @@ define(function(require) {
 
   module.config(
     ['$stateProvider',
-      function($stateProvider) {
+      function($stateProvider){
         $stateProvider
           .state('app.projectlist', {
             url: '/projectlist',
             templateUrl: "project/templates/list.html",
             controller: 'ProjectListController',
             authorization: true,
-            fullWidth: true
+            fullWidth: true,
+            resolve: {
+              permission: ['$q', '$state', '$window', 'permissionFactory',
+                function($q, $state, $window, permissionFactory){
+                  var deferred = $q.defer();
+                  if(permissionFactory.checkFeaturePermission('VIEW_PROJECT')) {
+                    deferred.resolve();
+                  } else {
+                    $window.location.href = $state.href('app.editprofile');
+                  }
+                  return deferred.promise;
+                }]
+            }
           })
           .state('app.createProject', {
             url: '/create-project',
             templateUrl: 'project/templates/create.html',
             controller: 'ProjectCreateController',
             authorization: true,
-            fullWidth: true
+            fullWidth: true,
+            resolve: {
+              permission: ['$q', '$state', '$window', 'permissionFactory',
+                function($q, $state, $window, permissionFactory){
+                  var deferred = $q.defer();
+                  if(permissionFactory.checkFeaturePermission('ADD_PROJECT')) {
+                    deferred.resolve();
+                  } else {
+                    $window.location.href = $state.href('app.projectlist');
+                  }
+                  return deferred.promise;
+                }]
+            }
           })
           .state('app.editProject', {
             url: '/edit-project',
@@ -75,7 +100,7 @@ define(function(require) {
             authorization: true,
             fullWidth: true,
             resolve: {
-              project: ['$q', 'projectFactory', '$rootScope', '$location', function($q, projectFactory, $rootScope, $location) {
+              project: ['$q', 'projectFactory', '$rootScope', '$location', function($q, projectFactory, $rootScope, $location){
                 var project = $rootScope.editProject;
                 if(!project) {
                   $location.path("/app/projectlist");
@@ -83,14 +108,24 @@ define(function(require) {
                 delete $rootScope.editProject;
                 return project;
               }],
-              companies: ['$q', 'companyFactory', function($q, companyFactory) {
+              companies: ['$q', 'companyFactory', function($q, companyFactory){
                 var deferred = $q.defer();
                 companyFactory.search()
-                  .success(function(resp) {
+                  .success(function(resp){
                     deferred.resolve(resp.companyList);
                   });
                 return deferred.promise;
-              }]
+              }],
+              permission: ['$q', '$state', '$window', 'permissionFactory',
+                function($q, $state, $window, permissionFactory){
+                  var deferred = $q.defer();
+                  if(permissionFactory.checkFeaturePermission('EDIT_PROJECT')) {
+                    deferred.resolve();
+                  } else {
+                    $window.location.href = $state.href('app.projectlist');
+                  }
+                  return deferred.promise;
+                }]
             }
           });
       }

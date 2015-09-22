@@ -4,7 +4,7 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <a ui-sref="app.createProject" class="btn btn-info pull-right" <!--ng-click="openCreateProjectModal()-->"><i
+                    <a ui-sref="app.createProject" class="btn btn-info pull-right" permission="ADD_PROJECT"><i
                             class="fa fa-plus-circle"></i>
                         Add Project</a>
 
@@ -52,16 +52,16 @@
                                 <!--control-->
                                 <div align="center">
                                     <ul class="list-inline">
-                                        <li class="text-left"><a href="javascript:void(0)"
+                                        <li class="text-left"><a href="javascript:void(0)" permission="EDIT_PROJECT"
                                                                  ng-click="editProject(project)"><i
                                                 class="fa fa-pencil-square-o"></i>
                                             Edit</a>
                                         </li>
-                                        <li class="text-center"><a href="javascript:void(0)"
+                                        <li class="text-center"><a href="javascript:void(0)" permission="DELETE_PROJECT"
                                                                    ng-click="deleteProject(project)"><i
                                                 class="fa fa-trash-o"></i>
                                             Delete</a></li>
-                                        <li class="text-right"><a href="javascript:void(0)"
+                                        <li class="text-right"><a href="javascript:void(0)" permission="VIEW_DASHBOARD"
                                                                   ng-click="goDashboard(project)"><i
                                                 class="fa fa-clock-o"></i>
                                             Dashboard</a></li>
@@ -94,13 +94,13 @@
                                 </div>
                                 <div class="project-buttons">
                                     <div class="button button-edit">
-                                        <a href="javascript:void(0)"
+                                        <a href="javascript:void(0)" permission="EDIT_PROJECT"
                                            ng-click="editProject(project)"><i
                                                 class="fa fa-pencil-square-o"></i>
                                             Edit</a>
                                     </div>
                                     <div class="button button-delete">
-                                        <a href="javascript:void(0)"
+                                        <a href="javascript:void(0)" permission="DELETE_PROJECT"
                                            ng-click="deleteProject(project)"><i
                                                 class="fa fa-trash-o"></i>
                                             Delete</a>

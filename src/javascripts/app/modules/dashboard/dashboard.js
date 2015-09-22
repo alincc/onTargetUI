@@ -40,7 +40,7 @@ define(function(require) {
               projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'utilFactory', '$rootScope', 'permissionFactory',
                 function($location, projectContext, $q, $state, $window, utilFactory, $rootScope, permissionFactory) {
                 var deferred = $q.defer();
-                if(projectContext.valid() && permissionFactory.checkPermission('DASHBOARD')) {
+                if(projectContext.valid() && permissionFactory.checkMenuPermission('DASHBOARD') && permissionFactory.checkFeaturePermission('VIEW_DASHBOARD')) {
                   // prepare project address
                   utilFactory.generateAddress($rootScope.currentProjectInfo.projectAddress)
                     .then(function(add) {
