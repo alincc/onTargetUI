@@ -19307,32 +19307,56 @@ a.text-black:hover {
   font-size: 14px;
   color: #a7a7a7;
 }
-.dashboard-page .project-heath .panel-body {
-  position: relative;
-  overflow-x: scroll;
-  overflow-y: hidden;
-}
 .dashboard-page .project-heath .panel-body h4 {
   margin-top: 0;
   color: #7a7b7a;
 }
-.dashboard-page .project-heath .panel-body .outer-chart .chart-container {
-  min-width: 800px;
+.dashboard-page .project-heath .panel-body .legend-container {
+  position: absolute;
+  width: 235px;
+  height: 24px;
+  top: 15px;
+  right: 27px;
+  opacity: 0.85;
+  background-color: #ffffff;
 }
-.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend > div {
+.dashboard-page .project-heath .panel-body .legend-container > div {
   display: none;
 }
-.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend table {
-  position: absolute;
-  top: -30px !important;
-  right: 0 !important;
-}
-.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend table .legendColorBox > div > div {
+.dashboard-page .project-heath .panel-body .legend-container table .legendColorBox > div > div {
   width: 12px !important;
   height: 12px !important;
   border-width: 3px !important;
 }
-.dashboard-page .project-heath .panel-body .outer-chart .chart-container .legend table .legendLabel span {
+.dashboard-page .project-heath .panel-body .legend-container table .legendLabel span {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 1px 10px 0 0;
+  display: block;
+}
+.dashboard-page .project-heath .panel-body .chart-container-outer {
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-bottom: 10px;
+}
+.dashboard-page .project-heath .panel-body .chart-container-outer .chart-container {
+  min-width: 1000px;
+}
+.dashboard-page .project-heath .panel-body .chart-container-outer .chart-container .legend > div {
+  display: none;
+}
+.dashboard-page .project-heath .panel-body .chart-container-outer .chart-container .legend table {
+  position: absolute;
+  top: -30px !important;
+  right: 0 !important;
+}
+.dashboard-page .project-heath .panel-body .chart-container-outer .chart-container .legend table .legendColorBox > div > div {
+  width: 12px !important;
+  height: 12px !important;
+  border-width: 3px !important;
+}
+.dashboard-page .project-heath .panel-body .chart-container-outer .chart-container .legend table .legendLabel span {
   font-weight: 600;
   font-size: 14px;
   margin: 1px 10px 0 0;
@@ -19378,6 +19402,25 @@ a.text-black:hover {
   font-weight: 600;
   color: #7a7b7a;
 }
+.dashboard-page .project-date .percentage {
+  position: absolute;
+  top: 50%;
+  margin-top: -12px;
+  left: 0;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+.dashboard-page .project-date .percentage p {
+  margin: 0;
+}
+.dashboard-page .project-date .percentage p.large {
+  font-size: 30px;
+  line-height: 25px;
+}
+.dashboard-page .project-date .percentage p.small {
+  font-size: 12px;
+}
 .dashboard-page .info-left-icon {
   display: table;
   width: 100%;
@@ -19421,6 +19464,11 @@ a.text-black:hover {
 .dashboard-page .weather-container {
   display: table;
   width: 100%;
+  min-height: 112px;
+}
+.dashboard-page .weather-container .text-danger {
+  display: table-cell;
+  vertical-align: middle;
 }
 .dashboard-page .weather-container .icon {
   display: table-cell;
@@ -19777,6 +19825,8 @@ a.text-black:hover {
 }
 .projectlist-page .project-grid .project-box .panel-body .description-container .list-inline li {
   display: table-cell;
+  text-align: center;
+  padding: 0;
 }
 .projectlist-page .project-grid .project-box .panel-body .description-container .project-description {
   text-overflow: ellipsis;
@@ -20095,6 +20145,29 @@ a.text-black:hover {
 }
 .on-site-page .panel-default .panel-heading {
   height: 55px;
+}
+.ontarget-page .project-date {
+  position: relative;
+  text-align: center;
+}
+.ontarget-page .project-date .percentage {
+  position: absolute;
+  top: 50%;
+  margin-top: -12px;
+  left: 0;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+.ontarget-page .project-date .percentage p {
+  margin: 0;
+}
+.ontarget-page .project-date .percentage p.large {
+  font-size: 30px;
+  line-height: 25px;
+}
+.ontarget-page .project-date .percentage p.small {
+  font-size: 12px;
 }
 .activity-section .panel {
   border-radius: 5px;
