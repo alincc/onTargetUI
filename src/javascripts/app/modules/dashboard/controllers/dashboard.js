@@ -74,9 +74,8 @@ define(function(require) {
                 var d = new Date(value.year, value.month, 1);
                 var lbName = monthNames[d.getMonth() === 0 ? 11 : d.getMonth() - 1] + ' ' + value.year;
                 labels.push(lbName);
-
                 // Earned values
-                if(moment().isAfter(moment([value.year, value.month]))){
+                if(moment().diff(moment([value.year, value.month]), 'months') >= 0) {
                   earnedValueData.push([
                     lbName,
                     value.cumulativeEarnedValue
@@ -84,7 +83,7 @@ define(function(require) {
                 }
 
                 // Actual values
-                if(moment().isAfter(moment([value.year, value.month]))){
+                if(moment().diff(moment([value.year, value.month]), 'months') >= 0) {
                   actualValueData.push([
                     lbName,
                     value.cumulativeActualCost

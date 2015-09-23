@@ -128,11 +128,12 @@ define(function(require){
                 }
               }
               else if(response.status === 401) {
-                pushFactory.unbind('onTargetAll');
-                pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
-                userContext.clearInfo();
-                projectContext.clearInfo();
-                $location.path('/signin');
+                toaster.pop('error', "Permission denied", "You have no permission to access this. Please contact your administrator");
+                //pushFactory.unbind('onTargetAll');
+                //pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
+                //userContext.clearInfo();
+                //projectContext.clearInfo();
+                //$location.path('/signin');
               }
             }
 
@@ -239,8 +240,8 @@ define(function(require){
   module.constant('appConstant', {
     domain: 'http://localhost:9000/ontargetrs/services',
     baseUrl: 'http://localhost:9000',
-    nodeServer: 'http://int.app.ontargetcloud.com:9001',
-    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    nodeServer: 'http://demo.newoceaninfosys.com:3215',
+    resourceUrl: 'http://demo.newoceaninfosys.com:3215',
     app: {
       name: "OnTarget",
       id: "OnTarget",
