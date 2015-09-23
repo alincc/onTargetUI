@@ -6,7 +6,7 @@
                 <div class="col-xs-12">
                     <h1 class="m-n font-thin h3 text-black">Dashboard
                         <a class="btn btn-default pull-right" permission="VIEW_PROJECT" href="#/app/projectlist"><i
-                            class="fa fa-arrow-left"></i> Back to projects list
+                                class="fa fa-arrow-left"></i> Back to projects list
                         </a>
                     </h1>
                 </div>
@@ -163,9 +163,10 @@
                             <!--legend="true"-->
                             <!--series="series">-->
                             <!--</canvas>-->
-                            <div class="outer-chart">
-                            <div j-plot class="chart-container" data="plot.data" options="plot.options"
-                                 style="height:240px"></div>
+                            <div class="legend-container" id="legend-container"></div>
+                            <div class="chart-container-outer">
+                                <div j-plot class="chart-container" data="plot.data" options="plot.options"
+                                     style="height:240px"></div>
                             </div>
                         </div>
                     </div>
@@ -457,7 +458,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="tl-avatar">
-                                                    <img path="{{activityLog.userImage}}" class="image-circle" file-path/>
+                                                    <img path="{{activityLog.userImage}}" class="image-circle"
+                                                         file-path/>
                                                 </div>
                                                 <div class="tl-content tl-log-text">{{activityLog.text}}</div>
 

@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<!--<div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> ONTARGET</strong></div>
         <div class="panel-body">
@@ -44,4 +44,143 @@
         </div>
     </div>
 
+</div>-->
+<div class="ontarget-page">
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="m-n font-thin h3 text-black">onTARGET</h1>
+                </div>
+            </div>
+        </div>
+        <!-- / main header -->
+        <div class="wrapper-md p-r-none">
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Cost Performance Index</h4>
+
+                            <div class="row">
+                                <div class="col-xs-12 project-date">
+                                    <div class="percentage">
+                                        <p class="large">{{costPerformanceIndex}} %</p>
+                                    </div>
+                                    <span
+                                            round-progress
+                                            max="100"
+                                            current="costPerformanceIndex"
+                                            color="#{{costPerformanceIndex | projectPercentageColor}}"
+                                            bgcolor="#ececec"
+                                            radius="80"
+                                            stroke="25"
+                                            semi="false"
+                                            rounded="false"
+                                            clockwise="true"
+                                            responsive="false"
+                                            iterations="10"
+                                            animation="easeInOutQuart">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Schedule Performance Index</h4>
+
+                            <div class="row">
+                                <div class="col-xs-12 project-date">
+                                    <div class="percentage">
+                                        <p class="large">{{schedulePerformanceIndex}} %</p>
+                                    </div>
+                                    <span
+                                            round-progress
+                                            max="100"
+                                            current="schedulePerformanceIndex"
+                                            color="#{{schedulePerformanceIndex | projectPercentageColor}}"
+                                            bgcolor="#ececec"
+                                            radius="80"
+                                            stroke="25"
+                                            semi="false"
+                                            rounded="false"
+                                            clockwise="true"
+                                            responsive="false"
+                                            iterations="10"
+                                            animation="easeInOutQuart">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Cost Variance</h4>
+
+                            <div class="row">
+                                <div class="col-xs-12 project-date">
+                                    <div class="percentage">
+                                        <p class="large">{{costVariance}} %</p>
+                                    </div>
+                                    <span
+                                            round-progress
+                                            max="100"
+                                            current="costVariance"
+                                            color="#{{costVariance | projectPercentageColor}}"
+                                            bgcolor="#ececec"
+                                            radius="80"
+                                            stroke="25"
+                                            semi="false"
+                                            rounded="false"
+                                            clockwise="true"
+                                            responsive="false"
+                                            iterations="10"
+                                            animation="easeInOutQuart">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Time Variance</h4>
+
+                            <div class="row">
+                                <div class="col-xs-12 project-date">
+                                    <div class="percentage">
+                                        <p class="large">{{timeVariance}} %</p>
+                                    </div>
+                                    <span
+                                            round-progress
+                                            max="100"
+                                            current="timeVariance"
+                                            color="#{{timeVariance | projectPercentageColor}}"
+                                            bgcolor="#ececec"
+                                            radius="80"
+                                            stroke="25"
+                                            semi="false"
+                                            rounded="false"
+                                            clockwise="true"
+                                            responsive="false"
+                                            iterations="10"
+                                            animation="easeInOutQuart">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

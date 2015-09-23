@@ -280,6 +280,13 @@ define(function(require){
         'ffb56d',
         'e25805'
       ],
+      percentageColor: [
+        'FF0000',
+        '800000',
+        'FFFF00',
+        'FFBF00',
+        'e25805'
+      ],
       projectHealthColours: [
         '#06bf3f', // green
         '#ff7e00', // orange

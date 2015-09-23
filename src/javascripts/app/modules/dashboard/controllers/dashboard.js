@@ -132,7 +132,8 @@ define(function(require) {
                   noColumns: 3,
                   labelFormatter: function(label, series) {
                     return '<span style="color:' + series.color + ';">' + label + '</span>';
-                  }
+                  },
+                  container: angular.element(document.querySelector('#legend-container'))
                 }
               }
             };
@@ -237,7 +238,6 @@ define(function(require) {
               $scope.weather.name = resp.name;
               $scope.weather.desc = resp.weather[0].description;
               $scope.weather.icon = resp.weather[0].icon;
-              $scope.weather.id = resp.weather[0].id;
             }
           });
 

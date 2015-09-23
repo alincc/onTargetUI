@@ -37,7 +37,7 @@
             <span>onFILE</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item" menu-permission="ONTARGET">
+    <li ui-sref-active="selected" ng-class="{'selected': $state.current.name == 'app.previewDocument'}"  class="item" menu-permission="ONTARGET">
         <a ui-sref="app.onTarget">
             <img src="img/icons/onTarget-icon-white.png" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />

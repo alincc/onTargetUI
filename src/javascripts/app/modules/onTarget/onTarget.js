@@ -16,9 +16,11 @@ define(function(require) {
 
         onSiteServiceModule = require('app/common/services/onTarget'),
         utilServiceModule = require('app/common/services/util'),
-        angularSanitize = require('angularSanitize');
+        angularSanitize = require('angularSanitize'),
+      colorFilter = require('app/common/filters/task'),
+      projectServiceModule = require('app/common/services/project');
 
-    var module = angular.module('app.onTarget', ['ui.router', 'app.config', 'common.context.project', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onTarget', 'common.services.util', 'ngSanitize', 'common.services.permission']);
+    var module = angular.module('app.onTarget', ['ui.router', 'app.config', 'common.context.project', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onTarget', 'common.services.util', 'ngSanitize', 'common.services.permission', 'common.filters.task', 'common.services.project']);
     module.run(['$templateCache', function($templateCache) {
         $templateCache.put('onTarget/templates/onTarget.html', template);
     }]);

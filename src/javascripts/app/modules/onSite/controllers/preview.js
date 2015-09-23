@@ -42,7 +42,7 @@ define(function(require){
         if($scope.selectedDoc) {
           onSiteFactory.addComment($scope.selectedDoc.fileId, model.comment, $scope.selectedDoc.name, $scope.selectedDoc.createdBy)
             .success(function(resp){
-              $scope.comments.push({
+              $scope.comments.unshift({
                 "comment": model.comment,
                 "commentedBy": $rootScope.currentUserInfo.userId,
                 "commentedDate": new Date().toISOString(),

@@ -14,17 +14,6 @@ define(function(require) {
             function(constant, $http) {
                 var service = {};
 
-                service.getBudgetChartData = function(projectId,userId) {
-                    var reqParams = {
-                        "baseRequest": {
-                            "loggedInUserId": userId,
-                            "loggedInUserProjectId": projectId
-                        },
-                        "projectId": projectId
-                    };
-
-                    return $http.post(constant.domain + '/report/earnedValueReport', reqParams);
-                };
                 return service;
             }
         ]

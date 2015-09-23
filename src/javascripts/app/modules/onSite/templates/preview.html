@@ -53,7 +53,7 @@
                                             said:
                                         </div>
                                         <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
-                                        <small class="text-muted" ng-bind="com.comment"></small>
+                                        <small class="text-muted" ng-bind-html="com.comment | escapeHtml | newLines"></small>
                                     </div>
                                 </li>
                             </ul>

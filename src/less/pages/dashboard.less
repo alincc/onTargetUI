@@ -47,16 +47,49 @@
   }
   .project-heath {
     .panel-body {
-      position: relative;
-      overflow-x: scroll;
-      overflow-y: hidden;
       h4 {
         margin-top: 0;
         color: #7a7b7a;
       }
-      .outer-chart {
+      .legend-container {
+        position: absolute;
+        width: 235px;
+        height: 24px;
+        top: 15px;
+        right: 27px;
+        opacity: 0.85;
+        background-color: rgb(255, 255, 255);
+        > div {
+          display: none;
+        }
+        table {
+
+          .legendColorBox {
+            > div {
+              > div {
+                width: 12px !important;
+                height: 12px !important;
+                border-width: 3px !important;
+              }
+            }
+          }
+          .legendLabel {
+            span {
+              font-weight: 600;
+              font-size: 14px;
+              margin: 1px 10px 0 0;
+              display: block;
+            }
+          }
+        }
+      }
+      .chart-container-outer {
+        position: relative;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        padding-bottom: 10px;
         .chart-container {
-          min-width: 800px;
+          min-width: 1000px;
           .legend {
             > div {
               display: none;
@@ -142,6 +175,25 @@
         color: #7a7b7a;
       }
     }
+    .percentage {
+      position: absolute;
+      top: 50%;
+      margin-top: -12px;
+      left: 0;
+      white-space: nowrap;
+      width: 100%;
+      text-align: center;
+      p {
+        margin: 0;
+        &.large {
+          font-size: 30px;
+          line-height: 25px;
+        }
+        &.small {
+          font-size: 12px;
+        }
+      }
+    }
   }
   .info-left-icon {
     display: table;
@@ -186,6 +238,11 @@
   .weather-container {
     display: table;
     width: 100%;
+    min-height: 112px;
+    .text-danger{
+      display: table-cell;
+      vertical-align: middle;
+    }
     .icon {
       display: table-cell;
       vertical-align: middle;
@@ -490,7 +547,7 @@
       height: 100%;
       background-color: #FAFAFA;
     }
-    .mCSB_outside+.mCSB_scrollTools {
+    .mCSB_outside + .mCSB_scrollTools {
       right: -18px;
     }
   }
