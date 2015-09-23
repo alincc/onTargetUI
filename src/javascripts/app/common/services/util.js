@@ -110,7 +110,7 @@ define(function(require) {
       return $http.get('http://api.openweathermap.org/data/2.5/weather', {
         params: {
           zip: zip,
-          units: 'imperial'
+          units:"Imperial"
         }
       });
     };
