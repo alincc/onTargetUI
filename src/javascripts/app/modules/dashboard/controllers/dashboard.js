@@ -238,6 +238,7 @@ define(function(require) {
               $scope.weather.name = resp.name;
               $scope.weather.desc = resp.weather[0].description;
               $scope.weather.icon = resp.weather[0].icon;
+              $scope.weather.id = resp.weather[0].id;
             }
           });
 
