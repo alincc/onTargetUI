@@ -222,7 +222,7 @@ define(function(require) {
         };
 
         $scope.getWeatherIconById = function() {
-          return "wi-owm-"+$scope.weather.id;
+          return "wi-owm-" + $scope.weather.id;
         };
 
         $scope.weatherError = false;
@@ -297,6 +297,10 @@ define(function(require) {
           $timeout(function() {
             $scope.$broadcast('content.reload');
           }, 200);
+        };
+
+        $scope.selectTask = function(task) {
+          $state.transitionTo('app.onTime', {activityId: task.activityId, taskId: task.projectTaskId});
         };
 
         // Task status
