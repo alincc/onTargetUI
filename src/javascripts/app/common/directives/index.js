@@ -13,7 +13,8 @@ define(function(require) {
     loadingBar = require('./loadingBar'),
     spinner = require('./spinner'),
     permission = require('./permission'),
-    menuPermission = require('./menuPermission');
+    menuPermission = require('./menuPermission'),
+    loadingButton = require('./loadingButton');
 
   var module = angular.module('common.directives',
     [
@@ -29,7 +30,8 @@ define(function(require) {
       'common.directives.loadingBar',
       'common.directives.spinner',
       'common.directives.permission',
-      'common.directives.menuPermission'
+      'common.directives.menuPermission',
+      'common.directives.loadingButton'
     ]);
   return module;
 });

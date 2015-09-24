@@ -3,18 +3,18 @@
         <div class="panel-heading bg-light lter">
             <span>Add Activity</span>
         </div>
-        <div class="create-edit panel-body" id="activity-create-panel">
-            <div class="modal-body add-project">
-                <form name="form" novalidate class="form-horizontal form-validation">
+        <form name="form" novalidate class="form-horizontal form-validation" ng-submit="save()">
+            <div class="create-edit panel-body" id="activity-create-panel">
+                <div class="modal-body add-project">
                     <div ng-include="'onTime/activity/templates/_createOrUpdate.html'"></div>
-                </form>
+                </div>
             </div>
-        </div>
-        <div class="panel-footer bg-light lter" ng-class="{'footer-height': activitySelected}">
-            <button class="btn btn-xs btn-primary" ng-disabled="form.$invalid || form.$submitted || onSubmit"
-                    ng-click="save()">Save
-            </button>
-            <button class="btn btn-xs btn-warning" type="button" ng-click="cancel()">Cancel</button>
-        </div>
+            <div class="panel-footer bg-light lter" ng-class="{'footer-height': activitySelected}">
+                <button class="btn btn-xs btn-primary" ng-disabled="form.$invalid || form.$submitted || onSubmit"
+                        type="submit" loading-button="form.$submitted" size="xs">Save
+                </button>
+                <button class="btn btn-xs btn-warning" type="button" ng-click="cancel()">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>

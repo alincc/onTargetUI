@@ -97,6 +97,14 @@
             button {
               padding: 3px 10px;
             }
+            .ladda-button[data-style=expand-right][data-loading]{
+              padding-right: 30px;
+            }
+            .ladda-button[data-style=expand-right]{
+              .ladda-spinner {
+                right: -16px;
+              }
+            }
           }
         }
       }
@@ -110,10 +118,5 @@
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 250px;
-  }
-  .panel-default{
-    .panel-heading {
-      height: 55px;
-    }
   }
 }

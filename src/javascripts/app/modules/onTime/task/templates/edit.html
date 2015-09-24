@@ -1,13 +1,14 @@
 <div ng-controller="EditTaskController">
-    <div class="add-edit-task panel-body" custom-scroll id="task-edit-panel">
-        <form name="task_form" no-validate class="form-validation">
+    <form name="task_form" no-validate class="form-validation" ng-submit="save()">
+        <div class="add-edit-task panel-body" custom-scroll id="task-edit-panel">
             <div ng-include="'onTime/task/templates/_createOrUpdate.html'"></div>
-        </form>
-    </div>
-    <div class="panel-footer bg-light lter">
-        <button class="btn btn-xs btn-primary" ng-click="save()"
-                ng-disabled="task_form.$error['required'] !== undefined || task_form.$submitted || onSubmit">Done
-        </button>
-        <button class="btn btn-xs btn-default" type="button" ng-click="cancel()">Cancel</button>
-    </div>
+        </div>
+        <div class="panel-footer bg-light lter">
+            <button class="btn btn-xs btn-primary" type="submit"
+                    loading-button="task_form.$submitted" size="xs"
+                    ng-disabled="task_form.$error['required'] !== undefined || task_form.$submitted || onSubmit">Done
+            </button>
+            <button class="btn btn-xs btn-default" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </form>
 </div>
