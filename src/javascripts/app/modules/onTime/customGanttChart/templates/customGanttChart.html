@@ -1,0 +1,39 @@
+<div data-ng-controller="CustomGanttChartController">
+    <div class="custom-gantt-chart-section">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="text-center" ng-if="isLoadingGanttChart">
+                    <spinner text="Loading..."></spinner>
+                </div>
+                <div class="row row-height" ng-show="ganttData.length > 0 && !isLoadingGanttChart">
+                    <div class="col-xs-3 col-md-2 activity-container col-height">
+                        <div class="activity-row-container">
+                            <div class="activity-row-name" ng-repeat="activity in ganttData">
+                                <span>{{activity.name}}</span>
+                            </div>
+                        </div>
+                        <div class="activity-name-footer"></div>
+                    </div>
+                    <div class="col-xs-9 col-md-10 gantt-container col-height">
+                        <div gantt data=ganttData
+                             column-width="getColumnWidth(options.width, options.scale, options.zoom)"
+                             template-url="onTime/customGanttChart/templates/customGanttChartTemplate.html"
+                             view-scale="options.scale"
+                             headers="options.headers"
+                             headers-formats="options.headersFormats"
+                             allow-side-resizing="options.allowSideResizing"
+                             show-side="options.showSide">
+                            <gantt-groups display="options.groupDisplayMode"></gantt-groups>
+                            <gantt-tooltips enabled="options.tooltips.enabled" date-format="options.tooltips.dateFormat"></gantt-tooltips>
+                            <gantt-bounds></gantt-bounds>
+                            <gantt-progress></gantt-progress>
+                            <!--<gantt-sortable></gantt-sortable>-->
+                            <gantt-draw-task></gantt-draw-task>
+                            <!--<gantt-resize-sensor></gantt-resize-sensor>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,7 @@
                     <spinner text="Loading..."></spinner>
                 </div>
                 <div class="panel-footer bg-light lter" ng-show="data.length > 0 && !isLoadingGanttChart">
-                    <div gantt data=data view-scale="options.scale" column-width="30">
+                    <div gantt data=data view-scale="day" column-width="30">
                         <gantt-tree></gantt-tree>
                         <gantt-groups></gantt-groups>
                         <gantt-tooltips></gantt-tooltips>
