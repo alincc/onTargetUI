@@ -38,7 +38,7 @@
                         <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Password is missing.</span>
                     </ng-messages>
                 </div>
-                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-disabled="form.$submitted || form.$invalid">Log in</button>
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" loading-button="form.$submitted" size="lg" ng-disabled="form.$submitted || form.$invalid">Log in</button>
 
                 <div class="text-right m-t m-b"><a ui-sref="forgotpassword">Forgot password ?</a> | <a
                         ui-sref="requestdemo">Request a demo</a></div>

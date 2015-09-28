@@ -160,7 +160,7 @@
                             <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Confirmation password is missing.</span>
                         </ng-messages>
                     </div>
-                    <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted = true" ng-disabled="form.$submitted || form.$invalid">Save</button>
+                    <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted = true" loading-button="form.$submitted" size="lg" ng-disabled="form.$submitted || form.$invalid">Save</button>
                 </div>
 
             </div>

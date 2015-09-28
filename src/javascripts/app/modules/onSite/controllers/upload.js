@@ -230,7 +230,7 @@ define(function(require) {
         }
         else if(source === 'DropBox') {
           $scope.extenalStorage.dropBox.isLeeching = true;
-          boxFactory.downloadFile(file.downloadUrl, file.fileName)
+          dropBoxFactory.downloadFile(file.downloadUrl, file.fileName)
             .success(function(resp) {
               $scope.extenalStorage.dropBox.isLeeching = false;
               done(resp);

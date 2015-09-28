@@ -47,52 +47,90 @@
   }
   .project-heath {
     .panel-body {
-      position: relative;
       h4 {
         margin-top: 0;
         color: #7a7b7a;
       }
-      .chart-container {
-        .legend {
-          > div {
-            display: none;
-          }
-          table {
-            position: absolute;
-            top: -30px !important;
-            right: 0 !important;
+      .legend-container {
+        position: absolute;
+        width: 235px;
+        height: 24px;
+        top: 15px;
+        right: 27px;
+        opacity: 0.85;
+        background-color: rgb(255, 255, 255);
+        > div {
+          display: none;
+        }
+        table {
 
-            .legendColorBox {
+          .legendColorBox {
+            > div {
               > div {
+                width: 12px !important;
+                height: 12px !important;
+                border-width: 3px !important;
+              }
+            }
+          }
+          .legendLabel {
+            span {
+              font-weight: 600;
+              font-size: 14px;
+              margin: 1px 10px 0 0;
+              display: block;
+            }
+          }
+        }
+      }
+      .chart-container-outer {
+        position: relative;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        padding-bottom: 10px;
+        .chart-container {
+          min-width: 1000px;
+          .legend {
+            > div {
+              display: none;
+            }
+            table {
+              position: absolute;
+              top: -30px !important;
+              right: 0 !important;
+
+              .legendColorBox {
                 > div {
-                  width: 12px !important;
-                  height: 12px !important;
-                  border-width: 3px !important;
+                  > div {
+                    width: 12px !important;
+                    height: 12px !important;
+                    border-width: 3px !important;
+                  }
                 }
               }
-            }
-            .legendLabel {
-              span {
-                font-weight: 600;
-                font-size: 14px;
-                margin: 1px 10px 0 0;
-                display: block;
+              .legendLabel {
+                span {
+                  font-weight: 600;
+                  font-size: 14px;
+                  margin: 1px 10px 0 0;
+                  display: block;
+                }
               }
-            }
 
-            //.wrapper {
-            //  span {
-            //    display: block;
-            //    width: 12px;
-            //    height: 12px;
-            //    border-radius: 50%;
-            //    position: absolute;
-            //    left: -15px;
-            //    top: 3px;
-            //    border-width: 2px;
-            //    border-style: solid;
-            //  }
-            //}
+              //.wrapper {
+              //  span {
+              //    display: block;
+              //    width: 12px;
+              //    height: 12px;
+              //    border-radius: 50%;
+              //    position: absolute;
+              //    left: -15px;
+              //    top: 3px;
+              //    border-width: 2px;
+              //    border-style: solid;
+              //  }
+              //}
+            }
           }
         }
       }
@@ -135,6 +173,25 @@
       span {
         font-weight: 600;
         color: #7a7b7a;
+      }
+    }
+    .percentage {
+      position: absolute;
+      top: 50%;
+      margin-top: -12px;
+      left: 0;
+      white-space: nowrap;
+      width: 100%;
+      text-align: center;
+      p {
+        margin: 0;
+        &.large {
+          font-size: 30px;
+          line-height: 25px;
+        }
+        &.small {
+          font-size: 12px;
+        }
       }
     }
   }
@@ -181,6 +238,11 @@
   .weather-container {
     display: table;
     width: 100%;
+    min-height: 112px;
+    .text-danger {
+      display: table-cell;
+      vertical-align: middle;
+    }
     .icon {
       display: table-cell;
       vertical-align: middle;
@@ -307,7 +369,11 @@
             width: 100%;
             border-bottom: solid 1px #ececec;
             padding-bottom: 10px;
-            margin-bottom: 15px;
+            padding-top: 15px;
+            &:hover {
+              cursor: pointer;
+              background-color: #f2f2f2;
+            }
             .task-status {
               display: table-cell;
               position: relative;
@@ -485,7 +551,7 @@
       height: 100%;
       background-color: #FAFAFA;
     }
-    .mCSB_outside+.mCSB_scrollTools {
+    .mCSB_outside + .mCSB_scrollTools {
       right: -18px;
     }
   }

@@ -6,11 +6,11 @@
                 <div class="col-xs-12">
                     <h1 class="m-n font-thin h3 text-black">
                         <button class="btn btn-default" ng-click="changeTab('taskManagement')"
-                                ng-class="{'selected': selectedTab==='taskManagement'}"><i
+                                ng-class="{'selected': selectedTab==='taskManagement'}" permission="VIEW_ACTIVITY"><i
                                 class="fa fa-bar-chart"></i> Task Management
                         </button>
                         <button class="btn btn-default" ng-click="changeTab('ganttChart')"
-                                ng-class="{'selected': selectedTab==='ganttChart'}"><i class="fa fa-align-left"></i>
+                                ng-class="{'selected': selectedTab==='ganttChart'}"><i class="fa fa-align-left" permission="VIEW_GANTT_CHART"></i>
                             Gantt Chart
                         </button>
                     </h1>
@@ -37,6 +37,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row" permission="VIEW_GANTT_CHART">
+                <div class="col-xs-12" ng-include="'onTime/customGanttChart/templates/customGanttChart.html'"></div>
             </div>
         </div>
         <div class="wrapper-md p-r-none activity-task-management" ng-if="selectedTab==='ganttChart'">

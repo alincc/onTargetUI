@@ -30,5 +30,14 @@ define(function(require) {
           percentage >= 50 ? appConstant.app.statusColours[1] :
             percentage >= 25 ? appConstant.app.statusColours[2] : appConstant.app.statusColours[3];
       };
+    }])
+    .filter('projectPercentageColor', ['appConstant', function(appConstant) {
+      return function(percentage) {
+        return percentage >= 100 ? appConstant.app.percentageColor[0] :
+          percentage >= 60 ? appConstant.app.percentageColor[1] :
+            percentage >= 40 ? appConstant.app.percentageColor[2] :
+              percentage >= 20 ? appConstant.app.percentageColor[3] :
+                appConstant.app.percentageColor[4];
+      };
     }]);
 });

@@ -9,6 +9,7 @@ define(function(require) {
     filePath = require('./filePath'),
     fileName = require('./fileName'),
     number = require('./number'),
+    escapeHtml = require('./escapeHtml'),
     fileThumbnail = require('./fileThumbnail');
 
   var module = angular.module('common.filters',
@@ -21,6 +22,7 @@ define(function(require) {
       'common.filters.filePath',
       'common.filters.fileName',
       'common.filters.number',
+      'common.filters.escapeHtml',
       'common.filters.fileThumbnail'
     ]);
   return module;

@@ -2,7 +2,7 @@
     <div class="no-result text-muted m-b-xs" ng-if="!model.assignees.length">This task has not been assigned yet.</div>
     <div ng-repeat="assignee in model.assignees" class="ow-item">
         <span><i class="fa fa-user"></i>&nbsp;&nbsp;<span class="name">{{assignee.contact.firstName}}&nbsp;{{assignee.contact.lastName}}</span></span>
-        <button class="btn btn-xs btn-warning" ng-click="removeUserFromTask(assignee)"><i class="fa fa-minus"></i>
+        <button class="btn btn-xs btn-warning" ng-click="removeUserFromTask(assignee)" permission="REMOVE_TASK_MEMBER"><i class="fa fa-minus"></i>
             Remove
         </button>
     </div>
@@ -19,7 +19,7 @@
                         </ui-select-choices>
                     </ui-select>
               <span class="input-group-btn">
-                <button class="btn btn-primary" ng-click="assignUserToTask()" ng-disabled="!model.selectedAssignee"><i class="fa fa-plus"></i> Add</button>
+                <button class="btn btn-primary" ng-click="assignUserToTask()" ng-disabled="!model.selectedAssignee" permission="ADD_TASK_MEMBER"><i class="fa fa-plus"></i> Add</button>
                   <button class="btn btn-warning" ng-click="onAddOwner = false"><i class="fa fa-minus"></i> Cancel</button>
               </span>
                 </div>

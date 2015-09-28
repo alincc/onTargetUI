@@ -5,8 +5,8 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h1 class="m-n font-thin h3 text-black">Dashboard
-                        <a class="btn btn-default pull-right" href="#/app/projectlist"><i
-                            class="fa fa-arrow-left"></i> Back to projects list
+                        <a class="btn btn-default pull-right" permission="VIEW_PROJECT" href="#/app/projectlist"><i
+                                class="fa fa-arrow-left"></i> Back to projects list
                         </a>
                     </h1>
                 </div>
@@ -132,7 +132,7 @@
                                 </section>
                                 <section ng-if="!weatherError">
                                     <div class="icon">
-                                        <i class="wi {{ getWeatherIcon() }}"></i>
+                                        <i class="wi {{ getWeatherIconById() }}"></i>
                                     </div>
                                     <div class="info">
                                         <p class="temp" ng-bind="weather.temp+' F'"></p>
@@ -163,8 +163,11 @@
                             <!--legend="true"-->
                             <!--series="series">-->
                             <!--</canvas>-->
-                            <div j-plot class="chart-container" data="plot.data" options="plot.options"
-                                 style="height:240px"></div>
+                            <div class="legend-container" id="legend-container"></div>
+                            <div class="chart-container-outer">
+                                <div j-plot class="chart-container" data="plot.data" options="plot.options"
+                                     style="height:240px"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,40 +179,7 @@
                             <tabset class="tab-container">
                                 <tab heading="Past due" class="task-past-due" select="taskTabSelect()">
                                     <div class="task-list" custom-scroll>
-                                        <div class="task-item" ng-repeat="task in tasks.pastDue">
-                                            <div class="task-status">
-                                                <div class="percentage">{{task.percentageComplete}}%</div>
-                                            <span
-                                                    round-progress
-                                                    max="100"
-                                                    current="task.percentageComplete"
-                                                    color="#{{task.percentageComplete | taskStatusColor}}"
-                                                    bgcolor="#ececec"
-                                                    radius="25"
-                                                    stroke="5"
-                                                    semi="false"
-                                                    rounded="false"
-                                                    clockwise="true"
-                                                    responsive="false"
-                                                    iterations="10"
-                                                    animation="easeInOutQuart">
-                                            </span>
-                                            </div>
-                                            <div class="task-info">
-                                                <div class="title">{{task.title}}</div>
-                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
-                                                </div>
-                                                <div class="priority"><span class="task-severity-{{task.severity}}"
-                                                                            ng-bind="task.severity|taskSeverity"></span>
-                                                    priority
-                                                </div>
-                                            </div>
-                                            <div class="task-update-date">
-                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
-                                            <div class="task-due-date">
-                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
+                                        <div class="task-item" ng-repeat="task in tasks.pastDue" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.pastDue.length">
                                             No tasks was found
@@ -218,40 +188,7 @@
                                 </tab>
                                 <tab heading="Active" class="task-active" select="taskTabSelect()">
                                     <div class="task-list" custom-scroll>
-                                        <div class="task-item" ng-repeat="task in tasks.active">
-                                            <div class="task-status">
-                                                <div class="percentage">{{task.percentageComplete}}%</div>
-                                            <span
-                                                    round-progress
-                                                    max="100"
-                                                    current="task.percentageComplete"
-                                                    color="#{{task.percentageComplete | taskStatusColor}}"
-                                                    bgcolor="#ececec"
-                                                    radius="25"
-                                                    stroke="5"
-                                                    semi="false"
-                                                    rounded="false"
-                                                    clockwise="true"
-                                                    responsive="false"
-                                                    iterations="10"
-                                                    animation="easeInOutQuart">
-                                            </span>
-                                            </div>
-                                            <div class="task-info">
-                                                <div class="title">{{task.title}}</div>
-                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
-                                                </div>
-                                                <div class="priority"><span class="task-severity-{{task.severity}}"
-                                                                            ng-bind="task.severity|taskSeverity"></span>
-                                                    priority
-                                                </div>
-                                            </div>
-                                            <div class="task-update-date">
-                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
-                                            <div class="task-due-date">
-                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
+                                        <div class="task-item" ng-repeat="task in tasks.active" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.active.length">
                                             No tasks was found
@@ -260,40 +197,7 @@
                                 </tab>
                                 <tab heading="Completed" class="task-completed" select="taskTabSelect()">
                                     <div class="task-list" custom-scroll>
-                                        <div class="task-item" ng-repeat="task in tasks.completed">
-                                            <div class="task-status">
-                                                <div class="percentage">{{task.percentageComplete}}%</div>
-                                            <span
-                                                    round-progress
-                                                    max="100"
-                                                    current="task.percentageComplete"
-                                                    color="#{{task.percentageComplete | taskStatusColor}}"
-                                                    bgcolor="#ececec"
-                                                    radius="25"
-                                                    stroke="5"
-                                                    semi="false"
-                                                    rounded="false"
-                                                    clockwise="true"
-                                                    responsive="false"
-                                                    iterations="10"
-                                                    animation="easeInOutQuart">
-                                            </span>
-                                            </div>
-                                            <div class="task-info">
-                                                <div class="title">{{task.title}}</div>
-                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
-                                                </div>
-                                                <div class="priority"><span class="task-severity-{{task.severity}}"
-                                                                            ng-bind="task.severity|taskSeverity"></span>
-                                                    priority
-                                                </div>
-                                            </div>
-                                            <div class="task-update-date">
-                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
-                                            <div class="task-due-date">
-                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
+                                        <div class="task-item" ng-repeat="task in tasks.completed" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.completed.length">
                                             No tasks was found
@@ -302,40 +206,7 @@
                                 </tab>
                                 <tab heading="Due in 7 days" class="task-due-in-7-days" select="taskTabSelect()">
                                     <div class="task-list" custom-scroll="{scrollX:'none', scrollY:'right'}">
-                                        <div class="task-item" ng-repeat="task in tasks.dueIn7Day">
-                                            <div class="task-status">
-                                                <div class="percentage">{{task.percentageComplete}}%</div>
-                                            <span
-                                                    round-progress
-                                                    max="100"
-                                                    current="task.percentageComplete"
-                                                    color="#{{task.percentageComplete | taskStatusColor}}"
-                                                    bgcolor="#ececec"
-                                                    radius="25"
-                                                    stroke="5"
-                                                    semi="false"
-                                                    rounded="false"
-                                                    clockwise="true"
-                                                    responsive="false"
-                                                    iterations="10"
-                                                    animation="easeInOutQuart">
-                                            </span>
-                                            </div>
-                                            <div class="task-info">
-                                                <div class="title">{{task.title}}</div>
-                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
-                                                </div>
-                                                <div class="priority"><span class="task-severity-{{task.severity}}"
-                                                                            ng-bind="task.severity|taskSeverity"></span>
-                                                    priority
-                                                </div>
-                                            </div>
-                                            <div class="task-update-date">
-                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
-                                            <div class="task-due-date">
-                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
+                                        <div class="task-item" ng-repeat="task in tasks.dueIn7Day" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.dueIn7Day.length">
                                             No tasks was found
@@ -344,41 +215,7 @@
                                 </tab>
                                 <tab heading="Critical" class="task-critical" select="taskTabSelect()">
                                     <div class="task-list" custom-scroll>
-                                        <div class="task-item" ng-repeat="task in tasks.critical">
-                                            <div class="task-status">
-                                                <div class="percentage">{{task.percentageComplete}}%</div>
-                                            <span
-                                                    round-progress
-                                                    max="100"
-                                                    current="task.percentageComplete"
-                                                    color="#{{task.percentageComplete | taskStatusColor}}"
-                                                    bgcolor="#ececec"
-                                                    radius="25"
-                                                    stroke="5"
-                                                    semi="false"
-                                                    rounded="false"
-                                                    clockwise="true"
-                                                    responsive="false"
-                                                    iterations="10"
-                                                    animation="easeInOutQuart">
-                                            </span>
-                                            </div>
-                                            <div class="task-info">
-                                                <div class="title">{{task.title}}</div>
-                                                <div class="assignee">Assigned to: <span>{{task.assignee[0].contact.firstName}}&nbsp;{{task.assignee[0].contact.lastName}}</span>
-                                                </div>
-                                                <div class="priority"><span class="task-severity-{{task.severity}}"
-                                                                            ng-bind="task.severity|taskSeverity"></span>
-                                                    priority
-                                                </div>
-                                            </div>
-                                            <div class="task-update-date">
-                                                Updated On: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
-                                            <div class="task-due-date">
-                                                Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
-                                            </div>
-                                        </div>
+                                        <div class="task-item" ng-repeat="task in tasks.critical" dashboard-task></div>
                                         <div class="no-result text-center" ng-if="!tasks.critical.length">
                                             No tasks was found
                                         </div>
@@ -455,7 +292,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="tl-avatar">
-                                                    <img path="{{activityLog.userImage}}" class="image-circle" file-path/>
+                                                    <img path="{{activityLog.userImage}}" class="image-circle"
+                                                         file-path/>
                                                 </div>
                                                 <div class="tl-content tl-log-text">{{activityLog.text}}</div>
 

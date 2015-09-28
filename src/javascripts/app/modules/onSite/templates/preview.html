@@ -1,0 +1,82 @@
+<div class="on-site-page">
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW">
+                        onSITE
+                        <button class="btn btn-default pull-right" ng-click="backToList()"><i
+                                class="fa fa-arrow-left"></i> Back to list
+                        </button>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper-md p-r-none" permission="ONSITE_VIEW">
+            <div class="row">
+                <div class="col-xs-12 col-md-8 p-r-0 preview-section">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
+                        <div class="panel-body">
+                            <iframe
+                                    ng-src="{{selectedDoc.previewPath}}"
+                                    frameborder="0" ng-if="!selectedDoc.isImage">
+                            </iframe>
+                            <div class="image-preview-wrapper"
+                                 ng-if="selectedDoc.isImage">
+                                <img class="image-size wrapper-xs" ng-src="{{selectedDoc.previewPath}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Comments</div>
+                        <div class="panel-body" custom-scroll>
+                            <div class="text-center" ng-if="isLoadingComment">
+                                <spinner text="Loading comments..."></spinner>
+                            </div>
+                            <div class="text-center" ng-if="!isLoadingComment && !comments.length">
+                                No comments
+                            </div>
+                            <ul class="list-group no-bg no-borders pull-in">
+                                <li class="list-group-item" ng-repeat="com in comments track by $index">
+                                    <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
+                                        <img path="{{com.commenterContact.userImagePath}}" file-path alt="..."
+                                             class="img-circle">
+                                    </a>
+
+                                    <div class="clear comment-content">
+                                        <div class="commenter"><a href="javascript:void(0)"
+                                                                  ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
+                                            said:
+                                        </div>
+                                        <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
+                                        <small class="text-muted" ng-bind-html="com.comment | escapeHtml | newLines"></small>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="add-comment" ng-show="!isLoadingComment" permission="ONSITE_ADD_COMMENT">
+                                <form name="add_comment_frm" novalidate
+                                      ng-submit="addComment(addCommentModel, add_comment_frm)">
+                                    <div class="textarea">
+                                        <textarea ng-model="addCommentModel.comment" auto-grow=""
+                                                  placeholder="Add a comment or reply here" rows="1"
+                                                  required></textarea>
+                                    </div>
+                                    <div class="button">
+                                        <button class="btn btn-primary" type="submit"
+                                                ng-disabled="add_comment_frm.$invalid || add_comment_frm.$submitted"
+                                                loading-button="add_comment_frm.$submitted" size="c">
+                                            Send <i class="fa fa-paper-plan-o"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

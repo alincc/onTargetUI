@@ -6,8 +6,8 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'permissionFactory',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, permissionFactory) {
       console.log($rootScope.currentTask);
       $scope.model = {
         percentageComplete: '',
@@ -19,6 +19,9 @@ define(function(require) {
 
 
       $scope.updateProgress = function() {
+        if(!$scope.isEdit) {
+          return;
+        }
         //taskProgressList[0].taskPercentageLogId
         taskFactory.createTaskPercentage({
           taskProgressList: $scope.model
@@ -33,6 +36,15 @@ define(function(require) {
           }
         );
       };
+
+      $scope.isEdit = false;
+      var checkPermission = function (){
+        if(permissionFactory.checkFeaturePermission('ADD_TASK_PERCENTAGE') || permissionFactory.checkFeaturePermission('EDIT_TASK_PERCENTAGE')) {
+          $scope.isEdit = true;
+        }
+      };
+      checkPermission();
+
     }];
   return controller;
 });

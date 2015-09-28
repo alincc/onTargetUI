@@ -5,8 +5,8 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', 'userNotificationsFactory', 'notifications',
-    function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory, userNotificationsFactory, notifications) {
+  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', 'userNotificationsFactory', 'notifications', 'permissionFactory',
+    function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory, userNotificationsFactory, notifications, permissionFactory) {
       function arrangeData(data, itemPerRow) {
         var list = [];
         var row = [];
@@ -89,46 +89,46 @@ define(function(require) {
       var createProjectModalInstance, editProjectModalInstance, deleteProjectModalInstance;
 
       /*$scope.openCreateProjectModal = function() {
-        createProjectModalInstance = $modal.open({
-          templateUrl: 'project/templates/create.html',
-          controller: 'ProjectCreateController',
-          size: 'lg'
-        });
+       createProjectModalInstance = $modal.open({
+       templateUrl: 'project/templates/create.html',
+       controller: 'ProjectCreateController',
+       size: 'lg'
+       });
 
-        createProjectModalInstance.result.then(function() {
-          $scope.getUserProjectList();
-        }, function() {
+       createProjectModalInstance.result.then(function() {
+       $scope.getUserProjectList();
+       }, function() {
 
-        });
-      };
+       });
+       };
 
-      $scope.editProjectModal = function(project) {
-        // prepare company list
-        companyFactory.search().success(function(resp) {
-          editProjectModalInstance = $modal.open({
-            templateUrl: 'project/templates/edit.html',
-            controller: 'ProjectEditController',
-            size: 'lg',
-            resolve: {
-              project: function() {
-                return project;
-              },
-              companies: function() {
-                return resp.companyList;
-              }
-            }
-          });
+       $scope.editProjectModal = function(project) {
+       // prepare company list
+       companyFactory.search().success(function(resp) {
+       editProjectModalInstance = $modal.open({
+       templateUrl: 'project/templates/edit.html',
+       controller: 'ProjectEditController',
+       size: 'lg',
+       resolve: {
+       project: function() {
+       return project;
+       },
+       companies: function() {
+       return resp.companyList;
+       }
+       }
+       });
 
-          editProjectModalInstance.result.then(function() {
-            $scope.getUserProjectList();
-          }, function() {
+       editProjectModalInstance.result.then(function() {
+       $scope.getUserProjectList();
+       }, function() {
 
-          });
-        });
-      };*/
+       });
+       });
+       };*/
 
       //edit project
-      $scope.editProject = function (project){
+      $scope.editProject = function(project) {
         $rootScope.editProject = project;
         $state.go('app.editProject');
       };
@@ -153,6 +153,9 @@ define(function(require) {
       };
 
       $scope.goDashboard = function(pj) {
+        if(!permissionFactory.checkFeaturePermission('VIEW_DASHBOARD')) {
+          return;
+        }
         console.log(pj);
         projectContext.setProject(pj);
         // get project details
@@ -165,22 +168,14 @@ define(function(require) {
               userNotificationsFactory.getAll({
                 "pageNumber": 1,
                 "perPageLimit": 5
-              }).then(function (resp){
+              }).then(function(resp) {
                 $rootScope.userNotifications = resp.data;
                 notifications.getNotificationSuccess();
               });
 
               notifications.currentProjectChange({project: pj});
 
-              // get user details and permissions
-              accountFactory.getUserProfileDetails($rootScope.currentUserInfo.userId)
-                .success(function(resp) {
-                  var newObj = angular.copy($rootScope.currentUserInfo);
-                  newObj.menuProfile = $rootScope.currentUserInfo.menuProfile = resp.menuList;
-                  newObj.permissionProfile = $rootScope.currentUserInfo.permissionProfile = resp.featureList;
-                  userContext.fillInfo(newObj, true);
-                  $state.go('app.dashboard');
-                });
+              $state.go('app.dashboard');
             }
           });
       };

@@ -7,8 +7,8 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', '$filter',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, $filter) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', '$filter', 'permissionFactory',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, $filter, permissionFactory) {
       $scope.task = {};
       $scope.isLoading = false;
       $scope.isSubmitting = false;
@@ -19,6 +19,9 @@ define(function(require) {
         taskBudgetEstimates: []
       };
       $scope.isEdit = false;
+      if(permissionFactory.checkFeaturePermission('ADD_TASK_BUDGET') || permissionFactory.checkFeaturePermission('EDIT_TASK_BUDGET')) {
+        $scope.isEdit = true;
+      }
 
       function daydiff(first, second) {
         return (second - first) / (1000 * 60 * 60 * 24);
@@ -37,7 +40,7 @@ define(function(require) {
                 toDate = daydiff(new Date($scope.task.endDate), lastDate) ? $scope.task.endDate : lastDate;
               if(_.findIndex(n.costs, { 'costType': 'ACTUAL'}) < 0) {
                 var cost1 = {
-                  cost: '',
+                  cost: 0,
                   costType: "ACTUAL",
                   fromDate: fromDate,
                   toDate: toDate,
@@ -49,7 +52,7 @@ define(function(require) {
               }
               if(_.findIndex(n.costs, { 'costType': 'PLANNED'}) < 0) {
                 var cost2 = {
-                  cost: '',
+                  cost: 0,
                   costType: "PLANNED",
                   fromDate: fromDate,
                   toDate: toDate,

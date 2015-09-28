@@ -1,28 +1,32 @@
-<div class="modal-header">
-    <h3 class="modal-title">Import activity</h3>
-</div>
-<div class="modal-body activity-import-modal">
-    <form name="import_frm" no-validate class="form-horizontal form-validation">
+<form name="import_frm" no-validate class="form-horizontal form-validation" ng-submit="import()">
+    <div class="modal-header">
+        <h3 class="modal-title">Import activity</h3>
+    </div>
+    <div class="modal-body activity-import-modal">
+
         <div class="btn btn-primary btn-block" ngf-select ng-model="importModel.file"><i class="fa fa-cloud-upload"></i>
             Choose file
         </div>
         <div class="table-responsive m-t-sm" ng-if="importModel.results.length">
             <table class="table table-bordered">
                 <thead>
-                    <tr>
-                        <td ng-repeat="h in importModel.table.headers track by $index" ng-bind="h"></td>
-                    </tr>
+                <tr>
+                    <td ng-repeat="h in importModel.table.headers track by $index" ng-bind="h"></td>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="r in importModel.table.rows track by $index">
-                        <td ng-repeat="c in r track by $index" ng-bind="c"></td>
-                    </tr>
+                <tr ng-repeat="r in importModel.table.rows track by $index">
+                    <td ng-repeat="c in r track by $index" ng-bind="c"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
-    </form>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="import()" ng-disabled="!importModel.results.length || isImporting"><i class="fa fa-inbox"></i> Import</button>
-    <button class="btn btn-warning" type="button" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
-</div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit" loading-button="import_frm.$submitted"
+                ng-disabled="!importModel.results.length || isImporting"><i class="fa fa-inbox"></i> Import
+        </button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+    </div>
+</form>

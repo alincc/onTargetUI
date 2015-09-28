@@ -11,9 +11,6 @@ define(function(require) {
     $scope.activities = [];
     $scope.isLoadingGanttChart = false;
     var canceler;
-      $scope.options = {
-        scale: 'day'
-      };
 
     var load = function() {
       var project_data = [];
@@ -46,7 +43,6 @@ define(function(require) {
         project_data = project_data.concat(tempdata);
       });
       $scope.data = project_data;
-      console.log($scope.data);
     };
 
     //var currentProjectId = $rootScope.currentProjectInfo.projectId;

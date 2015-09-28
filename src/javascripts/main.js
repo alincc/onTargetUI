@@ -61,7 +61,9 @@ require.config({
     jPlotCategories: '../bower_components/flot/jquery.flot.categories',
     jPlotToolTip: '../bower_components/flot.tooltip/js/jquery.flot.tooltip',
     jPlotOrderBar: '../bower_components/flot.orderbars/js/jquery.flot.orderBars',
-    jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline'
+    jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline',
+    spin: '../js/ladda/js/spin',
+    ladda: '../js/ladda/js/ladda'
   },
 
   shim: {
@@ -94,6 +96,9 @@ require.config({
     },
     "jPlotSpline": {
       deps: ["jPlot"]
+    },
+    "ladda": {
+      deps: ["spin"]
     },
     "angular": {
       deps: ["jQuery"],

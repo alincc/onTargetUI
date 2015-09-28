@@ -15,7 +15,7 @@
                 <td class="nowrap action" valign="middle"><button class="btn btn-xs btn-info"><i class="fa fa-eye"></i></button> <button class="btn btn-xs btn-primary" ng-click="download(attachment)"><i class="fa fa-cloud-download"></i></button></td>
             </tr>
         </table>
-        <div class="uploader" ng-show="!isLoadingAttachments">
+        <div class="uploader" ng-show="!isLoadingAttachments" permission="ADD_TASK_ATTACHMENT">
             <button type="button" class="btn btn-primary btn-block" ngf-select ng-model="attachment.file" ngf-multiple="false" ng-disabled="isUploading"><i class="fa fa-cloud-upload"></i> Upload an attachment</button>
             <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploading"></div>
         </div>

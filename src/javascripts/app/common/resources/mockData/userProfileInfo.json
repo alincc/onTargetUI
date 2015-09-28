@@ -1,0 +1,246 @@
+{
+  "type": "userProfileResponse",
+  "authenticated": false,
+  "returnMessage": "Successfully retrieved user profile details",
+  "returnVal": "SUCCESS",
+  "featureList": [
+    {
+      "featureKey": "VIEW_DASHBOARD",
+      "featureName": "View Dashboard"
+    },
+    {
+      "featureKey": "ADD_PROJECT",
+      "featureName": "Add Project"
+    },
+    {
+      "featureKey": "EDIT_PROJECT",
+      "featureName": "Edit Project"
+    },
+    {
+      "featureKey": "VIEW_PROJECT",
+      "featureName": "View Project"
+    },
+    {
+      "featureKey": "DELETE_PROJECT",
+      "featureName": "Delete Project"
+    },
+    {
+      "featureKey": "ADD_ACTIVITY",
+      "featureName": "Add Activity"
+    },
+    {
+      "featureKey": "EDIT_ACTIVITY",
+      "featureName": "Edit Activity"
+    },
+    {
+      "featureKey": "VIEW_ACTIVITY",
+      "featureName": "View Activity"
+    },
+    {
+      "featureKey": "DELETE_ACTIVITY",
+      "featureName": "Delete Activity"
+    },
+    {
+      "featureKey": "ADD_TASK",
+      "featureName": "Add Task"
+    },
+    {
+      "featureKey": "EDIT_TASK",
+      "featureName": "Edit Task"
+    },
+    {
+      "featureKey": "VIEW_TASK",
+      "featureName": "View Task"
+    },
+    {
+      "featureKey": "DELETE_TASK",
+      "featureName": "Delete Task"
+    },
+    {
+      "featureKey": "ADD_TASK_COMMENT",
+      "featureName": "Add Task Comment"
+    },
+    {
+      "featureKey": "EDIT_TASK_COMMENT",
+      "featureName": "Edit Task Comment"
+    },
+    {
+      "featureKey": "VIEW_TASK_COMMENT",
+      "featureName": "View Task Comment"
+    },
+    {
+      "featureKey": "DELETE_TASK_COMMENT",
+      "featureName": "Delete Task Comment"
+    },
+    {
+      "featureKey": "ADD_TASK_ATTACHMENT",
+      "featureName": "Add Task Attachment"
+    },
+    {
+      "featureKey": "EDIT_TASK_ATTACHMENT",
+      "featureName": "Edit Task Attachment"
+    },
+    {
+      "featureKey": "VIEW_TASK_ATTACHMENT",
+      "featureName": "View Task Attachment"
+    },
+    {
+      "featureKey": "DELETE_TASK_ATTACHMENT",
+      "featureName": "Delete Task Attachment"
+    },
+    {
+      "featureKey": "ADD_TASK_PERCENTAGE",
+      "featureName": "Add Task Percentage"
+    },
+    {
+      "featureKey": "EDIT_TASK_PERCENTAGE",
+      "featureName": "Edit Task Percentage"
+    },
+    {
+      "featureKey": "VIEW_TASK_PERCENTAGE",
+      "featureName": "View Task Percentage"
+    },
+    {
+      "featureKey": "DELETE_TASK_PERCENTAGE",
+      "featureName": "Delete Task Percentage"
+    },
+    {
+      "featureKey": "IMPORT_ACTIVITY",
+      "featureName": "Import Activity"
+    },
+    {
+      "featureKey": "ADD_TASK_BUDGET",
+      "featureName": "Add Task Budget"
+    },
+    {
+      "featureKey": "EDIT_TASK_BUDGET",
+      "featureName": "Edit Task Budget"
+    },
+    {
+      "featureKey": "VIEW_TASK_BUDGET",
+      "featureName": "View Task Budget"
+    },
+    {
+      "featureKey": "DELETE_TASK_BUDGET",
+      "featureName": "Delete Task Budget"
+    },
+    {
+      "featureKey": "ADD_TASK_MEMBER",
+      "featureName": "Add Task Member"
+    },
+    {
+      "featureKey": "VIEW_TASK_MEMBER",
+      "featureName": "View Task Member"
+    },
+    {
+      "featureKey": "REMOVE_TASK_MEMBER",
+      "featureName": "Remove Task Member"
+    },
+    {
+      "featureKey": "INVITE_TO_COLLABORATE",
+      "featureName": "Invite To Collaborate"
+    },
+    {
+      "featureKey": "VIEW_GANTT_CHART",
+      "featureName": "View Gantt Chart"
+    },
+    {
+      "featureKey": "SEARCH",
+      "featureName": "Search"
+    },
+    {
+      "featureKey": "ONSITE_VIEW",
+      "featureName": "OnSite View"
+    },
+    {
+      "featureKey": "ONSITE_UPLOAD",
+      "featureName": "OnSite Upload"
+    },
+    {
+      "featureKey": "ONSITE_DELETE",
+      "featureName": "OnSite Delete"
+    },
+    {
+      "featureKey": "ONSITE_ADD_COMMENT",
+      "featureName": "OnSIte Add Comment"
+    },
+    {
+      "featureKey": "ONSITE_EDIT_COMMENT",
+      "featureName": "OnSite Edit Comment"
+    },
+    {
+      "featureKey": "ONSITE_DELETE_COMMENT",
+      "featureName": "OnSite Delete Comment"
+    },
+    {
+      "featureKey": "ONSITE_VIEW_COMMENT",
+      "featureName": "OnSite View Comment"
+    },
+    {
+      "featureKey": "VIEW_CONTACT",
+      "featureName": "View Contact"
+    },
+    {
+      "featureKey": "ONFILE_ADD",
+      "featureName": "OnFile Add"
+    },
+    {
+      "featureKey": "ONFILE_VIEW",
+      "featureName": "OnFile View"
+    },
+    {
+      "featureKey": "ONFILE_APPROVE",
+      "featureName": "OnFile Approve"
+    },
+    {
+      "featureKey": "ONFILE_REJECT",
+      "featureName": "OnFIle Reject"
+    }
+  ],
+  "menuList": [
+    {
+      "menuKey": "DASHBOARD",
+      "menuName": "Dashboard"
+    },
+    {
+      "menuKey": "ONTIME",
+      "menuName": "onTime"
+    },
+    {
+      "menuKey": "ONSITE",
+      "menuName": "onSite"
+    },
+    {
+      "menuKey": "ONFILE",
+      "menuName": "onFile"
+    },
+    {
+      "menuKey": "ONCONTACT",
+      "menuName": "onContact"
+    },
+    {
+      "menuKey": "ONBIM",
+      "menuName": "onBim"
+    },
+    {
+      "menuKey": "ONTARGET",
+      "menuName": "onTarget"
+    },
+    {
+      "menuKey": "ONREPORT",
+      "menuName": "onReport"
+    },
+    {
+      "menuKey": "INVITETOCOLLABORATE",
+      "menuName": "inviteToCollaborate"
+    },
+    {
+      "menuKey": "SEARCH",
+      "menuName": "search"
+    },
+    {
+      "menuKey": "GANTTCHART",
+      "menuName": "ganttChart"
+    }
+  ]
+}

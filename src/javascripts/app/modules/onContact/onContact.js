@@ -8,20 +8,15 @@ define(function(require) {
         uiRouter = require('uiRouter'),
         config = require('app/config'),
         template = require('text!./templates/onContact.html'),
-
         controller = require('./controllers/onContact'),
-
         projectContextModule = require('app/common/context/project'),
-
-
-
         angularLocalStorage = require('angularLocalStorage'),
-
         onSiteServiceModule = require('app/common/services/onContact'),
         utilServiceModule = require('app/common/services/util'),
         angularSanitize = require('angularSanitize');
 
     var module = angular.module('app.onContact', ['ui.router', 'app.config', 'common.context.project', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onContact', 'common.services.util', 'ngSanitize', 'common.services.permission']);
+
     module.run(['$templateCache', function($templateCache) {
         $templateCache.put('onContact/templates/onContact.html', template);
     }]);
@@ -40,7 +35,7 @@ define(function(require) {
                         resolve: {
                             projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory) {
                                 var deferred = $q.defer();
-                                if(projectContext.valid() && permissionFactory.checkPermission('ONCONTACT')) {
+                                if(projectContext.valid() && permissionFactory.checkMenuPermission('ONCONTACT')) {
                                     deferred.resolve();
                                 } else {
                                     $window.location.href = $state.href('app.projectlist');

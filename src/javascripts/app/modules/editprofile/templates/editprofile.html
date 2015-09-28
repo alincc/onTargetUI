@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h1 class="m-n font-thin h3 text-black">Edit Profile
-                        <a class="btn btn-default pull-right" href="#/app/projectlist"><i
+                        <a class="btn btn-default pull-right" permission="VIEW_PROJECT" href="#/app/projectlist"><i
                                 class="fa fa-arrow-left"></i> Back to projects list
                         </a>
                     </h1>
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-offset-2 col-xs-10">
-                                        <button type="submit" class="btn btn-sm btn-primary" ng-disabled="form.$invalid || form.$submitted">Update</button>
+                                        <button type="submit" class="btn btn-sm btn-primary" loading-button="form.$submitted" ng-disabled="form.$invalid || form.$submitted">Update</button>
                                     </div>
                                 </div>
                             </form>

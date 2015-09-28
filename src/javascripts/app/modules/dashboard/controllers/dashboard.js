@@ -1,7 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular'),
-    lodash = require('lodash');
+    lodash = require('lodash'),
+    moment = require('moment');
   var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', 'notifications', 'taskFactory',
     function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout, notifications, taskFactory) {
       $scope.app = appConstant.app;
@@ -32,7 +33,9 @@ define(function(require) {
             ];
 
             var labels = [];
-
+            var earnedValueData = [];
+            var actualValueData = [];
+            var plannedValueData = [];
             var SPI = "";
             var CPI = "";
             var CV = "";
@@ -47,7 +50,6 @@ define(function(require) {
 
             if(lineValues !== null) {
               _.forEach(lineValues, function(value, index) {
-                var dateToString = new Date(value.year, value.month - 1);
 
                 var thisMonth = value.month - 1;
 
@@ -68,34 +70,33 @@ define(function(require) {
                 PV.push(value.cumulativePlannedValue);
                 AC.push(value.cumulativeActualCost);
 
+                // Labels
                 var d = new Date(value.year, value.month, 1);
-                labels.push(monthNames[d.getMonth() === 0 ? 11 : d.getMonth() - 1]);
+                var lbName = monthNames[d.getMonth() === 0 ? 11 : d.getMonth() - 1] + ' ' + value.year;
+                labels.push(lbName);
+                // Earned values
+                if(moment().diff(moment([value.year, value.month]), 'months') >= 0) {
+                  earnedValueData.push([
+                    lbName,
+                    value.cumulativeEarnedValue
+                  ]);
+                }
+
+                // Actual values
+                if(moment().diff(moment([value.year, value.month]), 'months') >= 0) {
+                  actualValueData.push([
+                    lbName,
+                    value.cumulativeActualCost
+                  ]);
+                }
+
+                // Planned values
+                plannedValueData.push([
+                  lbName,
+                  value.cumulativePlannedValue
+                ]);
               });
             }
-
-            var earnedValueData = [];
-            _.each(labels, function(el, idx) {
-              earnedValueData.push([
-                el,
-                EV[idx]
-              ]);
-            });
-
-            var actualValueData = [];
-            _.each(labels, function(el, idx) {
-              actualValueData.push([
-                el,
-                AC[idx]
-              ]);
-            });
-
-            var plannedValueData = [];
-            _.each(labels, function(el, idx) {
-              plannedValueData.push([
-                el,
-                PV[idx]
-              ]);
-            });
 
             $scope.plot = {
               data: [
@@ -130,8 +131,9 @@ define(function(require) {
                   show: true,
                   noColumns: 3,
                   labelFormatter: function(label, series) {
-                    return '<span style="color:'+series.color+';">' + label + '</span>';
-                  }
+                    return '<span style="color:' + series.color + ';">' + label + '</span>';
+                  },
+                  container: angular.element(document.querySelector('#legend-container'))
                 }
               }
             };
@@ -218,6 +220,11 @@ define(function(require) {
               return "";
           }
         };
+
+        $scope.getWeatherIconById = function() {
+          return "wi-owm-" + $scope.weather.id;
+        };
+
         $scope.weatherError = false;
         $scope.isLoadingWeather = true;
         utilFactory.getWeather($scope.project.projectAddress.zip)
@@ -231,6 +238,7 @@ define(function(require) {
               $scope.weather.name = resp.name;
               $scope.weather.desc = resp.weather[0].description;
               $scope.weather.icon = resp.weather[0].icon;
+              $scope.weather.id = resp.weather[0].id;
             }
           });
 
@@ -289,6 +297,10 @@ define(function(require) {
           $timeout(function() {
             $scope.$broadcast('content.reload');
           }, 200);
+        };
+
+        $scope.selectTask = function(task) {
+          $state.transitionTo('app.onTime', {activityId: task.activityId, taskId: task.projectTaskId});
         };
 
         // Task status
@@ -366,7 +378,7 @@ define(function(require) {
         $timeout(function() {
           var height = document.getElementById('task-container').offsetHeight;
 
-          document.getElementById('time-line').setAttribute("style","height:" + (height - 52)  + "px");
+          document.getElementById('time-line').setAttribute("style", "height:" + (height - 52) + "px");
         });
       });
     }];

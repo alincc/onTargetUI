@@ -41,8 +41,6 @@ define(function(require){
         return {
           response: function(response){
             var defer = $q.defer();
-
-            //[{"message":"may not be null","messageTemplate":"{javax.validation.constraints.NotNull.message}","path":"task.projectId"},{"invalidValue":"com.ontarget.request.bean.TaskRequest@63b3e688","message":"Task date range must be between project date range","messageTemplate":"{task.date.range.not.between.project}","path":"0"}]
             if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
               var errorMessageHtml = '';
               _.each(response.data, function(el){
@@ -70,42 +68,12 @@ define(function(require){
               defer.resolve(response);
             }
 
-            //if(originalData.success === true) {
-            //  if(angular.isDefined(originalData.message) && originalData.message !== null && originalData.message !== '') {
-            //    toaster.pop('success', "Success!", originalData.message);
-            //  }
-            //  defer.resolve(response);
-            //} else { //data.success === false
-            //
-            //  //error_description
-            //  if(originalData.error) {
-            //    if(originalData.error.details) {
-            //      toaster.pop('error', originalData.error.message, originalData.error.details);
-            //    } else {
-            //      toaster.pop('error', "Error!", originalData.error.message);
-            //    }
-            //  } else {
-            //    originalData.error = defaultError;
-            //  }
-            //
-            //  //response.data = originalData.error;
-            //  defer.reject(response);
-            //
-            //  //if (originalData.unAuthorizedRequest && !originalData.targetUrl) {
-            //  //  location.reload();
-            //  //}
-            //}
-            //
-            ////if (originalData.targetUrl) {
-            ////  location.href = originalData.targetUrl;
-            ////}
-
             return defer.promise;
           },
           responseError: function(response){
             console.log(response);
 
-            if(response.config.url.indexOf(constant.domain) > -1) {
+            if(angular.isObject(response) && response.config && (response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.nodeServer) > -1)) {
               if(response.status === 400) {
                 if(angular.isString(response.data)) {
                   toaster.pop('error', "Error", response.data);
@@ -128,80 +96,15 @@ define(function(require){
                 }
               }
               else if(response.status === 401) {
-                pushFactory.unbind('onTargetAll');
-                pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
-                userContext.clearInfo();
-                projectContext.clearInfo();
-                $location.path('/signin');
+                toaster.pop('error', "Permission denied", "You have no permission to access this. Please contact your administrator");
+                //pushFactory.unbind('onTargetAll');
+                //pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
+                //userContext.clearInfo();
+                //projectContext.clearInfo();
+                //$location.path('/signin');
               }
             }
 
-            //if(response.status === 401) {
-            //  var deferred = $q.defer();
-            //  if(!inflightAuthRequest) {
-            //    inflightAuthRequest = $injector.get("$http").post(constant.domain + '/api/Account/Token', "grant_type=refresh_token&refresh_token=" + userContext.authentication().refresh_token, {
-            //      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            //    });
-            //  }
-            //  inflightAuthRequest.then(function(r) {
-            //    console.log(r);
-            //    inflightAuthRequest = null;
-            //    if(r.data.data.access_token && r.data.data.refresh_token && r.data.data.expires_in) {
-            //      userContext.setToken(r.data.data.access_token, r.data.data.refresh_token);
-            //      $injector.get("$http")(response.config).then(function(resp) {
-            //        deferred.resolve(resp);
-            //      }, function(err) {
-            //        deferred.reject();
-            //      });
-            //    } else {
-            //      deferred.reject();
-            //    }
-            //  }, function(er) {
-            //    inflightAuthRequest = null;
-            //    deferred.reject();
-            //    userContext.clearInfo();
-            //    $injector.get("$state").go('signin');
-            //  });
-            //  return deferred.promise;
-            //}
-            //else if(response && response.data) {
-            //  if(angular.isString(response.data.error)) {
-            //    toaster.pop('error', "Error", response.data.error);
-            //  }
-            //  else if(angular.isDefined(response.data.error) && angular.isObject(response.data.error)) {
-            //    var messageHtml = "";
-            //    var title = "Error";
-            //    if(angular.isDefined(response.data.error.modelState) && angular.isObject(response.data.error.modelState)) {
-            //      title = response.data.error.message;
-            //      for(var propertyName in response.data.error.modelState) {
-            //        if(_.isEmpty(propertyName)) {
-            //          if(angular.isArray(response.data.error.modelState[propertyName])) {
-            //            _.each(response.data.error.modelState[propertyName], function(el) {
-            //              messageHtml += '- ' + el + '</br>';
-            //            });
-            //          }
-            //        } else {
-            //          if(response.data.error.modelState.hasOwnProperty(propertyName) && /^model\./.test(propertyName)) {
-            //            if(angular.isArray(response.data.error.modelState[propertyName])) {
-            //              _.each(response.data.error.modelState[propertyName], function(el) {
-            //                messageHtml += '- ' + el + '</br>';
-            //              });
-            //            }
-            //          }
-            //        }
-            //      }
-            //    }
-            //    toaster.pop({
-            //      type: 'error',
-            //      title: title,
-            //      body: messageHtml,
-            //      bodyOutputType: 'trustedHtml'
-            //    });
-            //  }
-            //  else if(angular.isDefined(response.data.error_description)) {
-            //    toaster.pop('error', "Error", response.data.error_description);
-            //  }
-            //}
             return $q.reject(response);
           }
         }
@@ -239,10 +142,8 @@ define(function(require){
   module.constant('appConstant', {
     domain: 'http://localhost:9000/ontargetrs/services',
     baseUrl: 'http://localhost:9000',
-    //nodeServer: 'http://localhost:9001',
-    //resourceUrl: 'http://localhost:9001',
-    nodeServer: 'http://int.app.ontargetcloud.com:9001',
-    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    nodeServer: 'http://demo.newoceaninfosys.com:3215',
+    resourceUrl: 'http://demo.newoceaninfosys.com:3215',
     app: {
       name: "OnTarget",
       id: "OnTarget",
@@ -279,6 +180,13 @@ define(function(require){
         '55d63c',
         'e2df05',
         'ffb56d',
+        'e25805'
+      ],
+      percentageColor: [
+        'FF0000',
+        '800000',
+        'FFFF00',
+        'FFBF00',
         'e25805'
       ],
       projectHealthColours: [

@@ -1,4 +1,4 @@
-<div ng-controller="ActivityController">
+<div ng-controller="ActivityController" permission="VIEW_ACTIVITY">
     <div class="activity-section">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -51,14 +51,14 @@
                 </div>
             </div>
             <div class="panel-footer bg-light lter" id="activity-panel-footer">
-                <button class="btn btn-xs btn-primary" ng-click="import()"><!--<i class="fa fa-inbox"></i>--> Import</button>
-                <button class="btn btn-xs btn-primary" ng-click="createActivity()"><!--<i class="fa fa-plus"></i>--> Add
+                <button class="btn btn-xs btn-primary" ng-click="import()" permission="IMPORT_ACTIVITY"><!--<i class="fa fa-inbox"></i>--> Import</button>
+                <button class="btn btn-xs btn-primary" ng-click="createActivity()" permission="ADD_ACTIVITY"><!--<i class="fa fa-plus"></i>--> Add
                     Activity
                 </button>
-                <button class="btn btn-xs btn-info" ng-click="editActivity()" ng-show="activitySelected"><!--<i
+                <button class="btn btn-xs btn-info" ng-click="editActivity()" ng-show="activitySelected" permission="EDIT_ACTIVITY"><!--<i
                         class="fa fa-pencil-square-o"></i>--> Edit Activity
                 </button>
-                <button class="btn btn-xs btn-danger" ng-click="openDeleteActivityModal()" ng-show="activitySelected"><!--<i
+                <button class="btn btn-xs btn-danger" ng-click="openDeleteActivityModal()" ng-show="activitySelected" permission="DELETE_ACTIVITY"><!--<i
                         class="fa fa-times"></i> -->Delete Activity
                 </button>
             </div>

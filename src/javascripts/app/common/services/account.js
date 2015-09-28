@@ -40,9 +40,22 @@ define(function(require) {
                 var userData = angular.extend(resp.data.user, {
                   username: userName
                 });
+
                 userContext.fillInfo(userData, true);
 
-                deferred.resolve();
+                // Get user permission
+                services.getUserProfileDetails(resp.data.user.userId)
+                  .success(function(resp2) {
+                    var newObj = angular.copy($rootScope.currentUserInfo);
+                    newObj.menuListPermission = $rootScope.currentUserInfo.menuListPermission = resp2.menuList;
+                    newObj.featureListPermission = $rootScope.currentUserInfo.featureListPermission = resp2.featureList;
+                    userContext.fillInfo(newObj, true);
+                    deferred.resolve();
+                  })
+                  .error(function(err) {
+                    deferred.resolve();
+                  });
+                //deferred.resolve();
               }, function(err) {
                 deferred.reject(err);
               });
@@ -92,6 +105,10 @@ define(function(require) {
       services.getUserProfileDetails = function(userId) {
         return $http.post(constant.domain + '/profile/userProfileInfo', {
           userId: userId
+        }, {
+          headers: {
+            'Authorization': false
+          }
         });
       };
 

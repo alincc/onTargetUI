@@ -1,11 +1,11 @@
-define(function(){
+define(function() {
   'use strict';
   var controller = ['$scope', 'appConstant', 'accountFactory', '$state', '$location', 'notifications', '$rootScope', '$modal', 'companyFactory', 'pushFactory', 'userNotificationsFactory', 'toaster', '$q',
-    function($scope, appConstant, accountFactory, $state, $location, notifications, $rootScope, $modal, companyFactory, pushFactory, userNotificationsFactory, toaster, $q){
+    function($scope, appConstant, accountFactory, $state, $location, notifications, $rootScope, $modal, companyFactory, pushFactory, userNotificationsFactory, toaster, $q) {
       $scope.app = appConstant.app;
       $scope.viewNotifications = [];
 
-      function bindInfo(){
+      function bindInfo() {
         $scope.userInfo = {
           firstName: $rootScope.currentUserInfo.contact.firstName,
           lastName: $rootScope.currentUserInfo.contact.lastName,
@@ -14,7 +14,7 @@ define(function(){
         };
       }
 
-      function bindUserNotifications(){
+      function bindUserNotifications() {
         $scope.allNotifications = $rootScope.userNotifications.notificationList;
         //$scope.newNotifications = _.where($scope.allNotifications, {"status": "NEW"});
         $scope.totalUnreadNotification = $rootScope.userNotifications.totalUnreadNotification;
@@ -25,27 +25,27 @@ define(function(){
         bindInfo();
       }
 
-      $scope.logout = function(){
+      $scope.logout = function() {
         // unbind channels
         pushFactory.unbind('onTargetAll');
         console.log('Unbind: ' + 'private-user-' + $rootScope.currentUserInfo.userId);
         pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
         accountFactory.logout()
-          .then(function(){
+          .then(function() {
             notifications.logoutSuccess();
 
             $state.go('signin');
           });
       };
 
-      $scope.inviteCollaborators = function(){
-        companyFactory.search().success(function(resp){
+      $scope.inviteCollaborators = function() {
+        companyFactory.search().success(function(resp) {
           $modal.open({
             templateUrl: 'navbar/templates/inviteCollaborators.html',
             controller: 'InviteCollaboratorsController',
             size: 'md',
             resolve: {
-              companies: function(){
+              companies: function() {
                 return resp.companyList;
               }
             }
@@ -53,22 +53,22 @@ define(function(){
         });
       };
 
-      notifications.onLoginSuccess($scope, function(){
+      notifications.onLoginSuccess($scope, function() {
         if($rootScope.currentUserInfo && $rootScope.currentUserInfo.contact) {
           bindInfo();
         }
       });
 
-      notifications.onUpdateProfileSuccess($scope, function(){
+      notifications.onUpdateProfileSuccess($scope, function() {
         bindInfo();
       });
 
-      notifications.onGetNotificationSuccess($scope, function(){
+      notifications.onGetNotificationSuccess($scope, function() {
         bindUserNotifications();
       });
 
       var canceler;
-      var getAllNotifications = function(){
+      var getAllNotifications = function() {
         if(canceler) {
           canceler.resolve();
         }
@@ -76,16 +76,16 @@ define(function(){
         userNotificationsFactory.getAll({
           "pageNumber": 1,
           "perPageLimit": 5
-        }, canceler).then(function(resp){
+        }, canceler).then(function(resp) {
           $rootScope.userNotifications = resp.data;
           notifications.getNotificationSuccess();
         });
       };
 
-      function bindChannel(){
+      function bindChannel() {
         if($rootScope.currentUserInfo.userId) {
           console.log('Register channel: ', 'private-user-' + $rootScope.currentUserInfo.userId);
-          pushFactory.bind('private-user-' + $rootScope.currentUserInfo.userId, function(data){
+          pushFactory.bind('private-user-' + $rootScope.currentUserInfo.userId, function(data) {
             console.log(data);
             if($rootScope.currentUserInfo.userId) {
               getAllNotifications();
@@ -97,20 +97,22 @@ define(function(){
 
       bindChannel();
 
-      notifications.onLoginSuccess($scope, function(){
+      notifications.onLoginSuccess($scope, function() {
         pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
         bindChannel();
       });
 
-      $scope.maskAsRead = function(){
-        //$scope.viewNotifications = $scope.allNotifications;
-        $scope.totalUnreadNotification = 0;
-        userNotificationsFactory.maskAsRead().success(
-          function(resp){
-            //console.log(resp);
-            getAllNotifications();
-          }
-        );
+      $scope.maskAsRead = function() {
+        if($scope.totalUnreadNotification > 0) {
+          //$scope.viewNotifications = $scope.allNotifications;
+          $scope.totalUnreadNotification = 0;
+          userNotificationsFactory.maskAsRead().success(
+            function(resp) {
+              //console.log(resp);
+              getAllNotifications();
+            }
+          );
+        }
       };
     }];
   return controller;
