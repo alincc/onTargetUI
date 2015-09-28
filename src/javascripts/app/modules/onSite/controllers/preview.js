@@ -4,6 +4,7 @@ define(function(require){
   var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state', 'document',
     function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state, document){
       $scope.selectedDoc = document;
+      $scope.onAction = $stateParams.onAction;
 
       var mapData = function(){
         var fileExtension = utilFactory.getFileExtension($scope.selectedDoc.name);
@@ -63,8 +64,19 @@ define(function(require){
         $state.go("app.onSite");
       };
 
+      $scope.backToAttachments = function (){
+        var activity = $rootScope.activitySelected || {};
+        var task = $rootScope.currentTask || {};
+        /*var activityId = $rootScope.activitySelected.projectId;
+        var taskId = $rootScope.currentTask.projectTaskId;*/
+        $rootScope.backtoAttachments = true;
+        $state.transitionTo('app.onTime', {activityId: activity.projectId, taskId: task.projectTaskId});
+      };
+
       mapData();
-      $scope.loadComment();
+      if($scope.onAction === 'onSite') {
+        $scope.loadComment();
+      }
     }];
   return controller;
 });

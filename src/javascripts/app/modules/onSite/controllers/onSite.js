@@ -119,7 +119,7 @@ define(function(require){
       
       $scope.preview = function (doc){
         //$location.search('docId', doc.fileId);
-        $state.go('app.previewDocument', {docId: doc.fileId});
+        $state.go('app.previewDocument', {docId: doc.fileId, onAction: 'onSite'});
       };
 
       var load = function (){
@@ -219,7 +219,7 @@ define(function(require){
 
       // Download
       $scope.download = function(doc){
-        $window.open(doc.filePath);
+        $window.open($filter('fileDownloadPath')(doc.name));
       };
 
       /*$scope.deleteDocument = function(doc){

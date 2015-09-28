@@ -10,7 +10,8 @@ define(function(require) {
     fileName = require('./fileName'),
     number = require('./number'),
     escapeHtml = require('./escapeHtml'),
-    fileThumbnail = require('./fileThumbnail');
+    fileThumbnail = require('./fileThumbnail'),
+    fileDownloadPath = require('./fileDownloadPath');
 
   var module = angular.module('common.filters',
     [
@@ -23,7 +24,8 @@ define(function(require) {
       'common.filters.fileName',
       'common.filters.number',
       'common.filters.escapeHtml',
-      'common.filters.fileThumbnail'
+      'common.filters.fileThumbnail',
+      'common.filters.fileDownloadPath'
     ]);
   return module;
 });

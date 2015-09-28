@@ -95,8 +95,14 @@ define(function(require) {
         taskFactory.getTaskById(task.projectTaskId, taskDetailsDefer)
           .success(function(resp) {
             $scope.taskSelected = $rootScope.currentTask = resp.task;
-            $scope.action = $scope.actions.infoTask;
-            notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
+            if($rootScope.backtoAttachments)
+            {
+              $scope.action = $scope.actions.logistic;
+              notifications.taskSelection({task: $scope.taskSelected, action: 'logistic'});
+            } else {
+              $scope.action = $scope.actions.infoTask;
+              notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
+            }
             // update route
             $location.search('taskId', $scope.taskSelected.projectTaskId);
           });

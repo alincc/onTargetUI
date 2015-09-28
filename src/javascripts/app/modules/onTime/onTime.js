@@ -9,9 +9,8 @@ define(function(require) {
     projectContextModule = require('app/common/context/project'),
     permissionServiceModule = require('app/common/services/permission'),
     ganttChartModule = require('./ganttChart/ganttChart'),
-    customGanttChartModule = require('./customGanttChart/customGanttChart'),
     notification = require('app/common/services/notifications');
-  var module = angular.module('app.onTime', ['ui.router', 'app.config', 'common.context.project', 'app.activity', 'app.task', 'common.services.permission', 'app.ganttChart', 'common.services.notifications', 'app.customGanttChart']);
+  var module = angular.module('app.onTime', ['ui.router', 'app.config', 'common.context.project', 'app.activity', 'app.task', 'common.services.permission', 'app.ganttChart', 'common.services.notifications']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onTime/templates/onTime.html', template);
