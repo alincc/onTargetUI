@@ -46,6 +46,9 @@ define(function(require){
           docPreviewerMap = elem[0].querySelector('#docPreviewerMap'),
           $docPreviewerMap = angular.element(docPreviewerMap),
           southWest, northEast, bounds;
+
+        L.Icon.Default.imagePath = '/img/leaflet';
+
         scope.docPreviewer.containerHeight = elem[0].offsetHeight;
         scope.docPreviewer.containerWidth = elem[0].offsetWidth;
 
@@ -150,17 +153,19 @@ define(function(require){
           });
 
           map.on('click', function(e){
-            contextMenu.hide();
+            //contextMenu.hide();
+            scope.currentContextMenuEvent = e;
+            scope.addMarker();
           });
 
           map.on('contextmenu', function(e){
-            scope.currentContextMenuEvent = e;
-            contextMenu.css({
-              'top': e.containerPoint.y + 10 + 'px',
-              'left': e.containerPoint.x + 27 + 'px'
-            });
-            console.log(map);
-            contextMenu.show();
+            //scope.currentContextMenuEvent = e;
+            //contextMenu.css({
+            //  'top': e.containerPoint.y + 10 + 'px',
+            //  'left': e.containerPoint.x + 27 + 'px'
+            //});
+            //console.log(map);
+            //contextMenu.show();
           });
         }
 
