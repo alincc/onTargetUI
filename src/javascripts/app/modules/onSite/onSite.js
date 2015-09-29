@@ -1,4 +1,4 @@
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular'),
     uiRouter = require('uiRouter'),
@@ -28,9 +28,12 @@ define(function(require) {
     fileThumbnail = require('app/common/filters/fileThumbnail'),
     fileDownloadPath = require('app/common/filters/fileDownloadPath'),
     notificationServiceModule = require('app/common/services/notifications'),
-    taskServiceModule = require('app/common/services/task');
-  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.task']);
+    taskServiceModule = require('app/common/services/task'),
+    docPreviewerModule = require('app/common/directives/docPreviewer/docPreviewer');
+  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.task', 'common.directives.docPreviewer']);
+
   module.run(['$templateCache', function($templateCache) {
+
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);
     $templateCache.put('onSite/templates/delete.html', deleteTemplate);
@@ -44,7 +47,7 @@ define(function(require) {
 
   module.config(
     ['$stateProvider',
-      function($stateProvider) {
+      function($stateProvider){
         $stateProvider
           .state('app.onSite', {
             url: '/onSite',
@@ -52,7 +55,7 @@ define(function(require) {
             controller: 'OnSiteController',
             //reloadOnSearch: false,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory) {
+              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory){
                 var deferred = $q.defer();
                 if(projectContext.valid() && permissionFactory.checkMenuPermission('ONSITE')) {
                   deferred.resolve();

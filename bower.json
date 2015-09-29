@@ -44,6 +44,7 @@
     "flot": "~0.8.3",
     "flot.tooltip": "~0.8.4",
     "flot.orderbars": "*",
-    "flot-spline": "~0.0.1"
+    "flot-spline": "~0.0.1",
+    "leaflet": "~0.7.5"
   }
 }

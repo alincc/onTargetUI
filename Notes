@@ -14,3 +14,7 @@ Python excel: https://pypi.python.org/pypi/xlrd
 
 + Other:
  - https://github.com/aheckmann/gm
+
+-- ImageMagick: Q16 static
+-- Ghostscript
+ + Check installtion: type 'convert' on terminal and check if the command exist

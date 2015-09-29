@@ -1,0 +1,11 @@
+<section class="doc-previewer">
+    <p class="loading" ng-show="docPreviewer.isLoading">Loading...</p>
+    <div id="docPreviewerMap" class="docPreviewerMap"
+         ng-style="{'height': docPreviewer.containerHeight+'px', 'width': docPreviewer.containerWidth+'px'}"
+         ng-show="!docPreviewer.isLoading"></div>
+    <ul class="doc-menu">
+        <li>
+            <a href="javascript:void(0)" ng-click="addMarker()">Add marker</a>
+        </li>
+    </ul>
+</section>

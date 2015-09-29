@@ -35,6 +35,7 @@ var move = require('./server/routes/move')(app);
 var googleDriveFiles = require('./server/routes/googleDriveFile')(app);
 var boxFiles = require('./server/routes/boxFile')(app);
 var dropBoxFiles = require('./server/routes/dropBoxFile')(app);
+var file = require('./server/routes/file')(app);
 
 // modules
 //var pushModule = require('./server/modules/push')(app);

@@ -63,7 +63,8 @@ require.config({
     jPlotOrderBar: '../bower_components/flot.orderbars/js/jquery.flot.orderBars',
     jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline',
     spin: '../js/ladda/js/spin',
-    ladda: '../js/ladda/js/ladda'
+    ladda: '../js/ladda/js/ladda',
+    leaflet: '../bower_components/leaflet/dist/leaflet-src'
   },
 
   shim: {
