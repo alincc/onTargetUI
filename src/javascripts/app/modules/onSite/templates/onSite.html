@@ -99,10 +99,6 @@
                                             <img ng-src="{{doc.name | fileThumbnail}}" height="64px"/>
                                         </a>
                                         <span class="delete-button" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE"><i class="fa fa-times-circle-o"></i></span>
-                                        <div>
-                                            <a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                                    ng-src="{{doc.name | fileThumbnail}}" height="64px"/></a>
-                                        </div>
                                     </div>
                                     <div style="text-align:left">
                                         <h5 class="doc-name">
@@ -124,62 +120,5 @@
                 </div>
             </div>
         </div>
-        <!--<div class="wrapper-md p-r-none" ng-if="isPreview">-->
-            <!--<div class="row">-->
-                <!--<div class="col-xs-12 col-md-8 p-r-0 preview-section">-->
-                    <!--<div class="panel panel-default">-->
-                        <!--<div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>-->
-                        <!--<div class="panel-body">-->
-                            <!--<doc-previewer path="{{selectedDoc.fileName}}"></doc-previewer>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="col-xs-12 col-md-4 p-l-0 comment-section">-->
-                    <!--<div class="panel panel-default">-->
-                        <!--<div class="panel-heading">Comments</div>-->
-                        <!--<div class="panel-body" custom-scroll>-->
-                            <!--<div class="text-center" ng-if="isLoadingComment">-->
-                                <!--<spinner text="Loading comments..."></spinner>-->
-                            <!--</div>-->
-                            <!--<div class="text-center" ng-if="!isLoadingComment && !comments.length">-->
-                                <!--No comments-->
-                            <!--</div>-->
-                            <!--<ul class="list-group no-bg no-borders pull-in">-->
-                                <!--<li class="list-group-item" ng-repeat="com in comments track by $index">-->
-                                    <!--<a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">-->
-                                        <!--<img path="{{com.commenterContact.userImagePath}}" file-path alt="..."-->
-                                             <!--class="img-circle">-->
-                                    <!--</a>-->
-
-                                    <!--<div class="clear comment-content">-->
-                                        <!--<div class="commenter"><a href="javascript:void(0)"-->
-                                                                  <!--ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>-->
-                                            <!--said:-->
-                                        <!--</div>-->
-                                        <!--<div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>-->
-                                        <!--<small class="text-muted" ng-bind="com.comment"></small>-->
-                                    <!--</div>-->
-                                <!--</li>-->
-                            <!--</ul>-->
-                            <!--<div class="add-comment" ng-show="!isLoadingComment">-->
-                                <!--<form name="add_comment_frm" novalidate-->
-                                      <!--ng-submit="addComment(addCommentModel, add_comment_frm)">-->
-                                    <!--<div class="textarea">-->
-                                        <!--<textarea ng-model="addCommentModel.comment" auto-grow=""-->
-                                                  <!--placeholder="Add a comment or reply here" rows="1"-->
-                                                  <!--required></textarea>-->
-                                    <!--</div>-->
-                                    <!--<div class="button">-->
-                                        <!--<button class="btn btn-primary" type="submit"-->
-                                                <!--ng-disabled="add_comment_frm.$invalid || add_comment_frm.$submitted">-->
-                                            <!--Send <i class="fa fa-paper-plan-o"></i></button>-->
-                                    <!--</div>-->
-                                <!--</form>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
     </div>
 </div>
