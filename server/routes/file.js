@@ -103,7 +103,7 @@ function convertPdfToPng(req, res){
         if(!fs.existsSync(destinationFolder)) {
           fs.mkdirSync(destinationFolder);
         }
-        exec('convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error){
+        exec('convert -density 300 ' + filePath + ' -quality 100 ' + destinationFilePath, function(error){
           if(error) {
             res.status(400);
             res.send(error);
@@ -181,3 +181,4 @@ module.exports = function(app){
   app.post('/node/file/info', getFileInfo);
   app.post('/node/file/getPdfImage', getPdfImage);
 };
+

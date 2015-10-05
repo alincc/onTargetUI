@@ -6,6 +6,8 @@ define(function(require){
     template = require('text!./templates/docPreviewer.html'),
     markerTemplate = require('text!./templates/marker.html'),
     L = require('leaflet'),
+    leafletDraw = require('leafletDraw'),
+    leafletFullScreen = require('leafletFullScreen'),
     utilServiceModule = require('app/common/services/util'),
     module;
   module = angular.module('common.directives.docPreviewer', ['app.config', 'common.services.util']);
@@ -139,13 +141,54 @@ define(function(require){
             maxZoom: 4,
             center: [0, 0],
             zoom: 2,
-            crs: L.CRS.Simple
+            crs: L.CRS.Simple,
+            fullscreenControl: true,
+            fullscreenControlOptions: { // optional
+              title:"Full Screen",
+              titleCancel:"Exit fullscreen mode"
+            }
           });
           southWest = map.unproject([0, imgH], map.getMaxZoom() - 1);
           northEast = map.unproject([imgW, 0], map.getMaxZoom() - 1);
           bounds = new L.LatLngBounds(southWest, northEast);
           L.imageOverlay($filter('filePath')(resp.url), bounds).addTo(map);
           map.setMaxBounds(bounds);
+
+          //leaflet.Draw
+
+          var editableLayers = new L.FeatureGroup();
+          map.addLayer(editableLayers);
+
+
+          var options = {
+            position: 'topright',
+            edit: {
+              featureGroup: editableLayers, //REQUIRED!!
+              remove: true
+            },
+            draw: {
+              polyline : {
+                metric : false
+              },
+              polygon : {
+                showArea: false
+              },
+              rectangle : {
+                showArea: false
+              },
+              marker: false
+            }
+          };
+
+          var drawControl = new L.Control.Draw(options);
+          map.addControl(drawControl);
+
+          map.on('draw:created', function (e) {
+            var type = e.layerType,
+              layer = e.layer;
+
+            editableLayers.addLayer(layer);
+          });
 
           $timeout(function(){
             map._onResize();
@@ -155,7 +198,7 @@ define(function(require){
           map.on('click', function(e){
             //contextMenu.hide();
             scope.currentContextMenuEvent = e;
-            scope.addMarker();
+            //scope.addMarker();
           });
 
           map.on('contextmenu', function(e){

@@ -64,7 +64,9 @@ require.config({
     jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline',
     spin: '../js/ladda/js/spin',
     ladda: '../js/ladda/js/ladda',
-    leaflet: '../bower_components/leaflet/dist/leaflet-src'
+    leaflet: '../bower_components/leaflet/dist/leaflet-src',
+    leafletDraw: '../bower_components/leaflet.draw/dist/leaflet.draw',
+    leafletFullScreen: '../bower_components/leaflet.fullscreen/Control.FullScreen'
   },
 
   shim: {
@@ -179,6 +181,12 @@ require.config({
     },
     "pushAngular": {
       deps: ['pusher', 'angular']
+    },
+    "leafletDraw": {
+      deps: ['leaflet']
+    },
+    "leafletFullScreen": {
+      deps: ['leaflet']
     }
   }
 });

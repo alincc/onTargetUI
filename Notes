@@ -14,6 +14,18 @@ Python excel: https://pypi.python.org/pypi/xlrd
 
 + Other:
  - https://github.com/aheckmann/gm
+ImageProcressing: https://github.com/aheckmann/gm
+
+-- spindrift
++ Install PDFTK (http://www.pdflabs.com/docs/install-pdftk/) on your system.
++ Ensure you have Ghostscript installed (check by running gs --version).
++ (optional) To extract individual images from a page, install pdfimages with brew install xpdf or apt-get install poppler-utils.
++ Window configuration: "You must add gs\bin and gs\lib to the PATH"
+-- Pdf2img
++ http://www.foolabs.com/xpdf
++ Window configuration: "You must add gs\bin and gs\lib to the PATH"
+-- Pdf2img
++ http://www.foolabs.com/xpdf
 
 -- ImageMagick: Q16 static
 -- Ghostscript
