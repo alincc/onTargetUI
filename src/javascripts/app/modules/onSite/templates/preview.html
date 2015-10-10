@@ -4,9 +4,15 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW">
-                        onSITE
-                        <button class="btn btn-default pull-right" ng-click="backToList()"><i
+                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onSite'">
+                    onSITE
+                    <button class="btn btn-default pull-right" ng-click="backToList()"><i
+                            class="fa fa-arrow-left"></i> Back to list
+                    </button>
+                </h1>
+                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onTime'">
+                        onTIME
+                        <button class="btn btn-default pull-right" ng-click="backToAttachments()"><i
                                 class="fa fa-arrow-left"></i> Back to list
                         </button>
                     </h1>
@@ -15,7 +21,7 @@
         </div>
         <div class="wrapper-md p-r-none" permission="ONSITE_VIEW">
             <div class="row">
-                <div class="col-xs-12 col-md-8 p-r-0 preview-section">
+                <div class="col-xs-12 preview-section" ng-class="{'col-md-8 p-r-0': onAction == 'onSite', 'col-md-12': onAction == 'onTime'}">
                     <div class="panel panel-default">
                         <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
                         <div class="panel-body">
@@ -30,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
+                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT" ng-if="onAction == 'onSite'">
                     <div class="panel panel-default">
                         <div class="panel-heading">Comments</div>
                         <div class="panel-body" custom-scroll>

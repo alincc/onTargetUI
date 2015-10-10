@@ -29,6 +29,7 @@ app.use(express.static(process.env.ROOT));
 // routes
 var upload = require('./server/routes/upload')(app);
 var download = require('./server/routes/download')(app);
+var downloadFile = require('./server/routes/downloadFile')(app);
 var xlsParser = require('./server/routes/xls-parser')(app);
 var move = require('./server/routes/move')(app);
 var googleDriveFiles = require('./server/routes/googleDriveFile')(app);

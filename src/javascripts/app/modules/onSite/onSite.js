@@ -26,8 +26,10 @@ define(function(require) {
     angularSanitize = require('angularSanitize'),
     toaster = require('toaster'),
     fileThumbnail = require('app/common/filters/fileThumbnail'),
-    notificationServiceModule = require('app/common/services/notifications');
-  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications']);
+    fileDownloadPath = require('app/common/filters/fileDownloadPath'),
+    notificationServiceModule = require('app/common/services/notifications'),
+    taskServiceModule = require('app/common/services/task');
+  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.task']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);
@@ -62,24 +64,39 @@ define(function(require) {
             }
           })
           .state('app.previewDocument', {
-            url: '/onSite/preview?docId',
+            url: '/:onAction/preview?docId',
             templateUrl: 'onSite/templates/preview.html',
             controller: 'PreviewDocumentController',
             resolve: {
-              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window) {
+              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'taskFactory', function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, taskFactory) {
                 var deferred = $q.defer();
-                if($stateParams.docId) {
-                  documentFactory.getDocumentDetail({
-                    projectId: $rootScope.currentProjectInfo.projectId,
-                    projectFileId: Number($stateParams.docId)
-                  }).success(
-                    function (resp){
-                      deferred.resolve(resp.projectFile);
+                switch ($stateParams.onAction)
+                {
+                  case 'onSite' :
+                    if($stateParams.docId) {
+                      documentFactory.getDocumentDetail({
+                        projectId: $rootScope.currentProjectInfo.projectId,
+                        projectFileId: Number($stateParams.docId)
+                      }).success(
+                        function (resp){
+                          deferred.resolve(resp.projectFile);
+                        }
+                      );
+                    } else {
+                      $window.location.href = $state.href('app.onSite');
                     }
-                  );
-                } else {
-                  $window.location.href = $state.href('app.onSite');
+                    break;
+                  case 'onTime' :
+                    if($rootScope.fileAttachment){
+                      var doc = $rootScope.fileAttachment;
+                      doc.name = doc.fileName;
+                      deferred.resolve(doc);
+                    }else {
+                      $window.location.href = $state.href('app.onTime');
+                    }
+                    break;
                 }
+
                 return deferred.promise;
               }]
             }

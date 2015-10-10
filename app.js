@@ -395,7 +395,7 @@ app.post('/ontargetrs/services*', function(req, res){
     } else {
       throw error;
     }
-  })).pipe(res);
+  }), { end : false }).pipe(res);
 });
 
 app.get('/ontargetrs/services*', function(req, res){
@@ -414,7 +414,7 @@ app.get('/ontargetrs/services*', function(req, res){
     } else {
       throw error;
     }
-  })).pipe(res);
+  }), { end : false }).pipe(res);
 });
 
 app.get('/', function(req, res){

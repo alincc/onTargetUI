@@ -7,8 +7,8 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'fileFactory', '$timeout', '$filter',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, fileFactory, $timeout, $filter) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'fileFactory', '$timeout', '$filter', '$state',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, fileFactory, $timeout, $filter, $state) {
       $scope.attachments = [];
       $scope.isUploading = false;
       $scope.percentage = 0;
@@ -56,7 +56,12 @@ define(function(require) {
       };
 
       $scope.download = function(att){
-        window.open($filter('filePath')(att.fileName));
+        window.open($filter('fileDownloadPath')(att.fileName));
+      };
+
+      $scope.preview = function (att){
+        $rootScope.fileAttachment = att;
+        $state.go('app.previewDocument', {onAction: 'onTime'});
       };
 
       $scope.saveTaskFile = function() {

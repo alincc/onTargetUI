@@ -37,7 +37,14 @@ define(function (){
           $scope.action = $scope.actions.attachment;
         }
       };
-      checkPermission();
+
+      if($rootScope.backtoAttachments)
+      {
+        $scope.action = $scope.actions.attachment;
+        $rootScope.backtoAttachments = false;
+      } else {
+        checkPermission();
+      }
 
       $scope.openAction = function (action){
         $scope.action = action;
