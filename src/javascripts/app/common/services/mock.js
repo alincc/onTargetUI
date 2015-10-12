@@ -25,6 +25,8 @@ define(function(require) {
     projectTaskFull = require('text!./../resources/mockData/projectTaskFull.json'),
     upload = require('text!./../resources/mockData/upload.json'),
     contact = require('text!./../resources/mockData/contact.json'),
+    company = require('text!./../resources/mockData/company.json'),
+    document = require('text!./../resources/mockData/document.json'),
     module;
 
   module = angular.module('common.services.mock', ['ngMockE2E', 'app.config', 'ngResource']);
@@ -144,6 +146,13 @@ define(function(require) {
         "returnVal": "SUCCESS",
         "id": 0
       }];
+    });
+    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/company\/getCompanyList/).respond(function(method, url, data){
+      return [200, angular.fromJson(company)];
+    });
+
+    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/documents\/getDocument/).respond(function(method, url, data){
+      return [200, angular.fromJson(document)];
     });
 
 

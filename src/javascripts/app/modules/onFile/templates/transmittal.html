@@ -1,0 +1,286 @@
+<div ng-controller="TransmittalController">
+    <div class="row">
+        <div class="col-md-6">
+            <form name="_form" no-validate class="form-validation" ng-submit="submit()">
+                <div class="form-group">
+                    <h4>Please fill out below infomation</h4>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Receiver's Name</label>
+                            <select class="form-control" name="username" ng-model="document.keyValues.username"
+                                    ng-options="receiverName.userId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
+                                <option value="">-- Select Receiver's Name --</option>
+                            </select>
+                            <ng-messages ng-if="_form.username.$dirty"
+                                         for="_form.username.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <select class="form-control" name="companyName" ng-model="document.keyValues.company_name"
+                                    ng-options="company.companyId as company.companyName for company in companies" required>
+                                <option value="">-- Select Company Name --</option>
+                            </select>
+                            <ng-messages ng-if="_form.companyName.$dirty"
+                                         for="_form.companyName.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>RFI#</label>
+                            <input type="text" class="form-control" placeholder="Enter RFI#"
+                                   ng-model="document.keyValues.RFI"
+                                   name="RFI" required/>
+                            <ng-messages ng-if="_form.RFI.$dirty"
+                                         for="_form.RFI.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Sent Via</label>
+                            <input type="text" class="form-control" placeholder="Enter Sent Via"
+                                   ng-model="document.keyValues.sent_via"
+                                   name="sent_via" required/>
+                            <ng-messages ng-if="_form.sent_via.$dirty"
+                                         for="_form.sent_via.$error">
+                                <span class="help-block m-b-none text-danger" ng-message
+                                      when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <span class="pull-right">(Optional)</span>
+                            <input type="text" class="form-control" placeholder="Enter Subject"
+                                   ng-model="document.keyValues.subject"
+                                   name="subject"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Due Date</label>
+                            <p class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter/Select Due date" required
+                                       ng-model="document.dueDate"
+                                       datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
+                                       datepicker-options="dueDate.options"
+                                       datepicker-append-to-body="true" date-range
+                                       name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="dueDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                            </p>
+                            <ng-messages ng-if="_form.dueDate.$dirty"
+                                         for="_form.dueDate.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label>Submitted for</label>
+                        <div class="form-group">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.approval">Approval</label>
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.for_use">For Use</label>
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.as_requested">As Requested</label>
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.review_and_comment">Request & Comment</label>
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.further_processing">Further Processing</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label>Action as Noted Below</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.out_for_signature"><span>Out For Signature</span></label>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.approve_as_submitted">Approve As Submitted</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.approve_as_noted">Approve As Noted</label>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.submit"><span>Submit</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.resubmitted">Re Submitted</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.returned">Returned</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.returned_for_corrections"><span>Returned for Corrections</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.resubmitt">Re Submit</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.received_as_noted">Received As Noted</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.due_by"><span>Due By</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.received_by">Received By</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="checkbox-inline"><input type="checkbox" ng-model="checkValues.sent_date">Sent Date</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <p class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter/Select Date" required
+                                       ng-model="document.keyValues.due_by_date"
+                                       datepicker-popup="MM/dd/yyyy" is-open="dueByDate.isOpen"
+                                       datepicker-options="dueByDate.options"
+                                       datepicker-append-to-body="true" date-range
+                                       name="dueByDate" ng-click="dueByDate.isOpen = !dueByDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="dueByDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                            </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <p class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter/Select Date" required
+                                       ng-model="document.keyValues.received_by_date"
+                                       datepicker-popup="MM/dd/yyyy" is-open="receivedDate.isOpen"
+                                       datepicker-options="receivedDate.options"
+                                       datepicker-append-to-body="true" date-range
+                                       name="receivedDate" ng-click="receivedDate.isOpen = !receivedDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="receivedDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                            </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <p class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter/Select Date" required
+                                       ng-model="document.keyValues.sent_by_date"
+                                       datepicker-popup="MM/dd/yyyy" is-open="sentDate.isOpen"
+                                       datepicker-options="sentDate.options"
+                                       datepicker-append-to-body="true" date-range
+                                       name="sentDate" ng-click="sentDate.isOpen = !sentDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="sentDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Items</label>
+                            <select class="form-control" name="items" ng-model="document.keyValues.items"
+                                    ng-options="item.id as item.name for item in items" required>
+                                <option value="">-- Select Items --</option>
+
+                            </select>
+                            <ng-messages ng-if="_form.items.$dirty"
+                                         for="_form.items.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" placeholder="Enter Description"
+                                   ng-model="document.keyValues.description"
+                                   name="description"/>
+                            <ng-messages ng-if="_form.description.$dirty"
+                                         for="_form.description.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Due Date</label>
+                            <span class="pull-right">(Optional)</span>
+                            <p class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter/Select Due date" required
+                                       ng-model="document.keyValues.date"
+                                       datepicker-popup="MM/dd/yyyy" is-open="date.isOpen"
+                                       datepicker-options="date.options"
+                                       datepicker-append-to-body="true" date-range
+                                       name="date" ng-click="date.isOpen = !date.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="date.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                            </p>
+                            <ng-messages ng-if="_form.date.$dirty"
+                                         for="_form.date.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Copies</label>
+                            <input type="text" class="form-control" placeholder="Enter Copies"
+                                   ng-model="document.keyValues.copies"
+                                   name="copies"/>
+                            <ng-messages ng-if="_form.copies.$dirty"
+                                         for="_form.copies.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Comments</label>
+                            <span class="pull-right">(Optional)</span>
+                            <textarea type="text" class="form-control" placeholder="Enter Comments"
+                                      ng-model="document.keyValues.comments"
+                                      name="comments"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button ng-disabled="_form.$invalid || _form.$submitted"
+                            class="btn btn-primary pull-right" type="submit" ng-click="submit()">Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -6,11 +6,9 @@ define(function(require) {
     template = require('text!./templates/onSite.html'),
     uploadTemplate = require('text!./templates/upload.html'),
     deleteTemplate = require('text!./templates/delete.html'),
-    previewTemplate = require('text!./templates/preview.html'),
     controller = require('./controllers/onSite'),
     uploadController = require('./controllers/upload'),
     deleteController = require('./controllers/delete'),
-    previewController = require('./controllers/preview'),
     projectContextModule = require('app/common/context/project'),
     documentServiceModule = require('app/common/services/document'),
     mentio = require('mentio'),
@@ -34,13 +32,11 @@ define(function(require) {
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);
     $templateCache.put('onSite/templates/delete.html', deleteTemplate);
-    $templateCache.put('onSite/templates/preview.html', previewTemplate);
   }]);
 
   module.controller('OnSiteController', controller);
   module.controller('UploadDocumentController', uploadController);
   module.controller('DeleteDocumentController', deleteController);
-  module.controller('PreviewDocumentController', previewController);
 
   module.config(
     ['$stateProvider',
@@ -59,44 +55,6 @@ define(function(require) {
                 } else {
                   $window.location.href = $state.href('app.projectlist');
                 }
-                return deferred.promise;
-              }]
-            }
-          })
-          .state('app.previewDocument', {
-            url: '/:onAction/preview?docId',
-            templateUrl: 'onSite/templates/preview.html',
-            controller: 'PreviewDocumentController',
-            resolve: {
-              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'taskFactory', function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, taskFactory) {
-                var deferred = $q.defer();
-                switch ($stateParams.onAction)
-                {
-                  case 'onSite' :
-                    if($stateParams.docId) {
-                      documentFactory.getDocumentDetail({
-                        projectId: $rootScope.currentProjectInfo.projectId,
-                        projectFileId: Number($stateParams.docId)
-                      }).success(
-                        function (resp){
-                          deferred.resolve(resp.projectFile);
-                        }
-                      );
-                    } else {
-                      $window.location.href = $state.href('app.onSite');
-                    }
-                    break;
-                  case 'onTime' :
-                    if($rootScope.fileAttachment){
-                      var doc = $rootScope.fileAttachment;
-                      doc.name = doc.fileName;
-                      deferred.resolve(doc);
-                    }else {
-                      $window.location.href = $state.href('app.onTime');
-                    }
-                    break;
-                }
-
                 return deferred.promise;
               }]
             }

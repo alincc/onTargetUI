@@ -28,7 +28,7 @@
       },
       "documentId": 14,
       "documentTemplate": {
-        "documentTemplateId": 22,
+        "documentTemplateId": 1,
         "name": "Request For Information"
       },
       "dueDate": "2015-04-10T05:45:00",
@@ -227,7 +227,7 @@
       },
       "documentId": 15,
       "documentTemplate": {
-        "documentTemplateId": 20,
+        "documentTemplateId": 2,
         "name": "Purchase Order"
       },
       "dueDate": "2015-07-26T00:00:00",
@@ -280,7 +280,7 @@
       },
       "documentId": 4,
       "documentTemplate": {
-        "documentTemplateId": 21,
+        "documentTemplateId": 3,
         "name": "Change Order"
       },
       "dueDate": "2015-03-13T00:00:00",
@@ -430,7 +430,7 @@
       },
       "documentId": 14,
       "documentTemplate": {
-        "documentTemplateId": 22,
+        "documentTemplateId": 4,
         "name": "Request For Information"
       },
       "dueDate": "2015-04-10T05:45:00",
@@ -629,7 +629,7 @@
       },
       "documentId": 15,
       "documentTemplate": {
-        "documentTemplateId": 20,
+        "documentTemplateId": 3,
         "name": "Purchase Order"
       },
       "dueDate": "2015-07-26T00:00:00",

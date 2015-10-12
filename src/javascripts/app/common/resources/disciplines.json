@@ -1,0 +1,55 @@
+[
+  {
+    "id": "MASONRY",
+    "name": "MASONRY"
+  },
+  {
+    "id": "CARPENTRY",
+    "name": "CARPENTRY"
+  },
+  {
+    "id": "Masonry",
+    "name": "Masonry"
+  },
+  {
+    "id": "WOODWORK",
+    "name": "WOODWORK"
+  },
+  {
+    "id": "ELECTRICAL",
+    "name": "ELECTRICAL"
+  },
+  {
+    "id": "PLUMBING",
+    "name": "PLUMBING"
+  },
+  {
+    "id": "INTERIORS",
+    "name": "INTERIORS"
+  },
+  {
+    "id": "MECHANICAL",
+    "name": "MECHANICAL"
+  },
+  {
+    "id": "COMMUNICATION",
+    "name": "COMMUNICATION"
+  },
+  {
+    "id": "ARCHITECTURAL",
+    "name": "ARCHITECTURAL"
+  },
+  {
+    "id": "STRUCTURAL",
+    "name": "STRUCTURAL"
+  },
+  {
+    "id": "PAINTING",
+    "name": "PAINTING"
+  },
+  {
+    "id": "OTHERS",
+    "name": "OTHERS"
+  }
+]
+

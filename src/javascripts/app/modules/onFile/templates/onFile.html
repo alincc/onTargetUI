@@ -1,0 +1,55 @@
+<div class="on-file-page">
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="m-n font-thin h3 text-black" permission="ONFILE_VIEW">
+                        onFILE
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <!-- / main header -->
+        <div class="wrapper-md p-r-none" permission="ONFILE_VIEW">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="nav-container">
+                        <nav class="navbar navbar-default">
+                            <div class="container-fluid">
+                                <div>
+                                    <ul class="nav nav-pills nav-justified text-muted">
+                                        <li ng-class="{'active': action.name==='viewDocument'}"><a href="javascript:void(0)" ng-click="openAction(actions.viewDocument)">View Documents</a></li>
+                                        <li ng-class="{'active': action.name==='changeOrder'}"><a href="javascript:void(0)" ng-click="openAction(actions.changeOrder)">Change Order</a></li>
+                                        <li ng-class="{'active': action.name==='requestForInformation'}"><a href="javascript:void(0)" ng-click="openAction(actions.requestForInformation)">Request For Information</a></li>
+                                        <li ng-class="{'active': action.name==='purchaseOrder'}"><a href="javascript:void(0)" ng-click="openAction(actions.purchaseOrder)">Purchase Order</a></li>
+                                        <li ng-class="{'active': action.name==='transmittal'}"><a href="javascript:void(0)" ng-click="openAction(actions.transmittal)">Transmittal</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div ng-switch on="action.name">
+                        <div ng-switch-when="viewDocument">
+                            <div ng-include="'viewDocument/templates/viewDocument.html'"></div>
+                        </div>
+                        <div ng-switch-when="changeOrder">
+                            <div ng-include="'changeOrder/templates/changeOrder.html'"></div>
+                        </div>
+                        <div ng-switch-when="requestForInformation">
+                            <div ng-include="'requestForInformation/templates/requestForInformation.html'"></div>
+                        </div>
+                        <div ng-switch-when="purchaseOrder">
+                            <div ng-include="'purchaseOrder/templates/purchaseOrder.html'"></div>
+                        </div>
+                        <div ng-switch-when="transmittal">
+                            <div ng-include="'transmittal/templates/transmittal.html'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

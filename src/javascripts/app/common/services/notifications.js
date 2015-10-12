@@ -30,6 +30,8 @@ define([
         _ACTIVITY_CREATED_ = '_ACTIVITY_CREATED_',
         _ACTIVITY_UPDATED_ = '_ACTIVITY_UPDATED_',
         _BUDGET_UPDATED_ = '_BUDGET_UPDATED_',
+        _DOCUMENT_UPLOADED_ = '_DOCUMENT_UPLOADED_',
+        _DOCUMENT_SELECTED_ = '_DOCUMENT_SELECTED_',
 
         requestStarted = function (){
           $rootScope.$broadcast(_START_REQUEST_);
@@ -206,6 +208,22 @@ define([
           $scope.$on(_BUDGET_UPDATED_, function (event, args){
             handler(args);
           });
+        },
+        documentUploaded = function (args){
+          $rootScope.$broadcast(_DOCUMENT_UPLOADED_, args);
+        },
+        onDocumentUploaded = function ($scope, handler){
+          $scope.$on(_DOCUMENT_UPLOADED_, function (event, args){
+            handler(args);
+          });
+        },
+        documentSelected = function (args){
+          $rootScope.$broadcast(_DOCUMENT_UPLOADED_, args);
+        },
+        onDocumentSelected = function ($scope, handler){
+          $scope.$on(_DOCUMENT_UPLOADED_, function (event, args){
+            handler(args);
+          });
         };
 
       return {
@@ -252,7 +270,11 @@ define([
         activityEdited: activityEdited,
         onActivityEdited: onActivityEdited,
         budgetUpdated: budgetUpdated,
-        onBudgetUpdated: onBudgetUpdated
+        onBudgetUpdated: onBudgetUpdated,
+        documentUploaded: documentUploaded,
+        onDocumentUploaded: onDocumentUploaded,
+        documentSelected: documentSelected,
+        onDocumentSelected: onDocumentSelected
       };
     }]);
 });

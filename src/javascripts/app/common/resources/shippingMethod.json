@@ -1,0 +1,14 @@
+[
+  {
+    "id": "AIR",
+    "name": "AIR"
+  },
+  {
+    "id": "LAND",
+    "name": "LAND"
+  },
+  {
+    "id": "WATER",
+    "name": "WATER"
+  }
+]

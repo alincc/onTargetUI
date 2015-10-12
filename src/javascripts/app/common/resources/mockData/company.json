@@ -1,0 +1,35 @@
+{
+  "type": "companyListResponse",
+  "authenticated": false,
+  "returnVal": "SUCCESS",
+  "companyList": [
+    {
+      "address": {
+        "address1": "363 23rd st",
+        "address2": "Suite 2098",
+        "addressId": 0,
+        "city": "New York",
+        "country": "USA",
+        "state": "NY",
+        "zip": "10001"
+      },
+      "companyId": 1,
+      "companyName": "SIMON AND BARRON WEA RESIDENTIAL",
+      "companyTypeId": 1,
+      "website": "http://www.ttg.com"
+    },
+    {
+      "address": {
+        "address1": "NY",
+        "addressId": 0,
+        "city": "NY",
+        "country": "NP",
+        "state": "Gandaki",
+        "zip": "1001"
+      },
+      "companyId": 2,
+      "companyName": "Santosh Company",
+      "companyTypeId": 1
+    }
+  ]
+}
