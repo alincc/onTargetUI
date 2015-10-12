@@ -58,7 +58,9 @@ define(function(require) {
     'app.changePassword',
     'app.notifications',
     'app.onContact',
-    'app.onTarget'
+    'app.onTarget',
+    'app.documentPreview',
+    'app.onFile'
   ]);
 
   app

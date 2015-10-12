@@ -533,6 +533,20 @@ body {
               }
             }
           }
+          &.menu-selected {
+            a {
+              background: @brand-primary;
+              img.inacti {
+                display: none;
+              }
+              img.acti {
+                display: inline-block;
+              }
+              span {
+                color: #fff;
+              }
+            }
+          }
         }
         &.header {
           a {
