@@ -62,19 +62,19 @@ module.exports = {
   },
   sagarmatha01: {
     port: 9000,
-    domain: 'https://app.ontargetcloud.com:9000/ontargetrs/services',
-    baseUrl: 'https://app.ontargetcloud.com:9000',
-    nodeServer: 'https://app.ontargetcloud.com:9001',
-    resourceUrl: 'https://app.ontargetcloud.com:9001',
+    domain: 'https://app.ontargetcloud.com/ontargetrs/services',
+    baseUrl: 'https://app.ontargetcloud.com',
+    nodeServer: 'https://app.ontargetcloud.com',
+    resourceUrl: 'https://app.ontargetcloud.com',
     // Proxy settings
     API_SERVER: 'https://172.31.59.54:8080/ontargetrs/services'
   },
   sagarmatha02: {
     port: 9000,
-    domain: 'https://app.ontargetcloud.com:9000/ontargetrs/services',
-    baseUrl: 'https://app.ontargetcloud.com:9000',
-    nodeServer: 'https://app.ontargetcloud.com:9001',
-    resourceUrl: 'https://app.ontargetcloud.com:9001',
+    domain: 'https://app.ontargetcloud.com/ontargetrs/services',
+    baseUrl: 'https://app.ontargetcloud.com',
+    nodeServer: 'https://app.ontargetcloud.com',
+    resourceUrl: 'https://app.ontargetcloud.com',
     // Proxy settings
     API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services'
   },
