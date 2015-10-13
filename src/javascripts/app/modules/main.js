@@ -20,6 +20,7 @@ define(function (require){
     editprofile: require('./editprofile/editprofile'),
     company: require('./editCompany/company'),
     changePassword: require('./changePassword/changePassword'),
-    notification: require('./notifications/notifications')
+    notification: require('./notifications/notifications'),
+    onContact: require('./onBIM/onBIM')
   };
 });

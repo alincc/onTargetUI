@@ -21,7 +21,8 @@ var folder = myArgs[0] || 'app';
 var port = myArgs[1] || 3214;
 //var cors = require('cors');
 var app = express();
-var API_SERVER = 'http://app.ontargetcloud.com:8080/ontargetrs/services';
+//var API_SERVER = 'http://app.ontargetcloud.com:8080/ontargetrs/services';
+var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services';
 
 // Config
 app.set('port', port);

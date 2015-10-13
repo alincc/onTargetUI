@@ -61,32 +61,32 @@
                             </tbody>
                         </table>
                     </div>
-                    <section ng-if="!isLoading && uploadedDocumentList.length && viewMode === 'grid'">
-                        <div class="row" ng-repeat="docRow in uploadedDocumentArrangedList track by $index">
-                            <div class="col-md-3" data-ng-repeat="doc in docRow track by $index">
-                                <article>
-                                    <div>
-                                        <a href="javascript:void(0)" ng-click="preview(doc)">
-                                            <img path="{{doc.name | fileThumbnail}}" height="64px" class="image-circle" file-path/>
-                                        </a>
-                                    </div>
-                                    <div style="text-align:left">
-                                        <h5>
-                                            Document name:
-                                            <a ng-click="preview(doc)">{{doc.name | fileName}}</a>
-                                        </h5>
-                                        <h5>
-                                            Uploaded on: {{doc.createdDate | date:app.dateFormat}}
-                                        </h5>
-                                        <h5>
-                                            Uploaded by: {{doc.createdByContact.firstName + ' ' +
-                                            doc.createdByContact.lastName}}
-                                        </h5>
-                                    </div>
-                                </article>
-                            </div>
-                        </div>
-                    </section>
+                    <!--<section ng-if="!isLoading && uploadedDocumentList.length && viewMode === 'grid'">-->
+                        <!--<div class="row" ng-repeat="docRow in uploadedDocumentArrangedList track by $index">-->
+                            <!--<div class="col-md-3" data-ng-repeat="doc in docRow track by $index">-->
+                                <!--<article>-->
+                                    <!--<div>-->
+                                        <!--<a href="javascript:void(0)" ng-click="preview(doc)">-->
+                                            <!--<img path="{{doc.name | fileThumbnail}}" height="64px" class="image-circle" file-path/>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                    <!--<div style="text-align:left">-->
+                                        <!--<h5>-->
+                                            <!--Document name:-->
+                                            <!--<a ng-click="preview(doc)">{{doc.name | fileName}}</a>-->
+                                        <!--</h5>-->
+                                        <!--<h5>-->
+                                            <!--Uploaded on: {{doc.createdDate | date:app.dateFormat}}-->
+                                        <!--</h5>-->
+                                        <!--<h5>-->
+                                            <!--Uploaded by: {{doc.createdByContact.firstName + ' ' +-->
+                                            <!--doc.createdByContact.lastName}}-->
+                                        <!--</h5>-->
+                                    <!--</div>-->
+                                <!--</article>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</section>-->
                 </div>
             </div>
         </div>
