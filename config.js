@@ -60,11 +60,23 @@ module.exports = {
     baseUrl: 'http://hostname:port',
     nodeServer: 'http://hostname:port'
   },
-  production: {
-    port: 0,
-    domain: 'http://hostname:port/ontargetrs/services',
-    baseUrl: 'http://hostname:port',
-    nodeServer: 'http://hostname:port'
+  sagarmatha01: {
+    port: 9000,
+    domain: 'http://172.31.59.54:9000/ontargetrs/services',
+    baseUrl: 'http://172.31.59.54:9000',
+    nodeServer: 'http://172.31.59.54:9001',
+    resourceUrl: 'http://172.31.59.54:9001',
+    // Proxy settings
+    API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services'
+  },
+  sagarmatha02: {
+    port: 9000,
+    domain: 'http://172.31.48.59:9000/ontargetrs/services',
+    baseUrl: 'http://172.31.48.59:9000',
+    nodeServer: 'http://172.31.48.59:9001',
+    resourceUrl: 'http://172.31.48.59:9005',
+    // Proxy settings
+    API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services'
   },
   server: {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
@@ -96,8 +108,13 @@ module.exports = {
     assetLocation: 'assets/', // empty is root
     maxFileSize: 15000000 // in bytes
   },
-  serverproduction: {
-    PROXY_URL: 'http://hostname:port/ontargetrs/services',
+  serversagarmatha01: {
+    PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root
+    maxFileSize: 15000000 // in bytes
+  },
+  serversagarmatha02: {
+    PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 15000000 // in bytes
   }
