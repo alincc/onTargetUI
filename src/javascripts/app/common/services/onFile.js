@@ -6,7 +6,9 @@ define(function(require) {
     documentTemplate = require('text!app/common/resources/documentTemplate.json'),
     disciplines = require('text!app/common/resources/disciplines.json'),
     categories = require('text!app/common/resources/categories.json'),
-    onFileItems = require('text!app/common/resources/onFileItems.json');
+    onFileItems = require('text!app/common/resources/onFileItems.json'),
+    submittedFor = require('text!app/common/resources/submittedFor.json'),
+    actionAsNoted = require('text!app/common/resources/actionsAsNoted.json');
   var module = angular.module('common.services.onFile', ['app.config']);
   module.factory('onFileFactory', ['$http', 'appConstant', function($http, constant) {
     var services = {};
@@ -53,6 +55,37 @@ define(function(require) {
         "documentId" : documentId,
         "newStatus" : newStatus,
         "modifiedBy" : modifiedBy});
+    };
+
+    services.getSubmittedFor = function (){
+      return angular.fromJson(submittedFor);
+    };
+
+    services.getActionAsNoted = function (){
+      return angular.fromJson(actionAsNoted);
+    };
+
+    services.addResponse = function (response, documentId){
+      return $http.post(constant.domain + '/document/response/save', {response: response, documentId: documentId});
+    };
+
+    services.getResponse = function (documentId){
+      return $http.post(constant.domain + '/document/response',{
+        documentId: documentId
+      });
+    };
+
+    services.updateResponse = function (responseId, response){
+      return $http.post(constant.domain + '/document/response/update',{
+        "documentResponseId" : responseId,
+        "response" : response
+      });
+    };
+
+    services.deleteResponse = function (resId){
+      return $http.post(constant.domain + '/document/response/delete',{
+        documentResponseId: resId
+      });
     };
 
     return services;

@@ -1,9 +1,10 @@
 define(function (require){
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext',
-    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext){
-
+  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state',
+    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state){
+      $scope.action = $scope.actions.purchaseOrder;
+      console.log($scope.action);
       var document = $rootScope.onFileDocument;
       $scope.purchaseOrder = {
         keyValues : {
@@ -12,6 +13,7 @@ define(function (require){
       };
       if(document) {
         $scope.purchaseOrder = document;
+        $scope.purchaseOrder.dueDate = new Date($scope.purchaseOrder.dueDate);
         $scope.submittal = document.submittal;
         $scope.approval = document.approval;
       }
@@ -103,6 +105,20 @@ define(function (require){
         onFileFactory.addNewDocument($scope.newDocument).success(function (resp){
           $scope._form.$setPristine();
         });
+      };
+
+      $scope.updateStatus = function(status){
+        $scope.onSubmit = true;
+        onFileFactory.updateStatus($scope.purchaseOrder.documentId, status, userContext.authentication().userData.userId)
+          .success(function (resp){
+            $scope.onSubmit = false;
+            $state.go('app.onFile');
+          })
+          .error(
+          function (err){
+            $scope.onSubmit = false;
+          }
+        );
       };
 
     load();

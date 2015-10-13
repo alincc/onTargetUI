@@ -27,6 +27,8 @@ define(function(require) {
     contact = require('text!./../resources/mockData/contact.json'),
     company = require('text!./../resources/mockData/company.json'),
     document = require('text!./../resources/mockData/document.json'),
+    documentResponses = require('text!./../resources/mockData/documentResponses.json'),
+    addDocumentResponse = require('text!./../resources/mockData/addDocumentResponse.json'),
     module;
 
   module = angular.module('common.services.mock', ['ngMockE2E', 'app.config', 'ngResource']);
@@ -37,7 +39,7 @@ define(function(require) {
       return [200, angular.fromJson(notifications)];
     });
 
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/project\/getProjectMembers/).respond(function(method, url, data) {
+    $httpBackend.whenPOST(constant.domain + "/project/getProjectMembers").respond(function(method, url, data) {
       return [200, angular.fromJson(contact)];
     });
 
@@ -57,7 +59,7 @@ define(function(require) {
       return [200, angular.fromJson(activityLog)];
     });
 
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/documents\/getUserDocument$/).respond(function(method, url, data) {
+    $httpBackend.whenPOST(constant.domain + "/documents/getUserDocument").respond(function(method, url, data) {
       return [200, angular.fromJson(userDocument)];
     });
 
@@ -94,7 +96,7 @@ define(function(require) {
       }];
     });
 
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/getProjectTaskList$/).respond(function(method, url, data) {
+    /*$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/getProjectTaskList$/).respond(function(method, url, data) {
       return [200, angular.fromJson(projectTask)];
     });
 
@@ -146,13 +148,21 @@ define(function(require) {
         "returnVal": "SUCCESS",
         "id": 0
       }];
-    });
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/company\/getCompanyList/).respond(function(method, url, data){
+    });*/
+    $httpBackend.whenPOST(constant.domain + "/company/getCompanyList").respond(function(method, url, data){
       return [200, angular.fromJson(company)];
     });
 
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/documents\/getDocument/).respond(function(method, url, data){
+    $httpBackend.whenPOST(constant.domain + "/documents/getDocument").respond(function(method, url, data){
       return [200, angular.fromJson(document)];
+    });
+
+    $httpBackend.whenPOST(constant.domain + "/document/response").respond(function(method, url, data){
+      return [200, angular.fromJson(documentResponses)];
+    });
+
+    $httpBackend.whenPOST(constant.domain + "/document/response/save").respond(function(method, url, data){
+      return [200, angular.fromJson(addDocumentResponse)];
     });
 
 

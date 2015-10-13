@@ -48,7 +48,7 @@ define(function(require) {
       function($stateProvider) {
         $stateProvider
           .state('app.onFile', {
-            url: '/onFile?documentId',
+            url: '/onFile',
             templateUrl: 'onFile/templates/onFile.html',
             controller: 'OnFileController',
             reloadOnSearch: false,
@@ -63,6 +63,30 @@ define(function(require) {
                 return deferred.promise;
               }]
             }
+          })
+          .state('app.onFile.CO', {
+            url: '/change-order',
+            templateUrl: 'changeOrder/templates/changeOrder.html',
+            controller: 'ChangeOrderController',
+            reloadOnSearch: false,
+          })
+          .state('app.onFile.PO', {
+            url: '/purchase-order',
+            templateUrl: 'purchaseOrder/templates/purchaseOrder.html',
+            controller: 'PurchaseOrderController',
+            reloadOnSearch: false,
+          })
+          .state('app.onFile.RIF', {
+            url: '/request-for-information',
+            templateUrl: 'requestForInformation/templates/requestForInformation.html',
+            controller: 'RequestForInformationController',
+            reloadOnSearch: false,
+          })
+          .state('app.onFile.Trans', {
+            url: '/transmittal',
+            templateUrl: 'transmittal/templates/transmittal.html',
+            controller: 'TransmittalController',
+            reloadOnSearch: false,
           });
       }
     ]

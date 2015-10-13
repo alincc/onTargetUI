@@ -1,72 +1,95 @@
-<div ng-controller="ViewDocumentController">
-    <tabset class="tab-container">
-        <tab heading="All">
-            <table class="table">
-                <tr class="table-header">
-                    <th>Type</th>
-                    <th>Document Name</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                    <th>Submitted By</th>
-                    <th>Submitted To</th>
-                    <!--<th>Action</th>-->
-                </tr>
-                <tr ng-repeat="doc in all">
-                    <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
-                    <td valign="middle" class="file-name">{{doc.name}}</td>
-                    <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
-                    <td valign="middle" class="file-name">{{doc.status}}</td>
-                    <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
-                    <td valign="middle" class="file-name">{{}}</td>
-                    <!--<td valign="middle" class="file-name">{{}}</td>-->
-                </tr>
-            </table>
-        </tab>
-        <tab heading="Submittals">
-            <table class="table">
-                <tr>
-                    <th>Type</th>
-                    <th>Document Name</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                    <th>Submitted By</th>
-                    <th>Submitted To</th>
-                    <th>Action</th>
-                </tr>
-                <tr ng-repeat="doc in submittals">
-                    <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
-                    <td valign="middle" class="file-name">{{doc.name}}</td>
-                    <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
-                    <td valign="middle" class="file-name">{{doc.status}}</td>
-                    <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
-                    <td valign="middle" class="file-name">{{}}</td>
-                    <td valign="middle" class="file-name">
-                        <a ng-click="viewDocument(doc, 'submittal')">Preview</a>
-                    </td>
-                </tr>
-            </table>
-        </tab>
-        <tab heading="Approvals">
-            <table class="table">
-                <tr>
-                    <th>Type</th>
-                    <th>Document Name</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                    <th>Submitted By</th>
-                    <th>Submitted To</th>
-                    <th>Action</th>
-                </tr>
-                <tr ng-repeat="doc in approvals">
-                    <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
-                    <td valign="middle" class="file-name">{{doc.name}}</td>
-                    <td valign="middle" class="file-name">{{doc.dueDate}}</td>
-                    <td valign="middle" class="file-name">{{doc.status | date: app.dateFormat}}</td>
-                    <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
-                    <td valign="middle" class="file-name">{{}}</td>
-                    <td valign="middle" class="file-name"><a ng-click="viewDocument(doc, 'approval')">Preview</a></td>
-                </tr>
-            </table>
-        </tab>
-    </tabset>
-</div>
+<tabset class="tab-container">
+    <tab heading="View Document" ng-click="openAction(actions.viewDocument)" active="true">
+        <div ng-controller="ViewDocumentController" class="view-document-section">
+            <tabset class="tab-container">
+                <tab heading="All">
+                    <table class="table table-striped table-hover">
+                        <tr class="table-header">
+                            <th>Type</th>
+                            <th>Document Name</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Submitted By</th>
+                            <th>Submitted To</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr ng-repeat="doc in all" ng-click="viewDocument(doc)">
+                            <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
+                            <td valign="middle" class="file-name">{{doc.name}}</td>
+                            <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
+                            <td valign="middle" class="file-name">{{doc.status}}</td>
+                            <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
+                            <td valign="middle" class="file-name">{{}}</td>
+                            <td valign="middle" class="file-name">
+                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event)">Approve</button>
+                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event)">Reject</button>
+                            </td>
+                        </tr>
+                    </table>
+                </tab>
+                <tab heading="Submittals">
+                    <table class="table table-striped table-hover">
+                        <tr>
+                            <th>Type</th>
+                            <th>Document Name</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Submitted By</th>
+                            <th>Submitted To</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr ng-repeat="doc in submittals"  ng-click="viewDocument(doc)">
+                            <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
+                            <td valign="middle" class="file-name">{{doc.name}}</td>
+                            <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
+                            <td valign="middle" class="file-name">{{doc.status}}</td>
+                            <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
+                            <td valign="middle" class="file-name">{{}}</td>
+                            <td valign="middle" class="file-name">
+                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event)">Approve</button>
+                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event)">Reject</button>
+                            </td>
+                        </tr>
+                    </table>
+                </tab>
+                <tab heading="Approvals">
+                    <table class="table table-striped table-hover">
+                        <tr>
+                            <th>Type</th>
+                            <th>Document Name</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Submitted By</th>
+                            <th>Submitted To</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr ng-repeat="doc in approvals"  ng-click="viewDocument(doc)">
+                            <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
+                            <td valign="middle" class="file-name">{{doc.name}}</td>
+                            <td valign="middle" class="file-name">{{doc.dueDate}}</td>
+                            <td valign="middle" class="file-name">{{doc.status | date: app.dateFormat}}</td>
+                            <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
+                            <td valign="middle" class="file-name">{{}}</td>
+                            <td valign="middle" class="file-name">
+                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event)">Approve</button>
+                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event)">Reject</button>
+                            </td>
+                        </tr>
+                    </table>
+                </tab>
+            </tabset>
+        </div>
+    </tab>
+    <tab heading="Change Order" ng-click="openAction(actions.changeOrder)">
+
+    </tab>
+    <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)">
+
+    </tab>
+    <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)">
+
+    </tab>
+    <tab heading="Transmittal" ng-click="openAction(actions.transmittal)">
+
+    </tab>
+</tabset>

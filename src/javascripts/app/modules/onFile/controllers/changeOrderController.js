@@ -1,8 +1,8 @@
 define(function (require){
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', 'fileFactory', '$timeout',
-    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, fileFactory, $timeout){
+  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', 'fileFactory', '$timeout', '$state',
+    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, fileFactory, $timeout, $state){
       var document = $rootScope.onFileDocument;
       $scope.changeOrder = {
         keyValues: {}
@@ -10,6 +10,7 @@ define(function (require){
 
       if(document) {
         $scope.changeOrder = document;
+        $scope.changeOrder.dueDate = new Date($scope.changeOrder.dueDate);
         $scope.submittal = document.submittal;
         $scope.approval = document.approval;
       }
@@ -199,6 +200,20 @@ define(function (require){
           }
         ).finally(
           function (e){
+            $scope.onSubmit = false;
+          }
+        );
+      };
+
+      $scope.updateStatus = function(status){
+        $scope.onSubmit = true;
+        onFileFactory.updateStatus($scope.changeOrder.documentId, status, userContext.authentication().userData.userId)
+          .success(function (resp){
+            $scope.onSubmit = false;
+            $state.go('app.onFile');
+          })
+          .error(
+          function (err){
             $scope.onSubmit = false;
           }
         );

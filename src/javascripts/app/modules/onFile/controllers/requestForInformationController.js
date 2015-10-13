@@ -1,8 +1,8 @@
 define(function (require){
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext',
-    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext){
+  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state',
+    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state){
       var document = $rootScope.onFileDocument;
       $scope.document = {
         keyValues: {}
@@ -10,8 +10,11 @@ define(function (require){
 
       if(document) {
         $scope.document = document;
+        $scope.document.dueDate = new Date($scope.document.dueDate);
         $scope.submittal = document.submittal;
         $scope.approval = document.approval;
+        $scope.onEdit = true;
+        $scope.newResponse = {};
       }
 
       $scope.dueDate = {
@@ -65,6 +68,7 @@ define(function (require){
               $scope.contactNameList.push({userId:projectMember.userId, name: fullName});
             });
           });
+        $scope.getResponse();
       };
 
       $scope.submit = function (){
@@ -96,7 +100,28 @@ define(function (require){
 
         onFileFactory.addNewDocument($scope.newDocument).success(function (resp){
           $scope._form.$setPristine();
+          $state.go('app.onFile');
         });
+      };
+
+      $scope.addResponse = function (){
+        onFileFactory.addResponse($scope.newResponse.response).success(
+          function (resp){
+            //$state.go('app.onFile');
+            $scope.getResponse();
+            $scope.newResponse = {};
+            $scope._response_form.$setPristine();
+          }
+        );
+      };
+
+      $scope.getResponse = function (){
+        onFileFactory.getResponse($scope.document.documentId).success(
+          function (resp){
+            $scope.responses = resp.documentResponses;
+            console.log($scope.responses);
+          }
+        );
       };
 
       load();

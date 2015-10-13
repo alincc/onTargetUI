@@ -1,8 +1,9 @@
 define(function (require){
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext',
-    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext){
+  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state',
+    function ($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state){
+      $scope.action = $scope.actions.transmittal;
       var document = $rootScope.onFileDocument;
       $scope.document = {
         keyValues: {}
@@ -10,6 +11,7 @@ define(function (require){
 
       if(document) {
         $scope.document = document;
+        $scope.document.dueDate = new Date($scope.document.dueDate);
         $scope.submittal = document.submittal;
         $scope.approval = document.approval;
       }
@@ -99,26 +101,18 @@ define(function (require){
             $scope.contacts = memberList || [];
           });
         $scope.items = onFileFactory.getItems();
+        $scope.submittedFors = onFileFactory.getSubmittedFor();
+        $scope.actionsAsNoted = onFileFactory.getActionAsNoted();
+        var i = 0;
+        for (i = 0; i < $scope.submittedFors.length; i++) {
+          $scope.submittedFors[i].value = _.result(_.findWhere($scope.document.keyValues, {'key': $scope.submittedFors[i].key}), 'value') || 'NO';
+        }
+        for (i = 0; i < $scope.actionsAsNoted.length; i++) {
+          $scope.actionsAsNoted[i].value = _.result(_.findWhere($scope.document.keyValues, {'key': $scope.actionsAsNoted[i].key}), 'value') || 'NO';
+        }
       };
 
       $scope.submit = function (){
-        $scope.document.keyValues.approval = $scope.checkValues.approval? 'YES' : 'NO';
-        $scope.document.keyValues.for_use = $scope.checkValues.for_use? 'YES' : 'NO';
-        $scope.document.keyValues.as_requested = $scope.checkValues.as_requested? 'YES' : 'NO';
-        $scope.document.keyValues.review_and_comment = $scope.checkValues.review_and_comment? 'YES' : 'NO';
-        $scope.document.keyValues.further_processing = $scope.checkValues.further_processing? 'YES' : 'NO';
-        $scope.document.keyValues.out_for_signature = $scope.checkValues.out_for_signature? 'YES' : 'NO';
-        $scope.document.keyValues.approve_as_submitted = $scope.checkValues.approve_as_submitted? 'YES' : 'NO';
-        $scope.document.keyValues.approve_as_noted = $scope.checkValues.approve_as_noted? 'YES' : 'NO';
-        $scope.document.keyValues.submit = $scope.checkValues.submit? 'YES' : 'NO';
-        $scope.document.keyValues.resubmitted = $scope.checkValues.resubmitted? 'YES' : 'NO';
-        $scope.document.keyValues.returned = $scope.checkValues.returned? 'YES' : 'NO';
-        $scope.document.keyValues.returned_for_corrections = $scope.checkValues.returned_for_corrections? 'YES' : 'NO';
-        $scope.document.keyValues.resubmitt = $scope.checkValues.resubmitt? 'YES' : 'NO';
-        $scope.document.keyValues.received_as_noted = $scope.checkValues.received_as_noted? 'YES' : 'NO';
-        $scope.document.keyValues.due_by = $scope.checkValues.due_by? 'YES' : 'NO';
-        $scope.document.keyValues.received_by = $scope.checkValues.received_by? 'YES' : 'NO';
-        $scope.document.keyValues.sent_date = $scope.checkValues.sent_date? 'YES' : 'NO';
         var newDocumentFormattedKeyValues = [];
         angular.forEach($scope.document.keyValues, function (value, key) {
           var keyValuePair =
@@ -131,6 +125,8 @@ define(function (require){
           this.push(keyValuePair);
         }, newDocumentFormattedKeyValues);
         $scope.newDocument.keyValues = newDocumentFormattedKeyValues;
+        $scope.newDocument.keyValues = $scope.newDocument.keyValues.concat($scope.submittedFors);
+        $scope.newDocument.keyValues = $scope.newDocument.keyValues.concat($scope.actionsAsNoted);
         $scope.newDocument.assignees = [
           {
             "userId": $scope.document.keyValues.name,
@@ -142,11 +138,25 @@ define(function (require){
             "userTypeId": 0
           }
         ];
-        $scope.newDocument.dueDate = document.dueDate;
+        $scope.newDocument.dueDate = $scope.document.dueDate;
 
         onFileFactory.addNewDocument($scope.newDocument).success(function (resp){
           $scope._form.$setPristine();
         });
+      };
+
+      $scope.updateStatus = function(status){
+        $scope.onSubmit = true;
+        onFileFactory.updateStatus($scope.document.documentId, status, userContext.authentication().userData.userId)
+          .success(function (resp){
+            $scope.onSubmit = false;
+            $state.go('app.onFile');
+          })
+          .error(
+          function (err){
+            $scope.onSubmit = false;
+          }
+        );
       };
 
       load();

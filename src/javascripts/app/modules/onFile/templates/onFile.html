@@ -12,7 +12,14 @@
         </div>
         <!-- / main header -->
         <div class="wrapper-md p-r-none" permission="ONFILE_VIEW">
+
             <div class="panel panel-default">
+                <div class="panel-body">
+                    <div ng-include="'viewDocument/templates/viewDocument.html'" ng-if="uiRouterState.current.name == 'app.onFile'"></div>
+                    <div ui-view></div>
+                </div>
+            </div>
+            <!--<div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="nav-container">
                         <nav class="navbar navbar-default">
@@ -31,7 +38,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div ng-switch on="action.name">
+                    &lt;!&ndash;<div ng-switch on="action.name">
                         <div ng-switch-when="viewDocument">
                             <div ng-include="'viewDocument/templates/viewDocument.html'"></div>
                         </div>
@@ -47,9 +54,11 @@
                         <div ng-switch-when="transmittal">
                             <div ng-include="'transmittal/templates/transmittal.html'"></div>
                         </div>
-                    </div>
+                    </div>&ndash;&gt;
+                    <div ng-include="'viewDocument/templates/viewDocument.html'" ng-if="action.name=='viewDocument'"></div>
+                    <div ui-view></div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>

@@ -1,367 +1,390 @@
-<div ng-controller="ChangeOrderController">
-    <div class="row">
-        <div class="col-md-6">
-            <form name="_form" no-validate class="form-validation" ng-submit="submit()">
-                <div class="form-group">
-                    <h4>Please fill out below infomation</h4>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
+<tabset class="tab-container">
+    <tab heading="View Document" ng-click="openAction(actions.viewDocument)">
+    </tab>
+    <tab heading="Change Order" ng-click="openAction(actions.changeOrder)" active="true">
+        <div ng-controller="ChangeOrderController">
+            <div class="row">
+                <div class="col-md-12">
+                    <form name="_form" no-validate class="form-validation" ng-submit="submit()">
                         <div class="form-group">
-                            <label>Name</label>
-                            <select class="form-control" name="receiverName" ng-model="changeOrder.keyValues.username"
-                                    ng-options="receiverName.userId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
-                                <option value="">-- Select Name --</option>
-                            </select>
-                            <ng-messages ng-if="_form.receiverName.$dirty"
-                                         for="_form.receiverName.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
+                            <span class="form-title">Please fill out below infomation</span>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Company Name</label>
-                            <select class="form-control" name="companyName" ng-model="changeOrder.keyValues.company_name"
-                                    ng-options="company.companyId as company.companyName for company in companies" required>
-                                <option value="">-- Select Company Name --</option>
-                            </select>
-                            <ng-messages ng-if="_form.companyName.$dirty"
-                                         for="_form.companyName.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <select class="form-control" name="receiverName" ng-model="changeOrder.keyValues.username"
+                                            ng-options="receiverName.userId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
+                                        <option value="">-- Select Name --</option>
+                                    </select>
+                                    <ng-messages ng-if="_form.receiverName.$dirty"
+                                                 for="_form.receiverName.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Company Name</label>
+                                    <select class="form-control" name="companyName" ng-model="changeOrder.keyValues.company_name"
+                                            ng-options="company.companyId as company.companyName for company in companies" required>
+                                        <option value="">-- Select Company Name --</option>
+                                    </select>
+                                    <ng-messages ng-if="_form.companyName.$dirty"
+                                                 for="_form.companyName.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Change Order</label>
-                            <!--<select class="form-control" name="co" ng-model="changeOrder.keyValues.co"
-                                    ng-options="receiverName.contact.contactId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
-                                <option value="">&#45;&#45; Select Change Order &#45;&#45;</option>
-                            </select>-->
-                            <input type="text" class="form-control" placeholder="Enter Change Order"
-                                   ng-model="changeOrder.keyValues.co"
-                                   name="location" required/>
-                            <ng-messages ng-if="_form.co.$dirty"
-                                         for="_form.co.$error">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Change Order</label>
+                                    <!--<select class="form-control" name="co" ng-model="changeOrder.keyValues.co"
+                                            ng-options="receiverName.contact.contactId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
+                                        <option value="">&#45;&#45; Select Change Order &#45;&#45;</option>
+                                    </select>-->
+                                    <input type="text" class="form-control" placeholder="Enter Change Order"
+                                           ng-model="changeOrder.keyValues.co"
+                                           name="co" required/>
+                                    <ng-messages ng-if="_form.co.$dirty"
+                                                 for="_form.co.$error">
                                 <span class="help-block m-b-none text-danger" ng-message
                                       when="required">This is a required field.</span>
-                            </ng-messages>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <input type="text" class="form-control" placeholder="Enter Location"
+                                           ng-model="changeOrder.keyValues.location"
+                                           name="location" required/>
+                                    <ng-messages ng-if="_form.location.$dirty"
+                                                 for="_form.location.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Location</label>
-                            <input type="text" class="form-control" placeholder="Enter Location"
-                                   ng-model="changeOrder.keyValues.location"
-                                   name="location" required/>
-                            <ng-messages ng-if="_form.location.$dirty"
-                                         for="_form.location.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <span class="pull-right">(Optional)</span>
+                                    <input type="text" class="form-control" placeholder="Enter Subject"
+                                           ng-model="changeOrder.keyValues.subject"
+                                           name="subject"/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label>Subject</label>
-                            <span class="pull-right">(Optional)</span>
-                            <input type="text" class="form-control" placeholder="Enter Subject"
-                                   ng-model="changeOrder.keyValues.subject"
-                                   name="subject"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Due Date</label>
-                            <p class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter/Select Due date" required
-                                       ng-model="changeOrder.dueDate"
-                                       datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
-                                       datepicker-options="dueDate.options"
-                                       datepicker-append-to-body="true" date-range
-                                       name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" placeholder="Enter/Select Due date" required
+                                               ng-model="changeOrder.dueDate"
+                                               datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
+                                               datepicker-options="dueDate.options"
+                                               datepicker-append-to-body="true" date-range
+                                               name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="dueDate.open($event)"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                             </span>
-                            </p>
-                            <ng-messages ng-if="_form.dueDate.$dirty"
-                                         for="_form.dueDate.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
+                                    </p>
+                                    <ng-messages ng-if="_form.dueDate.$dirty"
+                                                 for="_form.dueDate.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label>Description of Scope</label>
-                            <span class="pull-right">(Optional)</span>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>Description of Scope</label>
+                                    <span class="pull-right">(Optional)</span>
                             <textarea type="text" class="form-control" placeholder="Enter Description of Scope"
                                       ng-model="changeOrder.keyValues.description"
                                       name="description"/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <h4>Please Enter Project information</h4>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
                         <div class="form-group">
-                            <label>Contract Number</label>
-                            <input type="text" class="form-control" placeholder="Enter Contract Number"
-                                   ng-model="changeOrder.keyValues.contract_no"
-                                   name="contract_no" required/>
-                            <ng-messages ng-if="_form.contract_no.$dirty"
-                                         for="_form.contract_no.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
+                            <span class="form-title">Please Enter Project information</span>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Date Created</label>
-                            <p class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter/Select Date Created" required
-                                       ng-model="changeOrder.keyValues.date_created"
-                                       datepicker-popup="MM/dd/yyyy" is-open="dateCreated.isOpen"
-                                       datepicker-options="dateCreated.options"
-                                       datepicker-append-to-body="true" date-range
-                                       name="date_created" ng-click="dateCreated.isOpen = !dateCreated.isOpen"/>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Contract Number</label>
+                                    <input type="text" class="form-control" placeholder="Enter Contract Number"
+                                           ng-model="changeOrder.keyValues.contract_no"
+                                           name="contract_no" required/>
+                                    <ng-messages ng-if="_form.contract_no.$dirty"
+                                                 for="_form.contract_no.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Date Created</label>
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" placeholder="Enter/Select Date Created" required
+                                               ng-model="changeOrder.keyValues.date_created"
+                                               datepicker-popup="MM/dd/yyyy" is-open="dateCreated.isOpen"
+                                               datepicker-options="dateCreated.options"
+                                               datepicker-append-to-body="true" date-range
+                                               name="date_created" ng-click="dateCreated.isOpen = !dateCreated.isOpen"/>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="dateCreated.open($event)"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                             </span>
-                            </p>
-                            <ng-messages ng-if="_form.date_created.$dirty"
-                                         for="_form.date_created.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label>Contract Title</label>
-                            <span class="pull-right">(Optional)</span>
-                            <input type="text" class="form-control" placeholder="Enter Contract Title"
-                                   ng-model="changeOrder.keyValues.contract_title"
-                                   name="contract_title"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <h4>Please Enter Details</h4>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select class="form-control" name="priority" ng-model="changeOrder.keyValues.priority"
-                                    ng-options="priority.id as priority.name for priority in priorities" required>
-                                <option value="">-- Select Priority --</option>
-                            </select>
-                            <ng-messages ng-if="_form.priority.$dirty"
-                                         for="_form.priority.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Discipline</label>
-                            <select class="form-control" name="discipline" ng-model="changeOrder.keyValues.discipline"
-                                    ng-options="discipline.id as discipline.name for discipline in disciplines" required>
-                                <option value="">-- Select Discipline --</option>
-                            </select>
-                            <ng-messages ng-if="_form.discipline.$dirty"
-                                         for="_form.discipline.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select class="form-control" name="discipline" ng-model="changeOrder.keyValues.category"
-                                    ng-options="category.id as category.name for category in categories" required>
-                                <option value="">-- Select Category --</option>
-                            </select>
-                            <ng-messages ng-if="_form.category.$dirty"
-                                         for="_form.category.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <h4>Please Enter Impact</h4>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Schedule Impact</label>
-                            <!--<select class="form-control" name="schedule_impact" ng-model="changeOrder.keyValues.schedule_impact"
-                                    ng-options="schedule_impact.id as schedule_impact.name for schedule_impact in schedule_impacts" required>
-                                <option value="">&#45;&#45; Select Schedule Impact &#45;&#45;</option>
-                            </select>-->
-                            <input type="text" class="form-control" placeholder="Enter Schedule Impact"
-                                   ng-model="changeOrder.keyValues.schedule_impact"
-                                   name="schedule_impact" required/>
-                            <ng-messages ng-if="_form.schedule_impact.$dirty"
-                                         for="_form.schedule_impact.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Cost Impact</label>
-                            <!--<select class="form-control" name="cost_impact" ng-model="changeOrder.keyValues.cost_impact"
-                                    ng-options="cost_impact.id as cost_impact.name for cost_impact in cost_impacts" required>
-                                <option value="">&#45;&#45; Select Cost Impact &#45;&#45;</option>
-                            </select>-->
-                            <input type="text" class="form-control" placeholder="Enter Cost Impact"
-                                   ng-model="changeOrder.keyValues.cost_impact"
-                                   name="cost_impact" required/>
-                            <ng-messages ng-if="_form.cost_impact.$dirty"
-                                         for="_form.cost_impact.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Time Impact</label>
-                            <input type="text" class="form-control" placeholder="Enter Time Impact"
-                                   ng-model="changeOrder.keyValues.time_impact"
-                                   name="time_impact" required/>
-                            <ng-messages ng-if="_form.time_impact.$dirty"
-                                         for="_form.time_impact.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <h4>Please Enter Detail</h4>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Specification Section</label>
-                            <input type="text" class="form-control" placeholder="Enter Specification Section"
-                                   ng-model="changeOrder.keyValues.specification"
-                                   name="specification" required/>
-                            <ng-messages ng-if="_form.specification.$dirty"
-                                         for="_form.specification.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Drawing No.</label>
-                            <input type="text" class="form-control" placeholder="Enter Drawing No."
-                                   ng-model="changeOrder.keyValues.drawing"
-                                   name="drawing" required/>
-                            <ng-messages ng-if="_form.drawing.$dirty"
-                                         for="_form.drawing.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Cost Code</label>
-                            <input type="text" class="form-control" placeholder="Enter Cost Code"
-                                   ng-model="changeOrder.keyValues.cost_code"
-                                   name="cost_code" required/>
-                            <ng-messages ng-if="_form.cost_code.$dirty"
-                                         for="_form.cost_code.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default grid-key">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label>Description of Work</label>
-                                <input type="text" class="form-control cost-grid" placeholder="Enter Description of Work"
-                                       ng-model="cost.workDescription" ng-repeat="cost in costGrid"/>
+                                    </p>
+                                    <ng-messages ng-if="_form.date_created.$dirty"
+                                                 for="_form.date_created.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label>Cost Code</label>
-                                <input type="text" class="form-control cost-grid" placeholder="Enter Cost Code"
-                                       ng-model="cost.costCode" ng-repeat="cost in costGrid"/>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label>Amount</label>
-                                <input type="text" class="form-control cost-grid" placeholder="Enter Amount"
-                                       ng-model="cost.amount" ng-repeat="cost in costGrid"/>
-                            </div>
-                        </div>
-                    </div>
-
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="form-group pull-right">
-                                <a class="btn btn-primary"
-                                   class="btn btn-primary pull-right" type="submit" ng-click="addCostGrid()">Add
-                                </a>
-                                <a class="btn btn-primary"
-                                   class="btn btn-primary pull-right" type="submit" ng-click="removeCostGrid()">Remove
-                                </a>
-                                    </div>
+                                <div class="form-group">
+                                    <label>Contract Title</label>
+                                    <span class="pull-right">(Optional)</span>
+                                    <input type="text" class="form-control" placeholder="Enter Contract Title"
+                                           ng-model="changeOrder.keyValues.contract_title"
+                                           name="contract_title"/>
+                                </div>
                             </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label>Total Change Order Amount</label>
-                            <input type="text" class="form-control" placeholder="Enter Total Change Order Amount"
-                                   ng-model="changeOrder.keyValues.amount"
-                                   name="amount" required/>
-                            <ng-messages ng-if="_form.amount.$dirty"
-                                         for="_form.amount.$error">
-                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                            </ng-messages>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <span class="form-title">Please Enter Details</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select class="form-control" name="priority" ng-model="changeOrder.keyValues.priority"
+                                            ng-options="priority.id as priority.name for priority in priorities" required>
+                                        <option value="">-- Select Priority --</option>
+                                    </select>
+                                    <ng-messages ng-if="_form.priority.$dirty"
+                                                 for="_form.priority.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Discipline</label>
+                                    <select class="form-control" name="discipline" ng-model="changeOrder.keyValues.discipline"
+                                            ng-options="discipline.id as discipline.name for discipline in disciplines" required>
+                                        <option value="">-- Select Discipline --</option>
+                                    </select>
+                                    <ng-messages ng-if="_form.discipline.$dirty"
+                                                 for="_form.discipline.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select class="form-control" name="category" ng-model="changeOrder.keyValues.category"
+                                            ng-options="category.id as category.name for category in categories" required>
+                                        <option value="">-- Select Category --</option>
+                                    </select>
+                                    <ng-messages ng-if="_form.category.$dirty"
+                                                 for="_form.category.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="form-title">Please Enter Impact</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Schedule Impact</label>
+                                    <!--<select class="form-control" name="schedule_impact" ng-model="changeOrder.keyValues.schedule_impact"
+                                            ng-options="schedule_impact.id as schedule_impact.name for schedule_impact in schedule_impacts" required>
+                                        <option value="">&#45;&#45; Select Schedule Impact &#45;&#45;</option>
+                                    </select>-->
+                                    <input type="text" class="form-control" placeholder="Enter Schedule Impact"
+                                           ng-model="changeOrder.keyValues.schedule_impact"
+                                           name="schedule_impact" required/>
+                                    <ng-messages ng-if="_form.schedule_impact.$dirty"
+                                                 for="_form.schedule_impact.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Cost Impact</label>
+                                    <!--<select class="form-control" name="cost_impact" ng-model="changeOrder.keyValues.cost_impact"
+                                            ng-options="cost_impact.id as cost_impact.name for cost_impact in cost_impacts" required>
+                                        <option value="">&#45;&#45; Select Cost Impact &#45;&#45;</option>
+                                    </select>-->
+                                    <input type="text" class="form-control" placeholder="Enter Cost Impact"
+                                           ng-model="changeOrder.keyValues.cost_impact"
+                                           name="cost_impact" required/>
+                                    <ng-messages ng-if="_form.cost_impact.$dirty"
+                                                 for="_form.cost_impact.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Time Impact</label>
+                                    <input type="text" class="form-control" placeholder="Enter Time Impact"
+                                           ng-model="changeOrder.keyValues.time_impact"
+                                           name="time_impact" required/>
+                                    <ng-messages ng-if="_form.time_impact.$dirty"
+                                                 for="_form.time_impact.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="form-title">Please Enter Detail</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Specification Section</label>
+                                    <input type="text" class="form-control" placeholder="Enter Specification Section"
+                                           ng-model="changeOrder.keyValues.specification"
+                                           name="specification" required/>
+                                    <ng-messages ng-if="_form.specification.$dirty"
+                                                 for="_form.specification.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Drawing No.</label>
+                                    <input type="text" class="form-control" placeholder="Enter Drawing No."
+                                           ng-model="changeOrder.keyValues.drawing"
+                                           name="drawing" required/>
+                                    <ng-messages ng-if="_form.drawing.$dirty"
+                                                 for="_form.drawing.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Cost Code</label>
+                                    <input type="text" class="form-control" placeholder="Enter Cost Code"
+                                           ng-model="changeOrder.keyValues.cost_code"
+                                           name="cost_code" required/>
+                                    <ng-messages ng-if="_form.cost_code.$dirty"
+                                                 for="_form.cost_code.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default grid-key">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Description of Work</label>
+                                        <input type="text" class="form-control cost-grid" placeholder="Enter Description of Work"
+                                               ng-model="cost.workDescription" ng-repeat="cost in costGrid"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Cost Code</label>
+                                        <input type="text" class="form-control cost-grid" placeholder="Enter Cost Code"
+                                               ng-model="cost.costCode" ng-repeat="cost in costGrid"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Amount</label>
+                                        <input type="text" class="form-control cost-grid" placeholder="Enter Amount"
+                                               ng-model="cost.amount" ng-repeat="cost in costGrid"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group pull-right">
+                                        <a class="btn btn-primary"
+                                           class="btn btn-primary pull-right" type="submit" ng-click="addCostGrid()">Add
+                                        </a>
+                                        <a class="btn btn-primary"
+                                           class="btn btn-primary pull-right" type="submit" ng-click="removeCostGrid()">Remove
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Total Change Order Amount</label>
+                                    <input type="text" class="form-control" placeholder="Enter Total Change Order Amount"
+                                           ng-model="changeOrder.keyValues.amount"
+                                           name="amount" required/>
+                                    <ng-messages ng-if="_form.amount.$dirty"
+                                                 for="_form.amount.$error">
+                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                    </ng-messages>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-primary" ngf-select ngf-multiple="false" ng-model="attachment.file">Choose File</a>
+                            <span>{{attachment.file.name}}</span>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-right" ng-if="approval">
+                                <a ng-disabled="onSubmit"
+                                   class="btn btn-primary" ng-click="updateStatus('APPROVED')">Approve
+                                </a>
+                                <a ng-disabled="onSubmit"
+                                        class="btn btn-primary" ui-sref="app.onFile">Cancel
+                                </a>
+                            </div>
+                            <button ng-disabled="_form.$invalid || _form.$submitted || onSubmit"
+                                    loading-button="onSubmit"
+                                    class="btn btn-primary pull-right" type="submit" ng-if="!approval">Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <a class="btn btn-primary" ngf-select ngf-multiple="false" ng-model="attachment.file">Choose File</a>
-                    <span>{{attachment.file.name}}</span>
-                </div>
-                <div class="form-group">
-                    <button ng-disabled="_form.$invalid || _form.$submitted || onSubmit"
-                            loading-button="onSubmit"
-                            class="btn btn-primary pull-right" type="submit">Submit
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    </tab>
+    <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)">
+
+    </tab>
+    <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)">
+
+    </tab>
+    <tab heading="Transmittal" ng-click="openAction(actions.transmittal)">
+
+    </tab>
+</tabset>

@@ -1,7 +1,7 @@
 define(function (){
   'use strict';
-  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant',
-    function ($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant){
+  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state',
+    function ($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state){
       $scope.app = appConstant.app;
 
       documentFactory.getUserDocument($rootScope.currentProjectInfo.projectId).success(
@@ -19,6 +19,9 @@ define(function (){
           var keyValue = keyValues[i];
           var key = keyValue.key;
           var value = keyValue.value;
+          if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date'|| keyValue.key === 'sent_by_date'||keyValue.key === 'due_by_date'){
+            value = new Date(value);
+          }
           newKeyValues[key] = value;
         }
         return newKeyValues;
@@ -46,7 +49,7 @@ define(function (){
         return newGridKeyValues;
       };
 
-      $scope.viewDocument = function (doc, status){
+      $scope.viewDocument = function (doc){
         onFileFactory.getDocument(doc.documentId).success(
           function (resp){
             var document = resp.document;
@@ -56,16 +59,44 @@ define(function (){
             }
 
             document.keyValues = keyValues;
-            if(status === 'submittal') {
+            /*if(status === 'submittal') {
               document.submittal = true;
             } else if (status === 'approval') {
               document.approval = true;
-            }
+            }*/
 
             $rootScope.onFileDocument = document;
             notifications.documentSelected();
           }
         );
+      };
+
+      $scope.previewDocument = function (doc){
+        switch (doc.documentTemplate.documentTemplateId) {
+          case 1:
+            $state.go('app.onFile.PO', {docId: doc.documentId});
+            break;
+          case 2:
+            $state.go('app.onFile.CO', {docId: doc.documentId});
+            break;
+          case 3:
+            $state.go('app.onFile.RIF', {docId: doc.documentId});
+            break;
+          case 4:
+            $state.go('app.onFile.Trans', {docId: doc.documentId});
+            break;
+          default :
+            $scope.action = $scope.actions.viewDocument;
+            break;
+        }
+      };
+
+      $scope.changeStatus = function (doc, status, $event){
+        $event.stopImmediatePropagation();
+        onFileFactory.updateStatus(doc.documentId, status, userContext.authentication().userData.userId)
+          .success(function (resp){
+            //change status success
+          });
       };
 
     }];

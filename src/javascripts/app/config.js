@@ -199,7 +199,7 @@ define(function(require){
         '#4D5360'  // dark grey
       ]
     },
-	openWeatherMap:{
+    openWeatherMap:{
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'
     },
     push: {

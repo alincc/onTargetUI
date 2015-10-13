@@ -1,0 +1,50 @@
+[
+  {
+    "key": "out_for_signature",
+    "title": "Out For Signature"
+  },
+  {
+    "key": "approve_as_submitted",
+    "title": "Approve As Submitted"
+  },
+  {
+    "key": "approve_as_noted",
+    "title": "Approve As Noted"
+  },
+  {
+    "key": "submit",
+    "title": "Submit"
+  },
+  {
+    "key": "resubmitted",
+    "title": "Re Submitted"
+  },
+  {
+    "key": "returned",
+    "title": "Returned"
+  },
+  {
+    "key": "returned_for_corrections",
+    "title": "Returned for Corrections"
+  },
+  {
+    "key": "resubmitt",
+    "title": "Re Submit"
+  },
+  {
+    "key": "received_as_noted",
+    "title": "Received As Noted"
+  },
+  {
+    "key": "due_by",
+    "title": "Due By"
+  },
+  {
+    "key": "received_by",
+    "title": "Received By"
+  },
+  {
+    "key": "sent_date",
+    "title": "Sent Date"
+  }
+]
