@@ -199,6 +199,9 @@ define(function(require){
         '#4D5360'  // dark grey
       ]
     },
+	openWeatherMap:{
+      appId: 'd83ad50cdf64ae4f17132adbfd43cb90'
+    },
     push: {
       API_KEY: 'c2f5de73a4caa3763726',
       channel: 'onTarget'
