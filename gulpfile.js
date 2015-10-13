@@ -498,7 +498,7 @@ gulp.task('build:serversagarmatha02', function(){
     '!server/config.js',
     'server.js'
   ], {"base": "."})
-      .pipe(gulp.dest('build-server-sagarmatha01'));
+      .pipe(gulp.dest('build-server-sagarmatha02'));
 });
 
 ////////////////////////////////////
