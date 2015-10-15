@@ -4,7 +4,7 @@ define(function(require) {
     config = require('app/config'),
     countryServiceModule = require('app/common/services/country');
   var module = angular.module('common.services.util', ['app.config', 'common.services.country']);
-  module.factory('utilFactory', ['countryFactory', '$q', '$http', function(countryFactory, $q, $http) {
+  module.factory('utilFactory', ['countryFactory', '$q', '$http', 'appConstant', function(countryFactory, $q, $http,appConstant) {
     var services = {};
     /**
      * @param {DOMElement} element
@@ -110,7 +110,8 @@ define(function(require) {
       return $http.get('http://api.openweathermap.org/data/2.5/weather', {
         params: {
           zip: zip,
-          units: 'Imperial'
+          units: 'Imperial',
+          APPID: appConstant.openWeatherMap.appId
         }
       });
     };
