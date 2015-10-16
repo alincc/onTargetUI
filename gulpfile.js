@@ -113,7 +113,7 @@ gulp.task('lint', function(){
 // Window r.js command line fix (It conflict between r.js and r.cmd.js)
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
 // del node_modules\.bin\r.js
-gulp.task('requireJsOptimizer', ['html'], shell.task([
+gulp.task('requireJsOptimizer', ['html', 'bim'], shell.task([
   // This is the command
   'r.js -o src/javascripts/build.js'
 ]));
@@ -143,6 +143,12 @@ gulp.task('watchCSS', function(){
     './src/less/**/*.less',
     './src/less/*.less'
   ], ['lessOnly']);
+});
+
+// BIM
+gulp.task('bim', function(){
+   gulp.src('./src/bim/**/*')
+       .pipe(gulp.dest('./build/bim'));
 });
 
 // Test task
