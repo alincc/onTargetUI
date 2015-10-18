@@ -25,10 +25,11 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
                         <div class="panel-body">
-                            <iframe
-                                    ng-src="{{selectedDoc.previewPath}}"
-                                    frameborder="0" ng-if="!selectedDoc.isImage">
-                            </iframe>
+                            <object width="100%" height="100%" data="{{selectedDoc.objectPath}}" ng-if="!selectedDoc.isImage"></object>
+                            <!--<iframe-->
+                                    <!--ng-src="{{selectedDoc.previewPath}}"-->
+                                    <!--frameborder="0" ng-if="!selectedDoc.isImage">-->
+                            <!--</iframe>-->
                             <div class="image-preview-wrapper"
                                  ng-if="selectedDoc.isImage">
                                 <img class="image-size wrapper-xs" ng-src="{{selectedDoc.previewPath}}">

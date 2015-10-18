@@ -14,6 +14,7 @@ define(function(require){
         $scope.selectedDoc.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
           if(!$scope.selectedDoc.isImage) {
             $scope.selectedDoc.previewPath = $sce.trustAsResourceUrl('http://docs.google.com/gview?url=' + filePath + '&embedded=true');
+            $scope.selectedDoc.objectPath = $sce.trustAsResourceUrl(filePath);
           }
       };
 
