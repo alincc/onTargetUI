@@ -25,7 +25,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
                         <div class="panel-body">
-                            <object width="100%" height="100%" data="{{selectedDoc.objectPath}}" ng-if="!selectedDoc.isImage"></object>
+                            <pdf src="{{selectedDoc.objectPath}}" ng-if="!selectedDoc.isImage"></pdf>
                             <!--<iframe-->
                                     <!--ng-src="{{selectedDoc.previewPath}}"-->
                                     <!--frameborder="0" ng-if="!selectedDoc.isImage">-->
