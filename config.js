@@ -67,7 +67,7 @@ module.exports = {
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
     // Proxy settings
-    API_SERVER: 'https://172.31.59.54:8080/ontargetrs/services'
+    API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services'
   },
   sagarmatha02: {
     port: 9000,
