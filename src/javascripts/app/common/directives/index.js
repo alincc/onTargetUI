@@ -14,7 +14,8 @@ define(function(require) {
     spinner = require('./spinner'),
     permission = require('./permission'),
     menuPermission = require('./menuPermission'),
-    loadingButton = require('./loadingButton');
+    loadingButton = require('./loadingButton'),
+    pdfPreview = require('./pdfPreview');
 
   var module = angular.module('common.directives',
     [
@@ -31,7 +32,8 @@ define(function(require) {
       'common.directives.spinner',
       'common.directives.permission',
       'common.directives.menuPermission',
-      'common.directives.loadingButton'
+      'common.directives.loadingButton',
+      'common.directives.pdfPreview'
     ]);
   return module;
 });

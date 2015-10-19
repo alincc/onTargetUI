@@ -19,7 +19,7 @@ module.exports = {
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'http://localhost:9001',
     // Proxy settings
-    API_SERVER: 'http://localhost:8080/ontargetrs/services'
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services'
   },
   local1: {
     port: 9002,
