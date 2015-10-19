@@ -46,17 +46,5 @@ define(function(require) {
     };
   }
   ]);
-
-    module.directive('pdf', function() {
-        return {
-            restrict: 'E',
-            link: function(scope, element, attrs) {
-                var url = scope.$eval(attrs.src);
-                element.replaceWith('<object width="100%" height="100%" type="application/pdf" data="' + url + '"></object>');
-            }
-        };
-    });
-
-
   return module;
 });
