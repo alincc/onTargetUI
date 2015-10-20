@@ -15788,6 +15788,18 @@ body {
 .navi-wrap .navi .nav li.item:hover a span {
   color: #fff;
 }
+.navi-wrap .navi .nav li.item.menu-selected a {
+  background: #5b90bf;
+}
+.navi-wrap .navi .nav li.item.menu-selected a img.inacti {
+  display: none;
+}
+.navi-wrap .navi .nav li.item.menu-selected a img.acti {
+  display: inline-block;
+}
+.navi-wrap .navi .nav li.item.menu-selected a span {
+  color: #fff;
+}
 .navi-wrap .navi .nav li.header a {
   padding: 23px 0;
 }
@@ -20625,6 +20637,82 @@ a.text-black:hover {
 .ontarget-page .project-date .percentage p.small {
   font-size: 12px;
 }
+.on-file-page .panel-heading {
+  padding: 0px;
+}
+.on-file-page .panel-heading .nav {
+  margin: 0px;
+}
+.on-file-page .panel-heading .nav-container {
+  text-align: center;
+}
+.on-file-page .panel-heading .nav-container .navbar-default {
+  min-height: 0px;
+}
+.on-file-page .panel-heading .nav-container .navbar-default .container-fluid {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+.on-file-page .panel-heading .nav-container .navbar-default .container-fluid ul li a {
+  font-weight: 600;
+  padding: 10px 5px;
+}
+.on-file-page .panel-heading .nav-container .navbar-default .container-fluid ul li a:hover {
+  color: #4984b8;
+}
+.on-file-page .panel-heading .nav-container .navbar-default .container-fluid ul li a:focus {
+  color: #4984b8;
+}
+.on-file-page .panel-heading .nav-container .navbar-default .container-fluid ul li.active a {
+  color: #4984b8 !important;
+  background: none;
+}
+.on-file-page .grid-key {
+  padding: 15px;
+  padding-bottom: 0px;
+}
+.on-file-page .cost-grid {
+  margin-bottom: 10px;
+}
+.on-file-page .view-document-section .tab-content {
+  padding: 0px;
+}
+.on-file-page .view-document-section .tab-content .table {
+  margin-bottom: 0px;
+}
+.on-file-page .view-document-section .tab-content .table th {
+  border-top: 0px;
+  font-weight: normal;
+  background-color: #f4f4f4;
+  color: #7a7a7a;
+  padding: 8px 15px;
+}
+.on-file-page .view-document-section .tab-content .table tr:hover {
+  cursor: pointer;
+}
+.on-file-page .view-document-section .nav-tabs li.active a {
+  background-color: #f4f4f4;
+  border-bottom-color: #f4f4f4 !important;
+  color: #58666e;
+}
+.on-file-page .view-document-section .nav-tabs li a {
+  font-weight: normal;
+}
+.on-file-page .form-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+.on-file-page .checkbox-inline {
+  padding-left: 0px;
+  margin-right: 20px;
+}
+.on-file-page .nav-tabs li.active a {
+  color: #4984b8;
+  font-weight: bold;
+}
+.on-file-page .nav-tabs li a {
+  color: #58666e;
+}
 .activity-section .panel {
   border-radius: 5px;
 }
@@ -21340,4 +21428,16 @@ a.text-black:hover {
 }
 .comment-section .panel-body .add-comment form .button button {
   padding: 3px 10px;
+}
+.rfi-section .response-container {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+.rfi-section .response-container .submited-by {
+  font-style: italic;
+}
+.rfi-section hr {
+  border-top: 1px solid #ccc;
 }
