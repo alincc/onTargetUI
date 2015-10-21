@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            /*width: 800px;*/
+            padding: 20px;
+        }
+
+        .title-box {
+            float: left;
+            width: 60%;
+        }
+
+        .company-box {
+            float: left;
+            width: 40%;
+            margin-top: 20px;
+        }
+        .company-box p {
+            text-align: center;
+        }
+
+        .company-logo {
+            /*width: 300px;*/
+        }
+
+        .box {
+            border: solid 1px #cccccc;
+            border-radius: 3px;
+            padding: 0 10px;
+            width: 100%;
+            float: left;
+            box-sizing: border-box
+        }
+
+        .form-group {
+            float: left;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .column {
+            width: 50%;
+            float: left;
+        }
+        .label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="company-box">
+    <div class="company-logo">
+        <img src="https://wiki.maemo.org/images/thumb/d/de/Maemo.org_logo_contest_sample1_bundyo.png/300px-Maemo.org_logo_contest_sample1_bundyo.png">
+    </div>
+    <p>{{company}}</p>
+</div>
+<div class="title-box">
+    <div class="box">
+        <p>From : {{createdBy}} {{company}}</p>
+
+        <p>Date : {{createdDate}}</p>
+
+        <p>Address : {{address}}</p>
+
+        <p>Submitted to : {{username}}</p>
+
+        <p>Submitted to Company name : {{company_name}}</p>
+
+        <p>Attention : {{attention}}</p>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="box">
+        <p class="label">PURCHASE ORDER</p>
+
+        <p>Subject : {{subject}}</p>
+
+        <p>PO #: {{PO}}</p>
+
+        <p>Address : {{address}}</p>
+
+        <p>Priority : {{priority}}</p>
+
+        <p>Due Date : {{dueDate}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Shipping Detail</p>
+
+    <div class="box">
+        <p class="column label">Shipping Method : {{shipping_method}}</p>
+        <p class="column label">Shipping Items : {{shipping_terms}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Shipping Information</p>
+
+    <div class="box">
+        <p class="column label">Name : {{shipping_name}}</p>
+        <p class="column label">Company : {{ship_to_company}}</p>
+        <p class="column label">Address : {{ship_to_address}}</p>
+        <p class="column label">Total PO amount : {{total_po_amount}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Notes</p>
+
+    <div class="box">
+        <p>{{notes}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Approved by {{approvedBy}} . Date : {{approvedDate}}</p>
+
+    <p class="label">Attachments - {{attachments}}</p>
+</div>
+</body>
+</html>

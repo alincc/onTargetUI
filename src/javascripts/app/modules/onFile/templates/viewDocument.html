@@ -25,7 +25,7 @@
                                 No document
                             </td>
                         </tr>
-                        <tr ng-repeat="doc in all" ng-click="viewDocument(doc)">
+                        <tr ng-repeat="doc in all" ng-click="previewDocument(doc)">
                             <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
                             <td valign="middle" class="file-name">{{doc.name}}</td>
                             <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
@@ -33,8 +33,8 @@
                             <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
                             <td valign="middle" class="file-name">{{}}</td>
                             <td valign="middle" class="file-name">
-                                <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.view">View</button>
-                                <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
+                                <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
+                                <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
                                 <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event, $index)" ng-if="doc.approve">Approve</button>
                                 <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event, $index)" ng-if="doc.approve">Reject</button>

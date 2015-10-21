@@ -2,52 +2,57 @@ var fs = require('fs');
 var wkhtmltopdf = require('wkhtmltopdf');
 var config = require('./../config');
 var API_SERVER = config.PROXY_URL;
+var path = require('path');
 var request = require('request');
+var _ = require('lodash');
+var rootPath = process.env.ROOT;
 
 module.exports = {
   exportPdf: function(req, res) {
-    var type = req.params.type;
-    var docId = req.params.id;
-    var userId = req.params.userId;
-    var projectId = req.params.projectId;
+    var data = req.body.document,
+      projectAssetFolderName = req.body.projectAssetFolderName,
+      fileName,
+      destinationPath,
+      html;
+
+    switch(data.documentTemplate.documentTemplateId) {
+      case 1:
+        fileName = "purchase_order_" + data.documentId + ".pdf";
+        break;
+      case 2:
+        fileName = "change_order_" + data.documentId + ".pdf";
+        break;
+      case 3:
+        fileName = "request_for_information_" + data.documentId + ".pdf";
+        break;
+      case 4:
+        fileName = "transmittal_" + data.documentId + ".pdf";
+        break;
+    }
+
+    destinationPath = path.join(rootPath, 'assets', 'projects', projectAssetFolderName);
+    if(!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath);
+    }
+    destinationPath = path.join(destinationPath, 'onfile');
+    if(!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath);
+    }
+    destinationPath = path.join(destinationPath, fileName);
 
     wkhtmltopdf.command = 'wkhtmltopdf';
 
-    var transformKeyValues = function(keyValues) {
-      var newKeyValues = keyValues;
-      for(var i = 0; i < keyValues.length; i++) {
-        var keyValue = keyValues[i];
-        var key = keyValue.key;
-        var value = keyValue.value;
-        if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
-          value = new Date(value);
-        }
-        newKeyValues[key] = value;
-      }
-      return newKeyValues;
-    };
+    function failure(err) {
+      res.status(400);
+      res.send('Error');
+    }
 
-    var transformGridKeyValues = function(gridKeyValues) {
-      var newGridKeyValues = {};
-      for(var i = 0; i < gridKeyValues.length; i++) {
-        var grid = gridKeyValues[i];
-        if(newGridKeyValues[grid.gridRowIndex] === undefined) {
-          newGridKeyValues[grid.gridRowIndex] = [
-            {
-              "value": grid.value,
-              "key": grid.key
-            }
-          ];
-        } else {
-          newGridKeyValues[grid.gridRowIndex].push({
-            "value": grid.value,
-            "key": grid.key
-          });
-        }
-      }
-
-      return newGridKeyValues;
-    };
+    function success() {
+      res.send({
+        success: true,
+        filePath: 'assets/projects/' + projectAssetFolderName + '/onfile/' + fileName
+      });
+    }
 
     function fillPOData(html, data) {
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
@@ -73,7 +78,13 @@ module.exports = {
       html = html.replace(/\{\{approvedDate}}/g, data.approvedDate || '');
       html = html.replace(/\{\{attachments}}/g, data.attachments || '');
 
-      wkhtmltopdf(html, {pageSize: 'letter'}).pipe(res);
+      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      stream
+        .on("error", function(error) {
+          console.error("Problem copying file: " + error.stack);
+          failure(error);
+        })
+        .on("end", success);
     }
 
     function fillCOData(html, data) {
@@ -107,7 +118,13 @@ module.exports = {
       html = html.replace(/\{\{approvedDate}}/g, data.approvedDate || '');
       html = html.replace(/\{\{attachments}}/g, data.attachments || '');
 
-      wkhtmltopdf(html, {pageSize: 'letter'}).pipe(res);
+      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      stream
+        .on("error", function(error) {
+          console.error("Problem copying file: " + error.stack);
+          failure(error);
+        })
+        .on("finish", success);
     }
 
     function fillTransData(html, data) {
@@ -154,7 +171,13 @@ module.exports = {
       html = html.replace(/\{\{approvedDate}}/g, data.keyValues.approvedDate || '');
       html = html.replace(/\{\{attachments}}/g, data.keyValues.attachments || '');
 
-      wkhtmltopdf(html, {pageSize: 'letter'}).pipe(res);
+      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      stream
+        .on("error", function(error) {
+          console.error("Problem copying file: " + error.stack);
+          failure(error);
+        })
+        .on("end", success);
     }
 
     function fillRFIData(html, data) {
@@ -195,50 +218,59 @@ module.exports = {
 
       html = html.replace(/\{\{responses}}/g, response || '');
 
-      wkhtmltopdf(html, {pageSize: 'letter'}).pipe(res);
+      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      stream
+        .on("error", function(error) {
+          console.error("Problem copying file: " + error.stack);
+          failure(error);
+        })
+        .on("end", success);
     }
 
-    function getDocumentById(t, i) {
-      var body = {};
-      request({
-          method: 'POST',
-          body: body,
-          json: true,
-          url: API_SERVER + '/documents/getDocument'
-        },
-        function(error, response, body) {
-          if(!error && response.statusCode == 200) {
-            var document = response.document, html, data = {
-              keyValues: {}
-            };
+    // KeyValues
+    var parsedKeyValues = {}, attention = [];
+    _.each(data.keyValues, function(el) {
+      if(/^attention\d+/.test(el.key)) {
+        attention.push(el.key);
+      } else {
+        var value = el.value;
+        if(el.key === 'date_created' || el.key === 'date' || el.key === 'received_by_date' || el.key === 'sent_by_date' || el.key === 'due_by_date') {
+          value = new Date(el.value);
+        }
+        parsedKeyValues[el.key] = value;
+      }
+    });
+    parsedKeyValues['attention'] = attention;
+    data.keyValues = parsedKeyValues;
 
-            switch(type) {
-              case "po":
-                html = fs.readFileSync('./../assets/templates/purchaseOrder.html', 'utf8');
-                fillPOData(html, data);
-                break;
-              case "co":
-                html = fs.readFileSync('./../assets/templates/changeOrder.html', 'utf8');
-                fillCOData(html, data);
-                break;
-              case "rfi":
-                html = fs.readFileSync('./../assets/templates/requestForInformation.html', 'utf8');
-                fillRFIData(html, data);
-                break;
-              case "tr":
-                html = fs.readFileSync('./../assets/templates/transmittal.html', 'utf8');
-                fillTransData(html, data);
-                break;
-              default:
-                res.status(404)        // HTTP status 404: NotFound
-                  .send('Document not found');
-            }
-          } else {
-            res.send(error);
-          }
-        });
+    if(data.gridKeyValues && data.gridKeyValues.length > 0) {
+      var parsedGridKeyValues = {};
+      _.each(data.gridKeyValues, function(el) {
+        parsedGridKeyValues[el.key] = el.value;
+      });
+      data.gridKeyValues = parsedGridKeyValues;
     }
 
-    getDocumentById(type, docId);
+    switch(data.documentTemplate.documentTemplateId) {
+      case 1:
+        html = fs.readFileSync('server/assets/templates/purchaseOrder.html', 'utf8');
+        fillPOData(html, data);
+        break;
+      case 2:
+        html = fs.readFileSync('server/assets/templates/changeOrder.html', 'utf8');
+        fillCOData(html, data);
+        break;
+      case 3:
+        html = fs.readFileSync('server/assets/templates/requestForInformation.html', 'utf8');
+        fillRFIData(html, data);
+        break;
+      case 4:
+        html = fs.readFileSync('server/assets/templates/transmittal.html', 'utf8');
+        fillTransData(html, data);
+        break;
+      default:
+        res.status(404)        // HTTP status 404: NotFound
+          .send('Document not found');
+    }
   }
 };

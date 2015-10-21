@@ -6,13 +6,14 @@ define(function(require) {
       restrict: 'A',
       scope: {
         attachments: '=',
-        onEdit: '='
+        onEdit: '=',
+        onApprove: '=',
+        onView: '='
       },
       controller: ['$scope', '$window', '$filter', function($scope, $window, $filter) {
         $scope.downloadAttachment = function(file) {
           $window.open($filter('fileDownloadPathHash')(file.filePath));
         };
-
         $scope.removeFile = function(idx) {
           $scope.attachments.splice(idx, 1);
           $scope.$broadcast('uploadBox.DeleteFile', {idx: idx});
