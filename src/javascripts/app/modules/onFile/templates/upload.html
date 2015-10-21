@@ -1,0 +1,19 @@
+<div class="modal-header">
+    <h3 class="modal-title">Add document</h3>
+</div>
+<div class="modal-body on-site-upload-document-modal">
+    <upload-box multiple="true"></upload-box>
+    <p class="selected-file file-info" ng-repeat="file in uploadModel.files">
+                                <span class="file-icon">
+                                    <img ng-src="{{file.fileName | fileicon}}" alt=""/>
+                                </span>
+        <span class="file-name" ng-bind="file.fileName"></span>
+                                <span class="file-remove-icon" ng-click="removeFile($index)">
+                                    <i class="fa fa-times"></i>
+                                </span>
+    </p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="closeModal()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

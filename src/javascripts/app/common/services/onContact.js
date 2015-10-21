@@ -16,13 +16,9 @@ define(function(require) {
 
                 service.getContactList = function(projectId,userId) {
                     var reqParams = {
-                        "baseRequest": {
-                            "loggedInUserId": userId,
-                            "loggedInUserProjectId": projectId
-                        },
                         "projectId": projectId
                     };
-                    console.log("parampassed:: "+JSON.stringify(reqParams));
+                    //console.log("parampassed:: "+JSON.stringify(reqParams));
                     return $http.post(constant.domain + '/project/getProjectMembers', reqParams);
                 };
 

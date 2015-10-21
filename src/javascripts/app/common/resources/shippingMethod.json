@@ -1,14 +1,14 @@
 [
   {
-    "id": "AIR",
-    "name": "AIR"
+    "id": "Air",
+    "name": "Air"
   },
   {
-    "id": "LAND",
-    "name": "LAND"
+    "id": "Land",
+    "name": "Land"
   },
   {
-    "id": "WATER",
-    "name": "WATER"
+    "id": "Ship",
+    "name": "Ship"
   }
 ]

@@ -54,6 +54,6 @@ function downloadFile(req, res) {
   });
 }
 
-module.exports = function(app) {
-  app.post('/node/download', downloadFile);
+module.exports = {
+  download: downloadFile
 };

@@ -62,8 +62,11 @@ require.config({
     jPlotToolTip: '../bower_components/flot.tooltip/js/jquery.flot.tooltip',
     jPlotOrderBar: '../bower_components/flot.orderbars/js/jquery.flot.orderBars',
     jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline',
+    cryptorJs: '../bower_components/crypto-js/crypto-js',
     spin: '../js/ladda/js/spin',
-    ladda: '../js/ladda/js/ladda'
+    ladda: '../js/ladda/js/ladda',
+    angularChart: '../bower_components/angular-chart.js/dist/angular-chart',
+    chartjs: '../bower_components/Chart.js/Chart'
   },
 
   shim: {
@@ -178,6 +181,9 @@ require.config({
     },
     "pushAngular": {
       deps: ['pusher', 'angular']
+    },
+    "angularChart": {
+      deps: ['angular', 'chartjs']
     }
   }
 });

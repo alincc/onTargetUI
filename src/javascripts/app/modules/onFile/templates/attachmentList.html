@@ -1,0 +1,9 @@
+<p class="selected-file file-info" ng-repeat="file in attachments">
+                                <span class="file-icon">
+                                    <img ng-src="{{file.filePath | fileicon}}" alt=""/>
+                                </span>
+    <a ng-click="downloadAttachment(file)" class="file-name" ng-bind="file.filePath | fileName"></a>
+                                <span class="file-remove-icon" ng-click="removeFile($index)">
+                                    <i class="fa fa-times"></i>
+                                </span>
+</p>

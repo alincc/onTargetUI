@@ -21,7 +21,7 @@ var folder = myArgs[0] || 'app';
 var port = myArgs[1] || 3214;
 //var cors = require('cors');
 var app = express();
-var API_SERVER = 'http://int.app.ontargetcloud.com:9004/ontargetrs/services';
+var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrs/services';
 
 // Config
 app.set('port', port);
@@ -33,28 +33,28 @@ app.use(methodOverride());
 app.use(express.static(__dirname + '/' + folder));
 
 // Push implementation
-function getUserDetails(userId, cb){
+function getUserDetails(userId, cb) {
   request({
       method: 'POST',
       body: {"userId": userId, "accountStatus": null},
       json: true,
       url: API_SERVER + '/profile/getUserDetails'
     },
-    function(error, response, body){
+    function(error, response, body) {
       if(!error && response.statusCode == 200) {
         cb(response.body.user);
       }
     });
 }
 
-function getTaskDetails(taskId, baseRequest, cb){
+function getTaskDetails(taskId, baseRequest, cb) {
   request({
       method: 'POST',
       body: {"taskId": taskId, "baseRequest": baseRequest},
       json: true,
       url: API_SERVER + '/task/getTaskDetail'
     },
-    function(error, response, body){
+    function(error, response, body) {
       if(!error && response.statusCode == 200) {
         cb(response.body.task);
       } else {
@@ -63,20 +63,30 @@ function getTaskDetails(taskId, baseRequest, cb){
     });
 }
 
+function getDocumentTemplateName(docTemplateId) {
+  var docTemplates = {
+    "1": "Purchase Order",
+    "2": "Change Order",
+    "3": "Request For Information",
+    "4": "Transmittal"
+  };
+  return docTemplates[docTemplateId];
+}
+
 // Task assign
-app.post('/ontargetrs/services/task/assignUserToTask', function(req, res){
+app.post('/ontargetrs/services/task/assignUserToTask', function(req, res) {
   var data = req.body,
     taskId = req.body.taskId,
     baseRequest = req.body.baseRequest;
 
-  function assignUserToTask(){
+  function assignUserToTask() {
     request({
         method: 'POST',
         body: req.body,
         json: true,
         url: API_SERVER + '/task/assignUserToTask'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           res.send(response.body);
         } else {
@@ -85,9 +95,9 @@ app.post('/ontargetrs/services/task/assignUserToTask', function(req, res){
       });
   }
 
-  getTaskDetails(taskId, baseRequest, function(task){
+  getTaskDetails(taskId, baseRequest, function(task) {
     assignUserToTask();
-    getUserDetails(baseRequest.loggedInUserId, function(user1){
+    getUserDetails(baseRequest.loggedInUserId, function(user1) {
       // remove owner
       if(_.indexOf(req.body.members, req.body.ownerId) === -1) {
         //  pusher.trigger('onTarget', 'private-user-' + req.body.ownerId, {
@@ -96,17 +106,17 @@ app.post('/ontargetrs/services/task/assignUserToTask', function(req, res){
       }
       // add owner
       else {
-        var assignees = _.difference(data.members, _.map(task.assignee, function(el){
+        var assignees = _.difference(data.members, _.map(task.assignee, function(el) {
           return el.userId;
         }));
-        _.each(assignees, function(el){
-          getUserDetails(el, function(user2){
-            var taskAssignee = _.map(task.assignee, function(el){
+        _.each(assignees, function(el) {
+          getUserDetails(el, function(user2) {
+            var taskAssignee = _.map(task.assignee, function(el) {
               return el.userId;
             });
             taskAssignee.push(el);
             var d = _.uniq(taskAssignee);
-            _.each(d, function(el2){
+            _.each(d, function(el2) {
               pusher.trigger('onTarget', 'private-user-' + el2, {
                 "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has assigned ' + task.title + ' to ' + user2.contact.firstName + ' ' + user2.contact.lastName
               });
@@ -119,19 +129,19 @@ app.post('/ontargetrs/services/task/assignUserToTask', function(req, res){
 });
 
 // Task update/create
-app.post('/ontargetrs/services/task/addTask', function(req, res){
+app.post('/ontargetrs/services/task/addTask', function(req, res) {
   var task = req.body.task,
     baseRequest = req.body.baseRequest,
     taskStatuses = JSON.parse(fs.readFileSync(__dirname + '/' + folder + '/javascripts/app/common/resources/taskStatuses.json', 'utf8'));
 
-  function createUpdateTask(){
+  function createUpdateTask() {
     request({
         method: 'POST',
         body: req.body,
         json: true,
         url: API_SERVER + '/task/addTask'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           res.send(response.body);
         } else {
@@ -142,15 +152,15 @@ app.post('/ontargetrs/services/task/addTask', function(req, res){
 
   // Update task
   if(task.projectTaskId) {
-    getTaskDetails(task.projectTaskId, req.body.baseRequest, function(beforeUpdateTask){
+    getTaskDetails(task.projectTaskId, req.body.baseRequest, function(beforeUpdateTask) {
       createUpdateTask();
-      getUserDetails(baseRequest.loggedInUserId, function(user1){
+      getUserDetails(baseRequest.loggedInUserId, function(user1) {
         var assignees = beforeUpdateTask.assignee;
 
         // Task status notification
         if(beforeUpdateTask.status !== task.status) {
           var taskNewStatus = _.find(taskStatuses, {id: task.status});
-          _.each(assignees, function(el){
+          _.each(assignees, function(el) {
             pusher.trigger('onTarget', 'private-user-' + el.userId, {
               "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has changed the status of task to ' + (taskNewStatus ? taskNewStatus.name : task.status)
             });
@@ -158,7 +168,7 @@ app.post('/ontargetrs/services/task/addTask', function(req, res){
         }
 
         // Task edit notification
-        _.each(assignees, function(el){
+        _.each(assignees, function(el) {
           pusher.trigger('onTarget', 'private-user-' + el.userId, {
             "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has made an updated ' + task.title
           });
@@ -168,9 +178,9 @@ app.post('/ontargetrs/services/task/addTask', function(req, res){
   } else {
     // Create task
     createUpdateTask();
-    getUserDetails(baseRequest.loggedInUserId, function(user1){
-      _.each(task.assignees, function(el){
-        getUserDetails(el, function(user2){
+    getUserDetails(baseRequest.loggedInUserId, function(user1) {
+      _.each(task.assignees, function(el) {
+        getUserDetails(el, function(user2) {
           pusher.trigger('onTarget', 'private-user-' + el, {
             "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has assigned ' + task.title + ' to ' + user2.contact.firstName + ' ' + user2.contact.lastName
           });
@@ -181,18 +191,18 @@ app.post('/ontargetrs/services/task/addTask', function(req, res){
 });
 
 // Add Task comment
-app.post('/ontargetrs/services/task/addComment', function(req, res){
+app.post('/ontargetrs/services/task/addComment', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function addTaskComment(){
+  function addTaskComment() {
     request({
         method: 'POST',
         body: req.body,
         json: true,
         url: API_SERVER + '/task/addComment'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           res.send(response.body);
         } else {
@@ -203,10 +213,10 @@ app.post('/ontargetrs/services/task/addComment', function(req, res){
 
   addTaskComment();
 
-  getTaskDetails(data.taskId, baseRequest, function(task){
-    getUserDetails(baseRequest.loggedInUserId, function(user1){
+  getTaskDetails(data.taskId, baseRequest, function(task) {
+    getUserDetails(baseRequest.loggedInUserId, function(user1) {
       var assignees = task.assignee;
-      _.each(assignees, function(el){
+      _.each(assignees, function(el) {
         pusher.trigger('onTarget', 'private-user-' + el.userId, {
           "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has commented on ' + task.title
         });
@@ -216,18 +226,18 @@ app.post('/ontargetrs/services/task/addComment', function(req, res){
 });
 
 // Add Task attachment
-app.post('/ontargetrs/services/task/saveTaskFile', function(req, res){
+app.post('/ontargetrs/services/task/saveTaskFile', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function addTaskAttachment(){
+  function addTaskAttachment() {
     request({
         method: 'POST',
         body: req.body,
         json: true,
         url: API_SERVER + '/task/saveTaskFile'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           res.send(response.body);
         } else {
@@ -238,10 +248,10 @@ app.post('/ontargetrs/services/task/saveTaskFile', function(req, res){
 
   addTaskAttachment();
 
-  getTaskDetails(data.taskId, baseRequest, function(task){
-    getUserDetails(baseRequest.loggedInUserId, function(user1){
+  getTaskDetails(data.taskId, baseRequest, function(task) {
+    getUserDetails(baseRequest.loggedInUserId, function(user1) {
       var assignees = task.assignee;
-      _.each(assignees, function(el){
+      _.each(assignees, function(el) {
         pusher.trigger('onTarget', 'private-user-' + el.userId, {
           "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has made an attachment on ' + task.title
         });
@@ -251,18 +261,18 @@ app.post('/ontargetrs/services/task/saveTaskFile', function(req, res){
 });
 
 // Add onSite document
-app.post('/ontargetrs/services/upload/saveUploadedDocsInfo', function(req, res){
+app.post('/ontargetrs/services/upload/saveUploadedDocsInfo', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function saveUploadedDocsInfo(){
+  function saveUploadedDocsInfo() {
     request({
         method: 'POST',
         body: req.body,
         json: true,
         url: API_SERVER + '/upload/saveUploadedDocsInfo'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           res.send(response.body);
         } else {
@@ -271,14 +281,14 @@ app.post('/ontargetrs/services/upload/saveUploadedDocsInfo', function(req, res){
       });
   }
 
-  function getProjectMembers(projectId, cb){
+  function getProjectMembers(projectId, cb) {
     request({
         method: 'POST',
         body: {baseRequest: baseRequest, projectId: projectId},
         json: true,
         url: API_SERVER + '/project/getProjectMembers'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           cb(response.body);
         }
@@ -287,9 +297,9 @@ app.post('/ontargetrs/services/upload/saveUploadedDocsInfo', function(req, res){
 
   saveUploadedDocsInfo();
 
-  getUserDetails(baseRequest.loggedInUserId, function(user1){
-    getProjectMembers(baseRequest.loggedInUserProjectId, function(pmData){
-      _.each(pmData.projectMemberList, function(el){
+  getUserDetails(baseRequest.loggedInUserId, function(user1) {
+    getProjectMembers(baseRequest.loggedInUserProjectId, function(pmData) {
+      _.each(pmData.projectMemberList, function(el) {
         pusher.trigger('onTarget', 'private-user-' + el.userId, {
           "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has uploaded ' + data.name.substring(data.name.lastIndexOf('/') + 1)
         });
@@ -299,18 +309,18 @@ app.post('/ontargetrs/services/upload/saveUploadedDocsInfo', function(req, res){
 });
 
 // Add onSite document comment
-app.post('/ontargetrs/services/upload/addComment', function(req, res){
+app.post('/ontargetrs/services/upload/addComment', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function addComment(){
+  function addComment() {
     request({
         method: 'POST',
         body: req.body,
         json: true,
         url: API_SERVER + '/upload/addComment'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           res.send(response.body.taskAttachments);
         } else {
@@ -319,28 +329,28 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res){
       });
   }
 
-  function getTaskComments(cb){
+  function getTaskComments(cb) {
     request({
         method: 'POST',
         body: {"projectFileId": data.projectFileId, "baseRequest": baseRequest},
         json: true,
         url: API_SERVER + '/upload/projectFileCommentList'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           cb(response.body);
         }
       });
   }
 
-  function getProjectDetails(projectId, cb){
+  function getProjectDetails(projectId, cb) {
     request({
         method: 'POST',
         body: {"projectId": projectId, "baseRequest": baseRequest},
         json: true,
         url: API_SERVER + '/project/getProject'
       },
-      function(error, response, body){
+      function(error, response, body) {
         if(!error && response.statusCode == 200) {
           cb(response.body.project);
         }
@@ -349,9 +359,9 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res){
 
   addComment();
 
-  getTaskComments(function(taskComments){
+  getTaskComments(function(taskComments) {
     // commenters
-    var userList = _.map(taskComments.comments, function(el){
+    var userList = _.map(taskComments.comments, function(el) {
       return el.commentedBy;
     });
 
@@ -361,12 +371,12 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res){
     // File owner id
     userList.push(data.fileOwnerId);
 
-    getProjectDetails(baseRequest.loggedInUserProjectId, function(project){
+    getProjectDetails(baseRequest.loggedInUserProjectId, function(project) {
       // Project owner
       userList.push(project.projectOwnerId);
-      getUserDetails(baseRequest.loggedInUserId, function(user1){
+      getUserDetails(baseRequest.loggedInUserId, function(user1) {
         var d = _.uniq(userList);
-        _.each(d, function(el){
+        _.each(d, function(el) {
           pusher.trigger('onTarget', 'private-user-' + el, {
             "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has commented on the ' + data.fileName.substring(data.fileName.lastIndexOf('/') + 1)
           });
@@ -376,7 +386,163 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res){
   });
 });
 
-app.post('/ontargetrs/services*', function(req, res){
+// onFile documents
+app.post('/ontargetrs/services/documents', function(req, res) {
+  var document = req.body;
+  var recipients = [];
+  var submittedBy = req.body.submittedBy;
+  var submittedTo = _.result(_.find(document.keyValues, function(keyValue) {
+    return keyValue.key == 'username';
+  }), 'value');
+  recipients = recipients.push(submittedTo);
+
+  var attention = [];
+  attention = _.result(_.find(document.keyValues, function(keyValue) {
+    return keyValue.key == 'attention';
+  }), 'value');
+
+  if(attention.length > 0) {
+    recipients = recipients.concat(attention);
+  }
+
+  function createUpdateDocument(cb) {
+    request({
+        method: 'POST',
+        body: req.body,
+        json: true,
+        url: API_SERVER + '/documents'
+      },
+      function(error, response, body) {
+        if(!error && response.statusCode == 200) {
+          res.send(response.body);
+          cb();
+        } else {
+          res.send(error);
+        }
+      });
+  }
+
+  function pushNotification(type) {
+    getUserDetails(submittedBy, function(user) {
+      _.each(recipients, function(el) {
+        pusher.trigger('onTarget', 'private-user-' + el, {
+          "message": getDocumentTemplateName(document.documentTemplateId) + " has been " + type + " by" + user.contact.firstName + " " + user.contact.lastName + "for your review"
+        });
+      });
+    });
+    pusher.trigger('onTarget', 'private-user-' + submittedBy, {
+      "message": "You has been " + type + " " + getDocumentTemplateName(document.documentTemplateId)
+    });
+  }
+
+  if(document.documentId) {
+    //update document
+    createUpdateDocument(function() {
+      pushNotification('submitted')
+    });
+  } else {
+    //create new Document
+    createUpdateDocument(function() {
+      pushNotification('updated');
+    });
+  }
+});
+
+// Update document status
+app.post('/ontargetrs/services/documents/status', function(req, res) {
+  var newStatus = req.body.newStatus;
+  var documentId = req.body.documentId;
+  var baseRequest = req.body.baseRequest;
+
+  function updateStatus(cb) {
+    request({
+        method: 'POST',
+        body: req.body,
+        json: true,
+        url: API_SERVER + '/documents/status'
+      },
+      function(error, response, body) {
+        if(!error && response.statusCode == 200) {
+          res.send(response.body);
+          cb();
+        } else {
+          res.send(error);
+        }
+      });
+  }
+
+  function pushNotification() {
+    getDocument(function(document) {
+      var recipients = [];
+      var documentTemplateId = document.documentTemplate.documentTemplateId;
+      var submittedBy = document.createdBy;
+      recipients.push(submittedBy);
+      var submittedTo = _.result(_.find(document.keyValues, function(keyValue) {
+        return keyValue.key == 'username';
+      }), 'value');
+
+      recipients = recipients.push(submittedTo);
+
+      var attention = [];
+      attention = _.result(_.find(document.keyValues, function(keyValue) {
+        return keyValue.key == 'attention';
+      }), 'value');
+      if(attention.length > 0) {
+        recipients = recipients.concat(attention);
+      }
+
+      getUserDetails(baseRequest.loggedInUserId, function(user) {
+        _.each(recipients, function(el) {
+          pusher.trigger('onTarget', 'private-user-' + el, {
+            "message": user.contact.firstName + ' ' + user.contact.lastName + " has " + newStatus.toLowerCase() + "the " + getDocumentTemplateName(documentTemplateId)
+          });
+        });
+      });
+    });
+  }
+
+  function getDocument(cb) {
+    request({
+        method: 'POST',
+        body: {baseRequest: baseRequest, documentId: documentId},
+        json: true,
+        url: API_SERVER + '/documents/getDocument'
+      },
+      function(error, response, body) {
+        if(!error && response.statusCode == 200) {
+          cb(response.body.document);
+        }
+      });
+  }
+
+  updateStatus(function() {
+    pushNotification();
+  });
+});
+
+app.put('/ontargetrs/services*', function(req, res) {
+  //var r = request.post({headers: req.headers, uri: API_SERVER + req.params[0], json: req.body});
+  //req.pipe(r).pipe(res);
+  var url = API_SERVER + req.params[0];
+  if(qs.stringify(req.query) !== "") {
+    url += '?' + qs.stringify(req.query);
+  }
+  console.log('PUT request: ', API_SERVER + req.params[0]);
+  req.pipe(request({
+    url: url,
+    method: req.method,
+    json: req.body//,
+    //headers: req.headers
+  }, function(error, response, body) {
+    if(error && error.code === 'ECONNREFUSED') {
+      console.error('Refused connection');
+    } else {
+      throw error;
+    }
+  }), {end: false}).pipe(res);
+});
+
+app.post('/ontargetrs/services*', function(req, res) {
   //var r = request.post({headers: req.headers, uri: API_SERVER + req.params[0], json: req.body});
   //req.pipe(r).pipe(res);
   var url = API_SERVER + req.params[0];
@@ -389,46 +555,46 @@ app.post('/ontargetrs/services*', function(req, res){
     method: req.method,
     json: req.body//,
     //headers: req.headers
-  }, function(error, response, body){
+  }, function(error, response, body) {
     if(error && error.code === 'ECONNREFUSED') {
       console.error('Refused connection');
     } else {
       throw error;
     }
-  }), { end : false }).pipe(res);
+  }), {end: false}).pipe(res);
 });
 
-app.get('/ontargetrs/services*', function(req, res){
+app.get('/ontargetrs/services*', function(req, res) {
   var url = API_SERVER + req.params[0];
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }
-  console.log(API_SERVER + req.params[0]);
+  console.log('GET request: ', url);
   req.pipe(request({
     url: url,
-    method: req.method//,
+    method: 'GET'//,
     //headers: req.headers
-  }, function(error, response, body){
+  }, function(error, response, body) {
     if(error && error.code === 'ECONNREFUSED') {
       console.error('Refused connection');
     } else {
       throw error;
     }
-  }), { end : false }).pipe(res);
+  })).pipe(res);
 });
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.sendfile("index.html");
 });
 
-app.listen(app.get('port'), function(){
+app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-process.on('uncaughtException', function(err){
+process.on('uncaughtException', function(err) {
   if(err) {
     console.error('uncaughtException: ' + err.message);
     console.error(err.stack);
-    process.exit(1);             // exit with error
+    //process.exit(1);             // exit with error
   }
 });

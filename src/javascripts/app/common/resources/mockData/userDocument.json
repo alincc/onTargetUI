@@ -28,7 +28,7 @@
       },
       "documentId": 14,
       "documentTemplate": {
-        "documentTemplateId": 1,
+        "documentTemplateId": 3,
         "name": "Request For Information"
       },
       "dueDate": "2015-04-10T05:45:00",
@@ -251,6 +251,41 @@
       ],
       "modifiedBy": 0,
       "name": "test doc",
+      "projectId": 0,
+      "status": "SUBMITTED"
+    },
+    {
+      "createdBy": 1,
+      "creator": {
+        "contact": {
+          "areaCode": 971,
+          "contactId": 1,
+          "email": "santosh8pun@gmail.com",
+          "firstName": "Sanjeev",
+          "lastName": "Ghimire",
+          "phoneNumber": "9801012345",
+          "title": "Er",
+          "user": {
+            "discipline": 0,
+            "userId": 1,
+            "userTypeId": 0
+          },
+          "userImagePath": "sanjeev.jpg"
+        },
+        "discipline": 0,
+        "userId": 0,
+        "userTypeId": 0
+      },
+      "documentId": 14,
+      "documentTemplate": {
+        "documentTemplateId": 2,
+        "name": "Request For Information"
+      },
+      "dueDate": "2015-04-10T05:45:00",
+      "gridKeyValues":[{"key":"workDescription","value":"232","gridId":"CO-COSTGRID","gridRowIndex":0},{"key":"costCode","value":"234242","gridId":"CO-COSTGRID","gridRowIndex":0},{"key":"amount","value":"243242","gridId":"CO-COSTGRID","gridRowIndex":0}],
+      "keyValues":[{"key":"username","value":2,"createdBy":13,"createdDate":"2015-10-14T09:54:36.892Z"},{"key":"company_name","value":7,"createdBy":13,"createdDate":"2015-10-14T09:54:36.892Z"},{"key":"co","value":"dfsafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"location","value":"dfafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"subject","value":"fdafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"description","value":"fdasfafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"contract_no","value":"fdafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"date_created","value":"2015-10-13T17:00:00.000Z","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"contract_title","value":"fdsafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"priority","value":"CRITICAL","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"discipline","value":"CARPENTRY","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"category","value":"UNFORSEEN CONDITIONS","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"schedule_impact","value":"fdafafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"cost_impact","value":"fdafafda","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"time_impact","value":"fdafafa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"specification","value":"fdasfa","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"drawing","value":"2432","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"cost_code","value":"43242","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"},{"key":"amount","value":"242332","createdBy":13,"createdDate":"2015-10-14T09:54:36.893Z"}],
+      "modifiedBy": 0,
+      "name": "RFI Document",
       "projectId": 0,
       "status": "SUBMITTED"
     }

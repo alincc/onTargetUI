@@ -8,7 +8,8 @@ define(function(require) {
     categories = require('text!app/common/resources/categories.json'),
     onFileItems = require('text!app/common/resources/onFileItems.json'),
     submittedFor = require('text!app/common/resources/submittedFor.json'),
-    actionAsNoted = require('text!app/common/resources/actionsAsNoted.json');
+    actionAsNoted = require('text!app/common/resources/actionsAsNoted.json'),
+    impact = require('text!app/common/resources/impact.json');
   var module = angular.module('common.services.onFile', ['app.config']);
   module.factory('onFileFactory', ['$http', 'appConstant', function($http, constant) {
     var services = {};
@@ -18,8 +19,8 @@ define(function(require) {
     };
 
     services.getDocuments = function (userName){
-      //return $http.get(constant.domain + '/documents?userName=' + userName);
-      return $http.get(constant.baseUrl + '/ontargetrsbeta/services/documents?userName=' + userName);
+      return $http.get(constant.domain + '/documents?userName=' + userName);
+      //return $http.get(constant.baseUrl + '/ontargetrsbeta/services/document?userName=' + userName);
     };
 
     services.getDocumentTemplateId = function (){
@@ -27,7 +28,19 @@ define(function(require) {
     };
 
     services.addNewDocument = function (model){
-      return $http.post(constant.domain + '/documents', model);
+      return $http.put(constant.domain + '/document', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
+    };
+
+    services.updateDocument = function (model){
+      return $http.post(constant.domain + '/document', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
     };
 
     services.getDisciplines = function (){
@@ -39,19 +52,19 @@ define(function(require) {
     };
     
     services.addAttachment = function (model){
-      return $http.post(constant.domain + '/documents/attachments', model);
+      return $http.put(constant.domain + '/document/attachment/save', model);
     };
     
     services.getItems = function (){
       return angular.fromJson(onFileItems);
     };
     
-    services.getDocument = function (documentId){
-      return $http.post(constant.domain + '/documents/getDocument', {documentId: documentId});
+    services.getDocumentById = function (documentId){
+      return $http.post(constant.domain + '/document/getDocument', {dcoumentId: documentId});
     };
 
     services.updateStatus = function (documentId, newStatus, modifiedBy){
-      return $http.post(constant.domain + '/documents/status', {
+      return $http.post(constant.domain + '/document/status', {
         "documentId" : documentId,
         "newStatus" : newStatus,
         "modifiedBy" : modifiedBy});
@@ -66,7 +79,10 @@ define(function(require) {
     };
 
     services.addResponse = function (response, documentId){
-      return $http.post(constant.domain + '/document/response/save', {response: response, documentId: documentId});
+      return $http.put(constant.domain + '/document/response/save', {
+        documentId: documentId,
+        response: response
+      });
     };
 
     services.getResponse = function (documentId){
@@ -85,6 +101,20 @@ define(function(require) {
     services.deleteResponse = function (resId){
       return $http.post(constant.domain + '/document/response/delete',{
         documentResponseId: resId
+      });
+    };
+
+    services.exportPdf = function (url){
+      return $http.get('http://localhost:9001/node/exportPdf');
+    };
+
+    services.getImpacts = function (){
+      return angular.fromJson(impact);
+    };
+    
+    services.getDocumentAttachmentsByDocumentId = function (documentId){
+      return $http.post(constant.domain + '/document/attachment/getAll',{
+        documentId: documentId
       });
     };
 

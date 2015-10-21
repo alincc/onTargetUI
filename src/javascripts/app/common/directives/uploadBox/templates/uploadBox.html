@@ -1,0 +1,122 @@
+<section class="upload-box">
+    <ul class="nav nav-pills nav-justified">
+        <li ng-class="{'active':uploadModel.source==='Local'}"><a href ng-click="selectSource('Local')"><i
+                class="fa fa-cloud-upload"></i> My computer</a></li>
+        <li ng-class="{'active':uploadModel.source==='GoogleDrive'}"><a href
+                                                                        ng-click="selectSource('GoogleDrive')">Google
+            Drive</a></li>
+        <li ng-class="{'active':uploadModel.source==='Box'}"><a href
+                                                                ng-click="selectSource('Box')">Box</a>
+        </li>
+        <li ng-class="{'active':uploadModel.source==='DropBox'}"><a href
+                                                                    ng-click="selectSource('DropBox')">DropBox</a>
+        </li>
+    </ul>
+    <div class="uploader-content" ng-switch="uploadModel.source">
+        <section class="uploader-box local-upload m-t-md" ng-switch-when="Local">
+            <div class="btn btn-primary btn-block" ngf-select ng-model="uploadModel.files" ngf-multiple="multiple"
+                 ng-disabled="isUploading || uploadModel.filePath.length"><i
+                    class="fa fa-cloud-upload"></i> Choose Document
+            </div>
+            <div ngf-drop ng-model="uploadModel.files" class="drop-box"
+                 ngf-drag-over-class="dragover" ngf-multiple="multiple" ngf-allow-dir="false"
+                 ngf-pattern="'image/*,application/pdf'">or Drop Document file here
+            </div>
+            <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+            <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm"
+                 ng-show="isUploading"></div>
+        </section>
+        <section class="uploader-box google-drive-upload m-t-md" ng-switch-when="GoogleDrive"
+                 custom-scroll>
+            <button class="btn btn-primary btn-block" ng-if="!extenalStorage.googleDrive.isAuth"
+                    ng-click="extenalStorage.googleDrive.connect() && !extenalStorage.googleDrive.isValidating">Connect
+            </button>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="item in uploadModel.fileList">
+                    <span ng-bind="item.name"></span>
+                    <button class="btn btn-primary btn-xs pull-right" ng-if="!item.isMultiple"
+                            ng-disabled="extenalStorage.googleDrive.isLeeching || uploadModel.filePath.length"
+                            ng-click="leechFile(item, uploadModel.source)"><i class="fa fa-plus"></i>
+                    </button>
+                    <div class="btn-group pull-right" dropdown dropdown-append-to-body="true"
+                         ng-if="item.isMultiple">
+                        <button type="button" class="btn btn-primary btn-xs" dropdown-toggle
+                                ng-disabled="extenalStorage.googleDrive.isLeeching || uploadModel.filePath.length">
+                            <i class="fa fa-plus m-r-xs"></i> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="split-button">
+                            <li role="menuitem" ng-repeat="l in item.downloadUrls"><a href
+                                                                                      ng-click="leechFile(l, uploadModel.source)">Download
+                                as {{l.ext | uppercase}}</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="text-center m-t-md m-b-md" ng-if="extenalStorage.googleDrive.isLoading">
+                    <spinner text="Loading..."></spinner>
+                </li>
+                <li class="text-center m-t-md m-b-md"
+                    ng-if="!extenalStorage.googleDrive.isLoading && !uploadModel.fileList.length && extenalStorage.googleDrive.isAuth && !extenalStorage.googleDrive.isValidating">
+                    No files
+                </li>
+                <li class="m-top-md"
+                    ng-if="!extenalStorage.googleDrive.isLoading && extenalStorage.googleDrive.isAuth && !extenalStorage.googleDrive.isValidating">
+                    <button class="btn btn-primary btn-block" ng-if="extenalStorage.googleDrive.isHaveMore" ng-click="loadGoogleFile('next')">Load
+                        more
+                    </button>
+                </li>
+            </ul>
+        </section>
+        <section class="uploader-box box-upload m-t-md" ng-switch-when="Box" custom-scroll>
+            <button class="btn btn-primary btn-block" ng-if="!extenalStorage.box.isAuth"
+                    ng-click="extenalStorage.box.connect()">Connect
+            </button>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="item in uploadModel.fileList">
+                    <span ng-bind="item.name"></span>
+                    <button class="btn btn-primary btn-xs pull-right"
+                            ng-disabled="extenalStorage.box.isLeeching || uploadModel.filePath.length"
+                            ng-click="leechFile(item, uploadModel.source)"><i class="fa fa-plus"></i>
+                    </button>
+                </li>
+                <li class="text-center m-t-md m-b-md" ng-if="extenalStorage.box.isLoading">
+                    <spinner text="Loading..."></spinner>
+                </li>
+                <li class="text-center m-t-md m-b-md"
+                    ng-if="!extenalStorage.box.isLoading && !uploadModel.fileList.length && extenalStorage.box.isAuth">
+                    No files
+                </li>
+                <li class="m-top-md" ng-if="!extenalStorage.box.isLoading && extenalStorage.box.isAuth">
+                    <button class="btn btn-primary btn-block" ng-if="extenalStorage.box.isHaveMore" ng-click="loadBoxFile(true)">Load more</button>
+                </li>
+            </ul>
+        </section>
+        <section class="uploader-box dropbox-upload m-t-md" ng-switch-when="DropBox">
+            <button class="btn btn-primary btn-block" ng-if="!extenalStorage.dropBox.isAuth"
+                    ng-click="extenalStorage.dropBox.connect()">Connect
+            </button>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="item in uploadModel.fileList">
+                    <span ng-bind="item.name"></span>
+                    <button class="btn btn-primary btn-xs pull-right"
+                            ng-disabled="extenalStorage.dropBox.isLeeching || uploadModel.filePath.length"
+                            ng-click="leechFile(item, uploadModel.source)"><i class="fa fa-plus"></i>
+                    </button>
+                </li>
+                <li class="text-center m-t-md m-b-md" ng-if="extenalStorage.dropBox.isLoading">
+                    <spinner text="Loading..."></spinner>
+                </li>
+                <li class="text-center m-t-md m-b-md"
+                    ng-if="!extenalStorage.dropBox.isLoading && !uploadModel.fileList.length && extenalStorage.dropBox.isAuth">
+                    No files
+                </li>
+                <!--<li class="m-top-md" ng-if="!extenalStorage.box.isLoading && extenalStorage.box.isAuth">-->
+                <!--<button class="btn btn-primary btn-block" ng-click="loadBoxFile('next')">Load more</button>-->
+                <!--</li>-->
+            </ul>
+        </section>
+    </div>
+    <div class="download-progress-bar m-t-xs" ng-show="extenalStorage.isLeeching">
+        <progressbar class="progress-striped active" value="100" type="success">Downloading...
+        </progressbar>
+    </div>
+</section>

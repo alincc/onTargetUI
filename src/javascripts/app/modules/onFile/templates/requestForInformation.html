@@ -1,13 +1,14 @@
+<form name="_form" no-validate class="form-validation" ng-submit="submit()">
 <tabset class="tab-container">
     <tab heading="View Document" ng-click="openAction(actions.viewDocument)">
     </tab>
     <tab heading="Change Order" ng-click="openAction(actions.changeOrder)">
     </tab>
     <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)" active="true">
-        <div ng-controller="RequestForInformationController" class="rfi-section">
+        <div class="rfi-section">
             <div class="row">
                 <div class="col-md-12">
-                    <form name="_form" no-validate class="form-validation" ng-submit="submit()">
+
                         <div class="form-group">
                             <span class="form-title">Please fill out below infomation</span>
                         </div>
@@ -16,8 +17,8 @@
                                 <div class="form-group">
                                     <label>Receiver's Name</label>
                                     <select class="form-control" name="username" ng-model="document.keyValues.username"
-                                            ng-options="receiverName.userId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts"
-                                            required>
+                                            ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
+                                            required ng-change="getCompanyOfUser()">
                                         <option value="">-- Select Receiver's Name --</option>
                                     </select>
                                     <ng-messages ng-if="_form.username.$dirty"
@@ -29,12 +30,15 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Company Name</label>
-                                    <select class="form-control" name="companyName"
+                                    <!--<select class="form-control" name="companyName"
                                             ng-model="document.keyValues.company_name"
                                             ng-options="company.companyId as company.companyName for company in companies"
                                             required>
-                                        <option value="">-- Select Company Name --</option>
-                                    </select>
+                                        <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
+                                    </select>-->
+                                    <input type="text" class="form-control" placeholder="Enter Company Name"
+                                           ng-model="document.keyValues.company_name"
+                                           name="companyName" required readonly/>
                                     <ng-messages ng-if="_form.companyName.$dirty"
                                                  for="_form.companyName.$error">
                                         <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -50,7 +54,7 @@
                                                ng-model="document.keyValues.attention" theme="bootstrap"
                                                require-multiple name="attention">
                                         <ui-select-match placeholder="Select Name">{{$item.name}}</ui-select-match>
-                                        <ui-select-choices repeat="ct in contactNameList">
+                                        <ui-select-choices repeat="ct.userId as ct in contactNameList">
                                             {{ct.name}}
                                         </ui-select-choices>
                                     </ui-select>
@@ -152,12 +156,24 @@
                                     <label>Response</label>
                             <textarea type="text" class="form-control" placeholder="Enter Response"
                                       ng-model="response"
-                                      name="suggestion"/>
+                                      name="response"/>
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <a class="btn btn-primary" ng-click="openUploadModal('main')"><i class="fa fa-cloud-upload"></i>
+                                Upload
+                            </a>
+                        </div>
 
-                        <div class="form-group" ng-hide="onEdit">
+                        <div class="on-site-upload-document-modal form-group" attachment-list attachments="attachments" on-edit="onEdit">
+                        </div>
+
+                        <div class="form-group" ng-if="document.approve">
+                            <!--//show list attachment-->
+                        </div>
+
+                        <div class="form-group" ng-hide="document.approve||document.view">
                             <div class="checkbox pull-left">
                                 <label class="i-checks">
                                     <input type="checkbox" ng-model="document.keyValues.rfi_is_a_change"
@@ -165,68 +181,60 @@
                                     <i></i> This RFI is a change
                                 </label>
                             </div>
-                            <div class="pull-right" ng-if="approval">
-                                <a ng-disabled="onSubmit"
-                                   class="btn btn-primary" ng-click="addResponse()">Submit
-                                </a>
-                                <a ng-disabled="onSubmit"
-                                   class="btn btn-primary" ui-sref="app.onFile">Cancel
-                                </a>
-                            </div>
                             <button ng-disabled="_form.$invalid || _form.$submitted"
-                                    class="btn btn-primary pull-right" type="submit" ng-click="submit()"
-                                    ng-if="!approval">Submit
+                                    class="btn btn-primary pull-right" type="submit">Submit
                             </button>
                         </div>
-                    </form>
+
                     <!--Response-->
-                    <div ng-show="onEdit">
+                    <div ng-if="onEdit" class="pull-none">
                         <div class="form-group">
                             <span class="form-title">Response</span>
                         </div>
                         <div class="response-container" ng-repeat="response in responses">
                             <div class="form-group">
-                                <label>Title</label>
-                                <input type="text" class="form-control" placeholder="Enter Title"
-                                       ng-model="response.title"/>
+                                <p ng-bind-html="response.response | escapeHtml | newLines"></p>
                             </div>
-                            <div class="form-group">
-                                <label>Message</label>
-                                <textarea type="text" class="form-control" placeholder="Enter Response"
-                                          ng-model="response.response"/>
-                            </div>
-                            <span class="submited-by">Submitted by {{response.responsedBy.contact.firstName}} {{response.responsedBy.contact.lastName}} at {{response.responsedDate| date: 'short'}}</span>
-
+                            <p class="submited-by">Submitted by {{response.responsedBy.contact.firstName}} {{response.responsedBy.contact.lastName}} at {{response.responsedDate| date: 'short'}}</p>
                         </div>
                         <hr>
 
                         <div class="response-container">
-                            <form name="_response_form" novalidate class="form-validation" ng-submit="addResponse()">
+                            <section ng-form name="_response_form" novalidate class="form-validation">
+                                <!--<div class="form-group">-->
+                                    <!--<label>Title</label>-->
+                                    <!--<input type="text" class="form-control" placeholder="Enter Title"-->
+                                           <!--ng-model="newResponse.title" required name="title"/>-->
+                                    <!--<ng-messages ng-if="_response_form.title.$dirty"-->
+                                                 <!--for="_response_form.title.$error">-->
+                                        <!--<span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>-->
+                                    <!--</ng-messages>-->
+                                <!--</div>-->
                                 <div class="form-group">
-                                    <label>Title</label>
-                                    <input type="text" class="form-control" placeholder="Enter Title"
-                                           ng-model="newResponse.title" required name="title"/>
-                                    <ng-messages ng-if="_response_form.title.$dirty"
-                                                 for="_response_form.title.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                                <div class="form-group">
-                                    <label>Message</label>
-                                <textarea type="text" class="form-control" placeholder="Enter Response"
-                                          ng-model="newResponse.response" required name="response"/>
+                                    <label>Reply</label>
+                                    <textarea type="text" class="form-control" placeholder="Enter Response"
+                                              ng-model="newResponse.response" required name="response"/>
                                     <ng-messages ng-if="_response_form.response.$dirty"
                                                  for="_response_form.response.$error">
                                         <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                                     </ng-messages>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-primary" type="submit"
-                                            ng-disabled="_response_form.$invalid">Submit
+                                    <a class="btn btn-primary" ng-click="openUploadModal('response')">Choose File</a>
+                                </div>
+                                <div class="on-site-upload-document-modal form-group" attachment-list attachments="newResponse.attachments" on-edit="true">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="button" ng-click="addResponse()"
+                                            ng-disabled="_response_form.$invalid || isAddingResponse">Submit
                                     </button>
                                 </div>
-                            </form>
+                            </section>
                         </div>
+                        <div class="form-group">
+                            <a class="btn btn-primary pull-right" ng-click="updateStatus('CLOSED')">Close</a>
+                        </div>
+
                     </div>
 
                     <!--Response-->
@@ -240,3 +248,4 @@
 
     </tab>
 </tabset>
+</form>

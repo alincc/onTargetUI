@@ -148,6 +148,6 @@ function moveUploadedFile(file, uuid, success, failure) {
   moveFile(destinationDir, file.path, fileDestination, success, failure);
 }
 
-module.exports = function(app) {
-  app.post('/node/xls-parser', [multipartMiddleware], uploadFile);
+module.exports = {
+  xlsParser: uploadFile
 };
