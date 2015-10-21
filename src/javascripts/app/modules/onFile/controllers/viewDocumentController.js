@@ -91,12 +91,11 @@ define(function() {
       $scope.viewDocument = function(doc) {
         onFileFactory.getDocumentById(doc.documentId).success(
           function(resp) {
-            //var document = resp.document;
-            var document = doc;
+            var document = resp.document;
+            //var document = doc;
 
             var keyValues = transformKeyValues(document.keyValues);
-            console.log(keyValues);
-            if(document.gridKeyValues.length > 0) {
+            if(document.gridKeyValues && document.gridKeyValues.length > 0) {
               document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
             }
 
