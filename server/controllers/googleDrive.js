@@ -2,14 +2,7 @@ var request = require('request');
 var qs = require('querystring');
 
 function listFiles(req, res){
-
-  var folderId = req.query.folderId, token = req.query.access_token;
-
-  delete req.query.folderId;
-  delete req.query.access_token;
-
-  var url = 'https://api.box.com/2.0/folders/' + folderId + '/items';
-
+  var url = 'https://content.googleapis.com/drive/v2/files';
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }
@@ -17,10 +10,7 @@ function listFiles(req, res){
 
   req.pipe(request({
     url: url,
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + token
-    }
+    method: 'GET'
   }, function(error, response, body){
     if(error && error.code === 'ECONNREFUSED') {
       console.error('Refused connection');
@@ -29,7 +19,6 @@ function listFiles(req, res){
     }
   })).pipe(res);
 }
-
-module.exports = function(app){
-  app.get('/node/files/box', listFiles);
+module.exports = {
+  googleDrive: listFiles
 };

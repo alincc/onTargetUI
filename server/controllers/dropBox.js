@@ -2,15 +2,26 @@ var request = require('request');
 var qs = require('querystring');
 
 function listFiles(req, res){
-  var url = 'https://content.googleapis.com/drive/v2/files';
+
+  var path = decodeURIComponent(req.query.path), token = req.query.access_token;
+
+  delete req.query.path;
+  delete req.query.access_token;
+
+  var url = 'https://api.dropboxapi.com/1/metadata/auto' + path;
+
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }
+
   console.log('List files: ' + url);
 
   req.pipe(request({
     url: url,
-    method: 'GET'
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
   }, function(error, response, body){
     if(error && error.code === 'ECONNREFUSED') {
       console.error('Refused connection');
@@ -20,6 +31,6 @@ function listFiles(req, res){
   })).pipe(res);
 }
 
-module.exports = function(app){
-  app.get('/node/files/googledrive', listFiles);
+module.exports = {
+  dropBox: listFiles
 };

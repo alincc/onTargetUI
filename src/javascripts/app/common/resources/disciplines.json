@@ -1,55 +1,51 @@
 [
   {
-    "id": "MASONRY",
-    "name": "MASONRY"
-  },
-  {
-    "id": "CARPENTRY",
-    "name": "CARPENTRY"
-  },
-  {
     "id": "Masonry",
     "name": "Masonry"
   },
   {
-    "id": "WOODWORK",
-    "name": "WOODWORK"
+    "id": "Carpentry",
+    "name": "Carpentry"
   },
   {
-    "id": "ELECTRICAL",
-    "name": "ELECTRICAL"
+    "id": "Woodwork",
+    "name": "Woodwork"
   },
   {
-    "id": "PLUMBING",
-    "name": "PLUMBING"
+    "id": "Electrical",
+    "name": "Electrical"
   },
   {
-    "id": "INTERIORS",
-    "name": "INTERIORS"
+    "id": "Plumbing",
+    "name": "Plumbing"
   },
   {
-    "id": "MECHANICAL",
-    "name": "MECHANICAL"
+    "id": "Interiors",
+    "name": "Interiors"
   },
   {
-    "id": "COMMUNICATION",
-    "name": "COMMUNICATION"
+    "id": "Mechanical",
+    "name": "Mechanical"
   },
   {
-    "id": "ARCHITECTURAL",
-    "name": "ARCHITECTURAL"
+    "id": "Communication",
+    "name": "Communication"
   },
   {
-    "id": "STRUCTURAL",
-    "name": "STRUCTURAL"
+    "id": "Architectural",
+    "name": "Architectural"
   },
   {
-    "id": "PAINTING",
-    "name": "PAINTING"
+    "id": "Structural",
+    "name": "Structural"
   },
   {
-    "id": "OTHERS",
-    "name": "OTHERS"
+    "id": "Painting",
+    "name": "Painting"
+  },
+  {
+    "id": "Others",
+    "name": "Others"
   }
 ]
 

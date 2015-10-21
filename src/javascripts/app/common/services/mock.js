@@ -34,67 +34,66 @@ define(function(require) {
   module = angular.module('common.services.mock', ['ngMockE2E', 'app.config', 'ngResource']);
 
   module.run(["$httpBackend", 'appConstant', '$resource', function($httpBackend, constant, $resource) {
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/notification\/getNotifications$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(notifications)];
-    });
-
-    $httpBackend.whenPOST(constant.domain + "/project/getProjectMembers").respond(function(method, url, data) {
-      return [200, angular.fromJson(contact)];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(upload)];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/project\/getProject$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(projectDetails)];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/project\/getActivityOfProject$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(activityOfProject)];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/activityLog\/getLog$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(activityLog)];
-    });
-
-    $httpBackend.whenPOST(constant.domain + "/documents/getUserDocument").respond(function(method, url, data) {
-      return [200, angular.fromJson(userDocument)];
-    });
-
-    $httpBackend.whenPOST(/^http:\/\/demo.newoceaninfosys.com:3214\/ontargetrs\/services\/report\/earnedValueReport$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(earnedValueReport)];
-    });
-
-    $httpBackend.whenPOST(/^http:\/\/demo.newoceaninfosys.com:3214\/ontargetrs\/services\/report\/bireport$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(biReport)];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/projectFileCategoryList$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(documentCategory)];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/projectFileCommentList$/).respond(function(method, url, data) {
-      return [200, angular.fromJson(fileComment)];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/saveUploadedDocsInfo$/).respond(function(method, url, data) {
-      return [200, {
-        "authenticated" : false,
-        "responseCode" : "200",
-        "returnMessage" : "SUCCESS",
-        "returnVal" : "SUCCESS"
-      }];
-    });
-
-    $httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/addComment$/).respond(function(method, url, data) {
-      return [200, {
-        "authenticated" : false,
-        "returnMessage" : "Comment added successfully",
-        "returnVal" : "SUCCESS"
-      }];
-    });
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/notification\/getNotifications$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(notifications)];
+    //});
+    //
+    //$httpBackend.whenPOST(constant.domain + "/project/getProjectMembers").respond(function(method, url, data) {
+    //  return [200, angular.fromJson(contact)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(upload)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/project\/getProject$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(projectDetails)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/project\/getActivityOfProject$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(activityOfProject)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/activityLog\/getLog$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(activityLog)];
+    //});
+    //
+    //$httpBackend.whenPOST(constant.domain + "/documents/getUserDocument").respond(function(method, url, data) {
+    //  return [200, angular.fromJson(userDocument)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http:\/\/demo.newoceaninfosys.com:3214\/ontargetrs\/services\/report\/earnedValueReport$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(earnedValueReport)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http:\/\/demo.newoceaninfosys.com:3214\/ontargetrs\/services\/report\/bireport$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(biReport)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/projectFileCategoryList$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(documentCategory)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/projectFileCommentList$/).respond(function(method, url, data) {
+    //  return [200, angular.fromJson(fileComment)];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/saveUploadedDocsInfo$/).respond(function(method, url, data) {
+    //  return [200, {
+    //    "authenticated" : false,
+    //    "responseCode" : "200",
+    //    "returnMessage" : "SUCCESS",
+    //    "returnVal" : "SUCCESS"
+    //  }];
+    //});
+    //
+    //$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/upload\/addComment$/).respond(function(method, url, data) {
+    //  return [200, {
+    //    "authenticated" : false,
+    //    "returnMessage" : "Comment added successfully",
+    //    "returnVal" : "SUCCESS"
+    //  }];
+    //});
 
     /*$httpBackend.whenPOST(/^http\:\/\/app.ontargetcloud.com:8080\/ontargetrs\/services\/task\/getProjectTaskList$/).respond(function(method, url, data) {
       return [200, angular.fromJson(projectTask)];
@@ -149,11 +148,11 @@ define(function(require) {
         "id": 0
       }];
     });*/
-    $httpBackend.whenPOST(constant.domain + "/company/getCompanyList").respond(function(method, url, data){
-      return [200, angular.fromJson(company)];
-    });
+    //$httpBackend.whenPOST(constant.domain + "/company/getCompanyList").respond(function(method, url, data){
+    //  return [200, angular.fromJson(company)];
+    //});
 
-    $httpBackend.whenPOST(constant.domain + "/documents/getDocument").respond(function(method, url, data){
+    /*$httpBackend.whenPOST(constant.domain + "/documents/getDocument").respond(function(method, url, data){
       return [200, angular.fromJson(document)];
     });
 
@@ -164,6 +163,37 @@ define(function(require) {
     $httpBackend.whenPOST(constant.domain + "/document/response/save").respond(function(method, url, data){
       return [200, angular.fromJson(addDocumentResponse)];
     });
+
+    $httpBackend.whenPOST(constant.domain + "/documents/attachments").respond(function(method, url, data){
+      return [200, {
+        "type" : "addDocumentAttachmentResponse",
+        "authenticated" : false,
+        "returnMessage" : "Document attachment succefully added.",
+        "returnVal" : "SUCCESS",
+        "documentAttachmentId" : 1
+      }];
+    });
+
+    $httpBackend.whenPOST(constant.domain + "/documents").respond(function(method, url, data){
+      return [200, {
+        "type" : "addDocumentResponse",
+        "authenticated" : false,
+        "returnMessage" : "sucessfully uploaded",
+        "returnVal" : "SUCCESS",
+        "document" : {
+          "createdBy" : 10,
+          "documentId" : 2,
+          "documentTemplate" : {
+            "documentTemplateId" : 1
+          },
+          "dueDate" : "2015-10-06T00:00:00",
+          "modifiedBy" : 10,
+          "name" : "test doc",
+          "projectId" : 42,
+          "status" : "SUBMITTED"
+        }
+      }];
+    });*/
 
 
 

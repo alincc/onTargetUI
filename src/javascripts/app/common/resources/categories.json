@@ -1,14 +1,18 @@
 [
   {
-    "id": "ERRORS",
-    "name": "ERRORS"
+    "id": "Field Condition",
+    "name": "Field Condition"
   },
   {
-    "id": "OMISSONS",
-    "name": "OMISSONS"
+    "id": "Error and Omissions",
+    "name": "Error and Omissions"
   },
   {
-    "id": "UNFORSEEN CONDITIONS",
-    "name": "UNFORSEEN CONDITIONS"
+    "id": "Change In Scope",
+    "name": "Change In Scope"
+  },
+  {
+    "id": "Unforeseen conditions",
+    "name": "Unforeseen conditions"
   }
 ]

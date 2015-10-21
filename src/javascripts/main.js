@@ -62,6 +62,7 @@ require.config({
     jPlotToolTip: '../bower_components/flot.tooltip/js/jquery.flot.tooltip',
     jPlotOrderBar: '../bower_components/flot.orderbars/js/jquery.flot.orderBars',
     jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline',
+    cryptorJs: '../bower_components/crypto-js/crypto-js',
     spin: '../js/ladda/js/spin',
     ladda: '../js/ladda/js/ladda'
   },

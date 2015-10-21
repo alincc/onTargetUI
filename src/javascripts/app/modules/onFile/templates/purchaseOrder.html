@@ -7,7 +7,7 @@
 
     </tab>
     <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)" active="true">
-        <div ng-controller="PurchaseOrderController">
+        <div>
             <div class="row">
                 <div class="col-md-12">
                     <form name="_form" no-validate class="form-validation" ng-submit="submit()">
@@ -19,7 +19,8 @@
                                 <div class="form-group">
                                     <label>Receiver's Name</label>
                                     <select class="form-control" name="receiverName" ng-model="purchaseOrder.keyValues.username"
-                                            ng-options="receiverName.userId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
+                                            ng-options="receiverName.userId as receiverName.name for receiverName in contacts" required
+                                            ng-change="getCompanyOfUser()">
                                         <option value="">-- Select Receiver's Name --</option>
                                     </select>
                                     <ng-messages ng-if="_form.receiverName.$dirty"
@@ -31,10 +32,13 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Company Name</label>
-                                    <select class="form-control" name="companyName" ng-model="purchaseOrder.keyValues.company_name"
+                                    <!--<select class="form-control" name="companyName" ng-model="purchaseOrder.keyValues.company_name"
                                             ng-options="company.companyId as company.companyName for company in companies" required>
-                                        <option value="">-- Select Company Name --</option>
-                                    </select>
+                                        <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
+                                    </select>-->
+                                    <input type="text" class="form-control" placeholder="Enter Company Name"
+                                           ng-model="purchaseOrder.keyValues.company_name"
+                                           name="companyName" required readonly/>
                                     <ng-messages ng-if="_form.companyName.$dirty"
                                                  for="_form.companyName.$error">
                                         <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -215,9 +219,29 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="pull-right" ng-if="approval">
+                            <a class="btn btn-primary" ng-click="openUploadModal()"><i class="fa fa-cloud-upload"></i>
+                                Upload
+                            </a>
+                        </div>
+
+                        <div class="on-site-upload-document-modal form-group">
+                            <p class="selected-file file-info" ng-repeat="file in attachments">
+                                <span class="file-icon">
+                                    <img ng-src="{{file.fileName | fileicon}}" alt=""/>
+                                </span>
+                                <span class="file-name" ng-bind="file.fileName"></span>
+                                <span class="file-remove-icon" ng-click="removeFile($index)">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-right" ng-if="purchaseOrder.approve">
                                 <a ng-disabled="onSubmit"
                                    class="btn btn-primary" ng-click="updateStatus('APPROVED')">Approve
+                                </a>
+                                <a ng-disabled="onSubmit"
+                                   class="btn btn-danger" ng-click="updateStatus('REJECTED')">Reject
                                 </a>
                                 <a ng-disabled="onSubmit"
                                    class="btn btn-primary" ui-sref="app.onFile">Cancel
@@ -225,7 +249,7 @@
                             </div>
                             <button ng-disabled="_form.$invalid || _form.$submitted"
                                     loading-button="_form.$submitted"
-                                    class="btn btn-primary pull-right" type="submit" ng-if="!approval">Submit
+                                    class="btn btn-primary pull-right" type="submit" ng-if="!purchaseOrder.approve && !purchaseOrder.view">Submit
                             </button>
                         </div>
                     </form>

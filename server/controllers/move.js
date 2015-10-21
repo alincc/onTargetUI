@@ -146,6 +146,6 @@ function moveFile(req, res) {
   }
 }
 
-module.exports = function(app) {
-  app.post('/node/move', moveFile);
+module.exports = {
+  move: moveFile
 };

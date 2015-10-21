@@ -23,7 +23,7 @@ define(function (){
     
     $scope.openAction = function (action){
       delete $rootScope.onFileDocument;
-      $scope.action = action;
+      //$scope.action = action;
       switch (action) {
         case $scope.actions.changeOrder:
           $state.go('app.onFile.CO');

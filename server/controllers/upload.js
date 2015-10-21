@@ -2,22 +2,18 @@ var express = require('express');
 var path = require('path');
 var fs = require("fs");
 var mkdirp = require("mkdirp");
-var rimraf = require("rimraf");
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
 var gm = require('gm');
 var config = require('./../config');
 var imageService = require('./../services/image');
 
-// paths/constants
-var fileInputName = config.fileInputName,
-  uploadedFilesPath = config.uploadedFilesPath,
-  imagePathRoot = config.imagePathRoot,
-  maxFileSize = config.maxFileSize, // in bytes
-  fileName = '',
-  encryptedProjectFolderName = '';
-
 function uploadFile(req, res) {
+  var fileInputName = config.fileInputName,
+    uploadedFilesPath = config.uploadedFilesPath,
+    imagePathRoot = config.imagePathRoot,
+    maxFileSize = config.maxFileSize, // in bytes
+    fileName = '',
+    encryptedProjectFolderName = '';
+
   var file = req.files[fileInputName],
     uuid = req.body.uuid,
     rootFolder = req.body.folder,
@@ -31,9 +27,9 @@ function uploadFile(req, res) {
 
   file.name = fileName;
 
-  if(isValid(file.size)) {
+  if(isValid(file.size, maxFileSize)) {
     function upload(file) {
-      moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, context, function() {
+      moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, projectAssetFolderName, context, function() {
           var url = imagePathRoot + rootFolder + '/';
           if(rootFolder === 'projects') {
             if(context === '') {
@@ -72,16 +68,16 @@ function uploadFile(req, res) {
     }
   }
   else {
-    failWithTooBigFile(responseData, res);
+    failWithTooBigFile(responseData, maxFileSize, res);
   }
 }
 
-function failWithTooBigFile(responseData, res) {
+function failWithTooBigFile(responseData, maxFileSize, res) {
   res.status(400);
   res.send('File too big, please update file < ' + (maxFileSize / 1000000).toFixed(2) + 'MB');
 }
 
-function isValid(size) {
+function isValid(size, maxFileSize) {
   return size < maxFileSize;
 }
 
@@ -108,7 +104,7 @@ function moveFile(destinationDir, sourceFile, destinationFile, success, failure)
   });
 }
 
-function moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, context, success, failure) {
+function moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, projectAssetFolderName, context, success, failure) {
   var url = uploadedFilesPath + rootFolder,
     destinationDir,
     fileDestination;
@@ -179,6 +175,6 @@ function moveUploadedFile(file, uuid, rootFolder, projectAssetFolderName, contex
   }
 }
 
-module.exports = function(app) {
-  app.post('/node/upload', [multipartMiddleware], uploadFile);
+module.exports = {
+  upload: uploadFile
 };

@@ -3,17 +3,16 @@ var qs = require('querystring');
 
 function listFiles(req, res){
 
-  var path = decodeURIComponent(req.query.path), token = req.query.access_token;
+  var folderId = req.query.folderId, token = req.query.access_token;
 
-  delete req.query.path;
+  delete req.query.folderId;
   delete req.query.access_token;
 
-  var url = 'https://api.dropboxapi.com/1/metadata/auto' + path;
+  var url = 'https://api.box.com/2.0/folders/' + folderId + '/items';
 
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }
-
   console.log('List files: ' + url);
 
   req.pipe(request({
@@ -31,6 +30,6 @@ function listFiles(req, res){
   })).pipe(res);
 }
 
-module.exports = function(app){
-  app.get('/node/files/dropbox', listFiles);
+module.exports = {
+  box: listFiles
 };

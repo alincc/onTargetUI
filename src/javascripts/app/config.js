@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash'),
@@ -11,7 +11,7 @@ define(function(require){
 
   var module = angular.module('app.config', ['ui.router', 'angularUtils.directives.dirPagination', 'common.context.user', 'common.context.project', 'toaster']);
   module.config(['$locationProvider', '$urlRouterProvider', '$httpProvider', 'paginationTemplateProvider',
-    function($locationProvider, $urlRouterProvider, $httpProvider, paginationTemplateProvider){
+    function($locationProvider, $urlRouterProvider, $httpProvider, paginationTemplateProvider) {
 
       //Enable cross domain calls
       $httpProvider.defaults.useXDomain = true;
@@ -22,9 +22,9 @@ define(function(require){
 
 
       // Authorization header
-      $httpProvider.interceptors.push(['userContext', '$rootScope', function(userContext, $rootScope){
+      $httpProvider.interceptors.push(['userContext', '$rootScope', function(userContext, $rootScope) {
         return {
-          request: function(config){
+          request: function(config) {
             if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
@@ -37,13 +37,13 @@ define(function(require){
       }]);
 
       // Error handler
-      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', 'pushFactory', '$location', '$rootScope', 'userContext', 'projectContext', function($q, toaster, constant, pushFactory, $location, $rootScope, userContext, projectContext){
+      $httpProvider.interceptors.push(['$q', 'toaster', 'appConstant', 'pushFactory', '$location', '$rootScope', 'userContext', 'projectContext', function($q, toaster, constant, pushFactory, $location, $rootScope, userContext, projectContext) {
         return {
-          response: function(response){
+          response: function(response) {
             var defer = $q.defer();
             if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
               var errorMessageHtml = '';
-              _.each(response.data, function(el){
+              _.each(response.data, function(el) {
                 if(el.path !== '0') {
                   errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
                 } else {
@@ -70,7 +70,7 @@ define(function(require){
 
             return defer.promise;
           },
-          responseError: function(response){
+          responseError: function(response) {
             console.log(response);
 
             if(angular.isObject(response) && response.config && (response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.nodeServer) > -1)) {
@@ -80,7 +80,7 @@ define(function(require){
                 }
                 else if(angular.isArray(response.data) && response.data.length > 0 && angular.isDefined(response.data[0]["message"]) && angular.isDefined(response.data[0]["messageTemplate"]) && angular.isDefined(response.data[0]["path"])) {
                   var errorMessageHtml = '';
-                  _.each(response.data, function(el){
+                  _.each(response.data, function(el) {
                     if(el.path !== '0') {
                       errorMessageHtml += '- ' + el.path + ' ' + el.message + ' </br>';
                     } else {
@@ -123,9 +123,9 @@ define(function(require){
     }
   ]);
 
-  module.run(['$rootScope', 'userContext', '$location', function($rootScope, userContext, $location){
+  module.run(['$rootScope', 'userContext', '$location', function($rootScope, userContext, $location) {
     // Validate Authorization Page
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       if(userContext.authentication().isAuth || toState.authorization === false) {
 
       } else {
@@ -197,9 +197,10 @@ define(function(require){
         '#FDB45C', // yellow
         '#949FB1', // grey
         '#4D5360'  // dark grey
-      ]
+      ],
+      salt: 'onTargetDPHK'
     },
-    openWeatherMap:{
+    openWeatherMap: {
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'
     },
     push: {

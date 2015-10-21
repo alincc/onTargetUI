@@ -8,12 +8,14 @@ define(function(require) {
     viewDocumentTemplate = require('text!./templates/viewDocument.html'),
     requestForInformationTemplate = require('text!./templates/requestForInformation.html'),
     transmittalTemplate = require('text!./templates/transmittal.html'),
+    uploadTemplate = require('text!./templates/upload.html'),
     controller = require('./controllers/onFileController'),
     purchaseOrderController = require('./controllers/purchaseOrderController'),
     changeOrderController = require('./controllers/changeOrderController'),
     viewDocumentController = require('./controllers/viewDocumentController'),
     requestForInformationController = require('./controllers/requestForInformationController'),
     transmittalController = require('./controllers/transmittalController'),
+    uploadController = require('./controllers/upload'),
     projectContextModule = require('app/common/context/project'),
     permissionServiceModule = require('app/common/services/permission'),
     notification = require('app/common/services/notifications'),
@@ -34,6 +36,7 @@ define(function(require) {
     $templateCache.put('viewDocument/templates/viewDocument.html', viewDocumentTemplate);
     $templateCache.put('requestForInformation/templates/requestForInformation.html', requestForInformationTemplate);
     $templateCache.put('transmittal/templates/transmittal.html', transmittalTemplate);
+    $templateCache.put('onFile/templates/upload.html', uploadTemplate);
   }]);
 
   module.controller('OnFileController', controller);
@@ -42,6 +45,7 @@ define(function(require) {
   module.controller('ViewDocumentController', viewDocumentController);
   module.controller('RequestForInformationController', requestForInformationController);
   module.controller('TransmittalController', transmittalController);
+  module.controller('OnFileUploadController', uploadController);
 
   module.config(
     ['$stateProvider',

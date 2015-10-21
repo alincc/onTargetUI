@@ -9,7 +9,7 @@
     <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)">
     </tab>
     <tab heading="Transmittal" ng-click="openAction(actions.transmittal)" active="true">
-        <div ng-controller="TransmittalController">
+        <div>
             <div class="row">
                 <div class="col-md-12">
                     <form name="_form" no-validate class="form-validation" ng-submit="submit()" novalidate>
@@ -21,7 +21,9 @@
                                 <div class="form-group">
                                     <label>Receiver's Name</label>
                                     <select class="form-control" name="username" ng-model="document.keyValues.username"
-                                            ng-options="receiverName.userId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
+                                            ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
+                                            required
+                                            ng-change="getCompanyOfUser()">
                                         <option value="">-- Select Receiver's Name --</option>
                                     </select>
                                     <ng-messages ng-if="_form.username.$dirty"
@@ -33,10 +35,13 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Company Name</label>
-                                    <select class="form-control" name="companyName" ng-model="document.keyValues.company_name"
+                                    <!--<select class="form-control" name="companyName" ng-model="document.keyValues.company_name"
                                             ng-options="company.companyId as company.companyName for company in companies" required>
-                                        <option value="">-- Select Company Name --</option>
-                                    </select>
+                                        <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
+                                    </select>-->
+                                    <input type="text" class="form-control" placeholder="Enter Company Name"
+                                           ng-model="document.keyValues.company_name"
+                                           name="companyName" required readonly/>
                                     <ng-messages ng-if="_form.companyName.$dirty"
                                                  for="_form.companyName.$error">
                                         <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -47,12 +52,12 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label>RFI#</label>
-                                    <input type="text" class="form-control" placeholder="Enter RFI#"
-                                           ng-model="document.keyValues.RFI"
-                                           name="RFI" required/>
-                                    <ng-messages ng-if="_form.RFI.$dirty"
-                                                 for="_form.RFI.$error">
+                                    <label>Transmittal #</label>
+                                    <input type="text" class="form-control" placeholder="Enter transmittal #"
+                                           ng-model="document.keyValues.transmittal"
+                                           name="transmittal" required/>
+                                    <ng-messages ng-if="_form.transmittal.$dirty"
+                                                 for="_form.transmittal.$error">
                                         <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                                     </ng-messages>
                                 </div>
@@ -72,7 +77,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Subject</label>
                                     <span class="pull-right">(Optional)</span>
@@ -81,35 +86,16 @@
                                            name="subject"/>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Due Date</label>
-                                    <p class="input-group">
-                                        <input type="text" class="form-control" placeholder="Enter/Select Due date" required
-                                               ng-model="document.dueDate"
-                                               datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
-                                               datepicker-options="dueDate.options"
-                                               datepicker-append-to-body="true" date-range
-                                               name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="dueDate.open($event)"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                                    </p>
-                                    <ng-messages ng-if="_form.dueDate.$dirty"
-                                                 for="_form.dueDate.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label>Submitted for</label>
+
                                 <div class="form-group">
                                     <div class="checkbox-inline" ng-repeat="submittedFor in submittedFors">
                                         <label class="i-checks">
-                                            <input type="checkbox" ng-model="submittedFor.value" ng-true-value="'YES'" ng-false-value="'NO'" checked><i></i> {{submittedFor.title}}
+                                            <input type="checkbox" ng-model="submittedFor.value" ng-true-value="'YES'"
+                                                   ng-false-value="'NO'" checked><i></i> {{submittedFor.title}}
                                         </label>
                                     </div>
                                 </div>
@@ -125,7 +111,8 @@
                                 <div class="col-md-4" ng-repeat="action in actionsAsNoted">
                                     <div class="checkbox-inline">
                                         <label class="i-checks">
-                                            <input type="checkbox" ng-model="action.value" ng-true-value="'YES'" ng-false-value="'NO'" checked><i></i> {{action.title}}
+                                            <input type="checkbox" ng-model="action.value" ng-true-value="'YES'"
+                                                   ng-false-value="'NO'" checked><i></i> {{action.title}}
                                         </label>
                                     </div>
                                 </div>
@@ -152,7 +139,8 @@
                                                datepicker-popup="MM/dd/yyyy" is-open="receivedDate.isOpen"
                                                datepicker-options="receivedDate.options"
                                                datepicker-append-to-body="true" date-range
-                                               name="receivedDate" ng-click="receivedDate.isOpen = !receivedDate.isOpen"/>
+                                               name="receivedDate"
+                                               ng-click="receivedDate.isOpen = !receivedDate.isOpen"/>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="receivedDate.open($event)"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
@@ -207,21 +195,22 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Due Date</label>
-                                    <span class="pull-right">(Optional)</span>
+
                                     <p class="input-group">
-                                        <input type="text" class="form-control" placeholder="Enter/Select Due date" required
-                                               ng-model="document.keyValues.date"
-                                               datepicker-popup="MM/dd/yyyy" is-open="date.isOpen"
-                                               datepicker-options="date.options"
+                                        <input type="text" class="form-control" placeholder="Enter/Select Due date"
+                                               required
+                                               ng-model="document.dueDate"
+                                               datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
+                                               datepicker-options="dueDate.options"
                                                datepicker-append-to-body="true" date-range
-                                               name="date" ng-click="date.isOpen = !date.isOpen"/>
+                                               name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="date.open($event)"><i
+                                <button type="button" class="btn btn-default" ng-click="dueDate.open($event)"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                                     </p>
-                                    <ng-messages ng-if="_form.date.$dirty"
-                                                 for="_form.date.$error">
+                                    <ng-messages ng-if="_form.dueDate.$dirty"
+                                                 for="_form.dueDate.$error">
                                         <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                                     </ng-messages>
                                 </div>
@@ -252,16 +241,37 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="pull-right" ng-if="approval">
+                            <a class="btn btn-primary" ng-click="openUploadModal()"><i class="fa fa-cloud-upload"></i>
+                                Upload
+                            </a>
+                        </div>
+
+                        <div class="on-site-upload-document-modal form-group">
+                            <p class="selected-file file-info" ng-repeat="file in attachments">
+                                <span class="file-icon">
+                                    <img ng-src="{{file.fileName | fileicon}}" alt=""/>
+                                </span>
+                                <span class="file-name" ng-bind="file.fileName"></span>
+                                <span class="file-remove-icon" ng-click="removeFile($index)">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-right" ng-if="document.approve">
                                 <a ng-disabled="onSubmit"
                                    class="btn btn-primary" ng-click="updateStatus('APPROVED')">Approve
+                                </a>
+                                <a ng-disabled="onSubmit"
+                                   class="btn btn-danger" ng-click="updateStatus('REJECTED')">Reject
                                 </a>
                                 <a ng-disabled="onSubmit"
                                    class="btn btn-primary" ui-sref="app.onFile">Cancel
                                 </a>
                             </div>
                             <button ng-disabled="_form.$invalid || _form.$submitted"
-                                    class="btn btn-primary pull-right" type="submit" ng-click="submit()" ng-if="!approval">Submit
+                                    class="btn btn-primary pull-right" type="submit" ng-click="submit()"
+                                    ng-if="!document.approve && !document.view">Submit
                             </button>
                         </div>
                     </form>
