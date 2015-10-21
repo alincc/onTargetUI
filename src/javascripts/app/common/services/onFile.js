@@ -28,7 +28,19 @@ define(function(require) {
     };
 
     services.addNewDocument = function (model){
-      return $http.put(constant.domain + '/document', model);
+      return $http.put(constant.domain + '/document', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
+    };
+
+    services.updateDocument = function (model){
+      return $http.post(constant.domain + '/document', model, {
+        headers: {
+          AutoAlert: true
+        }
+      });
     };
 
     services.getDisciplines = function (){
@@ -40,7 +52,7 @@ define(function(require) {
     };
     
     services.addAttachment = function (model){
-      return $http.put(constant.domain + '/document/attachments', model);
+      return $http.put(constant.domain + '/document/attachment/save', model);
     };
     
     services.getItems = function (){
@@ -100,8 +112,10 @@ define(function(require) {
       return angular.fromJson(impact);
     };
     
-    services.getAttachmentById = function (documentId){
-      return $http.get(constant.domain + '/document/' + documentId + '/attachments');
+    services.getDocumentAttachmentsByDocumentId = function (documentId){
+      return $http.post(constant.domain + '/document/attachment/getAll',{
+        documentId: documentId
+      });
     };
 
     return services;

@@ -20,9 +20,9 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr ng-if="!isLoading && approvals.length<=0">
+                        <tr ng-if="!isLoading && all.length<=0">
                             <td colspan="7">
-                                No data
+                                No document
                             </td>
                         </tr>
                         <tr ng-repeat="doc in all" ng-click="viewDocument(doc)">
@@ -36,8 +36,8 @@
                                 <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
-                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event)" ng-if="doc.approve">Approve</button>
-                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event)" ng-if="doc.approve">Reject</button>
+                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event, $index)" ng-if="doc.approve">Approve</button>
+                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event, $index)" ng-if="doc.approve">Reject</button>
                             </td>
                         </tr>
                     </table>
@@ -60,9 +60,9 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr ng-if="!isLoading && approvals.length<=0">
+                        <tr ng-if="!isLoading && submittals.length<=0">
                             <td colspan="7">
-                                No data
+                                No submital document
                             </td>
                         </tr>
                         <tr ng-repeat="doc in submittals"  ng-click="viewDocument(doc)">
@@ -103,7 +103,7 @@
                         </tr>
                         <tr ng-if="!isLoading && approvals.length<=0">
                             <td colspan="7">
-                                No data
+                                No approval document
                             </td>
                         </tr>
                         <tr ng-repeat="doc in approvals"  ng-click="viewDocument(doc)">

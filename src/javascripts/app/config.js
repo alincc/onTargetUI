@@ -58,10 +58,11 @@ define(function(require) {
               });
               defer.reject(response);
             }
-            else if(response && response.data && response.data.returnVal === 'ERROR') {
+            else if(response && response.data && (response.data.returnVal === 'ERROR' || response.data.responseCode === 'ERROR')) {
               toaster.pop('error', 'Error', response.data.returnMessage);
               defer.reject(response);
-            } else {
+            }
+            else {
               if((response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.domain) > -1) && response.config.headers['AutoAlert']) {
                 toaster.pop('success', 'Success', response.data.returnMessage);
               }

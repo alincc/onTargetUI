@@ -1,3 +1,4 @@
+<form name="_form" no-validate class="form-validation" ng-submit="submit()">
 <tabset class="tab-container">
     <tab heading="View Document" ng-click="openAction(actions.viewDocument)">
     </tab>
@@ -7,7 +8,7 @@
         <div class="rfi-section">
             <div class="row">
                 <div class="col-md-12">
-                    <form name="_form" no-validate class="form-validation" ng-submit="submit()">
+
                         <div class="form-group">
                             <span class="form-title">Please fill out below infomation</span>
                         </div>
@@ -160,22 +161,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <a class="btn btn-primary" ng-click="openUploadModal()"><i class="fa fa-cloud-upload"></i>
+                            <a class="btn btn-primary" ng-click="openUploadModal('main')"><i class="fa fa-cloud-upload"></i>
                                 Upload
                             </a>
                         </div>
 
-                        <div class="on-site-upload-document-modal form-group">
-                            <p class="selected-file file-info" ng-repeat="file in attachments">
-                                <span class="file-icon">
-                                    <img ng-src="{{file.fileName | fileicon}}" alt=""/>
-                                </span>
-                                <span class="file-name" ng-bind="file.fileName"></span>
-                                <span class="file-remove-icon" ng-click="removeFile($index)">
-                                    <i class="fa fa-times"></i>
-                                </span>
-                            </p>
+                        <div class="on-site-upload-document-modal form-group" attachment-list attachments="attachments" on-edit="onEdit">
                         </div>
+
                         <div class="form-group" ng-if="document.approve">
                             <!--//show list attachment-->
                         </div>
@@ -189,69 +182,54 @@
                                 </label>
                             </div>
                             <button ng-disabled="_form.$invalid || _form.$submitted"
-                                    class="btn btn-primary pull-right" type="submit" ng-click="submit()">Submit
+                                    class="btn btn-primary pull-right" type="submit">Submit
                             </button>
                         </div>
-                    </form>
+
                     <!--Response-->
-                    <div ng-show="document.approve" class="pull-none">
+                    <div ng-if="onEdit" class="pull-none">
                         <div class="form-group">
                             <span class="form-title">Response</span>
                         </div>
                         <div class="response-container" ng-repeat="response in responses">
                             <div class="form-group">
-                                <label>Title</label>
-                                <!--<input type="text" class="form-control" placeholder="Enter Title"
-                                       ng-model="response.title"/>-->
-                                <p>{{response.title}}</p>
+                                <p ng-bind-html="response.response | escapeHtml | newLines"></p>
                             </div>
-                            <div class="form-group">
-                                <label>Reply</label>
-                                <!--<textarea type="text" class="form-control" placeholder="Enter Response"
-                                          ng-model="response.response"/>-->
-                                <p>{{response.response}}</p>
-                            </div>
-                            <!--Show list attachment-->
-                            <!--<span>Attachments - <a href="">example.pdf</a></span>-->
-                            <!--Show list attachment-->
-                            <br>
-                            <span class="submited-by">Submitted by {{response.responsedBy.contact.firstName}} {{response.responsedBy.contact.lastName}} at {{response.responsedDate| date: 'short'}}</span>
-
+                            <p class="submited-by">Submitted by {{response.responsedBy.contact.firstName}} {{response.responsedBy.contact.lastName}} at {{response.responsedDate| date: 'short'}}</p>
                         </div>
                         <hr>
 
                         <div class="response-container">
-                            <form name="_response_form" novalidate class="form-validation" ng-submit="addResponse()">
-                                <div class="form-group">
-                                    <label>Title</label>
-                                    <input type="text" class="form-control" placeholder="Enter Title"
-                                           ng-model="newResponse.title" required name="title"/>
-                                    <ng-messages ng-if="_response_form.title.$dirty"
-                                                 for="_response_form.title.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
+                            <section ng-form name="_response_form" novalidate class="form-validation">
+                                <!--<div class="form-group">-->
+                                    <!--<label>Title</label>-->
+                                    <!--<input type="text" class="form-control" placeholder="Enter Title"-->
+                                           <!--ng-model="newResponse.title" required name="title"/>-->
+                                    <!--<ng-messages ng-if="_response_form.title.$dirty"-->
+                                                 <!--for="_response_form.title.$error">-->
+                                        <!--<span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>-->
+                                    <!--</ng-messages>-->
+                                <!--</div>-->
                                 <div class="form-group">
                                     <label>Reply</label>
-                                <textarea type="text" class="form-control" placeholder="Enter Response"
-                                          ng-model="newResponse.response" required name="response"/>
+                                    <textarea type="text" class="form-control" placeholder="Enter Response"
+                                              ng-model="newResponse.response" required name="response"/>
                                     <ng-messages ng-if="_response_form.response.$dirty"
                                                  for="_response_form.response.$error">
                                         <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                                     </ng-messages>
                                 </div>
                                 <div class="form-group">
-                                    <a class="btn btn-primary" ngf-select ngf-multiple="true" ng-model="responseTerms">Choose File</a>
+                                    <a class="btn btn-primary" ng-click="openUploadModal('response')">Choose File</a>
+                                </div>
+                                <div class="on-site-upload-document-modal form-group" attachment-list attachments="newResponse.attachments" on-edit="true">
                                 </div>
                                 <div class="form-group">
-                                    <div ng-repeat="file in responseAttachments">{{file.name}}</div>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary" type="submit"
-                                            ng-disabled="_response_form.$invalid">Submit
+                                    <button class="btn btn-primary" type="button" ng-click="addResponse()"
+                                            ng-disabled="_response_form.$invalid || isAddingResponse">Submit
                                     </button>
                                 </div>
-                            </form>
+                            </section>
                         </div>
                         <div class="form-group">
                             <a class="btn btn-primary pull-right" ng-click="updateStatus('CLOSED')">Close</a>
@@ -270,3 +248,4 @@
 
     </tab>
 </tabset>
+</form>

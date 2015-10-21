@@ -109,9 +109,14 @@ define(function(require) {
         }
 
         if($scope.changeOrder.documentId) {
-          onFileFactory.getAttachmentById($scope.changeOrder.documentId).success(
+          onFileFactory.getDocumentAttachmentsByDocumentId($scope.changeOrder.documentId).success(
             function(resp) {
-              $scope.attachments = $scope.attachments.concat(resp);
+              $scope.attachments = $scope.attachments.concat(resp.attachments);
+              $scope.attachments = _.map($scope.attachments, function(el) {
+                var newEl = el;
+                newEl.uploaded = true;
+                return newEl;
+              });
             }
           );
         }
@@ -164,29 +169,81 @@ define(function(require) {
           }
         ];
 
-        onFileFactory.addNewDocument($scope.newDocument).success(function(resp) {
-          $scope.documentId = resp.document.documentId;
-          var promises = [];
-          if($scope.attachments.length > 0) {
-            _.each($scope.attachments, function(file) {
-              promises.push(saveDocumentInfo(file));
-            });
+        if($scope.changeOrder.documentId) {
+          onFileFactory.updateDocument($scope.newDocument).success(function(resp) {
+            $scope.documentId = resp.document.documentId;
+            var promises = [];
+            if($scope.attachments.length > 0) {
+              _.each($scope.attachments, function(file) {
+                if(!file.uploaded) {
+                  promises.push(saveDocumentInfo(file));
+                }
+              });
 
-            $q.all(promises).then(function(values) {
+              $q.all(promises).then(function(values) {
+                $state.go('app.onFile');
+                $scope.onSubmit = false;
+                $scope._form.$setPristine();
+              }, function(errors) {
+                $state.go('app.onFile');
+                $scope.onSubmit = false;
+                $scope._form.$setPristine();
+                console.log(errors);
+              });
+            } else {
               $state.go('app.onFile');
-            }, function(errors) {
-              $state.go('app.onFile');
-              console.log(errors);
-            });
-          } else {
-            $state.go('app.onFile');
-          }
-        }).finally(
-          function() {
+              $scope.onSubmit = false;
+              $scope._form.$setPristine();
+            }
+          }).error(function(err){
+            console.log(err);
             $scope.onSubmit = false;
             $scope._form.$setPristine();
-          }
-        );
+          }).finally(
+            function() {
+              $scope.onSubmit = false;
+              $scope._form.$setPristine();
+            }
+          );
+        }
+        else{
+          onFileFactory.addNewDocument($scope.newDocument).success(function(resp) {
+            $scope.documentId = resp.document.documentId;
+            var promises = [];
+            if($scope.attachments.length > 0) {
+              _.each($scope.attachments, function(file) {
+                if(!file.uploaded) {
+                  promises.push(saveDocumentInfo(file));
+                }
+              });
+
+              $q.all(promises).then(function(values) {
+                $state.go('app.onFile');
+                $scope.onSubmit = false;
+                $scope._form.$setPristine();
+              }, function(errors) {
+                $state.go('app.onFile');
+                $scope.onSubmit = false;
+                $scope._form.$setPristine();
+                console.log(errors);
+              });
+            } else {
+              $state.go('app.onFile');
+              $scope.onSubmit = false;
+              $scope._form.$setPristine();
+            }
+          })
+            .error(function(err){
+              console.log(err);
+              $scope.onSubmit = false;
+              $scope._form.$setPristine();
+            }).finally(
+            function() {
+              $scope.onSubmit = false;
+              $scope._form.$setPristine();
+            }
+          );
+        }
       };
 
       /* var addAttachment = function (file){

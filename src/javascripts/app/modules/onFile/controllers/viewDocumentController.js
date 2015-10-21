@@ -1,7 +1,7 @@
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state',
-    function($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state) {
+  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state', '$timeout',
+    function($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state, $timeout) {
       $scope.app = appConstant.app;
       $scope.isLoading = true;
       $scope.approvals = [];
@@ -106,7 +106,7 @@ define(function() {
              } else if (status === 'approval') {
              document.approval = true;
              }*/
-            document.approve = doc.approve;
+            document.approve = doc.status === 'APPROVE';
             document.edit = doc.edit;
             document.view = doc.view;
 
@@ -136,11 +136,15 @@ define(function() {
         }
       };
 
-      $scope.changeStatus = function(doc, status, $event) {
+      $scope.changeStatus = function(doc, status, $event, idx) {
         $event.stopImmediatePropagation();
         onFileFactory.updateStatus(doc.documentId, status, userContext.authentication().userData.userId)
           .success(function(resp) {
+            doc.approve = false;
+            doc.status = status;
+            doc.view = true;
             //change status success
+            //$scope.approvals.splice(idx, 1);
           });
       };
 

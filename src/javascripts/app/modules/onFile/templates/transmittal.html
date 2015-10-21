@@ -246,17 +246,9 @@
                             </a>
                         </div>
 
-                        <div class="on-site-upload-document-modal form-group">
-                            <p class="selected-file file-info" ng-repeat="file in attachments">
-                                <span class="file-icon">
-                                    <img ng-src="{{file.fileName | fileicon}}" alt=""/>
-                                </span>
-                                <span class="file-name" ng-bind="file.fileName"></span>
-                                <span class="file-remove-icon" ng-click="removeFile($index)">
-                                    <i class="fa fa-times"></i>
-                                </span>
-                            </p>
+                        <div class="on-site-upload-document-modal form-group" attachment-list attachments="attachments" on-edit="onEdit">
                         </div>
+
                         <div class="form-group">
                             <div class="pull-right" ng-if="document.approve">
                                 <a ng-disabled="onSubmit"
@@ -270,7 +262,7 @@
                                 </a>
                             </div>
                             <button ng-disabled="_form.$invalid || _form.$submitted"
-                                    class="btn btn-primary pull-right" type="submit" ng-click="submit()"
+                                    class="btn btn-primary pull-right" type="submit"
                                     ng-if="!document.approve && !document.view">Submit
                             </button>
                         </div>

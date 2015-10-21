@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$timeout', 'documentFactory', '$modalInstance', 'fileFactory',
-    function($scope, $rootScope, $timeout, documentFactory, $modalInstance, fileFactory) {
+  var controller = ['$scope', '$rootScope', '$timeout', 'documentFactory', '$modalInstance', 'fileFactory', 'from',
+    function($scope, $rootScope, $timeout, documentFactory, $modalInstance, fileFactory, from) {
       $scope.uploadModel = {
         category: null,
         description: '',
@@ -59,7 +59,10 @@ define(function(require) {
       };
 
       $scope.closeModal = function (){
-        $modalInstance.close($scope.uploadModel.files);
+        $modalInstance.close({
+          from: from,
+          result: $scope.uploadModel.files
+        });
       };
     }];
   return controller;
