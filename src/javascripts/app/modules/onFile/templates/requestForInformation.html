@@ -1,4 +1,4 @@
-<form name="_form" no-validate class="form-validation" ng-submit="submit()">
+
 <tabset class="tab-container">
     <tab heading="View Document" ng-click="openAction(actions.viewDocument)">
     </tab>
@@ -8,7 +8,7 @@
         <div class="rfi-section">
             <div class="row">
                 <div class="col-md-12">
-
+                    <form name="_form" no-validate class="form-validation" ng-submit="submit(_form)">
                         <div class="form-group">
                             <span class="form-title">Please fill out below infomation</span>
                         </div>
@@ -185,9 +185,9 @@
                                     class="btn btn-primary pull-right" type="submit">Submit
                             </button>
                         </div>
-
+                    </form>
                     <!--Response-->
-                    <div ng-if="onEdit" class="pull-none">
+                    <div ng-if="onEdit" class="pull-none" style="clear:both;">
                         <div class="form-group">
                             <span class="form-title">Response</span>
                         </div>
@@ -200,7 +200,7 @@
                         <hr>
 
                         <div class="response-container">
-                            <section ng-form name="_response_form" novalidate class="form-validation">
+                            <form name="_response_form" novalidate class="form-validation" ng-submit="addResponse(_response_form)">
                                 <!--<div class="form-group">-->
                                     <!--<label>Title</label>-->
                                     <!--<input type="text" class="form-control" placeholder="Enter Title"-->
@@ -225,11 +225,11 @@
                                 <div class="on-site-upload-document-modal form-group" attachment-list attachments="newResponse.attachments" on-edit="true">
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-primary" type="button" ng-click="addResponse()"
-                                            ng-disabled="_response_form.$invalid || isAddingResponse">Submit
+                                    <button class="btn btn-primary" type="submit"
+                                            ng-disabled="_response_form.$invalid || _response_form.$submitted">Submit
                                     </button>
                                 </div>
-                            </section>
+                            </form>
                         </div>
                         <div class="form-group">
                             <a class="btn btn-primary pull-right" ng-click="updateStatus('CLOSED')">Close</a>
@@ -248,4 +248,3 @@
 
     </tab>
 </tabset>
-</form>

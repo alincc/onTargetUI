@@ -14,11 +14,13 @@ define(function(require) {
       if(document) {
         console.log(document);
         var attention = [];
-        for(var prop in document.keyValues) {
-          if(document.keyValues.hasOwnProperty(prop) && /^attention\d+/.test(prop)) {
-            attention.push(document.keyValues[prop]);
+
+        angular.forEach(document.keyValues, function(value, key) {
+          if(/^attention\d+/.test(key)) {
+            attention.push(value);
+            delete document.keyValues[key];
           }
-        }
+        });
 
         $scope.document = document;
         $scope.documentId = document.documentId;
@@ -108,18 +110,27 @@ define(function(require) {
         }
       };
 
-      $scope.submit = function() {
+      $scope.submit = function(form) {
         $scope.document.keyValues.rfi_is_a_change = $scope.document.keyValues.rfi_is_a_change || 'NO';
         var newDocumentFormattedKeyValues = [];
-
         angular.forEach($scope.document.keyValues, function(value, key) {
-          var keyValuePair = {
-            "key": key,
-            "value": value/*,
-             "createdBy" : $scope.newDocument.submittedBy,
-             "createdDate" : new Date()*/
-          };
-          this.push(keyValuePair);
+          var $this = this;
+          if(key === 'attention') {
+            _.each(value, function(el, idx) {
+              $this.push({
+                "key": 'attention' + idx,
+                "value": el
+              })
+            });
+          } else {
+            var keyValuePair = {
+              "key": key,
+              "value": value/*,
+               "createdBy" : $scope.newDocument.submittedBy,
+               "createdDate" : new Date()*/
+            };
+            this.push(keyValuePair);
+          }
         }, newDocumentFormattedKeyValues);
         $scope.newDocument.keyValues = newDocumentFormattedKeyValues;
 
@@ -136,7 +147,6 @@ define(function(require) {
         if($scope.document.documentId) {
           onFileFactory.updateDocument($scope.newDocument)
             .success(function(resp) {
-              $scope.documentId = resp.document.documentId;
               var promises = [];
               if($scope.attachments.length > 0) {
                 _.each($scope.attachments, function(file) {
@@ -148,25 +158,25 @@ define(function(require) {
                 $q.all(promises).then(function(values) {
                   $state.go('app.onFile');
                   $scope.onSubmit = false;
-                  $scope._form.$setPristine();
+                  form.$setPristine();
                 }, function(errors) {
                   $state.go('app.onFile');
                   console.log(errors);
                   $scope.onSubmit = false;
-                  $scope._form.$setPristine();
+                  form.$setPristine();
                 });
               } else {
                 $state.go('app.onFile');
                 $scope.onSubmit = false;
-                $scope._form.$setPristine();
+                form.$setPristine();
               }
             })
             .error(function(err) {
               console.log(err);
               $scope.onSubmit = false;
-              $scope._form.$setPristine();
+              form.$setPristine();
             }).finally(function() {
-              $scope._form.$setPristine();
+              form.$setPristine();
             });
         }
         else {
@@ -184,30 +194,30 @@ define(function(require) {
                 $q.all(promises).then(function(values) {
                   $state.go('app.onFile');
                   $scope.onSubmit = false;
-                  $scope._form.$setPristine();
+                  form.$setPristine();
                 }, function(errors) {
                   $state.go('app.onFile');
                   $scope.onSubmit = false;
-                  $scope._form.$setPristine();
+                  form.$setPristine();
                   console.log(errors);
                 });
               } else {
                 $state.go('app.onFile');
                 $scope.onSubmit = false;
-                $scope._form.$setPristine();
+                form.$setPristine();
               }
             })
             .error(function(err) {
               console.log(err);
               $scope.onSubmit = false;
-              $scope._form.$setPristine();
+              form.$setPristine();
             }).finally(function() {
-              $scope._form.$setPristine();
+              form.$setPristine();
             });
         }
       };
 
-      $scope.addResponse = function() {
+      $scope.addResponse = function(form) {
         $scope.isAddingResponse = true;
         onFileFactory.addResponse($scope.newResponse.response, $scope.document.documentId).success(
           function(resp) {
@@ -220,7 +230,7 @@ define(function(require) {
             function done() {
               $scope.getResponse();
               $scope.newResponse = {};
-              $scope._form._response_form.$setPristine();
+              form.$setPristine();
               $scope.isAddingResponse = false;
               loadDocumentAttachments(true);
             }
@@ -233,7 +243,7 @@ define(function(require) {
 
           }, function(err) {
             console.log(err);
-            $scope._form._response_form.$setPristine();
+            form.$setPristine();
             $scope.isAddingResponse = false;
           });
       };
