@@ -100,8 +100,11 @@ define(function(require) {
               $scope.contacts.push({userId: projectMember.userId.toString(), name: fullName});
               if(document && projectMember.userId.toString() === document.keyValues.username) {
                 $scope.username = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
-                console.log($scope.username);
               }
+              if(document && projectMember.userId.toString() === document.keyValues.ship_to_name) {
+                $scope.ship_to_name = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
+              }
+
             });
           });
 
@@ -260,6 +263,8 @@ define(function(require) {
           document: angular.copy($scope.purchaseOrder),
           projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName
         };
+        
+        data.document.keyValues.username = $scope.username;
         onFileFactory.exportPdf(data)
           .success(function(resp) {
             if(download){

@@ -8,14 +8,14 @@ var _ = require('lodash');
 var rootPath = process.env.ROOT;
 
 module.exports = {
-  exportPdf: function(req, res) {
+  exportPdf: function (req, res){
     var data = req.body.document,
       projectAssetFolderName = req.body.projectAssetFolderName,
       fileName,
       destinationPath,
       html;
 
-    switch(data.documentTemplate.documentTemplateId) {
+    switch (data.documentTemplate.documentTemplateId) {
       case 1:
         fileName = "purchase_order_" + data.documentId + ".pdf";
         break;
@@ -31,34 +31,34 @@ module.exports = {
     }
 
     destinationPath = path.join(rootPath, 'assets', 'projects', projectAssetFolderName);
-    if(!fs.existsSync(destinationPath)) {
+    if (!fs.existsSync(destinationPath)) {
       fs.mkdirSync(destinationPath);
     }
     destinationPath = path.join(destinationPath, 'onfile');
-    if(!fs.existsSync(destinationPath)) {
+    if (!fs.existsSync(destinationPath)) {
       fs.mkdirSync(destinationPath);
     }
     destinationPath = path.join(destinationPath, fileName);
 
     wkhtmltopdf.command = 'wkhtmltopdf';
 
-    function failure(err) {
+    function failure(err){
       res.status(400);
       res.send('Error');
     }
 
-    function success() {
+    function success(){
       res.send({
         success: true,
         filePath: 'assets/projects/' + projectAssetFolderName + '/onfile/' + fileName
       });
     }
 
-    function fillPOData(html, data) {
+    function fillPOData(html, data){
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
-      html = html.replace(/\{\{createdDate}}/g, data.createdDate || '');
+      html = html.replace(/\{\{createdDate}}/g, data.keyValues.date_created || '');
       html = html.replace(/\{\{address}}/g, data.keyValues.address || '');
       html = html.replace(/\{\{username}}/g, data.keyValues.username || '');
       html = html.replace(/\{\{attention}}/g, data.keyValues.attention || '');
@@ -69,7 +69,7 @@ module.exports = {
       html = html.replace(/\{\{dueDate}}/g, data.dueDate || '');
       html = html.replace(/\{\{shipping_method}}/g, data.keyValues.shipping_method || '');
       html = html.replace(/\{\{shipping_terms}}/g, data.keyValues.shipping_terms || '');
-      html = html.replace(/\{\{shipping_name}}/g, data.keyValues.shipping_name || '');
+      html = html.replace(/\{\{shipping_name}}/g, data.keyValues.ship_to_name || '');
       html = html.replace(/\{\{ship_to_company}}/g, data.keyValues.ship_to_company || '');
       html = html.replace(/\{\{ship_to_address}}/g, data.keyValues.ship_to_address || '');
       html = html.replace(/\{\{total_po_amount}}/g, data.keyValues.total_po_amount || '');
@@ -80,14 +80,14 @@ module.exports = {
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function(error) {
+        .on("error", function (error){
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
-        .on("end", success);
+        .on("finish", success);
     }
 
-    function fillCOData(html, data) {
+    function fillCOData(html, data){
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
@@ -104,7 +104,7 @@ module.exports = {
       html = html.replace(/\{\{contract_title}}/g, data.keyValues.contract_title || '');
       html = html.replace(/\{\{priority}}/g, data.keyValues.priority || '');
       html = html.replace(/\{\{discipline}}/g, data.keyValues.discipline || '');
-      html = html.replace(/\{\{category}}/g, data.keyValues.categorys || '');
+      html = html.replace(/\{\{category}}/g, data.keyValues.category || '');
       html = html.replace(/\{\{schedule_impact}}/g, data.keyValues.schedule_impact || '');
       html = html.replace(/\{\{cost_impact}}/g, data.keyValues.cost_impact || '');
       html = html.replace(/\{\{time_impact}}/g, data.keyValues.time_impact || '');
@@ -117,17 +117,35 @@ module.exports = {
       html = html.replace(/\{\{approvedBy}}/g, data.approvedBy || '');
       html = html.replace(/\{\{approvedDate}}/g, data.approvedDate || '');
       html = html.replace(/\{\{attachments}}/g, data.attachments || '');
+      html = html.replace(/\{\{amount}}/g, data.keyValues.amount || '');
+
+      var gridKeys = '';
+      var temp = '<tr>\
+            <td>{{workDescription}}</td>\
+            <td>{{costCode}}</td>\
+            <td>{{amount}}</td>\
+        </tr>';
+      for (var i = 0; i < data.gridKeyValues.length; i++) {
+        var gridKey = temp;
+        gridKey = gridKey.replace(/\{\{workDescription}}/g, data.gridKeyValues[i].workDescription || '');
+        gridKey = gridKey.replace(/\{\{costCode}}/g, data.gridKeyValues[i].costCode || '');
+        gridKey = gridKey.replace(/\{\{amount}}/g, data.gridKeyValues[i].amount || '');
+
+        gridKeys = gridKeys + gridKey;
+      }
+
+      html = html.replace(/\{\{gridKeyValues}}/g, gridKeys || '');
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function(error) {
+        .on("error", function (error){
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
         .on("finish", success);
     }
 
-    function fillTransData(html, data) {
+    function fillTransData(html, data){
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
@@ -163,7 +181,7 @@ module.exports = {
 
       html = html.replace(/\{\{items}}/g, data.keyValues.items || '');
       html = html.replace(/\{\{description}}/g, data.keyValues.description || '');
-      html = html.replace(/\{\{dueDate}}/g, data.keyValues.dueDate || '');
+      html = html.replace(/\{\{dueDate}}/g, data.dueDate || '');
       html = html.replace(/\{\{copies}}/g, data.keyValues.copies || '');
       html = html.replace(/\{\{comment}}/g, data.keyValues.comment || '');
 
@@ -173,21 +191,21 @@ module.exports = {
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function(error) {
+        .on("error", function (error){
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
-        .on("end", success);
+        .on("finish", success);
     }
 
-    function fillRFIData(html, data) {
+    function fillRFIData(html, data){
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
       html = html.replace(/\{\{createdDate}}/g, data.createdDate || '');
       html = html.replace(/\{\{address}}/g, data.keyValues.address || '');
       html = html.replace(/\{\{username}}/g, data.keyValues.username || '');
-      html = html.replace(/\{\{attention}}/g, data.keyValues.attention || '');
+      html = html.replace(/\{\{attention}}/g, data.attentionName || '');
 
       html = html.replace(/\{\{subject}}/g, data.keyValues.subject || '');
       html = html.replace(/\{\{RFI}}/g, data.keyValues.RFI || '');
@@ -208,50 +226,64 @@ module.exports = {
     </div>\
     </div>';
 
-      var responseData = {};
+      var responseData = data.responseData;
 
-      response = response.replace(/\{\{title}}/g, responseData.title || '');
+      var resHtml = ''
+
+      for(var i=0; i<responseData.length; i++) {
+        var res = response;
+        res = res.replace(/\{\{title}}/g, responseData[i].title || '');
+        res = res.replace(/\{\{reply}}/g, responseData[i].response || '');
+        res = res.replace(/\{\{responseBy}}/g, responseData[i].responsedBy.contact.firstName + ' ' + responseData[i].responsedBy.contact.lastName || '');
+        res = res.replace(/\{\{responseDate}}/g, responseData[i].responsedDate || '');
+        res = res.replace(/\{\{responseTime}}/g, responseData[i].responsedDate || '');
+        resHtml = resHtml + res;
+      }
+
+
+
+      /*response = response.replace(/\{\{title}}/g, responseData.title || '');
       response = response.replace(/\{\{reply}}/g, responseData.reply || '');
       response = response.replace(/\{\{responseBy}}/g, responseData.responsedBy ? responseData.responsedBy.contact ? responseData.responsedBy.contact.firstName + ' ' + responseData.responsedBy.contact.lastName : '' : '');
       response = response.replace(/\{\{responsedDate}}/g, responseData.responsedDate.getDate() + '/' + responseData.responsedDate.getMonth() + '/' + responseData.responsedDate.getYear() || '');
-      response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime() || '');
+      response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime() || '');*/
 
-      html = html.replace(/\{\{responses}}/g, response || '');
+      html = html.replace(/\{\{responses}}/g, resHtml || '');
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function(error) {
+        .on("error", function (error){
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
-        .on("end", success);
+        .on("finish", success);
     }
 
     // KeyValues
-    var parsedKeyValues = {}, attention = [];
-    _.each(data.keyValues, function(el) {
-      if(/^attention\d+/.test(el.key)) {
-        attention.push(el.key);
-      } else {
-        var value = el.value;
-        if(el.key === 'date_created' || el.key === 'date' || el.key === 'received_by_date' || el.key === 'sent_by_date' || el.key === 'due_by_date') {
-          value = new Date(el.value);
-        }
-        parsedKeyValues[el.key] = value;
-      }
-    });
-    parsedKeyValues['attention'] = attention;
-    data.keyValues = parsedKeyValues;
+    /*var parsedKeyValues = {}, attention = [];
+     _.each(data.keyValues, function(el) {
+     if(/^attention\d+/.test(el.key)) {
+     attention.push(el.key);
+     } else {
+     var value = el.value;
+     if(el.key === 'date_created' || el.key === 'date' || el.key === 'received_by_date' || el.key === 'sent_by_date' || el.key === 'due_by_date') {
+     value = new Date(el.value);
+     }
+     parsedKeyValues[el.key] = value;
+     }
+     });
+     parsedKeyValues['attention'] = attention;
+     data.keyValues = parsedKeyValues;
 
-    if(data.gridKeyValues && data.gridKeyValues.length > 0) {
-      var parsedGridKeyValues = {};
-      _.each(data.gridKeyValues, function(el) {
-        parsedGridKeyValues[el.key] = el.value;
-      });
-      data.gridKeyValues = parsedGridKeyValues;
-    }
+     if(data.gridKeyValues && data.gridKeyValues.length > 0) {
+     var parsedGridKeyValues = {};
+     _.each(data.gridKeyValues, function(el) {
+     parsedGridKeyValues[el.key] = el.value;
+     });
+     data.gridKeyValues = parsedGridKeyValues;
+     }*/
 
-    switch(data.documentTemplate.documentTemplateId) {
+    switch (data.documentTemplate.documentTemplateId) {
       case 1:
         html = fs.readFileSync('server/assets/templates/purchaseOrder.html', 'utf8');
         fillPOData(html, data);

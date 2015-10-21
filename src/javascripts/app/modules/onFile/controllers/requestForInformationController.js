@@ -392,6 +392,9 @@ define(function (require) {
           document: angular.copy($scope.document),
           projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName
         };
+
+        data.document.responseData = $scope.responses;
+        data.document.attentionName = $scope.attentionName;
         onFileFactory.exportPdf(data)
           .success(function (resp) {
             if (download) {

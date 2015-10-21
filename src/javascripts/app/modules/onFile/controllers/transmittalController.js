@@ -298,6 +298,7 @@ define(function (require) {
           document: angular.copy($scope.document),
           projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName
         };
+        data.document.keyValues.username = $scope.username;
         onFileFactory.exportPdf(data)
           .success(function(resp) {
             if(download){

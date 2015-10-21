@@ -301,11 +301,13 @@ define(function (require) {
           });
       };
 
-      $scope.exportPdf = function () {
-        onFileFactory.exportPdf('').then(function (resp) {
+      /*$scope.exportPdf = function () {
+        var data = angular.copy($scope.changeOrder);
+        data.keyValues.username = $scope.username;
+        onFileFactory.exportPdf(data).then(function (resp) {
 
         });
-      };
+      };*/
 
       $scope.getCompanyOfUser = function () {
         $scope.changeOrder.keyValues.company_name = '';
@@ -343,6 +345,7 @@ define(function (require) {
           document: angular.copy($scope.changeOrder),
           projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName
         };
+        data.document.keyValues.username = $scope.username;
         onFileFactory.exportPdf(data)
           .success(function(resp) {
             if(download){
