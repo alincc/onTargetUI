@@ -55,6 +55,12 @@ define(function(require) {
       return $http.put(constant.domain + '/document/attachment/save', model);
     };
 
+    services.deleteAttachment = function(id) {
+      return $http.put(constant.domain + '/document/attachment/delete', {
+        documentAttachmentId: id
+      });
+    };
+
     services.getItems = function() {
       return angular.fromJson(onFileItems);
     };

@@ -1,4 +1,4 @@
-define(function (require) {
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     uiRouter = require('uiRouter'),
@@ -31,7 +31,7 @@ define(function (require) {
     angularUiSelect = require('angularUiSelect');
   var module = angular.module('app.onFile', ['ui.router', 'app.config', 'common.context.project', 'common.services.permission', 'common.services.notifications', 'common.services.task', 'common.services.onFile', 'common.services.company', 'common.services.onContact', 'common.services.file', 'common.services.document', 'ui.select']);
 
-  module.run(['$templateCache', function ($templateCache) {
+  module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onFile/templates/onFile.html', template);
     $templateCache.put('purchaseOrder/templates/purchaseOrder.html', purchaseOrderTemplate);
     $templateCache.put('changeOrder/templates/changeOrder.html', changeOrderTemplate);
@@ -54,7 +54,7 @@ define(function (require) {
 
   module.config(
     ['$stateProvider',
-      function ($stateProvider) {
+      function($stateProvider) {
         $stateProvider
           .state('app.onFile', {
             url: '/onFile',
@@ -62,9 +62,9 @@ define(function (require) {
             controller: 'OnFileController',
             reloadOnSearch: false,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function ($location, projectContext, $q, $state, $window, permissionFactory) {
+              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory) {
                 var deferred = $q.defer();
-                if (projectContext.valid() && permissionFactory.checkMenuPermission('ONFILE')) {
+                if(projectContext.valid() && permissionFactory.checkMenuPermission('ONFILE')) {
                   deferred.resolve();
                 } else {
                   $window.location.href = $state.href('app.projectlist');
@@ -79,28 +79,32 @@ define(function (require) {
             controller: 'ChangeOrderController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function ($location, $q, $state, $window, onFileFactory, $stateParams) {
+              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
                 var deferred = $q.defer();
                 //parse key values
                 function transformKeyValues(keyValues) {
                   var newKeyValues = {};
-                  for (var i = 0; i < keyValues.length; i++) {
+                  for(var i = 0; i < keyValues.length; i++) {
                     var keyValue = keyValues[i];
                     var key = keyValue.key;
                     var value = keyValue.value;
-                    if (keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
                       value = new Date(value);
+                    }
+                    else if(keyValue.key === 'receiverId') {
+                      value = parseInt(value);
                     }
                     newKeyValues[key] = value;
                   }
                   return newKeyValues;
                 }
+
                 //parse grid key value
                 function transformGridKeyValues(gridKeyValues) {
                   var newGridKeyValues = [];
-                  for (var i = 0; i < gridKeyValues.length; i++) {
+                  for(var i = 0; i < gridKeyValues.length; i++) {
                     var grid = gridKeyValues[i];
-                    if (newGridKeyValues[grid.gridRowIndex] === undefined) {
+                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
                       newGridKeyValues[grid.gridRowIndex] = {};
                       var key = grid.key;
                       var value = grid.value;
@@ -112,23 +116,23 @@ define(function (require) {
                   return newGridKeyValues;
                 }
 
-                if (!$stateParams.docId) {
+                if(!$stateParams.docId) {
                   deferred.resolve();
                 } else {
                   onFileFactory.getDocumentById($stateParams.docId).success(
-                    function (resp) {
+                    function(resp) {
                       var document = resp.document;
-                      if (document.documentTemplate.documentTemplateId !== 2) {
+                      if(document.documentTemplate.documentTemplateId !== 2) {
                         $window.location.href = $state.href('app.onFile');
                       }
                       var keyValues = transformKeyValues(document.keyValues);
-                      if (document.gridKeyValues && document.gridKeyValues.length > 0) {
+                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
                         document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
                       }
 
                       document.keyValues = keyValues;
                       deferred.resolve(document);
-                    }).error(function (error) {
+                    }).error(function(error) {
                       $location.search('taskId', null);
                       deferred.resolve();
                     });
@@ -143,29 +147,33 @@ define(function (require) {
             controller: 'PurchaseOrderController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function ($location, $q, $state, $window, onFileFactory, $stateParams) {
+              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
                 var deferred = $q.defer();
-                
+
                 //parse key values
                 function transformKeyValues(keyValues) {
                   var newKeyValues = {};
-                  for (var i = 0; i < keyValues.length; i++) {
+                  for(var i = 0; i < keyValues.length; i++) {
                     var keyValue = keyValues[i];
                     var key = keyValue.key;
                     var value = keyValue.value;
-                    if (keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
                       value = new Date(value);
+                    }
+                    else if(keyValue.key === 'receiverId' || keyValue.key === 'ship_to_company') {
+                      value = parseInt(value);
                     }
                     newKeyValues[key] = value;
                   }
                   return newKeyValues;
                 }
+
                 //parse grid key value
                 function transformGridKeyValues(gridKeyValues) {
                   var newGridKeyValues = [];
-                  for (var i = 0; i < gridKeyValues.length; i++) {
+                  for(var i = 0; i < gridKeyValues.length; i++) {
                     var grid = gridKeyValues[i];
-                    if (newGridKeyValues[grid.gridRowIndex] === undefined) {
+                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
                       newGridKeyValues[grid.gridRowIndex] = {};
                       var key = grid.key;
                       var value = grid.value;
@@ -176,23 +184,24 @@ define(function (require) {
                   }
                   return newGridKeyValues;
                 }
-                if (!$stateParams.docId) {
+
+                if(!$stateParams.docId) {
                   deferred.resolve();
                 } else {
                   onFileFactory.getDocumentById($stateParams.docId).success(
-                    function (resp) {
+                    function(resp) {
                       var document = resp.document;
-                      if (document.documentTemplate.documentTemplateId !== 1) {
+                      if(document.documentTemplate.documentTemplateId !== 1) {
                         $window.location.href = $state.href('app.onFile');
                       }
                       var keyValues = transformKeyValues(document.keyValues);
-                      if (document.gridKeyValues && document.gridKeyValues.length > 0) {
+                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
                         document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
                       }
 
                       document.keyValues = keyValues;
                       deferred.resolve(document);
-                    }).error(function (error) {
+                    }).error(function(error) {
                       $location.search('taskId', null);
                       deferred.resolve();
                     });
@@ -207,29 +216,33 @@ define(function (require) {
             controller: 'RequestForInformationController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function ($location, $q, $state, $window, onFileFactory, $stateParams) {
+              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
                 var deferred = $q.defer();
-                
+
                 //parse key values
                 function transformKeyValues(keyValues) {
                   var newKeyValues = {};
-                  for (var i = 0; i < keyValues.length; i++) {
+                  for(var i = 0; i < keyValues.length; i++) {
                     var keyValue = keyValues[i];
                     var key = keyValue.key;
                     var value = keyValue.value;
-                    if (keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
                       value = new Date(value);
+                    }
+                    else if(keyValue.key === 'receiverId') {
+                      value = parseInt(value);
                     }
                     newKeyValues[key] = value;
                   }
                   return newKeyValues;
                 }
+
                 //parse grid key value
                 function transformGridKeyValues(gridKeyValues) {
                   var newGridKeyValues = [];
-                  for (var i = 0; i < gridKeyValues.length; i++) {
+                  for(var i = 0; i < gridKeyValues.length; i++) {
                     var grid = gridKeyValues[i];
-                    if (newGridKeyValues[grid.gridRowIndex] === undefined) {
+                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
                       newGridKeyValues[grid.gridRowIndex] = {};
                       var key = grid.key;
                       var value = grid.value;
@@ -240,23 +253,24 @@ define(function (require) {
                   }
                   return newGridKeyValues;
                 }
-                if (!$stateParams.docId) {
+
+                if(!$stateParams.docId) {
                   deferred.resolve();
                 } else {
                   onFileFactory.getDocumentById($stateParams.docId).success(
-                    function (resp) {
+                    function(resp) {
                       var document = resp.document;
-                      if (document.documentTemplate.documentTemplateId !== 3) {
+                      if(document.documentTemplate.documentTemplateId !== 3) {
                         $window.location.href = $state.href('app.onFile');
                       }
                       var keyValues = transformKeyValues(document.keyValues);
-                      if (document.gridKeyValues && document.gridKeyValues.length > 0) {
+                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
                         document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
                       }
 
                       document.keyValues = keyValues;
                       deferred.resolve(document);
-                    }).error(function (error) {
+                    }).error(function(error) {
                       $location.search('taskId', null);
                       deferred.resolve();
                     });
@@ -271,29 +285,33 @@ define(function (require) {
             controller: 'TransmittalController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function ($location, $q, $state, $window, onFileFactory, $stateParams) {
+              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
                 var deferred = $q.defer();
-                
+
                 //parse key values
                 function transformKeyValues(keyValues) {
                   var newKeyValues = {};
-                  for (var i = 0; i < keyValues.length; i++) {
+                  for(var i = 0; i < keyValues.length; i++) {
                     var keyValue = keyValues[i];
                     var key = keyValue.key;
                     var value = keyValue.value;
-                    if (keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
                       value = new Date(value);
+                    }
+                    else if(keyValue.key === 'receiverId') {
+                      value = parseInt(value);
                     }
                     newKeyValues[key] = value;
                   }
                   return newKeyValues;
                 }
+
                 //parse grid key value
                 function transformGridKeyValues(gridKeyValues) {
                   var newGridKeyValues = [];
-                  for (var i = 0; i < gridKeyValues.length; i++) {
+                  for(var i = 0; i < gridKeyValues.length; i++) {
                     var grid = gridKeyValues[i];
-                    if (newGridKeyValues[grid.gridRowIndex] === undefined) {
+                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
                       newGridKeyValues[grid.gridRowIndex] = {};
                       var key = grid.key;
                       var value = grid.value;
@@ -304,23 +322,24 @@ define(function (require) {
                   }
                   return newGridKeyValues;
                 }
-                if (!$stateParams.docId) {
+
+                if(!$stateParams.docId) {
                   deferred.resolve();
                 } else {
                   onFileFactory.getDocumentById($stateParams.docId).success(
-                    function (resp) {
+                    function(resp) {
                       var document = resp.document;
-                      if (document.documentTemplate.documentTemplateId !== 4) {
+                      if(document.documentTemplate.documentTemplateId !== 4) {
                         $window.location.href = $state.href('app.onFile');
                       }
                       var keyValues = transformKeyValues(document.keyValues);
-                      if (document.gridKeyValues && document.gridKeyValues.length > 0) {
+                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
                         document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
                       }
 
                       document.keyValues = keyValues;
                       deferred.resolve(document);
-                    }).error(function (error) {
+                    }).error(function(error) {
                       $location.search('taskId', null);
                       deferred.resolve();
                     });
@@ -331,7 +350,7 @@ define(function (require) {
           });
       }
     ]
-    );
+  );
 
   return module;
 });

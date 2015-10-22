@@ -11,7 +11,7 @@
         <div>
             <div class="row">
                 <div class="col-md-12">
-                    <form name="_form" no-validate class="form-validation" ng-submit="submit()">
+                    <form name="_form" no-validate class="form-validation" ng-submit="submit(_form)">
                         <div class="panel panel-default">
                             <div class="panel-heading"><b>Please fill out below infomation</b></div>
                             <div class="panel-body">
@@ -21,17 +21,17 @@
                                         <div class="form-group">
                                             <label>Receiver's Name</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">{{username}} &nbsp;</p>
-                                            <select class="form-control" name="receiverName"
-                                                    ng-model="purchaseOrder.keyValues.username"
+                                            <p class="text-field" ng-if="onView||onApprove">{{receiverName}} &nbsp;</p>
+                                            <select class="form-control" name="receiverId"
+                                                    ng-model="purchaseOrder.keyValues.receiverId"
                                                     ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
                                                     required
                                                     ng-change="getCompanyOfUser()"
                                                     ng-if="onEdit">
                                                 <option value="">-- Select Receiver's Name --</option>
                                             </select>
-                                            <ng-messages ng-if="_form.receiverName.$dirty"
-                                                         for="_form.receiverName.$error">
+                                            <ng-messages ng-if="_form.receiverId.$dirty"
+                                                         for="_form.receiverId.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                                             </ng-messages>
                                         </div>
@@ -42,10 +42,6 @@
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{purchaseOrder.keyValues.company_name}} &nbsp;</p>
-                                            <!--<select class="form-control" name="companyName" ng-model="purchaseOrder.keyValues.company_name"
-                                                    ng-options="company.companyId as company.companyName for company in companies" required>
-                                                <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
-                                            </select>-->
                                             <input type="text" class="form-control" placeholder="Enter Company Name"
                                                    ng-model="purchaseOrder.keyValues.company_name"
                                                    name="companyName" required readonly
@@ -307,13 +303,13 @@
 
                         <div class="form-group">
                             <div class="pull-right" ng-if="onApprove">
-                                <a ng-disabled="onSubmit"
+                                <a ng-disabled="_form.$submitted"
                                    class="btn btn-primary" ng-click="updateStatus('APPROVED')">Approve
                                 </a>
-                                <a ng-disabled="onSubmit"
+                                <a ng-disabled="_form.$submitted"
                                    class="btn btn-danger" ng-click="updateStatus('REJECTED')">Reject
                                 </a>
-                                <a ng-disabled="onSubmit"
+                                <a ng-disabled="_form.$submitted"
                                    class="btn btn-primary" ui-sref="app.onFile">Cancel
                                 </a>
                             </div>

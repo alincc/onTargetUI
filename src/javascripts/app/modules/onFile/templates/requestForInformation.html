@@ -16,15 +16,14 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>Receiver's Name</label>
-
-                                            <p class="text-field" ng-if="onView||onApprove">{{username}}</p>
-                                            <select class="form-control" name="username"
-                                                    ng-model="document.keyValues.username"
+                                            <p class="text-field" ng-if="onView||onApprove" ng-bind="::receiverName"></p>
+                                            <select class="form-control" name="receiverId"
+                                                    ng-model="document.keyValues.receiverId"
                                                     ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
-                                                    required ng-change="getCompanyOfUser()" ng-if="onEdit">
+                                                    required ng-change="getCompanyOfUser()" ng-if="onEdit || onAddNew">
                                                 <option value="">-- Select Receiver's Name --</option>
                                             </select>
-                                            <ng-messages ng-if="_form.username.$dirty" for="_form.username.$error">
+                                            <ng-messages ng-if="_form.receiverId.$dirty" for="_form.receiverId.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                                             </ng-messages>
                                         </div>
@@ -35,15 +34,9 @@
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.company_name}}</p>
-                                            <!--<select class="form-control" name="companyName"
-                                                    ng-model="document.keyValues.company_name"
-                                                    ng-options="company.companyId as company.companyName for company in companies"
-                                                    required>
-                                                <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
-                                            </select>-->
                                             <input type="text" class="form-control" placeholder="Enter Company Name"
                                                    ng-model="document.keyValues.company_name" name="companyName"
-                                                   required readonly ng-if="onEdit"/>
+                                                   required readonly ng-if="onEdit || onAddNew"/>
                                             <ng-messages ng-if="_form.companyName.$dirty" for="_form.companyName.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                                             </ng-messages>
@@ -54,12 +47,15 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label>Attention</label>
-
-                                            <p class="text-field" ng-if="onView||onApprove">{{attentionName}} &nbsp;</p>
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                <span ng-repeat="p in attentionPersons">
+                                                    <span ng-bind="p.contact.firstName+' '+p.contact.lastName"></span><span ng-if="!$last">,&nbsp;</span>
+                                                </span>
+                                            </p>
                                             <ui-select append-to-body="true" multiple tagging
                                                        ng-model="document.keyValues.attention" theme="bootstrap"
                                                        require-multiple
-                                                       name="attention" ng-if="onEdit">
+                                                       name="attention" ng-if="onEdit || onAddNew">
                                                 <ui-select-match placeholder="Select Name">{{$item.name}}</ui-select-match>
                                                 <ui-select-choices repeat="ct.userId as ct in contactNameList">
                                                     {{ct.name}}
@@ -76,7 +72,7 @@
 
                                             <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.RFI}}</p>
                                             <input type="text" class="form-control" placeholder="Enter RFI#"
-                                                   ng-model="document.keyValues.RFI" name="RFI" required ng-if="onEdit"
+                                                   ng-model="document.keyValues.RFI" name="RFI" required ng-if="onEdit || onAddNew"
                                                     />
                                             <ng-messages ng-if="_form.RFI.$dirty" for="_form.RFI.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -94,7 +90,7 @@
                                                 {{document.keyValues.subject}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Subject"
                                                    ng-model="document.keyValues.subject" name="subject"
-                                                   ng-if="onEdit"/>
+                                                   ng-if="onEdit || onAddNew"/>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +104,7 @@
                                             <select class="form-control" name="priority"
                                                     ng-model="document.keyValues.priority"
                                                     ng-options="priority.id as priority.name for priority in priorities"
-                                                    required ng-if="onEdit">
+                                                    required ng-if="onEdit || onAddNew">
                                                 <option value="">-- Select Priority --</option>
                                             </select>
                                             <ng-messages ng-if="_form.priority.$dirty" for="_form.priority.$error">
@@ -123,7 +119,7 @@
                                             <p class="text-field" ng-if="onView||onApprove">{{document.dueDate|date:
                                                 app.dateFormat}}</p>
 
-                                            <p class="input-group" ng-if="onEdit">
+                                            <p class="input-group" ng-if="onEdit || onAddNew">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Due date"
                                                        required ng-model="document.dueDate" datepicker-popup="MM/dd/yyyy"
                                                        is-open="dueDate.isOpen" datepicker-options="dueDate.options"
@@ -151,7 +147,7 @@
                                                 {{document.keyValues.question_or_concern}}</p>
                                     <textarea type="text" class="form-control" placeholder="Enter Questions/Concerns"
                                               ng-model="document.keyValues.question_or_concern"
-                                              name="question_or_concern" ng-if="onEdit"/>
+                                              name="question_or_concern" ng-if="onEdit || onAddNew"/>
                                         </div>
                                     </div>
                                 </div>
@@ -165,7 +161,7 @@
                                                 {{document.keyValues.suggestion}}</p>
                                     <textarea type="text" class="form-control" placeholder="Enter Suggestion"
                                               ng-model="document.keyValues.suggestion" name="suggestion"
-                                              ng-if="onEdit"/>
+                                              ng-if="onEdit || onAddNew"/>
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +179,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading"><b>Attachments</b></div>
                             <div class="panel-body">
-                                <div class="form-group" ng-if="onEdit">
+                                <div class="form-group" ng-if="onEdit || onAddNew">
                                     <a class="btn btn-primary" ng-click="openUploadModal('main')"><i
                                             class="fa fa-cloud-upload"></i>
                                         Upload
@@ -208,20 +204,17 @@
                         </div>
 
                         <div class="form-group">
-                            <button ng-disabled="_form.$invalid || _form.$submitted || onSubmit" loading-button="onSubmit"
+                            <button ng-disabled="_form.$invalid || _form.$submitted || onSubmit" loading-button="_form.$submitted"
                                     class="btn btn-primary pull-right"
-                                    type="submit" ng-if="onEdit">Submit
+                                    type="submit" ng-if="onEdit || onAddNew">Submit
                             </button>
                         </div>
                     </form>
 
-                    <div class="panel panel-default" style="clear: both">
-                        <div class="panel-heading"><b>Comments</b></div>
+                    <div class="panel panel-default" style="clear: both" ng-if="(onEdit || onApprove) && !onAddNew">
+                        <div class="panel-heading"><b>Responses</b></div>
                         <div class="panel-body">
-                            <div ng-if="onEdit || onApprove" class="pull-none" style="clear:both;">
-                                <div class="form-group" ng-if="responses.length > 0">
-                                    <span class="form-title">Response</span>
-                                </div>
+                            <div class="pull-none" style="clear:both;">
                                 <div class="response-container" ng-repeat="response in responses">
                                     <div class="form-group">
                                         <p ng-bind-html="response.response | escapeHtml | newLines"></p>
@@ -232,18 +225,9 @@
                                 </div>
                                 <hr ng-if="responses.length > 0 && onApprove">
 
-                                <div class="response-container">
+                                <div class="response-container" ng-if="onEdit || onApprove">
                                     <form name="_response_form" novalidate class="form-validation"
                                           ng-submit="addResponse(_response_form)">
-                                        <!--<div class="form-group">-->
-                                        <!--<label>Title</label>-->
-                                        <!--<input type="text" class="form-control" placeholder="Enter Title"-->
-                                        <!--ng-model="newResponse.title" required name="title"/>-->
-                                        <!--<ng-messages ng-if="_response_form.title.$dirty"-->
-                                        <!--for="_response_form.title.$error">-->
-                                        <!--<span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>-->
-                                        <!--</ng-messages>-->
-                                        <!--</div>-->
                                         <div class="form-group">
                                             <label>Reply</label>
                                     <textarea type="text" class="form-control" placeholder="Enter Response"
@@ -251,62 +235,24 @@
                                             />
                                             <ng-messages ng-if="_response_form.response.$dirty"
                                                          for="_response_form.response.$error">
-                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                            </ng-messages>
-                                        </div>
-                                        <div class="response-container" ng-repeat="response in responses">
-                                            <div class="form-group">
-                                                <p ng-bind-html="response.response | escapeHtml | newLines"></p>
-                                            </div>
-                                            <p class="submited-by">Submitted by {{response.responsedBy.contact.firstName}}
-                                                {{response.responsedBy.contact.lastName}}
-                                                at {{response.responsedDate| date: 'short'}}</p>
-                                        </div>
-                                        <hr ng-if="responses.length > 0 && onApprove">
-
-                                        <div class="response-container" ng-if="onApprove">
-                                            <form name="_response_form" novalidate class="form-validation"
-                                                  ng-submit="addResponse(_response_form)">
-                                                <!--<div class="form-group">-->
-                                                <!--<label>Title</label>-->
-                                                <!--<input type="text" class="form-control" placeholder="Enter Title"-->
-                                                <!--ng-model="newResponse.title" required name="title"/>-->
-                                                <!--<ng-messages ng-if="_response_form.title.$dirty"-->
-                                                <!--for="_response_form.title.$error">-->
-                                                <!--<span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>-->
-                                                <!--</ng-messages>-->
-                                                <!--</div>-->
-                                                <div class="form-group">
-                                                    <label>Reply</label>
-                                    <textarea type="text" class="form-control" placeholder="Enter Response"
-                                              ng-model="newResponse.response" required name="response"
-                                            />
-                                                    <ng-messages ng-if="_response_form.response.$dirty"
-                                                                 for="_response_form.response.$error">
                                                         <span class="help-block m-b-none text-danger" ng-message
                                                               when="required">This is a required field.</span>
-                                                    </ng-messages>
-                                                </div>
-                                                <div class="form-group">
-                                                    <a class="btn btn-primary" ng-click="openUploadModal('response')">Choose
-                                                        File</a>
-                                                </div>
-                                                <div class="on-site-upload-document-modal form-group" attachment-list
-                                                     attachments="newResponse.attachments" on-edit="true" on-approve="onApprove" on-view="onView">
-                                                </div>
-                                                <div class="form-group">
-                                                    <button class="btn btn-primary" type="submit"
-                                                            ng-disabled="_response_form.$invalid || _response_form.$submitted">
-                                                        Submit
-                                                    </button>
-                                                </div>
-                                            </form>
+                                            </ng-messages>
                                         </div>
-                                        <!--<div class="form-group">
-                                            <a class="btn btn-primary pull-right" ng-click="updateStatus('CLOSED')">Close</a>
-                                        </div>-->
+                                        <div class="form-group">
+                                            <a class="btn btn-primary" ng-click="openUploadModal('response')">Choose
+                                                File</a>
+                                        </div>
+                                        <div class="on-site-upload-document-modal form-group" attachment-list
+                                             attachments="newResponse.attachments" on-edit="true" on-approve="onApprove" on-view="onView">
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary" type="submit"
+                                                    ng-disabled="_response_form.$invalid || _response_form.$submitted">
+                                                Submit
+                                            </button>
+                                        </div>
                                     </form>
-                                    <!--Response-->
                                 </div>
                             </div>
 
@@ -315,13 +261,13 @@
 
                     <div class="form-group">
                         <div class="pull-right" ng-if="onApprove">
-                            <a ng-disabled="onSubmit" class="btn btn-primary"
+                            <a ng-disabled="_form.$submitted" class="btn btn-primary"
                                ng-click="updateStatus('APPROVED')">Approve
                             </a>
-                            <a ng-disabled="onSubmit" class="btn btn-danger"
+                            <a ng-disabled="_form.$submitted" class="btn btn-danger"
                                ng-click="updateStatus('REJECTED')">Reject
                             </a>
-                            <a ng-disabled="onSubmit" class="btn btn-primary" ui-sref="app.onFile">Cancel
+                            <a ng-disabled="_form.$submitted" class="btn btn-primary" ui-sref="app.onFile">Cancel
                             </a>
                         </div>
                     </div>

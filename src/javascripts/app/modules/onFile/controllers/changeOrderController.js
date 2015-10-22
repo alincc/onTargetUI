@@ -1,4 +1,4 @@
-define(function (require) {
+define(function(require) {
   'use strict';
   var angular = require('angular');
 
@@ -13,15 +13,15 @@ define(function (require) {
       $scope.attachments = [];
 
       //user action : view, edit, create, approve
-      var getUserAction = function (document) {
-        if (document.createdBy === userContext.authentication().userData.userId) {
-          if (document.status === 'SUBMITTED') {
+      var getUserAction = function(document) {
+        if(document.createdBy === userContext.authentication().userData.userId) {
+          if(document.status === 'SUBMITTED') {
             $scope.onEdit = true;
           } else {
             $scope.onView = true;
           }
         } else {
-          if (document.status === 'SUBMITTED') {
+          if(document.status === 'SUBMITTED') {
             $scope.onApprove = true;
           } else {
             $scope.onView = true;
@@ -29,8 +29,9 @@ define(function (require) {
         }
       };
 
-      if (document) {
+      if(document) {
         getUserAction(document);
+        $scope.documentId = document.documentId;
         $scope.changeOrder = document;
         $scope.changeOrder.dueDate = new Date($scope.changeOrder.dueDate);
         $scope.submittal = document.submittal;
@@ -39,8 +40,6 @@ define(function (require) {
       } else {
         $scope.onEdit = true;
       }
-      
-      console.log($scope);
 
       $scope.dueDate = {
         options: {
@@ -48,7 +47,7 @@ define(function (require) {
           startingDay: 1
         },
         isOpen: false,
-        open: function ($event) {
+        open: function($event) {
           this.isOpen = true;
         }
       };
@@ -59,7 +58,7 @@ define(function (require) {
           startingDay: 1
         },
         isOpen: false,
-        open: function ($event) {
+        open: function($event) {
           this.isOpen = true;
         }
       };
@@ -75,15 +74,6 @@ define(function (require) {
         "keyValues": [],
         "gridKeyValues": [],
         "submittedBy": userContext.authentication().userData.userId
-        /*"submitter": {
-         "userId": userContext.authentication().userData.userId,
-         "username": userContext.authentication().userData.username,
-         "password": null,
-         "designation": null,
-         "accountStatus": null,
-         "userStatus": null,
-         "userTypeId": 0
-         }*/
       };
 
       $scope.addCostGrid = function() {
@@ -92,52 +82,53 @@ define(function (require) {
           costCode: '',
           amount: ''
         };
-        if ($scope.costGrid.length < 50) {
+        if($scope.costGrid.length < 50) {
           $scope.costGrid.push(cost);
         }
       };
 
-      $scope.removeCostGrid = function (index) {
-        if ($scope.costGrid.length > 1) {
+      $scope.removeCostGrid = function(index) {
+        if($scope.costGrid.length > 1) {
           $scope.costGrid.splice(index, 1);
         }
       };
 
-      var load = function () {
+      var load = function() {
         $scope.priorities = taskFactory.getTaskSeverities();
         $scope.shippingMethods = onFileFactory.getShippingMethod();
         $scope.disciplines = onFileFactory.getDisciplines();
         $scope.categories = onFileFactory.getCategories();
         $scope.scheduleImpacts = onFileFactory.getImpacts();
         $scope.costImpacts = onFileFactory.getImpacts();
-        companyFactory.search().success(function (resp) {
+        companyFactory.search().success(function(resp) {
           $scope.companies = resp.companyList;
         });
 
         onContactFactory.getContactList($rootScope.currentProjectInfo.projectId, $rootScope.currentUserInfo.userId).
-          success(function (content) {
+          success(function(content) {
             var memberList = content.projectMemberList;
             $scope.contactLists = memberList;
-            $scope.contacts = [];
-            angular.forEach(memberList, function (projectMember, key) {
-              var fullName = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
-              $scope.contacts.push({userId: projectMember.userId.toString(), name: fullName});
-              if(document && projectMember.userId.toString() === document.keyValues.username) {
-                $scope.username = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
-                console.log($scope.username);
-              }
+            $scope.contacts = _.map(memberList, function(el) {
+              return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
             });
+
+            if(document) {
+              var receiver = _.find(memberList, {userId: document.keyValues.receiverId});
+              if(receiver) {
+                $scope.receiverName = receiver.contact.firstName + ' ' + receiver.contact.lastName;
+              }
+            }
           });
 
-        if (!$scope.changeOrder.documentId) {
+        if(!$scope.changeOrder.documentId) {
           $scope.addCostGrid();
         }
 
-        if ($scope.changeOrder.documentId) {
+        if($scope.changeOrder.documentId) {
           onFileFactory.getDocumentAttachmentsByDocumentId($scope.changeOrder.documentId).success(
-            function (resp) {
+            function(resp) {
               $scope.attachments = $scope.attachments.concat(resp.attachments);
-              $scope.attachments = _.map($scope.attachments, function (el) {
+              $scope.attachments = _.map($scope.attachments, function(el) {
                 var newEl = el;
                 newEl.uploaded = true;
                 return newEl;
@@ -147,10 +138,10 @@ define(function (require) {
         }
       };
 
-      $scope.submit = function () {
+      $scope.submit = function(form) {
         $scope.onSubmit = true;
         var newDocumentFormattedKeyValues = [];
-        angular.forEach($scope.changeOrder.keyValues, function (value, key) {
+        angular.forEach($scope.changeOrder.keyValues, function(value, key) {
           var keyValuePair = {
             "key": key,
             "value": value
@@ -161,20 +152,20 @@ define(function (require) {
         $scope.newDocument.dueDate = $scope.changeOrder.dueDate;
 
         var gridKeyValues = [];
-        for (var i = 0; i < $scope.costGrid.length; i++) {
+        for(var i = 0; i < $scope.costGrid.length; i++) {
           var costGridRow = $scope.costGrid[i];
           var gridKeyValue = {};
           var keys = ["workDescription", "costCode", "amount"];
           var rowValid = true;
-          for (var j = 0; j < keys.length; j++) {
-            if (!costGridRow[keys[j]]) {
+          for(var j = 0; j < keys.length; j++) {
+            if(!costGridRow[keys[j]]) {
               rowValid = false;
               break;
             }
           }
-          if (rowValid) {
+          if(rowValid) {
             gridKeyValue.gridRowIndex = i;
-            for (var k = 0; k < keys.length; k++) {
+            for(var k = 0; k < keys.length; k++) {
               var gridvalue = {
                 key: keys[k],
                 value: costGridRow[keys[k]],
@@ -189,130 +180,100 @@ define(function (require) {
 
         $scope.newDocument.assignees = [
           {
-            "userId": $scope.changeOrder.keyValues.username,
+            "userId": $scope.changeOrder.keyValues.receiverId,
             "username": null
           }
         ];
 
-        function done() {
-          $scope.exportPdf().
-            then(function() {
-              $state.go('app.onFile');
-              $scope.onSubmit = false;
-              $scope._form.$setPristine();
-            });
+        function done(exp, form) {
+          if(exp) {
+            $scope.exportPdf().
+              then(function() {
+                $state.go('app.onFile');
+                $scope.onSubmit = false;
+                form.$setPristine();
+              });
+          }
+          else {
+            $state.go('app.onFile');
+            $scope.onSubmit = false;
+            form.$setPristine();
+          }
         }
 
         if($scope.changeOrder.documentId) {
           onFileFactory.updateDocument($scope.newDocument).success(function(resp) {
-            $scope.documentId = resp.document.documentId;
             var promises = [];
-            if ($scope.attachments.length > 0) {
-              _.each($scope.attachments, function (file) {
-                if (!file.uploaded) {
-                  promises.push(saveDocumentInfo(file));
+            if($scope.attachments.length > 0) {
+              _.each($scope.attachments, function(file) {
+                if(!file.uploaded) {
+                  promises.push($scope.saveDocumentInfo(file));
+                } else if(file.deleted) {
+                  promises.push($scope.deleteAttachment(file));
                 }
               });
 
               $q.all(promises).then(function(values) {
-                done();
+                done(true, form);
               }, function(errors) {
-                $scope.exportPdf().
-                  done();
+                done(true, form);
                 console.log(errors);
               });
             } else {
-              $state.go('app.onFile');
-              $scope.onSubmit = false;
-              $scope._form.$setPristine();
+              done(true, form);
             }
           }).error(function(err) {
             console.log(err);
             $scope.onSubmit = false;
-            $scope._form.$setPristine();
-          }).finally(
-            function () {
-              $scope.onSubmit = false;
-              $scope._form.$setPristine();
-            }
-          );
+            form.$setPristine();
+          });
         }
         else {
           onFileFactory.addNewDocument($scope.newDocument).success(function(resp) {
             $scope.documentId = resp.document.documentId;
             var promises = [];
-            if ($scope.attachments.length > 0) {
-              _.each($scope.attachments, function (file) {
-                if (!file.uploaded) {
-                  promises.push(saveDocumentInfo(file));
+            if($scope.attachments.length > 0) {
+              _.each($scope.attachments, function(file) {
+                if(!file.uploaded) {
+                  promises.push($scope.saveDocumentInfo(file));
                 }
               });
 
               $q.all(promises).then(function(values) {
-                done();
+                done(false, form);
               }, function(errors) {
-                done();
+                done(false, form);
                 console.log(errors);
               });
             } else {
-              $state.go('app.onFile');
-              $scope.onSubmit = false;
-              $scope._form.$setPristine();
+              done(false, form);
             }
           })
             .error(function(err) {
               console.log(err);
               $scope.onSubmit = false;
-              $scope._form.$setPristine();
-            }).finally(
-            function () {
-              $scope.onSubmit = false;
-              $scope._form.$setPristine();
-            }
-          );
+              form.$setPristine();
+            });
         }
       };
 
-      /* var addAttachment = function (file){
-       var deferred = $q.defer();
-       onFileFactory.addAttachment({
-       "documentId" : $scope.documentId,
-       "filePath" : file.filePath,
-       "addedBy" : userContext.authentication().userData.userId
-       }).success(
-       function (resp){
-       deferred.resolve(resp);
-       }).error(function (error){
-       deferred.reject(error);
-       });
-       return deferred.promise;
-       };*/
-
-      $scope.updateStatus = function (status) {
+      $scope.updateStatus = function(status) {
         $scope.onSubmit = true;
         onFileFactory.updateStatus($scope.changeOrder.documentId, status, userContext.authentication().userData.userId)
-          .success(function (resp) {
+          .success(function(resp) {
             $scope.onSubmit = false;
             $state.go('app.onFile');
           })
           .error(
-          function (err) {
+          function(err) {
             $scope.onSubmit = false;
           });
       };
 
-      /*$scope.exportPdf = function () {
-        var data = angular.copy($scope.changeOrder);
-        data.keyValues.username = $scope.username;
-        onFileFactory.exportPdf(data).then(function (resp) {
-
-        });
-      };*/
-
-      $scope.getCompanyOfUser = function () {
+      $scope.getCompanyOfUser = function() {
         $scope.changeOrder.keyValues.company_name = '';
-        $scope.changeOrder.keyValues.company_name = _.result(_.find($scope.contactLists, function (contact) {
-          return contact.userId.toString() === $scope.changeOrder.keyValues.username;
+        $scope.changeOrder.keyValues.company_name = _.result(_.find($scope.contactLists, function(contact) {
+          return contact.userId === $scope.changeOrder.keyValues.receiverId;
         }), 'companyName');
       };
 
@@ -345,10 +306,10 @@ define(function (require) {
           document: angular.copy($scope.changeOrder),
           projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName
         };
-        data.document.keyValues.username = $scope.username;
+        data.document.keyValues.receiverName = $scope.receiverName;
         onFileFactory.exportPdf(data)
           .success(function(resp) {
-            if(download){
+            if(download) {
               $window.open($filter('fileDownloadPathHash')(resp.filePath));
             }
             deferred.resolve();
@@ -359,24 +320,28 @@ define(function (require) {
         return deferred.promise;
       };
 
-      var saveDocumentInfo = function (file) {
+      $scope.saveDocumentInfo = function(file) {
         var deferred = $q.defer();
         fileFactory.move(file.filePath, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'onfile')
-          .success(function (resp) {
+          .success(function(resp) {
             onFileFactory.addAttachment({
               "documentId": $scope.documentId,
               "filePath": resp.url,
               "addedBy": userContext.authentication().userData.userId
             }).success(
-              function (resp) {
+              function(resp) {
                 deferred.resolve(resp);
-              }).error(function (error) {
+              }).error(function(error) {
                 deferred.reject(error);
               });
-          }).error(function (error) {
+          }).error(function(error) {
             deferred.reject(error);
           });
         return deferred.promise;
+      };
+
+      $scope.deleteAttachment = function(file) {
+        return onFileFactory.deleteAttachment(file.documentAttachmentId);
       };
 
       load();

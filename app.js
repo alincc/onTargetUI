@@ -397,8 +397,8 @@ app.put('/ontargetrs/services/document', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
-          res.send(response.body);
           notifications(data);
+          res.send(response.body);
         } else {
           res.send(error);
         }
@@ -483,8 +483,8 @@ app.post('/ontargetrs/services/document/status', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
-          res.send(response.body);
           pushNotification(data);
+          res.send(response.body);
         } else {
           res.send(error);
         }
@@ -577,8 +577,8 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
-          res.send(response.body);
           notifications(data);
+          res.send(response.body);
         } else {
           res.send(error);
         }
