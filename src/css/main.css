@@ -21065,24 +21065,6 @@ a.text-black:hover {
 .on-site-upload-document-modal textarea {
   resize: none;
 }
-.on-site-upload-document-modal .uploader-content .uploader-box {
-  max-height: 300px;
-}
-.on-site-upload-document-modal .uploader-content .uploader-box .list-group {
-  list-style: none;
-}
-.on-site-upload-document-modal .uploader-content .uploader-box.local-upload .drop-box {
-  text-align: center;
-  height: 150px;
-  line-height: 150px;
-  color: #999;
-  font-size: 20px;
-  border: dashed 3px #ccc;
-  margin-top: 10px;
-}
-.on-site-upload-document-modal .download-progress-bar .progress {
-  margin: 0;
-}
 .on-site-upload-document-modal .file-info {
   position: relative;
   height: auto;
@@ -21440,4 +21422,22 @@ a.text-black:hover {
 }
 .rfi-section hr {
   border-top: 1px solid #ccc;
+}
+.upload-box .uploader-content .uploader-box {
+  max-height: 300px;
+}
+.upload-box .uploader-content .uploader-box .list-group {
+  list-style: none;
+}
+.upload-box .uploader-content .uploader-box.local-upload .drop-box {
+  text-align: center;
+  height: 150px;
+  line-height: 150px;
+  color: #999;
+  font-size: 20px;
+  border: dashed 3px #ccc;
+  margin-top: 10px;
+}
+.upload-box .download-progress-bar .progress {
+  margin: 0;
 }

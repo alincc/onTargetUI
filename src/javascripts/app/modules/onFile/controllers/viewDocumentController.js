@@ -91,8 +91,8 @@ define(function() {
       $scope.viewDocument = function(doc) {
         onFileFactory.getDocumentById(doc.documentId).success(
           function(resp) {
-            //var document = resp.document;
-            var document = doc;
+            var document = resp.document;
+            //var document = doc;
 
             var keyValues = transformKeyValues(document.keyValues);
             console.log(keyValues);
