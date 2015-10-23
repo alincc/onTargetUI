@@ -95,6 +95,12 @@ gulp.task('html', ['script'], function(){
     .pipe(gulp.dest('./build/'));
 });
 
+// Copy css
+gulp.task('css', function(){
+  return gulp.src('src/css/main.min.css')
+    .pipe(gulp.dest('build/css'));
+});
+
 // Jshint
 gulp.task('lint', function(){
   return gulp.src([
@@ -113,7 +119,7 @@ gulp.task('lint', function(){
 // Window r.js command line fix (It conflict between r.js and r.cmd.js)
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
 // del node_modules\.bin\r.js
-gulp.task('requireJsOptimizer', ['html'], shell.task([
+gulp.task('requireJsOptimizer', ['html', 'css'], shell.task([
   // This is the command
   'r.js -o src/javascripts/build.js'
 ]));
@@ -167,12 +173,8 @@ gulp.task('test', ['lint'], function(){
 
 // Common build
 gulp.task('build', ['requireJsOptimizer'], function(){
-  // Move css file
-  gulp.src('src/css/main.min.css')
-    .pipe(gulp.dest('build/css'));
-
   // move main script file
-  gulp.src('src/javascripts/main.min.js')
+  return gulp.src('src/javascripts/main.min.js')
     .pipe(replace(/domain: '.*'/, "domain: '" + config.default.domain + "'")) // domain
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.default.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.default.nodeServer + "'")) // node server domain

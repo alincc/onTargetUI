@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            /*width: 800px;*/
+            padding: 20px;
+        }
+
+        .title-box {
+            float: left;
+            width: 60%;
+        }
+
+        .company-box {
+            float: left;
+            width: 40%;
+            margin-top: 20px;
+        }
+        .company-box p {
+            text-align: center;
+        }
+
+        .company-logo {
+            /*width: 300px;*/
+        }
+
+        .box {
+            border: solid 1px #cccccc;
+            border-radius: 3px;
+            padding: 0 10px;
+            width: 100%;
+            float: left;
+            box-sizing: border-box
+        }
+
+        .form-group {
+            float: left;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .column {
+            width: 50%;
+            float: left;
+        }
+        .label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="company-box">
+    <div class="company-logo">
+        <img src="https://wiki.maemo.org/images/thumb/d/de/Maemo.org_logo_contest_sample1_bundyo.png/300px-Maemo.org_logo_contest_sample1_bundyo.png">
+    </div>
+    <p>{{company}}</p>
+</div>
+<div class="title-box">
+    <div class="box">
+        <p>From : {{createdBy}} {{company}}</p>
+
+        <p>Date : {{createdDate}}</p>
+
+        <p>Address : {{address}}</p>
+
+        <p>Submitted to : {{username}}</p>
+
+        <p>Submitted to Company name : {{company_name}}</p>
+
+        <p>Attention : {{attention}}</p>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="box">
+        <p class="label">REQUEST FOR INFORMATION</p>
+
+        <p>Subject : {{subject}}</p>
+
+        <p>RFI #: {{RFI}}</p>
+
+        <p>Questions/concerns</p>
+        <p>{{question_or_concern}}</p>
+
+        <p>Suggestions</p>
+        <p>{{suggestion}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <input type="checkbox" {{rfi_is_a_change}}> This RFI is a change
+</div>
+{{responses}}
+<div class="form-group">
+    <div class="column"><input type="checkbox" {{}}> Open</div>
+    <div class="column"><input type="checkbox" {{}}> Closed</div>
+</div>
+</body>
+</html>

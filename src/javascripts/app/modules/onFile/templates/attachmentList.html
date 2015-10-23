@@ -1,9 +1,9 @@
-<p class="selected-file file-info" ng-repeat="file in attachments">
+<p class="selected-file file-info" ng-repeat="file in attachments" ng-if="!file.deleted">
                                 <span class="file-icon">
                                     <img ng-src="{{file.filePath | fileicon}}" alt=""/>
                                 </span>
     <a ng-click="downloadAttachment(file)" class="file-name" ng-bind="file.filePath | fileName"></a>
-                                <span class="file-remove-icon" ng-click="removeFile($index)">
+                                <span class="file-remove-icon" ng-click="removeFile(file, $index)" ng-if="!onApprove && !onView">
                                     <i class="fa fa-times"></i>
                                 </span>
 </p>

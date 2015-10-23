@@ -25,19 +25,19 @@
                                 No document
                             </td>
                         </tr>
-                        <tr ng-repeat="doc in all" ng-click="viewDocument(doc)">
+                        <tr ng-repeat="doc in all" ng-click="previewDocument(doc)">
                             <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
                             <td valign="middle" class="file-name">{{doc.name}}</td>
                             <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
                             <td valign="middle" class="file-name">{{doc.status}}</td>
                             <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
-                            <td valign="middle" class="file-name">{{}}</td>
+                            <td valign="middle" class="file-name"><span ng-repeat="s in doc.submittedTo"><span ng-bind="s.contact.firstName + ' ' + s.contact.lastName"></span><span ng-if="!$last">,&nbsp;</span></span></td>
                             <td valign="middle" class="file-name">
-                                <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.view">View</button>
-                                <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
+                                <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
+                                <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
-                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event, $index)" ng-if="doc.approve">Approve</button>
-                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event, $index)" ng-if="doc.approve">Reject</button>
+                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVED', $event, $index)" ng-if="doc.approve && haveApprovePermission">Approve</button>
+                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECTED', $event, $index)" ng-if="doc.approve && haveRejectPermission">Reject</button>
                             </td>
                         </tr>
                     </table>
@@ -71,13 +71,13 @@
                             <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
                             <td valign="middle" class="file-name">{{doc.status}}</td>
                             <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
-                            <td valign="middle" class="file-name">{{}}</td>
+                            <td valign="middle" class="file-name"><span ng-repeat="s in doc.submittedTo"><span ng-bind="s.contact.firstName + ' ' + s.contact.lastName"></span><span ng-if="!$last">,&nbsp;</span></span></td>
                             <td valign="middle" class="file-name">
                                 <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
-                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVED', $event)" ng-if="doc.approve">Approve</button>
-                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECTED', $event)" ng-if="doc.approve">Reject</button>
+                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVED', $event)" ng-if="doc.approve && haveApprovePermission">Approve</button>
+                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECTED', $event)" ng-if="doc.approve && haveRejectPermission">Reject</button>
                                 <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'CLOSED', $event)" ng-if="doc.approve && doc.documentTemplate.documentTemplateId=='3'">Close</button>
                             </td>
                         </tr>
@@ -109,16 +109,16 @@
                         <tr ng-repeat="doc in approvals"  ng-click="viewDocument(doc)">
                             <td valign="middle" class="file-name">{{doc.documentTemplate.name}}</td>
                             <td valign="middle" class="file-name">{{doc.name}}</td>
-                            <td valign="middle" class="file-name">{{doc.dueDate}}</td>
-                            <td valign="middle" class="file-name">{{doc.status | date: app.dateFormat}}</td>
+                            <td valign="middle" class="file-name">{{doc.dueDate | date: app.dateFormat}}</td>
+                            <td valign="middle" class="file-name">{{doc.status}}</td>
                             <td valign="middle" class="file-name">{{doc.creator.contact.firstName}}&nbsp;{{doc.creator.contact.lastName}}</td>
-                            <td valign="middle" class="file-name">{{}}</td>
+                            <td valign="middle" class="file-name"><span ng-repeat="s in doc.submittedTo"><span ng-bind="s.contact.firstName + ' ' + s.contact.lastName"></span><span ng-if="!$last">,&nbsp;</span></span></td>
                             <td valign="middle" class="file-name">
                                 <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="viewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
-                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVE', $event)" ng-if="doc.approve">Approve</button>
-                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECT', $event)" ng-if="doc.approve">Reject</button>
+                                <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVED', $event)" ng-if="doc.approve && haveApprovePermission">Approve</button>
+                                <button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECTED', $event)" ng-if="doc.approve && haveRejectPermission">Reject</button>
                             </td>
                         </tr>
                     </table>

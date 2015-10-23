@@ -7,241 +7,315 @@
 
     </tab>
     <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)" active="true">
+        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView||onApprove">Export PDF</button>
         <div>
             <div class="row">
                 <div class="col-md-12">
-                    <form name="_form" no-validate class="form-validation" ng-submit="submit()">
-                        <div class="form-group">
-                            <span class="form-title">Please fill out below infomation</span>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Receiver's Name</label>
-                                    <select class="form-control" name="receiverName" ng-model="purchaseOrder.keyValues.username"
-                                            ng-options="receiverName.userId as receiverName.name for receiverName in contacts" required
-                                            ng-change="getCompanyOfUser()">
-                                        <option value="">-- Select Receiver's Name --</option>
-                                    </select>
-                                    <ng-messages ng-if="_form.receiverName.$dirty"
-                                                 for="_form.receiverName.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
+                    <form name="_form" no-validate class="form-validation" ng-submit="submit(_form)">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><b>Please fill out below infomation</b></div>
+                            <div class="panel-body">
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Receiver's Name</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">{{receiverName}} &nbsp;</p>
+                                            <select class="form-control" name="receiverId"
+                                                    ng-model="purchaseOrder.keyValues.receiverId"
+                                                    ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
+                                                    required
+                                                    ng-change="getCompanyOfUser()"
+                                                    ng-if="onEdit">
+                                                <option value="">-- Select Receiver's Name --</option>
+                                            </select>
+                                            <ng-messages ng-if="_form.receiverId.$dirty"
+                                                         for="_form.receiverId.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Company Name</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.company_name}} &nbsp;</p>
+                                            <input type="text" class="form-control" placeholder="Enter Company Name"
+                                                   ng-model="purchaseOrder.keyValues.company_name"
+                                                   name="companyName" required readonly
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.companyName.$dirty"
+                                                         for="_form.companyName.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Company Name</label>
-                                    <!--<select class="form-control" name="companyName" ng-model="purchaseOrder.keyValues.company_name"
-                                            ng-options="company.companyId as company.companyName for company in companies" required>
-                                        <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
-                                    </select>-->
-                                    <input type="text" class="form-control" placeholder="Enter Company Name"
-                                           ng-model="purchaseOrder.keyValues.company_name"
-                                           name="companyName" required readonly/>
-                                    <ng-messages ng-if="_form.companyName.$dirty"
-                                                 for="_form.companyName.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>PO#</label>
-                                    <input type="text" class="form-control" placeholder="Enter PO#"
-                                           ng-model="purchaseOrder.keyValues.PO"
-                                           name="po" required/>
-                                    <!--<select class="form-control" name="po" ng-model="newDocument.po"
-                                            ng-options="po.id as po.name for po in taskSeverities" required>
-                                        <option value="">&#45;&#45; Select PO# &#45;&#45;</option>
-                                    </select>-->
-                                    <ng-messages ng-if="_form.po.$dirty"
-                                                 for="_form.po.$error">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>PO#</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.PO}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter PO#"
+                                                   ng-model="purchaseOrder.keyValues.PO"
+                                                   name="po" required
+                                                   ng-if="onEdit"/>
+                                            <!--<select class="form-control" name="po" ng-model="newDocument.po"
+                                                    ng-options="po.id as po.name for po in taskSeverities" required>
+                                                <option value="">&#45;&#45; Select PO# &#45;&#45;</option>
+                                            </select>-->
+                                            <ng-messages ng-if="_form.po.$dirty"
+                                                         for="_form.po.$error">
                                 <span class="help-block m-b-none text-danger" ng-message
                                       when="required">This is a required field.</span>
-                                    </ng-messages>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Address</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.address}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Address"
+                                                   ng-model="purchaseOrder.keyValues.address"
+                                                   name="address" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.address.$dirty"
+                                                         for="_form.address.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    <input type="text" class="form-control" placeholder="Enter Address"
-                                           ng-model="purchaseOrder.keyValues.address"
-                                           name="address" required/>
-                                    <ng-messages ng-if="_form.address.$dirty"
-                                                 for="_form.address.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>Subject</label>
+                                            <span class="pull-right">(Optional)</span>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.subject}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Subject"
+                                                   ng-model="purchaseOrder.keyValues.subject"
+                                                   name="subject"
+                                                   ng-if="onEdit"/>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label>Subject</label>
-                                    <span class="pull-right">(Optional)</span>
-                                    <input type="text" class="form-control" placeholder="Enter Subject"
-                                           ng-model="purchaseOrder.keyValues.subject"
-                                           name="subject"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Priority</label>
-                                    <select class="form-control" name="priority" ng-model="purchaseOrder.keyValues.priority"
-                                            ng-options="priority.id as priority.name for priority in priorities" required>
-                                        <option value="">-- Select Priority --</option>
-                                    </select>
-                                    <ng-messages ng-if="_form.priority.$dirty"
-                                                 for="_form.priority.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Due Date</label>
-                                    <p class="input-group">
-                                        <input type="text" class="form-control" placeholder="Enter/Select Due date" required
-                                               ng-model="purchaseOrder.dueDate"
-                                               datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
-                                               datepicker-options="dueDate.options"
-                                               datepicker-append-to-body="true" date-range
-                                               name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Priority</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.priority}}</p>
+                                            <select class="form-control" name="priority"
+                                                    ng-model="purchaseOrder.keyValues.priority"
+                                                    ng-options="priority.id as priority.name for priority in priorities"
+                                                    required
+                                                    ng-if="onEdit">
+                                                <option value="">-- Select Priority --</option>
+                                            </select>
+                                            <ng-messages ng-if="_form.priority.$dirty"
+                                                         for="_form.priority.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Due Date</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">{{purchaseOrder.dueDate|date:
+                                                app.dateFormat}}</p>
+
+                                            <p class="input-group" ng-if="onEdit">
+                                                <input type="text" class="form-control" placeholder="Enter/Select Due date"
+                                                       required
+                                                       ng-model="purchaseOrder.dueDate"
+                                                       datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
+                                                       datepicker-options="dueDate.options"
+                                                       datepicker-append-to-body="true" date-range
+                                                       name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="dueDate.open($event)"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                             </span>
-                                    </p>
-                                    <ng-messages ng-if="_form.dueDate.$dirty"
-                                                 for="_form.dueDate.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
+                                            </p>
+                                            <ng-messages ng-if="_form.dueDate.$dirty"
+                                                         for="_form.dueDate.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Shipping Method</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.shipping_method}}</p>
+                                            <select class="form-control" name="shippingMethod"
+                                                    ng-model="purchaseOrder.keyValues.shipping_method"
+                                                    ng-options="shippingMethod.id as shippingMethod.name for shippingMethod in shippingMethods"
+                                                    required
+                                                    ng-if="onEdit">
+                                                <option value="">-- Select Shipping Method --</option>
+                                            </select>
+                                            <ng-messages ng-if="_form.shippingMethod.$dirty"
+                                                         for="_form.shippingMethod.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Shipping Terms</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.shipping_terms}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Shipping Terms"
+                                                   ng-model="purchaseOrder.keyValues.shipping_terms"
+                                                   name="shippingTerms" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.shippingTerms.$dirty"
+                                                         for="_form.shippingTerms.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Shipping Method</label>
-                                    <select class="form-control" name="shippingMethod" ng-model="purchaseOrder.keyValues.shipping_method"
-                                            ng-options="shippingMethod.id as shippingMethod.name for shippingMethod in shippingMethods" required>
-                                        <option value="">-- Select Shipping Method --</option>
-                                    </select>
-                                    <ng-messages ng-if="_form.shippingMethod.$dirty"
-                                                 for="_form.shippingMethod.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><b>Please fill out the Shipping information</b></div>
+                            <div class="panel-body">
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Name</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.ship_to_name}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Name"
+                                                   ng-model="purchaseOrder.keyValues.ship_to_name"
+                                                   name="shippingName" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.shippingName.$dirty"
+                                                         for="_form.shippingName.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Company Name</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.ship_to_company}}</p>
+                                            <select class="form-control" name="shippingCompanyName"
+                                                    ng-model="purchaseOrder.keyValues.ship_to_company"
+                                                    ng-options="company.companyId as company.companyName for company in companies"
+                                                    required
+                                                    ng-if="onEdit">
+                                                <option value="">-- Select Company Name --</option>
+                                            </select>
+                                            <ng-messages ng-if="_form.shippingCompanyName.$dirty"
+                                                         for="_form.shippingCompanyName.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Shipping Terms</label>
-                                    <input type="text" class="form-control" placeholder="Enter Shipping Terms"
-                                           ng-model="purchaseOrder.keyValues.shipping_terms"
-                                           name="shippingTerms" required/>
-                                    <ng-messages ng-if="_form.shippingTerms.$dirty"
-                                                 for="_form.shippingTerms.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Address</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.ship_to_address}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Address"
+                                                   ng-model="purchaseOrder.keyValues.ship_to_address"
+                                                   name="shippingAddress" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.shippingAddress.$dirty"
+                                                         for="_form.shippingAddress.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Total PO Amount</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.total_po_amount}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Total PO Amount"
+                                                   ng-model="purchaseOrder.keyValues.total_po_amount"
+                                                   name="totalPOAmount" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.totalPOAmount.$dirty"
+                                                         for="_form.totalPOAmount.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <span class="form-title">Please fill out the Shipping information</span>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter Name"
-                                           ng-model="purchaseOrder.keyValues.ship_to_name"
-                                           name="shippingName" required/>
-                                    <ng-messages ng-if="_form.shippingName.$dirty"
-                                                 for="_form.shippingName.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Company Name</label>
-                                    <select class="form-control" name="shippingCompanyName" ng-model="purchaseOrder.keyValues.ship_to_company"
-                                            ng-options="company.companyId as company.companyName for company in companies" required>
-                                        <option value="">-- Select Company Name --</option>
-                                    </select>
-                                    <ng-messages ng-if="_form.shippingCompanyName.$dirty"
-                                                 for="_form.shippingCompanyName.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    <input type="text" class="form-control" placeholder="Enter Address"
-                                           ng-model="purchaseOrder.keyValues.ship_to_address"
-                                           name="shippingAddress" required/>
-                                    <ng-messages ng-if="_form.shippingAddress.$dirty"
-                                                 for="_form.shippingAddress.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>Total PO Amount</label>
-                                    <input type="text" class="form-control" placeholder="Enter Total PO Amount"
-                                           ng-model="purchaseOrder.keyValues.total_po_amount"
-                                           name="totalPOAmount" required/>
-                                    <ng-messages ng-if="_form.totalPOAmount.$dirty"
-                                                 for="_form.totalPOAmount.$error">
-                                        <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                    </ng-messages>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label>Notes</label>
-                                    <span class="pull-right">(Optional)</span>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>Notes</label>
+                                            <span class="pull-right">(Optional)</span>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{purchaseOrder.keyValues.notes}}</p>
                             <textarea type="text" class="form-control" placeholder="Enter Notes"
                                       ng-model="purchaseOrder.keyValues.notes"
-                                      name="notes"/>
+                                      name="notes" ng-if="onEdit"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <a class="btn btn-primary" ng-click="openUploadModal()"><i class="fa fa-cloud-upload"></i>
-                                Upload
-                            </a>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><b>Attachments</b></div>
+                            <div class="panel-body">
+                                <div class="form-group" ng-if="onEdit">
+                                    <a class="btn btn-primary" ng-click="openUploadModal('main')"><i
+                                            class="fa fa-cloud-upload"></i>
+                                        Upload
+                                    </a>
+                                </div>
+
+                                <div class="on-site-upload-document-modal form-group" attachment-list
+                                     attachments="attachments" on-edit="onEdit" on-approve="onApprove" on-view="onView">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="on-site-upload-document-modal form-group" attachment-list attachments="attachments" on-edit="onEdit">
-                        </div>
-
                         <div class="form-group">
-                            <div class="pull-right" ng-if="purchaseOrder.approve">
-                                <a ng-disabled="onSubmit"
+                            <div class="pull-right" ng-if="onApprove">
+                                <a ng-disabled="_form.$submitted"
                                    class="btn btn-primary" ng-click="updateStatus('APPROVED')">Approve
                                 </a>
-                                <a ng-disabled="onSubmit"
+                                <a ng-disabled="_form.$submitted"
                                    class="btn btn-danger" ng-click="updateStatus('REJECTED')">Reject
                                 </a>
-                                <a ng-disabled="onSubmit"
+                                <a ng-disabled="_form.$submitted"
                                    class="btn btn-primary" ui-sref="app.onFile">Cancel
                                 </a>
                             </div>
                             <button ng-disabled="_form.$invalid || _form.$submitted"
                                     loading-button="_form.$submitted"
-                                    class="btn btn-primary pull-right" type="submit" ng-if="!purchaseOrder.approve && !purchaseOrder.view">Submit
+                                    class="btn btn-primary pull-right" type="submit" ng-if="onEdit">Submit
                             </button>
                         </div>
                     </form>

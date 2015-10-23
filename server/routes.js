@@ -11,7 +11,7 @@ var boxController = require('./controllers/box');
 var dropBoxController = require('./controllers/dropBox');
 
 module.exports = function(app) {
-  app.get('/node/onfile/:type/export/:id/:userId/:projectId', onFileController.exportPdf);
+  app.post('/node/onfile/export', onFileController.exportPdf);
   app.post('/node/upload', [multipartMiddleware], uploadController.upload);
   app.post('/node/download', downloadController.download);
   app.get('/download/file', downloadFileController.downloadFile);

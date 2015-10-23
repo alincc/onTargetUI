@@ -386,127 +386,172 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
   });
 });
 
-// onFile documents
-app.post('/ontargetrs/services/documents', function(req, res) {
-  var document = req.body;
-  var recipients = [];
-  var submittedBy = req.body.submittedBy;
-  var submittedTo = _.result(_.find(document.keyValues, function(keyValue) {
-    return keyValue.key == 'username';
-  }), 'value');
-  recipients = recipients.push(submittedTo);
-
-  var attention = [];
-  attention = _.result(_.find(document.keyValues, function(keyValue) {
-    return keyValue.key == 'attention';
-  }), 'value');
-
-  if(attention.length > 0) {
-    recipients = recipients.concat(attention);
-  }
-
-  function createUpdateDocument(cb) {
+// Add onFile documents
+app.put('/ontargetrs/services/document', function(req, res) {
+  function addDocument(data) {
     request({
-        method: 'POST',
-        body: req.body,
+        method: 'PUT',
+        body: data,
         json: true,
-        url: API_SERVER + '/documents'
+        url: API_SERVER + '/document'
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
+          notifications(data);
           res.send(response.body);
-          cb();
         } else {
           res.send(error);
         }
       });
   }
 
-  function pushNotification(type) {
-    getUserDetails(submittedBy, function(user) {
-      _.each(recipients, function(el) {
-        pusher.trigger('onTarget', 'private-user-' + el, {
-          "message": getDocumentTemplateName(document.documentTemplateId) + " has been " + type + " by" + user.contact.firstName + " " + user.contact.lastName + "for your review"
-        });
-      });
-    });
-    pusher.trigger('onTarget', 'private-user-' + submittedBy, {
-      "message": "You has been " + type + " " + getDocumentTemplateName(document.documentTemplateId)
-    });
+  function notifications(data) {
+    switch(data.documentTemplateId) {
+      case "1":
+        poNotification(data);
+        break;
+      case "2":
+        coNotification(data);
+        break;
+      case "3":
+        rfiNotification(data);
+        break;
+      case "4":
+        trNotification(data);
+        break;
+    }
   }
 
-  if(document.documentId) {
-    //update document
-    createUpdateDocument(function() {
-      pushNotification('submitted')
-    });
-  } else {
-    //create new Document
-    createUpdateDocument(function() {
-      pushNotification('updated');
-    });
+  function coNotification(data) {
+    var receiver = data.assignees[0];
+    if(receiver) {
+      getUserDetails(data.submittedBy, function(user) {
+        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+          "message": "Change Order has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
+        });
+      });
+    }
   }
+
+  function rfiNotification(data) {
+    var receiver = data.assignees[0];
+    if(receiver) {
+      getUserDetails(data.submittedBy, function(user) {
+        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+          "message": "RFI has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
+        });
+      });
+    }
+  }
+
+  function poNotification(data) {
+    var receiver = data.assignees[0];
+    if(receiver) {
+      getUserDetails(data.submittedBy, function(user) {
+        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+          "message": "PO has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
+        });
+      });
+    }
+  }
+
+  function trNotification(data) {
+    var receiver = data.assignees[0];
+    if(receiver) {
+      getUserDetails(data.submittedBy, function(user) {
+        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+          "message": "Transmittal has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
+        });
+      });
+    }
+  }
+
+  addDocument(req.body);
 });
 
 // Update document status
-app.post('/ontargetrs/services/documents/status', function(req, res) {
-  var newStatus = req.body.newStatus;
-  var documentId = req.body.documentId;
+app.post('/ontargetrs/services/document/status', function(req, res) {
   var baseRequest = req.body.baseRequest;
+  var data = req.body;
 
-  function updateStatus(cb) {
+  function updateStatus(data) {
     request({
         method: 'POST',
-        body: req.body,
+        body: data,
         json: true,
-        url: API_SERVER + '/documents/status'
+        url: API_SERVER + '/document/status'
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
+          pushNotification(data);
           res.send(response.body);
-          cb();
         } else {
           res.send(error);
         }
       });
   }
 
-  function pushNotification() {
-    getDocument(function(document) {
-      var recipients = [];
-      var documentTemplateId = document.documentTemplate.documentTemplateId;
-      var submittedBy = document.createdBy;
-      recipients.push(submittedBy);
-      var submittedTo = _.result(_.find(document.keyValues, function(keyValue) {
-        return keyValue.key == 'username';
-      }), 'value');
+  function getProjectMembers(projectId, cb) {
+    request({
+        method: 'POST',
+        body: {baseRequest: baseRequest, projectId: projectId},
+        json: true,
+        url: API_SERVER + '/project/getProjectMembers'
+      },
+      function(error, response, body) {
+        if(!error && response.statusCode == 200) {
+          cb(response.body);
+        }
+      });
+  }
 
-      recipients = recipients.push(submittedTo);
-
-      var attention = [];
-      attention = _.result(_.find(document.keyValues, function(keyValue) {
-        return keyValue.key == 'attention';
-      }), 'value');
-      if(attention.length > 0) {
-        recipients = recipients.concat(attention);
-      }
-
+  function pushNotification(data) {
+    console.log(data);
+    getDocument(data.documentId, function(document) {
       getUserDetails(baseRequest.loggedInUserId, function(user) {
-        _.each(recipients, function(el) {
-          pusher.trigger('onTarget', 'private-user-' + el, {
-            "message": user.contact.firstName + ' ' + user.contact.lastName + " has " + newStatus.toLowerCase() + "the " + getDocumentTemplateName(documentTemplateId)
-          });
-        });
+        var actionText = data.newStatus === 'APPROVE' ? 'Approved' : 'Rejected';
+
+        switch(document.documentTemplate.documentTemplateId) {
+          case 1:
+            pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
+              "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the PO"
+            });
+            break;
+          case 2:
+            pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
+              "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the Change Order"
+            });
+            break;
+          case 3:
+            //pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
+            //  "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the RFI"
+            //});
+            //var userAttentions = [];
+            //for(var obj in document.keyValues){
+            //  if(document.keyValues.hasOwnProperty(obj) && /^attention\d+/.test(obj)){
+            //    userAttentions.push(document.keyValues[obj]);
+            //    pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
+            //      "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the RFI"
+            //    });
+            //  }
+            //}
+            break;
+          case 4:
+            pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
+              "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the Transmittal"
+            });
+            break;
+        }
       });
     });
   }
 
-  function getDocument(cb) {
+  function getDocument(documentId, cb) {
     request({
         method: 'POST',
-        body: {baseRequest: baseRequest, documentId: documentId},
+        body: {baseRequest: baseRequest, dcoumentId: documentId},
         json: true,
-        url: API_SERVER + '/documents/getDocument'
+        url: API_SERVER + '/document/getDocument'
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
@@ -515,9 +560,79 @@ app.post('/ontargetrs/services/documents/status', function(req, res) {
       });
   }
 
-  updateStatus(function() {
-    pushNotification();
-  });
+  updateStatus(data);
+});
+
+// Add RFI Response
+app.put('/ontargetrs/services/document/response/save', function(req, res) {
+  var data = req.body;
+  var baseRequest = req.body.baseRequest;
+
+  function addResponse(data) {
+    request({
+        method: 'PUT',
+        body: req.body,
+        json: true,
+        url: API_SERVER + '/document/response/save'
+      },
+      function(error, response, body) {
+        if(!error && response.statusCode == 200) {
+          notifications(data);
+          res.send(response.body);
+        } else {
+          res.send(error);
+        }
+      });
+  }
+
+  function getDocument(documentId, cb) {
+    request({
+        method: 'POST',
+        body: {baseRequest: baseRequest, dcoumentId: documentId},
+        json: true,
+        url: API_SERVER + '/document/getDocument'
+      },
+      function(error, response, body) {
+        if(!error && response.statusCode == 200) {
+          cb(response.body.document);
+        }
+      });
+  }
+
+  function notifications(data) {
+    getDocument(data.documentId, function(document) {
+      var parsedKeyValues = {}, attention = [];
+      _.each(document.keyValues, function(el) {
+        if(/^attention\d+/.test(el.key)) {
+          attention.push(el.key);
+        } else {
+          var value = el.value;
+          if(el.key === 'date_created' || el.key === 'date' || el.key === 'received_by_date' || el.key === 'sent_by_date' || el.key === 'due_by_date') {
+            value = new Date(el.value);
+          }
+          parsedKeyValues[el.key] = value;
+        }
+      });
+      parsedKeyValues['attention'] = attention;
+
+      getUserDetails(baseRequest.loggedInUserId, function(user) {
+        if(parsedKeyValues.receiverId) {
+          attention.push(parsedKeyValues.receiverId);
+        }
+        else if(parsedKeyValues.username) {
+          attention.push(parsedKeyValues.username);
+        }
+
+        _.each(attention, function(el) {
+          pusher.trigger('onTarget', 'private-user-' + el, {
+            "message": user.contact.firstName + " " + user.contact.lastName + " has replied to the RFI"
+          });
+        });
+      });
+    });
+  }
+
+  addResponse(data);
 });
 
 app.put('/ontargetrs/services*', function(req, res) {

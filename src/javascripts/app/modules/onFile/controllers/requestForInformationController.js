@@ -1,33 +1,52 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', 'fileFactory', '$timeout', '$q', '$modal',
-    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal) {
-      var document = $rootScope.onFileDocument;
+  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', 'fileFactory', '$timeout', '$q', '$modal', '$window', '$filter', 'document',
+    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal, $window, $filter, document) {
+
       $scope.document = {
         keyValues: {}
       };
       $scope.attachments = [];
       $scope.isAddingResponse = false;
-      var documentId = '';
 
-      if(document) {
-        console.log(document);
-        var attention = [];
-        for(var prop in document.keyValues) {
-          if(document.keyValues.hasOwnProperty(prop) && /^attention\d+/.test(prop)) {
-            attention.push(document.keyValues[prop]);
+      //user action : view, edit, create, approve
+      var getUserAction = function(document) {
+        if(document.createdBy === userContext.authentication().userData.userId) {
+          if(document.status === 'SUBMITTED') {
+            $scope.onEdit = true;
+          } else {
+            $scope.onView = true;
+          }
+        } else {
+          if(document.status === 'SUBMITTED') {
+            $scope.onApprove = true;
+          } else {
+            $scope.onView = true;
           }
         }
+      };
+
+      if(document) {
+        getUserAction(document);
+        var attention = [];
+        angular.forEach(document.keyValues, function(value, key) {
+          if(/^attention\d+/.test(key)) {
+            attention.push(parseInt(value));
+            delete document.keyValues[key];
+          }
+        });
 
         $scope.document = document;
         $scope.documentId = document.documentId;
         $scope.document.dueDate = new Date($scope.document.dueDate);
         $scope.submittal = document.submittal;
         $scope.approval = document.approval;
-        $scope.onEdit = true;
+        // $scope.onEdit = true;
         $scope.newResponse = {};
         $scope.document.keyValues.attention = attention;
+      } else {
+        $scope.onAddNew = true;
       }
 
       $scope.dueDate = {
@@ -45,6 +64,7 @@ define(function(require) {
       $scope.contacts = [];
       $scope.attentions = [];
       $scope.contactNameList = [];
+      $scope.attentionPersons = [];
 
       $scope.newDocument = {
         "projectId": $rootScope.currentProjectInfo.projectId,
@@ -93,12 +113,36 @@ define(function(require) {
             var memberList = content.projectMemberList;
             $scope.contacts = [];
             $scope.contactLists = memberList || [];
-            angular.forEach(memberList, function(projectMember, key) {
-              var fullName = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
-              $scope.contacts.push({userId: projectMember.userId.toString(), name: fullName});
-              $scope.contactNameList.push({userId: projectMember.userId.toString(), name: fullName});
+            $scope.attentionName = '';
+
+            if(document) {
+              // Get receiver name
+              if(document.keyValues.receiverId) {
+                var receiver = _.find(memberList, {userId: document.keyValues.receiverId});
+                if(receiver) {
+                  $scope.receiverName = receiver.contact.firstName + ' ' + receiver.contact.lastName;
+                }
+              }
+
+              // Make attention list
+              $scope.attentionPersons = _.map(_.where(document.keyValues.attention, function(el) {
+                return _.find(memberList, {userId: el});
+              }), function(el) {
+                var obj = _.find(memberList, {userId: el});
+                return obj;
+              });
+            }
+
+            // Make contact list
+            $scope.contacts = _.map(memberList, function(el) {
+              return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
+            });
+
+            $scope.contactNameList = _.map(memberList, function(el) {
+              return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
             });
           });
+
         if($scope.document.documentId) {
           $scope.getResponse();
         }
@@ -108,68 +152,89 @@ define(function(require) {
         }
       };
 
-      $scope.submit = function() {
+      $scope.submit = function(form) {
         $scope.document.keyValues.rfi_is_a_change = $scope.document.keyValues.rfi_is_a_change || 'NO';
         var newDocumentFormattedKeyValues = [];
-
         angular.forEach($scope.document.keyValues, function(value, key) {
-          var keyValuePair = {
-            "key": key,
-            "value": value/*,
-             "createdBy" : $scope.newDocument.submittedBy,
-             "createdDate" : new Date()*/
-          };
-          this.push(keyValuePair);
+          var $this = this;
+          if(key === 'attention') {
+            _.each(value, function(el, idx) {
+              $this.push({
+                "key": 'attention' + idx,
+                "value": el
+              });
+            });
+          } else {
+            var keyValuePair = {
+              "key": key,
+              "value": value/*,
+               "createdBy" : $scope.newDocument.submittedBy,
+               "createdDate" : new Date()*/
+            };
+            this.push(keyValuePair);
+          }
         }, newDocumentFormattedKeyValues);
         $scope.newDocument.keyValues = newDocumentFormattedKeyValues;
 
         //add submittedTo user to assignees
         $scope.newDocument.assignees = [
           {
-            "userId": $scope.document.keyValues.username,
+            "userId": $scope.document.keyValues.receiverId,
             "username": null
           }
         ];
 
         $scope.newDocument.dueDate = $scope.document.dueDate;
 
+        function done(exp, form) {
+          if(exp) {
+            $scope.exportPdf().
+              then(function() {
+                $state.go('app.onFile');
+                $scope.onSubmit = false;
+                form.$setPristine();
+              });
+          } else {
+            $state.go('app.onFile');
+            $scope.onSubmit = false;
+            form.$setPristine();
+          }
+        }
+
         if($scope.document.documentId) {
           onFileFactory.updateDocument($scope.newDocument)
             .success(function(resp) {
-              $scope.documentId = resp.document.documentId;
               var promises = [];
               if($scope.attachments.length > 0) {
                 _.each($scope.attachments, function(file) {
                   if(!file.uploaded) {
-                    promises.push(saveDocumentInfo(file));
+                    promises.push($scope.saveDocumentInfo(file));
+                  } else if(file.deleted) {
+                    promises.push($scope.deleteAttachment(file));
                   }
                 });
 
                 $q.all(promises).then(function(values) {
-                  $state.go('app.onFile');
-                  $scope.onSubmit = false;
-                  $scope._form.$setPristine();
+                  done(true, form);
                 }, function(errors) {
-                  $state.go('app.onFile');
+                  done(true, form);
                   console.log(errors);
-                  $scope.onSubmit = false;
-                  $scope._form.$setPristine();
                 });
               } else {
-                $state.go('app.onFile');
-                $scope.onSubmit = false;
-                $scope._form.$setPristine();
+                done(true, form);
               }
             })
             .error(function(err) {
               console.log(err);
               $scope.onSubmit = false;
-              $scope._form.$setPristine();
-            }).finally(function() {
-              $scope._form.$setPristine();
+              form.$setPristine();
             });
         }
         else {
+          $scope.newDocument.keyValues.push({
+            "key": "date_created",
+            "value": new Date().toISOString()
+          });
           onFileFactory.addNewDocument($scope.newDocument)
             .success(function(resp) {
               $scope.documentId = resp.document.documentId;
@@ -177,50 +242,42 @@ define(function(require) {
               if($scope.attachments.length > 0) {
                 _.each($scope.attachments, function(file) {
                   if(!file.uploaded) {
-                    promises.push(saveDocumentInfo(file));
+                    promises.push($scope.saveDocumentInfo(file));
                   }
                 });
 
                 $q.all(promises).then(function(values) {
-                  $state.go('app.onFile');
-                  $scope.onSubmit = false;
-                  $scope._form.$setPristine();
+                  done(false, form);
                 }, function(errors) {
-                  $state.go('app.onFile');
-                  $scope.onSubmit = false;
-                  $scope._form.$setPristine();
+                  done(false, form);
                   console.log(errors);
                 });
               } else {
-                $state.go('app.onFile');
-                $scope.onSubmit = false;
-                $scope._form.$setPristine();
+                done(false, form);
               }
             })
             .error(function(err) {
               console.log(err);
               $scope.onSubmit = false;
-              $scope._form.$setPristine();
-            }).finally(function() {
-              $scope._form.$setPristine();
+              form.$setPristine();
             });
         }
       };
 
-      $scope.addResponse = function() {
+      $scope.addResponse = function(form) {
         $scope.isAddingResponse = true;
         onFileFactory.addResponse($scope.newResponse.response, $scope.document.documentId).success(
           function(resp) {
             //$state.go('app.onFile');
             var promises = [];
             _.each($scope.newResponse.attachments, function(file) {
-              promises.push(saveDocumentInfo(file));
+              promises.push($scope.saveDocumentInfo(file));
             });
 
             function done() {
               $scope.getResponse();
               $scope.newResponse = {};
-              $scope._form._response_form.$setPristine();
+              form.$setPristine();
               $scope.isAddingResponse = false;
               loadDocumentAttachments(true);
             }
@@ -233,7 +290,7 @@ define(function(require) {
 
           }, function(err) {
             console.log(err);
-            $scope._form._response_form.$setPristine();
+            form.$setPristine();
             $scope.isAddingResponse = false;
           });
       };
@@ -263,7 +320,7 @@ define(function(require) {
 
       $scope.getCompanyOfUser = function() {
         $scope.document.keyValues.company_name = _.result(_.find($scope.contactLists, function(contact) {
-          return contact.userId.toString() === $scope.document.keyValues.username;
+          return contact.userId === $scope.document.keyValues.receiverId;
         }), 'companyName');
 
         removeUserSelected();
@@ -274,12 +331,12 @@ define(function(require) {
         $scope.contactNameList = [];
         angular.forEach($scope.contactLists, function(projectMember, key) {
           var fullName = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
-          if(projectMember.userId.toString() !== $scope.document.keyValues.username) {
+          if(projectMember.userId.toString() !== $scope.document.keyValues.receiverId) {
             $scope.contactNameList.push({userId: projectMember.userId.toString(), name: fullName});
           }
         });
         _.remove($scope.document.keyValues.attention, function(attention) {
-          return attention.userId.toString() === $scope.document.keyValues.username;
+          return attention.userId.toString() === $scope.document.keyValues.receiverId;
         });
       };
 
@@ -314,7 +371,7 @@ define(function(require) {
         });
       };
 
-      var saveDocumentInfo = function(file) {
+      $scope.saveDocumentInfo = function(file) {
         console.log('Save file', file);
         var deferred = $q.defer();
         fileFactory.move(file.filePath, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'onfile')
@@ -331,6 +388,32 @@ define(function(require) {
               });
           }).error(function(error) {
             deferred.reject(error);
+          });
+        return deferred.promise;
+      };
+
+      $scope.deleteAttachment = function(file) {
+        return onFileFactory.deleteAttachment(file.documentAttachmentId);
+      };
+
+      $scope.exportPdf = function(download) {
+        var deferred = $q.defer();
+        var data = {
+          document: angular.copy($scope.document),
+          projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName
+        };
+        data.document.keyValues.receiverName = $scope.receiverName;
+        data.document.responseData = $scope.responses;
+        data.document.attentionName = $scope.attentionName;
+        onFileFactory.exportPdf(data)
+          .success(function(resp) {
+            if(download) {
+              $window.open($filter('fileDownloadPathHash')(resp.filePath));
+            }
+            deferred.resolve();
+          })
+          .error(function(err) {
+            deferred.resolve();
           });
         return deferred.promise;
       };

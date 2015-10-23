@@ -1,7 +1,7 @@
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state', '$timeout',
-    function($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state, $timeout) {
+  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state', 'permissionFactory',
+    function($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state, permissionFactory) {
       $scope.app = appConstant.app;
       $scope.isLoading = true;
       $scope.approvals = [];
@@ -95,8 +95,7 @@ define(function() {
             //var document = doc;
 
             var keyValues = transformKeyValues(document.keyValues);
-            console.log(keyValues);
-            if(document.gridKeyValues.length > 0) {
+            if(document.gridKeyValues && document.gridKeyValues.length > 0) {
               document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
             }
 
@@ -106,7 +105,7 @@ define(function() {
              } else if (status === 'approval') {
              document.approval = true;
              }*/
-            document.approve = doc.status === 'APPROVE';
+            document.approve = doc.status === 'APPROVED';
             document.edit = doc.edit;
             document.view = doc.view;
 
@@ -136,8 +135,18 @@ define(function() {
         }
       };
 
+      $scope.haveApprovePermission = permissionFactory.checkFeaturePermission('ONFILE_APPROVE');
+      $scope.haveRejectPermission = permissionFactory.checkFeaturePermission('ONFILE_REJECT');
+      $scope.haveViewPermission = permissionFactory.checkFeaturePermission('ONFILE_VIEW');
+
       $scope.changeStatus = function(doc, status, $event, idx) {
         $event.stopImmediatePropagation();
+        if(status === 'APPROVED' && !$scope.haveApprovePermission) {
+          return;
+        }
+        if(status === 'REJECTED' && !$scope.haveRejectPermission) {
+          return;
+        }
         onFileFactory.updateStatus(doc.documentId, status, userContext.authentication().userData.userId)
           .success(function(resp) {
             doc.approve = false;

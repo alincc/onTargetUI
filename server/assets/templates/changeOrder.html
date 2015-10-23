@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .title-box {
+            float: left;
+            width: 60%;
+        }
+
+        .company-box {
+            float: left;
+            width: 40%;
+            margin-top: 20px;
+        }
+        .company-box p {
+            text-align: center;
+        }
+
+        .company-logo {
+            /*width: 300px;*/
+        }
+
+        .box {
+            border: solid 1px #cccccc;
+            border-radius: 3px;
+            padding: 0 10px;
+            width: 100%;
+            float: left;
+            box-sizing: border-box
+        }
+
+        .form-group {
+            float: left;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .column {
+            width: 50%;
+            float: left;
+        }
+        .label {
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<div class="company-box">
+    <div class="company-logo">
+        <img src="https://wiki.maemo.org/images/thumb/d/de/Maemo.org_logo_contest_sample1_bundyo.png/300px-Maemo.org_logo_contest_sample1_bundyo.png">
+    </div>
+    <p>{{company}}</p>
+</div>
+<div class="title-box">
+    <div class="box">
+        <p>From : {{username}} {{company_name}}</p>
+
+        <p>Date : {{createdDate}}</p>
+
+        <p>Address : {{address}}</p>
+
+        <p>Submitted to : {{username}}</p>
+
+        <p>Submitted to Company name : {{company_name}}</p>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="box">
+        <p class="label">CHANGE ORDER</p>
+
+        <p>Subject : {{subject}}</p>
+
+        <p>Change Order #: {{co}}</p>
+
+        <p>Location : {{location}}</p>
+
+        <p>Due Date : {{dueDate}}</p>
+
+        <p>Description of Scope : {{description}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Project Information Details</p>
+
+    <div class="box">
+        <p class="column label">Contract number : {{contract_no}}</p>
+        <p class="column label">Date Created : {{date_created}}</p>
+        <p class="column label">Contract Title : {{contract_title}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Change Order Details</p>
+    <div class="box">
+        <p class="column label">Priority : {{priority}}</p>
+        <p class="column label">Discipline : {{discipline}}</p>
+        <p class="column label">Category : {{category}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Impact</p>
+    <div class="box">
+        <p class="column label">Schedule Impact : {{schedule_impact}}</p>
+        <p class="column label">Cost Impact : {{cost_impact}}</p>
+        <p class="column label">Time Impact : {{time_impact}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Contract Document Details</p>
+    <div class="box">
+        <p class="column label">Specification Section : {{specification}}</p>
+        <p class="column label">Drawing No : {{drawing}}</p>
+        <p class="column label">Cost Code : {{cost_code}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Change Description</p>
+
+    <table>
+        <tr>
+            <th>Description</th>
+            <th>Cost Code</th>
+            <th>Amount</th>
+        </tr>
+        {{gridKeyValues}}
+    </table>
+    <p class="label">Total : {{amount}}</p>
+</div>
+<div class="form-group">
+    <p class="label">Approved by {{approvedBy}}. Date : {{approvedDate}}</p>
+
+    <p class="label">Attachments - {{attachments}}</p>
+</div>
+</body>
+</html>
