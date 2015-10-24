@@ -20637,8 +20637,8 @@ a.text-black:hover {
 .ontarget-page .project-date .percentage p.small {
   font-size: 12px;
 }
-.on-file-page .panel-heading {
-  padding: 0px;
+.on-file-page {
+  position: relative;
 }
 .on-file-page .panel-heading .nav {
   margin: 0px;
@@ -20667,9 +20667,16 @@ a.text-black:hover {
   color: #4984b8 !important;
   background: none;
 }
-.on-file-page .grid-key {
+.on-file-page .panel-body {
   padding: 15px;
   padding-bottom: 0px;
+}
+.on-file-page .panel-body .btn-group {
+  margin-top: 23px;
+}
+.on-file-page .panel-body .btn-group .btn-remove {
+  margin: 4px 0 10px 0;
+  float: right;
 }
 .on-file-page .cost-grid {
   margin-bottom: 10px;
@@ -20712,6 +20719,16 @@ a.text-black:hover {
 }
 .on-file-page .nav-tabs li a {
   color: #58666e;
+}
+.on-file-page .button-export {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+.on-file-page .text-field {
+  border: solid 1px #cfdadd;
+  border-radius: 2px;
+  padding: 5px 10px;
 }
 .activity-section .panel {
   border-radius: 5px;
