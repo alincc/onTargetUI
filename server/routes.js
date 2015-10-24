@@ -9,6 +9,8 @@ var moveController = require('./controllers/move');
 var googleDriveController = require('./controllers/googleDrive');
 var boxController = require('./controllers/box');
 var dropBoxController = require('./controllers/dropBox');
+var fileController = require('./controllers/file');
+var onSiteController = require('./controllers/onSite');
 
 module.exports = function(app) {
   app.post('/node/onfile/export', onFileController.exportPdf);
@@ -20,4 +22,8 @@ module.exports = function(app) {
   app.get('/node/files/googledrive', googleDriveController.googleDrive);
   app.get('/node/files/box', boxController.box);
   app.get('/node/files/dropbox', dropBoxController.dropBox);
+  app.post('/node/file/info', fileController.fileInfo);
+  app.post('/node/file/getPdfImage', fileController.pdfImage);
+  app.post('/node/file/convertPdfToImage', fileController.convertPdfToImage);
+  app.post('/node/onsite/exportPdf', onSiteController.exportPdf);
 };

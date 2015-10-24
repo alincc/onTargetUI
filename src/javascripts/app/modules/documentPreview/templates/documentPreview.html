@@ -1,15 +1,15 @@
 <div class="on-site-page">
-    <div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="hbox hbox-auto-xs hbox-auto-sm header-title">
         <!-- main header -->
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
                     <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onSite'">
-                    onSITE
-                    <button class="btn btn-default pull-right" ng-click="backToList()"><i
-                            class="fa fa-arrow-left"></i> Back to list
-                    </button>
-                </h1>
+                        onSITE
+                        <button class="btn btn-default pull-right" ng-click="backToList()"><i
+                                class="fa fa-arrow-left"></i> Back to list
+                        </button>
+                    </h1>
                     <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onTime'">
                         onTIME
                         <button class="btn btn-default pull-right" ng-click="backToAttachments()"><i
@@ -21,22 +21,40 @@
         </div>
         <div class="wrapper-md p-r-none" permission="ONSITE_VIEW">
             <div class="row">
-                <div class="col-xs-12 preview-section" ng-class="{'col-md-8 p-r-0': onAction == 'onSite', 'col-md-12': onAction == 'onTime'}">
+                <div class="col-xs-12 preview-section"
+                     ng-class="{'col-md-8 p-r-0': onAction == 'onSite', 'col-md-12': onAction == 'onTime'}">
                     <div class="panel panel-default">
-                        <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
-                        <div class="panel-body">
-                            <iframe
-                                    ng-src="{{selectedDoc.previewPath}}"
-                                    frameborder="0" ng-if="!selectedDoc.isImage">
-                            </iframe>
-                            <div class="image-preview-wrapper"
-                                 ng-if="selectedDoc.isImage">
-                                <img class="image-size wrapper-xs" ng-src="{{selectedDoc.previewPath}}">
+                        <form name="_form" novalidate ng-submit="saveDoc(selectedDoc)">
+                            <div class="panel-heading">
+                                <span ng-bind="selectedDoc.name | fileName"></span>
+                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="cancelEdit()"
+                                        ng-show="showDocPreview">Cancel
+                                </button>
+                                <span class="spliter pull-right"></span>
+                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="editDoc(selectedDoc)"
+                                        ng-show="!showDocPreview">Edit
+                                </button>
+                                <button class="btn btn-info btn-xs pull-right m-r-xs"
+                                        ng-show="showDocPreview"
+                                        type="submit" size="xs"
+                                        ng-disabled="_form.$submitted"
+                                        loading-button="_form.$submitted">Done
+                                </button>
                             </div>
-                        </div>
+                            <div class="panel-body" ng-if="showDocPreview">
+                                <pdf-tagging-mark-up path="{{selectedDoc.name}}"
+                                                     image-path="{[selectedDoc.filePath}}"
+                                                     selected-doc="selectedDoc"></pdf-tagging-mark-up>
+                            </div>
+                            <div class="panel-body" ng-if="!showDocPreview">
+                                <pdf-viewer src="{{trustSrc(selectedDoc.filePath)}}" ng-if="isPdf"></pdf-viewer>
+                                <img ng-if="!isPdf" ng-src="{{selectedDoc.filePath}}"/>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT" ng-if="onAction == 'onSite'">
+                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT"
+                     ng-if="onAction == 'onSite'">
                     <div class="panel panel-default">
                         <div class="panel-heading">Comments</div>
                         <div class="panel-body" custom-scroll>
@@ -59,7 +77,8 @@
                                             said:
                                         </div>
                                         <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
-                                        <small class="text-muted" ng-bind-html="com.comment | escapeHtml | newLines"></small>
+                                        <small class="text-muted"
+                                               ng-bind-html="com.comment | escapeHtml | newLines"></small>
                                     </div>
                                 </li>
                             </ul>

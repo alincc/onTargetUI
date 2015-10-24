@@ -145,6 +145,7 @@ define(function(require) {
     baseUrl: 'http://localhost:9000',
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'http://localhost:9001',
+    bimServer: 'http://localhost:9000/bim',
     app: {
       name: "OnTarget",
       id: "OnTarget",
@@ -198,8 +199,7 @@ define(function(require) {
         '#FDB45C', // yellow
         '#949FB1', // grey
         '#4D5360'  // dark grey
-      ],
-      salt: 'onTargetDPHK'
+      ]
     },
     openWeatherMap: {
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'

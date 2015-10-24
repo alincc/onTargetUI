@@ -22,6 +22,7 @@ var port = myArgs[1] || 3214;
 //var cors = require('cors');
 var app = express();
 var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrs/services';
+var BIM_SERVER = 'http://216.14.121.204:8080';
 
 // Config
 app.set('port', port);
@@ -635,6 +636,7 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
   addResponse(data);
 });
 
+// onTarget services
 app.put('/ontargetrs/services*', function(req, res) {
   //var r = request.post({headers: req.headers, uri: API_SERVER + req.params[0], json: req.body});
   //req.pipe(r).pipe(res);
@@ -681,6 +683,46 @@ app.post('/ontargetrs/services*', function(req, res) {
 
 app.get('/ontargetrs/services*', function(req, res) {
   var url = API_SERVER + req.params[0];
+  if(qs.stringify(req.query) !== "") {
+    url += '?' + qs.stringify(req.query);
+  }
+  console.log('GET request: ', url);
+  req.pipe(request({
+    url: url,
+    method: 'GET'//,
+    //headers: req.headers
+  }, function(error, response, body) {
+    if(error && error.code === 'ECONNREFUSED') {
+      console.error('Refused connection');
+    } else {
+      throw error;
+    }
+  })).pipe(res);
+});
+
+// onTarget BIM proxies
+app.post('/bim*', function(req, res) {
+  var url = BIM_SERVER + req.params[0];
+  if(qs.stringify(req.query) !== "") {
+    url += '?' + qs.stringify(req.query);
+  }
+  console.log(BIM_SERVER + req.params[0]);
+  req.pipe(request({
+    url: url,
+    method: req.method,
+    json: req.body//,
+    //headers: req.headers
+  }, function(error, response, body) {
+    if(error && error.code === 'ECONNREFUSED') {
+      console.error('Refused connection');
+    } else {
+      throw error;
+    }
+  }), {end: false}).pipe(res);
+});
+
+app.get('/bim*', function(req, res) {
+  var url = BIM_SERVER + req.params[0];
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }

@@ -22,6 +22,7 @@ define(function (require){
     changePassword: require('./changePassword/changePassword'),
     notification: require('./notifications/notifications'),
     documentPreview: require('./documentPreview/documentPreview'),
-    onFile: require('./onFile/onFile')
+    onFile: require('./onFile/onFile'),
+    onBim: require('./onBim/onBim')
   };
 });

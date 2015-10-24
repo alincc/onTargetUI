@@ -62,9 +62,12 @@ require.config({
     jPlotToolTip: '../bower_components/flot.tooltip/js/jquery.flot.tooltip',
     jPlotOrderBar: '../bower_components/flot.orderbars/js/jquery.flot.orderBars',
     jPlotSpline: '../bower_components/flot-spline/js/jquery.flot.spline',
-    cryptorJs: '../bower_components/crypto-js/crypto-js',
     spin: '../js/ladda/js/spin',
     ladda: '../js/ladda/js/ladda',
+    leaflet: '../bower_components/leaflet/dist/leaflet-src',
+    leafletDraw: '../bower_components/leaflet.draw/dist/leaflet.draw',
+    leafletFullScreen: '../bower_components/leaflet.fullscreen/Control.FullScreen',
+    cryptorJs: '../bower_components/crypto-js/crypto-js',
     angularChart: '../bower_components/angular-chart.js/dist/angular-chart',
     chartjs: '../bower_components/Chart.js/Chart'
   },
@@ -181,6 +184,12 @@ require.config({
     },
     "pushAngular": {
       deps: ['pusher', 'angular']
+    },
+    "leafletDraw": {
+      deps: ['leaflet']
+    },
+    "leafletFullScreen": {
+      deps: ['leaflet']
     },
     "angularChart": {
       deps: ['angular', 'chartjs']

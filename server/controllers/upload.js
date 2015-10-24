@@ -23,7 +23,7 @@ function uploadFile(req, res) {
     responseData = {
       success: false
     };
-  fileName = req.body.fileName;
+  fileName = req.body.fileName.replace(/\s/g,'_');
 
   file.name = fileName;
 

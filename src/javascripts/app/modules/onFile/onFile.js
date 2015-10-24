@@ -26,10 +26,11 @@ define(function(require) {
     companyServiceModule = require('app/common/services/company'),
     contactServiceModule = require('app/common/services/onContact'),
     fileServiceModule = require('app/common/services/file'),
+    uploadBoxModule = require('app/common/directives/uploadBox/uploadBox'),
     userContext = require('app/common/context/user'),
     documentServiceModule = require('app/common/services/document'),
     angularUiSelect = require('angularUiSelect');
-  var module = angular.module('app.onFile', ['ui.router', 'app.config', 'common.context.project', 'common.services.permission', 'common.services.notifications', 'common.services.task', 'common.services.onFile', 'common.services.company', 'common.services.onContact', 'common.services.file', 'common.services.document', 'ui.select']);
+  var module = angular.module('app.onFile', ['ui.router', 'app.config', 'common.context.project', 'common.services.permission', 'common.services.notifications', 'common.services.task', 'common.services.onFile', 'common.services.company', 'common.services.onContact', 'common.services.file', 'common.services.document', 'ui.select', 'common.directives.uploadBox']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onFile/templates/onFile.html', template);
@@ -62,7 +63,8 @@ define(function(require) {
             controller: 'OnFileController',
             reloadOnSearch: false,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory) {
+              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory',
+                function($location, projectContext, $q, $state, $window, permissionFactory) {
                 var deferred = $q.defer();
                 if(projectContext.valid() && permissionFactory.checkMenuPermission('ONFILE')) {
                   deferred.resolve();
@@ -147,7 +149,8 @@ define(function(require) {
             controller: 'PurchaseOrderController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
+              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams',
+                function($location, $q, $state, $window, onFileFactory, $stateParams) {
                 var deferred = $q.defer();
 
                 //parse key values
@@ -216,7 +219,8 @@ define(function(require) {
             controller: 'RequestForInformationController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
+              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams',
+                function($location, $q, $state, $window, onFileFactory, $stateParams) {
                 var deferred = $q.defer();
 
                 //parse key values
@@ -276,6 +280,18 @@ define(function(require) {
                     });
                 }
                 return deferred.promise;
+              }],
+              contactList: ['onContactFactory', '$rootScope', '$q',
+                function(onContactFactory, $rootScope, $q) {
+                var deferred = $q.defer();
+                onContactFactory.getContactList($rootScope.currentProjectInfo.projectId, $rootScope.currentUserInfo.userId)
+                  .success(function(content) {
+                    deferred.resolve(content.projectMemberList);
+                  })
+                  .error(function(content) {
+                    deferred.resolve([]);
+                  });
+                return deferred.promise;
               }]
             }
           })
@@ -285,7 +301,8 @@ define(function(require) {
             controller: 'TransmittalController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
+              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams',
+                function($location, $q, $state, $window, onFileFactory, $stateParams) {
                 var deferred = $q.defer();
 
                 //parse key values

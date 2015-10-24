@@ -1,0 +1,234 @@
+{
+   "type" : "getBIMResponse",
+   "authenticated" : false,
+   "projectId" : 42,
+   "poids" : [ {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:25:29-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 13
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:27:16-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 14
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:28:32-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 15
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:31:47-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 16
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:37:13-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 17
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:41:08-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 18
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:44:04-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 19
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:45:37-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 20
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:56:54-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 21
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-03T22:59:14-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 22
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-04T14:36:00-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 23
+   }, {
+      "createdByContact" : {
+         "areaCode" : 11377,
+         "contactId" : 8,
+         "email" : "sanjeev@ontargetcloud.com",
+         "firstName" : "Sanjeev",
+         "lastName" : "Ghimire",
+         "phoneNumber" : "8596847931",
+         "title" : "Project Manager",
+         "user" : {
+            "discipline" : 0,
+            "userId" : 10,
+            "userTypeId" : 0
+         },
+         "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "createdDate" : "2015-10-04T15:42:18-07:00",
+      "poid" : 0,
+      "projectBimFileId" : 24
+   } ]
+}

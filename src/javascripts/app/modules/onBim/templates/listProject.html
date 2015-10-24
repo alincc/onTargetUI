@@ -1,0 +1,31 @@
+<div class="onbim-project-list">
+    <div class="wrapper-md p-r-none">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a class="btn btn-default" ui-sref="app.onBim.addProject">Add Project</a>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div ng-repeat="project in projectList" class="col-xs-1 col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="project-image" align="center">
+                                    <a href="javascript:void(0)" ng-click="projectDetail(project)">
+                                        <img file-path="project" path="{{project.projectImagePath}}"
+                                             class="img-responsive"/>
+                                    </a>
+                                </div>
+                                <div class="project-info">
+                                    <div class="project-name">Project Name</div>
+                                    <div class="project-description">
+                                        <p>Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

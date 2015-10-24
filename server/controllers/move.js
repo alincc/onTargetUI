@@ -4,11 +4,11 @@ var request = require('request');
 var mkdirp = require("mkdirp");
 var rootPath = process.env.ROOT;
 var mime = require('mime');
+var config = require('./../config');
 
 // paths/constants
-var assetsPath = path.join(rootPath, 'assets'),
-  uploadedFilesPath = assetsPath + "/",
-  imagePathRoot = 'assets/';
+var uploadedFilesPath = config.uploadedFilesPath,
+  imagePathRoot = config.imagePathRoot;
 
 function moveFile(req, res) {
   var responseData = {

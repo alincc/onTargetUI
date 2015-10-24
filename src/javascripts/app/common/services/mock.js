@@ -29,6 +29,7 @@ define(function(require) {
     document = require('text!./../resources/mockData/document.json'),
     documentResponses = require('text!./../resources/mockData/documentResponses.json'),
     addDocumentResponse = require('text!./../resources/mockData/addDocumentResponse.json'),
+    bimProjectList = require('text!./../resources/mockData/bimProjectList.json'),
     module;
 
   module = angular.module('common.services.mock', ['ngMockE2E', 'app.config', 'ngResource']);
@@ -194,6 +195,20 @@ define(function(require) {
         }
       }];
     });*/
+    
+    $httpBackend.whenPOST(constant.baseUrl + "/bim/getall").respond(function(method, url, data){
+      return [200, angular.fromJson(bimProjectList)];
+    });
+
+    $httpBackend.whenPOST(constant.baseUrl + "/bim/save").respond(function(method, url, data){
+      return [200, {
+        "type" : "saveBIMResponse",
+        "authenticated" : false,
+        "returnMessage" : "Successfully saved bim poid.",
+        "returnVal" : "true"
+      }
+      ];
+    });
 
 
 
