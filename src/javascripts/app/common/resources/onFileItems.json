@@ -1,0 +1,46 @@
+[
+  {
+    "id": "Communication",
+    "name": "Communication"
+  },
+  {
+    "id": "Document",
+    "name": "Document"
+  },
+  {
+    "id": "Drawings",
+    "name": "Drawings"
+  },
+  {
+    "id": "Change Orders",
+    "name": "Change Orders"
+  },
+  {
+    "id": "Prints",
+    "name": "Prints"
+  },
+  {
+    "id": "RFI",
+    "name": "RFI"
+  },
+  {
+    "id": "Samples",
+    "name": "Samples"
+  },
+  {
+    "id": "Shop Drawings",
+    "name": "Shop Drawings"
+  },
+  {
+    "id": "Submittal Package",
+    "name": "Submittal Package"
+  },
+  {
+    "id": "Coordination Documents",
+    "name": "Coordination Documents"
+  },
+  {
+    "id": "Meeting Minutes",
+    "name": "Meeting Minutes"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "key": "approval",
+    "title": "Approval"
+  },
+  {
+    "key": "for_use",
+    "title": "For Use"
+  },
+  {
+    "key": "as_requested",
+    "title": "As Requested"
+  },
+  {
+    "key": "review_and_comment",
+    "title": "Request & Comment"
+  },
+  {
+    "key": "further_processing",
+    "title": "Further Processing"
+  }
+]

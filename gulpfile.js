@@ -95,6 +95,12 @@ gulp.task('html', ['script'], function(){
     .pipe(gulp.dest('./build/'));
 });
 
+// Copy css
+gulp.task('css', function(){
+  return gulp.src('src/css/main.min.css')
+    .pipe(gulp.dest('build/css'));
+});
+
 // Jshint
 gulp.task('lint', function(){
   return gulp.src([
@@ -113,7 +119,7 @@ gulp.task('lint', function(){
 // Window r.js command line fix (It conflict between r.js and r.cmd.js)
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
 // del node_modules\.bin\r.js
-gulp.task('requireJsOptimizer', ['html'], shell.task([
+gulp.task('requireJsOptimizer', ['html', 'css'], shell.task([
   // This is the command
   'r.js -o src/javascripts/build.js'
 ]));
@@ -167,12 +173,8 @@ gulp.task('test', ['lint'], function(){
 
 // Common build
 gulp.task('build', ['requireJsOptimizer'], function(){
-  // Move css file
-  gulp.src('src/css/main.min.css')
-    .pipe(gulp.dest('build/css'));
-
   // move main script file
-  gulp.src('src/javascripts/main.min.js')
+  return gulp.src('src/javascripts/main.min.js')
     .pipe(replace(/domain: '.*'/, "domain: '" + config.default.domain + "'")) // domain
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.default.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
@@ -206,6 +208,7 @@ gulp.task('build:local', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.local.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.local.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.local.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-local'));
 
   gulp.src('./package.app.json')
@@ -232,41 +235,13 @@ gulp.task('build:integration', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.integration.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.integration.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.integration.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-integration'));
 
   gulp.src('./package.app.json')
     .pipe(rename('./package.json'))
     .pipe(gulp.dest('./build-integration'));
 });
-
-
-// ---- Integration -----
-gulp.task('build:beta', ['build'], function(){
-  // Copy all file in build folder
-  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-      .pipe(gulp.dest('./build-beta/app'));
-
-  // minify
-  gulp.src(['./src/javascripts/main.min.js'])
-      .pipe(replace(/domain: '.*'/, "domain: '" + config.beta.domain + "'")) // domain
-      .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.beta.baseUrl + "'")) // base url
-      .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.beta.nodeServer + "'")) // node server domain
-      .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.beta.resourceUrl + "'"))
-      .pipe(uglify())
-      .pipe(gulp.dest('./build-beta/app/javascripts'));
-
-  // Copy app.js and modify value
-  gulp.src('./app.js')
-    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.beta.port))
-      .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
-      .pipe(gulp.dest('./build-beta'));
-
-  gulp.src('./package.app.json')
-      .pipe(rename('./package.json'))
-      .pipe(gulp.dest('./build-beta'));
-});
-
-
 
 // ---- Testing -----
 gulp.task('build:testing', ['build'], function(){
@@ -287,6 +262,7 @@ gulp.task('build:testing', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.testing.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.testing.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.testing.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-testing'));
 
   gulp.src('./package.app.json')
@@ -313,6 +289,7 @@ gulp.task('build:staging', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.staging.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.staging.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.staging.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-staging'));
 
   gulp.src('./package.app.json')
@@ -339,6 +316,7 @@ gulp.task('build:production', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.production.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.production.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.production.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-production'));
 
   gulp.src('./package.app.json')
@@ -365,71 +343,6 @@ gulp.task('build:server', function(){
     'server.js'
   ], {"base": "."})
     .pipe(gulp.dest('build-server'));
-});
-
-
-// Server build local
-gulp.task('build:serverlocal', function(){
-  gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server'));
-
-  gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
-      .pipe(gulp.dest('build-server'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-      .pipe(gulp.dest('build-server'));
-});
-
-// Server build local
-gulp.task('build:serverintegration', function(){
-  gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server'));
-
-  gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
-      .pipe(gulp.dest('build-server'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-      .pipe(gulp.dest('build-server'));
-});
-
-
-// Server build local
-gulp.task('build:serverbeta', function(){
-  gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server-beta'));
-
-  gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverbeta.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
-      .pipe(gulp.dest('build-server-beta'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-      .pipe(gulp.dest('build-server-beta'));
 });
 
 ////////////////////////////////////

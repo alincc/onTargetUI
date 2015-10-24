@@ -66,7 +66,10 @@ require.config({
     ladda: '../js/ladda/js/ladda',
     leaflet: '../bower_components/leaflet/dist/leaflet-src',
     leafletDraw: '../bower_components/leaflet.draw/dist/leaflet.draw',
-    leafletFullScreen: '../bower_components/leaflet.fullscreen/Control.FullScreen'
+    leafletFullScreen: '../bower_components/leaflet.fullscreen/Control.FullScreen',
+    cryptorJs: '../bower_components/crypto-js/crypto-js',
+    angularChart: '../bower_components/angular-chart.js/dist/angular-chart',
+    chartjs: '../bower_components/Chart.js/Chart'
   },
 
   shim: {
@@ -187,6 +190,9 @@ require.config({
     },
     "leafletFullScreen": {
       deps: ['leaflet']
+    },
+    "angularChart": {
+      deps: ['angular', 'chartjs']
     }
   }
 });

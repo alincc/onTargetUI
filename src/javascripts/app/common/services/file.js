@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require){
   'use strict';
   var angular = require('angular'),
     utilService = require('app/common/services/util'),
@@ -9,10 +9,10 @@ define(function(require) {
 
   module.factory('fileFactory',
     ['Upload', 'appConstant', 'utilFactory', '$http',
-      function(Upload, constant, utilFactory, $http) {
+      function (Upload, constant, utilFactory, $http){
         var service = {};
 
-        service.upload = function(file, newFileName, rootFolder, projectAssetFolderName, context, crop) {
+        service.upload = function (file, newFileName, rootFolder, projectAssetFolderName, context, crop){
           newFileName = newFileName || file.name;
           return Upload.upload({
             url: constant.nodeServer + '/node/upload',
@@ -30,8 +30,12 @@ define(function(require) {
             }
           });
         };
-
-        service.move = function(filePath, newFileName, rootFolder, projectAssetFolderName, context) {
+        service.convertPDFToImage = function (filePath){
+          return $http.post(constant.nodeServer + '/node/file/convertPdfToImage', {
+            path: filePath
+          });
+        };
+        service.move = function (filePath, newFileName, rootFolder, projectAssetFolderName, context){
           newFileName = newFileName || filePath.substring(filePath.lastIndexOf('/') + 1);
           return $http.post(constant.nodeServer + '/node/move', {
             'path': filePath,
@@ -46,6 +50,15 @@ define(function(require) {
             }
           });
         };
+
+        service.info = function (path){
+          return $http.post(constant.nodeServer + '/node/file/info', {path: path});
+        };
+
+        service.getPdfImage = function (path){
+          return $http.post(constant.nodeServer + '/node/file/getPdfImage', {path: path});
+        };
+
         return service;
       }
     ]

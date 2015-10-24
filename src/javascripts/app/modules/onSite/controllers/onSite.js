@@ -220,7 +220,7 @@ define(function(require){
 
       // Download
       $scope.download = function(doc){
-        $window.open($filter('fileDownloadPath')(doc.name));
+        $window.open($filter('fileDownloadPathHash')(doc.name));
       };
 
       /*$scope.deleteDocument = function(doc){

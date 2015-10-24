@@ -13,13 +13,13 @@ define(function(require) {
       function(constant, $http) {
         var service = {};
         service.getUserDocument = function(projectId) {
-          return $http.post(constant.domain + '/documents/getUserDocument', {
+          return $http.post(constant.domain + '/document/getUserDocument', {
             projectId: projectId
           });
         };
 
         service.getDocumentById = function(docId) {
-          return $http.post(constant.domain + '/documents/getDocument', {
+          return $http.post(constant.domain + '/document/getDocument', {
             dcoumentId: docId
           });
         };

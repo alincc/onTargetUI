@@ -1,0 +1,333 @@
+<tabset class="tab-container">
+    <tab heading="View Document" ng-click="openAction(actions.viewDocument)">
+    </tab>
+    <tab heading="Change Order" ng-click="openAction(actions.changeOrder)">
+    </tab>
+    <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)">
+
+    </tab>
+    <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)">
+    </tab>
+    <tab heading="Transmittal" ng-click="openAction(actions.transmittal)" active="true">
+        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView||onApprove">Export PDF</button>
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <form name="_form" no-validate class="form-validation" ng-submit="submit(_form)" novalidate>
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><b>Please fill out below infomation</b></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Receiver's Name</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">{{receiverName}}</p>
+                                            <select class="form-control" name="receiverId"
+                                                    ng-model="document.keyValues.receiverId"
+                                                    ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
+                                                    required
+                                                    ng-change="getCompanyOfUser()"
+                                                    ng-if="onEdit">
+                                                <option value="">-- Select Receiver's Name --</option>
+                                            </select>
+                                            <ng-messages ng-if="_form.receiverId.$dirty"
+                                                         for="_form.receiverId.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Company Name</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.company_name}}</p>
+                                            <!--<select class="form-control" name="companyName" ng-model="document.keyValues.company_name"
+                                                    ng-options="company.companyId as company.companyName for company in companies" required>
+                                                <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
+                                            </select>-->
+                                            <input type="text" class="form-control" placeholder="Enter Company Name"
+                                                   ng-model="document.keyValues.company_name"
+                                                   name="companyName" required readonly
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.companyName.$dirty"
+                                                         for="_form.companyName.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Transmittal #</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.transmittal}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter transmittal #"
+                                                   ng-model="document.keyValues.transmittal"
+                                                   name="transmittal" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.transmittal.$dirty"
+                                                         for="_form.transmittal.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Sent Via</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.sent_via}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Sent Via"
+                                                   ng-model="document.keyValues.sent_via"
+                                                   name="sent_via" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.sent_via.$dirty"
+                                                         for="_form.sent_via.$error">
+                                <span class="help-block m-b-none text-danger" ng-message
+                                      when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>Subject</label>
+                                            <span class="pull-right">(Optional)</span>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.subject}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Subject"
+                                                   ng-model="document.keyValues.subject"
+                                                   name="subject"
+                                                   ng-if="onEdit"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label>Submitted for</label>
+
+                                        <div class="form-group">
+                                            <div class="checkbox-inline" ng-repeat="submittedFor in submittedFors">
+                                                <label class="i-checks">
+                                                    <input type="checkbox" ng-model="submittedFor.value"
+                                                           ng-true-value="'YES'"
+                                                           ng-false-value="'NO'" checked
+                                                           ng-disabled="onView||onApprove"><i></i> {{submittedFor.title}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label>Action as Noted Below</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4" ng-repeat="action in actionsAsNoted">
+                                            <div class="checkbox-inline">
+                                                <label class="i-checks">
+                                                    <input type="checkbox" ng-model="action.value" ng-true-value="'YES'"
+                                                           ng-false-value="'NO'" checked
+                                                           ng-disabled="onView||onApprove"><i></i> {{action.title}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.due_by_date}}</p>
+
+                                            <p class="input-group" ng-if="onEdit">
+                                                <input type="text" class="form-control" placeholder="Enter/Select Date"
+                                                       ng-model="document.keyValues.due_by_date"
+                                                       datepicker-popup="MM/dd/yyyy" is-open="dueByDate.isOpen"
+                                                       datepicker-options="dueByDate.options"
+                                                       datepicker-append-to-body="true" date-range
+                                                       name="dueByDate" ng-click="dueByDate.isOpen = !dueByDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="dueByDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.received_by_date}}</p>
+
+                                            <p class="input-group" ng-if="onEdit">
+                                                <input type="text" class="form-control" placeholder="Enter/Select Date"
+                                                       ng-model="document.keyValues.received_by_date"
+                                                       datepicker-popup="MM/dd/yyyy" is-open="receivedDate.isOpen"
+                                                       datepicker-options="receivedDate.options"
+                                                       datepicker-append-to-body="true" date-range
+                                                       name="receivedDate"
+                                                       ng-click="receivedDate.isOpen = !receivedDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="receivedDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.sent_by_date}}</p>
+
+                                            <p class="input-group" ng-if="onEdit">
+                                                <input type="text" class="form-control" placeholder="Enter/Select Date"
+                                                       ng-model="document.keyValues.sent_by_date"
+                                                       datepicker-popup="MM/dd/yyyy" is-open="sentDate.isOpen"
+                                                       datepicker-options="sentDate.options"
+                                                       datepicker-append-to-body="true" date-range
+                                                       name="sentDate" ng-click="sentDate.isOpen = !sentDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="sentDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Items</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.items}}</p>
+                                            <select class="form-control" name="items" ng-model="document.keyValues.items"
+                                                    ng-options="item.id as item.name for item in items" required
+                                                    ng-if="onEdit">
+                                                <option value="">-- Select Items --</option>
+
+                                            </select>
+                                            <ng-messages ng-if="_form.items.$dirty"
+                                                         for="_form.items.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Description</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">
+                                                {{document.keyValues.description}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Description"
+                                                   ng-model="document.keyValues.description"
+                                                   name="description" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.description.$dirty"
+                                                         for="_form.description.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Due Date</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">{{document.dueDate}}</p>
+
+                                            <p class="input-group" ng-if="onEdit">
+                                                <input type="text" class="form-control" placeholder="Enter/Select Due date"
+                                                       required
+                                                       ng-model="document.dueDate"
+                                                       datepicker-popup="MM/dd/yyyy" is-open="dueDate.isOpen"
+                                                       datepicker-options="dueDate.options"
+                                                       datepicker-append-to-body="true" date-range
+                                                       name="dueDate" ng-click="dueDate.isOpen = !dueDate.isOpen"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="dueDate.open($event)"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                                            </p>
+                                            <ng-messages ng-if="_form.dueDate.$dirty"
+                                                         for="_form.dueDate.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>Copies</label>
+
+                                            <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.copies}}</p>
+                                            <input type="text" class="form-control" placeholder="Enter Copies"
+                                                   ng-model="document.keyValues.copies"
+                                                   name="copies" required
+                                                   ng-if="onEdit"/>
+                                            <ng-messages ng-if="_form.copies.$dirty"
+                                                         for="_form.copies.$error">
+                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                                            </ng-messages>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>Comments</label>
+                                            <span class="pull-right">(Optional)</span>
+
+                                            <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.comments}}
+                                                &nbsp;</p>
+                            <textarea type="text" class="form-control" placeholder="Enter Comments"
+                                      ng-model="document.keyValues.comments"
+                                      name="comments" ng-if="onEdit"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><b>Attachments</b></div>
+                            <div class="panel-body">
+                                <div class="form-group" ng-if="onEdit">
+                                    <a class="btn btn-primary" ng-click="openUploadModal('main')"><i
+                                            class="fa fa-cloud-upload"></i>
+                                        Upload
+                                    </a>
+                                </div>
+
+                                <div class="on-site-upload-document-modal form-group" attachment-list
+                                     attachments="attachments" on-edit="onEdit" on-approve="onApprove" on-view="onView">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="pull-right" ng-if="onApprove">
+                                <a ng-disabled="_form.$submitted"
+                                   class="btn btn-primary" ng-click="updateStatus('APPROVED')">Approve
+                                </a>
+                                <a ng-disabled="_form.$submitted"
+                                   class="btn btn-danger" ng-click="updateStatus('REJECTED')">Reject
+                                </a>
+                                <a ng-disabled="_form.$submitted"
+                                   class="btn btn-primary" ui-sref="app.onFile">Cancel
+                                </a>
+                            </div>
+                            <button ng-disabled="_form.$invalid || _form.$submitted"
+                                    loading-button="_form.$submitted"
+                                    class="btn btn-primary pull-right" type="submit"
+                                    ng-if="onEdit">Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </tab>
+</tabset>

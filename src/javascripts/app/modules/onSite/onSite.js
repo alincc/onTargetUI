@@ -11,7 +11,6 @@ define(function(require){
     deleteController = require('./controllers/delete'),
     projectContextModule = require('app/common/context/project'),
     documentServiceModule = require('app/common/services/document'),
-    mentio = require('mentio'),
     angularUiSelect = require('angularUiSelect'),
     angularLocalStorage = require('angularLocalStorage'),
     uploadServiceModule = require('app/common/services/file'),
@@ -27,12 +26,32 @@ define(function(require){
     fileDownloadPath = require('app/common/filters/fileDownloadPath'),
     notificationServiceModule = require('app/common/services/notifications'),
     taskServiceModule = require('app/common/services/task'),
-    docPreviewerModule = require('app/common/directives/docPreviewer/docPreviewer');
-  var module = angular.module('app.onSite', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.notifications', 'common.directives.docPreviewer']);
+    pdfTaggingMarkUpModule = require('app/common/directives/pdfTaggingMarkUp/pdfTaggingMarkUp');
+  var module = angular.module('app.onSite', [
+    'ui.router',
+    'app.config',
+    'common.context.project',
+    'common.services.document',
+    'angularLocalStorage',
+    'ui.select',
+    'common.services.file',
+    'common.services.onSite',
+    'common.services.util',
+    'ngSanitize',
+    'common.services.googleDrive',
+    'common.services.box',
+    'toaster',
+    'common.services.permission',
+    'common.services.dropBox',
+    'common.filters.fileThumbnail',
+    'common.services.notifications',
+    'common.filters.fileDownloadPath',
+    'common.services.notifications',
+    'common.directives.pdfTaggingMarkUp'
+  ]);
 
 
   module.run(['$templateCache', function($templateCache) {
-
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);
     $templateCache.put('onSite/templates/delete.html', deleteTemplate);
@@ -52,7 +71,19 @@ define(function(require){
             controller: 'OnSiteController',
             //reloadOnSearch: false,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory){
+              projectValid: [
+                '$location',
+                'projectContext',
+                '$q',
+                '$state',
+                '$window',
+                'permissionFactory',
+                function($location,
+                         projectContext,
+                         $q,
+                         $state,
+                         $window,
+                         permissionFactory){
                 var deferred = $q.defer();
                 if(projectContext.valid() && permissionFactory.checkMenuPermission('ONSITE')) {
                   deferred.resolve();

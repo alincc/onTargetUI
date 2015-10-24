@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            /*width: 800px;*/
+            padding: 20px;
+        }
+
+        .title-box {
+            float: left;
+            width: 60%;
+        }
+
+        .company-box {
+            float: left;
+            width: 40%;
+            margin-top: 20px;
+        }
+
+        .company-box p {
+            text-align: center;
+        }
+
+        .company-logo {
+            /*width: 300px;*/
+        }
+
+        .box {
+            border: solid 1px #cccccc;
+            border-radius: 3px;
+            padding: 0 10px;
+            width: 100%;
+            float: left;
+            box-sizing: border-box
+        }
+
+        .form-group {
+            float: left;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .column {
+            width: 50%;
+            float: left;
+        }
+
+        .column-4 {
+            width: 33%;
+            float: left;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .check-box {
+            margin-bottom: 15px;
+            padding-right: 20px;
+            box-sizing: border-box
+        }
+
+        .pull-left {
+            float: left;
+        }
+
+        .pull-none {
+            float: none;
+        }
+    </style>
+</head>
+<body>
+<div class="company-box">
+    <div class="company-logo">
+        <img src="https://wiki.maemo.org/images/thumb/d/de/Maemo.org_logo_contest_sample1_bundyo.png/300px-Maemo.org_logo_contest_sample1_bundyo.png">
+    </div>
+    <p>{{company}}</p>
+</div>
+<div class="title-box">
+    <div class="box">
+        <p>From : {{createdBy}} {{company}}</p>
+
+        <p>Date : {{createdDate}}</p>
+
+        <p>Address : {{address}}</p>
+
+        <p>Submitted to : {{username}}</p>
+
+        <p>Submitted to Company name : {{company_name}}</p>
+
+        <p>Send Via : {{sent_via}}</p>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="box">
+        <p class="label">TRANSMITTAL</p>
+
+        <p>Subject : {{subject}}</p>
+
+        <p>Transmittal #: {{transmittal}}</p>
+
+        <p class="label">Submitted For :</p>
+
+        <div class="pull-left check-box"><input type="checkbox" {{approval}}> Approval</div>
+        <div class="pull-left check-box"><input type="checkbox" {{for_use}}> for Use</div>
+        <div class="pull-left check-box"><input type="checkbox" {{as_requested}}> As Requested</div>
+        <div class="pull-left check-box"><input type="checkbox" {{review_and_comment}}> Request & Comment</div>
+        <div class="pull-none check-box"><input type="checkbox" {{further_processing}}> Further Processing</div>
+        <p class="label">Action as noted Below</p>
+
+        <div class="column-4 check-box"><input type="checkbox" {{out_for_signature}}> Out for Signature</div>
+        <div class="column-4 check-box"><input type="checkbox" {{approve_as_submitted}}> Approve as Submitted</div>
+        <div class="column-4 check-box"><input type="checkbox" {{approve_as_noted}}> Approve as Noted</div>
+        <div class="column-4 check-box"><input type="checkbox" {{submit}}> Submit</div>
+        <div class="column-4 check-box"><input type="checkbox" {{resubmitted}}> Re-submitted</div>
+        <div class="column-4 check-box"><input type="checkbox" {{returned}}> Returned</div>
+        <div class="column-4 check-box"><input type="checkbox" {{returned_for_corrections}}> Returned for correction</div>
+        <div class="column-4 check-box"><input type="checkbox" {{resubmit}}> Re-submit</div>
+        <div class="column-4 check-box"><input type="checkbox" {{received_as_noted}}> Received as Noted</div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="box" style="padding-top: 15px;">
+        <div class="column-4 check-box"><input type="checkbox" {{due_by}}> Due Date</div>
+        <div class="column-4 check-box"><input type="checkbox" {{received_by}}> Received by</div>
+        <div class="column-4 check-box"><input type="checkbox" {{sent_date}}> Sent Date</div>
+        <div class="column-4"><p class="label">{{due_by_date}}</p></div>
+        <div class="column-4"><p class="label">{{received_by_date}}</p></div>
+        <div class="column-4"><p class="label">{{sent_by_date}}</p></div>
+        <div class="column">
+            <p class="label">Items :</p>
+        </div>
+        <div class="column">
+            <p class="label">Description :</p>
+        </div>
+        <div class="column">
+            <p>{{items}}</p>
+        </div>
+        <div class="column">
+            <p>{{description}}</p>
+        </div>
+        <div class="column">
+            <p class="label">Due date : {{dueDate}}</p>
+        </div>
+        <div class="column">
+            <p class="label">Copies : {{copies}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="box">
+        <p class="label">Comments :</p>
+
+        <p>{{comment}}</p>
+    </div>
+</div>
+<div class="form-group">
+    <p class="label">Approved by {{approvedBy}} . Date : {{approvedDate}}</p>
+
+    <p class="label">Attachments - {{attachments}}</p>
+</div>
+</body>
+</html>

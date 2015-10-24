@@ -1,0 +1,56 @@
+{
+  "type" : "getDocumentQuestionResponse",
+  "authenticated" : false,
+  "returnMessage" : "Successfully retrieved document responses",
+  "returnVal" : "SUCCESS",
+  "documentId" : 2,
+  "documentResponses" : [ {
+    "response" : "This is a new response",
+    "responsedBy" : {
+      "contact" : {
+        "areaCode" : 11377,
+        "contactId" : 8,
+        "email" : "sanjeev@ontargetcloud.com",
+        "firstName" : "Sanjeev",
+        "lastName" : "Ghimire",
+        "phoneNumber" : "8596847931",
+        "title" : "Project Manager",
+        "user" : {
+          "discipline" : 0,
+          "userId" : 10,
+          "userTypeId" : 0
+        },
+        "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "discipline" : 0,
+      "userId" : 10,
+      "userTypeId" : 0
+    },
+    "responsedDate" : "2015-10-09T17:31:57-07:00",
+    "status" : "ACTIVE"
+  }, {
+    "response" : "This is a new response",
+    "responsedBy" : {
+      "contact" : {
+        "areaCode" : 11377,
+        "contactId" : 8,
+        "email" : "sanjeev@ontargetcloud.com",
+        "firstName" : "Sanjeev",
+        "lastName" : "Ghimire",
+        "phoneNumber" : "8596847931",
+        "title" : "Project Manager",
+        "user" : {
+          "discipline" : 0,
+          "userId" : 10,
+          "userTypeId" : 0
+        },
+        "userImagePath" : "assets/profile/sanjeev.jpg"
+      },
+      "discipline" : 0,
+      "userId" : 10,
+      "userTypeId" : 0
+    },
+    "responsedDate" : "2015-10-09T17:35:51-07:00",
+    "status" : "ACTIVE"
+  } ]
+}

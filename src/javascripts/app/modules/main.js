@@ -21,6 +21,7 @@ define(function (require){
     company: require('./editCompany/company'),
     changePassword: require('./changePassword/changePassword'),
     notification: require('./notifications/notifications'),
-    documentPreview: require('./documentPreview/documentPreview')
+    documentPreview: require('./documentPreview/documentPreview'),
+    onFile: require('./onFile/onFile')
   };
 });

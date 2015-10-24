@@ -1,0 +1,22 @@
+{
+  "PO": {
+    "document_template_id": "1",
+    "name": "Purchase Order",
+    "documentName": "PO Document"
+  },
+  "CO": {
+    "document_template_id": "2",
+    "name": "Change Order",
+    "documentName": "CO Document"
+  },
+  "RFI": {
+    "document_template_id": "3",
+    "name": "Request For Information",
+    "documentName": "RFI Document"
+  },
+  "Trans": {
+    "document_template_id": "4",
+    "name": "Transmittal",
+    "documentName": "Trans Document"
+  }
+}
