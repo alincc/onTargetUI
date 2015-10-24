@@ -73,6 +73,9 @@ define(function(require) {
                    onSiteFactory) {
             var fileExtension = $scope.path.substring($scope.path.lastIndexOf('.') + 1);
 
+            // Generate original file path
+            $scope.originalFilePath = $scope.path.substring(0, $scope.path.lastIndexOf('/')) + '/' + $scope.path.substring($scope.path.lastIndexOf('/') + 1).substring($scope.path.substring($scope.path.lastIndexOf('/') + 1).indexOf('_') + 1);
+
             $scope.pdfTaggingMarkUp = {
               isLoading: true,
               fileExtension: fileExtension,
@@ -96,7 +99,7 @@ define(function(require) {
             };
 
             $scope.getPdfImage = function() {
-              return fileFactory.getPdfImage($scope.path);
+              return fileFactory.getPdfImage($scope.originalFilePath);
             };
 
             $scope.addTags = function(tags) {
@@ -333,8 +336,9 @@ define(function(require) {
                   comment: cm.comment,
                   userId: cm.commentedBy,
                   author: cm.commenterContact.firstName + ' ' + cm.commenterContact.lastName,
+                  commentedDate: cm.commentedDate,
                   loadedComment: true
-                }
+                };
               });
               objLayer.options = layer.options;
               objLayer._mRadius = layer._getLngRadius ? layer._getLngRadius() / 2 : 0;
@@ -362,30 +366,24 @@ define(function(require) {
                     }
                     _.remove(scope.markers, {id: objLayer.id});
                   };
-                  markerScope.marker.add = function(form) {
+                  markerScope.marker.add = function() {
+                    if(!objLayer.comments) {
+                      objLayer.comments = [];
+                    }
 
-                    if(objLayer.comments) {
-                      objLayer.comments.push(
-                        {
-                          comment: this.comment,
-                          userId: $rootScope.currentUserInfo.userId,
-                          author: $rootScope.currentUserInfo.contact.firstName + ' ' + $rootScope.currentUserInfo.contact.lastName,
-                          loadedComment: false
-                        });
-                    } else {
-                      objLayer.comments = [{
+                    objLayer.comments.push(
+                      {
                         comment: this.comment,
                         userId: $rootScope.currentUserInfo.userId,
-                        author: $rootScope.currentUserInfo.con.firstName + ' ' + $rootScope.currentUserInfo.contact.lastName,
+                        author: $rootScope.currentUserInfo.contact.firstName + ' ' + $rootScope.currentUserInfo.contact.lastName,
+                        commentedDate: new Date().toISOString(),
                         loadedComment: false
-                      }];
-                    }
-                    markerScope.marker.comments = angular.copy(objLayer.comments);
+                      });
 
+                    markerScope.marker.comments = angular.copy(objLayer.comments);
                     // clear textbox
                     markerScope.marker.comment = "";
-                    form.$setPristine();
-
+                    markerScope.add_comment_form.$setPristine();
 
                     //scope.addComment(objLayer.id, this.text);
 
@@ -724,7 +722,7 @@ define(function(require) {
                     commentId: null,
                     comment: cm.comment,
                     commentedBy: cm.author,
-                    commentedDate: new Date().toISOString(),
+                    commentedDate: cm.commentedDate,
                     commenterContact: null
                   };
                 });
@@ -829,7 +827,7 @@ define(function(require) {
                 'projectFileTagAttributeId': null
               });
               return {
-                'projectFileId': doc.fileId,
+                'projectFileId': docId,
                 'projectFileTagId': null,
                 'parentFileTagId': null,
                 'tag': 'TAg',
@@ -917,11 +915,10 @@ define(function(require) {
             if(!doc) {
               return;
             }
-            var listPath = doc.name.split('/');
-            var fileName = listPath[listPath.length - 1];
-            var randomName = (new Date().getTime()).toString() + '_' + fileName;
-            listPath[listPath.length - 1] = randomName;
-            var newFilePath = listPath.join('/');
+            // Generate new file name
+            var randomName = (new Date().getTime()).toString() + '_' + scope.originalFilePath.substring(scope.originalFilePath.lastIndexOf('/') + 1);
+            // New file path
+            var newFilePath = scope.originalFilePath.substring(0, scope.originalFilePath.lastIndexOf('/')) + '/' + randomName;
             var data = {
               "projectId": $rootScope.currentProjectInfo.projectId,
               "name": newFilePath,
