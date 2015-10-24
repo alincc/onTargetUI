@@ -666,7 +666,6 @@ define(function(require) {
                       //marker2.addTo(map);
                       marker.layerType = t;
                       marker.comments = tag.comment;
-                      console.log(tag, tag.comment);
                       onDrawCreated(marker, true, true);
                     }
                   }
@@ -887,9 +886,13 @@ define(function(require) {
           scope.exportPdf = function(fileName, width, height) {
             var deferred = $q.defer();
             var layers = angular.copy(scope.listLayers);
-            _.each(layers, function(layer) {
-              delete(layer.layer._leaflet_events);
-              delete(layer.layer.editing);
+            _.each(layers, function(l) {
+              if(l.layer && l.layer._leaflet_events) {
+                delete l.layer._leaflet_events;
+              }
+              if(l.layer && angular.isDefined(l.layer.editing)) {
+                delete l.layer.editing;
+              }
             });
             var img = document.querySelector('.leaflet-image-layer');
             $http.post(appConstant.nodeServer + '/node/onsite/exportPdf', {
