@@ -10,7 +10,7 @@ define(function(require) {
     mentio = require('mentio'),
     angularUiSelect = require('angularUiSelect'),
     angularLocalStorage = require('angularLocalStorage'),
-    uploadServiceModule = require('app/common/services/file'),
+    fileServiceModule = require('app/common/services/file'),
     onSiteServiceModule = require('app/common/services/onSite'),
     utilServiceModule = require('app/common/services/util'),
     googleDriveServiceModule = require('app/common/services/googleDrive'),
@@ -22,8 +22,10 @@ define(function(require) {
     fileThumbnail = require('app/common/filters/fileThumbnail'),
     fileDownloadPath = require('app/common/filters/fileDownloadPath'),
     notificationServiceModule = require('app/common/services/notifications'),
-    taskServiceModule = require('app/common/services/task');
-  var module = angular.module('app.documentPreview', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.task']);
+    taskServiceModule = require('app/common/services/task'),
+    pdfViewerDirectiveModule = require('app/common/directives/pdfViewer'),
+    ngSanitize = require('angularSanitize');
+  var module = angular.module('app.documentPreview', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.task', 'common.directives.pdfViewer', 'ngSanitize']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('documentPreview/templates/documentPreview.html', previewTemplate);
   }]);
@@ -38,37 +40,45 @@ define(function(require) {
             templateUrl: 'documentPreview/templates/documentPreview.html',
             controller: 'PreviewDocumentController',
             resolve: {
-              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'taskFactory', function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, taskFactory) {
-                var deferred = $q.defer();
-                switch ($stateParams.onAction)
-                {
-                  case 'onSite' :
-                    if($stateParams.docId) {
-                      documentFactory.getDocumentDetail({
-                        projectId: $rootScope.currentProjectInfo.projectId,
-                        projectFileId: Number($stateParams.docId)
-                      }).success(
-                        function (resp){
-                          deferred.resolve(resp.projectFile);
-                        }
-                      );
-                    } else {
-                      $window.location.href = $state.href('app.onSite');
-                    }
-                    break;
-                  case 'onTime' :
-                    if($rootScope.fileAttachment){
-                      var doc = $rootScope.fileAttachment;
-                      doc.name = doc.fileName;
-                      deferred.resolve(doc);
-                    }else {
-                      $window.location.href = $state.href('app.onTime');
-                    }
-                    break;
-                }
+              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'fileFactory',
+                function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, fileFactory) {
+                  var deferred = $q.defer();
+                  switch($stateParams.onAction) {
+                    case 'onSite' :
+                      if($stateParams.docId) {
+                        documentFactory.getDocumentDetail({
+                          projectId: $rootScope.currentProjectInfo.projectId,
+                          projectFileId: Number($stateParams.docId)
+                        }).success(
+                          function(resp) {
+                            fileFactory.getPdfImage(resp.projectFile.name)
+                              .then(function(r) {
+                                deferred.resolve({
+                                  projectFile: resp.projectFile,
+                                  imagePath: r.data.url
+                                });
+                              }, function(err, status) {
+                                console.log(err, status);
+                              });
+                          }
+                        );
+                      } else {
+                        $window.location.href = $state.href('app.onSite');
+                      }
+                      break;
+                    case 'onTime' :
+                      if($rootScope.fileAttachment) {
+                        var doc = $rootScope.fileAttachment;
+                        doc.name = doc.fileName;
+                        deferred.resolve(doc);
+                      } else {
+                        $window.location.href = $state.href('app.onTime');
+                      }
+                      break;
+                  }
 
-                return deferred.promise;
-              }]
+                  return deferred.promise;
+                }]
             }
           });
       }

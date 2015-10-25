@@ -42,15 +42,27 @@ define(function(require){
                 if(angular.isDefined(resp.expires_in)) {
                   deferred.resolve();
                 } else {
+                  isAuthorized = false;
+                  isLogged = false;
+                  nextPageToken = null;
+                  token = null;
                   deferred.reject();
                 }
               })
               .error(function(err){
                 console.log(err);
+                isAuthorized = false;
+                isLogged = false;
+                nextPageToken = null;
+                token = null;
                 deferred.reject();
               });
           }
           else {
+            isAuthorized = false;
+            isLogged = false;
+            nextPageToken = null;
+            token = null;
             deferred.reject();
           }
           return deferred.promise;

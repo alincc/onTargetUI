@@ -45,6 +45,9 @@
     "flot.tooltip": "~0.8.4",
     "flot.orderbars": "*",
     "flot-spline": "~0.0.1",
+    "leaflet": "~0.7.5",
+    "leaflet.draw": "~0.2.3",
+    "leaflet.fullscreen": "latast"
     "crypto-js": "~3.1.5"
   }
 }

@@ -1,15 +1,9 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', 'fileFactory', '$timeout', '$q', '$modal', '$window', '$filter', 'document',
-    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal, $window, $filter, document) {
-
-      $scope.document = {
-        keyValues: {}
-      };
-      $scope.attachments = [];
-      $scope.isAddingResponse = false;
-
+  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', 'fileFactory', '$timeout', '$q', '$modal', '$window', '$filter', 'document', 'contactList',
+    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal, $window, $filter, document, contactList) {
+      var memberList = contactList;
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
         if(document.createdBy === userContext.authentication().userData.userId) {
@@ -26,6 +20,14 @@ define(function(require) {
           }
         }
       };
+
+      $scope.document = {
+        keyValues: {}
+      };
+
+      $scope.attachments = [];
+
+      $scope.isAddingResponse = false;
 
       if(document) {
         getUserAction(document);
@@ -61,9 +63,13 @@ define(function(require) {
       };
 
       var documentTemplate = onFileFactory.getDocumentTemplateId();
+
       $scope.contacts = [];
+
       $scope.attentions = [];
+
       $scope.contactNameList = [];
+
       $scope.attentionPersons = [];
 
       $scope.newDocument = {
@@ -108,40 +114,46 @@ define(function(require) {
           $scope.companies = resp.companyList;
         });
 
-        onContactFactory.getContactList($rootScope.currentProjectInfo.projectId, $rootScope.currentUserInfo.userId).
-          success(function(content) {
-            var memberList = content.projectMemberList;
-            $scope.contacts = [];
-            $scope.contactLists = memberList || [];
-            $scope.attentionName = '';
+        $scope.contacts = [];
+        $scope.contactLists = memberList || [];
+        $scope.attentionName = '';
 
-            if(document) {
-              // Get receiver name
-              if(document.keyValues.receiverId) {
-                var receiver = _.find(memberList, {userId: document.keyValues.receiverId});
-                if(receiver) {
-                  $scope.receiverName = receiver.contact.firstName + ' ' + receiver.contact.lastName;
-                }
-              }
+        // Make contact list
+        $scope.contacts = _.map(memberList, function(el) {
+          return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
+        });
 
-              // Make attention list
-              $scope.attentionPersons = _.map(_.where(document.keyValues.attention, function(el) {
-                return _.find(memberList, {userId: el});
-              }), function(el) {
-                var obj = _.find(memberList, {userId: el});
-                return obj;
-              });
+        $scope.contactNameList = _.map(memberList, function(el) {
+          return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
+        });
+
+        if(document) {
+          // Get receiver name
+          if(document.keyValues.receiverId) {
+            var receiver = _.find(memberList, {userId: document.keyValues.receiverId});
+            if(receiver) {
+              $scope.receiverName = receiver.contact.firstName + ' ' + receiver.contact.lastName;
             }
 
-            // Make contact list
-            $scope.contacts = _.map(memberList, function(el) {
-              return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
+            // remove receiver name from contactNameList
+            _.remove($scope.contactNameList, function(contact, idx) {
+              return contact.userId === document.keyValues.receiverId;
             });
+          }
 
-            $scope.contactNameList = _.map(memberList, function(el) {
-              return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
-            });
+          // Make attention list
+          $scope.attentionPersons = _.map(_.where(document.keyValues.attention, function(el) {
+            return _.find(memberList, {userId: el});
+          }), function(el) {
+            var obj = _.find(memberList, {userId: el});
+            return obj;
           });
+
+          //remove contact name from receiver list
+          _.remove($scope.contacts, function(contact, idx) {
+            return _.contains(document.keyValues.attention, contact.userId);
+          });
+        }
 
         if($scope.document.documentId) {
           $scope.getResponse();
@@ -331,12 +343,13 @@ define(function(require) {
         $scope.contactNameList = [];
         angular.forEach($scope.contactLists, function(projectMember, key) {
           var fullName = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
-          if(projectMember.userId.toString() !== $scope.document.keyValues.receiverId) {
-            $scope.contactNameList.push({userId: projectMember.userId.toString(), name: fullName});
+          if(projectMember.userId !== $scope.document.keyValues.receiverId) {
+            $scope.contactNameList.push({userId: projectMember.userId, name: fullName});
           }
         });
+        console.log($scope.document.keyValues.attention);
         _.remove($scope.document.keyValues.attention, function(attention) {
-          return attention.userId.toString() === $scope.document.keyValues.receiverId;
+          return attention === $scope.document.keyValues.receiverId;
         });
       };
 
@@ -416,6 +429,24 @@ define(function(require) {
             deferred.resolve();
           });
         return deferred.promise;
+      };
+
+      //$scope.removeReceiver = function(){
+      //  _.remove($scope.contacts, function(contact) {
+      //    return contact.userId === document.keyValues.attention;
+      //  });
+      //};
+
+      $scope.updateReceiverList = function() {
+        // Make contact list
+        $scope.contacts = _.compact(_.map(memberList, function(el) {
+          if(!_.contains($scope.document.keyValues.attention, el.userId)) {
+            return {userId: el.userId, name: el.contact.firstName + ' ' + el.contact.lastName};
+          }
+        }));
+
+        //$scope.document.keyValues.receiverId =
+
       };
 
       load();

@@ -56,6 +56,7 @@ define(function(require){
           var fileExtension = utilFactory.getFileExtension(el.name);
           var filePath = $filter('filePath')(el.name);
           el.filePath = filePath;
+          el.fileName = el.name;
           el.previewPath = filePath;
           el.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
           if(!el.isImage) {

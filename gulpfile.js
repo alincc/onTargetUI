@@ -208,6 +208,7 @@ gulp.task('build:local', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.local.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.local.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.local.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-local'));
 
   gulp.src('./package.app.json')
@@ -234,6 +235,7 @@ gulp.task('build:integration', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.integration.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.integration.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.integration.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-integration'));
 
   gulp.src('./package.app.json')
@@ -261,6 +263,7 @@ gulp.task('build:beta', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.beta.port))
       .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
+      .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.beta.BIM_SERVER + "'"))
       .pipe(gulp.dest('./build-beta'));
 
   gulp.src('./package.app.json')
@@ -289,6 +292,7 @@ gulp.task('build:testing', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.testing.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.testing.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.testing.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-testing'));
 
   gulp.src('./package.app.json')
@@ -315,6 +319,7 @@ gulp.task('build:staging', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.staging.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.staging.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.staging.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-staging'));
 
   gulp.src('./package.app.json')
@@ -341,6 +346,7 @@ gulp.task('build:sagarmatha01', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha01.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha01.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.production.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-sagarmatha01'));
 
   gulp.src('./package.app.json')
@@ -367,6 +373,7 @@ gulp.task('build:sagarmatha02', ['build'], function(){
   gulp.src('./app.js')
       .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha02.port))
       .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha02.API_SERVER + "'"))
+      .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.production.BIM_SERVER + "'"))
       .pipe(gulp.dest('./build-sagarmatha02'));
 
   gulp.src('./package.app.json')

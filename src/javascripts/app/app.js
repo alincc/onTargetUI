@@ -60,12 +60,13 @@ define(function(require) {
     'app.onContact',
     'app.onTarget',
     'app.documentPreview',
-    'app.onFile'
+    'app.onFile',
+    'app.onBim'
   ]);
 
   app
-    .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant', 'pushFactory', 'notifications', 'appConstant',
-      function($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant, pushFactory, notifications, appConstant) {
+    .run(['$templateCache', 'userContext', 'projectContext', 'userNotificationsFactory', '$rootScope', 'appConstant', 'pushFactory', 'notifications',
+      function($templateCache, userContext, projectContext, userNotificationsFactory, $rootScope, constant, pushFactory, notifications) {
         // Load Authentication data from localstorage
         userContext.loadFromLocal();
 

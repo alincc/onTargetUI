@@ -2,14 +2,13 @@ var path = require('path');
 var fs = require("fs");
 var request = require('request');
 var mkdirp = require("mkdirp");
-var rootPath = process.env.ROOT;
 var mime = require('mime');
 //var cors = require('cors');
+var config = require('./../config');
 
 // paths/constants
-var assetsPath = path.join(rootPath, 'assets'),
-  uploadedFilesPath = assetsPath + "/temp/",
-  imagePathRoot = 'assets/temp/';
+var uploadedFilesPath = config.uploadedFilesPath,
+  imagePathRoot = config.imagePathRoot;
 
 function downloadFile(req, res) {
   var responseData = {
@@ -17,13 +16,13 @@ function downloadFile(req, res) {
   };
   var url = req.body.url;
   var uuid = req.body.uuid;
-  var fileName = req.body.fileName;
-  var destinationDir = uploadedFilesPath + uuid + '/';
+  var fileName = req.body.fileName.replace(/\s/g,'_');
+  var destinationDir = uploadedFilesPath + 'temp/';
   var fileDestination = destinationDir + fileName;
 
   function success() {
     responseData.success = true;
-    responseData.url = imagePathRoot + uuid + "/" + fileName;
+    responseData.url = imagePathRoot + "temp/" + fileName;
     responseData.name = fileName;
     responseData.type = mime.lookup(fileName.substring(fileName.lastIndexOf('.') + 1));
     res.send(responseData);

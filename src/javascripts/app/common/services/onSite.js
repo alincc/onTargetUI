@@ -7,7 +7,7 @@ define(function(require) {
   module.factory('onSiteFactory', ['$http', 'appConstant', 'Upload', function($http, constant, Upload) {
     var services = {};
 
-    services.parseXls=function(file){
+    services.parseXls = function(file) {
       return Upload.upload({
         url: constant.nodeServer + '/node/xls-parser',
         file: file,
@@ -47,10 +47,33 @@ define(function(require) {
       });
     };
 
-    services.deleteDocument = function (projectFileId){
+    services.deleteDocument = function(projectFileId) {
       return $http.post(constant.domain + '/upload/delete', {
         projectFileId: projectFileId
       });
+    };
+
+    services.addTagComment = function(id, comment) {
+      return $http.post(constant.domain + '/project/file/tag/comment/add', {
+        "comment": comment,
+        "projectFileTagId": id
+      });
+    };
+
+    services.addTags = function(tags) {
+      return $http.post(constant.domain + '/project/file/tag/save', {
+        tags: tags
+      });
+    };
+
+    services.getTagsByDocument = function(id) {
+      return $http.post(constant.domain + '/project/file/tag/get', {
+        "projectFileId": id
+      });
+    };
+
+    services.exportPdf = function(data) {
+      return $http.post(constant.nodeServer + '/node/onsite/exportPdf', data);
     };
 
     return services;
