@@ -199,7 +199,8 @@ define(function(require) {
         '#FDB45C', // yellow
         '#949FB1', // grey
         '#4D5360'  // dark grey
-      ]
+      ],
+      salt: 'onTargetDPHK'
     },
     openWeatherMap: {
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'

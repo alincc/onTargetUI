@@ -48,7 +48,7 @@ function getFileInfo(req, res) {
 function convertPdfToImage(req, res) {
   var tmpNumber = new Date().getTime();
   var relativePath = req.body.path;
-  var filePath = path.join(rootPath, relativePath);
+  var filePath = [rootPath, relativePath].join('/');
   var fileExt = relativePath.substring(relativePath.lastIndexOf('.') + 1).toLowerCase();
   var fileType = mime.lookup(fileExt);
   var fileName = relativePath.substring(relativePath.lastIndexOf('/') + 1).substring(0, relativePath.substring(relativePath.lastIndexOf('/') + 1).lastIndexOf('.'));
@@ -142,7 +142,7 @@ function convertPdfToImage(req, res) {
 
 function getPdfImage(req, res) {
   var relativePath = req.body.path;
-  var filePath = path.join(rootPath, relativePath);
+  var filePath = [rootPath, relativePath].join('/');
   var fileName = relativePath.substring(relativePath.lastIndexOf('/') + 1).substring(0, relativePath.substring(relativePath.lastIndexOf('/') + 1).lastIndexOf('.'));
   var outputFolder = filePath.substring(0, filePath.lastIndexOf('/'));
   var exportedFile = outputFolder + '/converted_' + fileName + '.jpg';

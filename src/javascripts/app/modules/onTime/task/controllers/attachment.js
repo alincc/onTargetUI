@@ -7,8 +7,8 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'fileFactory', '$timeout', '$filter', '$state',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, fileFactory, $timeout, $filter, $state) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'fileFactory', '$timeout', '$filter', '$state', '$window',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, fileFactory, $timeout, $filter, $state, $window) {
       $scope.attachments = [];
       $scope.isUploading = false;
       $scope.percentage = 0;
@@ -56,7 +56,7 @@ define(function(require) {
       };
 
       $scope.download = function(att){
-        window.open($filter('fileDownloadPath')(att.fileName));
+        $window.open($filter('fileDownloadPathHash')(att.location));
       };
 
       $scope.preview = function (att){

@@ -10,7 +10,8 @@ module.exports = {
     nodeServer: 'http://int.app.ontargetcloud.com:9001',
     resourceUrl: 'http://int.app.ontargetcloud.com:9001',
     // Proxy settings
-    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services'
+    API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
+    BIM_SERVER: 'http://216.14.121.204:8080'
   },
   local: {
     port: 9000,
@@ -19,7 +20,8 @@ module.exports = {
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'http://localhost:9001',
     // Proxy settings
-    API_SERVER: 'http://localhost:8080/ontargetrs/services'
+    API_SERVER: 'http://localhost:8080/ontargetrs/services',
+    BIM_SERVER: 'http://216.14.121.204:8080'
   },
   local1: {
     port: 9002,
@@ -28,7 +30,8 @@ module.exports = {
     nodeServer: 'http://localhost:9003',
     resourceUrl: 'http://localhost:9003',
     // Proxy settings
-    API_SERVER: 'http://localhost:8080/ontargetrs/services'
+    API_SERVER: 'http://localhost:8080/ontargetrs/services',
+    BIM_SERVER: 'http://216.14.121.204:8080'
   },
   integration: {
     port: 9000,
@@ -37,7 +40,8 @@ module.exports = {
     nodeServer: 'http://int.app.ontargetcloud.com:9001', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
     // Proxy settings
-    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services'		// API
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',		// API
+    BIM_SERVER: 'http://216.14.121.204:8080'
   },
   beta: {
     port: 9004,
@@ -46,7 +50,8 @@ module.exports = {
     nodeServer: 'http://int.app.ontargetcloud.com:9005', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9005', 					// This should be same as the node server because the resources are storing on the node server
     // Proxy settings
-    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services'		// API
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',		// API
+    BIM_SERVER: 'http://216.14.121.204:8080'		// API
   },
   testing: {
     port: 0,
@@ -67,7 +72,8 @@ module.exports = {
     nodeServer: 'http://172.31.59.54:9001',
     resourceUrl: 'http://172.31.59.54:9001',
     // Proxy settings
-    API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services'
+    API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
+    BIM_SERVER: 'http://216.14.121.204:8080'
   },
   sagarmatha02: {
     port: 9000,
@@ -76,7 +82,8 @@ module.exports = {
     nodeServer: 'http://172.31.48.59:9001',
     resourceUrl: 'http://172.31.48.59:9005',
     // Proxy settings
-    API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services'
+    API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
+    BIM_SERVER: 'http://216.14.121.204:8080'
   },
   server: {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
