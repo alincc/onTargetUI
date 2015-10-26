@@ -64,7 +64,7 @@ table.table-hover tr {
 
 table .btn {
 	padding: 1px 5px 1px;
-	margin-right: -3px;
+	/*margin-right: -3px;*/
 }
 
 .accept {

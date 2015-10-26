@@ -82,6 +82,10 @@
                     '<p class="message">' + data.comment + '</p>' +
                     '</td>' +
                     '</tr>');
+
+            if(containerDiv.find('tr.no-result').length){
+                containerDiv.find('tr.no-result').remove();
+            }
             containerDiv.find("table tbody").append($tr);
             othis.validateAvatarUrl($tr.find('.avt img'));
         };

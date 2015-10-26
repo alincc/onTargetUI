@@ -52,7 +52,7 @@ function Project(containerDiv, main, project) {
 	othis.modelAddedListeners = new EventRegistry();
 	othis.modelUnloadedListeners = new EventRegistry();
 	othis.menuItems = [];
-	
+
 	this.show = function(){
 		if (typeof project == "number" || typeof project == "string") {
 			othis.reloadProject(project);
@@ -78,25 +78,25 @@ function Project(containerDiv, main, project) {
 		});
 	};
 
-	this.selected = function(groupId, id){
+	this.selected = function(origin, groupId, id){
 		othis.selectListeners.trigger(function(selectListener){
-			selectListener(groupId, id);
+			selectListener(origin, groupId, id);
 		});
 	};
-	
+
 	this.unselected = function(groupId, id){
 		othis.unselectListeners.trigger(function(unselectListener){
 			unselectListener(groupId, id);
 		});
 	};
-	
+
 	this.setObjectVisibility = function(groupId, ids, mode) {
 		if (!Array.isArray(ids)) {
 			ids = [ids];
 		}
 		var objectArray = [];
 		var oldModeArray = [];
-		
+
 		ids.forEach(function(id){
 			othis.models[groupId].get(id, function(object){
 				if (object != null) {
@@ -109,16 +109,16 @@ function Project(containerDiv, main, project) {
 		});
 
 		containerDiv.find(".rightCol > .details").show();
-		
+
 		othis.objectVisibilityListeners.trigger(function(objectVisibilityListener){
 			objectVisibilityListener(objectArray, oldModeArray);
 		});
 	};
-	
+
 	this.resize = function(){
 		containerDiv.find(".sidespanWrapper").height(($(window).height() - $(".navbar").outerHeight() - containerDiv.find(".col-md-4 .panel-heading").outerHeight() - 57) + "px");
 	};
-	
+
 	this.changeRevision = function(project, roid){
 		if (othis.loaded[project.oid] != null) {
 			othis.modelUnloadedListeners.trigger(function(modelUnloadedListener){
@@ -142,7 +142,7 @@ function Project(containerDiv, main, project) {
 			});
 		}
 	};
-	
+
 	this.loadModel = function(){
 		othis.projects.forEach(function(project){
 			var ids = [];
@@ -157,7 +157,7 @@ function Project(containerDiv, main, project) {
 			});
 		});
 	};
-	
+
 	this.preloadModel = function(project, roid){
 		var countingPromise = new CountingPromise();
 		var promise = new Promise();
@@ -238,7 +238,7 @@ function Project(containerDiv, main, project) {
 				    }
 				]
 			};
-			
+
 			model.query(preLoadQuery, function(loaded){
 			}).done(function(){
 				Global.notifier.setInfo("Loading model data...");
@@ -283,7 +283,7 @@ function Project(containerDiv, main, project) {
 					promise.fire();
 					Global.notifier.clear();
 				});
-			});			
+			});
 		}
 
 		return promise;
@@ -294,7 +294,7 @@ function Project(containerDiv, main, project) {
 
 		$(window).resize(othis.resize);
 		othis.resize();
-		
+
 		othis.projects = [];
 		Global.bimServerApi.call("ServiceInterface", "getAllRelatedProjects", {poid: othis.project.oid}, function(list){
 			list.forEach(function(smallProject){
@@ -329,7 +329,7 @@ function Project(containerDiv, main, project) {
 				div.hide();
 				containerDiv.find(".sidespanWrapper .sidespan").append(div);
 				plugin.init(div, othis);
-				
+
 				label.click(function(){
 					if (othis.sidespan != null) {
 						othis.sidespan.hide();
@@ -391,7 +391,7 @@ function Project(containerDiv, main, project) {
 			});
 		});
 	};
-	
+
 	this.load3DView = function(){
 		containerDiv.find(".rightCol > .details").hide();
 		containerDiv.find(".rightCol > .rightpanel").show();
@@ -405,7 +405,7 @@ function Project(containerDiv, main, project) {
 			});
 		});
 	};
-	
+
 	this.loadProjectTree = function(){
 		if (othis.sidespan != null) {
 			othis.sidespan.hide();
@@ -437,7 +437,7 @@ function Project(containerDiv, main, project) {
 		othis.sidespan = othis.types;
 		othis.sidespan.show();
 	};
-	
+
 	this.showLayers = function(){
 		if (othis.sidespan != null) {
 			othis.sidespan.hide();
@@ -445,7 +445,7 @@ function Project(containerDiv, main, project) {
 		othis.sidespan = othis.layers;
 		othis.sidespan.show();
 	};
-	
+
 	this.showClassifications = function(){
 		if (othis.sidespan != null) {
 			othis.sidespan.hide();
@@ -461,14 +461,14 @@ function Project(containerDiv, main, project) {
 		//othis.sidespan = othis.comment;
 		othis.sidespan.show();
 	};*/
-	
+
 	this.loadDetails = function(project){
 		containerDiv.find(".rightCol").load(Global.templatePath + "rightpanel.html", function(){
 			new RightPanel($(this), main, othis.project, othis).show();
 			containerDiv.find(".rightCol > .details").show();
 		});
 	};
-	
+
 	this.share = function(poid, roid) {
 		var div = $("<div class=\"modal fade\">");
 		$(document.body).append(div);
@@ -483,7 +483,7 @@ function Project(containerDiv, main, project) {
 //	othis.menuItems.push(main.addMenuItem("Project", "Share", function(){
 //		othis.share(othis.project.oid, othis.project.lastRevisionId);
 //	}));
-	
+
 	containerDiv.find(".btnProjectTree").click(othis.loadProjectTree);
 	containerDiv.find(".btnProperties").click(othis.showProperties);
 	containerDiv.find(".btnComments").click(othis.showComments);

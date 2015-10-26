@@ -72,7 +72,8 @@ require.config({
     chartjs: '../bower_components/Chart.js/Chart',
     'jquery.ui.widget': '../js/bim/jquery.ui.widget',
     jqueryUpload: '../js/bim/jquery.fileupload',
-    History: '../js/bim/history.adapter.jquery'
+    History: '../js/bim/history.adapter.jquery',
+    jqueryScrollTo: '../js/bim/jquery.scrollto'
   },
 
   shim: {
@@ -202,6 +203,9 @@ require.config({
     },
     "jqueryUpload" :{
       deps: ['jQuery', 'jquery.ui.widget']
+    },
+    "jqueryScrollTo" : {
+      deps: ['jQuery']
     }
   }
 });
