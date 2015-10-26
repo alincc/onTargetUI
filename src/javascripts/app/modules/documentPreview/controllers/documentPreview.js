@@ -13,6 +13,7 @@ define(function(require) {
         $scope.selectedDoc.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
         $scope.docImagePath = document.imagePath;
         $scope.isPdf = /(pdf$)/.test(filePath);
+        $scope.isImage = /(png|jpg|jpeg|gif)/.test(fileExtension);
       };
 
       // Comments
@@ -238,7 +239,12 @@ define(function(require) {
       };
 
       $scope.backToList = function() {
-        $state.go("app.onSite");
+        if($scope.onAction === 'onSite') {
+          $state.go("app.onSite");
+        }
+        else {
+          window.history.back();
+        }
       };
 
       $scope.editDoc = function(doc) {
