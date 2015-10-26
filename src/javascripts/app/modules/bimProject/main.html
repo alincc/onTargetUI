@@ -76,7 +76,7 @@ function Main(address, user) {
 		Global.bimServerApi.call("AuthInterface", "getLoggedInUser", {}, function(user){
 			//$(".main .nav li").hide();
 			othis.user = user;
-			$(".nav.navbar-nav > li, .userDivider, .btnAddUser, .btnListUsers").hide();
+			$(".on-bim-page .nav.navbar-nav > li, .userDivider, .btnAddUser, .btnListUsers").hide();
 			Settings.getMenuItems().forEach(function(menuItem){
 				if (menuItem == "dashboardLink" || menuItem == "gettingStartedLink" || menuItem == "serversettingsLink") {
 					if (user.userType == "ADMIN") {
