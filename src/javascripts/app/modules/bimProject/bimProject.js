@@ -4,6 +4,7 @@ define(function (require){
     uiRouter = require('uiRouter'),
     config = require('app/config'),
     jqueryUpload = require('jqueryUpload'),
+    jqueryScrollTo = require('jqueryScrollTo'),
     History = require('History'),
     indexTemplate = require('text!./index.html'),
     bimProjectTemplate = require('text!./templates/bimProject.html'),

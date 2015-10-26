@@ -72,7 +72,25 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 			}
 		}
 
+
 		this.visibleTypes = new Array();
+
+		if(BIMSURFER.Util.isset(options, options.autoStart)) {
+			if(!BIMSURFER.Util.isset(options.autoStart.serverUrl, options.autoStart.serverUsername, options.autoStart.serverPassword, options.autoStart.projectOid)) {
+				console.error('Some autostart parameters are missing');
+				return;
+			}
+			var _this = this;
+			var BIMServer = new BIMSURFER.Server(this, options.autoStart.serverUrl, options.autoStart.serverUsername, options.autoStart.serverPassword, false, true, true, function() {
+				if(BIMServer.loginStatus != 'loggedin') {
+					_this.div.innerHTML = 'Something went wrong while connecting';
+					console.error('Something went wrong while connecting');
+					return;
+				}
+				var project = BIMServer.getProjectByOid(options.autoStart.projectOid);
+				project.loadScene((BIMSURFER.Util.isset(options.autoStart.revisionOid) ? options.autoStart.revisionOid : null), true);
+			});
+		}
 	},
 
 	/**
@@ -122,7 +140,7 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 		}
 		return control;
 	},
-	
+
 	getControl: function(type) {
 		var controls = this.controls[type];
 		if (controls.length > 0) {
@@ -138,8 +156,8 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 	 * @return The light object
 	 */
 	addLight: function(light) {
-	   	if(light.CLASS.substr(0, 16) != 'BIMSURFER.Light.') {
-	   		return;
+		if(light.CLASS.substr(0, 16) != 'BIMSURFER.Light.') {
+			return;
 		}
 
 		if(this.lights.indexOf(light) == -1) {
@@ -194,12 +212,12 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 		jQuery(this.div).empty();
 
 		this.canvas = jQuery('<canvas />')
-							.attr('id', jQuery(this.div).attr('id') + "-canvas")
-							.attr('width', width)
-							.attr('height', height)
-							.html('<p>This application requires a browser that supports the <a href="http://www.w3.org/html/wg/html5/">HTML5</a> &lt;canvas&gt; feature.</p>')
-							.addClass(this.CLASS.replace(/\./g,"-"))
-							.appendTo(this.div);
+			.attr('id', jQuery(this.div).attr('id') + "-canvas")
+			.attr('width', width)
+			.attr('height', height)
+			.html('<p>This application requires a browser that supports the <a href="http://www.w3.org/html/wg/html5/">HTML5</a> &lt;canvas&gt; feature.</p>')
+			.addClass(this.CLASS.replace(/\./g,"-"))
+			.appendTo(this.div);
 		return this.canvas;
 	},
 
@@ -244,23 +262,9 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 		if(typeof options != 'object') {
 			options = {};
 		}
-		options.tatusPopups = false;
 
 		if (this.scene == null) {
 			try {
-				var self = this;
-				var CAPTURE_ID = "canvasCaptureNode";
-						
-				var addCaptureNode = function(nodes) {
-					if (options.useCapture) {
-						nodes.push({
-							type: "canvas/capture",
-							id  : CAPTURE_ID
-						});
-						
-					}
-					return nodes;
-				};
 				this.scene = {
 					backfaces: false,
 					type: "scene",
@@ -271,72 +275,52 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 						look: (typeof options.look == 'object' ? options.look : { x: 0.0, y: 0.0, z: 0.0 }),
 						up: (typeof options.up == 'object' ? options.up : { x: 0.0, y: 0.0, z: 1.0 }),
 						nodes: [{
-							nodes: addCaptureNode([{
-								type: 'camera',
-								id: 'main-camera',
-								optics: {
-									type: 'perspective',
-									far: (typeof options.far == 'number' ? options.far : 100),
-									near: (typeof options.near == 'number' ? options.near : 0.001),
-									aspect: (typeof options.aspect ==  'number' ? options.aspect : jQuery(this.canvas).width() / jQuery(this.canvas).height()),
-									fovy: (typeof options.fovy ==  'number' ? options.fovy : 37.8493)
+							type: 'camera',
+							id: 'main-camera',
+							optics: {
+								type: 'perspective',
+								far: (typeof options.far == 'number' ? options.far : 100),
+								near: (typeof options.near == 'number' ? options.near : 0.001),
+								aspect: (typeof options.aspect ==  'number' ? options.aspect : jQuery(this.canvas).width() / jQuery(this.canvas).height()),
+								fovy: (typeof options.fovy ==  'number' ? options.fovy : 37.8493)
+							},
+							nodes: [{
+								type: 'renderer',
+								id: 'main-renderer',
+								clear: {
+									color: (typeof options.clearColor ==  'boolean' ? options.clearColor : true),
+									depth: (typeof options.clearDepth ==  'boolean' ? options.clearDepth : true),
+									stencil: (typeof options.clearStencil ==  'boolean' ? options.clearStencil : true)
 								},
 								nodes: [{
-									type: 'renderer',
-									id: 'main-renderer',
-									clear: {
-										color: (typeof options.clearColor ==  'boolean' ? options.clearColor : true),
-										depth: (typeof options.clearDepth ==  'boolean' ? options.clearDepth : true),
-										stencil: (typeof options.clearStencil ==  'boolean' ? options.clearStencil : true)
-									},
-									nodes: [{
-										type: 'lights',
-										id: 'my-lights',
-										lights: []
-									}]
+									type: 'lights',
+									id: 'my-lights',
+									lights: []
 								}]
-							}])
+							}]
 						}]
 					}]
 				};
-				
+
 				this.drawCanvas();
 				this.scene.canvasId = jQuery(this.canvas).attr('id');
 				this.scene.id = this.scene.canvasId;
 				this.scene = SceneJS.createScene(this.scene);
-				
+
 				var _this = this;
-				if (options.useCapture) {
-					this.scene.getNode(CAPTURE_ID, function(node) {
-						var d;
-						node.on("image", function(data) {
-							d.resolve(data);
-						});
-						_this.capture = function(options) {
-							d = jQuery.Deferred();
-							node.capture({
-							        format: (options || {}).format || "png",
-							        width : (options || {}).width  || 1024,
-							        height: (options || {}).height || 1024
-							});
-							return d;
-						};
-					});
-				}
-				
 				this.scene.on("tick", function(){
 					_this.geometryLoaders.forEach(function(geometryLoader){
 						geometryLoader.process();
 					});
 				});
-				
+
 				for(var i = 0; i < this.lights.length; i++) {
 					this.lights[i].activate();
 				}
-				
+
 				var clickSelect = new BIMSURFER.Control.ClickSelect();
 				this.addControl(clickSelect);
-				
+
 				if(this.scene != null) {
 					this.scene.set('tagMask', '^()$');
 
@@ -361,7 +345,7 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 	 */
 	loadGeometry: function(geometryLoader) {
 		var o = this;
-		
+
 		o.geometryLoaders.push(geometryLoader);
 		// TODO limit to something useful
 		if (o.geometryLoaders.length <= 20) {
@@ -398,7 +382,7 @@ BIMSURFER.Viewer = BIMSURFER.Class({
 		this.visibleTypes.forEach(function(type){
 			mask.push(type);
 		});
-		
+
 		var tagMask = '^(' + mask.join('|') + ')$';
 		this.scene.set('tagMask', tagMask);
 		this.events.trigger('tagMaskUpdated');
