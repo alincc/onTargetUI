@@ -69,7 +69,10 @@ require.config({
     leafletFullScreen: '../bower_components/leaflet.fullscreen/Control.FullScreen',
     cryptorJs: '../bower_components/crypto-js/crypto-js',
     angularChart: '../bower_components/angular-chart.js/dist/angular-chart',
-    chartjs: '../bower_components/Chart.js/Chart'
+    chartjs: '../bower_components/Chart.js/Chart',
+    'jquery.ui.widget': '../js/bim/jquery.ui.widget',
+    jqueryUpload: '../js/bim/jquery.fileupload',
+    History: '../js/bim/history.adapter.jquery'
   },
 
   shim: {
@@ -193,6 +196,12 @@ require.config({
     },
     "angularChart": {
       deps: ['angular', 'chartjs']
+    },
+    "jquery.ui.widget": {
+      deps: ['jQuery']
+    },
+    "jqueryUpload" :{
+      deps: ['jQuery', 'jquery.ui.widget']
     }
   }
 });

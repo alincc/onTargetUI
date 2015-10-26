@@ -12598,59 +12598,6 @@ div.gantt-table-content {
 .gantt-side-content-tree .gantt-tree-handle-button {
   pointer-events: auto;
 }
-.angular-ui-tree-empty {
-  border: 1px dashed #bbb;
-  min-height: 100px;
-  background-color: #e5e5e5;
-  background-image: -webkit-linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), -webkit-linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff);
-  background-image: -moz-linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), -moz-linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff);
-  background-image: linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff);
-  background-size: 60px 60px;
-  background-position: 0 0, 30px 30px;
-}
-.angular-ui-tree-nodes {
-  display: block;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.angular-ui-tree-nodes .angular-ui-tree-nodes {
-  padding-left: 20px;
-}
-.angular-ui-tree-node,
-.angular-ui-tree-placeholder {
-  display: block;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  min-height: 20px;
-  line-height: 20px;
-}
-.angular-ui-tree-hidden {
-  display: none;
-}
-.angular-ui-tree-placeholder {
-  margin: 5px 0;
-  padding: 0;
-  min-height: 30px;
-}
-.angular-ui-tree-handle {
-  cursor: move;
-  text-decoration: none;
-  font-weight: 700;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  min-height: 20px;
-  line-height: 20px;
-}
-.angular-ui-tree-drag {
-  position: absolute;
-  pointer-events: none;
-  z-index: 999;
-  opacity: 0.8;
-}
 /*!
  * Ladda including the default theme.
  */
@@ -21385,6 +21332,9 @@ a.text-black:hover {
   width: 10px;
   height: 1px;
 }
+.on-site-page .normal-preview img {
+  max-height: 100%;
+}
 .ontarget-page .project-date {
   position: relative;
   text-align: center;
@@ -21507,6 +21457,7 @@ a.text-black:hover {
   top: 0px;
   left: 0px;
   margin: 15px;
+  margin-left: 30px;
 }
 .onbim-project-list .project-image img {
   margin: 0 auto;
@@ -21531,8 +21482,43 @@ a.text-black:hover {
 }
 .onbim-project-list .project-info .project-description p {
   text-overflow: ellipsis;
-  white-space: nowrap;
   overflow: hidden;
+}
+.onbim-project-detail .tree-node {
+  margin-bottom: 10px;
+  color: #5b90bf;
+}
+.onbim-project-detail .tree-node:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.onbim-project-detail .tree-expanded .tree-branch-head {
+  background: url("../img/icons/folder.png") no-repeat !important;
+}
+.onbim-project-detail .tree-collapsed .tree-branch-head {
+  background: url("../img/icons/folder-closed.png") no-repeat !important;
+}
+.on-bim-page .commentWrapper .comments .comment-item .avt {
+  width: 70px;
+}
+.on-bim-page .commentWrapper .comments .comment-item .avt img.avatar {
+  width: 40px;
+}
+.on-bim-page .commentWrapper .comments .comment-item .content {
+  position: relative;
+}
+.on-bim-page .commentWrapper .comments .comment-item .content p {
+  margin: 0;
+}
+.on-bim-page .commentWrapper .comments .comment-item .content .date {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 12px;
+  color: #98a6ad;
+}
+.on-bim-page .commentWrapper .comment-form {
+  padding: 0 15px;
 }
 .activity-section .panel {
   border-radius: 5px;

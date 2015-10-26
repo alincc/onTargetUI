@@ -36,7 +36,7 @@ define(function(require) {
       function($stateProvider) {
         $stateProvider
           .state('app.previewDocument', {
-            url: '/:onAction/preview?docId',
+            url: '/preview?onAction&docId',
             templateUrl: 'documentPreview/templates/documentPreview.html',
             controller: 'PreviewDocumentController',
             resolve: {
@@ -70,7 +70,10 @@ define(function(require) {
                       if($rootScope.fileAttachment) {
                         var doc = $rootScope.fileAttachment;
                         doc.name = doc.fileName;
-                        deferred.resolve(doc);
+                        deferred.resolve({
+                          projectFile: doc,
+                          imagePath: doc.location
+                        });
                       } else {
                         $window.location.href = $state.href('app.onTime');
                       }

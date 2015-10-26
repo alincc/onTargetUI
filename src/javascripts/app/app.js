@@ -61,7 +61,7 @@ define(function(require) {
     'app.onTarget',
     'app.documentPreview',
     'app.onFile',
-    'app.onBim'
+    'app.bimProject'
   ]);
 
   app

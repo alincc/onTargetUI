@@ -1,0 +1,167 @@
+<div class="comments">
+    <table class="table table-no-top">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+    <div class=comment-form>
+        <div class="input-group">
+            <input type="text" id="commentText" class="form-control" placeholder="Enter your comment">
+          <span class="input-group-btn">
+            <button class="btn btn-default btnAddComment" type="button" disabled="disabled">Add</button>
+          </span>
+        </div>
+    </div>
+</div>
+<script>
+    function Comments(containerDiv, projectPage, models, main, oid) {
+        var othis = this;
+        var domain = $('#request_domain').val();
+        var userId = $('#loggedInUserId').val();
+        var projectId = $('#loggedInUserProjectId').val();
+        var projectBimFileId = $('#projectBimFileId').val();
+        var resourceUrl = $('#resourceUrl').val();
+        var currentUserFirstName = $('#currentUserFirstName').val();
+        var currentUserLastName = $('#currentUserLastName').val();
+        var currentUserAvatarPath = $('#currentUserAvatarPath').val();
+
+        othis.selectedId = oid;
+
+        this.close = function() {
+        };
+
+        this.hide = function() {
+            containerDiv.hide();
+        };
+
+        this.show = function() {
+            containerDiv.show();
+        };
+
+        this.appendNoCommentMessage = function() {
+            var tr = '<tr class="comment-item no-result">' +
+                    '<td class="content">' +
+                    '<p class="text-center">No comment.</p>' +
+                    '</td>' +
+                    '</tr>';
+
+            containerDiv.find("table tbody").append(tr);
+        };
+
+        this.validateAvatarUrl = function(img) {
+
+            var avatarUrl = resourceUrl + '/' + img.attr('src');
+            if(/^\//.test(img.attr('src'))) {
+                avatarUrl = resourceUrl + img.attr('src');
+            }
+            var imgEl = document.createElement('img');
+            imgEl.onerror = function() {
+                img.attr("src", 'img/no-avatar.png');
+            };
+            imgEl.onload = function() {
+                var $this = this;
+                elem.attr("src", $this.src);
+            };
+            img.attr("src", avatarUrl);
+            imgEl.src = avatarUrl;
+        };
+
+        this.appendComment = function(data) {
+            var formattedDate = new Date(data.commentedDate);
+            var d = formattedDate.getDate();
+            var m = formattedDate.getMonth();
+            m += 1;  // JavaScript months are 0-11
+            var y = formattedDate.getFullYear();
+            var dateStr = m + '/' + d + '/' + y;
+            var $tr = $('<tr class="comment-item">' +
+                    '<td class="avt">' +
+                    '<img class="avatar" src="' + data.commenterContact.userImagePath + '" />' +
+                    '</td>' +
+                    '<td class="content">' +
+                    '<p class="author"><b>' + data.commenterContact.firstName + ' ' + data.commenterContact.lastName + '</b> said:</p>' +
+                    '<span class="date">' + dateStr + '</span>' +
+                    '<p class="message">' + data.comment + '</p>' +
+                    '</td>' +
+                    '</tr>');
+            containerDiv.find("table tbody").append($tr);
+            othis.validateAvatarUrl($tr.find('.avt img'));
+        };
+
+        this.loadComments = function() {
+            console.log('Load comments');
+            $.ajax({
+                url: domain + '/bim/comment/list',
+                method: 'POST',
+                data: JSON.stringify({
+                    "baseRequest": {
+                        "loggedInUserId": parseInt(userId),
+                        "loggedInUserProjectId": parseInt(projectId)
+                    },
+                    "projectBIMFileId": parseInt(projectBimFileId)
+                }),
+                dataType: "json",
+                contentType: 'application/json',
+                success: function(data) {
+                    if(data.comments.length === 0) {
+                        othis.appendNoCommentMessage();
+                    } else {
+                        for(var i = 0; i < data.comments.length; i++) {
+                            othis.appendComment(data.comments[i]);
+                        }
+                    }
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        };
+
+        this.addComment = function() {
+            $.ajax({
+                url: domain + '/bim/comment/save',
+                method: 'POST',
+                data: JSON.stringify({
+                    "baseRequest": {
+                        "loggedInUserId": parseInt(userId),
+                        "loggedInUserProjectId": parseInt(projectId)
+                    },
+                    "projectBIMFileId": parseInt(projectBimFileId),
+                    "comment": containerDiv.find('#commentText').val()
+                }),
+                dataType: "json",
+                contentType: 'application/json',
+                success: function(data) {
+                    if(data.returnVal === 'SUCCESS') {
+                        othis.appendComment({
+                            commentedDate: new Date().toISOString(),
+                            commenterContact: {
+                                firstName: currentUserFirstName,
+                                lastName: currentUserLastName,
+                                userImagePath: currentUserAvatarPath
+                            },
+                            comment: containerDiv.find('#commentText').val()
+                        });
+                        containerDiv.find('#commentText').val('');
+                    }
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        };
+
+        this.onCommentKeyup = function(e) {
+            var val = containerDiv.find('#commentText').val();
+            var $btn = containerDiv.find('.btnAddComment');
+            if(val.trim().length === 0) {
+                $btn.attr('disabled', 'disabled');
+            } else {
+                $btn.removeAttr('disabled');
+            }
+        };
+
+        containerDiv.find('#commentText').keyup(othis.onCommentKeyup);
+        containerDiv.find(".btnAddComment").click(othis.addComment);
+
+        othis.loadComments();
+    }
+</script>

@@ -77,6 +77,10 @@ gulp.task('script', ['images'], function(){
     .pipe(gulp.dest('./build/bower_components/requirejs'));
 
   gulp.src([
+    './src/js/**/*'])
+    .pipe(gulp.dest('./build/js'));
+
+  gulp.src([
     './src/javascripts/app/common/resources/**/*.json'])
     .pipe(gulp.dest('./build/javascripts/app/common/resources'));
 
@@ -84,6 +88,10 @@ gulp.task('script', ['images'], function(){
     './src/javascripts/app/common/templates/**/*'])
     .pipe(gulp.dest('./build/javascripts/app/common/templates'));
 
+  gulp.src([
+    './src/javascripts/app/modules/bimProject/**/*.html',
+    './src/javascripts/app/modules/bimProject/**/*.version'])
+    .pipe(gulp.dest('./build/javascripts/app/modules/bimProject'));
 });
 
 // Copy index.html, rename main and css file
@@ -96,7 +104,13 @@ gulp.task('html', ['script'], function(){
 });
 
 // Copy css
-gulp.task('css', function(){
+gulp.task('BIMCss', function(){
+  return gulp.src('src/less/css/**/*')
+    .pipe(gulp.dest('build/css'));
+});
+
+// Copy css
+gulp.task('css',['BIMCss'], function(){
   return gulp.src('src/css/main.min.css')
     .pipe(gulp.dest('build/css'));
 });
@@ -179,6 +193,7 @@ gulp.task('build', ['requireJsOptimizer'], function(){
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.default.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.default.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.default.baseUrl + "/bim'"))
     .pipe(gulp.dest('build/javascripts'));
 
   del([
@@ -201,6 +216,7 @@ gulp.task('build:local', ['build'], function(){
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.local.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.local.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.local.baseUrl + "/bim'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-local/app/javascripts'));
 
@@ -228,6 +244,7 @@ gulp.task('build:integration', ['build'], function(){
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.integration.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.integration.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.integration.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.integration.baseUrl + "/bim'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-integration/app/javascripts'));
 
@@ -243,7 +260,6 @@ gulp.task('build:integration', ['build'], function(){
     .pipe(gulp.dest('./build-integration'));
 });
 
-
 // ---- Integration -----
 gulp.task('build:beta', ['build'], function(){
   // Copy all file in build folder
@@ -256,6 +272,7 @@ gulp.task('build:beta', ['build'], function(){
       .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.beta.baseUrl + "'")) // base url
       .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.beta.nodeServer + "'")) // node server domain
       .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.beta.resourceUrl + "'"))
+      .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.beta.baseUrl + "/bim'"))
       .pipe(uglify())
       .pipe(gulp.dest('./build-beta/app/javascripts'));
 
@@ -285,6 +302,7 @@ gulp.task('build:testing', ['build'], function(){
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.testing.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.testing.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.testing.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.testing.baseUrl + "/bim'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-testing/app/javascripts'));
 
@@ -312,6 +330,7 @@ gulp.task('build:staging', ['build'], function(){
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.staging.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.staging.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.staging.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.staging.baseUrl + "/bim'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-staging/app/javascripts'));
 
@@ -327,6 +346,34 @@ gulp.task('build:staging', ['build'], function(){
     .pipe(gulp.dest('./build-staging'));
 });
 
+// ---- Production -----
+gulp.task('build:production', ['build'], function(){
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-production/app'));
+
+  // minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.production.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.production.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.production.nodeServer + "'")) // node server domain
+    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.production.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.production.baseUrl + "/bim'"))
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-production/app/javascripts'));
+
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.production.port))
+    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.production.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.production.BIM_SERVER + "'"))
+    .pipe(gulp.dest('./build-production'));
+
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-production'));
+});
+
 // ---- Production - sagarmatha01 -----
 gulp.task('build:sagarmatha01', ['build'], function(){
   // Copy all file in build folder
@@ -339,6 +386,7 @@ gulp.task('build:sagarmatha01', ['build'], function(){
     .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.sagarmatha01.baseUrl + "'")) // base url
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha01.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha01.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha01.baseUrl + "/bim'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-sagarmatha01/app/javascripts'));
 
@@ -366,6 +414,7 @@ gulp.task('build:sagarmatha02', ['build'], function(){
       .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.sagarmatha02.baseUrl + "'")) // base url
       .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha02.nodeServer + "'")) // node server domain
       .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha02.resourceUrl + "'"))
+      .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha02.baseUrl + "/bim'"))
       .pipe(uglify())
       .pipe(gulp.dest('./build-sagarmatha02/app/javascripts'));
 

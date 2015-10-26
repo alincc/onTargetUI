@@ -1,0 +1,44 @@
+<div ng-controller="BimCommentController" class="comment-section">
+    <div class="panel-body" custom-scroll>
+        <div class="text-center" ng-if="isLoadingComment">
+            <spinner text="Loading comments..."></spinner>
+        </div>
+        <div class="text-center" ng-if="!isLoadingComment && !comments.length">
+            No comments
+        </div>
+        <ul class="list-group no-bg no-borders pull-in">
+            <li class="list-group-item" ng-repeat="com in comments track by $index">
+                <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
+                    <img path="{{com.commenterContact.userImagePath}}" file-path alt="..."
+                         class="img-circle">
+                </a>
+
+                <div class="clear comment-content">
+                    <div class="commenter"><a href="javascript:void(0)"
+                                              ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
+                        said:
+                    </div>
+                    <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
+                    <small class="text-muted"
+                           ng-bind-html="com.comment | escapeHtml | newLines"></small>
+                </div>
+            </li>
+        </ul>
+        <div class="add-comment" ng-show="!isLoadingComment" permission="ONSITE_ADD_COMMENT">
+            <form name="add_comment_frm" novalidate
+                  ng-submit="addComment(addCommentModel, add_comment_frm)">
+                <div class="textarea">
+                                        <textarea ng-model="addCommentModel.comment" auto-grow=""
+                                                  placeholder="Add a comment or reply here" rows="1"
+                                                  required></textarea>
+                </div>
+                <div class="button">
+                    <button class="btn btn-primary" type="submit"
+                            ng-disabled="add_comment_frm.$invalid || add_comment_frm.$submitted"
+                            loading-button="add_comment_frm.$submitted" size="c">
+                        Send <i class="fa fa-paper-plan-o"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -45,8 +45,8 @@
             <span>onTARGET</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item" menu-permission="ONBIM">
-        <a ui-sref="app.onBim.listProject">
+    <li ui-sref-active="selected"  class="item" menu-permission="ONBIM" ng-class="{'menu-selected': $state.current.name == 'app.bimProject.addProject' || $state.current.name == 'app.bimProject.project'}">
+        <a ui-sref="app.bimProject.listProject">
             <img src="img/icons/onBim-icon-white.png" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
             <img src="img/icons/onBim-icon.png" class="inacti" />

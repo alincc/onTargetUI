@@ -29,6 +29,7 @@ define(function(require) {
           };
 
         service.isAuth = function() {
+          localStorage.setItem("bimToken", authentication.token);
           return authentication.isAuth;
         };
 
@@ -97,12 +98,12 @@ define(function(require) {
         };
 
         service.getAllProjects = function(projectId) {
-          return $http.post(constant.domain + '/bim/getAll', {projectId: projectId});
+          return $http.post(constant.domain + '/bim/getAll', {projectid: projectId});
         };
 
         service.addProject = function(projectId, poid, projectBimFileLocation) {
           return $http.post(constant.domain + '/bim/save', {
-            "projectId" : projectId,
+            "projectid" : projectId,
             "poid" : poid,
             "projectBimFileLocation" : projectBimFileLocation
           });
@@ -205,6 +206,72 @@ define(function(require) {
 
         service.getSchema = function (){
           return angular.fromJson(schema);
+        };
+        
+        service.getSerializerByPluginClassName = function (){
+          return $http.post(constant.bimServer + '/json', {
+            "request": {
+              "interface":"org.bimserver.PluginInterface",
+              "method":"getSerializerByPluginClassName",
+              "parameters": {
+                pluginClassName: "org.bimserver.serializers.JsonSerializerPlugin"
+              }
+            },
+            "token": authentication.token
+          });
+        };
+
+        service.downloadByJsonQuery = function (jsonQuery, roids, serializerOid){
+          return $http.post(constant.bimServer + '/json', {
+            "request": {
+              "interface":"org.buildingsmart.bimsie1.Bimsie1ServiceInterface",
+              "method":"downloadByJsonQuery",
+              "parameters": {
+                jsonQuery: jsonQuery,
+                roids: roids,
+                serializerOid: serializerOid,
+                sync: true
+              }
+            },
+            "token": authentication.token
+          });
+        };
+
+        service.generateRevisionDownloadUrl = function (longActionId, serializerOid, topicId){
+          return $http.get(constant.bimServer + '/download?token=' + authentication.token + '&longActionId=' + longActionId + '&serializerOid=' + serializerOid + '&topicId=' + topicId);
+        };
+
+        service.downloadByTypes = function (roid, type, jsonSerializerOid){
+          return $http.post(constant.bimServer + '/json', {
+            "request": {
+              "interface":"org.buildingsmart.bimsie1.Bimsie1ServiceInterface",
+              "method":"downloadByTypes",
+              "parameters": {
+                roids: [roid],
+                classNames: [type],
+                schema: "ifc2x3tc1",
+                includeAllSubtypes: true,
+                serializerOid: jsonSerializerOid,
+                useObjectIDM: false,
+                deep: false,
+                sync: true
+              }
+            },
+            "token": authentication.token
+          });
+        };
+
+        service.cleanupLongAction = function (laid){
+          return $http.post(constant.bimServer + '/json', {
+            "request": {
+              "interface":"org.bimserver.ServiceInterface",
+              "method":"cleanupLongAction",
+              "parameters": {
+                actionId: laid
+              }
+            },
+            "token": authentication.token
+          });
         };
 
         return service;

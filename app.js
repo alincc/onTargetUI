@@ -623,8 +623,8 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
         else if(parsedKeyValues.username) {
           attention.push(parsedKeyValues.username);
         }
-
-        _.each(attention, function(el) {
+        var d = _.uniq(attention);
+        _.each(d, function(el) {
           pusher.trigger('onTarget', 'private-user-' + el, {
             "message": user.contact.firstName + " " + user.contact.lastName + " has replied to the RFI"
           });

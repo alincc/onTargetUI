@@ -31,24 +31,25 @@
                                         ng-show="showDocPreview">Cancel
                                 </button>
                                 <span class="spliter pull-right"></span>
-                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="editDoc(selectedDoc)"
+                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="editDoc(selectedDoc)" ng-if="onAction == 'onSite'"
                                         ng-show="!showDocPreview">Edit
                                 </button>
-                                <button class="btn btn-info btn-xs pull-right m-r-xs"
+                                <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
                                         ng-show="showDocPreview"
                                         type="submit" size="xs"
                                         ng-disabled="_form.$submitted"
                                         loading-button="_form.$submitted">Done
                                 </button>
                             </div>
-                            <div class="panel-body" ng-if="showDocPreview">
+                            <div class="panel-body" ng-if="showDocPreview && onAction == 'onSite'">
                                 <pdf-tagging-mark-up path="{{selectedDoc.name}}"
                                                      image-path="{[selectedDoc.filePath}}"
                                                      selected-doc="selectedDoc"></pdf-tagging-mark-up>
                             </div>
-                            <div class="panel-body" ng-if="!showDocPreview">
+                            <div class="panel-body normal-preview" ng-if="!showDocPreview">
                                 <pdf-viewer src="{{trustSrc(selectedDoc.filePath)}}" ng-if="isPdf"></pdf-viewer>
-                                <img ng-if="!isPdf" ng-src="{{selectedDoc.filePath}}"/>
+                                <img ng-if="isImage" ng-src="{{selectedDoc.filePath}}"/>
+                                <p ng-if="!isImage && !isPdf">Sorry, this kind of file not supporte preview.</p>
                             </div>
                         </form>
                     </div>
