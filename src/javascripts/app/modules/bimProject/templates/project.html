@@ -1,0 +1,11 @@
+<section>
+    <input type="hidden" id="request_domain" value="{{::constant.domain}}" />
+    <input type="hidden" id="loggedInUserId" value="{{::currentUserInfo.userId}}" />
+    <input type="hidden" id="loggedInUserProjectId" value="{{::currentProjectInfo.projectId}}" />
+    <input type="hidden" id="projectBimFileId" value="{{::projectBimFileId}}" />
+    <input type="hidden" id="resourceUrl" value="{{::constant.resourceUrl}}" />
+    <input type="hidden" id="currentUserFirstName" value="{{::currentUserInfo.contact.firstName}}" />
+    <input type="hidden" id="currentUserLastName" value="{{::currentUserInfo.contact.lastName}}" />
+    <input type="hidden" id="currentUserAvatarPath" value="{{::currentUserInfo.contact.userImagePath}}" />
+    <div ng-include="'bimProject/templates/index.html'"></div>
+</section>
