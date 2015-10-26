@@ -425,7 +425,9 @@
                                                        ng-repeat="cost in costGrid">{{cost.workDescription}}</p>
                                                     <input type="text" class="form-control cost-grid"
                                                            placeholder="Enter Description of Work"
-                                                           ng-model="cost.workDescription" ng-repeat="cost in costGrid"
+                                                           ng-model="cost.workDescription"
+                                                           ng-repeat="cost in costGrid"
+                                                           required
                                                            ng-if="onEdit"/>
                                                 </div>
                                             </div>
@@ -437,7 +439,9 @@
                                                        ng-repeat="cost in costGrid">{{cost.costCode}}</p>
                                                     <input type="text" class="form-control cost-grid"
                                                            placeholder="Enter Cost Code"
-                                                           ng-model="cost.costCode" ng-repeat="cost in costGrid"
+                                                           ng-model="cost.costCode"
+                                                           ng-repeat="cost in costGrid"
+                                                           required
                                                            ng-if="onEdit"/>
                                                 </div>
                                             </div>
@@ -449,7 +453,10 @@
                                                        ng-repeat="cost in costGrid">{{cost.amount}}</p>
                                                     <input type="text" class="form-control cost-grid"
                                                            placeholder="Enter Amount"
-                                                           ng-model="cost.amount" ng-repeat="cost in costGrid"
+                                                           ng-model="cost.amount"
+                                                           required
+                                                           ng-repeat="cost in costGrid"
+                                                           ng-money min="0"
                                                            ng-if="onEdit"/>
                                                 </div>
                                             </div>
@@ -475,19 +482,8 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Total Change Order Amount</label>
-
-                                            <p class="text-field" ng-if="onView||onApprove">
-                                                {{changeOrder.keyValues.amount}}</p>
-                                            <input type="text" class="form-control"
-                                                   placeholder="Enter Total Change Order Amount"
-                                                   ng-model="changeOrder.keyValues.amount"
-                                                   name="amount" required
-                                                   ng-if="onEdit"/>
-                                            <ng-messages ng-if="_form.amount.$dirty"
-                                                         for="_form.amount.$error">
-                                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
-                                            </ng-messages>
+                                            <input type="hidden" ng-model="changeOrder.keyValues.amount" />
+                                            <label>Total Change Order Amount: <b ng-bind="(changeOrder.keyValues.amount || 0) | currency"></b></label>
                                         </div>
                                     </div>
                                 </div>

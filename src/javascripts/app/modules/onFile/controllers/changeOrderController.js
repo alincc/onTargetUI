@@ -344,6 +344,18 @@ define(function(require) {
         return onFileFactory.deleteAttachment(file.documentAttachmentId);
       };
 
+      $scope.$watch('costGrid', function() {
+        $scope.changeOrder.keyValues.amount = 0;
+        _.each($scope.costGrid, function(el) {
+          try {
+            $scope.changeOrder.keyValues.amount += parseInt(el.amount);
+          }
+          catch(err) {
+
+          }
+        });
+      }, true);
+
       load();
 
     }];

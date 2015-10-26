@@ -1,9 +1,10 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', 'fileFactory', '$timeout', '$q', '$modal', '$window', '$filter', 'document', 'contactList',
-    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal, $window, $filter, document, contactList) {
+  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', 'fileFactory', '$timeout', '$q', '$modal', '$window', '$filter', 'document', 'contactList', 'permissionFactory',
+    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal, $window, $filter, document, contactList, permissionFactory) {
       var memberList = contactList;
+
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
         if(document.createdBy === userContext.authentication().userData.userId) {
@@ -24,6 +25,11 @@ define(function(require) {
       $scope.document = {
         keyValues: {}
       };
+
+      $scope.onRejecting = false;
+      $scope.onApproving = false;
+      $scope.onSubmit = false;
+      $scope.isAllowAddResponse = false;
 
       $scope.attachments = [];
 
@@ -47,6 +53,9 @@ define(function(require) {
         // $scope.onEdit = true;
         $scope.newResponse = {};
         $scope.document.keyValues.attention = attention;
+
+        $scope.isAllowAddResponse = $scope.document.keyValues.receiverId === $rootScope.currentUserInfo.userId || $scope.document.createdBy === $rootScope.currentUserInfo.userId || attention.indexOf($rootScope.currentUserInfo.userId) > -1;
+
       } else {
         $scope.onAddNew = true;
       }
@@ -278,6 +287,7 @@ define(function(require) {
 
       $scope.addResponse = function(form) {
         $scope.isAddingResponse = true;
+        $scope.onSubmit = true;
         onFileFactory.addResponse($scope.newResponse.response, $scope.document.documentId).success(
           function(resp) {
             //$state.go('app.onFile');
@@ -312,20 +322,6 @@ define(function(require) {
           function(resp) {
             $scope.responses = resp.documentResponses;
             console.log($scope.responses);
-          }
-        );
-      };
-
-      $scope.updateStatus = function(status) {
-        $scope.onSubmit = true;
-        onFileFactory.updateStatus($scope.document.documentId, status, userContext.authentication().userData.userId)
-          .success(function(resp) {
-            $scope.onSubmit = false;
-            $state.go('app.onFile');
-          })
-          .error(
-          function(err) {
-            $scope.onSubmit = false;
           }
         );
       };
@@ -447,6 +443,31 @@ define(function(require) {
 
         //$scope.document.keyValues.receiverId =
 
+      };
+
+      $scope.haveApprovePermission = permissionFactory.checkFeaturePermission('ONFILE_APPROVE');
+      $scope.haveRejectPermission = permissionFactory.checkFeaturePermission('ONFILE_REJECT');
+
+      $scope.changeStatus = function(status) {
+        if(status === 'APPROVED' && !$scope.haveApprovePermission) {
+          return;
+        }
+        if(status === 'REJECTED' && !$scope.haveRejectPermission) {
+          return;
+        }
+        $scope.onSubmit = true;
+        $scope.onRejecting = status === 'REJECTED';
+        $scope.onApproving = status === 'APPROVED';
+        onFileFactory.updateStatus($scope.document.documentId, status, userContext.authentication().userData.userId)
+          .success(function(resp) {
+            $state.go($state.current, {docId: $scope.document.documentId}, {reload: true});
+          })
+          .error(function(err) {
+            $scope.onSubmit = false;
+            $scope.onRejecting = false;
+            $scope.onApproving = false;
+            console.log(err);
+          });
       };
 
       load();

@@ -8,24 +8,33 @@ define(function() {
       $scope.submittals = [];
 
       var viewData = function(approvals, submittals) {
-        for(var i = 0; i < approvals.length; i++) {
-          if(approvals[i].status === 'SUBMITTED') {
-            approvals[i].approve = true;
+        approvals = _.map(approvals, function(el) {
+          var newEl = el;
+          if(newEl.status === 'SUBMITTED') {
+            newEl.approve = true;
           } else {
-            approvals[i].view = true;
+            newEl.view = true;
           }
-        }
+          newEl.subject = _.pluck(_.where(newEl.keyValues, {key: 'subject'}), 'value');
+          return newEl;
+        });
 
-        for(var j = 0; j < submittals.length; j++) {
-          if(submittals[j].status === 'SUBMITTED') {
-            submittals[j].edit = true;
+        submittals = _.map(submittals, function(el) {
+          var newEl = el;
+          if(newEl.status === 'SUBMITTED') {
+            newEl.edit = true;
           } else {
-            submittals[j].view = true;
+            newEl.view = true;
           }
-        }
-        $scope.approvals = approvals;
-        $scope.submittals = submittals;
-        $scope.all = $scope.approvals.concat($scope.submittals);
+          newEl.subject = _.pluck(_.where(newEl.keyValues, {key: 'subject'}), 'value');
+          return newEl;
+        });
+
+        $scope.approvals = approvals.reverse();
+
+        $scope.submittals = submittals.reverse();
+
+        $scope.all = _.sortBy($scope.approvals.concat($scope.submittals), 'createdDate').reverse();
       };
 
       documentFactory.getUserDocument($rootScope.currentProjectInfo.projectId)
@@ -152,8 +161,10 @@ define(function() {
             doc.approve = false;
             doc.status = status;
             doc.view = true;
+
             //change status success
-            //$scope.approvals.splice(idx, 1);
+            _.remove($scope.approvals, {documentId: doc.documentId});
+            _.remove($scope.all, {documentId: doc.documentId});
           });
       };
 
