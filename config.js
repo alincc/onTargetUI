@@ -16,7 +16,7 @@ module.exports = {
   local: {
     port: 9000,
     domain: 'http://localhost:9000/ontargetrs/services',
-    baseUrl: 'http://localhost.com:9000',
+    baseUrl: 'http://localhost:9000',
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'http://localhost:9001',
     // Proxy settings
