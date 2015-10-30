@@ -16,8 +16,7 @@ define(function(require) {
         }
       }
       else {
-        if(permissionFactory.checkFeaturePermission(attrs.permission)) {
-        } else {
+        if(!permissionFactory.checkFeaturePermission(attrs.permission)) {
           element.remove();
         }
       }

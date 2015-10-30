@@ -17,8 +17,7 @@ define(function(require) {
         }
       }
       else {
-        if(permissionFactory.checkMenuPermission(attrs.menuPermission)) {
-        } else {
+        if(!permissionFactory.checkMenuPermission(attrs.menuPermission)) {
           element.remove();
         }
       }
