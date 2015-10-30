@@ -115,4 +115,57 @@
     border-radius: 2px;
     padding: 5px 10px;
   }
+  .comment-section {
+    .panel-body {
+      .comment-content {
+        border: solid 1px #d5d5d5;
+        padding: 5px;
+        border-radius: 5px;
+        .commenter {
+          color: @text-muted;
+          a {
+            color: @text-color;
+            font-weight: bold;
+          }
+        }
+        .date {
+          position: absolute;
+          right: 25px;
+          top: 17px;
+          font-size: 12px;
+          color: @text-muted
+        }
+      }
+      .add-comment {
+        position: relative;
+        border: solid 1px #d5d5d5;
+        border-radius: 5px;
+        padding: 5px 5px 0px 5px;
+        form {
+          display: table;
+          width: 100%;
+          .textarea {
+            display: table-cell;
+            vertical-align: top;
+            width: 100%;
+            textarea {
+              width: 100%;
+              border: 0;
+              resize: none;
+              min-height: 29px;
+              border-radius: 5px;
+              padding-top: 5px;
+            }
+          }
+          .button {
+            display: table-cell;
+            vertical-align: top;
+            button {
+              padding: 3px 10px;
+            }
+          }
+        }
+      }
+    }
+  }
 }

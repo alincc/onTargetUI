@@ -1,10 +1,10 @@
 <div class="project">
-	<div class="row">
+	<div class="row row-off-canvas">
 		<div class="col-md-8 rightCol">
 			<div class="rightpanel ih">
 			</div>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-4 leftCol" id="sidebar">
 			<div class="panel panel-default">
 				<div class="panel-heading btn-group projectTabs" data-toggle="buttons" style="padding: 0; width: 100%">
 					<label class="btnProjectTree btn btn-default active">
@@ -116,7 +116,11 @@ function Project(containerDiv, main, project) {
 	};
 
 	this.resize = function(){
-		containerDiv.find(".sidespanWrapper").height(($(window).height() - $(".navbar").outerHeight() - containerDiv.find(".col-md-4 .panel-heading").outerHeight() - 57) + "px");
+		if($('.row-off-canvas').hasClass('fullscreen')) {
+			containerDiv.find(".sidespanWrapper").height(100 + 'vh');
+		} else {
+			containerDiv.find(".sidespanWrapper").height(($(window).height() - $(".navbar").outerHeight() - containerDiv.find(".col-md-4 .panel-heading").outerHeight() - 110) + "px");
+		}
 	};
 
 	this.changeRevision = function(project, roid){

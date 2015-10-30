@@ -18,7 +18,6 @@ define(function(require) {
         elem.html('<span class="ladda-label">' + innerHtml + '</span>');
         var l = Ladda.create(elem[0]);
         scope.$watch('loadingButton', function(e) {
-          console.log(l, scope.loadingButton);
           if(scope.loadingButton) {
             l.start();
           } else {

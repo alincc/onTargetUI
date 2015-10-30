@@ -2,46 +2,54 @@
     <div class="wrapper-md p-r-none">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a class="btn btn-default" ui-sref="app.bimProject.addProject">Add Project</a>
+                <a class="btn btn-info" ui-sref="app.bimProject.addProject"><i class="fa fa-plus-circle"></i> Add Project</a>
             </div>
             <div class="panel-body">
-                <div class="row">
-                    <div ng-repeat="project in bimProjects" class="col-xs-1 col-md-6">
+                <div class="row" ng-if="!onLoading && !projectList.length">
+                    <div class="col-xs-12">
+                        <alert type="info" class="text-center">No projects</alert>
+                    </div>
+                </div>
+                <div class="row" ng-if="onLoading">
+                    <div class="col-xs-12 text-center">
+                        <spinner text="Loading..."></spinner>
+                    </div>
+                </div>
+                <div class="row" ng-hide="onLoading">
+                    <div ng-repeat="project in projectList" class="col-xs-1 col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="project-image" align="center">
                                     <a href="javascript:void(0)" ng-click="projectDetail(project)">
-                                        <img file-path="project" path="{{project.projectImagePath}}"
+                                        <img file-path="project" path="{{project.projectBimFileLocation}}"
                                              class="img-responsive"/>
                                     </a>
                                 </div>
                                 <div class="project-info">
-                                    <div class="project-name">{{project.name}}</div>
+                                    <div class="project-name">{{project.bim.name}}</div>
+                                    <div align="center" class="option">
+                                        <ul class="list-inline list-justified">
+                                            <li class="text-left">
+                                                <a href="javascript:void(0)" permission="EDIT_PROJECT"
+                                                                     ng-click="editProject(project)"><i
+                                                    class="fa fa-pencil-square-o"></i>
+                                                Edit</a>
+                                            </li>
+                                            <li class="text-center">
+                                                <a href="javascript:void(0)" permission="DELETE_PROJECT"
+                                                                       ng-click="deleteProject(project)"><i
+                                                    class="fa fa-trash-o"></i>
+                                                Delete</a></li>
+                                        </ul>
+                                    </div>
                                     <div class="project-description">
-                                        <p>{{project.description}}</p>
+                                        <p>{{project.bim.description}}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--<div class="row">
-                    <div class="projects">
-                        <div class="well well-sm noprojects">There are no projects yet, click on Project | New project to create a new project</div>
-                        <table class="projectsTable table table-hover initialhide">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Sub Projects</th>
-                                <th>Revisions</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>-->
             </div>
         </div>
     </div>

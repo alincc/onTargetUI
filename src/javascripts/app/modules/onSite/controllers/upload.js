@@ -51,8 +51,10 @@ define(function (require){
                   fileFactory.convertPDFToImage(resp.url).then(function (){
                     $modalInstance.close(data);
                   }, function (err){
-                    console.log(err);
+                    $modalInstance.close(err);
                   });
+                } else {
+                  $modalInstance.close(data);
                 }
               })
               .error(function (){

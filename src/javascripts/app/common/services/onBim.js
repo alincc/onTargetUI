@@ -174,6 +174,16 @@ define(function(require) {
           });
         };
 
+        service.deleteBimProject = function(projectId) {
+          return $http.post(constant.domain + '/bim/delete', {
+            projectBimFileId: projectId
+          }, {
+            headers: {
+              AutoAlert: true
+            }
+          });
+        };
+
         service.updateBimProject = function (sProject){
           return $http.post(constant.bimServer + '/json', {
             "request": {

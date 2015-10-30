@@ -105,7 +105,11 @@ gulp.task('html', ['script'], function(){
 
 // Copy css
 gulp.task('BIMCss', function(){
-  return gulp.src('src/less/css/**/*')
+  return gulp.src([
+    'src/css/**/*',
+    '!src/css/main.css',
+    '!src/css/main.min.css'
+  ])
     .pipe(gulp.dest('build/css'));
 });
 

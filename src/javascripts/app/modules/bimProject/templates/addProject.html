@@ -1,4 +1,4 @@
-<div class="addproject">
+<div class="onbim-add-project">
     <div class="wrapper-md p-r-none">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -6,13 +6,21 @@
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Name</label>
                         <div class="col-lg-5">
-                            <input type="text" class="form-control" placeholder="Name" ng-model="project.projectName" required name="projectName">
+                            <input type="text" class="form-control" placeholder="Name" ng-model="project.projectName" name="projectName" required/>
+                            <ng-messages ng-if="_form.projectName.$dirty"
+                                         for="_form.projectName.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Description</label>
                         <div class="col-lg-5">
-                            <textarea class="form-control" placeholder="Description" cols="60" rows="7" ng-model="project.description" required name="description"></textarea>
+                            <textarea class="form-control" placeholder="Description" cols="60" rows="7" ng-model="project.description" name="description" required></textarea>
+                            <ng-messages ng-if="_form.description.$dirty"
+                                         for="_form.description.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -25,6 +33,11 @@
                                     required>
                                 <option value="">-- Select Uniform Length Measure --</option>
                             </select>
+
+                            <ng-messages ng-if="_form.lengthMeasureInput.$dirty"
+                                         for="_form.lengthMeasureInput.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
                         </div>
                     </div>
                     <div class="form-group">
@@ -36,16 +49,35 @@
                                     required>
                                 <option value="">-- Select Schema --</option>
                             </select>
+                            <ng-messages ng-if="_form.schema.$dirty"
+                                         for="_form.schema.$error">
+                                <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Project image</label>
+                        <div class="col-lg-5">
+                            <div class="picture-container">
+                                <a ngf-select ng-model="picture.file" ngf-multiple="false">
+                                    <div class="overlay">
+                                        <p>Change picture</p>
+                                    </div>
+                                    <img file-path="project" path="{{project.projectBimFileLocation}}"/>
+                                </a>
+                                <div loading-bar="{{picture.percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="picture.isUploadPicture"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-3"></div>
                         <div class="col-lg-5">
-                            <button type="submit" class="btn btn-primary" ng-disable="_form.$invalid || _form.$submitted"
+                            <button type="submit" class="btn btn-primary" ng-disabled="_form.$invalid || _form.$submitted"
                                     loading-button="_form.$submitted">Add</button>
                         </div>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>

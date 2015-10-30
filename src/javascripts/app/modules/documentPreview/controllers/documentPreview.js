@@ -44,16 +44,16 @@ define(function(require) {
         if($scope.selectedDoc) {
           onSiteFactory.addComment($scope.selectedDoc.fileId, model.comment, $scope.selectedDoc.name, $scope.selectedDoc.createdBy)
             .success(function(resp) {
-              //$scope.comments.unshift({
-              //  "comment": model.comment,
-              //  "commentedBy": $rootScope.currentUserInfo.userId,
-              //  "commentedDate": new Date().toISOString(),
-              //  "commenterContact": $rootScope.currentUserInfo.contact,
-              //  "projectFileCommentId": 0
-              //});
-              //$scope.addCommentModel.comment = '';
-              //form.$setPristine();
-              //$scope.$broadcast('autosize:update');
+              $scope.comments.unshift({
+                "comment": model.comment,
+                "commentedBy": $rootScope.currentUserInfo.userId,
+                "commentedDate": new Date().toISOString(),
+                "commenterContact": $rootScope.currentUserInfo.contact,
+                "projectFileCommentId": 0
+              });
+              $scope.addCommentModel.comment = '';
+              form.$setPristine();
+              $scope.$broadcast('autosize:update');
             })
             .error(function(err) {
               console.log(err);

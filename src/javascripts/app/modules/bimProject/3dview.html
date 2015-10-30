@@ -150,6 +150,7 @@
 			o.viewer = new BIMSURFER.Viewer(Global.bimServerApi, 'viewport');
 			o.resize();
 			$(window).resize(o.resize);
+			$(".rightCol").resize(o.resize);
 			o.viewer.loadScene(function(){
 				var clickSelect = o.viewer.getControl("BIMSURFER.Control.ClickSelect");
 				clickSelect.activate();
@@ -160,7 +161,11 @@
 
 		this.resize = function(){
 			$("#viewport").width(containerDiv.parents("panel-body").first().width() + "px");
-			$("#viewport").height(($(window).height() - $(".navbar").outerHeight() - $(".rightpanel .panel-heading").outerHeight() - 98) + "px");
+			if($('.row-off-canvas').hasClass('fullscreen')) {
+				$("#viewport").height(100 + 'vh');
+			} else {
+				$("#viewport").height(($(window).height() - $(".navbar").outerHeight() - $(".rightpanel .panel-heading").outerHeight() - 150) + "px");
+			}
 			o.viewer.resize($('div#viewport').width(), $('div#viewport').height());
 		};
 

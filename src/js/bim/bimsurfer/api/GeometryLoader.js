@@ -111,6 +111,8 @@ function GeometryLoader(bimServerApi, models, viewer) {
 			o.viewer.events.trigger('sceneLoaded', [o.viewer.scene]);
 			o.bimServerApi.call("ServiceInterface", "cleanupLongAction", {actionId: o.topicId}, function(){
 			});
+			//Tho show full screen button when load finish
+			$('.fullscreen-button').show();
 		}
 	};
 	

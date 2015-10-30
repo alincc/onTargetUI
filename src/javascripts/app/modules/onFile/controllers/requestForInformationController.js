@@ -30,7 +30,6 @@ define(function(require) {
       $scope.onApproving = false;
       $scope.onSubmit = false;
       $scope.isAllowAddResponse = false;
-
       $scope.attachments = [];
 
       $scope.isAddingResponse = false;
@@ -105,16 +104,17 @@ define(function(require) {
         if(reset) {
           $scope.attachments = [];
         }
-        onFileFactory.getDocumentAttachmentsByDocumentId($scope.document.documentId).success(
-          function(resp) {
+        onFileFactory.getDocumentAttachmentsByDocumentId($scope.document.documentId)
+          .success(function(resp) {
+            console.log(resp);
             $scope.attachments = $scope.attachments.concat(resp.attachments);
             $scope.attachments = _.map($scope.attachments, function(el) {
               var newEl = el;
               newEl.uploaded = true;
               return newEl;
             });
-          }
-        );
+            console.log($scope.attachments);
+          });
       }
 
       var load = function() {
@@ -296,7 +296,9 @@ define(function(require) {
               promises.push($scope.saveDocumentInfo(file));
             });
 
-            function done() {
+            function done(form) {
+              console.log(form);
+              $scope.newResponse.response = "";
               $scope.getResponse();
               $scope.newResponse = {};
               form.$setPristine();
@@ -305,9 +307,9 @@ define(function(require) {
             }
 
             $q.all(promises).then(function(values) {
-              done();
+              done(form);
             }, function(errors) {
-              done();
+              done(form);
             });
 
           }, function(err) {

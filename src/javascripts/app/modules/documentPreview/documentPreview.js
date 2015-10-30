@@ -51,15 +51,19 @@ define(function(require) {
                           projectFileId: Number($stateParams.docId)
                         }).success(
                           function(resp) {
-                            fileFactory.getPdfImage(resp.projectFile.name)
-                              .then(function(r) {
-                                deferred.resolve({
-                                  projectFile: resp.projectFile,
-                                  imagePath: r.data.url
+                            if(/(pdf$)/.test(resp.projectFile.name)) {
+                              fileFactory.getPdfImage(resp.projectFile.name)
+                                .then(function (r){
+                                  deferred.resolve({
+                                    projectFile: resp.projectFile,
+                                    imagePath: r.data.url
+                                  });
+                                }, function (err, status){
+                                  console.log(err, status);
                                 });
-                              }, function(err, status) {
-                                console.log(err, status);
-                              });
+                            } else {
+                              deferred.resolve({projectFile: resp.projectFile});
+                            }
                           }
                         );
                       } else {

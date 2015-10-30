@@ -28,9 +28,9 @@
                             <div class="panel-heading">
                                 <span ng-bind="selectedDoc.name | fileName"></span>
                                 <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="cancelEdit()"
+                                        ng-disabled="_form.$submitted"
                                         ng-show="showDocPreview">Cancel
                                 </button>
-                                <span class="spliter pull-right"></span>
                                 <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="editDoc(selectedDoc)" ng-if="onAction == 'onSite'"
                                         ng-show="!showDocPreview">Edit
                                 </button>

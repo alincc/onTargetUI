@@ -223,7 +223,7 @@ define(function(require) {
             map = L.map('pdfTaggingMarkUpMap', {
               minZoom: 1,
               maxZoom: 4,
-              center: [0, 0],
+              center: [0, 0], // - , -
               zoom: 1,
               crs: L.CRS.Simple,
               fullscreenControl: true,

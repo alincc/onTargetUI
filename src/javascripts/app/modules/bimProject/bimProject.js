@@ -8,6 +8,7 @@ define(function (require){
     History = require('History'),
     indexTemplate = require('text!./index.html'),
     bimProjectTemplate = require('text!./templates/bimProject.html'),
+    bimProjectDeleteTemplate = require('text!./templates/delete.html'),
     listTemplate = require('text!./templates/listProject.html'),
     projectTemplate = require('text!./templates/project.html'),
     addProjectTemplate = require('text!./templates/addProject.html'),
@@ -17,12 +18,15 @@ define(function (require){
     projectDetailController = require('./controllers/project'),
     addProjectController = require('./controllers/addProject'),
     commentController = require('./controllers/comment'),
-    onBimFactory = require('app/common/services/onBim');
+    projectDeleteController = require('./controllers/delete'),
+    onBimFactory = require('app/common/services/onBim'),
+    fileFactory = require('app/common/services/file');
 
   var module = angular.module('app.bimProject', [
     'ui.router',
     'app.config',
-    'common.services.onBim'
+    'common.services.onBim',
+    'common.services.file'
   ]);
 
   module.run([
@@ -38,6 +42,7 @@ define(function (require){
       $templateCache.put('bimProjectDetail/templates/bimProjectDetail.html', projectTemplate);
       $templateCache.put('bimAddProject/templates/bimAddProject.html', addProjectTemplate);
       $templateCache.put('bimComment/templates/bimComment.html', commentTemplate);
+      $templateCache.put('bimProject/templates/delete.html', bimProjectDeleteTemplate);
     }]);
 
   module.controller('BimProjectController', bimProjectController);
@@ -45,6 +50,7 @@ define(function (require){
   module.controller('BimProjectDetailController', projectDetailController);
   module.controller('BimAddProjectController', addProjectController);
   module.controller('BimCommentController', commentController);
+  module.controller('BimProjectDeleteController', projectDeleteController);
 
   module.config(
     ['$stateProvider', '$urlRouterProvider',

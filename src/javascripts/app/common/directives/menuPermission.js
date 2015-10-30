@@ -18,7 +18,6 @@ define(function(require) {
       }
       else {
         if(permissionFactory.checkMenuPermission(attrs.menuPermission)) {
-          console.log("permission");
         } else {
           element.remove();
         }

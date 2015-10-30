@@ -19772,6 +19772,23 @@ a.text-black:hover {
 .ladda-button[data-size="lg"][data-style=expand-right][data-loading] {
   padding-right: 16px;
 }
+ul.list-justified {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+}
+ul.list-justified li {
+  display: table-cell;
+  float: none;
+  width: 1%;
+}
+.text-black {
+  color: #000;
+}
+.no-resize {
+  resize: none;
+}
 .butterbar {
   position: relative;
   margin-bottom: -3px;
@@ -21451,6 +21468,55 @@ a.text-black:hover {
   border-radius: 2px;
   padding: 5px 10px;
 }
+.on-file-page .comment-section .panel-body .comment-content {
+  border: solid 1px #d5d5d5;
+  padding: 5px;
+  border-radius: 5px;
+}
+.on-file-page .comment-section .panel-body .comment-content .commenter {
+  color: #98a6ad;
+}
+.on-file-page .comment-section .panel-body .comment-content .commenter a {
+  color: #58666e;
+  font-weight: bold;
+}
+.on-file-page .comment-section .panel-body .comment-content .date {
+  position: absolute;
+  right: 25px;
+  top: 17px;
+  font-size: 12px;
+  color: #98a6ad;
+}
+.on-file-page .comment-section .panel-body .add-comment {
+  position: relative;
+  border: solid 1px #d5d5d5;
+  border-radius: 5px;
+  padding: 5px 5px 0px 5px;
+}
+.on-file-page .comment-section .panel-body .add-comment form {
+  display: table;
+  width: 100%;
+}
+.on-file-page .comment-section .panel-body .add-comment form .textarea {
+  display: table-cell;
+  vertical-align: top;
+  width: 100%;
+}
+.on-file-page .comment-section .panel-body .add-comment form .textarea textarea {
+  width: 100%;
+  border: 0;
+  resize: none;
+  min-height: 29px;
+  border-radius: 5px;
+  padding-top: 5px;
+}
+.on-file-page .comment-section .panel-body .add-comment form .button {
+  display: table-cell;
+  vertical-align: top;
+}
+.on-file-page .comment-section .panel-body .add-comment form .button button {
+  padding: 3px 10px;
+}
 .onbim-project-list .project-image {
   width: 205px;
   position: absolute;
@@ -21519,6 +21585,40 @@ a.text-black:hover {
 }
 .on-bim-page .commentWrapper .comment-form {
   padding: 0 15px;
+}
+.onbim-add-project .picture-container {
+  width: 120px;
+}
+.onbim-add-project .picture-container a {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+}
+.onbim-add-project .picture-container a img {
+  width: 120px;
+}
+.onbim-add-project .picture-container a .overlay {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+.onbim-add-project .picture-container a .overlay p {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  text-align: center;
+  width: 100%;
+  color: #fff;
+}
+.onbim-add-project .picture-container a:hover .overlay {
+  display: block;
+}
+.onbim-add-project textarea {
+  resize: none;
 }
 .activity-section .panel {
   border-radius: 5px;
@@ -22217,18 +22317,6 @@ a.text-black:hover {
 }
 .comment-section .panel-body .add-comment form .button button {
   padding: 3px 10px;
-}
-.rfi-section .response-container {
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  padding: 10px;
-  margin-bottom: 15px;
-}
-.rfi-section .response-container .submited-by {
-  font-style: italic;
-}
-.rfi-section hr {
-  border-top: 1px solid #ccc;
 }
 .upload-box .uploader-content .uploader-box {
   max-height: 300px;

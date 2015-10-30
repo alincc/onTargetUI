@@ -84,9 +84,7 @@ define(function() {
 
       function bindChannel() {
         if($rootScope.currentUserInfo.userId) {
-          console.log('Register channel: ', 'private-user-' + $rootScope.currentUserInfo.userId);
           pushFactory.bind('private-user-' + $rootScope.currentUserInfo.userId, function(data) {
-            console.log(data);
             if($rootScope.currentUserInfo.userId) {
               getAllNotifications();
               toaster.pop('info', 'Info', data.message);
