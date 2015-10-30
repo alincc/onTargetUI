@@ -98,7 +98,7 @@ define(function(require) {
         };
 
         service.getAllProjects = function(projectId) {
-          return $http.post(constant.domain + '/bim/getAll', {projectid: projectId});
+          return $http.post(constant.domain + '/bim/getAll', {projectId: projectId});
         };
 
         service.addProject = function(projectId, poid, projectBimFileLocation) {
