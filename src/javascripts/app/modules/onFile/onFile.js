@@ -9,6 +9,7 @@ define(function(require) {
     requestForInformationTemplate = require('text!./templates/requestForInformation.html'),
     transmittalTemplate = require('text!./templates/transmittal.html'),
     uploadTemplate = require('text!./templates/upload.html'),
+    deleteReponseTemplate = require('text!./templates/deleteResponse.html'),
     attachmentListTemplate = require('text!./templates/attachmentList.html'),
     attachmentListDirective = require('./directives/attachmentList'),
     controller = require('./controllers/onFileController'),
@@ -18,6 +19,7 @@ define(function(require) {
     requestForInformationController = require('./controllers/requestForInformationController'),
     transmittalController = require('./controllers/transmittalController'),
     uploadController = require('./controllers/upload'),
+    deleteResponseController = require('./controllers/deleteResponse'),
     projectContextModule = require('app/common/context/project'),
     permissionServiceModule = require('app/common/services/permission'),
     notification = require('app/common/services/notifications'),
@@ -41,6 +43,7 @@ define(function(require) {
     $templateCache.put('transmittal/templates/transmittal.html', transmittalTemplate);
     $templateCache.put('onFile/templates/upload.html', uploadTemplate);
     $templateCache.put('onFile/templates/attachmentList.html', attachmentListTemplate);
+    $templateCache.put('onFile/templates/deleteResponse.html', deleteReponseTemplate);
   }]);
 
   module.controller('OnFileController', controller);
@@ -50,6 +53,7 @@ define(function(require) {
   module.controller('RequestForInformationController', requestForInformationController);
   module.controller('TransmittalController', transmittalController);
   module.controller('OnFileUploadController', uploadController);
+  module.controller('DeleteResponseController', deleteResponseController);
 
   module.directive('attachmentList', attachmentListDirective);
 

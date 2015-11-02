@@ -174,13 +174,26 @@ define(function(require) {
           });
         };
 
-        service.deleteBimProject = function(projectId) {
+        service.deleteProject = function(projectId) {
           return $http.post(constant.domain + '/bim/delete', {
             projectBimFileId: projectId
           }, {
             headers: {
               AutoAlert: true
             }
+          });
+        };
+        
+        service.deleteBimProject = function (poid){
+          return $http.post(constant.bimServer + '/json', {
+            "request": {
+              "interface":"org.buildingsmart.bimsie1.Bimsie1ServiceInterface",
+              "method":"deleteProject",
+              "parameters": {
+                poid: poid
+              }
+            },
+            "token": authentication.token
           });
         };
 
@@ -281,6 +294,13 @@ define(function(require) {
               }
             },
             "token": authentication.token
+          });
+        };
+
+        service.updateBimThumbnail = function (projectBimFileId, bimThumbnailPath){
+          return $http.post(constant.domain + '/bim/updateThumbnailPath', {
+            "projectBimFileId" : projectBimFileId,
+            "bimThumbnailPath" : bimThumbnailPath
           });
         };
 

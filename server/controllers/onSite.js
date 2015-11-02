@@ -135,6 +135,40 @@ function exportPdf(req, res) {
   });
 }
 
+function getNextVersionName(req, res) {
+  var filePath = req.body.path;
+  var fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+  var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+  var fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+  var fullFilePath = [rootPath, filePath].join('/');
+  var versionName = filePath.substring(0, filePath.lastIndexOf('/'));
+  var reg = new RegExp(fileNameWithoutExt + '\\-\\d+\\.' + fileExt + '$');
+  if(fs.existsSync(fullFilePath)) {
+    var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
+    var versions = _.filter(files, function(file) {
+      return reg.test(file);
+    });
+    if(versions.length <= 0) {
+      versionName = versionName + '/' + fileNameWithoutExt + '-1.' + fileExt;
+    } else {
+      var lastVersionName = _.sortBy(versions).reverse();
+      var versionNumber = /.*\-(\d+)\./.exec(lastVersionName)[1];
+      if(versionNumber) {
+        versionName = versionName + '/' + fileNameWithoutExt + '-' + (parseInt(versionNumber) + 1) + '.' + fileExt;
+      }
+    }
+
+    res.send({
+      success: true,
+      newVersionName: versionName
+    });
+  } else {
+    res.status(400);
+    res.send('File not found!');
+  }
+}
+
 module.exports = {
-  exportPdf: exportPdf
+  exportPdf: exportPdf,
+  getNextVersionName: getNextVersionName
 };

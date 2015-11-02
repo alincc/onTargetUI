@@ -16,7 +16,9 @@ function downloadFile(req, res) {
   };
   var url = req.body.url;
   var uuid = req.body.uuid;
-  var fileName = req.body.fileName.replace(/\s/g,'_');
+  var fileName = req.body.fileName
+    .replace(/\'/g,'_')
+    .replace(/\"/g,'_');
   var destinationDir = uploadedFilesPath + 'temp/';
   var fileDestination = destinationDir + fileName;
 

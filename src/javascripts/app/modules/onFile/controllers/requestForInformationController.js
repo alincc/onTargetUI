@@ -31,6 +31,7 @@ define(function(require) {
       $scope.onSubmit = false;
       $scope.isAllowAddResponse = false;
       $scope.attachments = [];
+      $scope.currentUserId = $rootScope.currentUserInfo.userId;
 
       $scope.isAddingResponse = false;
 
@@ -473,6 +474,51 @@ define(function(require) {
       };
 
       load();
+
+      $scope.openUpdateResponse = function (response){
+        response.onEdit = true;
+        response.updateResponse = response.response;
+      };
+
+      $scope.updateResponse = function (response){
+        if(response.updateReponse !== '') {
+          onFileFactory.updateResponse(response.documentResponseId, response.updateResponse).success(
+            function (resp){
+              response.onEdit = false;
+              $scope.getResponse();
+            }
+          );
+        }
+      };
+
+      var deleteResponseModalInstance;
+      
+      $scope.openDeleteModal = function (response){
+        deleteResponseModalInstance = $modal.open({
+          templateUrl: 'onFile/templates/deleteResponse.html',
+          controller: 'DeleteResponseController',
+          size: 'sm',
+          resolve: {
+            response: function() {
+              return response;
+            }
+          }
+        });
+
+        deleteResponseModalInstance.result.then(function() {
+          $scope.getResponse();
+        }, function() {
+
+        });
+      };
+
+      $scope.deleteResponse = function (response){
+        onFileFactory.deleteResponse(response.documentResponseId).success(
+          function (resp){
+            $scope.getResponse();
+          }
+        );
+      };
 
     }];
   return controller;

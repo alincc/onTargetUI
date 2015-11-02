@@ -55,7 +55,7 @@ define(function(require) {
         var onTargetProject = _.find($scope.projectList, {poid: project.poid});
         if(onTargetProject) {
           $state.go('app.bimProject.project', {
-            poid: project.oid,
+            poid: project.poid,
             projectBimFileId: onTargetProject.projectBimFileId
           });
         } else {
@@ -87,6 +87,11 @@ define(function(require) {
         }, function() {
 
         });
+      };
+
+      $scope.editProject = function (project){
+        $rootScope.currentBimProject = project;
+        $state.go('app.bimProject.updateProject', {poid: project.poid, projectBimFileId: project.projectBimFileId});
       };
     }
   ];

@@ -117,6 +117,7 @@
   }
   .comment-section {
     .panel-body {
+      height: auto;
       .comment-content {
         border: solid 1px #d5d5d5;
         padding: 5px;
@@ -165,6 +166,35 @@
             }
           }
         }
+      }
+      .reponse-group-button {
+        margin-top: 5px;
+        font-size: 16px;
+        color: #8E939B;
+        .update-button{
+          padding: 3px;
+          &:hover {
+            color: green;
+            cursor: pointer;
+          }
+        }
+        .danger-button{
+          padding: 3px;
+          &:hover {
+            color: red;
+            cursor: pointer;
+          }
+        }
+        .default-button {
+          padding: 3px;
+          &:hover {
+            color: #337ab7;
+            cursor: pointer;
+          }
+        }
+      }
+      .control-group-button {
+        margin-top: 0px;
       }
     }
   }

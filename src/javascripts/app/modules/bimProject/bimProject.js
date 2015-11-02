@@ -12,21 +12,25 @@ define(function (require){
     listTemplate = require('text!./templates/listProject.html'),
     projectTemplate = require('text!./templates/project.html'),
     addProjectTemplate = require('text!./templates/addProject.html'),
+    updateProjectTemplate = require('text!./templates/updateProject.html'),
     commentTemplate = require('text!./templates/comment.html'),
     bimProjectController = require('./controllers/bimProject'),
     listController = require('./controllers/listProject'),
     projectDetailController = require('./controllers/project'),
     addProjectController = require('./controllers/addProject'),
+    updateProjectController = require('./controllers/updateProject'),
     commentController = require('./controllers/comment'),
     projectDeleteController = require('./controllers/delete'),
     onBimFactory = require('app/common/services/onBim'),
-    fileFactory = require('app/common/services/file');
+    fileFactory = require('app/common/services/file'),
+    utilFactory = require('app/common/services/util');
 
   var module = angular.module('app.bimProject', [
     'ui.router',
     'app.config',
     'common.services.onBim',
-    'common.services.file'
+    'common.services.file',
+    'common.services.util'
   ]);
 
   module.run([
@@ -43,6 +47,7 @@ define(function (require){
       $templateCache.put('bimAddProject/templates/bimAddProject.html', addProjectTemplate);
       $templateCache.put('bimComment/templates/bimComment.html', commentTemplate);
       $templateCache.put('bimProject/templates/delete.html', bimProjectDeleteTemplate);
+      $templateCache.put('bimProject/templates/updateProject.html', updateProjectTemplate);
     }]);
 
   module.controller('BimProjectController', bimProjectController);
@@ -51,6 +56,7 @@ define(function (require){
   module.controller('BimAddProjectController', addProjectController);
   module.controller('BimCommentController', commentController);
   module.controller('BimProjectDeleteController', projectDeleteController);
+  module.controller('BimUpdateProjectController', updateProjectController);
 
   module.config(
     ['$stateProvider', '$urlRouterProvider',
@@ -107,6 +113,27 @@ define(function (require){
             templateUrl: 'bimAddProject/templates/bimAddProject.html',
             controller: 'BimAddProjectController',
             reloadOnSearch: false
+          })
+          .state('app.bimProject.updateProject', {
+            url: '/update-project?poid&projectBimFileId',
+            templateUrl: 'bimProject/templates/updateProject.html',
+            controller: 'BimUpdateProjectController',
+            reloadOnSearch: false,
+            resolve: {
+              project: ['$stateParams', '$q', 'onBimFactory',
+                function ($stateParams, $q, onBimFactory){
+                  var defferred = $q.defer();
+                  if($stateParams.poid) {
+                    onBimFactory.getBimProjectByPoid($stateParams.poid).success(
+                      function (resp){
+                        defferred.resolve(resp.response.result);
+                      }
+                    );
+                  }
+                  return defferred.promise;
+                }
+              ]
+            }
           });
       }
     ]
