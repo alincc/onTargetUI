@@ -76,6 +76,12 @@ define(function(require) {
       return $http.post(constant.nodeServer + '/node/onsite/exportPdf', data);
     };
 
+    services.getNextVersionName = function(path){
+      return $http.post(constant.nodeServer + '/node/onsite/getNextVersionName', {
+        path: path
+      });
+    };
+
     return services;
   }]);
   return module;

@@ -26,4 +26,5 @@ module.exports = function(app) {
   app.post('/node/file/getPdfImage', fileController.pdfImage);
   app.post('/node/file/convertPdfToImage', fileController.convertPdfToImage);
   app.post('/node/onsite/exportPdf', onSiteController.exportPdf);
+  app.post('/node/onsite/getNextVersionName', onSiteController.getNextVersionName);
 };

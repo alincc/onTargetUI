@@ -3,8 +3,33 @@ var path = require('path');
 var fs = require("fs");
 var mkdirp = require("mkdirp");
 var gm = require('gm');
+var rootPath = process.env.ROOT;
 var config = require('./../config');
 var imageService = require('./../services/image');
+var _ = require('lodash');
+
+function generateNewFileName(filePath) {
+  var fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+  var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+  var fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+  var fullFilePath = filePath;
+  var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
+  var newName = fileName;
+  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\).' + fileExt + '$');
+  var duplicates = _.filter(files, function(file) {
+    return reg.test(file);
+  });
+  if(duplicates.length <= 0) {
+    newName = fileNameWithoutExt + ' (1).' + fileExt;
+  } else {
+    var lastDuplicateNumber = _.sortBy(duplicates).reverse();
+    var duplicateNumber = /.*\s+\((\d+)\)\./.exec(lastDuplicateNumber)[1];
+    if(duplicateNumber) {
+      newName = fileNameWithoutExt + ' (' + (parseInt(duplicateNumber) + 1) + ').' + fileExt;
+    }
+  }
+  return newName;
+}
 
 function uploadFile(req, res) {
   var fileInputName = config.fileInputName,
@@ -23,7 +48,9 @@ function uploadFile(req, res) {
     responseData = {
       success: false
     };
-  fileName = req.body.fileName.replace(/\s/g,'_');
+  fileName = req.body.fileName
+    .replace(/\'/g, '_')
+    .replace(/\"/g, '_');
 
   file.name = fileName;
 
@@ -122,7 +149,7 @@ function moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, p
           fileDestination = destinationDir + '/' + fileName;
           // Check if file exist, then change file name
           if(fs.existsSync(fileDestination)) {
-            fileName = new Date().getTime() + '-' + fileName;
+            fileName = generateNewFileName(fileDestination);
             fileDestination = destinationDir + '/' + fileName;
           }
           moveFile(destinationDir, file.path, fileDestination, success, failure);
@@ -140,7 +167,7 @@ function moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, p
 
               // Check if file exist, then change file name
               if(fs.existsSync(fileDestination)) {
-                fileName = new Date().getTime() + '-' + fileName;
+                fileName = generateNewFileName(fileDestination);
                 fileDestination = destinationDir + '/' + fileName;
               }
 
@@ -155,7 +182,7 @@ function moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, p
     destinationDir = url;
     fileDestination = destinationDir + '/' + fileName;
     if(fs.existsSync(fileDestination)) {
-      fileName = new Date().getTime() + '-' + fileName;
+      fileName = generateNewFileName(fileDestination);
       fileDestination = destinationDir + '/' + fileName;
     }
     moveFile(destinationDir, file.path, fileDestination, success, failure);

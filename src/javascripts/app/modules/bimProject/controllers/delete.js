@@ -4,9 +4,12 @@ define(function() {
     function($scope, $rootScope, $modalInstance, countryFactory, onBimFactory, project) {
 
       $scope.delete = function() {
-        onBimFactory.deleteBimProject(project.projectBimFileId).then(
+        onBimFactory.deleteProject(project.projectBimFileId).then(
           function(resp) {
-            $modalInstance.close({});
+            onBimFactory.deleteBimProject(project.poid).finally(
+              function (){
+                $modalInstance.close({});
+            });
           });
       };
 

@@ -1,13 +1,13 @@
 define(function(require){
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', 'fileFactory', '$timeout', 'toaster',
-    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster){
+  var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', 'fileFactory', '$timeout', 'toaster', 'utilFactory',
+    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster, utilFactory){
       $scope.app = appConstant.app;
       $scope.project = {};
       $scope.updateData = {};
       $scope.oid = '';
-
+      $scope.projectAssetFolderName = utilFactory.makeId(20);
 
       $scope.picture = {
         file: null,
@@ -24,19 +24,44 @@ define(function(require){
       $scope.addBimProject = function (){
         onBimFactory.addBimProject($scope.project.projectName, $scope.project.schema)
           .success(function (resp){
-            var updateData = resp.response.result;
-            $scope.oid = updateData.oid;
-            updateData.description = $scope.project.description;
-            updateData.exportLengthMeasurePrefix = $scope.project.exportLengthMeasurePrefix;
-            onBimFactory.updateBimProject(updateData).success(
-              function (resp){
-                onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation).success(function (resp){
-                  $scope._form.$setPristine();
-                  $state.go('app.bimProject.project', {poid: $scope.oid});
-                  ///$state.go('app.bimProject.listProject');
-                });
-              }
-            );
+            if(!resp.response.exception) {
+              var updateData = resp.response.result;
+              $scope.oid = updateData.oid;
+              updateData.description = $scope.project.description;
+              updateData.exportLengthMeasurePrefix = $scope.project.exportLengthMeasurePrefix;
+              onBimFactory.updateBimProject(updateData).success(
+                function (resp){
+                  if($scope.picture.isUploadedPicture) {
+                    fileFactory.move($scope.project.projectBimFileLocation, null, 'projects', $scope.projectAssetFolderName, 'onbim').success(
+                      function (resp){
+                        $scope.project.projectBimFileLocation = resp.url;
+
+                        onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation).success(function (resp){
+                          //update thumbnail path
+                          $scope._form.$setPristine();
+                          $state.go('app.bimProject.project', {poid: $scope.oid});
+                          ///$state.go('app.bimProject.listProject');
+                        });
+                      }
+                    ).finally(
+                      function (){
+                        $scope._form.$setPristine();
+                      }
+                    );
+                  } else {
+                    onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation).success(function (resp){
+                      //update thumbnail path
+                      $scope._form.$setPristine();
+                      $state.go('app.bimProject.project', {poid: $scope.oid});
+                      ///$state.go('app.bimProject.listProject');
+                    });
+                  }
+                }
+              );
+            } else {
+              toaster.pop('error', 'Error', resp.response.exception.message);
+              $scope._form.$setPristine();
+            }
           }
         );
       };

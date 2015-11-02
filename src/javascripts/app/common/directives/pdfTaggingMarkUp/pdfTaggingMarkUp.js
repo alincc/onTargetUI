@@ -70,9 +70,19 @@ define(function(require) {
                    fileFactory,
                    onSiteFactory) {
             var fileExtension = $scope.path.substring($scope.path.lastIndexOf('.') + 1);
+            var fileName = $scope.path.substring($scope.path.lastIndexOf('/') + 1);
+            var fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
 
             // Generate original file path
-            $scope.originalFilePath = $scope.path.substring(0, $scope.path.lastIndexOf('/')) + '/' + $scope.path.substring($scope.path.lastIndexOf('/') + 1).substring($scope.path.substring($scope.path.lastIndexOf('/') + 1).indexOf('_') + 1);
+            $scope.originalFilePath = $scope.path;
+            if(/.*\-\d+\./.test(fileName)) {
+              $scope.originalFilePath =
+                $scope.path.substring(0, $scope.path.lastIndexOf('/')) + '/' +
+                fileNameWithoutExtension.substring(0, fileNameWithoutExtension.lastIndexOf('-')) +
+                '.' + fileExtension;
+            }
+
+            console.log($scope.path, $scope.originalFilePath);
 
             $scope.pdfTaggingMarkUp = {
               isLoading: true,
@@ -89,7 +99,7 @@ define(function(require) {
             };
 
             $scope.getFileInfo = function() {
-              return fileFactory.info($scope.path);
+              return fileFactory.info($scope.originalFilePath);
             };
 
             $scope.addComment = function(id, comment) {
@@ -865,35 +875,50 @@ define(function(require) {
             if(!doc) {
               return;
             }
-            // Generate new file name
-            var randomName = (new Date().getTime()).toString() + '_' + scope.originalFilePath.substring(scope.originalFilePath.lastIndexOf('/') + 1);
-            // New file path
-            var newFilePath = scope.originalFilePath.substring(0, scope.originalFilePath.lastIndexOf('/')) + '/' + randomName;
-            var data = {
-              "projectId": $rootScope.currentProjectInfo.projectId,
-              "name": newFilePath,
-              "fileType": doc.fileType,
-              "createdBy": $rootScope.currentUserInfo.userId,
-              "modifiedBy": $rootScope.currentUserInfo.userId,
-              "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
-              "description": doc.description
-            };
-            documentFactory.saveUploadedDocsInfo(data).then(function(resp) {
-              if(resp.data && resp.data.documentDetail) {
-                var docId = resp.data.documentDetail.fileId;
-                var listTag = scope.extractListTags(doc, docId);
-                scope.addTag(listTag).then(function(resp) {
-                  scope.exportPdf(randomName, width, height).then(function(dt) {
-                    fileFactory.convertPDFToImage(dt.path).then(function(r) {
-                      scope.$emit('pdfTaggingMarkUp.SaveDone', {url: r.url, docId: docId});
+
+            onSiteFactory.getNextVersionName(scope.originalFilePath)
+              .success(function(resp) {
+                var newFilePath = resp.newVersionName;
+                var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/'));
+                var data = {
+                  "projectId": $rootScope.currentProjectInfo.projectId,
+                  "name": newFilePath,
+                  "fileType": doc.fileType,
+                  "createdBy": $rootScope.currentUserInfo.userId,
+                  "modifiedBy": $rootScope.currentUserInfo.userId,
+                  "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
+                  "description": doc.description
+                };
+                documentFactory.saveUploadedDocsInfo(data).then(function(resp) {
+                  if(resp.data && resp.data.documentDetail) {
+                    var docId = resp.data.documentDetail.fileId;
+                    var listTag = scope.extractListTags(doc, docId);
+                    scope.addTag(listTag).then(function(resp) {
+                      scope.exportPdf(newFileName, width, height).then(function(dt) {
+                        fileFactory.convertPDFToImage(dt.path).then(function(r) {
+                          scope.$emit('pdfTaggingMarkUp.SaveDone', {url: r.url, docId: docId});
+                        }, function(err) {
+                          console.log(err);
+                          scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+                        });
+                      }, function(err) {
+                        console.log(err);
+                        scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+                      });
                     }, function(err) {
                       console.log(err);
+                      scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
                     });
-
-                  });
+                  }
+                }, function(err) {
+                  console.log(err);
+                  scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
                 });
-              }
-            });
+              })
+              .error(function(err) {
+                console.log(err);
+                scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+              });
           });
         }
       };

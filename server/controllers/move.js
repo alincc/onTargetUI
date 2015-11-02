@@ -5,6 +5,30 @@ var mkdirp = require("mkdirp");
 var rootPath = process.env.ROOT;
 var mime = require('mime');
 var config = require('./../config');
+var _ = require('lodash');
+
+function generateNewFileName(filePath) {
+  var fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+  var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+  var fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
+  var fullFilePath = filePath;
+  var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
+  var newName = fileName;
+  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\).' + fileExt + '$');
+  var duplicates = _.filter(files, function(file) {
+    return reg.test(file);
+  });
+  if(duplicates.length <= 0) {
+    newName = fileNameWithoutExt + ' (1).' + fileExt;
+  } else {
+    var lastDuplicateNumber = _.sortBy(duplicates).reverse();
+    var duplicateNumber = /.*\s+\((\d+)\)\./.exec(lastDuplicateNumber)[1];
+    if(duplicateNumber) {
+      newName = fileNameWithoutExt + ' (' + (parseInt(duplicateNumber) + 1) + ').' + fileExt;
+    }
+  }
+  return newName;
+}
 
 // paths/constants
 var uploadedFilesPath = config.uploadedFilesPath,
@@ -97,7 +121,7 @@ function moveFile(req, res) {
             fileDestination = destinationDir + '/' + fileName;
             // Check if file exist, then change file name
             if(fs.existsSync(fileDestination)) {
-              fileName = new Date().getTime() + '-' + fileName;
+              fileName = generateNewFileName(fileDestination);
               fileDestination = destinationDir + '/' + fileName;
             }
             moveFile(destinationDir, sourceFilePath, fileDestination, success, failure);
@@ -115,7 +139,7 @@ function moveFile(req, res) {
 
                 // Check if file exist, then change file name
                 if(fs.existsSync(fileDestination)) {
-                  fileName = new Date().getTime() + '-' + fileName;
+                  fileName = generateNewFileName(fileDestination);
                   fileDestination = destinationDir + '/' + fileName;
                 }
 
@@ -130,7 +154,7 @@ function moveFile(req, res) {
       destinationDir = url;
       fileDestination = destinationDir + '/' + fileName;
       if(fs.existsSync(fileDestination)) {
-        fileName = new Date().getTime() + '-' + fileName;
+        fileName = generateNewFileName(fileDestination);
         fileDestination = destinationDir + '/' + fileName;
       }
       moveFile(destinationDir, sourceFilePath, fileDestination, success, failure);

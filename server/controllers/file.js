@@ -68,7 +68,7 @@ function convertPdfToImage(req, res) {
     }
   };
 
-  var sendResult = function() {
+  var sendResult = function(exportedFile) {
     gm(exportedFile).size(function(err, value) {
       if(err) {
         res.status(400);
@@ -90,11 +90,16 @@ function convertPdfToImage(req, res) {
   };
 
   if(fs.existsSync(exportedFile)) {
-    sendResult();
+    sendResult(exportedFile);
   } else {
     if(fileExt !== 'pdf') {
-      res.status(400);
-      res.send('Please select pdf file!');
+      if(/(jpg|jpeg|png)/.test(fileExt)) {
+        console.log(filePath);
+        sendResult(filePath);
+      } else {
+        res.status(400);
+        res.send('Please select pdf or image file!');
+      }
     } else {
       if(!fs.existsSync(filePath)) {
         res.status(400);
@@ -103,7 +108,7 @@ function convertPdfToImage(req, res) {
         if(!fs.existsSync(destinationFolder)) {
           fs.mkdirSync(destinationFolder);
         }
-        exec('gm convert -density 200 ' + filePath + ' -quality 100 ' + destinationFilePath, function(error) {
+        exec('convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath+'"', function(error) {
           if(error) {
             res.status(400);
             res.send(error);
@@ -130,7 +135,7 @@ function convertPdfToImage(req, res) {
 
                 deleteExportFiles();
 
-                sendResult();
+                sendResult(exportedFile);
               }
             });
           }

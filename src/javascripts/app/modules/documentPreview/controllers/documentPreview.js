@@ -269,6 +269,10 @@ define(function(require) {
         $location.search('docId', dt.docId);
       });
 
+      $scope.$on('pdfTaggingMarkUp.SaveError', function(e, dt) {
+        $scope._form.$setPristine();
+      });
+
       $scope.backToAttachments = function() {
         var activity = $rootScope.activitySelected || {};
         var task = $rootScope.currentTask || {};

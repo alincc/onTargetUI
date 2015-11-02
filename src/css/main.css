@@ -21351,6 +21351,7 @@ ul.list-justified li {
 }
 .on-site-page .normal-preview img {
   max-height: 100%;
+  max-width: 100%;
 }
 .ontarget-page .project-date {
   position: relative;
@@ -21468,6 +21469,9 @@ ul.list-justified li {
   border-radius: 2px;
   padding: 5px 10px;
 }
+.on-file-page .comment-section .panel-body {
+  height: auto;
+}
 .on-file-page .comment-section .panel-body .comment-content {
   border: solid 1px #d5d5d5;
   padding: 5px;
@@ -21516,6 +21520,35 @@ ul.list-justified li {
 }
 .on-file-page .comment-section .panel-body .add-comment form .button button {
   padding: 3px 10px;
+}
+.on-file-page .comment-section .panel-body .reponse-group-button {
+  margin-top: 5px;
+  font-size: 16px;
+  color: #8E939B;
+}
+.on-file-page .comment-section .panel-body .reponse-group-button .update-button {
+  padding: 3px;
+}
+.on-file-page .comment-section .panel-body .reponse-group-button .update-button:hover {
+  color: green;
+  cursor: pointer;
+}
+.on-file-page .comment-section .panel-body .reponse-group-button .danger-button {
+  padding: 3px;
+}
+.on-file-page .comment-section .panel-body .reponse-group-button .danger-button:hover {
+  color: red;
+  cursor: pointer;
+}
+.on-file-page .comment-section .panel-body .reponse-group-button .default-button {
+  padding: 3px;
+}
+.on-file-page .comment-section .panel-body .reponse-group-button .default-button:hover {
+  color: #337ab7;
+  cursor: pointer;
+}
+.on-file-page .comment-section .panel-body .control-group-button {
+  margin-top: 0px;
 }
 .onbim-project-list .project-image {
   width: 205px;
