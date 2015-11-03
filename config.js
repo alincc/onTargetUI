@@ -67,23 +67,23 @@ module.exports = {
   },
   sagarmatha01: {
     port: 9000,
-    domain: 'http://172.31.59.54:9000/ontargetrs/services',
-    baseUrl: 'http://172.31.59.54:9000',
-    nodeServer: 'http://172.31.59.54:9001',
-    resourceUrl: 'http://172.31.59.54:9001',
+    domain: 'https://app.ontargetcloud.com/ontargetrs/services',
+    baseUrl: 'https://app.ontargetcloud.com',
+    nodeServer: 'https://app.ontargetcloud.com',
+    resourceUrl: 'https://app.ontargetcloud.com',
     // Proxy settings
     API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
-    BIM_SERVER: 'http://216.14.121.204:8080'
+    BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
   },
   sagarmatha02: {
     port: 9000,
-    domain: 'http://172.31.48.59:9000/ontargetrs/services',
-    baseUrl: 'http://172.31.48.59:9000',
-    nodeServer: 'http://172.31.48.59:9001',
-    resourceUrl: 'http://172.31.48.59:9005',
+    domain: 'https://app.ontargetcloud.com/ontargetrs/services',
+    baseUrl: 'https://app.ontargetcloud.com',
+    nodeServer: 'https://app.ontargetcloud.com',
+    resourceUrl: 'https://app.ontargetcloud.com',
     // Proxy settings
     API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
-    BIM_SERVER: 'http://216.14.121.204:8080'
+    BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
   },
   server: {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
