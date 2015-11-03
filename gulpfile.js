@@ -398,7 +398,7 @@ gulp.task('build:sagarmatha01', ['build'], function(){
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha01.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha01.API_SERVER + "'"))
-    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.production.BIM_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha01.BIM_SERVER + "'"))
     .pipe(gulp.dest('./build-sagarmatha01'));
 
   gulp.src('./package.app.json')
@@ -426,7 +426,7 @@ gulp.task('build:sagarmatha02', ['build'], function(){
   gulp.src('./app.js')
       .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha02.port))
       .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha02.API_SERVER + "'"))
-      .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.production.BIM_SERVER + "'"))
+      .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha02.BIM_SERVER + "'"))
       .pipe(gulp.dest('./build-sagarmatha02'));
 
   gulp.src('./package.app.json')
