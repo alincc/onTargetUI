@@ -44,7 +44,7 @@ define(function(require) {
               "request": {
                 "interface": "org.buildingsmart.bimsie1.Bimsie1AuthInterface",
                 "method": "login",
-                "parameters": {"username": "ontargetbim@ontargetcloud.com", "password": "0nT4rg3tBIm2015"}
+                "parameters": {"username": "bim@ontargetcloud.com", "password": "admin"}
               }
             })
               .success(function(resp) {
