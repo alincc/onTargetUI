@@ -108,7 +108,7 @@ function convertPdfToImage(req, res) {
         if(!fs.existsSync(destinationFolder)) {
           fs.mkdirSync(destinationFolder);
         }
-        exec('gm convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath+'"', function(error) {
+        exec('/usr/local/bin/gm convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath+'"', function(error) {
           if(error) {
             res.status(400);
             res.send(error);
