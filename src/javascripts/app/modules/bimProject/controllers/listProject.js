@@ -2,15 +2,15 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', '$modal',
-    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, $modal) {
+  var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', '$modal', 'toaster',
+    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, $modal, toaster) {
       $scope.app = appConstant.app;
       $scope.bimProjects = [];
       $scope.projects = [];
 
       $scope.getProjectList = function() {
         $scope.onLoading = true;
-        onBimFactory.getAllProjects($rootScope.currentProjectInfo.projectId).success(
+        onBimFactory.getAllProjects($rootScope.currentProjectInfo.projectId).then(
           function(resp) {
             $scope.projectList = resp.poids;
             if($scope.projectList && $scope.projectList.length > 0) {
@@ -32,6 +32,12 @@ define(function(require) {
                 });
             } else {
               $scope.onLoading = false;
+            }
+          }, function (err){
+            console.log(err.message);
+            $scope.onLoading = false;
+            if(err.message === 'Unexpected token U') {
+              toaster.pop('error', "Permission denied", "You have no permission to access this. Please contact your administrator");
             }
           }
         );

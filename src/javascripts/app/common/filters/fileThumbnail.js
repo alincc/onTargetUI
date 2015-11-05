@@ -12,6 +12,10 @@ define(function(require) {
           var icon = 'file';
           if(/(pdf)/.test(fileExtension)) {
             icon = 'pdf';
+            var fileName = value.substring(value.lastIndexOf('/') + 1).substring(0, value.substring(value.lastIndexOf('/') + 1).lastIndexOf('.'));
+            var dirname = value.match(/(.*)[\/\\]/)[1]||'';
+            var thumbnail = constant.nodeServer + '/' + dirname + '/converted_' + fileName + '.jpg';
+            return thumbnail;
           }
           else if(/(txt)/.test(fileExtension)) {
             icon = 'txt';

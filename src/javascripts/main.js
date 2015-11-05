@@ -73,7 +73,10 @@ require.config({
     'jquery.ui.widget': '../js/bim/jquery.ui.widget',
     jqueryUpload: '../js/bim/jquery.fileupload',
     History: '../js/bim/history.adapter.jquery',
-    jqueryScrollTo: '../js/bim/jquery.scrollto'
+    jqueryScrollTo: '../js/bim/jquery.scrollto',
+    bimsurfer: '../js/bim/bimsurfer/api/BIMSURFER',
+    bimsurferEvents: '../js/bim/bimsurfer/api/Events',
+    bimsurferViewer: '../js/bim/bimsurfer/api/Viewer'
   },
 
   shim: {
@@ -206,6 +209,12 @@ require.config({
     },
     "jqueryScrollTo" : {
       deps: ['jQuery']
+    },
+    "bimsurferEvents" : {
+      deps: ['bimsurfer']
+    },
+    "bimsurferViewer":{
+      deps: ['bimsurferEvents']
     }
   }
 });

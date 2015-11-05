@@ -244,11 +244,18 @@ define(function(require) {
               }
             });
 
-            southWest = map.unproject([0, imgH], map.getMaxZoom() - 1);
-            northEast = map.unproject([imgW, 0], map.getMaxZoom() - 1);
+            /*southWest = map.unproject([0, imgH], 2);
+            northEast = map.unproject([imgW, 0], 2);*/
+            southWest = map.unproject([0, imgH], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
+            northEast = map.unproject([imgW, 0], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
             bounds = new L.LatLngBounds(southWest, northEast);
             L.imageOverlay($filter('filePath')(resp.url), bounds).addTo(map);
             //map.setMaxBounds(bounds);
+            //map.fitBounds(bounds);
+
+            var fitHeight = map.unproject([0, imgH], x(imgH * 2, scope.pdfTaggingMarkUp.containerHeight));
+
+            map.setView([fitHeight.lat/2, northEast.lng/2], 2);
 
             //leaflet.Draw
 
@@ -418,6 +425,7 @@ define(function(require) {
             map.on('draw:created', onDrawCreated);
 
             map.on('draw:deleted', function(e) {
+              console.log('delete');
               var layers = e.layers._layers;
               _.each(layers, function(objLayer, k) {
                 var id = objLayer.id;
@@ -445,6 +453,7 @@ define(function(require) {
                 newObjL.options = objLayer.options;
                 newObjL._mRadius = objLayer._getLngRadius ? objLayer._getLngRadius() / 2 : 0;
                 newObjL.r = objLayer._mRadius;
+                newObjL.type = objLayer.layerType;
                 scope.listLayers.push(newObjL);
                 editableLayers.addLayer(objLayer);
                 i = i + 1;
@@ -669,7 +678,9 @@ define(function(require) {
           };
 
           scope.extractListTags = function(doc, docId) {
-            return _.map(doc.listLayer, function(m) {
+            //return _.map(doc.listLayer, function(m) {
+            var layers = angular.copy(scope.listLayers);
+            return _.map(layers, function(m) {
               if(m.type === 'marker') {
                 var listComment = _.map(m.comments, function(cm) {
                   return {
@@ -856,7 +867,7 @@ define(function(require) {
               geo: layers,
               width: width,
               height: height,
-              scale: map.getMaxZoom() - 1,
+              scale: x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth),
               projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName,
               fileName: fileName
 

@@ -181,8 +181,11 @@
                                     <div class="task-list" custom-scroll>
                                         <div class="task-item" ng-repeat="task in tasks.pastDue" dashboard-task>
                                         </div>
-                                        <div class="no-result text-center" ng-if="!tasks.pastDue.length">
+                                        <div class="no-result text-center" ng-if="!tasks.pastDue.length && !taskLoading">
                                             No tasks was found
+                                        </div>
+                                        <div class="task-loading text-center" ng-if="taskLoading">
+                                            <spinner text="Loading..."></spinner>
                                         </div>
                                     </div>
                                 </tab>
@@ -190,8 +193,11 @@
                                     <div class="task-list" custom-scroll>
                                         <div class="task-item" ng-repeat="task in tasks.active" dashboard-task>
                                         </div>
-                                        <div class="no-result text-center" ng-if="!tasks.active.length">
+                                        <div class="no-result text-center" ng-if="!tasks.active.length && !taskLoading">
                                             No tasks was found
+                                        </div>
+                                        <div class="task-loading text-center" ng-if="taskLoading">
+                                            <spinner text="Loading..."></spinner>
                                         </div>
                                     </div>
                                 </tab>
@@ -199,8 +205,11 @@
                                     <div class="task-list" custom-scroll>
                                         <div class="task-item" ng-repeat="task in tasks.completed" dashboard-task>
                                         </div>
-                                        <div class="no-result text-center" ng-if="!tasks.completed.length">
+                                        <div class="no-result text-center" ng-if="!tasks.completed.length && !taskLoading">
                                             No tasks was found
+                                        </div>
+                                        <div class="task-loading text-center" ng-if="taskLoading">
+                                            <spinner text="Loading..."></spinner>
                                         </div>
                                     </div>
                                 </tab>
@@ -208,16 +217,22 @@
                                     <div class="task-list" custom-scroll="{scrollX:'none', scrollY:'right'}">
                                         <div class="task-item" ng-repeat="task in tasks.dueIn7Day" dashboard-task>
                                         </div>
-                                        <div class="no-result text-center" ng-if="!tasks.dueIn7Day.length">
+                                        <div class="no-result text-center" ng-if="!tasks.dueIn7Day.length && !taskLoading">
                                             No tasks was found
+                                        </div>
+                                        <div class="task-loading text-center" ng-if="taskLoading">
+                                            <spinner text="Loading..."></spinner>
                                         </div>
                                     </div>
                                 </tab>
                                 <tab heading="Critical" class="task-critical" select="taskTabSelect()">
                                     <div class="task-list" custom-scroll>
                                         <div class="task-item" ng-repeat="task in tasks.critical" dashboard-task></div>
-                                        <div class="no-result text-center" ng-if="!tasks.critical.length">
+                                        <div class="no-result text-center" ng-if="!tasks.critical.length && !taskLoading">
                                             No tasks was found
+                                        </div>
+                                        <div class="task-loading text-center" ng-if="taskLoading">
+                                            <spinner text="Loading..."></spinner>
                                         </div>
                                     </div>
                                 </tab>

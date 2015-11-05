@@ -64,8 +64,12 @@
                                 </td>
                             </tr>-->
                             <tr ng-repeat="doc in uploadedDocumentList | filter:search:name track by $index">
-                                <td class="file-icon"><a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                        ng-src="{{doc.name | fileThumbnail}}"/></a></td>
+                                <td class="file-icon">
+                                    <div class="thumbnail-icon">
+                                    <a href="javascript:void(0)" ng-click="preview(doc)"><img
+                                        ng-src="{{doc.name | fileThumbnail}}"/></a>
+                                    </div>
+                                </td>
                                 <td><a href="javascript:void(0)" ng-click="preview(doc)"
                                        ng-bind="doc.name | fileName"></a></td>
                                 <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>

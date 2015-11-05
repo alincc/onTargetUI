@@ -254,6 +254,7 @@ define(function(require) {
         var currentDate = new Date();
         var now = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
         $scope.loadTask = function() {
+          $scope.taskLoading = true;
           taskFactory.getProjectTasks($scope.project.projectId)
             .success(function(resp) {
               console.log(resp);
@@ -283,11 +284,12 @@ define(function(require) {
                     $scope.tasks.critical.push(tsk);
                   }
                 });
+                $scope.taskLoading = false;
               }
 
             })
             .error(function(err) {
-
+              $scope.taskLoading = false;
             });
         };
 

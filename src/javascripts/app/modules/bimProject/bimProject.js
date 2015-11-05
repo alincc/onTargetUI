@@ -23,7 +23,10 @@ define(function (require){
     projectDeleteController = require('./controllers/delete'),
     onBimFactory = require('app/common/services/onBim'),
     fileFactory = require('app/common/services/file'),
-    utilFactory = require('app/common/services/util');
+    utilFactory = require('app/common/services/util'),
+    bimsurfer = require('bimsurfer'),
+    bimsurferEvents = require('bimsurferEvents'),
+    bimsurferViewer = require('bimsurferViewer');
 
   var module = angular.module('app.bimProject', [
     'ui.router',

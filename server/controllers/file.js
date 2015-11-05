@@ -48,14 +48,21 @@ function getFileInfo(req, res) {
 function convertPdfToImage(req, res) {
   var tmpNumber = new Date().getTime();
   var relativePath = req.body.path;
-  var filePath = [rootPath, relativePath].join('/');
-  var fileExt = relativePath.substring(relativePath.lastIndexOf('.') + 1).toLowerCase();
+  //var filePath = [rootPath, relativePath].join('/');
+  var filePath = path.join(rootPath, relativePath);
+  //var fileExt = relativePath.substring(relativePath.lastIndexOf('.') + 1).toLowerCase();
+  var fileExt = path.extname(filePath);
   var fileType = mime.lookup(fileExt);
-  var fileName = relativePath.substring(relativePath.lastIndexOf('/') + 1).substring(0, relativePath.substring(relativePath.lastIndexOf('/') + 1).lastIndexOf('.'));
-  var outputFolder = filePath.substring(0, filePath.lastIndexOf('/'));
-  var destinationFolder = outputFolder + '/output';
-  var destinationFilePath = destinationFolder + '/' + tmpNumber + '_' + fileName + '.jpg';
-  var exportedFile = outputFolder + '/converted_' + fileName + '.jpg';
+  //var fileName = relativePath.substring(relativePath.lastIndexOf('/') + 1).substring(0, relativePath.substring(relativePath.lastIndexOf('/') + 1).lastIndexOf('.'));
+  var fileName = path.basename(filePath, fileExt);
+  //var outputFolder = filePath.substring(0, filePath.lastIndexOf('/'));
+  var outputFolder = path.dirname(filePath);
+  //var destinationFolder = outputFolder + '/output';
+  var destinationFolder = path.join(outputFolder, 'output');
+  //var destinationFilePath = destinationFolder + '/' + tmpNumber + '_' + fileName + '.jpg';
+  var destinationFilePath = path.join(destinationFolder, tmpNumber + '_' + fileName + '.jpg');
+  //var exportedFile = outputFolder + '/converted_' + fileName + '.jpg';
+  var exportedFile = path.join(outputFolder, 'converted_' + fileName + '.jpg');
   var relativeExportedFilePath = relativePath.substring(0, relativePath.lastIndexOf('/')) + '/converted_' + fileName + '.jpg';
 
   var deleteExportFiles = function() {
@@ -68,7 +75,7 @@ function convertPdfToImage(req, res) {
     }
   };
 
-  var sendResult = function(exportedFile) {
+  var sendResult = function() {
     gm(exportedFile).size(function(err, value) {
       if(err) {
         res.status(400);
@@ -90,16 +97,11 @@ function convertPdfToImage(req, res) {
   };
 
   if(fs.existsSync(exportedFile)) {
-    sendResult(exportedFile);
+    sendResult();
   } else {
-    if(fileExt !== 'pdf') {
-      if(/(jpg|jpeg|png)/.test(fileExt)) {
-        console.log(filePath);
-        sendResult(filePath);
-      } else {
-        res.status(400);
-        res.send('Please select pdf or image file!');
-      }
+    if(fileExt !== '.pdf') {
+      res.status(400);
+      res.send('Please select pdf file!');
     } else {
       if(!fs.existsSync(filePath)) {
         res.status(400);
@@ -108,7 +110,7 @@ function convertPdfToImage(req, res) {
         if(!fs.existsSync(destinationFolder)) {
           fs.mkdirSync(destinationFolder);
         }
-        exec('convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath+'"', function(error) {
+        exec('convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
           if(error) {
             res.status(400);
             res.send(error);
@@ -135,7 +137,7 @@ function convertPdfToImage(req, res) {
 
                 deleteExportFiles();
 
-                sendResult(exportedFile);
+                sendResult();
               }
             });
           }
@@ -147,10 +149,14 @@ function convertPdfToImage(req, res) {
 
 function getPdfImage(req, res) {
   var relativePath = req.body.path;
-  var filePath = [rootPath, relativePath].join('/');
-  var fileName = relativePath.substring(relativePath.lastIndexOf('/') + 1).substring(0, relativePath.substring(relativePath.lastIndexOf('/') + 1).lastIndexOf('.'));
-  var outputFolder = filePath.substring(0, filePath.lastIndexOf('/'));
-  var exportedFile = outputFolder + '/converted_' + fileName + '.jpg';
+  //var filePath = [rootPath, relativePath].join('/');
+  var filePath = path.join(rootPath, relativePath);
+  //var fileName = relativePath.substring(relativePath.lastIndexOf('/') + 1).substring(0, relativePath.substring(relativePath.lastIndexOf('/') + 1).lastIndexOf('.'));
+  var fileName = path.basename(filePath, path.extname(filePath));
+  //var outputFolder = filePath.substring(0, filePath.lastIndexOf('\\'));
+  var outputFolder = path.dirname(filePath);
+  //var exportedFile = outputFolder + '/converted_' + fileName + '.jpg';
+  var exportedFile = path.join(outputFolder, 'converted_' + fileName + '.jpg');
   var relativeExportedFilePath = relativePath.substring(0, relativePath.lastIndexOf('/')) + '/converted_' + fileName + '.jpg';
 
   var sendResult = function() {
@@ -173,6 +179,7 @@ function getPdfImage(req, res) {
       }
     });
   };
+
 
   if(fs.existsSync(exportedFile)) {
     sendResult();
