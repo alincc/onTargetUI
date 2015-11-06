@@ -1,9 +1,10 @@
+var config = require('./../config');
 var Pusher = require('pusher');
 var exports = {};
 var pusher = new Pusher({
-  appId: '138273',
-  key: 'c2f5de73a4caa3763726',
-  secret: 'e2455e810e36cbed510e',
+  appId: config.pusher_appId,
+  key: config.pusher_key,
+  secret: config.pusher_secret,
   encrypted: true
 });
 pusher.port = 443;

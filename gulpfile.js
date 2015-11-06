@@ -20,7 +20,7 @@ var paths = {
 };
 
 // Combine lesses
-gulp.task('less', ['lint'], function(done){
+gulp.task('less', ['lint'], function(done) {
   gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
@@ -32,7 +32,7 @@ gulp.task('less', ['lint'], function(done){
     .on('end', done);
 });
 
-gulp.task('lessOnly', function(done){
+gulp.task('lessOnly', function(done) {
   gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
@@ -45,7 +45,7 @@ gulp.task('lessOnly', function(done){
 });
 
 // Copy Fonts
-gulp.task('fonts', ['less'], function(){
+gulp.task('fonts', ['less'], function() {
   gulp.src([
     './src/fonts/*',
     './src/fonts/*/*'])
@@ -63,14 +63,14 @@ gulp.task('fonts', ['less'], function(){
 });
 
 // Copy Images
-gulp.task('images', ['fonts'], function(){
+gulp.task('images', ['fonts'], function() {
   return gulp.src([
     './src/img/**/*'])
     .pipe(gulp.dest('./build/img/'));
 });
 
 // Copy js to build
-gulp.task('script', ['images'], function(){
+gulp.task('script', ['images'], function() {
   gulp.src([
     './src/bower_components/requirejs/*',
     './src/bower_components/requirejs/**/*.*'])
@@ -95,7 +95,7 @@ gulp.task('script', ['images'], function(){
 });
 
 // Copy index.html, rename main and css file
-gulp.task('html', ['script'], function(){
+gulp.task('html', ['script'], function() {
   return gulp.src([
     './src/index.html'])
     .pipe(replace('javascripts/main', 'javascripts/main.min'))
@@ -104,7 +104,7 @@ gulp.task('html', ['script'], function(){
 });
 
 // Copy css
-gulp.task('BIMCss', function(){
+gulp.task('BIMCss', function() {
   return gulp.src([
     'src/css/**/*',
     '!src/css/main.css',
@@ -114,13 +114,13 @@ gulp.task('BIMCss', function(){
 });
 
 // Copy css
-gulp.task('css',['BIMCss'], function(){
+gulp.task('css', ['BIMCss'], function() {
   return gulp.src('src/css/main.min.css')
     .pipe(gulp.dest('build/css'));
 });
 
 // Jshint
-gulp.task('lint', function(){
+gulp.task('lint', function() {
   return gulp.src([
     './src/javascripts/app/common/**/*.js',
     './src/javascripts/app/common/**/**/*.js',
@@ -143,7 +143,7 @@ gulp.task('requireJsOptimizer', ['html', 'css'], shell.task([
 ]));
 
 // Watch
-gulp.task('watch', function(){
+gulp.task('watch', function() {
   // Watch for changes in `app` folder
   gulp.watch([
     './src/less/**/*.css',
@@ -160,7 +160,7 @@ gulp.task('watch', function(){
 });
 
 // Watch CSS
-gulp.task('watchCSS', function(){
+gulp.task('watchCSS', function() {
   // Watch for changes in `app` folder
   gulp.watch([
     './src/less/**/*.css',
@@ -170,7 +170,7 @@ gulp.task('watchCSS', function(){
 });
 
 // Test task
-gulp.task('test', ['lint'], function(){
+gulp.task('test', ['lint'], function() {
   // Be sure to return the stream
   return gulp.src([
     'undefined.js' // https://github.com/lazd/gulp-karma/issues/7
@@ -179,7 +179,7 @@ gulp.task('test', ['lint'], function(){
       configFile: './karma.conf.js',
       action: 'run'
     }))
-    .on('error', function(err){
+    .on('error', function(err) {
       // Make sure failed tests cause gulp to exit non-zero
       throw err;
     });
@@ -190,7 +190,7 @@ gulp.task('test', ['lint'], function(){
 ///////////////////////////////////
 
 // Common build
-gulp.task('build', ['requireJsOptimizer'], function(){
+gulp.task('build', ['requireJsOptimizer'], function() {
   // move main script file
   return gulp.src('src/javascripts/main.min.js')
     .pipe(replace(/domain: '.*'/, "domain: '" + config.default.domain + "'")) // domain
@@ -198,6 +198,7 @@ gulp.task('build', ['requireJsOptimizer'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.default.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.default.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.default.pusher.apiKey + "'"))
     .pipe(gulp.dest('build/javascripts'));
 
   del([
@@ -209,7 +210,7 @@ gulp.task('build', ['requireJsOptimizer'], function(){
 // Environment builds
 
 // ---- Local -----
-gulp.task('build:local', ['build'], function(){
+gulp.task('build:local', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
     .pipe(gulp.dest('./build-local/app'));
@@ -221,6 +222,7 @@ gulp.task('build:local', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.local.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.local.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.local.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-local/app/javascripts'));
 
@@ -237,7 +239,7 @@ gulp.task('build:local', ['build'], function(){
 });
 
 // ---- Integration -----
-gulp.task('build:integration', ['build'], function(){
+gulp.task('build:integration', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
     .pipe(gulp.dest('./build-integration/app'));
@@ -249,6 +251,7 @@ gulp.task('build:integration', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.integration.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.integration.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.integration.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.integration.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-integration/app/javascripts'));
 
@@ -265,37 +268,37 @@ gulp.task('build:integration', ['build'], function(){
 });
 
 // ---- Integration -----
-gulp.task('build:beta', ['build'], function(){
+gulp.task('build:beta', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-      .pipe(gulp.dest('./build-beta/app'));
+    .pipe(gulp.dest('./build-beta/app'));
 
   // minify
   gulp.src(['./src/javascripts/main.min.js'])
-      .pipe(replace(/domain: '.*'/, "domain: '" + config.beta.domain + "'")) // domain
-      .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.beta.baseUrl + "'")) // base url
-      .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.beta.nodeServer + "'")) // node server domain
-      .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.beta.resourceUrl + "'"))
-      .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.beta.baseUrl + "/bim'"))
-      .pipe(uglify())
-      .pipe(gulp.dest('./build-beta/app/javascripts'));
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.beta.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.beta.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.beta.nodeServer + "'")) // node server domain
+    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.beta.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.beta.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.beta.pusher.apiKey + "'"))
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-beta/app/javascripts'));
 
   // Copy app.js and modify value
   gulp.src('./app.js')
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.beta.port))
-      .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
-      .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.beta.BIM_SERVER + "'"))
-      .pipe(gulp.dest('./build-beta'));
+    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.beta.BIM_SERVER + "'"))
+    .pipe(gulp.dest('./build-beta'));
 
   gulp.src('./package.app.json')
-      .pipe(rename('./package.json'))
-      .pipe(gulp.dest('./build-beta'));
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-beta'));
 });
 
 
-
 // ---- Testing -----
-gulp.task('build:testing', ['build'], function(){
+gulp.task('build:testing', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
     .pipe(gulp.dest('./build-testing/app'));
@@ -307,6 +310,7 @@ gulp.task('build:testing', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.testing.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.testing.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.testing.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.testing.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-testing/app/javascripts'));
 
@@ -323,7 +327,7 @@ gulp.task('build:testing', ['build'], function(){
 });
 
 // ---- Staging -----
-gulp.task('build:staging', ['build'], function(){
+gulp.task('build:staging', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
     .pipe(gulp.dest('./build-staging/app'));
@@ -335,6 +339,7 @@ gulp.task('build:staging', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.staging.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.staging.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.staging.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.staging.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-staging/app/javascripts'));
 
@@ -351,7 +356,7 @@ gulp.task('build:staging', ['build'], function(){
 });
 
 // ---- Production -----
-gulp.task('build:production', ['build'], function(){
+gulp.task('build:production', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
     .pipe(gulp.dest('./build-production/app'));
@@ -363,6 +368,7 @@ gulp.task('build:production', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.production.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.production.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.production.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.production.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-production/app/javascripts'));
 
@@ -379,7 +385,7 @@ gulp.task('build:production', ['build'], function(){
 });
 
 // ---- Production - sagarmatha01 -----
-gulp.task('build:sagarmatha01', ['build'], function(){
+gulp.task('build:sagarmatha01', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
     .pipe(gulp.dest('./build-sagarmatha01/app'));
@@ -391,6 +397,7 @@ gulp.task('build:sagarmatha01', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha01.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha01.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha01.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha01.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-sagarmatha01/app/javascripts'));
 
@@ -407,35 +414,36 @@ gulp.task('build:sagarmatha01', ['build'], function(){
 });
 
 // ---- Production sagarmatha 02 -----
-gulp.task('build:sagarmatha02', ['build'], function(){
+gulp.task('build:sagarmatha02', ['build'], function() {
   // Copy all file in build folder
   gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-      .pipe(gulp.dest('./build-sagarmatha02/app'));
+    .pipe(gulp.dest('./build-sagarmatha02/app'));
 
   // minify
   gulp.src(['./src/javascripts/main.min.js'])
-      .pipe(replace(/domain: '.*'/, "domain: '" + config.sagarmatha02.domain + "'")) // domain
-      .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.sagarmatha02.baseUrl + "'")) // base url
-      .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha02.nodeServer + "'")) // node server domain
-      .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha02.resourceUrl + "'"))
-      .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha02.baseUrl + "/bim'"))
-      .pipe(uglify())
-      .pipe(gulp.dest('./build-sagarmatha02/app/javascripts'));
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.sagarmatha02.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.sagarmatha02.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha02.nodeServer + "'")) // node server domain
+    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha02.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha02.baseUrl + "/bim'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha02.pusher.apiKey + "'"))
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-sagarmatha02/app/javascripts'));
 
   // Copy app.js and modify value
   gulp.src('./app.js')
-      .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha02.port))
-      .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha02.API_SERVER + "'"))
-      .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha02.BIM_SERVER + "'"))
-      .pipe(gulp.dest('./build-sagarmatha02'));
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha02.port))
+    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha02.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha02.BIM_SERVER + "'"))
+    .pipe(gulp.dest('./build-sagarmatha02'));
 
   gulp.src('./package.app.json')
-      .pipe(rename('./package.json'))
-      .pipe(gulp.dest('./build-sagarmatha02'));
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-sagarmatha02'));
 });
 
 // Server build
-gulp.task('build:server', function(){
+gulp.task('build:server', function() {
   gulp.src('package.json', {"base": "."})
     .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
     .pipe(gulp.dest('build-server'));
@@ -445,6 +453,9 @@ gulp.task('build:server', function(){
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.server.maxFileSize))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.server.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.server.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.server.pusher.secret + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -457,117 +468,132 @@ gulp.task('build:server', function(){
 
 
 // Server build local
-gulp.task('build:serverlocal', function(){
+gulp.task('build:serverlocal', function() {
   gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server'));
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server'));
 
   gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
-      .pipe(gulp.dest('build-server'));
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverlocal.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverlocal.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverlocal.pusher.secret + '\''))
+    .pipe(gulp.dest('build-server'));
 
   return gulp.src([
     'server/**/*',
     '!server/config.js',
     'server.js'
   ], {"base": "."})
-      .pipe(gulp.dest('build-server'));
+    .pipe(gulp.dest('build-server'));
 });
 
 // Server build local
-gulp.task('build:serverintegration', function(){
+gulp.task('build:serverintegration', function() {
   gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server'));
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server'));
 
   gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
-      .pipe(gulp.dest('build-server'));
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverintegration.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverintegration.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverintegration.pusher.secret + '\''))
+    .pipe(gulp.dest('build-server'));
 
   return gulp.src([
     'server/**/*',
     '!server/config.js',
     'server.js'
   ], {"base": "."})
-      .pipe(gulp.dest('build-server'));
+    .pipe(gulp.dest('build-server'));
 });
 
 
 // Server build local
-gulp.task('build:serverbeta', function(){
+gulp.task('build:serverbeta', function() {
   gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server-beta'));
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server-beta'));
 
   gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverbeta.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
-      .pipe(gulp.dest('build-server-beta'));
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverbeta.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverbeta.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverbeta.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverbeta.pusher.secret + '\''))
+    .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
     'server/**/*',
     '!server/config.js',
     'server.js'
   ], {"base": "."})
-      .pipe(gulp.dest('build-server-beta'));
+    .pipe(gulp.dest('build-server-beta'));
 });
 
 
 // Server build production - sagarmatha01
-gulp.task('build:serversagarmatha01', function(){
+gulp.task('build:serversagarmatha01', function() {
   gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server-sagarmatha01'));
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server-sagarmatha01'));
 
   gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
-      .pipe(gulp.dest('build-server-sagarmatha01'));
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
+    .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
     'server/**/*',
     '!server/config.js',
     'server.js'
   ], {"base": "."})
-      .pipe(gulp.dest('build-server-sagarmatha01'));
+    .pipe(gulp.dest('build-server-sagarmatha01'));
 });
 
 // Server build production - sagarmatha02
-gulp.task('build:serversagarmatha01', function(){
+gulp.task('build:serversagarmatha01', function() {
   gulp.src('package.json', {"base": "."})
-      .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-      .pipe(gulp.dest('build-server-sagarmatha01'));
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server-sagarmatha01'));
 
   gulp.src('server/config.js', {"base": "."})
-      .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-      .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-      .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
-      .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
-      .pipe(gulp.dest('build-server-sagarmatha01'));
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
+    .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
     'server/**/*',
     '!server/config.js',
     'server.js'
   ], {"base": "."})
-      .pipe(gulp.dest('build-server-sagarmatha01'));
+    .pipe(gulp.dest('build-server-sagarmatha01'));
 });
 
 ////////////////////////////////////
 ///////// SERVE TASKS //////////////
 ///////////////////////////////////
 
-gulp.task('serve', ['watch'], function(){
+gulp.task('serve', ['watch'], function() {
   connect.server({
     root: ['src'],
     port: 9000,
@@ -576,7 +602,7 @@ gulp.task('serve', ['watch'], function(){
   open("http://localhost:9000");
 });
 
-gulp.task('serve:local', function(){
+gulp.task('serve:local', function() {
   connect.server({
     root: ['build-local'],
     port: config.local.port
@@ -588,7 +614,7 @@ gulp.task('serve:local', function(){
 ///////// DEPLOY TASKS /////////////
 ///////////////////////////////////
 
-gulp.task('deploy:ui:local', ['build:local'], function(){
+gulp.task('deploy:ui:local', ['build:local'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
@@ -607,7 +633,7 @@ gulp.task('deploy:ui:local', ['build:local'], function(){
     .pipe(conn.dest('/onTargetUI'));
 });
 
-gulp.task('deploy:node:local', ['build:server'], function(){
+gulp.task('deploy:node:local', ['build:server'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({
@@ -626,11 +652,11 @@ gulp.task('deploy:node:local', ['build:server'], function(){
     .pipe(conn.dest('/onTargetNodeServer'));
 });
 
-gulp.task('deploy:local', ['deploy:ui:local', 'deploy:node:local'], function(){
+gulp.task('deploy:local', ['deploy:ui:local', 'deploy:node:local'], function() {
 
 });
 
-gulp.task('deploy', ['build'], function(){
+gulp.task('deploy', ['build'], function() {
   process.stdout.write('Transfering files...\n');
 
   var conn = ftp.create({

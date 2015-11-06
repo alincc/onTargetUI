@@ -14,11 +14,11 @@ define(function(require) {
         pusher;
 
       services.initialize = function() {
-        client = new Pusher(constant.push.API_KEY, {
+        client = new Pusher(constant.pusher_api_key, {
           encrypted: true
         });
         pusher = $pusher(client);
-        channel = pusher.subscribe(constant.push.channel);
+        channel = pusher.subscribe(constant.pusher_channel);
 
         channel.unbind('onTargetAll');
 

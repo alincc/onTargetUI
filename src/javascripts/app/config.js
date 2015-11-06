@@ -205,10 +205,8 @@ define(function(require) {
     openWeatherMap: {
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'
     },
-    push: {
-      API_KEY: 'c2f5de73a4caa3763726',
-      channel: 'onTarget'
-    },
+    pusher_api_key: 'c2f5de73a4caa3763726',
+    pusher_channel: 'onTarget',
     externalFiles: {
       // https://developers.google.com/drive/web/quickstart/js - Follow this instruction to get client_id, DO NOT change the scope if you know what are you doing
       googleDrive: {
