@@ -81,7 +81,7 @@ module.exports = {
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
-    },
+    }
   },
   staging: {
     port: 0,
@@ -91,7 +91,7 @@ module.exports = {
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
-    },
+    }
   },
   sagarmatha01: {
     port: 9000,
