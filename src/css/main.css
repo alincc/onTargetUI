@@ -21237,6 +21237,10 @@ ul.list-justified li {
   margin-left: 20px;
   display: inline-block;
 }
+.on-site-page .table-responsive td.file-icon .thumbnail-icon {
+  height: 64px;
+  overflow: hidden;
+}
 .on-site-page .table-responsive td.file-icon img {
   width: 64px;
 }
@@ -21352,6 +21356,9 @@ ul.list-justified li {
 .on-site-page .normal-preview img {
   max-height: 100%;
   max-width: 100%;
+}
+.on-site-page .leaflet-control-attribution {
+  display: none;
 }
 .ontarget-page .project-date {
   position: relative;

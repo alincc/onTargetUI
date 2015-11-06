@@ -107,9 +107,9 @@ module.exports = {
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
     pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
+      appId: '152503',
+      apiKey: 'f0a0bf34cd094e438cba',
+      secret: 'a2244d813cebbd30dc2e'
     },
     // Proxy settings
     API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
@@ -122,9 +122,9 @@ module.exports = {
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
     pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
+      appId: '152503',
+      apiKey: 'f0a0bf34cd094e438cba',
+      secret: 'a2244d813cebbd30dc2e'
     },
     // Proxy settings
     API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
