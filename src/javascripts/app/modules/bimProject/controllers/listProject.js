@@ -12,7 +12,7 @@ define(function(require) {
         $scope.onLoading = true;
         onBimFactory.getAllProjects($rootScope.currentProjectInfo.projectId).then(
           function(resp) {
-            $scope.projectList = resp.poids;
+            $scope.projectList = resp.data.poids;
             if($scope.projectList && $scope.projectList.length > 0) {
               var promises = [];
               _.each($scope.projectList, function(project) {
