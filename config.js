@@ -13,6 +13,9 @@ module.exports = {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
     },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
+    },
     // Proxy settings
     API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -26,6 +29,9 @@ module.exports = {
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
+    },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
     },
     // Proxy settings
     API_SERVER: 'http://localhost:8080/ontargetrs/services',
@@ -41,6 +47,9 @@ module.exports = {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
     },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
+    },
     // Proxy settings
     API_SERVER: 'http://localhost:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -54,6 +63,9 @@ module.exports = {
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
+    },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
     },
     // Proxy settings
     API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',		// API
@@ -69,6 +81,9 @@ module.exports = {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
     },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
+    },
     // Proxy settings
     API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',		// API
     BIM_SERVER: 'http://216.14.121.204:8080'		// API
@@ -81,6 +96,9 @@ module.exports = {
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
+    },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
     }
   },
   staging: {
@@ -103,6 +121,9 @@ module.exports = {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
     },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
+    },
     // Proxy settings
     API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
     BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
@@ -116,6 +137,9 @@ module.exports = {
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
+    },
+    pusher: {
+      apiKey: 'c2f5de73a4caa3763726'
     },
     // Proxy settings
     API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
