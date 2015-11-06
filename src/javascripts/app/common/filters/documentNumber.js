@@ -11,26 +11,26 @@ define(function(require) {
             default:
             case 'Change Order': {
               return _.result(_.find(document.keyValues, function(keyValue) {
-                return keyValue.key.toLowerCase() == 'co';
+                return keyValue.key.toLowerCase() === 'co';
               }), 'value');
             }
             case 'Request For Information' : {
               return _.result(_.find(document.keyValues, function(keyValue) {
-                return keyValue.key.toLowerCase() == 'rfi';
+                return keyValue.key.toLowerCase() === 'rfi';
               }), 'value');
             }
             case 'Purchase Order': {
               return _.result(_.find(document.keyValues, function(keyValue) {
-                return keyValue.key.toLowerCase() == 'po';
+                return keyValue.key.toLowerCase() === 'po';
               }), 'value');
             }
             case 'Transmittal' : {
               return _.result(_.find(document.keyValues, function(keyValue) {
-                return keyValue.key.toLowerCase() == 'transmittal';
+                return keyValue.key.toLowerCase() === 'transmittal';
               }), 'value');
             }
           }
-        }
+        };
       });
 
   return module;
