@@ -9,6 +9,10 @@ module.exports = {
     baseUrl: 'http://localhost:3214',
     nodeServer: 'http://int.app.ontargetcloud.com:9001',
     resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     // Proxy settings
     API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -19,6 +23,10 @@ module.exports = {
     baseUrl: 'http://localhost:9000',
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'http://localhost:9001',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     // Proxy settings
     API_SERVER: 'http://localhost:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -29,6 +37,10 @@ module.exports = {
     baseUrl: 'http://localhost:9002',
     nodeServer: 'http://localhost:9003',
     resourceUrl: 'http://localhost:9003',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     // Proxy settings
     API_SERVER: 'http://localhost:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -39,6 +51,10 @@ module.exports = {
     baseUrl: 'http://int.app.ontargetcloud.com:9000', 						// Site domain
     nodeServer: 'http://int.app.ontargetcloud.com:9001', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     // Proxy settings
     API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',		// API
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -49,6 +65,10 @@ module.exports = {
     baseUrl: 'http://int.app.ontargetcloud.com:9004', 						// Site domain
     nodeServer: 'http://int.app.ontargetcloud.com:9005', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9005', 					// This should be same as the node server because the resources are storing on the node server
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     // Proxy settings
     API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',		// API
     BIM_SERVER: 'http://216.14.121.204:8080'		// API
@@ -57,13 +77,21 @@ module.exports = {
     port: 0,
     domain: 'http://hostname:port/ontargetrs/services',
     baseUrl: 'http://hostname:port',
-    nodeServer: 'http://hostname:port'
+    nodeServer: 'http://hostname:port',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
   },
   staging: {
     port: 0,
     domain: 'http://hostname:port/ontargetrs/services',
     baseUrl: 'http://hostname:port',
-    nodeServer: 'http://hostname:port'
+    nodeServer: 'http://hostname:port',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
   },
   sagarmatha01: {
     port: 9000,
@@ -71,6 +99,10 @@ module.exports = {
     baseUrl: 'https://app.ontargetcloud.com',
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     // Proxy settings
     API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
     BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
@@ -81,6 +113,10 @@ module.exports = {
     baseUrl: 'https://app.ontargetcloud.com',
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     // Proxy settings
     API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
     BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'

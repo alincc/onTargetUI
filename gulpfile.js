@@ -307,6 +307,7 @@ gulp.task('build:testing', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.testing.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.testing.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.testing.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.testing.bimServerAddress + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-testing/app/javascripts'));
 
@@ -335,6 +336,7 @@ gulp.task('build:staging', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.staging.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.staging.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.staging.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.staging.bimServerAddress + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-staging/app/javascripts'));
 
@@ -363,6 +365,7 @@ gulp.task('build:production', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.production.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.production.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.production.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.production.bimServerAddress + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-production/app/javascripts'));
 
@@ -391,6 +394,7 @@ gulp.task('build:sagarmatha01', ['build'], function(){
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha01.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha01.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha01.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.sagarmatha01.bimServerAddress + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-sagarmatha01/app/javascripts'));
 
@@ -419,6 +423,7 @@ gulp.task('build:sagarmatha02', ['build'], function(){
       .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha02.nodeServer + "'")) // node server domain
       .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha02.resourceUrl + "'"))
       .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha02.baseUrl + "/bim'"))
+      .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.sagarmatha02.bimServerAddress + "'"))
       .pipe(uglify())
       .pipe(gulp.dest('./build-sagarmatha02/app/javascripts'));
 
