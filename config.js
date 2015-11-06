@@ -195,9 +195,9 @@ module.exports = {
     assetLocation: 'assets/', // empty is root
     maxFileSize: 15000000, // in bytes
     pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
+      appId: '152503',
+      apiKey: 'f0a0bf34cd094e438cba',
+      secret: 'a2244d813cebbd30dc2e'
     }
   },
   serversagarmatha02: {
