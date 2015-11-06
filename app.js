@@ -7,11 +7,15 @@ var methodOverride = require('method-override');
 var _ = require('lodash');
 var fs = require('fs');
 
+var pusher_appId = '138273';
+var pusher_key = 'c2f5de73a4caa3763726';
+var pusher_secret = 'e2455e810e36cbed510e';
+
 var Pusher = require('pusher');
 var pusher = new Pusher({
-  appId: '138273',
-  key: 'c2f5de73a4caa3763726',
-  secret: 'e2455e810e36cbed510e',
+  appId: pusher_appId,
+  key: pusher_key,
+  secret: pusher_secret,
   encrypted: true
 });
 pusher.port = 443;

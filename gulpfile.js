@@ -231,6 +231,9 @@ gulp.task('build:local', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.local.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.local.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.local.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.local.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.local.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.local.pusher.secret + '\''))
     .pipe(gulp.dest('./build-local'));
 
   gulp.src('./package.app.json')
@@ -260,6 +263,9 @@ gulp.task('build:integration', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.integration.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.integration.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.integration.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.integration.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.integration.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.integration.pusher.secret + '\''))
     .pipe(gulp.dest('./build-integration'));
 
   gulp.src('./package.app.json')
@@ -289,6 +295,9 @@ gulp.task('build:beta', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.beta.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.beta.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.beta.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.beta.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.beta.pusher.secret + '\''))
     .pipe(gulp.dest('./build-beta'));
 
   gulp.src('./package.app.json')
@@ -319,6 +328,9 @@ gulp.task('build:testing', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.testing.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.testing.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.testing.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.testing.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.testing.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.testing.pusher.secret + '\''))
     .pipe(gulp.dest('./build-testing'));
 
   gulp.src('./package.app.json')
@@ -348,6 +360,9 @@ gulp.task('build:staging', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.staging.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.staging.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.staging.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.staging.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.staging.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.staging.pusher.secret + '\''))
     .pipe(gulp.dest('./build-staging'));
 
   gulp.src('./package.app.json')
@@ -377,6 +392,9 @@ gulp.task('build:production', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.production.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.production.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.production.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.production.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.production.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.production.pusher.secret + '\''))
     .pipe(gulp.dest('./build-production'));
 
   gulp.src('./package.app.json')
@@ -406,6 +424,9 @@ gulp.task('build:sagarmatha01', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha01.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha01.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha01.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.sagarmatha01.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.sagarmatha01.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.sagarmatha01.pusher.secret + '\''))
     .pipe(gulp.dest('./build-sagarmatha01'));
 
   gulp.src('./package.app.json')
@@ -435,6 +456,9 @@ gulp.task('build:sagarmatha02', ['build'], function() {
     .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha02.port))
     .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha02.API_SERVER + "'"))
     .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha02.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.sagarmatha02.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.sagarmatha02.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.sagarmatha02.pusher.secret + '\''))
     .pipe(gulp.dest('./build-sagarmatha02'));
 
   gulp.src('./package.app.json')
@@ -453,9 +477,6 @@ gulp.task('build:server', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.server.maxFileSize))
-    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.server.pusher.appId + '\''))
-    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.server.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.server.pusher.secret + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -478,9 +499,6 @@ gulp.task('build:serverlocal', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
-    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverlocal.pusher.appId + '\''))
-    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverlocal.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverlocal.pusher.secret + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -502,9 +520,6 @@ gulp.task('build:serverintegration', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
-    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverintegration.pusher.appId + '\''))
-    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverintegration.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverintegration.pusher.secret + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -527,9 +542,6 @@ gulp.task('build:serverbeta', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
-    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverbeta.pusher.appId + '\''))
-    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverbeta.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverbeta.pusher.secret + '\''))
     .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
@@ -552,9 +564,6 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
-    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
-    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -576,9 +585,6 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
-    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
-    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([

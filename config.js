@@ -133,81 +133,41 @@ module.exports = {
   server: {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root and the location should end with slash '/' if not empty
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
-    }
+    maxFileSize: 15000000 // in bytes
   },
   serverlocal: {
     PROXY_URL: 'http://localhost:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
-    }
+    maxFileSize: 15000000 // in bytes
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
-    }
+    maxFileSize: 15000000 // in bytes
   },
   serverbeta: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
-    }
+    maxFileSize: 15000000 // in bytes
   },
   servertesting: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
-    }
+    maxFileSize: 15000000 // in bytes
   },
   serverstaging: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
-    }
+    maxFileSize: 15000000 // in bytes
   },
   serversagarmatha01: {
     PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '152503',
-      apiKey: 'f0a0bf34cd094e438cba',
-      secret: 'a2244d813cebbd30dc2e'
-    }
+    maxFileSize: 15000000 // in bytes
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
-    pusher: {
-      appId: '138273',
-      apiKey: 'c2f5de73a4caa3763726',
-      secret: 'e2455e810e36cbed510e'
-    }
+    maxFileSize: 15000000 // in bytes
   }
 };
