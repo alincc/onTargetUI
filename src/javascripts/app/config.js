@@ -146,6 +146,7 @@ define(function(require) {
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'http://localhost:9001',
     bimServer: 'http://localhost:9000/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
     app: {
       name: "OnTarget",
       id: "OnTarget",
@@ -207,6 +208,8 @@ define(function(require) {
     },
     pusher_api_key: 'c2f5de73a4caa3763726',
     pusher_channel: 'onTarget',
+    bim_user: 'bim@ontargetcloud.com',
+    bim_password: 'admin',
     externalFiles: {
       // https://developers.google.com/drive/web/quickstart/js - Follow this instruction to get client_id, DO NOT change the scope if you know what are you doing
       googleDrive: {

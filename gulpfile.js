@@ -198,6 +198,9 @@ gulp.task('build', ['requireJsOptimizer'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.default.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.default.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.default.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.default.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.default.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.default.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.default.pusher.apiKey + "'"))
     .pipe(gulp.dest('build/javascripts'));
 
@@ -222,6 +225,9 @@ gulp.task('build:local', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.local.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.local.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.local.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.local.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.local.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.local.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.local.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-local/app/javascripts'));
@@ -254,6 +260,9 @@ gulp.task('build:integration', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.integration.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.integration.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.integration.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.integration.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.integration.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.integration.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.integration.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-integration/app/javascripts'));
@@ -286,6 +295,9 @@ gulp.task('build:beta', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.beta.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.beta.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.beta.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.beta.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.beta.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.beta.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.beta.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-beta/app/javascripts'));
@@ -319,6 +331,9 @@ gulp.task('build:testing', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.testing.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.testing.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.testing.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.testing.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.testing.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.testing.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.testing.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-testing/app/javascripts'));
@@ -351,6 +366,9 @@ gulp.task('build:staging', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.staging.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.staging.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.staging.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.staging.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.staging.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.staging.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.staging.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-staging/app/javascripts'));
@@ -383,6 +401,9 @@ gulp.task('build:production', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.production.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.production.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.production.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.production.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.production.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.production.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.production.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-production/app/javascripts'));
@@ -415,6 +436,9 @@ gulp.task('build:sagarmatha01', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha01.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha01.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha01.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.sagarmatha01.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.sagarmatha01.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.sagarmatha01.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha01.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-sagarmatha01/app/javascripts'));
@@ -447,6 +471,9 @@ gulp.task('build:sagarmatha02', ['build'], function() {
     .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha02.nodeServer + "'")) // node server domain
     .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha02.resourceUrl + "'"))
     .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha02.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.sagarmatha02.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.sagarmatha02.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.sagarmatha02.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha02.pusher.apiKey + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-sagarmatha02/app/javascripts'));
