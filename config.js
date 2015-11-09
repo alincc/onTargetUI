@@ -135,8 +135,8 @@ module.exports = {
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
     bimCredential: {
-      username: 'bim@ontargetcloud.com',
-      password: 'admin'
+      username: 'ontargetbim@ontargetcloud.com',
+      password: '0nT4rg3tBIm2015'
     },
     pusher: {
       appId: '152503',
@@ -154,8 +154,8 @@ module.exports = {
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
     bimCredential: {
-      username: 'bim@ontargetcloud.com',
-      password: 'admin'
+      username: 'ontargetbim@ontargetcloud.com',
+      password: '0nT4rg3tBIm2015'
     },
     pusher: {
       appId: '152503',
