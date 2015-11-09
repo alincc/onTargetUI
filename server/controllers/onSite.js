@@ -151,7 +151,7 @@ function getNextVersionName(req, res) {
     if(versions.length <= 0) {
       versionName = versionName + '/' + fileNameWithoutExt + '-1.' + fileExt;
     } else {
-      var lastVersionName = _.sortBy(versions).reverse();
+      var lastVersionName = _.sortBy(versions).reverse()[0];
       var versionNumber = /.*\-(\d+)\./.exec(lastVersionName)[1];
       if(versionNumber) {
         versionName = versionName + '/' + fileNameWithoutExt + '-' + (parseInt(versionNumber) + 1) + '.' + fileExt;

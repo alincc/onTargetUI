@@ -9,6 +9,12 @@ module.exports = {
     baseUrl: 'http://localhost:3214',
     nodeServer: 'http://int.app.ontargetcloud.com:9001',
     resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    bimServer: 'http://localhost:3214/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     pusher: {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
@@ -24,6 +30,12 @@ module.exports = {
     baseUrl: 'http://localhost:9000',
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'http://localhost:9001',
+    bimServer: 'http://localhost:9000/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     pusher: {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
@@ -39,6 +51,12 @@ module.exports = {
     baseUrl: 'http://localhost:9002',
     nodeServer: 'http://localhost:9003',
     resourceUrl: 'http://localhost:9003',
+    bimServer: 'http://localhost:9002/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     pusher: {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
@@ -54,6 +72,12 @@ module.exports = {
     baseUrl: 'http://int.app.ontargetcloud.com:9000', 						// Site domain
     nodeServer: 'http://int.app.ontargetcloud.com:9001', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
+    bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     pusher: {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
@@ -69,6 +93,12 @@ module.exports = {
     baseUrl: 'http://int.app.ontargetcloud.com:9004', 						// Site domain
     nodeServer: 'http://int.app.ontargetcloud.com:9005', 					// Node server domain
     resourceUrl: 'http://int.app.ontargetcloud.com:9005', 					// This should be same as the node server because the resources are storing on the node server
+    bimServer: 'http://int.app.ontargetcloud.com:9004/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     pusher: {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
@@ -83,6 +113,12 @@ module.exports = {
     domain: 'http://hostname:port/ontargetrs/services',
     baseUrl: 'http://hostname:port',
     nodeServer: 'http://hostname:port',
+    bimServer: 'http://hostname:port/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     pusher: {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
@@ -94,6 +130,12 @@ module.exports = {
     domain: 'http://hostname:port/ontargetrs/services',
     baseUrl: 'http://hostname:port',
     nodeServer: 'http://hostname:port',
+    bimServer: 'http://hostname:port/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
     pusher: {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
@@ -106,6 +148,12 @@ module.exports = {
     baseUrl: 'https://app.ontargetcloud.com',
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
+    bimServer: 'https://app.ontargetcloud.com/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'ontargetbim@ontargetcloud.com',
+      password: '0nT4rg3tBIm2015'
+    },
     pusher: {
       appId: '152503',
       apiKey: 'f0a0bf34cd094e438cba',
@@ -121,6 +169,12 @@ module.exports = {
     baseUrl: 'https://app.ontargetcloud.com',
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
+    bimServer: 'https://app.ontargetcloud.com/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'ontargetbim@ontargetcloud.com',
+      password: '0nT4rg3tBIm2015'
+    },
     pusher: {
       appId: '152503',
       apiKey: 'f0a0bf34cd094e438cba',

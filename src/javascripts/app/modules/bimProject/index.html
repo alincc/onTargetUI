@@ -297,7 +297,7 @@
                     };
 
                     var address = getParameterByName("address");
-                    address = "https://app.ontargetcloud.com/bimserver";
+                    address = $('#bimServerAddress').val();
                     if (address != null) {
                         othis.loadBimServerApiFromAddress(address, successFunction, errorFunction);
                     } else if ($.cookie("address" + window.document.location.port) != null) {

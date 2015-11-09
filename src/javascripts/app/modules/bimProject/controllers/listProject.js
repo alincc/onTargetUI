@@ -10,8 +10,8 @@ define(function(require) {
 
       $scope.getProjectList = function() {
         $scope.onLoading = true;
-        onBimFactory.getAllProjects($rootScope.currentProjectInfo.projectId).then(
-          function(resp) {
+        onBimFactory.getAllProjects($rootScope.currentProjectInfo.projectId)
+          .then(function(resp) {
             $scope.projectList = resp.data.poids;
             if($scope.projectList && $scope.projectList.length > 0) {
               var promises = [];
@@ -57,7 +57,6 @@ define(function(require) {
       };
 
       $scope.projectDetail = function(project) {
-        //$state.go('app.bimProject.project', {poid: project.poid});
         var onTargetProject = _.find($scope.projectList, {poid: project.poid});
         if(onTargetProject) {
           $state.go('app.bimProject.project', {
@@ -68,8 +67,6 @@ define(function(require) {
           alert('BIM project not found');
         }
       };
-
-      $scope.getProjectList();
 
       var deleteProjectModalInstance;
       $scope.deleteProject = function(project) {
@@ -99,6 +96,8 @@ define(function(require) {
         $rootScope.currentBimProject = project;
         $state.go('app.bimProject.updateProject', {poid: project.poid, projectBimFileId: project.projectBimFileId});
       };
+
+      $scope.getProjectList();
     }
   ];
 
