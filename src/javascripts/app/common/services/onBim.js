@@ -29,13 +29,12 @@ define(function(require) {
           };
 
         service.isAuth = function() {
-          localStorage.setItem("bimToken", authentication.token);
           return authentication.isAuth;
         };
 
         service.login = function() {
           var deferred = $q.defer();
-          service.loadAuthentication();
+          //service.loadAuthentication();
           if(service.isAuth()) {
             deferred.resolve();
           } else {
@@ -87,7 +86,8 @@ define(function(require) {
                       })
                       .success(function(resp3) {
                         authentication.isAllowUsersToCreateTopLevelProjects = resp3.response.result;
-                        storage.set('BIMAuthenticationData', authentication);
+                        localStorage.setItem("bimToken", authentication.token);
+                        //storage.set('BIMAuthenticationData', authentication);
                         deferred.resolve();
                       })
                       .error(function(err) {
@@ -108,8 +108,8 @@ define(function(require) {
         };
 
         service.loadAuthentication = function() {
-          var data = storage.get('BIMAuthenticationData');
-          authentication = data || {};
+          //var data = storage.get('BIMAuthenticationData');
+          authentication = {};
         };
 
         service.getAllProjects = function(projectId) {
