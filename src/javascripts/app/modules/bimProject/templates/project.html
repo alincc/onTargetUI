@@ -7,5 +7,6 @@
     <input type="hidden" id="currentUserFirstName" value="{{::currentUserInfo.contact.firstName}}" />
     <input type="hidden" id="currentUserLastName" value="{{::currentUserInfo.contact.lastName}}" />
     <input type="hidden" id="currentUserAvatarPath" value="{{::currentUserInfo.contact.userImagePath}}" />
+    <input type="hidden" id="bimServerAddress" value="{{::constant.bimServerAddress}}" />
     <div ng-include="'bimProject/templates/index.html'"></div>
 </section>

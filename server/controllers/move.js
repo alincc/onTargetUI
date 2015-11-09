@@ -21,7 +21,7 @@ function generateNewFileName(filePath) {
   if(duplicates.length <= 0) {
     newName = fileNameWithoutExt + ' (1).' + fileExt;
   } else {
-    var lastDuplicateNumber = _.sortBy(duplicates).reverse();
+    var lastDuplicateNumber = _.sortBy(duplicates).reverse()[0];
     var duplicateNumber = /.*\s+\((\d+)\)\./.exec(lastDuplicateNumber)[1];
     if(duplicateNumber) {
       newName = fileNameWithoutExt + ' (' + (parseInt(duplicateNumber) + 1) + ').' + fileExt;

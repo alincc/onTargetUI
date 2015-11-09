@@ -12,7 +12,8 @@ define(function(require) {
     escapeHtml = require('./escapeHtml'),
     fileThumbnail = require('./fileThumbnail'),
     fileDownloadPath = require('./fileDownloadPath'),
-    fileDownloadPathHash = require('./fileDownloadPathHash');
+    fileDownloadPathHash = require('./fileDownloadPathHash'),
+    documentNumber = require('./documentNumber');
 
   var module = angular.module('common.filters',
     [
@@ -27,7 +28,8 @@ define(function(require) {
       'common.filters.escapeHtml',
       'common.filters.fileThumbnail',
       'common.filters.fileDownloadPath',
-      'common.filters.fileDownloadPathHash'
+      'common.filters.fileDownloadPathHash',
+      'common.filters.documentNumber'
     ]);
   return module;
 });

@@ -28,7 +28,7 @@
                         </tr>
                         <tr ng-repeat="doc in all" ng-click="previewDocument(doc)">
                             <td valign="middle" class="file-name" ng-bind="::doc.documentTemplate.name"></td>
-                            <td valign="middle" class="file-name" ng-bind="::doc.documentId"></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc | documentNumber"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.subject"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.dueDate | date: app.dateFormat"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
@@ -69,7 +69,7 @@
                         </tr>
                         <tr ng-repeat="doc in submittals"  ng-click="previewDocument(doc)">
                             <td valign="middle" class="file-name" ng-bind="::doc.documentTemplate.name"></td>
-                            <td valign="middle" class="file-name" ng-bind="::doc.documentId"></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc | documentNumber"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.subject"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.dueDate | date: app.dateFormat"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
@@ -110,7 +110,7 @@
                         </tr>
                         <tr ng-repeat="doc in approvals"  ng-click="previewDocument(doc)">
                             <td valign="middle" class="file-name" ng-bind="::doc.documentTemplate.name"></td>
-                            <td valign="middle" class="file-name" ng-bind="::doc.documentId"></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc | documentNumber"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.subject"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.dueDate | date: app.dateFormat"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
