@@ -890,7 +890,7 @@ define(function(require) {
             onSiteFactory.getNextVersionName(scope.originalFilePath)
               .success(function(resp) {
                 var newFilePath = resp.newVersionName;
-                var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/'));
+                var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
                 var data = {
                   "projectId": $rootScope.currentProjectInfo.projectId,
                   "name": newFilePath,
