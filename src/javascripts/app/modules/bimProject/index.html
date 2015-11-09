@@ -298,7 +298,6 @@
 
                     var address = getParameterByName("address");
                     address = $('#bimServerAddress').val();
-                    alert();
                     if (address != null) {
                         othis.loadBimServerApiFromAddress(address, successFunction, errorFunction);
                     } else if ($.cookie("address" + window.document.location.port) != null) {
