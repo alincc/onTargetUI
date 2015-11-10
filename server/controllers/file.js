@@ -110,11 +110,14 @@ function convertPdfToImage(req, res) {
         if(!fs.existsSync(destinationFolder)) {
           fs.mkdirSync(destinationFolder);
         }
+        console.log('Start convert file with command: ' + 'gm convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath + '"');
         exec('gm convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
           if(error) {
+            console.log('Failed to convert pdf to image!', JSON.stringify(error));
             res.status(400);
-            res.send(error);
+            res.send(error.message);
           } else {
+            console.log('Convert file successful!');
             // merge all image into 1
             var gmstate;
             var files = fs.readdirSync(destinationFolder);
@@ -128,11 +131,13 @@ function convertPdfToImage(req, res) {
                 }
               }
             }
+            console.log('Start merging files into single file!');
             // finally write out the file asynchronously
             gmstate.write(exportedFile, function(err) {
               if(err) {
+                console.log('Failed to merge files!', JSON.stringify(err));
                 res.status(400);
-                res.send(err);
+                res.send(err.message);
               } else {
 
                 deleteExportFiles();
