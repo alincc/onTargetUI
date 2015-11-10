@@ -244,6 +244,7 @@
                     $(".sidespan").empty();
                     Global.history = pushInitialState();
                     var notLoggedInFunction = function (address){
+                        console.log('notLoggedInFunction', Global, Global.history, Global.history.page);
                         if (Global.history.page == "Login") {
                             $(".indexcontainer").load(Global.templateDir + "login.html", function (){
                                 othis.current = new Login(address);
@@ -272,6 +273,7 @@
                         // We do have an API
 //                        var token = getParameterByName("token");
                         var token = localStorage.getItem("bimToken");
+                        console.log('Token: ', token);
                         if (token == null) {
                             token = $.cookie("autologin" + window.document.location.port);
                         }
@@ -282,10 +284,12 @@
                                     othis.current = new Main(Global.bimServerApi.baseUrl, Global.bimServerApi.user.name).show(false);
                                 });
                             }, function (){
+                                console.log('Failed to set token');
                                 $.removeCookie("autologin" + window.document.location.port);
                                 notLoggedInFunction(address);
                             });
                         } else {
+                            console.log('Token nulled');
                             notLoggedInFunction(address);
                         }
                     };
@@ -298,6 +302,7 @@
 
                     var address = getParameterByName("address");
                     address = $('#bimServerAddress').val();
+                    console.log('Address: ', address);
                     if (address != null) {
                         othis.loadBimServerApiFromAddress(address, successFunction, errorFunction);
                     } else if ($.cookie("address" + window.document.location.port) != null) {
@@ -307,6 +312,7 @@
                             if (address != null) {
                                 othis.loadBimServerApiFromAddress(address, successFunction, errorFunction);
                             } else {
+                                console.log('Address nulled', address);
                                 notLoggedInFunction(address);
 //				    							$(".indexcontainer").load(Global.baseDir + "selectserver.html", function(){
 //				    								new SelectServer();
@@ -418,6 +424,7 @@
                 Global.notifier = new Notifier();
 
                 function loadError(){
+                    console.log('Load Error');
                     window.clearTimeout(Global.timeoutId);
                     Global.notifier.error("Could not connect");
                     $.removeCookie("username" + window.document.location.port, {path: "/"});
