@@ -86,7 +86,7 @@ define(function(require) {
                       })
                       .success(function(resp3) {
                         authentication.isAllowUsersToCreateTopLevelProjects = resp3.response.result;
-                        localStorage.setItem("bimToken", authentication.token);
+                        storage.set("bimToken", authentication.token);
                         //storage.set('BIMAuthenticationData', authentication);
                         deferred.resolve();
                       })
