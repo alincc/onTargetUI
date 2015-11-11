@@ -29,7 +29,7 @@ define(function(require) {
           };
 
         service.isAuth = function() {
-          return authentication.isAuth;
+          return authentication.isAuth && authentication.token !== '';
         };
 
         service.login = function() {
@@ -86,7 +86,7 @@ define(function(require) {
                       })
                       .success(function(resp3) {
                         authentication.isAllowUsersToCreateTopLevelProjects = resp3.response.result;
-                        localStorage.setItem("bimToken", authentication.token);
+                        storage.set("bimToken", authentication.token);
                         //storage.set('BIMAuthenticationData', authentication);
                         deferred.resolve();
                       })
