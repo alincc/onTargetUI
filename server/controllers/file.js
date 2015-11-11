@@ -5,6 +5,7 @@ var rootPath = process.env.ROOT;
 var mime = require('mime');
 var gm = require('gm');
 var exec = require('child_process').exec;
+var pdfService = require('./../services/pdf');
 
 function getFileInfo(req, res) {
   var relativePath = req.body.path;
@@ -48,108 +49,113 @@ function getFileInfo(req, res) {
 function convertPdfToImage(req, res) {
   var tmpNumber = new Date().getTime();
   var relativePath = req.body.path;
-  //var filePath = [rootPath, relativePath].join('/');
   var filePath = path.join(rootPath, relativePath);
-  //var fileExt = relativePath.substring(relativePath.lastIndexOf('.') + 1).toLowerCase();
   var fileExt = path.extname(filePath);
   var fileType = mime.lookup(fileExt);
-  //var fileName = relativePath.substring(relativePath.lastIndexOf('/') + 1).substring(0, relativePath.substring(relativePath.lastIndexOf('/') + 1).lastIndexOf('.'));
   var fileName = path.basename(filePath, fileExt);
-  //var outputFolder = filePath.substring(0, filePath.lastIndexOf('/'));
   var outputFolder = path.dirname(filePath);
-  //var destinationFolder = outputFolder + '/output';
   var destinationFolder = path.join(outputFolder, 'output');
-  //var destinationFilePath = destinationFolder + '/' + tmpNumber + '_' + fileName + '.jpg';
   var destinationFilePath = path.join(destinationFolder, tmpNumber + '_' + fileName + '.jpg');
-  //var exportedFile = outputFolder + '/converted_' + fileName + '.jpg';
   var exportedFile = path.join(outputFolder, 'converted_' + fileName + '.jpg');
   var relativeExportedFilePath = relativePath.substring(0, relativePath.lastIndexOf('/')) + '/converted_' + fileName + '.jpg';
 
-  var deleteExportFiles = function() {
-    var files = fs.readdirSync(destinationFolder);
-    for(var i in files) {
-      var filePath = destinationFolder + '/' + files[i];
-      if(files[i].indexOf(tmpNumber + '_' + fileName) > -1) {
-        fs.unlinkSync(filePath);
-      }
-    }
-  };
+  pdfService.parse(relativePath, function() {
+    console.log('Parse pdf to image successful!');
+  }, function() {
+    console.log('Failed to parse pdf to image!');
+  });
 
-  var sendResult = function() {
-    gm(exportedFile).size(function(err, value) {
-      if(err) {
-        res.status(400);
-        res.send(err);
-      } else {
-        var stats = fs.statSync(exportedFile);
-        var fileSizeInBytes = stats["size"];
+  res.send({
+    success: true
+  });
 
-        res.send({
-          success: true,
-          type: mime.lookup('jpg'),
-          width: value.width,
-          height: value.height,
-          url: relativeExportedFilePath,
-          size: fileSizeInBytes
-        });
-      }
-    });
-  };
+  //var deleteExportFiles = function() {
+  //  var files = fs.readdirSync(destinationFolder);
+  //  for(var i in files) {
+  //    var filePath = destinationFolder + '/' + files[i];
+  //    if(files[i].indexOf(tmpNumber + '_' + fileName) > -1) {
+  //      fs.unlinkSync(filePath);
+  //    }
+  //  }
+  //};
+  //
+  //var sendResult = function() {
+  //  gm(exportedFile).size(function(err, value) {
+  //    if(err) {
+  //      res.status(400);
+  //      res.send(err);
+  //    } else {
+  //      var stats = fs.statSync(exportedFile);
+  //      var fileSizeInBytes = stats["size"];
+  //
+  //      res.send({
+  //        success: true,
+  //        type: mime.lookup('jpg'),
+  //        width: value.width,
+  //        height: value.height,
+  //        url: relativeExportedFilePath,
+  //        size: fileSizeInBytes
+  //      });
+  //    }
+  //  });
+  //};
 
-  if(fs.existsSync(exportedFile)) {
-    sendResult();
-  } else {
-    if(fileExt !== '.pdf') {
-      res.status(400);
-      res.send('Please select pdf file!');
-    } else {
-      if(!fs.existsSync(filePath)) {
-        res.status(400);
-        res.send('File not found!');
-      } else {
-        if(!fs.existsSync(destinationFolder)) {
-          fs.mkdirSync(destinationFolder);
-        }
-        console.log('Start convert file with command: ' + 'gm convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath + '"');
-        exec('gm convert -density 200 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
-          if(error) {
-            console.log('Failed to convert pdf to image!', JSON.stringify(error));
-            res.status(400);
-            res.send(error.message);
-          } else {
-            console.log('Convert file successful!');
-            // merge all image into 1
-            var gmstate;
-            var files = fs.readdirSync(destinationFolder);
-            for(var i in files) {
-              var filePath = destinationFolder + '/' + files[i];
-              if(files[i].indexOf(tmpNumber + '_' + fileName) > -1) {
-                if(gmstate) {
-                  gmstate.append(filePath);
-                } else {
-                  gmstate = gm(filePath);
-                }
-              }
-            }
-            console.log('Start merging files into single file!');
-            // finally write out the file asynchronously
-            gmstate.write(exportedFile, function(err) {
-              if(err) {
-                console.log('Failed to merge files!', JSON.stringify(err));
-                res.status(400);
-                res.send(err.message);
-              } else {
-
-                deleteExportFiles();
-
-                sendResult();
-              }
-            });
-          }
-        });
-      }
-    }
-  }
+  //if(fs.existsSync(exportedFile)) {
+  //  sendResult();
+  //} else {
+  //  if(fileExt !== '.pdf') {
+  //    res.status(400);
+  //    res.send('Please select pdf file!');
+  //  } else {
+  //    if(!fs.existsSync(filePath)) {
+  //      res.status(400);
+  //      res.send('File not found!');
+  //    } else {
+  //      if(!fs.existsSync(destinationFolder)) {
+  //        fs.mkdirSync(destinationFolder);
+  //      }
+  //      console.log('Start convert file...');
+  //
+  //      console.log('Command: ' + 'gm convert -density 200 "' + filePath + '" -quality 90 "' + destinationFilePath + '"');
+  //      exec('convert -density 150 "' + filePath + '" -quality 80 "' + destinationFilePath + '"', function(error) {
+  //        if(error) {
+  //          console.log('Failed to convert pdf to image!', JSON.stringify(error));
+  //          res.status(400);
+  //          res.send(error.message);
+  //        } else {
+  //          console.log('Convert file successful!');
+  //          // merge all image into 1
+  //          var gmstate;
+  //          var files = fs.readdirSync(destinationFolder);
+  //          for(var i in files) {
+  //            var filePath = destinationFolder + '/' + files[i];
+  //            if(files[i].indexOf(tmpNumber + '_' + fileName) > -1) {
+  //              if(gmstate) {
+  //                gmstate.append(filePath);
+  //              } else {
+  //                gmstate = gm(filePath);
+  //              }
+  //            }
+  //          }
+  //          console.log('Start merging files into single file...');
+  //          // finally write out the file asynchronously
+  //          gmstate.write(exportedFile, function(err) {
+  //            if(err) {
+  //              console.log('Failed to merge files!', JSON.stringify(err));
+  //              res.status(400);
+  //              res.send(err.message);
+  //            } else {
+  //              console.log('Merge files successful!');
+  //              deleteExportFiles();
+  //
+  //              sendResult();
+  //            }
+  //          });
+  //        }
+  //      });
+  //    }
+  //  }
+  //}
 }
 
 function getPdfImage(req, res) {

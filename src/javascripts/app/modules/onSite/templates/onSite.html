@@ -41,81 +41,164 @@
                     <div ng-if="isLoading" class="row text-center">
                         <spinner text="Loading..."></spinner>
                     </div>
-                    <div class="table-responsive" ng-if="viewMode === 'list' && !isLoading">
-                        <table class="table table-striped b-t b-light">
-                            <thead>
-                            <tr>
-                                <th style="width: 64px;"></th>
-                                <th>Document Name</th>
-                                <th>Uploaded by</th>
-                                <th>Uploaded on</th>
-                                <th style="width: 310px;">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-if="!isLoading && !uploadedDocumentList.length">
-                                <td colspan="5">
-                                    <alert type="info" class="text-center">No documents</alert>
-                                </td>
-                            </tr>
-                            <!--<tr ng-if="isLoading">
-                                <td colspan="5" class="text-center">
-                                    <spinner text="Loading..."></spinner>
-                                </td>
-                            </tr>-->
-                            <tr ng-repeat="doc in uploadedDocumentList | filter:search:name track by $index">
-                                <td class="file-icon">
-                                    <div class="thumbnail-icon">
-                                    <a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                        ng-src="{{doc.name | fileThumbnail}}"/></a>
-                                    </div>
-                                </td>
-                                <td><a href="javascript:void(0)" ng-click="preview(doc)"
-                                       ng-bind="doc.name | fileName"></a></td>
-                                <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                                <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
-                                <td>
-                                    <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc)">
-                                        <i class="fa fa-comment"></i> Comment
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-info" ng-click="download(doc)">
-                                        <i class="fa fa-download"></i> Download
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-warning" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
-                                        <i class="fa fa-trash"></i> Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <section ng-if="viewMode === 'grid'">
-                        <div class="row" ng-if="!isLoading && !uploadedDocumentList.length">
-                            <div class="col-xs-12 text-center">
-                                <alert type="info" class="text-center">No documents</alert>
-                            </div>
+
+                    <div class="row" ng-if="!isLoading && !uploadedDocumentList.length">
+                        <div class="col-xs-12 text-center">
+                            <alert type="info" class="text-center">No documents</alert>
                         </div>
-                        <div class="row" ng-repeat="docRow in uploadedDocumentArrangedList track by $index">
-                            <div class="col-md-3" data-ng-repeat="doc in docRow | filter:search:name track by $index">
+                    </div>
+
+                    <div class="row" ng-show="isCategorySelected">
+                        <div class="col-md-12 margin-bottom">
+                            <h4 class="pull-left">{{selectedCategoryName}}</h4>
+                            <button class="btn btn-default pull-right" ng-click="backToCategories()">
+                                <i class="fa fa-arrow-left"></i> Back to categories
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row" ng-hide="isCategorySelected">
+                        <div class="col-md-3" ng-repeat="category in categories track by $index">
+                            <article>
+                                <div class="document-category" ng-click="chooseCategory(category)">
+                                    <img src="./img/icons/folder-graphite.png">
+                                    <p>{{category.name}} <span ng-show="category.count > 0"> ({{category.count}})</span>
+                                    </p>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div ng-if="viewMode === 'list' && !isLoading">
+                        <div class="table-responsive" ng-show="isCategorySelected">
+                            <table class="table table-striped b-t b-light">
+                                <thead>
+                                <tr>
+                                    <th style="width: 64px;"></th>
+                                    <th>Document Name</th>
+                                    <th>Uploaded by</th>
+                                    <th>Uploaded on</th>
+                                    <th style="width: 310px;">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-if="listResults.length === 0">
+                                    <td colspan="5">
+                                        <alert type="info" class="text-center">No documents</alert>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="doc in uploadedDocumentList | filter:filterByCategoryId | filter:filterBySearchBox as listResults track by $index">
+                                    <td class="file-icon">
+                                        <div class="thumbnail-icon">
+                                            <a href="javascript:void(0)" ng-click="preview(doc)"><img
+                                                ng-if="doc.versionProjectFiles.length <= 0"
+                                              ng-src="{{doc.thumbnailImageName | fileThumbnail}}"/></a>
+                                            <a href="javascript:void(0)" ng-click="preview(doc)"><img
+                                                ng-if="doc.versionProjectFiles.length > 0"
+                                              ng-src="{{doc.versionProjectFiles[0].thumbnailImageName | fileThumbnail}}"/></a>
+                                        </div>
+                                    </td>
+                                    <td><a href="javascript:void(0)" ng-click="preview(doc)"
+                                           ng-if="doc.versionProjectFiles.length <= 0"
+                                           ng-bind="doc.name | fileName"></a>
+                                        <a href="javascript:void(0)" ng-click="preview(doc)"
+                                           ng-if="doc.versionProjectFiles.length > 0"
+                                           ng-bind="doc.versionProjectFiles[0].name | fileName"></a></td>
+                                    <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
+                                    <td ng-if="doc.versionProjectFiles.length <= 0" ng-bind="doc.createdDate | date:app.dateFormat"></td>
+                                    <td ng-if="doc.versionProjectFiles.length > 0" ng-bind="doc.versionProjectFiles[0].createdDate | date:app.dateFormat"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc)">
+                                            <i class="fa fa-comment"></i> Comment
+                                        </button>
+                                        <button type="button" class="btn btn-xs btn-info" ng-click="download(doc)">
+                                            <i class="fa fa-download"></i> Download
+                                        </button>
+                                        <button type="button" class="btn btn-xs btn-info" ng-click="editDocument(doc)" permission="ONSITE_DELETE">
+                                            <i class="fa fa-pencil"></i> Edit
+                                        </button>
+                                        <button type="button" class="btn btn-xs btn-warning" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <section ng-if="viewMode === 'grid' && !isLoading">
+                        <div class="row" ng-show="isCategorySelected">
+                            <article class="col-md-12" ng-if="gridResults.length === 0">
+                                <div class="text-center">
+                                    <alert type="info" class="text-center">No documents</alert>
+                                </div>
+                            </article>
+                            <div class="col-md-3"
+                                 data-ng-repeat="doc in uploadedDocumentList | filter:filterByCategoryId | filter:filterBySearchBox as gridResults track by $index">
                                 <article>
-                                    <div class="file-thumbnail">
-                                        <a href="javascript:void(0)" ng-click="preview(doc)">
-                                            <img ng-src="{{doc.name | fileThumbnail}}" height="64px"/>
-                                        </a>
-                                        <span class="delete-button" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE"><i class="fa fa-times-circle-o"></i></span>
+                                    <div ng-if="doc.versionProjectFiles.length > 0">
+                                        <div class="file-thumbnail">
+                                            <a href="javascript:void(0)" ng-click="preview(doc)">
+                                                <img
+                                                    ng-src="{{doc.versionProjectFiles[0].thumbnailImageName | fileThumbnail}}"
+                                                    height="64px"/>
+                                            </a>
+                                        </div>
+                                        <div style="text-align:left">
+                                            <button type="button" class="btn btn-xs btn-info"
+                                                    ng-click="editDocument(doc)" permission="ONSITE_DELETE">
+                                                <i class="fa fa-pencil"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-warning"
+                                                    ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+
+                                            <h5 class="doc-name">
+                                                Document name:
+                                                <a ng-click="preview(doc)">{{doc.versionProjectFiles[0].name |
+                                                    fileName}}</a>
+                                            </h5>
+                                            <h5>
+                                                Uploaded on: {{doc.versionProjectFiles[0].createdDate |
+                                                date:app.dateFormat}}
+                                            </h5>
+                                            <h5>
+                                                Uploaded by: {{doc.versionProjectFiles[0].createdByContact.firstName + '
+                                                ' +
+                                                doc.versionProjectFiles[0].createdByContact.lastName}}
+                                            </h5>
+                                        </div>
                                     </div>
-                                    <div style="text-align:left">
-                                        <h5 class="doc-name">
-                                            Document name:
-                                            <a ng-click="preview(doc)">{{doc.name | fileName}}</a>
-                                        </h5>
-                                        <h5>
-                                            Uploaded on: {{doc.createdDate | date:app.dateFormat}}
-                                        </h5>
-                                        <h5>
-                                            Uploaded by: {{doc.createdByContact.firstName + ' ' +
-                                            doc.createdByContact.lastName}}
-                                        </h5>
+                                    <div ng-if="doc.versionProjectFiles.length <= 0">
+                                        <div class="file-thumbnail">
+                                            <a href="javascript:void(0)" ng-click="preview(doc)">
+                                                <img ng-src="{{doc.thumbnailImageName | fileThumbnail}}" height="64px"/>
+                                            </a>
+                                        </div>
+                                        <div style="text-align:left">
+                                            <button type="button" class="btn btn-xs btn-info"
+                                                    ng-click="editDocument(doc)" permission="ONSITE_DELETE">
+                                                <i class="fa fa-pencil"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-warning"
+                                                    ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+
+                                            <h5 class="doc-name">
+                                                Document name:
+                                                <a ng-click="preview(doc)">{{doc.name | fileName}}</a>
+                                            </h5>
+                                            <h5>
+                                                Uploaded on: {{doc.createdDate | date:app.dateFormat}}
+                                            </h5>
+                                            <h5>
+                                                Uploaded by: {{doc.createdByContact.firstName + ' ' +
+                                                doc.createdByContact.lastName}}
+                                            </h5>
+                                        </div>
                                     </div>
                                 </article>
                             </div>

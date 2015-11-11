@@ -28,7 +28,7 @@ define(function(require) {
             if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
-                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : $rootScope.mainProjectInfo.projectId
+                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : 1
               };
             }
             return config;
@@ -206,7 +206,7 @@ define(function(require) {
     openWeatherMap: {
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'
     },
-    pusher_api_key: 'c2f5de73a4caa3763726',
+    pusher_api_key: 'f0a0bf34cd094e438cba',
     pusher_channel: 'onTarget',
     bim_user: 'bim@ontargetcloud.com',
     bim_password: 'admin',

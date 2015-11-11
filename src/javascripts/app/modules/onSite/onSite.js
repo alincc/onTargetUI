@@ -5,9 +5,11 @@ define(function(require){
     config = require('app/config'),
     template = require('text!./templates/onSite.html'),
     uploadTemplate = require('text!./templates/upload.html'),
+    editTemplate = require('text!./templates/edit.html'),
     deleteTemplate = require('text!./templates/delete.html'),
     controller = require('./controllers/onSite'),
     uploadController = require('./controllers/upload'),
+    editController = require('./controllers/edit'),
     deleteController = require('./controllers/delete'),
     projectContextModule = require('app/common/context/project'),
     documentServiceModule = require('app/common/services/document'),
@@ -54,11 +56,13 @@ define(function(require){
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('onSite/templates/onSite.html', template);
     $templateCache.put('onSite/templates/upload.html', uploadTemplate);
+    $templateCache.put('onSite/templates/edit.html', editTemplate);
     $templateCache.put('onSite/templates/delete.html', deleteTemplate);
   }]);
 
   module.controller('OnSiteController', controller);
   module.controller('UploadDocumentController', uploadController);
+  module.controller('EditDocumentController', editController);
   module.controller('DeleteDocumentController', deleteController);
 
   module.config(

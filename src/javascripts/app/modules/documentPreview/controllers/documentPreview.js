@@ -266,7 +266,8 @@ define(function(require) {
         //$scope.selectedDoc.filePath = $filter('filePath')(dt);
         //$scope.showDocPreview = false;
         //$scope._form.$setPristine();
-        $location.search('docId', dt.docId);
+        //$location.search('docId', dt.docId);
+        $state.go("app.onSite");
       });
 
       $scope.$on('pdfTaggingMarkUp.SaveError', function(e, dt) {

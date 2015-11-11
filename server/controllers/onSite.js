@@ -5,25 +5,35 @@ var mime = require('mime');
 var gm = require('gm');
 var _ = require('lodash');
 var rootPath = process.env.ROOT;
-
-function generateGuiId() {
-  return 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace(/[x]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
+var config = require('./../config');
+var pdfService = require('./../services/pdf');
+var utilService = require('./../services/util');
 
 function exportPdf(req, res) {
   var imageUrl = req.body.path;
+  var docId = req.body.docId;
+  var baseRequest = req.body.baseRequest;
   var markerUrl = 'server/assets/img/marker-icon.png';
   var listGeo = req.body.geo;
   var zoom = req.body.scale;
   var exportFileName = req.body.fileName;
   var imgWidth, imgHeight;
   var projectAssetFolderName = req.body.projectAssetFolderName;
+
+  var convertPdfToImage = function(){
+    // Convert pdf to image
+    pdfService.parse('assets/projects/' + projectAssetFolderName + '/onsite/' + exportFileName, function(){
+      request({
+          method: 'POST',
+          body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
+          json: true,
+          url: config.PROXY_URL + '/upload/updateConversionComplete'
+        });
+    });
+  };
+
   var g = gm(path.join(rootPath, imageUrl)).size(function(err, size) {
-    console.log(size, err);
-    var randomId = generateGuiId();
+    var randomId = utilService.newGuidId();
     if(!err) {
       imgWidth = size.width;
       imgHeight = size.height;
@@ -95,18 +105,19 @@ function exportPdf(req, res) {
       var tmpName = 'tmp_' + randomId + '.jpg';
       tmpName = path.join(destinationPath1, tmpName);
 
-
       var destinationPath = path.join(rootPath, 'assets', 'projects', projectAssetFolderName);
+
       if(!fs.existsSync(destinationPath)) {
         fs.mkdirSync(destinationPath);
       }
       destinationPath = path.join(destinationPath, 'onsite');
+
       if(!fs.existsSync(destinationPath)) {
         fs.mkdirSync(destinationPath);
       }
       destinationPath = path.join(destinationPath, exportFileName);
 
-      var returningPath = 'assets/projects/' + projectAssetFolderName + '/onsite/' + exportFileName;
+      //var returningPath = 'assets/projects/' + projectAssetFolderName + '/onsite/' + exportFileName;
 
       g.write(tmpName, function() {
         var newG = gm()
@@ -124,14 +135,15 @@ function exportPdf(req, res) {
         newG.mosaic()  // Merges the images as a matrix
           .write(tmpName, function(err) {
             gm(tmpName).write(destinationPath, function() {
-              res.send({
-                success: true,
-                path: returningPath
-              });
+              convertPdfToImage();
             });
           });
       });
     }
+  });
+
+  res.send({
+    success: true
   });
 }
 

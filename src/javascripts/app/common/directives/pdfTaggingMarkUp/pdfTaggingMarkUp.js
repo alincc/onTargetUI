@@ -245,7 +245,7 @@ define(function(require) {
             });
 
             /*southWest = map.unproject([0, imgH], 2);
-            northEast = map.unproject([imgW, 0], 2);*/
+             northEast = map.unproject([imgW, 0], 2);*/
             southWest = map.unproject([0, imgH], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
             northEast = map.unproject([imgW, 0], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
             bounds = new L.LatLngBounds(southWest, northEast);
@@ -255,7 +255,7 @@ define(function(require) {
 
             var fitHeight = map.unproject([0, imgH], x(imgH * 2, scope.pdfTaggingMarkUp.containerHeight));
 
-            map.setView([fitHeight.lat/2, northEast.lng/2], 2);
+            map.setView([fitHeight.lat / 2, northEast.lng / 2], 2);
 
             //leaflet.Draw
 
@@ -851,7 +851,7 @@ define(function(require) {
             }, []);
           };
 
-          scope.exportPdf = function(fileName, width, height) {
+          scope.exportPdf = function(docId, fileName, width, height) {
             var deferred = $q.defer();
             var layers = angular.copy(scope.listLayers);
             _.each(layers, function(l) {
@@ -869,8 +869,8 @@ define(function(require) {
               height: height,
               scale: x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth),
               projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName,
-              fileName: fileName
-
+              fileName: fileName,
+              docId: docId
             })
               .success(function(dt) {
                 deferred.resolve(dt);
@@ -893,29 +893,35 @@ define(function(require) {
                 var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
                 var data = {
                   "projectId": $rootScope.currentProjectInfo.projectId,
-                  "name": newFilePath,
+                  "name": $filter('fileName')(newFilePath),
                   "fileType": doc.fileType,
                   "createdBy": $rootScope.currentUserInfo.userId,
                   "modifiedBy": $rootScope.currentUserInfo.userId,
                   "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
-                  "description": doc.description
+                  "description": doc.description,
+                  "parentProjectFileId": doc.parentProjectFileId === 0 ? doc.fileId : doc.parentProjectFileId,
+                  "isConversionComplete": false,
+                  "thumbnailImageName": $filter('pdfThumbnail')(newFilePath),
+                  "filePath": newFilePath
                 };
                 documentFactory.saveUploadedDocsInfo(data).then(function(resp) {
                   if(resp.data && resp.data.documentDetail) {
                     var docId = resp.data.documentDetail.fileId;
                     var listTag = scope.extractListTags(doc, docId);
                     scope.addTag(listTag).then(function(resp) {
-                      scope.exportPdf(newFileName, width, height).then(function(dt) {
-                        fileFactory.convertPDFToImage(dt.path).then(function(r) {
-                          scope.$emit('pdfTaggingMarkUp.SaveDone', {url: r.url, docId: docId});
-                        }, function(err) {
-                          console.log(err);
-                          scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                        });
-                      }, function(err) {
-                        console.log(err);
-                        scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                      });
+                      scope.$emit('pdfTaggingMarkUp.SaveDone');
+                      scope.exportPdf(docId, newFileName, width, height);
+                      //  .then(function(dt) {
+                      //  fileFactory.convertPDFToImage(dt.path).then(function(r) {
+                      //    scope.$emit('pdfTaggingMarkUp.SaveDone', {url: r.url, docId: docId});
+                      //  }, function(err) {
+                      //    console.log(err);
+                      //    scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+                      //  });
+                      //}, function(err) {
+                      //  console.log(err);
+                      //  scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+                      //});
                     }, function(err) {
                       console.log(err);
                       scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});

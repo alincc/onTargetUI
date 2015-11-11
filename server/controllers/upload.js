@@ -15,7 +15,7 @@ function generateNewFileName(filePath) {
   var fullFilePath = filePath;
   var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
   var newName = fileName;
-  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\).' + fileExt + '$');
+  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\)\\.' + fileExt + '$');
   var duplicates = _.filter(files, function(file) {
     return reg.test(file);
   });
