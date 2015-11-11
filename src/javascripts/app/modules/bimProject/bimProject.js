@@ -1,4 +1,4 @@
-define(function (require){
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     uiRouter = require('uiRouter'),
@@ -40,9 +40,9 @@ define(function (require){
     '$templateCache',
     '$rootScope',
     '$state',
-    function ($templateCache,
-              $rootScope,
-              $state){
+    function($templateCache,
+             $rootScope,
+             $state) {
       $templateCache.put('bimProject/templates/bimProject.html', bimProjectTemplate);
       $templateCache.put('bimProject/templates/index.html', indexTemplate);
       $templateCache.put('listProjectBim/templates/listProjectBim.html', listTemplate);
@@ -63,7 +63,7 @@ define(function (require){
 
   module.config(
     ['$stateProvider', '$urlRouterProvider',
-      function ($stateProvider, $urlRouterProvider){
+      function($stateProvider, $urlRouterProvider) {
         $stateProvider
           .state('app.bimProject', {
             url: '/bim-project',
@@ -71,16 +71,16 @@ define(function (require){
             controller: 'BimProjectController',
             abstract: true,
             resolve: {
-              authorization: ['$q', 'onBimFactory', function ($q, onBimFactory){
+              authorization: ['$q', 'onBimFactory', function($q, onBimFactory) {
                 var deferred = $q.defer();
                 console.log('Authorizing');
                 onBimFactory.login()
-                  .then(function (){
+                  .then(function() {
                     //console.log($state.href('app.onBim.listProject'));
                     //$location.href($state.href('app.onBim.listProject'));
                     console.log('Authorized');
                     deferred.resolve();
-                  }, function (err){
+                  }, function(err) {
                     console.log(err);
                     deferred.reject();
                   });
@@ -92,7 +92,24 @@ define(function (require){
             url: '/list-project',
             templateUrl: 'listProjectBim/templates/listProjectBim.html',
             controller: 'BimListProjectController',
-            reloadOnSearch: false
+            reloadOnSearch: false,
+            resolve: {
+              authorization: ['$q', 'onBimFactory', function($q, onBimFactory) {
+                var deferred = $q.defer();
+                console.log('Authorizing');
+                onBimFactory.login()
+                  .then(function() {
+                    //console.log($state.href('app.onBim.listProject'));
+                    //$location.href($state.href('app.onBim.listProject'));
+                    console.log('Authorized');
+                    deferred.resolve();
+                  }, function(err) {
+                    console.log(err);
+                    deferred.reject();
+                  });
+                return deferred.promise;
+              }]
+            }
           })
           .state('app.bimProject.project', {
             url: '/project?poid&projectBimFileId',
@@ -100,7 +117,22 @@ define(function (require){
             controller: 'BimProjectDetailController',
             reloadOnSearch: false,
             resolve: {
-              checkParam : ['$q', 'onBimFactory', '$stateParams', function ($q, onBimFactory, $stateParams){
+              authorization: ['$q', 'onBimFactory', function($q, onBimFactory) {
+                var deferred = $q.defer();
+                console.log('Authorizing');
+                onBimFactory.login()
+                  .then(function() {
+                    //console.log($state.href('app.onBim.listProject'));
+                    //$location.href($state.href('app.onBim.listProject'));
+                    console.log('Authorized');
+                    deferred.resolve();
+                  }, function(err) {
+                    console.log(err);
+                    deferred.reject();
+                  });
+                return deferred.promise;
+              }],
+              checkParam: ['$q', 'onBimFactory', '$stateParams', function($q, onBimFactory, $stateParams) {
                 var deferred = $q.defer();
                 if(!$stateParams.poid) {
                   deferred.reject();
@@ -115,7 +147,24 @@ define(function (require){
             url: '/add-project',
             templateUrl: 'bimAddProject/templates/bimAddProject.html',
             controller: 'BimAddProjectController',
-            reloadOnSearch: false
+            reloadOnSearch: false,
+            resolve: {
+              authorization: ['$q', 'onBimFactory', function($q, onBimFactory) {
+                var deferred = $q.defer();
+                console.log('Authorizing');
+                onBimFactory.login()
+                  .then(function() {
+                    //console.log($state.href('app.onBim.listProject'));
+                    //$location.href($state.href('app.onBim.listProject'));
+                    console.log('Authorized');
+                    deferred.resolve();
+                  }, function(err) {
+                    console.log(err);
+                    deferred.reject();
+                  });
+                return deferred.promise;
+              }]
+            }
           })
           .state('app.bimProject.updateProject', {
             url: '/update-project?poid&projectBimFileId',
@@ -123,17 +172,32 @@ define(function (require){
             controller: 'BimUpdateProjectController',
             reloadOnSearch: false,
             resolve: {
+              authorization: ['$q', 'onBimFactory', function($q, onBimFactory) {
+                var deferred = $q.defer();
+                console.log('Authorizing');
+                onBimFactory.login()
+                  .then(function() {
+                    //console.log($state.href('app.onBim.listProject'));
+                    //$location.href($state.href('app.onBim.listProject'));
+                    console.log('Authorized');
+                    deferred.resolve();
+                  }, function(err) {
+                    console.log(err);
+                    deferred.reject();
+                  });
+                return deferred.promise;
+              }],
               project: ['$stateParams', '$q', 'onBimFactory',
-                function ($stateParams, $q, onBimFactory){
-                  var defferred = $q.defer();
+                function($stateParams, $q, onBimFactory) {
+                  var deferred = $q.defer();
                   if($stateParams.poid) {
                     onBimFactory.getBimProjectByPoid($stateParams.poid).success(
-                      function (resp){
-                        defferred.resolve(resp.response.result);
+                      function(resp) {
+                        deferred.resolve(resp.response.result);
                       }
                     );
                   }
-                  return defferred.promise;
+                  return deferred.promise;
                 }
               ]
             }

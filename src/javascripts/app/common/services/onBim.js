@@ -29,7 +29,7 @@ define(function(require) {
           };
 
         service.isAuth = function() {
-          return authentication.isAuth;
+          return authentication.isAuth && authentication.token !== '';
         };
 
         service.login = function() {
