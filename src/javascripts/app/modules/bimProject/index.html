@@ -284,8 +284,8 @@
                                 token = localStorage.getItem("bimToken")
                             } else {
                                 token = $.cookie("bimToken");
-                                token = token.replace(/^(\"|\')|(\"|\')$/g,'');
                             }
+                            token = token.replace(/^(\"|\')|(\"|\')$/g,'');
                             return token;
                         };
 
