@@ -62,4 +62,37 @@ exports.crop = function(path, name, success, failure){
   });
 };
 
+exports.cropImageSquare = function(input, output, size, cb){
+  gm(input).size(function(err, value){
+    if(err) {
+      cb(err);
+    } else {
+      var imgWidth = value.width;
+      var imgHeight = value.height;
+      var cropWidth = imgWidth;
+      var cropHeight = imgHeight;
+      if(cropWidth > cropHeight) {
+        cropWidth = cropHeight;
+      }
+      else if(cropHeight > cropWidth) {
+        cropHeight = cropWidth;
+      }
+      var x = (imgWidth / 2) - (cropWidth / 2);
+      var y = (imgHeight / 2) - (cropHeight / 2);
+
+      // Crop
+      gm(input)
+        .crop(cropWidth, cropHeight, x, y)
+        .resize(size)
+        .write(output, function(err){
+          if(err) {
+            cb(err);
+          } else {
+            cb();
+          }
+        });
+    }
+  });
+};
+
 module.exports = exports;

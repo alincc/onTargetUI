@@ -1,14 +1,15 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state', 'document', '$http',
-    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state, document, $http) {
+  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state', 'document',
+    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state, document) {
       $scope.selectedDoc = document.projectFile;
       $scope.onAction = $stateParams.onAction;
+      $scope.pdfImagePages = document.pages;
 
       var mapData = function() {
-        var fileExtension = utilFactory.getFileExtension($scope.selectedDoc.name);
-        var filePath = $filter('filePath')($scope.selectedDoc.name);
+        var fileExtension = utilFactory.getFileExtension($scope.selectedDoc.filePath);
+        var filePath = $filter('filePath')($scope.selectedDoc.filePath);
         $scope.selectedDoc.filePath = filePath;
         $scope.selectedDoc.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
         $scope.docImagePath = document.imagePath;
@@ -59,16 +60,6 @@ define(function(require) {
               console.log(err);
             });
         }
-      };
-
-      $scope.addCommentToServer = function(objPost) {
-        return $http.post(appConstant.domain + '/project/file/tag/comment/add', objPost);
-      };
-
-      $scope.addTag = function(tags) {
-        return $http.post(appConstant.domain + '/project/file/tag/save', {
-          tags: tags
-        });
       };
 
       $scope.extractListComment = function(doc) {
@@ -232,12 +223,6 @@ define(function(require) {
         });
       };
 
-      $scope.getProjectFileTagId = function(id) {
-        return $http.post(appConstant.domain + '/project/file/tag/get', {
-          "projectFileId": id
-        });
-      };
-
       $scope.backToList = function() {
         if($scope.onAction === 'onSite') {
           $state.go("app.onSite");
@@ -248,7 +233,7 @@ define(function(require) {
       };
 
       $scope.editDoc = function(doc) {
-        $scope.getProjectFileTagId(doc.fileId).then(function(resp) {
+        onSiteFactory.getDocumentTags(doc.fileId).then(function(resp) {
           $rootScope.pdfTaggingMarkUpEditData = resp.data.tags;
           $scope.showDocPreview = true;
         });

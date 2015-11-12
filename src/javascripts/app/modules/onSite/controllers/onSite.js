@@ -9,7 +9,14 @@ define(function(require) {
       $scope.uploadedDocumentList = [];
       $scope.uploadedDocumentArrangedList = [];
       $scope.categories = [];
+
       $scope.isCategorySelected = false;
+      var categoryIdQueryString = $stateParams.categoryId;
+      if(!!categoryIdQueryString) {
+        $scope.isCategorySelected = true;
+        $scope.selectedCategoryId = categoryIdQueryString;
+      }
+
       //$scope.isPreview = angular.isDefined($stateParams.docId);
       $scope.currentProject = $rootScope.currentProjectInfo;
 
@@ -297,11 +304,16 @@ define(function(require) {
         $scope.isCategorySelected = true;
         $scope.selectedCategoryId = category.id;
         $scope.selectedCategoryName = category.name;
+
+        //$scope.categorySelected = $rootScope.categorySelected = category;
+
+        // Update route
+        $location.search('categoryId', category.id);
       };
 
       $scope.filterByCategoryId = function(document) {
         if($scope.selectedCategoryId) {
-          return document.projectFileCategoryId.projectFileCategoryId === $scope.selectedCategoryId;
+          return document.projectFileCategoryId.projectFileCategoryId.toString() === $scope.selectedCategoryId.toString();
         }
       };
 
@@ -309,6 +321,8 @@ define(function(require) {
         $scope.isCategorySelected = false;
         $scope.selectedCategoryId = 0;
         $scope.selectedCategoryName = '';
+
+        $location.search('categoryId', null);
       };
 
       $scope.filterBySearchBox = function(document) {

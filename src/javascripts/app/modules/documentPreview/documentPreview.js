@@ -40,29 +40,47 @@ define(function(require) {
             templateUrl: 'documentPreview/templates/documentPreview.html',
             controller: 'PreviewDocumentController',
             resolve: {
-              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'fileFactory',
-                function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, fileFactory) {
+              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'onSiteFactory',
+                function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, onSiteFactory) {
                   var deferred = $q.defer();
                   switch($stateParams.onAction) {
                     case 'onSite' :
                       if($stateParams.docId) {
                         documentFactory.getDocumentDetail({
                           projectId: $rootScope.currentProjectInfo.projectId,
-                          projectFileId: Number($stateParams.docId)
+                          projectFileId: parseInt($stateParams.docId)
                         }).success(
                           function(resp) {
                             if(/(pdf$)/.test(resp.projectFile.name)) {
-                              fileFactory.getPdfImage(resp.projectFile.name)
-                                .then(function (r){
-                                  deferred.resolve({
-                                    projectFile: resp.projectFile,
-                                    imagePath: r.data.url
+                              if(!resp.projectFile.conversionComplete) {
+                                console.log('This file havent finish conversation yet!');
+                                deferred.reject();
+                              } else {
+                                onSiteFactory.getPdfImagePages(resp.projectFile.filePath)
+                                  .success(function(p) {
+                                    if(p.pages.length === 0) {
+                                      console.log('Cannot found any images for this file!');
+                                      deferred.reject();
+                                    }
+                                    else {
+                                      deferred.resolve({
+                                        projectFile: resp.projectFile,
+                                        pages: p.pages
+                                      });
+                                    }
                                   });
-                                }, function (err, status){
-                                  console.log(err, status);
-                                });
+                              }
+                              //fileFactory.getPdfImage(resp.projectFile.name)
+                              //  .then(function (r){
+                              //    deferred.resolve({
+                              //      projectFile: resp.projectFile,
+                              //      imagePath: r.data.url
+                              //    });
+                              //  }, function (err, status){
+                              //    console.log(err, status);
+                              //  });
                             } else {
-                              deferred.resolve({projectFile: resp.projectFile});
+                              deferred.resolve({projectFile: resp.projectFile, pages: []});
                             }
                           }
                         );
@@ -76,6 +94,7 @@ define(function(require) {
                         doc.name = doc.fileName;
                         deferred.resolve({
                           projectFile: doc,
+                          pages: [doc.location],
                           imagePath: doc.location
                         });
                       } else {

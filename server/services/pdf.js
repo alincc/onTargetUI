@@ -3,9 +3,10 @@ var fs = require("fs");
 var request = require('request');
 var rootPath = process.env.ROOT;
 var mime = require('mime');
-var util = require('./util');
+var utilService = require('./util');
 var exec = require('child_process').exec;
 var gm = require('gm');
+var imageService = require('./image');
 
 var exports = {};
 
@@ -16,7 +17,7 @@ function parse(relativePath, success, fail) {
   var fileType = mime.lookup(fileExt);
   var fileName = path.basename(filePath);
   var fileNameWithoutExt = path.basename(filePath, fileExt);
-  var folder = path.join(fileFolder, util.getFolderNameFromFile(fileName));
+  var folder = path.join(fileFolder, utilService.getFolderNameFromFile(fileName));
   var destinationFilePath = path.join(folder, 'pages', fileNameWithoutExt + '.jpg');
   if(!fs.existsSync(folder)) {
     fs.mkdirSync(folder);
@@ -32,7 +33,7 @@ function parse(relativePath, success, fail) {
   }
 
   // convert pdf pages to images
-  exec('gm convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
+  exec('convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
     if(error) {
       if(fail) {
         fail(error);
@@ -46,41 +47,54 @@ function parse(relativePath, success, fail) {
       if(firstPage) {
         var filePath = path.join(folder, 'pages', firstPage);
         var thumbnail = path.join(folder, fileNameWithoutExt + '.thumb.jpg');
-        gm(filePath).size(function(err, value) {
-          if(err) {
+
+        imageService.cropImageSquare(filePath, thumbnail, 200, function(err){
+          if(err){
             if(fail) {
               fail(err);
             }
-          } else {
-            var imgWidth = value.width;
-            var imgHeight = value.height;
-            var cropWidth = imgWidth;
-            var cropHeight = imgHeight;
-            if(cropWidth > cropHeight) {
-              cropWidth = cropHeight;
+          }else{
+            if(success) {
+              success();
             }
-            else if(cropHeight > cropWidth) {
-              cropHeight = cropWidth;
-            }
-            var x = (imgWidth / 2) - (cropWidth / 2);
-            var y = (imgHeight / 2) - (cropHeight / 2);
-            // Crop
-            gm(filePath)
-              .crop(cropWidth, cropHeight, x, y)
-              .resize(200)
-              .write(thumbnail, function(err) {
-                if(err) {
-                  if(fail) {
-                    fail(err);
-                  }
-                } else {
-                  if(success) {
-                    success();
-                  }
-                }
-              });
           }
         });
+
+        //gm(filePath).size(function(err, value) {
+        //  if(err) {
+        //    if(fail) {
+        //      fail(err);
+        //    }
+        //  } else {
+        //    var imgWidth = value.width;
+        //    var imgHeight = value.height;
+        //    var cropWidth = imgWidth;
+        //    var cropHeight = imgHeight;
+        //    if(cropWidth > cropHeight) {
+        //      cropWidth = cropHeight;
+        //    }
+        //    else if(cropHeight > cropWidth) {
+        //      cropHeight = cropWidth;
+        //    }
+        //    var x = (imgWidth / 2) - (cropWidth / 2);
+        //    var y = (imgHeight / 2) - (cropHeight / 2);
+        //    // Crop
+        //    gm(filePath)
+        //      .crop(cropWidth, cropHeight, x, y)
+        //      .resize(200)
+        //      .write(thumbnail, function(err) {
+        //        if(err) {
+        //          if(fail) {
+        //            fail(err);
+        //          }
+        //        } else {
+        //          if(success) {
+        //            success();
+        //          }
+        //        }
+        //      });
+        //  }
+        //});
       }
 
       if(success) {

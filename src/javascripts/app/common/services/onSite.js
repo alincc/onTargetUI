@@ -76,9 +76,21 @@ define(function(require) {
       return $http.post(constant.nodeServer + '/node/onsite/exportPdf', data);
     };
 
-    services.getNextVersionName = function(path){
+    services.getPdfImagePages = function(path) {
+      return $http.post(constant.nodeServer + '/node/onsite/getPdfImages', {
+        path: path
+      });
+    };
+
+    services.getNextVersionName = function(path) {
       return $http.post(constant.nodeServer + '/node/onsite/getNextVersionName', {
         path: path
+      });
+    };
+
+    services.getDocumentTags = function(projectFileId){
+      return $http.post(constant.domain + '/project/file/tag/get', {
+        "projectFileId": projectFileId
       });
     };
 

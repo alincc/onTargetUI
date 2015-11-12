@@ -70,10 +70,10 @@ define(function(require){
       function($stateProvider){
         $stateProvider
           .state('app.onSite', {
-            url: '/onSite',
+            url: '/onSite?categoryId',
             templateUrl: 'onSite/templates/onSite.html',
             controller: 'OnSiteController',
-            //reloadOnSearch: false,
+            reloadOnSearch: false,
             resolve: {
               projectValid: [
                 '$location',

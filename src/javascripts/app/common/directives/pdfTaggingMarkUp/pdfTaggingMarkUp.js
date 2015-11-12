@@ -901,7 +901,7 @@ define(function(require) {
                   "description": doc.description,
                   "parentProjectFileId": doc.parentProjectFileId === 0 ? doc.fileId : doc.parentProjectFileId,
                   "isConversionComplete": false,
-                  "thumbnailImageName": $filter('pdfThumbnail')(newFilePath),
+                  "thumbnailImageName": $filter('fileThumbnail')(newFilePath),
                   "filePath": newFilePath
                 };
                 documentFactory.saveUploadedDocsInfo(data).then(function(resp) {

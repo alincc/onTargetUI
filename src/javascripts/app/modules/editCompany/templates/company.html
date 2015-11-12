@@ -14,31 +14,57 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-xs-12">
-              <form role="form" class="form-horizontal form-validation" name="form" novalidate ng-submit="updateCompany()">
-                <div class="form-group">
-                  <label class="col-xs-2 control-label">Company name <span class="label-required" ng-show="form.companyName.$error.required">*</span></label>
+              <form role="form" class="form-horizontal form-validation" name="form" novalidate
+                    ng-submit="updateCompany()">
+                <div class="form-group add-project">
+                  <label class="col-xs-2 control-label">Logo</label>
+
                   <div class="col-xs-10">
-                    <input required ng-model="company.companyName" type="text" class="form-control" placeholder="Enter company name" name="companyName" />
+                    <div class="picture-container">
+                      <a ngf-select ng-model="uploadModel.file" ngf-multiple="false">
+                        <div class="overlay">
+                          <p>Change picture</p>
+                        </div>
+                        <img file-path="project" path="{{company.companyLogoPath}}"/>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-xs-2 control-label">Company name <span class="label-required"
+                                                                           ng-show="form.companyName.$error.required">*</span></label>
+
+                  <div class="col-xs-10">
+                    <input required ng-model="company.companyName" type="text" class="form-control"
+                           placeholder="Enter company name" name="companyName"/>
                     <span class="text-danger help-block m-b-none" ng-show="form.companyName.$error.required">Please provide Company Name</span>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-xs-2 control-label">Address 1 <span class="label-required" ng-show="form.address1.$error.required">*</span></label>
+                  <label class="col-xs-2 control-label">Address 1 <span class="label-required"
+                                                                        ng-show="form.address1.$error.required">*</span></label>
+
                   <div class="col-xs-10">
-                    <input required ng-model="company.address.address1" type="text" class="form-control" placeholder="Enter address 1" name="address1" />
+                    <input required ng-model="company.address.address1" type="text" class="form-control"
+                           placeholder="Enter address 1" name="address1"/>
                     <span class="text-danger help-block m-b-none" ng-show="form.address1.$error.required">Please provide Company Address 1</span>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-xs-2 control-label">Address 2</label>
+
                   <div class="col-xs-10">
-                    <input ng-model="company.address.address2" type="text" class="form-control" placeholder="Enter address 2" name="address2" />
+                    <input ng-model="company.address.address2" type="text" class="form-control"
+                           placeholder="Enter address 2" name="address2"/>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-xs-2 control-label">Country <span class="label-required" ng-show="form.companyCountry.$error.required">*</span></label>
+                  <label class="col-xs-2 control-label">Country <span class="label-required"
+                                                                      ng-show="form.companyCountry.$error.required">*</span></label>
+
                   <div class="col-xs-10">
-                    <select name="companyCountry" class="form-control" ng-model="company.address.country" placeholder="Country"
+                    <select name="companyCountry" class="form-control" ng-model="company.address.country"
+                            placeholder="Country"
                             required
                             ng-options="country.code as country.name for country in countries"
                             ng-change="getStateList()">
@@ -48,9 +74,12 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-xs-2 control-label">State <span class="label-required" ng-show="form.companyState.$error.required">*</span></label>
+                  <label class="col-xs-2 control-label">State <span class="label-required"
+                                                                    ng-show="form.companyState.$error.required">*</span></label>
+
                   <div class="col-xs-10">
-                    <select name="companyState" class="form-control" ng-model="company.address.state" placeholder="State"
+                    <select name="companyState" class="form-control" ng-model="company.address.state"
+                            placeholder="State"
                             required ng-options="state.code as state.name for state in states">
                       <option value="">-- Select --</option>
                     </select>
@@ -58,23 +87,32 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-xs-2 control-label">City <span class="label-required" ng-show="form.city.$error.required">*</span></label>
+                  <label class="col-xs-2 control-label">City <span class="label-required"
+                                                                   ng-show="form.city.$error.required">*</span></label>
+
                   <div class="col-xs-10">
-                    <input required ng-model="company.address.city" type="text" class="form-control" placeholder="Enter city" name="city" />
+                    <input required ng-model="company.address.city" type="text" class="form-control"
+                           placeholder="Enter city" name="city"/>
                     <span class="text-danger help-block m-b-none" ng-show="form.city.$error.required">Please provide City</span>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-xs-2 control-label">Zip Code <span class="label-required" ng-show="form.zip.$error.required">*</span></label>
+                  <label class="col-xs-2 control-label">Zip Code <span class="label-required"
+                                                                       ng-show="form.zip.$error.required">*</span></label>
+
                   <div class="col-xs-10">
-                    <input required ng-model="company.address.zip" type="text" class="form-control" placeholder="Enter zip" name="zip" />
+                    <input required ng-model="company.address.zip" type="text" class="form-control"
+                           placeholder="Enter zip" name="zip"/>
                     <span class="text-danger help-block m-b-none" ng-show="form.zip.$error.required">Please provide Zip Code</span>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-xs-2 control-label"></label>
+
                   <div class="col-xs-10">
-                    <button type="submit" class="btn btn-sm btn-primary" ng-disabled="form.$invalid || form.$submitted">Update</button>
+                    <button type="submit" class="btn btn-sm btn-primary"
+                            ng-disabled="form.$invalid || form.$submitted">Update
+                    </button>
                   </div>
                 </div>
               </form>

@@ -3,7 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', 'userContext', '$state', '$stateParams', 'appConstant', 'accountFactory', 'countryFactory', function($scope, userContext, $state, $stateParams, appConstant, accountFactory, countryFactory) {
+  var controller = ['$scope', 'userContext', '$state', '$stateParams', 'appConstant', 'accountFactory', 'countryFactory', 'fileFactory', 'appConstant', '$q', 'toaster',
+    function($scope, userContext, $state, $stateParams, appConstant, accountFactory, countryFactory, fileFactory, constant, $q, toaster) {
     $scope.user = {
       email: $stateParams.email,
       firstName: '',
@@ -17,13 +18,17 @@ define(function() {
       companyCity: '',
       companyCountry: '',
       companyState: '',
-      companyZip: ''
+      companyZip: '',
+      companyLogoPath: ''
     };
 
     $scope.countries = countryFactory.getCountryList();
 
     $scope.app = appConstant.app;
     $scope.signupMsg = '';
+    $scope.uploadModel = {
+      file: null
+    };
 
     $scope.getStateList = function() {
       var fileName = getCountryFileName($scope.user.companyCountry);
@@ -65,6 +70,33 @@ define(function() {
         }
       );
     };
+
+    $scope.$watch('uploadModel.file', function () {
+      if ($scope.uploadModel.file) {
+        if (constant.app.allowedImageExtension.test($scope.uploadModel.file.type)) {
+          var deferred = $q.defer();
+          fileFactory.upload($scope.uploadModel.file, null, 'companylogo', null, null, true)
+            .success(function (data, status, headers, config) {
+              $scope.user.companyLogoPath = data.url;
+
+              deferred.resolve({
+                filePath: data.url,
+                fileName: data.name,
+                fileType: $scope.uploadModel.file.type
+              });
+            })
+            .error(function (err) {
+              deferred.reject(err);
+            });
+
+          $scope.isLoading = false;
+          //return deferred.promise;
+        }
+        else {
+          toaster.pop('error', 'Error', 'Only accept jpg, png file');
+        }
+      }
+    });
   }];
   return controller;
 });

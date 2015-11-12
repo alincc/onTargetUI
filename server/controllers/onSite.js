@@ -20,15 +20,20 @@ function exportPdf(req, res) {
   var imgWidth, imgHeight;
   var projectAssetFolderName = req.body.projectAssetFolderName;
 
-  var convertPdfToImage = function(){
+  var convertPdfToImage = function() {
     // Convert pdf to image
-    pdfService.parse('assets/projects/' + projectAssetFolderName + '/onsite/' + exportFileName, function(){
+    pdfService.parse('assets/projects/' + projectAssetFolderName + '/onsite/' + exportFileName, function() {
+      console.log('Update document conversation complete: ' + JSON.stringify({
+          "projectFileId": docId,
+          isConversionComplete: true,
+          "baseRequest": baseRequest
+        }));
       request({
-          method: 'POST',
-          body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
-          json: true,
-          url: config.PROXY_URL + '/upload/updateConversionComplete'
-        });
+        method: 'POST',
+        body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
+        json: true,
+        url: config.PROXY_URL + '/upload/updateConversionComplete'
+      });
     });
   };
 
@@ -180,7 +185,52 @@ function getNextVersionName(req, res) {
   }
 }
 
+function getPdfImages(req, res) {
+  var relativePath = req.body.path;
+  var filePath = path.join(rootPath, relativePath);
+  var fileFolder = path.join(rootPath, relativePath.substring(0, relativePath.lastIndexOf('/')));
+  var fileExt = path.extname(filePath);
+  var fileName = path.basename(filePath);
+  var fileNameWithoutExt = path.basename(filePath, fileExt);
+  var folder = path.join(fileFolder, utilService.getFolderNameFromFile(fileName));
+  var pageFolder = path.join(folder, 'pages');
+  var destinationFilePath = path.join(folder, 'pages', fileNameWithoutExt + '.jpg');
+  var sendResult = function(pages) {
+    res.send({
+      success: true,
+      pages: pages
+    });
+  };
+  var makePath = function(name) {
+    return relativePath.substring(0, relativePath.lastIndexOf('/')) + '/' + utilService.getFolderNameFromFile(fileName) + '/pages/' + name;
+  };
+
+  if(!fs.existsSync(folder)) {
+    sendResult([]);
+  }
+
+  if(!fs.existsSync(pageFolder)) {
+    sendResult([]);
+  }
+
+  var files = fs.readdirSync(pageFolder);
+  if(files.length === 1) {
+    sendResult([makePath(files[0])]);
+  }
+  else if(files.length > 1) {
+    var pages = [];
+    _.each(files, function(el) {
+      pages.push(makePath(el));
+    });
+    sendResult(pages);
+  }
+  else {
+    sendResult([]);
+  }
+}
+
 module.exports = {
   exportPdf: exportPdf,
-  getNextVersionName: getNextVersionName
+  getNextVersionName: getNextVersionName,
+  getPdfImages: getPdfImages
 };

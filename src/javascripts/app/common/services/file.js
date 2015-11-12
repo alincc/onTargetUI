@@ -30,9 +30,10 @@ define(function (require){
             }
           });
         };
-        service.convertPDFToImage = function (filePath){
+        service.convertPDFToImage = function (filePath, docId){
           return $http.post(constant.nodeServer + '/node/file/convertPdfToImage', {
-            path: filePath
+            path: filePath,
+            docId: docId
           });
         };
         service.move = function (filePath, newFileName, rootFolder, projectAssetFolderName, context){

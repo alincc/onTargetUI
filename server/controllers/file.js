@@ -6,6 +6,9 @@ var mime = require('mime');
 var gm = require('gm');
 var exec = require('child_process').exec;
 var pdfService = require('./../services/pdf');
+var imageService = require('./../services/image');
+var utilService = require('./../services/util');
+var config = require('./../config');
 
 function getFileInfo(req, res) {
   var relativePath = req.body.path;
@@ -49,7 +52,10 @@ function getFileInfo(req, res) {
 function convertPdfToImage(req, res) {
   var tmpNumber = new Date().getTime();
   var relativePath = req.body.path;
+  var docId = req.body.docId;
+  var baseRequest = req.body.baseRequest;
   var filePath = path.join(rootPath, relativePath);
+  var fileFolder = path.join(rootPath, relativePath.substring(0, relativePath.lastIndexOf('/')));
   var fileExt = path.extname(filePath);
   var fileType = mime.lookup(fileExt);
   var fileName = path.basename(filePath, fileExt);
@@ -57,17 +63,46 @@ function convertPdfToImage(req, res) {
   var destinationFolder = path.join(outputFolder, 'output');
   var destinationFilePath = path.join(destinationFolder, tmpNumber + '_' + fileName + '.jpg');
   var exportedFile = path.join(outputFolder, 'converted_' + fileName + '.jpg');
-  var relativeExportedFilePath = relativePath.substring(0, relativePath.lastIndexOf('/')) + '/converted_' + fileName + '.jpg';
+  var relativeExportedFilePath = fileFolder + '/converted_' + fileName + '.jpg';
 
-  pdfService.parse(relativePath, function() {
-    console.log('Parse pdf to image successful!');
-  }, function() {
-    console.log('Failed to parse pdf to image!');
-  });
+  if(/\.pdf$/.test(relativePath)) {
+    console.log('Start convert pdf to image');
+    pdfService.parse(relativePath, function() {
+      console.log('Update document conversation complete: ' + JSON.stringify({
+          "projectFileId": docId,
+          "isConversionComplete": true,
+          "baseRequest": baseRequest
+        }));
+      request({
+          method: 'POST',
+          body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
+          json: true,
+          url: config.PROXY_URL + '/upload/updateConversionComplete'
+        },
+        function(error, response, body) {
+          if(!error && response.statusCode == 200) {
 
-  res.send({
-    success: true
-  });
+          }
+        });
+    }, function() {
+      console.log('Failed to parse pdf to image!');
+    });
+    res.send({
+      success: true
+    });
+  }
+  else {
+    //var folder = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)));
+    var thumbnail = path.join(fileFolder, fileName + '.thumb.jpg');
+    //if(!fs.existsSync(folder)) {
+    //  fs.mkdirSync(folder);
+    //}
+    imageService.cropImageSquare(filePath, thumbnail, 200, function(err){
+      res.send({
+        success: true
+      });
+    });
+  }
 
   //var deleteExportFiles = function() {
   //  var files = fs.readdirSync(destinationFolder);
