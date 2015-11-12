@@ -18,7 +18,9 @@ define(function (require) {
 
       $scope.$on('uploadBox.uploadCompleted', function (e, files) {
         $scope.uploadModel.files = angular.copy(files);
-        $scope.uploadModel.name = angular.copy($scope.uploadModel.files[0].fileName);
+        if($scope.uploadModel.files.length > 0) {
+          $scope.uploadModel.name = angular.copy($scope.uploadModel.files[0].fileName);
+        }
         $scope.isUploading = false;
       });
 
@@ -45,11 +47,11 @@ define(function (require) {
             model.fileType = resp.type;
             var data = {
               "projectId": $rootScope.currentProjectInfo.projectId,
-              "name": model.fileName,
+              "name": model.name,
               "fileType": model.fileType,
               "createdBy": $rootScope.currentUserInfo.userId,
               "modifiedBy": $rootScope.currentUserInfo.userId,
-              "categoryId": model.category.id,
+              "categoryId": $scope.uiSelectModel.selectedItem.id,
               "description": model.description,
               "parentProjectFileId" : 0,
               "projectFileId" : 0,
