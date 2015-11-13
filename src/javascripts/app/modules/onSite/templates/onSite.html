@@ -149,7 +149,7 @@
                                             </a>
                                         </div>
                                         <div style="text-align:left">
-                                            <div ng-if="!doc.conversionComplete">
+                                            <div ng-if="doc.conversionComplete" class="m-t-sm">
                                                 <button type="button" class="btn btn-xs btn-info"
                                                         ng-click="editDocument(doc)" permission="ONSITE_DELETE">
                                                     <i class="fa fa-pencil"></i> Edit
@@ -159,7 +159,7 @@
                                                     <i class="fa fa-trash"></i> Delete
                                                 </button>
                                             </div>
-                                            <div ng-if="!!doc.conversionComplete">
+                                            <div ng-if="!doc.conversionComplete">
                                                 <div class="progress task-status-active" style="height: 5px;margin-bottom: 0;margin-top: 10px;">
                                                     <progressbar class="active progress-striped m-b-sm"
                                                                  value="100"
@@ -186,7 +186,7 @@
                                             </a>
                                         </div>
                                         <div style="text-align:left">
-                                            <div ng-if="!doc.conversionComplete">
+                                            <div ng-if="doc.conversionComplete" class="m-t-sm">
                                                 <button type="button" class="btn btn-xs btn-info"
                                                         ng-click="editDocument(doc)" permission="ONSITE_DELETE">
                                                     <i class="fa fa-pencil"></i> Edit
@@ -196,7 +196,7 @@
                                                     <i class="fa fa-trash"></i> Delete
                                                 </button>
                                             </div>
-                                            <div ng-if="!!doc.conversionComplete">
+                                            <div ng-if="!doc.conversionComplete">
                                                 <div class="progress task-status-active" style="height: 5px;margin-bottom: 0;margin-top: 10px;">
                                                     <progressbar class="active progress-striped m-b-sm"
                                                                  value="100"
