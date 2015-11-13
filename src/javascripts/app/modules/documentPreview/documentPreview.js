@@ -46,16 +46,19 @@ define(function(require) {
                   switch($stateParams.onAction) {
                     case 'onSite' :
                       if($stateParams.docId) {
+                        // Get document details
                         documentFactory.getDocumentDetail({
                           projectId: $rootScope.currentProjectInfo.projectId,
                           projectFileId: parseInt($stateParams.docId)
                         }).success(
                           function(resp) {
                             if(/(pdf$)/.test(resp.projectFile.name)) {
+                              // Check document conversation status
                               if(!resp.projectFile.conversionComplete) {
                                 console.log('This file havent finish conversation yet!');
                                 deferred.reject();
                               } else {
+                                // Get pdf images
                                 onSiteFactory.getPdfImagePages(resp.projectFile.filePath)
                                   .success(function(p) {
                                     if(p.pages.length === 0) {
@@ -63,24 +66,52 @@ define(function(require) {
                                       deferred.reject();
                                     }
                                     else {
-                                      deferred.resolve({
-                                        projectFile: resp.projectFile,
-                                        pages: p.pages
-                                      });
+                                      // Get versions
+                                      if(resp.projectFile.parentProjectFileId !== 0) {
+                                        documentFactory.getDocumentDetail({
+                                          projectId: $rootScope.currentProjectInfo.projectId,
+                                          projectFileId: resp.projectFile.parentProjectFileId
+                                        }).success(function(v) {
+                                          deferred.resolve({
+                                            projectFile: resp.projectFile,
+                                            pages: p.pages,
+                                            parentDocument: v.projectFile,
+                                            versions: v.projectFile.versionProjectFiles
+                                          });
+                                        });
+                                      } else {
+                                        deferred.resolve({
+                                          projectFile: resp.projectFile,
+                                          pages: p.pages,
+                                          parentDocument: null,
+                                          versions: resp.projectFile.versionProjectFiles
+                                        });
+                                      }
                                     }
                                   });
                               }
-                              //fileFactory.getPdfImage(resp.projectFile.name)
-                              //  .then(function (r){
-                              //    deferred.resolve({
-                              //      projectFile: resp.projectFile,
-                              //      imagePath: r.data.url
-                              //    });
-                              //  }, function (err, status){
-                              //    console.log(err, status);
-                              //  });
                             } else {
-                              deferred.resolve({projectFile: resp.projectFile, pages: []});
+                              // Get versions
+                              if(resp.projectFile.parentProjectFileId !== 0) {
+                                documentFactory.getDocumentDetail({
+                                  projectId: $rootScope.currentProjectInfo.projectId,
+                                  projectFileId: resp.projectFile.parentProjectFileId
+                                }).success(function(v) {
+                                  deferred.resolve({
+                                    projectFile: resp.projectFile,
+                                    pages: [resp.projectFile.filePath],
+                                    parentDocument: v.projectFile,
+                                    versions: v.projectFile.versionProjectFiles
+                                  });
+                                })
+                              } else {
+                                deferred.resolve({
+                                  projectFile: resp.projectFile,
+                                  pages: [resp.projectFile.filePath],
+                                  parentDocument: null,
+                                  versions: resp.projectFile.versionProjectFiles
+                                });
+                              }
                             }
                           }
                         );

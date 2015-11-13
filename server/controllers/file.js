@@ -66,13 +66,7 @@ function convertPdfToImage(req, res) {
   var relativeExportedFilePath = fileFolder + '/converted_' + fileName + '.jpg';
 
   if(/\.pdf$/.test(relativePath)) {
-    console.log('Start convert pdf to image');
     pdfService.parse(relativePath, function() {
-      console.log('Update document conversation complete: ' + JSON.stringify({
-          "projectFileId": docId,
-          "isConversionComplete": true,
-          "baseRequest": baseRequest
-        }));
       request({
           method: 'POST',
           body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
@@ -84,8 +78,8 @@ function convertPdfToImage(req, res) {
 
           }
         });
-    }, function(error) {
-      console.log('Failed to parse pdf to image!', error.message);
+    }, function() {
+      console.log('Failed to parse pdf to image!');
     });
     res.send({
       success: true

@@ -54,9 +54,9 @@ define(function(require) {
         replace: true,
         templateUrl: 'pdfTaggingMarkUpTemplate',
         scope: {
-          path: '@',
           selectedDoc: '=',
-          imagePath: '@'
+          model: '=',
+          pageNumber: '@'
         },
         controller: [
           '$scope',
@@ -69,20 +69,12 @@ define(function(require) {
                    $state,
                    fileFactory,
                    onSiteFactory) {
-            var fileExtension = $scope.path.substring($scope.path.lastIndexOf('.') + 1);
-            var fileName = $scope.path.substring($scope.path.lastIndexOf('/') + 1);
+            var fileExtension = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('.') + 1);
+            var fileName = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('/') + 1);
             var fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
 
             // Generate original file path
-            $scope.originalFilePath = $scope.path;
-            if(/.*\-\d+\./.test(fileName)) {
-              $scope.originalFilePath =
-                $scope.path.substring(0, $scope.path.lastIndexOf('/')) + '/' +
-                fileNameWithoutExtension.substring(0, fileNameWithoutExtension.lastIndexOf('-')) +
-                '.' + fileExtension;
-            }
-
-            console.log($scope.path, $scope.originalFilePath);
+            $scope.originalFilePath = $scope.selectedDoc.filePath;
 
             $scope.pdfTaggingMarkUp = {
               isLoading: true,
@@ -99,7 +91,12 @@ define(function(require) {
             };
 
             $scope.getFileInfo = function() {
-              return fileFactory.info($scope.originalFilePath);
+              console.log($scope.selectedDoc.originalFilePath);
+              if($scope.selectedDoc.originalFilePath) {
+                return fileFactory.info($scope.selectedDoc.originalFilePath);
+              } else {
+                return fileFactory.info($scope.model.imagePath);
+              }
             };
 
             $scope.addComment = function(id, comment) {
@@ -287,7 +284,9 @@ define(function(require) {
             };
 
             var drawControl = new L.Control.Draw(options);
+
             map.addControl(drawControl);
+
             function onDrawCreated(e, hideOpenPopup, ignoreToLayer) {
               var type = e.layerType,
                 layer = e.layer || e;
@@ -299,7 +298,7 @@ define(function(require) {
                 return {
                   comment: cm.comment,
                   userId: cm.commentedBy,
-                  author: cm.commenterContact.firstName + ' ' + cm.commenterContact.lastName,
+                  author: cm.commenterContact ? cm.commenterContact.firstName + ' ' + cm.commenterContact.lastName : cm.commentedBy,
                   commentedDate: cm.commentedDate,
                   loadedComment: true
                 };
@@ -352,6 +351,8 @@ define(function(require) {
                     //scope.addComment(objLayer.id, this.text);
 
                     //layer.closePopup();
+
+                    scope.updatePageData();
                   };
 
                   $compile(layer._popup._contentNode)(markerScope);
@@ -420,6 +421,8 @@ define(function(require) {
                 }
                 editableLayers.addLayer(layer);
               }
+
+              scope.updatePageData();
             }
 
             map.on('draw:created', onDrawCreated);
@@ -438,7 +441,10 @@ define(function(require) {
               //objLayer._mRadius = layer._mRadius;
               //scope.listLayers.push(objLayer);
               //editableLayers.addLayer(layer);
+
+              scope.updatePageData();
             });
+
             map.on('draw:edited', function(e) {
               var layers = e.layers._layers,
                 listGeo = e.layers.toGeoJSON().features;
@@ -466,7 +472,10 @@ define(function(require) {
               //  });
               //  scope.listLayers.push()
               //});
+
+              scope.updatePageData();
             });
+
             $timeout(function() {
               map._onResize();
               renderMarkers();
@@ -491,8 +500,12 @@ define(function(require) {
               //contextMenu.show();
             });
 
-            if($rootScope.pdfTaggingMarkUpEditData) {
-              _.each($rootScope.pdfTaggingMarkUpEditData, function(tag) {
+            map.on('zoomend', function(e) {
+              scope.updatePageData();
+            });
+
+            if(scope.model.tagList) {
+              _.each(scope.model.tagList, function(tag) {
                 var attrs = tag.attributes;
                 var type = _.filter(attrs, function(a) {
                   return a.key === 'type';
@@ -658,21 +671,6 @@ define(function(require) {
             contextMenu.hide();
           };
 
-          if(/(png|jpg|jpeg)/i.test(scope.pdfTaggingMarkUp.fileExtension)) {
-            scope.getFileInfo()
-              .success(render)
-              .error(function(err) {
-                console.log(err);
-              });
-          }
-          else {
-            scope.getPdfImage()
-              .success(render)
-              .error(function(err) {
-                console.log(err);
-              });
-          }
-
           scope.addTag = function(tags) {
             return onSiteFactory.addTags(tags);
           };
@@ -795,7 +793,7 @@ define(function(require) {
                 'projectFileId': docId,
                 'projectFileTagId': null,
                 'parentFileTagId': null,
-                'tag': 'TAg',
+                'tag': 'TAG',
                 'title': 'TAG',
                 'tagType': 'TAG',
                 'tagFilePath': '',
@@ -851,8 +849,40 @@ define(function(require) {
             }, []);
           };
 
-          scope.exportPdf = function(docId, fileName, width, height) {
-            var deferred = $q.defer();
+          //scope.exportPdf = function(docId, fileName, width, height) {
+          //  var deferred = $q.defer();
+          //  var layers = angular.copy(scope.listLayers);
+          //  _.each(layers, function(l) {
+          //    if(l.layer && l.layer._leaflet_events) {
+          //      delete l.layer._leaflet_events;
+          //    }
+          //    if(l.layer && angular.isDefined(l.layer.editing)) {
+          //      delete l.layer.editing;
+          //    }
+          //  });
+          //  onSiteFactory.exportPdf({
+          //    path: scope.imgUrl,
+          //    geo: layers,
+          //    width: width,
+          //    height: height,
+          //    scale: x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth),
+          //    projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName,
+          //    fileName: fileName,
+          //    docId: docId
+          //  })
+          //    .success(function(dt) {
+          //      deferred.resolve(dt);
+          //    });
+          //  return deferred.promise;
+          //};
+
+          scope.updatePageData = function() {
+            var listTag = scope.extractListTags(scope.selectedDoc, scope.selectedDoc.fileId);
+            var newListTag = _.each(listTag, function(el) {
+              el.title = "Tag | Page-" + scope.pageNumber;
+              return el;
+            });
+            var img = document.querySelector('.leaflet-image-layer');
             var layers = angular.copy(scope.listLayers);
             _.each(layers, function(l) {
               if(l.layer && l.layer._leaflet_events) {
@@ -862,81 +892,67 @@ define(function(require) {
                 delete l.layer.editing;
               }
             });
-            onSiteFactory.exportPdf({
-              path: scope.imgUrl,
-              geo: layers,
-              width: width,
-              height: height,
-              scale: x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth),
-              projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName,
-              fileName: fileName,
-              docId: docId
-            })
-              .success(function(dt) {
-                deferred.resolve(dt);
-              });
-            return deferred.promise;
+            scope.model.tagList = newListTag;
+            scope.model.layers = layers || [];
+            scope.model.width = img.width;
+            scope.model.height = img.height;
+            scope.model.scale = x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth);
           };
 
-          scope.$on('pdfTaggingMarkUp.SaveTheDoc', function(e, args) {
-            var img = document.querySelector('.leaflet-image-layer');
-            var doc = args.doc;
-            var width = img.width;
-            var height = img.height;
-            if(!doc) {
-              return;
-            }
+          //scope.$on('pdfTaggingMarkUp.SaveTheDoc', function(e, args) {
+          //  var img = document.querySelector('.leaflet-image-layer');
+          //  var doc = args.doc;
+          //  var width = img.width;
+          //  var height = img.height;
+          //  if(!doc) {
+          //    return;
+          //  }
+          //
+          //  onSiteFactory.getNextVersionName(scope.originalFilePath)
+          //    .success(function(resp) {
+          //      var newFilePath = resp.newVersionName;
+          //      var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
+          //      var data = {
+          //        "projectId": $rootScope.currentProjectInfo.projectId,
+          //        "name": $filter('fileName')(newFilePath),
+          //        "fileType": doc.fileType,
+          //        "createdBy": $rootScope.currentUserInfo.userId,
+          //        "modifiedBy": $rootScope.currentUserInfo.userId,
+          //        "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
+          //        "description": doc.description,
+          //        "parentProjectFileId": doc.parentProjectFileId === 0 ? doc.fileId : doc.parentProjectFileId,
+          //        "isConversionComplete": false,
+          //        "thumbnailImageName": $filter('fileThumbnail')(newFilePath),
+          //        "filePath": newFilePath
+          //      };
+          //      documentFactory.saveUploadedDocsInfo(data).then(function(resp) {
+          //        if(resp.data && resp.data.documentDetail) {
+          //          var docId = resp.data.documentDetail.fileId;
+          //          var listTag = scope.extractListTags(doc, docId);
+          //          scope.addTag(listTag).then(function(resp) {
+          //            scope.$emit('pdfTaggingMarkUp.SaveDone');
+          //            scope.exportPdf(docId, newFileName, width, height);
+          //          }, function(err) {
+          //            console.log(err);
+          //            scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+          //          });
+          //        }
+          //      }, function(err) {
+          //        console.log(err);
+          //        scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+          //      });
+          //    })
+          //    .error(function(err) {
+          //      console.log(err);
+          //      scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
+          //    });
+          //});
 
-            onSiteFactory.getNextVersionName(scope.originalFilePath)
-              .success(function(resp) {
-                var newFilePath = resp.newVersionName;
-                var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
-                var data = {
-                  "projectId": $rootScope.currentProjectInfo.projectId,
-                  "name": $filter('fileName')(newFilePath),
-                  "fileType": doc.fileType,
-                  "createdBy": $rootScope.currentUserInfo.userId,
-                  "modifiedBy": $rootScope.currentUserInfo.userId,
-                  "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
-                  "description": doc.description,
-                  "parentProjectFileId": doc.parentProjectFileId === 0 ? doc.fileId : doc.parentProjectFileId,
-                  "isConversionComplete": false,
-                  "thumbnailImageName": $filter('fileThumbnail')(newFilePath),
-                  "filePath": newFilePath
-                };
-                documentFactory.saveUploadedDocsInfo(data).then(function(resp) {
-                  if(resp.data && resp.data.documentDetail) {
-                    var docId = resp.data.documentDetail.fileId;
-                    var listTag = scope.extractListTags(doc, docId);
-                    scope.addTag(listTag).then(function(resp) {
-                      scope.$emit('pdfTaggingMarkUp.SaveDone');
-                      scope.exportPdf(docId, newFileName, width, height);
-                      //  .then(function(dt) {
-                      //  fileFactory.convertPDFToImage(dt.path).then(function(r) {
-                      //    scope.$emit('pdfTaggingMarkUp.SaveDone', {url: r.url, docId: docId});
-                      //  }, function(err) {
-                      //    console.log(err);
-                      //    scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                      //  });
-                      //}, function(err) {
-                      //  console.log(err);
-                      //  scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                      //});
-                    }, function(err) {
-                      console.log(err);
-                      scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                    });
-                  }
-                }, function(err) {
-                  console.log(err);
-                  scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                });
-              })
-              .error(function(err) {
-                console.log(err);
-                scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-              });
-          });
+          scope.getFileInfo()
+            .success(render)
+            .error(function(err) {
+              console.log(err);
+            });
         }
       };
     }]);
