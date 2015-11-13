@@ -19792,6 +19792,9 @@ ul.list-justified li {
 .no-resize {
   resize: none;
 }
+.clear-left {
+  clear: left;
+}
 .butterbar {
   position: relative;
   margin-bottom: -3px;
@@ -21276,19 +21279,28 @@ ul.list-justified li {
   text-decoration: underline;
   color: #5b90bf;
 }
+.on-site-page .table-responsive .table > tbody + tbody {
+  border-top: 1px solid #ddd;
+}
 .on-site-page .file-thumbnail {
-  display: inline-block;
-  position: relative;
+  height: 200px;
+  display: table;
+  width: 100%;
 }
-.on-site-page .file-thumbnail .delete-button {
-  top: -5px;
-  right: -5px;
-  position: absolute;
-  cursor: pointer;
+.on-site-page .file-thumbnail a {
+  display: table-cell;
+  height: 100%;
+  vertical-align: bottom;
 }
-.on-site-page .file-thumbnail .delete-button .fa {
-  font-size: 18px;
-  color: red;
+.on-site-page .file-thumbnail a img {
+  max-height: 100%;
+}
+.on-site-page .preview-section .panel-heading .page-info {
+  display: block;
+  float: right;
+  margin: 0 10px;
+  font-size: 14px;
+  line-height: 22px;
 }
 .on-site-page .preview-section .panel-body {
   height: 690px;
@@ -22335,6 +22347,13 @@ ul.list-justified li {
 }
 .app-header .new-notification {
   background-color: #ffffe5;
+}
+.preview-section .panel-heading .page-info {
+  display: block;
+  float: right;
+  margin: 0 10px;
+  font-size: 14px;
+  line-height: 22px;
 }
 .preview-section .panel-body {
   height: 690px;
