@@ -12,7 +12,7 @@ define(function(require) {
           var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
           var icon = 'file';
           if(/(pdf)/.test(fileExtension)) {
-            return value.substring(0, value.lastIndexOf('/')) + '/' + fileName.replace(/\./, '_') + '/' + fileNameWithoutExt + '.thumb.jpg';
+            return value.substring(0, value.lastIndexOf('/')) + '/' + fileName.replace(/\./g, '_') + '/' + fileNameWithoutExt + '.thumb.jpg';
           }
           else if(/(txt)/.test(fileExtension)) {
             icon = 'txt';

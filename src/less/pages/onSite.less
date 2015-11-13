@@ -20,22 +20,33 @@
         color: @brand-primary;
       }
     }
+    .table > tbody + tbody {
+      border-top: 1px solid #ddd;
+    }
   }
   .file-thumbnail {
-    display: inline-block;
-    position: relative;
-    .delete-button {
-      top: -5px;
-      right: -5px;
-      position: absolute;
-      cursor: pointer;
-      .fa {
-        font-size: 18px;
-        color: red;
+    height: 200px;
+    display: table;
+    width: 100%;
+    a {
+      display: table-cell;
+      height: 100%;
+      vertical-align: bottom;
+      img {
+        max-height: 100%;
       }
     }
   }
   .preview-section {
+    .panel-heading {
+      .page-info {
+        display: block;
+        float: right;
+        margin: 0 10px;
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
     .panel-body {
       height: @onSite-height;
       iframe {

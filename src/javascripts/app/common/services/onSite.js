@@ -72,8 +72,12 @@ define(function(require) {
       });
     };
 
-    services.exportPdf = function(data) {
-      return $http.post(constant.nodeServer + '/node/onsite/exportPdf', data);
+    services.exportPdf = function(docId, projectId, data) {
+      return $http.post(constant.nodeServer + '/node/onsite/exportPdf', {
+        docId: docId,
+        projectId: projectId,
+        data: data
+      });
     };
 
     services.getPdfImagePages = function(path) {

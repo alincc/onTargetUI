@@ -48,7 +48,7 @@ define(function(require) {
             // sort doc.versionProjectFiles descending
             $scope.uploadedDocumentList.forEach(function(doc) {
               if(doc.versionProjectFiles.length > 1) {
-                doc.versionProjectFiles = _.sortByOrder(doc.versionProjectFiles, 'versionNo', 'desc');
+                doc.versionProjectFiles = _.sortBy(doc.versionProjectFiles, 'versionNo').reverse();
               }
             });
 
@@ -193,10 +193,18 @@ define(function(require) {
               return $scope.categories; // resolve categories to modal
             },
             selectedCategory: function() {
-              return {
-                id: $scope.selectedCategoryId,
-                name: $scope.selectedCategoryName
-              };
+              if($scope.selectedCategoryId && $scope.selectedCategoryName) {
+                return {
+                  id: $scope.selectedCategoryId,
+                  name: $scope.selectedCategoryName
+                };
+              } else if(!!$scope.selectedCategoryId){
+                var category = _.find($scope.categories, {id: parseInt($scope.selectedCategoryId)});
+                return {
+                  id: category.id,
+                  name: category.name
+                };
+              }
             }
           }
         });

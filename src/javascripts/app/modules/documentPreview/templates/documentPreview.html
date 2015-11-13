@@ -24,7 +24,7 @@
                 <div class="col-xs-12 preview-section"
                      ng-class="{'col-md-8 p-r-0': onAction == 'onSite', 'col-md-12': onAction == 'onTime'}">
                     <div class="panel panel-default">
-                        <form name="_form" novalidate ng-submit="saveDoc(selectedDoc)">
+                        <form name="_form" novalidate ng-submit="saveChanges(selectedDoc)">
                             <div class="panel-heading">
                                 <span ng-bind="selectedDoc.name | fileName"></span>
                                 <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="cancelEdit()"
@@ -38,17 +38,34 @@
                                         ng-show="showDocPreview"
                                         type="submit" size="xs"
                                         ng-disabled="_form.$submitted"
-                                        loading-button="_form.$submitted">Done
+                                        loading-button="_form.$submitted">Save changes
+                                </button>
+                                <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
+                                        type="button"
+                                        ng-show="showDocPreview"
+                                        ng-click="nextPage()"
+                                        ng-disabled="!haveNextPage">Next >
+                                </button>
+                                <span class="page-info" ng-show="showDocPreview">Page {{currentPageIndex + 1}} of {{pdfImagePages.length}}</span>
+                                <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
+                                        type="button"
+                                        ng-show="showDocPreview"
+                                        ng-click="prevPage()"
+                                        ng-disabled="!havePrevPage">< Previous
                                 </button>
                             </div>
                             <div class="panel-body" ng-if="showDocPreview && onAction == 'onSite'">
-                                <pdf-tagging-mark-up path="{{selectedDoc.name}}"
-                                                     image-path="{[selectedDoc.filePath}}"
+                                <pdf-tagging-mark-up ng-if="!isNexting"
+                                                     model="currentPage"
+                                                     page-number="{{currentPageIndex+1}}"
                                                      selected-doc="selectedDoc"></pdf-tagging-mark-up>
+                                <!--<pdf-tagging-mark-up path="{{selectedDoc.name}}"-->
+                                                     <!--image-path="{[selectedDoc.filePath}}"-->
+                                                     <!--selected-doc="selectedDoc"></pdf-tagging-mark-up>-->
                             </div>
                             <div class="panel-body normal-preview" ng-if="!showDocPreview">
-                                <pdf-viewer src="{{trustSrc(selectedDoc.filePath)}}" ng-if="isPdf"></pdf-viewer>
-                                <img ng-if="isImage" ng-src="{{selectedDoc.filePath}}"/>
+                                <pdf-viewer src="{{trustSrc(selectedDoc.fullFilePath)}}" ng-if="isPdf"></pdf-viewer>
+                                <img ng-if="isImage" ng-src="{{selectedDoc.fullFilePath}}"/>
                                 <p ng-if="!isImage && !isPdf">Sorry, this kind of file not supporte preview.</p>
                             </div>
                         </form>
@@ -57,7 +74,27 @@
                 <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT"
                      ng-if="onAction == 'onSite'">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Comments</div>
+                        <div class="panel-heading">
+                            <span>Comments</span>
+                            <!--<div class="pull-right" ng-if="selectedDoc.versionProjectFiles.length > 0">-->
+                            <div class="pull-right">
+
+                                <section class="project-chooser" dropdown on-toggle="toggled(open)">
+                                    <a href dropdown-toggle>
+                                        <span class="project-name">Version {{currentVersion.versionNo}}</span>
+                                        &nbsp;<i class="fa fa-sort"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li ng-class="{'selected': currentVersion.versionNo === 'Origin'}">
+                                            <a href ng-click="selectVersion(null)">Origin</a>
+                                        </li>
+                                        <li ng-repeat="v in versions"  ng-class="{'selected': currentVersion.versionNo === v.versionNo}">
+                                            <a href ng-bind="'Version ' + v.versionNo" ng-click="selectVersion(v)"></a>
+                                        </li>
+                                    </ul>
+                                </section>
+                            </div>
+                        </div>
                         <div class="panel-body" custom-scroll>
                             <div class="text-center" ng-if="isLoadingComment">
                                 <spinner text="Loading comments..."></spinner>

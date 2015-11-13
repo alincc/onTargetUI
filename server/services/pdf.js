@@ -7,6 +7,7 @@ var utilService = require('./util');
 var exec = require('child_process').exec;
 var gm = require('gm');
 var imageService = require('./image');
+var _ = require('lodash');
 
 var exports = {};
 
@@ -33,7 +34,7 @@ function parse(relativePath, success, fail) {
   }
 
   // convert pdf pages to images
-  exec('gm convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
+  exec('convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
     if(error) {
       if(fail) {
         fail(error);
@@ -48,12 +49,12 @@ function parse(relativePath, success, fail) {
         var filePath = path.join(folder, 'pages', firstPage);
         var thumbnail = path.join(folder, fileNameWithoutExt + '.thumb.jpg');
 
-        imageService.cropImageSquare(filePath, thumbnail, 200, function(err){
-          if(err){
+        imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
+          if(err) {
             if(fail) {
               fail(err);
             }
-          }else{
+          } else {
             if(success) {
               success();
             }
