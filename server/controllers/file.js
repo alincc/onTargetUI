@@ -84,8 +84,8 @@ function convertPdfToImage(req, res) {
 
           }
         });
-    }, function() {
-      console.log('Failed to parse pdf to image!');
+    }, function(error) {
+      console.log('Failed to parse pdf to image!', error.message);
     });
     res.send({
       success: true
