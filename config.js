@@ -149,7 +149,7 @@ module.exports = {
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
     bimServer: 'https://app.ontargetcloud.com/bim',
-    bimServerAddress: 'http://216.14.121.204:8080',
+    bimServerAddress: 'https://app.ontargetcloud.com/bimserver',
     bimCredential: {
       username: 'ontargetbim@ontargetcloud.com',
       password: '0nT4rg3tBIm2015'
@@ -170,7 +170,7 @@ module.exports = {
     nodeServer: 'https://app.ontargetcloud.com',
     resourceUrl: 'https://app.ontargetcloud.com',
     bimServer: 'https://app.ontargetcloud.com/bim',
-    bimServerAddress: 'http://216.14.121.204:8080',
+    bimServerAddress: 'https://app.ontargetcloud.com/bimserver',
     bimCredential: {
       username: 'ontargetbim@ontargetcloud.com',
       password: '0nT4rg3tBIm2015'
