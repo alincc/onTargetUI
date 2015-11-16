@@ -19478,6 +19478,9 @@ a.text-black:hover {
 .w-xxxl {
   width: 450px;
 }
+.w-xxxxl {
+  width: 800px;
+}
 .w-full {
   width: 100%;
 }
@@ -19788,6 +19791,9 @@ ul.list-justified li {
 }
 .no-resize {
   resize: none;
+}
+.clear-left {
+  clear: left;
 }
 .butterbar {
   position: relative;
@@ -21233,6 +21239,28 @@ ul.list-justified li {
 .edit-profile-page .avatar-container a:hover .overlay {
   display: block;
 }
+.edit-profile-page .upload-button {
+  position: relative;
+  overflow: hidden;
+}
+.edit-profile-page .upload-button input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+.edit-profile-page .logo-image {
+  max-height: 200px;
+}
 .on-site-page .buttons {
   margin-left: 20px;
   display: inline-block;
@@ -21251,19 +21279,28 @@ ul.list-justified li {
   text-decoration: underline;
   color: #5b90bf;
 }
+.on-site-page .table-responsive .table > tbody + tbody {
+  border-top: 1px solid #ddd;
+}
 .on-site-page .file-thumbnail {
-  display: inline-block;
-  position: relative;
+  height: 200px;
+  display: table;
+  width: 100%;
 }
-.on-site-page .file-thumbnail .delete-button {
-  top: -5px;
-  right: -5px;
-  position: absolute;
-  cursor: pointer;
+.on-site-page .file-thumbnail a {
+  display: table-cell;
+  height: 100%;
+  vertical-align: bottom;
 }
-.on-site-page .file-thumbnail .delete-button .fa {
-  font-size: 18px;
-  color: red;
+.on-site-page .file-thumbnail a img {
+  max-height: 100%;
+}
+.on-site-page .preview-section .panel-heading .page-info {
+  display: block;
+  float: right;
+  margin: 0 10px;
+  font-size: 14px;
+  line-height: 22px;
 }
 .on-site-page .preview-section .panel-body {
   height: 690px;
@@ -21359,6 +21396,25 @@ ul.list-justified li {
 }
 .on-site-page .leaflet-control-attribution {
   display: none;
+}
+.on-site-page .document-category .item-height {
+  height: 160px;
+}
+.on-site-page .document-category .item {
+  padding: 15px;
+  margin: 5px;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.on-site-page .document-category .item img {
+  display: inline-block;
+  height: 50px;
+  margin: 10px;
+}
+.on-site-page .margin-bottom {
+  margin-bottom: 10px;
 }
 .ontarget-page .project-date {
   position: relative;
@@ -21820,6 +21876,10 @@ ul.list-justified li {
 }
 .add-project .picture-container a:hover .overlay {
   display: block;
+}
+.add-project .align-center {
+  margin: auto;
+  position: relative;
 }
 .add-project textarea {
   resize: none;
@@ -22287,6 +22347,13 @@ ul.list-justified li {
 }
 .app-header .new-notification {
   background-color: #ffffe5;
+}
+.preview-section .panel-heading .page-info {
+  display: block;
+  float: right;
+  margin: 0 10px;
+  font-size: 14px;
+  line-height: 22px;
 }
 .preview-section .panel-body {
   height: 690px;

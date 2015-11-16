@@ -287,7 +287,7 @@ function exportPdf2(req, res) {
           } else {
             if(/\.pdf$/.test(document.projectFile.filePath)) {
               // convert pdf pages to images
-              exec('convert "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
+              exec('gm convert "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
                 if(error) {
                   console.log(error.message);
                 } else {
