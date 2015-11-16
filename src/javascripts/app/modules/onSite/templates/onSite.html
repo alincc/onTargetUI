@@ -149,50 +149,6 @@
                                     </td>
                                 </tr>
                                 </tbody>
-                                <tbody>
-
-                                <tr ng-repeat="doc in uploadedDocumentList | filter:filterByCategoryId | filter:filterBySearchBox as listResults track by $index"
-                                    ng-class="!doc.conversionComplete ? 'success' : ''">
-                                    <td class="file-icon">
-                                        <div class="thumbnail-icon">
-                                            <!--<pre>{{doc.thumbnailImageName | filePath}}</pre>-->
-                                            <a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                                on-image-error
-                                                ng-if="doc.versionProjectFiles.length <= 0"
-                                              ng-src="{{doc.thumbnailImageName | filePath}}"/></a>
-                                            <a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                                on-image-error
-                                                ng-if="doc.versionProjectFiles.length > 0"
-                                              ng-src="{{doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/></a>
-                                        </div>
-                                    </td>
-                                    <td><a href="javascript:void(0)" ng-click="preview(doc)"
-                                           ng-if="doc.versionProjectFiles.length <= 0"
-                                           ng-bind="doc.name | fileName"></a>
-                                        <a href="javascript:void(0)" ng-click="preview(doc)"
-                                           ng-if="doc.versionProjectFiles.length > 0"
-                                           ng-bind="doc.versionProjectFiles[0].name | fileName"></a></td>
-                                    <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                                    <td ng-if="doc.versionProjectFiles.length <= 0" ng-bind="doc.createdDate | date:app.dateFormat"></td>
-                                    <td ng-if="doc.versionProjectFiles.length > 0" ng-bind="doc.versionProjectFiles[0].createdDate | date:app.dateFormat"></td>
-                                    <td>
-                                        <div ng-if="doc.conversionComplete">
-                                            <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc)">
-                                                <i class="fa fa-comment"></i> Comment
-                                            </button>
-                                            <button type="button" class="btn btn-xs btn-info" ng-click="download(doc)">
-                                                <i class="fa fa-download"></i> Download
-                                            </button>
-                                            <button type="button" class="btn btn-xs btn-info" ng-click="editDocument(doc)" permission="ONSITE_DELETE">
-                                                <i class="fa fa-pencil"></i> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-xs btn-warning" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
-                                                <i class="fa fa-trash"></i> Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
