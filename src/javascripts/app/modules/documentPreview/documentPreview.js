@@ -103,7 +103,7 @@ define(function(require) {
                                     parentDocument: v.projectFile,
                                     versions: v.projectFile.versionProjectFiles
                                   });
-                                })
+                                });
                               } else {
                                 deferred.resolve({
                                   projectFile: resp.projectFile,

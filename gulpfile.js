@@ -20,46 +20,46 @@ var paths = {
 };
 
 // Combine lesses
-gulp.task('less', ['lint'], function(done) {
-  gulp.src('./src/less/main.less')
+gulp.task('less', ['lint'], function() {
+  return gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
     .pipe(rename({extname: '.min.css'}))
-    .pipe(gulp.dest('./src/css/'))
-    .on('end', done);
+    .pipe(gulp.dest('./src/css/'));
 });
 
-gulp.task('lessOnly', function(done) {
-  gulp.src('./src/less/main.less')
+gulp.task('lessOnly', function() {
+  return gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
     .pipe(rename({extname: '.min.css'}))
-    .pipe(gulp.dest('./src/css/'))
-    .on('end', done);
+    .pipe(gulp.dest('./src/css/'));
 });
 
 // Copy Fonts
-gulp.task('fonts', ['less'], function() {
-  gulp.src([
+gulp.task('fonts:awesome', function() {
+  return gulp.src([
+    './src/bower_components/components-font-awesome/fonts/*'
+  ]).pipe(gulp.dest('./build/fonts/'));
+});
+
+gulp.task('fonts:bootstrap', function() {
+  return gulp.src([
+    './src/bower_components/bootstrap-css-only/fonts/*'
+  ]).pipe(gulp.dest('./build/fonts/'));
+});
+
+gulp.task('fonts', ['fonts:awesome', 'fonts:bootstrap', 'less'], function() {
+  return gulp.src([
     './src/fonts/*',
     './src/fonts/*/*'])
     .pipe(gulp.dest('./build/fonts/'));
-
-  // font-awesome fonts
-  gulp.src([
-    './src/bower_components/components-font-awesome/fonts/*'
-  ]).pipe(gulp.dest('./build/fonts/'));
-
-  // glyphicon font
-  gulp.src([
-    './src/bower_components/bootstrap-css-only/fonts/*'
-  ]).pipe(gulp.dest('./build/fonts/'));
 });
 
 // Copy Images
@@ -70,28 +70,36 @@ gulp.task('images', ['fonts'], function() {
 });
 
 // Copy js to build
-gulp.task('script', ['images'], function() {
-  gulp.src([
+gulp.task('script:requirejs', function(){
+  return gulp.src([
     './src/bower_components/requirejs/*',
     './src/bower_components/requirejs/**/*.*'])
     .pipe(gulp.dest('./build/bower_components/requirejs'));
+});
 
-  gulp.src([
-    './src/js/**/*'])
-    .pipe(gulp.dest('./build/js'));
-
-  gulp.src([
+gulp.task('resources', function(){
+  return gulp.src([
     './src/javascripts/app/common/resources/**/*.json'])
     .pipe(gulp.dest('./build/javascripts/app/common/resources'));
+});
 
-  gulp.src([
+gulp.task('templates', function(){
+  return gulp.src([
     './src/javascripts/app/common/templates/**/*'])
     .pipe(gulp.dest('./build/javascripts/app/common/templates'));
+});
 
-  gulp.src([
+gulp.task('bimProjectData', function(){
+  return gulp.src([
     './src/javascripts/app/modules/bimProject/**/*.html',
     './src/javascripts/app/modules/bimProject/**/*.version'])
     .pipe(gulp.dest('./build/javascripts/app/modules/bimProject'));
+});
+
+gulp.task('script', ['script:requirejs', 'resources', 'templates', 'bimProjectData', 'images'], function() {
+  return gulp.src([
+    './src/js/**/*'])
+    .pipe(gulp.dest('./build/js'));
 });
 
 // Copy index.html, rename main and css file
