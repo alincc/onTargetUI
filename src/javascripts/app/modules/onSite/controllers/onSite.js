@@ -159,8 +159,17 @@ define(function(require) {
 
       $scope.preview = function(doc) {
         //$location.search('docId', doc.fileId);
-        $state.go('app.previewDocument', {docId: doc.fileId, onAction: 'onSite'});
+        $scope.isLoadingDocument = true;
+        $state.go('app.previewDocument', {docId: doc.fileId, onAction: 'onSite'}).then(function() {
+          $scope.isLoadingDocument = false;
+        });
       };
+
+      $rootScope.$on('isLoadingDocument', function(newValue) {
+        if(angular.isDefined(newValue)) {
+          $scope.isLoadingDocument = false;
+        }
+      }, true);
 
       var load = function() {
         $scope.isLoading = true;

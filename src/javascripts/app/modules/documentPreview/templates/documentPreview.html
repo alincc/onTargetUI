@@ -31,7 +31,8 @@
                                         ng-disabled="_form.$submitted"
                                         ng-show="showDocPreview">Cancel
                                 </button>
-                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="editDoc(selectedDoc)" ng-if="onAction == 'onSite'"
+                                <button class="btn btn-primary btn-xs pull-right" type="button"
+                                        ng-click="editDoc(selectedDoc)" ng-if="onAction == 'onSite'"
                                         ng-show="!showDocPreview">Edit
                                 </button>
                                 <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
@@ -42,14 +43,14 @@
                                 </button>
                                 <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
                                         type="button"
-                                        ng-show="showDocPreview"
+                                        ng-show="showDocPreview && pdfImagePages.length > 1"
                                         ng-click="nextPage()"
                                         ng-disabled="!haveNextPage">Next >
                                 </button>
-                                <span class="page-info" ng-show="showDocPreview">Page {{currentPageIndex + 1}} of {{pdfImagePages.length}}</span>
+                                <span class="page-info" ng-show="showDocPreview && pdfImagePages.length > 1">Page {{currentPageIndex + 1}} of {{pdfImagePages.length}}</span>
                                 <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
                                         type="button"
-                                        ng-show="showDocPreview"
+                                        ng-show="showDocPreview && pdfImagePages.length > 1"
                                         ng-click="prevPage()"
                                         ng-disabled="!havePrevPage">< Previous
                                 </button>
@@ -57,15 +58,14 @@
                             <div class="panel-body" ng-if="showDocPreview && onAction == 'onSite'">
                                 <pdf-tagging-mark-up ng-if="!isNexting"
                                                      model="currentPage"
-                                                     page-number="{{currentPageIndex+1}}"
+                                                     page-number="{{currentPageIndex + 1}}"
+                                                     parent-doc="parentDocument"
                                                      selected-doc="selectedDoc"></pdf-tagging-mark-up>
-                                <!--<pdf-tagging-mark-up path="{{selectedDoc.name}}"-->
-                                                     <!--image-path="{[selectedDoc.filePath}}"-->
-                                                     <!--selected-doc="selectedDoc"></pdf-tagging-mark-up>-->
                             </div>
                             <div class="panel-body normal-preview" ng-if="!showDocPreview">
                                 <pdf-viewer src="{{trustSrc(selectedDoc.fullFilePath)}}" ng-if="isPdf"></pdf-viewer>
                                 <img ng-if="isImage" ng-src="{{selectedDoc.fullFilePath}}"/>
+
                                 <p ng-if="!isImage && !isPdf">Sorry, this kind of file not supporte preview.</p>
                             </div>
                         </form>
@@ -85,10 +85,11 @@
                                         &nbsp;<i class="fa fa-sort"></i>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <li ng-class="{'selected': currentVersion.versionNo === 'Origin'}">
-                                            <a href ng-click="selectVersion(null)">Origin</a>
+                                        <li ng-class="{'selected': currentVersion.versionNo === 'Original'}">
+                                            <a href ng-click="selectVersion(null)">Original</a>
                                         </li>
-                                        <li ng-repeat="v in versions"  ng-class="{'selected': currentVersion.versionNo === v.versionNo}">
+                                        <li ng-repeat="v in versions"
+                                            ng-class="{'selected': currentVersion.versionNo === v.versionNo}">
                                             <a href ng-bind="'Version ' + v.versionNo" ng-click="selectVersion(v)"></a>
                                         </li>
                                     </ul>

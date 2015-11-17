@@ -6,9 +6,13 @@ define(function (require) {
   module.directive('onImageError', [function () {
     return {
       restrict: 'A',
+      scope: {
+        onImageError: '@'
+      },
       link: function (scope, element, attrs) {
         element.bind('error', function () {
-          var extension = attrs.src.split('.').pop();
+          //var extension = attrs.src.split('.').pop();
+          var extension = attrs.onImageError.split('.').pop();
           switch (extension) {
             case 'doc':
             case 'docx':

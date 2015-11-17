@@ -39,6 +39,7 @@ define(function(require) {
     '$q',
     'fileFactory',
     'onSiteFactory',
+    'appConstant',
     function(utilFactory,
              $filter,
              $timeout,
@@ -48,7 +49,8 @@ define(function(require) {
              documentFactory,
              $q,
              fileFactory,
-             onSiteFactory) {
+             onSiteFactory,
+             constant) {
       return {
         restrict: 'E',
         replace: true,
@@ -69,17 +71,17 @@ define(function(require) {
                    $state,
                    fileFactory,
                    onSiteFactory) {
-            var fileExtension = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('.') + 1);
-            var fileName = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('/') + 1);
-            var fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+            $scope.fileExtension = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('.') + 1);
+            $scope.fileName = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('/') + 1);
+            $scope.fileNameWithoutExtension = $scope.fileName.substring(0, $scope.fileName.lastIndexOf('.'));
 
             // Generate original file path
             $scope.originalFilePath = $scope.selectedDoc.filePath;
 
             $scope.pdfTaggingMarkUp = {
               isLoading: true,
-              fileExtension: fileExtension,
-              fileMimeType: utilFactory.getFileMimeType(fileExtension),
+              fileExtension: $scope.fileExtension,
+              fileMimeType: utilFactory.getFileMimeType($scope.fileExtension),
               containerHeight: 0,
               containerWidth: 0
             };
@@ -120,7 +122,7 @@ define(function(require) {
             contextMenu = angular.element(elem[0].querySelector('.doc-menu')),
             pdfTaggingMarkUpMap = elem[0].querySelector('#pdfTaggingMarkUpMap'),
             $pdfTaggingMarkUpMap = angular.element(pdfTaggingMarkUpMap),
-            southWest, northEast, bounds;
+            southWest, northEast, bounds, tileSize = 256;
 
           L.Icon.Default.imagePath = '/img/leaflet';
 
@@ -128,17 +130,6 @@ define(function(require) {
           scope.selectedDoc.listLayer = scope.listLayers;
           scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
           scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
-
-          function guid() {
-            function s4() {
-              return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-            }
-
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-              s4() + '-' + s4() + s4() + s4();
-          }
 
           function x(a, b) {
             return Math.log2(a / b) + 1;
@@ -225,16 +216,29 @@ define(function(require) {
           function render(resp) {
             scope.pdfTaggingMarkUp.isLoading = false;
             scope.imgUrl = resp.url;
-            imgH = resp.height;
-            imgW = resp.width;
-            map = L.map('pdfTaggingMarkUpMap', {
-              minZoom: 1,
-              maxZoom: 4,
-              center: [0, 0], // - , -
-              zoom: 1,
-              crs: L.CRS.Simple,
-              fullscreenControl: true,
+            //imgH = resp.height;
+            //imgW = resp.width;
 
+            imgH = 512 * Math.pow(2, 5);
+            imgW = 512 * Math.pow(2, 5);
+
+            // Custom CRS
+            L.CRS.Screen = L.extend({}, L.CRS, {
+              projection: L.Projection.LonLat,
+              transformation: new L.Transformation(1, 0, 1, 0),
+              scale: function(e) {
+                return 512 * Math.pow(2, e);
+              }
+            });
+
+
+            map = L.map('pdfTaggingMarkUpMap', {
+              minZoom: 0,
+              maxZoom: 5,
+              center: [0, 0], // - , -
+              zoom: 0,
+              crs: L.CRS.Screen,
+              fullscreenControl: true,
               fullscreenControlOptions: { // optional
                 title: "Full Screen",
                 titleCancel: "Exit fullscreen mode"
@@ -243,16 +247,31 @@ define(function(require) {
 
             /*southWest = map.unproject([0, imgH], 2);
              northEast = map.unproject([imgW, 0], 2);*/
-            southWest = map.unproject([0, imgH], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
-            northEast = map.unproject([imgW, 0], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
+            southWest = map.unproject([0, imgH], 0);
+            northEast = map.unproject([imgW, 0], 0);
             bounds = new L.LatLngBounds(southWest, northEast);
-            L.imageOverlay($filter('filePath')(resp.url), bounds).addTo(map);
+            L.tileLayer(constant.resourceUrl + '/' +
+              scope.model.imagePath.substring(0, scope.model.imagePath.lastIndexOf('/')) + '/' +
+              scope.model.imagePath.substring(scope.model.imagePath.lastIndexOf('/') + 1).replace(/\./g, '_') + '_tiles' +
+              '/{z}/{x}_{y}.png',
+              {
+                minZoom: 0,
+                maxZoom: 5,
+                // This map option disables world wrapping. by default, it is false.
+                continuousWorld: false,
+                // This option disables loading tiles outside of the world bounds.
+                noWrap: true,
+                tileSize: 512,
+                bounds: bounds
+              })
+              .addTo(map);
+            //L.imageOverlay($filter('filePath')(resp.url), bounds).addTo(map);
             //map.setMaxBounds(bounds);
             //map.fitBounds(bounds);
 
-            var fitHeight = map.unproject([0, imgH], x(imgH * 2, scope.pdfTaggingMarkUp.containerHeight));
+            //var fitHeight = map.unproject([0, imgH], 0);
 
-            map.setView([fitHeight.lat / 2, northEast.lng / 2], 2);
+            //map.setView([10, 10], 0);
 
             //leaflet.Draw
 
@@ -291,7 +310,7 @@ define(function(require) {
               var type = e.layerType,
                 layer = e.layer || e;
               var comments = e.comments;
-              var id = guid();
+              var id = utilFactory.newGuid();
               layer.id = id;
               var objLayer = layer.toGeoJSON();
               objLayer.comments = _.map(comments, function(cm) {
@@ -464,6 +483,7 @@ define(function(require) {
                 editableLayers.addLayer(objLayer);
                 i = i + 1;
               });
+              console.log(layers, editableLayers);
               //var layers = e.layers._layers;
               //_.each(layers, function (objLayer, k){
               //  var id = objLayer.id;
@@ -503,13 +523,14 @@ define(function(require) {
             map.on('zoomend', function(e) {
               scope.updatePageData();
             });
-
+console.log(scope.model);
             if(scope.model.tagList) {
               _.each(scope.model.tagList, function(tag) {
                 var attrs = tag.attributes;
                 var type = _.filter(attrs, function(a) {
                   return a.key === 'type';
                 });
+                console.log(type, attrs);
                 var options = _.reduce(attrs, function(memo, a) {
                   if(a.key.startsWith('options.')) {
                     var keys = a.key.split('.')[1], value = a.value;
@@ -517,18 +538,21 @@ define(function(require) {
                   }
                   return memo;
                 }, {});
+                console.log(options);
                 if(type.length) {
                   var t = type[0].value, geo, coords;
+                  console.log(t);
                   switch(t) {
                     case 'rectangle':
                     {
                       geo = _.filter(attrs, function(a) {
                         return a.key.startsWith('geo.');
                       });
+                      console.log(geo);
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -538,6 +562,7 @@ define(function(require) {
                         }
                         return memo;
                       }, []);
+                      console.log(coords);
                       var rectangle = L.rectangle(coords, options), rectangle2 = angular.copy(rectangle);
                       //rectangle2.addTo(map);
                       rectangle.layerType = t;
@@ -551,8 +576,8 @@ define(function(require) {
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -575,8 +600,8 @@ define(function(require) {
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -597,6 +622,7 @@ define(function(require) {
                       var radius = _.filter(attrs, function(a) {
                         return a.key.startsWith('radius');
                       });
+                      console.log(radius);
                       var circleRadius = 0;
                       if(radius.length) {
                         circleRadius = parseFloat(radius[0].value);
@@ -604,10 +630,11 @@ define(function(require) {
                       geo = _.filter(attrs, function(a) {
                         return a.key.startsWith('geo.');
                       });
+                      console.log(geo);
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -617,6 +644,7 @@ define(function(require) {
                         }
                         return memo;
                       }, []);
+                      console.log(coords);
                       var circle = L.circle(coords[0], circleRadius, options), circle2 = angular.copy(circle);
                       //circle2.addTo(map);
                       circle.layerType = t;
@@ -630,8 +658,8 @@ define(function(require) {
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -894,9 +922,6 @@ define(function(require) {
             });
             scope.model.tagList = newListTag;
             scope.model.layers = layers || [];
-            scope.model.width = img.width;
-            scope.model.height = img.height;
-            scope.model.scale = x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth);
           };
 
           //scope.$on('pdfTaggingMarkUp.SaveTheDoc', function(e, args) {

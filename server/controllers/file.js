@@ -9,6 +9,8 @@ var pdfService = require('./../services/pdf');
 var imageService = require('./../services/image');
 var utilService = require('./../services/util');
 var config = require('./../config');
+var Promise = require('promise');
+var _ = require('lodash');
 
 function getFileInfo(req, res) {
   var relativePath = req.body.path;
@@ -66,18 +68,31 @@ function convertPdfToImage(req, res) {
   var relativeExportedFilePath = fileFolder + '/converted_' + fileName + '.jpg';
 
   if(/\.pdf$/.test(relativePath)) {
-    pdfService.parse(relativePath, function() {
-      request({
-          method: 'POST',
-          body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
-          json: true,
-          url: config.PROXY_URL + '/upload/updateConversionComplete'
-        },
-        function(error, response, body) {
-          if(!error && response.statusCode == 200) {
-
+    pdfService.parse(relativePath).then(function() {
+      var promises = [];
+      var folder = fs.readdirSync(path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages'));
+      _.each(folder, function(el) {
+        var fp = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages', el);
+        if(fs.lstatSync(fp).isFile()) {
+          for(var size = 0; size < 6; size++) {
+            promises.push(imageService.tiles(fp, 512 * Math.pow(2, size), size));
           }
-        });
+        }
+      });
+      Promise.all(promises)
+        .then(function() {
+          request({
+              method: 'POST',
+              body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
+              json: true,
+              url: config.PROXY_URL + '/upload/updateConversionComplete'
+            },
+            function(error, response, body) {
+              if(!error && response.statusCode == 200) {
+
+              }
+            });
+        })
     }, function() {
       console.log('Failed to parse pdf to image!');
     });
@@ -91,7 +106,7 @@ function convertPdfToImage(req, res) {
     //if(!fs.existsSync(folder)) {
     //  fs.mkdirSync(folder);
     //}
-    imageService.cropImageSquare(filePath, thumbnail, 200, function(err){
+    imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
       res.send({
         success: true
       });

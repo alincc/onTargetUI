@@ -42,16 +42,10 @@
                         <spinner text="Loading..."></spinner>
                     </div>
 
-                    <div class="row" ng-if="!isLoading && !uploadedDocumentList.length">
-                        <div class="col-xs-12 text-center">
-                            <alert type="info" class="text-center">No documents</alert>
-                        </div>
-                    </div>
-
                     <div class="row" ng-show="isCategorySelected">
                         <div class="col-md-12 margin-bottom">
                             <h4 class="pull-left">{{selectedCategoryName}}</h4>
-                            <button class="btn btn-default pull-right" ng-click="backToCategories()">
+                            <button class="btn btn-default pull-right" ng-click="backToCategories()" ng-hide="isLoadingDocument">
                                 <i class="fa fa-arrow-left"></i> Back to categories
                             </button>
                         </div>
@@ -76,8 +70,9 @@
                                 <tr>
                                     <th style="width: 64px;"></th>
                                     <th>Document Name</th>
-                                    <th>Uploaded by</th>
-                                    <th>Uploaded on</th>
+                                    <th>Created by</th>
+                                    <th>Created on</th>
+                                    <th>Updated on</th>
                                     <th style="width: 310px;">Action</th>
                                 </tr>
                                 </thead>
@@ -89,11 +84,11 @@
                                     </tr>
                                 </tbody>
                                 <tbody ng-repeat="doc in uploadedDocumentList | filter:filterByCategoryId | filter:filterBySearchBox as listResults track by $index">
-                                <tr ng-class="!doc.conversionComplete ? 'success' : ''" ng-if="doc.versionProjectFiles.length <= 0">
+                                <tr ng-if="doc.versionProjectFiles.length <= 0" ng-class="!doc.conversionComplete ? 'success' : ''">
                                     <td class="file-icon">
                                         <div class="thumbnail-icon">
                                             <a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                                    on-image-error
+                                                    on-image-error="{{doc.name}}"
                                                     ng-src="{{doc.thumbnailImageName | filePath}}"/></a>
                                         </div>
                                     </td>
@@ -101,6 +96,7 @@
                                            ng-bind="doc.name | fileName"></a></td>
                                     <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
                                     <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
+                                    <td></td>
                                     <td>
                                         <div ng-if="doc.conversionComplete">
                                             <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc)">
@@ -118,11 +114,11 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr ng-class="!doc.versionProjectFiles[0].conversionComplete ? 'success' : ''" ng-if="doc.versionProjectFiles.length > 0">
+                                <tr ng-if="doc.versionProjectFiles.length > 0" ng-class="!doc.versionProjectFiles[0].conversionComplete ? 'success' : ''">
                                     <td class="file-icon">
                                         <div class="thumbnail-icon">
                                             <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])"><img
-                                                    on-image-error
+                                                    on-image-error="{{doc.name}}"
                                                     ng-src="{{doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/></a>
                                         </div>
                                     </td>
@@ -130,7 +126,8 @@
                                         <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])"
                                            ng-bind="doc.versionProjectFiles[0].name | fileName"></a></td>
                                     <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                                    <td ng-bind="doc.versionProjectFiles[0].createdDate | date:app.dateFormat"></td>
+                                    <td ng-bind="doc.createdDate | date:app.datetimeFormat"></td>
+                                    <td ng-bind="doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></td>
                                     <td>
                                         <div ng-if="doc.versionProjectFiles[0].conversionComplete">
                                             <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc.versionProjectFiles[0])">
@@ -168,7 +165,7 @@
                                         <div class="file-thumbnail">
                                             <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])">
                                                 <img
-                                                    on-image-error
+                                                    on-image-error="{{doc.name}}"
                                                     ng-src="{{doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/>
                                             </a>
                                         </div>
@@ -196,7 +193,7 @@
                                                 <a ng-click="preview(doc.versionProjectFiles[0])" ng-bind="doc.versionProjectFiles[0].name | fileName"></a>
                                             </h5>
                                             <h5>
-                                                Uploaded on: <span ng-bind="doc.versionProjectFiles[0].createdDate | date:app.dateFormat"></span>
+                                                Uploaded on: <span ng-bind="doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></span>
                                             </h5>
                                             <h5>
                                                 Uploaded by: <span ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></span>
@@ -206,7 +203,7 @@
                                     <div ng-if="doc.versionProjectFiles.length <= 0">
                                         <div class="file-thumbnail">
                                             <a href="javascript:void(0)" ng-click="preview(doc)">
-                                                <img ng-src="{{doc.thumbnailImageName | filePath}}" on-image-error/>
+                                                <img ng-src="{{doc.thumbnailImageName | filePath}}" on-image-error="{{doc.name}}"/>
                                             </a>
                                         </div>
                                         <div style="text-align:left">
@@ -233,7 +230,7 @@
                                                 <a ng-click="preview(doc)">{{doc.name | fileName}}</a>
                                             </h5>
                                             <h5>
-                                                Uploaded on: {{doc.createdDate | date:app.dateFormat}}
+                                                Uploaded on: {{doc.createdDate | date:app.datetimeFormat}}
                                             </h5>
                                             <h5>
                                                 Uploaded by: {{doc.createdByContact.firstName + ' ' +

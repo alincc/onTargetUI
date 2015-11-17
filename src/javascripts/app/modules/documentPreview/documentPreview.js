@@ -40,8 +40,8 @@ define(function(require) {
             templateUrl: 'documentPreview/templates/documentPreview.html',
             controller: 'PreviewDocumentController',
             resolve: {
-              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'onSiteFactory',
-                function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, onSiteFactory) {
+              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'onSiteFactory', 'toaster', '$timeout',
+                function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, onSiteFactory, toaster, $timeout) {
                   var deferred = $q.defer();
                   switch($stateParams.onAction) {
                     case 'onSite' :
@@ -51,66 +51,125 @@ define(function(require) {
                           projectId: $rootScope.currentProjectInfo.projectId,
                           projectFileId: parseInt($stateParams.docId)
                         }).success(
-                          function(resp) {
-                            if(/(pdf$)/.test(resp.projectFile.name)) {
-                              // Check document conversation status
-                              if(!resp.projectFile.conversionComplete) {
-                                console.log('This file havent finish conversation yet!');
+                          function(currentDocument) {
+                            if(/(pdf$)/.test(currentDocument.projectFile.name)) {
+                              // Check document conversion status
+                              if(!currentDocument.projectFile.conversionComplete) {
+                                toaster.pop('info', 'Info', 'This file have not finish conversion yet, please try again later.');
                                 deferred.reject();
                               } else {
-                                // Get pdf images
-                                onSiteFactory.getPdfImagePages(resp.projectFile.filePath)
-                                  .success(function(p) {
-                                    if(p.pages.length === 0) {
-                                      console.log('Cannot found any images for this file!');
-                                      deferred.reject();
-                                    }
-                                    else {
-                                      // Get versions
-                                      if(resp.projectFile.parentProjectFileId !== 0) {
-                                        documentFactory.getDocumentDetail({
-                                          projectId: $rootScope.currentProjectInfo.projectId,
-                                          projectFileId: resp.projectFile.parentProjectFileId
-                                        }).success(function(v) {
-                                          deferred.resolve({
-                                            projectFile: resp.projectFile,
-                                            pages: p.pages,
-                                            parentDocument: v.projectFile,
-                                            versions: v.projectFile.versionProjectFiles
-                                          });
-                                        });
-                                      } else {
-                                        deferred.resolve({
-                                          projectFile: resp.projectFile,
-                                          pages: p.pages,
-                                          parentDocument: null,
-                                          versions: resp.projectFile.versionProjectFiles
-                                        });
+                                // Original
+                                if(currentDocument.projectFile.parentProjectFileId === 0) {
+                                  // Get pdf images
+                                  onSiteFactory.getPdfImagePages(currentDocument.projectFile.filePath)
+                                    .success(function(p) {
+                                      if(p.pages.length === 0) {
+                                        toaster.pop('error', 'Error', 'Cannot found any images for this file!');
+                                        deferred.reject();
                                       }
-                                    }
-                                  });
+                                      else {
+                                        // Get document tags
+                                        onSiteFactory.getDocumentTags(currentDocument.projectFile.fileId)
+                                          .success(function(documentTag) {
+                                            deferred.resolve({
+                                              projectFile: currentDocument.projectFile,
+                                              pages: p.pages,
+                                              parentDocument: null,
+                                              versions: currentDocument.projectFile.versionProjectFiles,
+                                              tags: documentTag.tags
+                                            });
+                                          })
+                                          .error(function(err) {
+                                            console.log(err);
+                                            toaster.pop('error', 'Error', 'Get document tags failed');
+                                          });
+                                      }
+                                    })
+                                    .error(function(err) {
+                                      toaster.pop('error', 'Error', 'Get pdf images failed');
+                                      deferred.reject(err);
+                                    });
+                                } else {
+                                  // Version
+                                  documentFactory.getDocumentDetail({
+                                    projectId: $rootScope.currentProjectInfo.projectId,
+                                    projectFileId: currentDocument.projectFile.parentProjectFileId
+                                  }).success(function(parentDocument) {
+                                    // Get pdf images
+                                    onSiteFactory.getPdfImagePages(parentDocument.projectFile.filePath)
+                                      .success(function(p) {
+                                        if(p.pages.length === 0) {
+                                          toaster.pop('error', 'Error', 'Cannot found any images for this file!');
+                                          deferred.reject();
+                                        }
+                                        else {
+                                          // Get document tags
+                                          onSiteFactory.getDocumentTags(currentDocument.projectFile.fileId)
+                                            .success(function(documentTag) {
+                                              deferred.resolve({
+                                                projectFile: currentDocument.projectFile,
+                                                pages: p.pages,
+                                                parentDocument: parentDocument.projectFile,
+                                                versions: parentDocument.projectFile.versionProjectFiles,
+                                                tags: documentTag.tags
+                                              });
+                                            })
+                                            .error(function(err) {
+                                              console.log(err);
+                                              toaster.pop('error', 'Error', 'Get document tags failed');
+                                            });
+                                        }
+                                      })
+                                      .error(function(err) {
+                                        toaster.pop('error', 'Error', 'Get pdf images failed');
+                                        deferred.reject(err);
+                                      });
+                                  })
+                                    .error(function(err) {
+                                      toaster.pop('error', 'Error', 'Get document details failed');
+                                      deferred.reject();
+                                    });
+                                }
                               }
                             } else {
                               // Get versions
-                              if(resp.projectFile.parentProjectFileId !== 0) {
+                              if(currentDocument.projectFile.parentProjectFileId !== 0) {
                                 documentFactory.getDocumentDetail({
                                   projectId: $rootScope.currentProjectInfo.projectId,
-                                  projectFileId: resp.projectFile.parentProjectFileId
+                                  projectFileId: currentDocument.projectFile.parentProjectFileId
                                 }).success(function(v) {
-                                  deferred.resolve({
-                                    projectFile: resp.projectFile,
-                                    pages: [resp.projectFile.filePath],
-                                    parentDocument: v.projectFile,
-                                    versions: v.projectFile.versionProjectFiles
-                                  });
+                                  // Get document tags
+                                  onSiteFactory.getDocumentTags(currentDocument.projectFile.fileId)
+                                    .success(function(documentTag) {
+                                      deferred.resolve({
+                                        projectFile: currentDocument.projectFile,
+                                        pages: [currentDocument.projectFile.filePath],
+                                        parentDocument: v.projectFile,
+                                        versions: v.projectFile.versionProjectFiles,
+                                        tags: documentTag.tags
+                                      });
+                                    })
+                                    .error(function(err) {
+                                      console.log(err);
+                                      toaster.pop('error', 'Error', 'Get document tags failed');
+                                    });
                                 });
                               } else {
-                                deferred.resolve({
-                                  projectFile: resp.projectFile,
-                                  pages: [resp.projectFile.filePath],
-                                  parentDocument: null,
-                                  versions: resp.projectFile.versionProjectFiles
-                                });
+                                // Get document tags
+                                onSiteFactory.getDocumentTags(currentDocument.projectFile.fileId)
+                                  .success(function(documentTag) {
+                                    deferred.resolve({
+                                      projectFile: currentDocument.projectFile,
+                                      pages: [currentDocument.projectFile.filePath],
+                                      parentDocument: null,
+                                      versions: currentDocument.projectFile.versionProjectFiles,
+                                      tags: documentTag.tags
+                                    });
+                                  })
+                                  .error(function(err) {
+                                    console.log(err);
+                                    toaster.pop('error', 'Error', 'Get document tags failed');
+                                  });
                               }
                             }
                           }
@@ -134,6 +193,9 @@ define(function(require) {
                       break;
                   }
 
+                  $timeout(function() {
+                    $rootScope.$broadcast('isLoadingDocument', false);
+                  }, 1000);
                   return deferred.promise;
                 }]
             }

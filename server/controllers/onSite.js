@@ -11,6 +11,7 @@ var config = require('./../config');
 var pdfService = require('./../services/pdf');
 var utilService = require('./../services/util');
 var imageService = require('./../services/image');
+var documentService = require('./../services/document');
 var Promise = require('promise');
 
 //function exportPdf(req, res) {
@@ -159,39 +160,40 @@ var Promise = require('promise');
 function exportPdf2(req, res) {
   var baseRequest = req.body.baseRequest;
   var data = req.body.data;
+  var projectId = req.body.projectId;
+  var docId = req.body.docId;
 
-  request({
-    method: 'POST',
-    body: {"projectFileId": req.body.docId, projectId: req.body.projectId, "baseRequest": baseRequest},
-    json: true,
-    url: config.PROXY_URL + '/upload/getDocumentById'
-  }, function(error, response, body) {
-    if(!error && response.statusCode == 200) {
-      var document = response.body;
-      var docId = document.projectFile.fileId;
+  documentService.getDocumentById(docId, projectId, baseRequest)
+    .then(function(document) {
+      docId = document.projectFile.fileId;
       var markerUrl = 'server/assets/img/marker-icon.png';
       var promises = [], error, outputFolder = path.join(rootPath, 'assets', 'temp', utilService.newGuidId());
+
+      // Create temp folder if not exists
       if(!fs.existsSync(outputFolder)) {
         fs.mkdirSync(outputFolder);
       }
 
+      // fn get opacity
       var getOpacityStr = function(opt) {
         return ('0' + Math.round((1 - opt) * 255).toString(16)).slice(-2);
       };
 
+      // loop pages
       _.each(data, function(el, pageIndex) {
         promises.push(new Promise(function(resolve, reject) {
           var imageUrl = el.imagePath;
           var listGeo = el.layers;
-          var zoom = el.scale;
           var imgWidth, imgHeight;
           var g = gm(path.join(rootPath, imageUrl))
             .size(function(err, size) {
               if(!err) {
                 imgWidth = size.width;
                 imgHeight = size.height;
+                //var scale = Math.pow(2, zoom);
+                var scale = imgWidth;
+                /*Math.log(imgWidth / 512) / Math.log(2)*/
                 if(el.layers) {
-                  var scale = Math.pow(2, zoom);
                   for(var i = 0; i < listGeo.length; i++) {
                     var type = listGeo[i].geometry.type;
                     var coords = listGeo[i].geometry.coordinates;
@@ -202,7 +204,7 @@ function exportPdf2(req, res) {
                         var newCoordsStrPolygon = _.map(coords[0], function(d) {
                           d[0] = d[0] * scale;
                           d[1] = d[1] * scale;
-                          d[1] = -d[1];
+                          //d[1] = -d[1];
                           return d.join(',')
                         }).join(' ');
                         g = g.fill(style.color + getOpacityStr(style.fillOpacity)).stroke(style.color + getOpacityStr(style.opacity), style.weight);
@@ -214,7 +216,7 @@ function exportPdf2(req, res) {
                         var newCoordsStrLine = _.map(coords, function(d) {
                           d[0] = d[0] * scale;
                           d[1] = d[1] * scale;
-                          d[1] = -d[1];
+                          //d[1] = -d[1];
                           return d.join(',')
                         }).join(' ');
                         g = g.fill('transparent').stroke(style.color + getOpacityStr(style.opacity), style.weight);
@@ -227,7 +229,7 @@ function exportPdf2(req, res) {
                         radius = radius * 2 * scale;
                         coords[0] = coords[0] * scale;
                         coords[1] = coords[1] * scale;
-                        coords[1] = -coords[1];
+                        //coords[1] = -coords[1];
                         var coords2 = [coords[0] + radius, coords[1]];
 
 
@@ -280,6 +282,7 @@ function exportPdf2(req, res) {
         }));
       });
 
+      // all promises are resolved
       Promise.all(promises)
         .then(function(data) {
           if(error) {
@@ -287,74 +290,96 @@ function exportPdf2(req, res) {
           } else {
             if(/\.pdf$/.test(document.projectFile.filePath)) {
               // convert pdf pages to images
-              exec('gm convert "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
+              console.log('Merging images to pdf...');
+              exec('gm convert "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 -compress jpeg "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
                 if(error) {
-                  console.log(error.message);
-                } else {
-                  console.log('Convert pdf to image');
-                  // Convert pdf to image
-                  pdfService.parse(document.projectFile.filePath, function() {
-                    // Update document status
-                    console.log('Update document status');
-                    request({
-                      method: 'POST',
-                      body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
-                      json: true,
-                      url: config.PROXY_URL + '/upload/updateConversionComplete'
-                    }, function(err) {
-                      if(!err) {
-                        console.log('Get parent document');
-                        // Get parent document
+                  console.log('Error while converting pdf to image', error.message);
+                }
+                else {
+                  console.log('Merge images to pdf successful!');
+                  var firstPage = fs.readdirSync(outputFolder)[0];
+                  if(firstPage) {
+                    var filePath = path.join(rootPath, document.projectFile.filePath);
+                    var fileNameWithoutExt = path.basename(filePath, path.extname(filePath));
+                    var folder = path.join(path.dirname(filePath), utilService.getFolderNameFromFile(path.basename(filePath)));
+                    var thumbnail = path.join(folder, fileNameWithoutExt + '.thumb.jpg');
+                    if(!fs.existsSync(folder)) {
+                      fs.mkdirSync(folder);
+                    }
+
+                    imageService.cropImageSquare(path.join(outputFolder, firstPage), thumbnail, 200, function(err) {
+                      if(err) {
+                        console.log('Failed to create image thumbnail!', error.message);
+                      } else {
+                        console.log('Updating document status');
                         request({
                           method: 'POST',
-                          body: {
-                            "projectFileId": document.projectFile.parentProjectFileId,
-                            projectId: req.body.projectId,
-                            "baseRequest": baseRequest
-                          },
+                          body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
                           json: true,
-                          url: config.PROXY_URL + '/upload/getDocumentById'
-                        }, function(error, response, body) {
-                          if(!error) {
-                            console.log('Copy images from parent document');
-                            // Copy parent images to version
-                            var filePath = path.join(rootPath, response.body.projectFile.filePath);
-                            var fileFolder = path.join(rootPath, response.body.projectFile.filePath.substring(0, response.body.projectFile.filePath.lastIndexOf('/')));
-                            var folder = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)));
-                            var pageFolder = path.join(folder, 'pages');
-
-                            var fileDesPath = path.join(rootPath, document.projectFile.filePath);
-                            var fileDesFolder = path.join(rootPath, document.projectFile.filePath.substring(0, document.projectFile.filePath.lastIndexOf('/')));
-                            var destinationFolder = path.join(fileDesFolder, utilService.getFolderNameFromFile(path.basename(fileDesPath)));
-                            var destPageFolder = path.join(destinationFolder, 'pages');
-
-                            if(!fs.existsSync(destinationFolder)) {
-                              fs.mkdirSync(destinationFolder);
-                            }
-
-                            if(!fs.existsSync(destPageFolder)) {
-                              fs.mkdirSync(destPageFolder);
-                            }
-
-                            var oldImage = fs.readdirSync(destPageFolder);
-                            _.each(oldImage, function(el) {
-                              fs.unlinkSync(path.join(destPageFolder, el));
-                            });
-
-                            var images = fs.readdirSync(pageFolder);
-                            _.each(images, function(el) {
-                              fse.copySync(path.resolve(pageFolder, el), path.join(destPageFolder, el));
-                            });
+                          url: config.PROXY_URL + '/upload/updateConversionComplete'
+                        }, function(err) {
+                          if(!err) {
+                            console.log('Update document status successful!');
                           }
                         });
                       }
                     });
-                  }, function(err) {
-                    console.log('Failed to parse pdf to images', err.message);
-                  });
+                  }
+
+                  // Convert pdf to image
+                  //pdfService.parse(document.projectFile.filePath).then(function() {
+                  //  // Update document status
+                  //  console.log('Convert pdf to images successful!');
+                  //  console.log('Updating document status');
+                  //  request({
+                  //    method: 'POST',
+                  //    body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
+                  //    json: true,
+                  //    url: config.PROXY_URL + '/upload/updateConversionComplete'
+                  //  }, function(err) {
+                  //    if(!err) {
+                  //      console.log('Update document status successful!');
+                  //      //documentService.getDocumentById(document.projectFile.parentProjectFileId, projectId, baseRequest)
+                  //      //  .then(function(parentDocument) {
+                  //      //    //console.log('Copy images from parent document');
+                  //      //    //// Copy parent images to version
+                  //      //    //var filePath = path.join(rootPath, response.body.projectFile.filePath);
+                  //      //    //var fileFolder = path.join(rootPath, response.body.projectFile.filePath.substring(0, response.body.projectFile.filePath.lastIndexOf('/')));
+                  //      //    //var folder = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)));
+                  //      //    //var pageFolder = path.join(folder, 'pages');
+                  //      //    //
+                  //      //    //var fileDesPath = path.join(rootPath, document.projectFile.filePath);
+                  //      //    //var fileDesFolder = path.join(rootPath, document.projectFile.filePath.substring(0, document.projectFile.filePath.lastIndexOf('/')));
+                  //      //    //var destinationFolder = path.join(fileDesFolder, utilService.getFolderNameFromFile(path.basename(fileDesPath)));
+                  //      //    //var destPageFolder = path.join(destinationFolder, 'pages');
+                  //      //    //
+                  //      //    //if(!fs.existsSync(destinationFolder)) {
+                  //      //    //  fs.mkdirSync(destinationFolder);
+                  //      //    //}
+                  //      //    //
+                  //      //    //if(!fs.existsSync(destPageFolder)) {
+                  //      //    //  fs.mkdirSync(destPageFolder);
+                  //      //    //}
+                  //      //    //
+                  //      //    //var oldImage = fs.readdirSync(destPageFolder);
+                  //      //    //_.each(oldImage, function(el) {
+                  //      //    //  fs.unlinkSync(path.join(destPageFolder, el));
+                  //      //    //});
+                  //      //    //
+                  //      //    //var images = fs.readdirSync(pageFolder);
+                  //      //    //_.each(images, function(el) {
+                  //      //    //  fse.copySync(pageFolder, destPageFolder);
+                  //      //    //});
+                  //      //  });
+                  //    }
+                  //  });
+                  //}, function(err) {
+                  //  console.log('Failed to parse pdf to images', err.message);
+                  //});
                 }
               });
-            } else {
+            }
+            else {
               var tempFile = fs.readdirSync(outputFolder)[0];
               if(tempFile) {
                 var tempFilePath = path.join(outputFolder, tempFile);
@@ -388,11 +413,10 @@ function exportPdf2(req, res) {
       res.send({
         success: true
       });
-
-    } else {
-      console.log('Failed export to pdf!', error.message);
-    }
-  });
+    }, function(err) {
+      res.status(400);
+      res.send(err.message);
+    });
 }
 
 function getNextVersionName(req, res) {
@@ -404,7 +428,7 @@ function getNextVersionName(req, res) {
   var versionName = filePath.substring(0, filePath.lastIndexOf('/'));
   var reg = new RegExp(fileNameWithoutExt + '\\-\\d+\\.' + fileExt + '$');
   if(fs.existsSync(fullFilePath)) {
-    var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
+    var files = fs.readdirSync(path.join(fullFilePath.substring(0, fullFilePath.lastIndexOf('/'))));
     var versions = _.filter(files, function(file) {
       return reg.test(file);
     });
@@ -413,8 +437,9 @@ function getNextVersionName(req, res) {
     } else {
       var lastVersionName = _.sortBy(versions).reverse()[0];
       var versionNumber = /.*\-(\d+)\./.exec(lastVersionName)[1];
+      lastVersionName = lastVersionName.substring(0, lastVersionName.lastIndexOf('-'));
       if(versionNumber) {
-        versionName = versionName + '/' + fileNameWithoutExt + '-' + (parseInt(versionNumber) + 1) + '.' + fileExt;
+        versionName = versionName + '/' + lastVersionName + '-' + (parseInt(versionNumber) + 1) + '.' + fileExt;
       }
     }
 
@@ -456,7 +481,9 @@ function getPdfImages(req, res) {
     sendResult([]);
   }
 
-  var files = fs.readdirSync(pageFolder);
+  var files = _.filter(fs.readdirSync(pageFolder), function(fileName) {
+    return fs.lstatSync(path.join(pageFolder, fileName)).isFile();
+  });
   if(files.length === 1) {
     sendResult([makePath(files[0])]);
   }
