@@ -13,7 +13,7 @@
                     <ui-select ng-model="model.selectedAssignee"
                                theme="bootstrap"
                                reset-search-input="true">
-                        <ui-select-match placeholder="Enter owner name">{{$select.selected.contact.firstName + ' ' + $select.selected.contact.lastName}}</ui-select-match>
+                        <ui-select-match placeholder="Enter assignee name">{{$select.selected.contact.firstName + ' ' + $select.selected.contact.lastName}}</ui-select-match>
                         <ui-select-choices repeat="own in contacts track by $index">
                             <div ng-bind="own.contact.firstName + ' ' + own.contact.lastName"></div>
                         </ui-select-choices>
@@ -26,7 +26,7 @@
             </form>
         </div>
         <button class="btn btn-primary" ng-show="!onAddOwner" ng-click="addOwner()"><i class="fa fa-plus"></i> Add
-            Owner
+            Assignee
         </button>
     </div>
 </div>
