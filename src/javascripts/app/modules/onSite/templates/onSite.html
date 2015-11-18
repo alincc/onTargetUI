@@ -95,7 +95,7 @@
                                     <td><a href="javascript:void(0)" ng-click="preview(doc)"
                                            ng-bind="doc.name | fileName"></a></td>
                                     <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                                    <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
+                                    <td ng-bind="doc.createdDate | date:app.datetimeFormat"></td>
                                     <td></td>
                                     <td>
                                         <div ng-if="doc.conversionComplete">
@@ -277,7 +277,7 @@
                                                                   ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
                                             said:
                                         </div>
-                                        <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
+                                        <div class="date" ng-bind="com.commentedDate | date:app.datetimeFormat"></div>
                                         <small class="text-muted" ng-bind="com.comment"></small>
                                     </div>
                                 </li>
