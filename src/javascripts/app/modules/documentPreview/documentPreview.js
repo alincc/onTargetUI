@@ -55,7 +55,7 @@ define(function(require) {
                             if(/(pdf$)/.test(currentDocument.projectFile.name)) {
                               // Check document conversion status
                               if(!currentDocument.projectFile.conversionComplete) {
-                                toaster.pop('info', 'Info', 'This file have not finish conversion yet, please try again later.');
+                                toaster.pop('info', 'Info', 'PDF file conversion is in progress.Please try again');
                                 deferred.reject();
                               } else {
                                 // Original

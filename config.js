@@ -187,56 +187,56 @@ module.exports = {
   server: {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root and the location should end with slash '/' if not empty
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   },
   serverlocal: {
     PROXY_URL: 'http://localhost:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   },
   serverbeta: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   },
   servertesting: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   },
   serverstaging: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   },
   serversagarmatha01: {
     PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
-    maxFileSize: 15000000, // in bytes
+    maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs'
   }
