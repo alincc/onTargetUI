@@ -475,10 +475,12 @@ function getPdfImages(req, res) {
 
   if(!fs.existsSync(folder)) {
     sendResult([]);
+	return;
   }
 
   if(!fs.existsSync(pageFolder)) {
     sendResult([]);
+	return;
   }
 
   var files = _.filter(fs.readdirSync(pageFolder), function(fileName) {
