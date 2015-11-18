@@ -36,6 +36,7 @@ define(function(require) {
       $scope.currentVersion = _.find($scope.versions, {fileId: $scope.selectedDoc.fileId}) ?
         _.find($scope.versions, {fileId: $scope.selectedDoc.fileId}) : {versionNo: 'Original'};
       $scope.onAction = $stateParams.onAction;
+      $scope.categoryId = $stateParams.categoryId;
       $scope.pdfImagePages = _.map(document.pages, function(el) {
         return {
           imagePath: el
@@ -115,7 +116,7 @@ define(function(require) {
 
       $scope.backToList = function() {
         if($scope.onAction === 'onSite') {
-          $state.go("app.onSite");
+          $state.go("app.onSite", {categoryId: $scope.categoryId});
         }
         else {
           window.history.back();

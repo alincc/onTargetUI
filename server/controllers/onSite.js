@@ -291,7 +291,9 @@ function exportPdf2(req, res) {
             if(/\.pdf$/.test(document.projectFile.filePath)) {
               // convert pdf pages to images
               console.log('Merging images to pdf...');
+              console.time("MergingImagesToPdf");
               exec(config.convertCommand + ' "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 -compress jpeg "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
+                console.timeEnd("MergingImagesToPdf");
                 if(error) {
                   console.log('Error while converting pdf to image', error.message);
                 }
@@ -475,12 +477,12 @@ function getPdfImages(req, res) {
 
   if(!fs.existsSync(folder)) {
     sendResult([]);
-	return;
+    return;
   }
 
   if(!fs.existsSync(pageFolder)) {
     sendResult([]);
-	return;
+    return;
   }
 
   var files = _.filter(fs.readdirSync(pageFolder), function(fileName) {

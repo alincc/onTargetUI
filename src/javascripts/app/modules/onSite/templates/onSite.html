@@ -43,16 +43,17 @@
                     </div>
 
                     <div class="row" ng-show="isCategorySelected">
-                        <div class="col-md-12 margin-bottom">
+                        <div class="col-md-12 margin-bottom" ng-hide="isLoading">
                             <h4 class="pull-left">{{selectedCategoryName}}</h4>
-                            <button class="btn btn-default pull-right" ng-click="backToCategories()" ng-hide="isLoadingDocument">
+                            <button class="btn btn-default pull-right" ng-click="backToCategories()">
                                 <i class="fa fa-arrow-left"></i> Back to categories
                             </button>
                         </div>
                     </div>
 
                     <div class="row document-category" ng-hide="isCategorySelected">
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-height" ng-repeat="category in categories track by $index">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-height" ng-hide="isLoading"
+                             ng-repeat="category in categories track by $index">
                             <article>
                                 <div class="item" ng-click="chooseCategory(category)">
                                     <img src="./img/icons/folder-graphite.jpg">
@@ -78,7 +79,7 @@
                                 </thead>
                                 <tbody ng-if="listResults.length === 0">
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <alert type="info" class="text-center">No documents</alert>
                                         </td>
                                     </tr>

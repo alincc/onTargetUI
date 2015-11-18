@@ -98,24 +98,25 @@ exports.cropImageSquare = function(input, output, size, cb) {
 };
 
 exports.tiles = function(input, size, zoom, crop) {
-  crop = crop || 512;
-  var fileFolder = path.dirname(input);
-  var fileName = path.basename(input);
-  var destinationFolder = path.join(fileFolder, util.getFolderNameFromFile(fileName) + '_tiles');
-
-  if(!fs.existsSync(destinationFolder)) {
-    fs.mkdirSync(destinationFolder);
-  }
-
-  destinationFolder = path.join(destinationFolder, zoom.toString());
-
-  if(!fs.existsSync(destinationFolder)) {
-    fs.mkdirSync(destinationFolder);
-  }
-
-  destinationFolder = path.join(destinationFolder, '%[filename:tile].png');
-
   return new Promise(function(resolve, reject) {
+    console.log('Splicing image zoom level ' + zoom + '...');
+    crop = crop || 512;
+    var fileFolder = path.dirname(input);
+    var fileName = path.basename(input);
+    var destinationFolder = path.join(fileFolder, util.getFolderNameFromFile(fileName) + '_tiles');
+
+    if(!fs.existsSync(destinationFolder)) {
+      fs.mkdirSync(destinationFolder);
+    }
+
+    destinationFolder = path.join(destinationFolder, zoom.toString());
+
+    if(!fs.existsSync(destinationFolder)) {
+      fs.mkdirSync(destinationFolder);
+    }
+
+    destinationFolder = path.join(destinationFolder, '%[filename:tile].png');
+
     //exec('convert "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"', function(err) {
     //  if(err) {
     //    console.log('Splice level ' + zoom + ' failed!', err.message);
@@ -126,12 +127,14 @@ exports.tiles = function(input, size, zoom, crop) {
     //  }
     //});
 
+    console.time("SplicingImagesIntoTilesLevel" + zoom);
     exec(config.convertCommand + ' "' + input + '" -resize ' + size + 'x -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" -background transparent -extent ' + crop + 'x' + crop + ' +repage +adjoin "' + destinationFolder + '"', function(err) {
+      console.timeEnd("SplicingImagesIntoTilesLevel" + zoom);
       if(err) {
-        console.log('Splice level ' + zoom + ' failed!', err.message);
+        console.log('Splicing image zoom level ' + zoom + '...Failed!', err.message);
         reject(err);
       } else {
-        console.log('Splice level ' + zoom + ' successful!');
+        console.log('Splicing image zoom level ' + zoom + '...Done!');
         resolve();
       }
     });

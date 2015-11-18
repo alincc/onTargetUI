@@ -36,7 +36,7 @@ define(function(require) {
       function($stateProvider) {
         $stateProvider
           .state('app.previewDocument', {
-            url: '/preview?onAction&docId',
+            url: '/preview?onAction&docId?categoryId',
             templateUrl: 'documentPreview/templates/documentPreview.html',
             controller: 'PreviewDocumentController',
             resolve: {
@@ -55,7 +55,7 @@ define(function(require) {
                             if(/(pdf$)/.test(currentDocument.projectFile.name)) {
                               // Check document conversion status
                               if(!currentDocument.projectFile.conversionComplete) {
-                                toaster.pop('info', 'Info', 'This file have not finish conversion yet, please try again later.');
+                                toaster.pop('info', 'Info', 'File conversion still in progress. Please try again later.');
                                 deferred.reject();
                               } else {
                                 // Original
@@ -193,9 +193,6 @@ define(function(require) {
                       break;
                   }
 
-                  $timeout(function() {
-                    $rootScope.$broadcast('isLoadingDocument', false);
-                  }, 1000);
                   return deferred.promise;
                 }]
             }
