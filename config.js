@@ -190,7 +190,7 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   },
   serverlocal: {
     PROXY_URL: 'http://localhost:8080/ontargetrs/services',
@@ -198,7 +198,7 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
@@ -206,7 +206,7 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   },
   serverbeta: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
@@ -214,7 +214,7 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   },
   servertesting: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -222,7 +222,7 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   },
   serverstaging: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -230,7 +230,7 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   },
   serversagarmatha01: {
     PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
@@ -238,7 +238,7 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
@@ -246,6 +246,6 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
 	convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 5
+    concurrencyImageProcesses: 1
   }
 };
