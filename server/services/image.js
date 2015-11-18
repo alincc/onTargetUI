@@ -99,24 +99,26 @@ exports.cropImageSquare = function(input, output, size, cb) {
 };
 
 exports.tiles = function(input, size, zoom, crop) {
-  crop = crop || 512;
-  var fileFolder = path.dirname(input);
-  var fileName = path.basename(input);
-  var destinationFolder = path.join(fileFolder, util.getFolderNameFromFile(fileName) + '_tiles');
-
-  if(!fs.existsSync(destinationFolder)) {
-    fs.mkdirSync(destinationFolder);
-  }
-
-  destinationFolder = path.join(destinationFolder, zoom.toString());
-
-  if(!fs.existsSync(destinationFolder)) {
-    fs.mkdirSync(destinationFolder);
-  }
-
-  destinationFolder = path.join(destinationFolder, '%[filename:tile].png');
-
   return new Promise(function(resolve, reject) {
+    console.log('Splicing image zoom level ' + zoom + '...');
+    crop = crop || 512;
+    var fileFolder = path.dirname(input);
+    var fileName = path.basename(input);
+    var destinationFolder = path.join(fileFolder, util.getFolderNameFromFile(fileName) + '_tiles');
+
+    if(!fs.existsSync(destinationFolder)) {
+      fs.mkdirSync(destinationFolder);
+    }
+
+    destinationFolder = path.join(destinationFolder, zoom.toString());
+
+    if(!fs.existsSync(destinationFolder)) {
+      fs.mkdirSync(destinationFolder);
+    }
+
+    destinationFolder = path.join(destinationFolder, '%[filename:tile].png');
+
+	return new Promise(function(resolve, reject) {
     
 	  (function(rs, rf) {
         queue.add(function(done) {

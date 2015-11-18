@@ -3,6 +3,14 @@ define(function(require) {
   var angular = require('angular');
   var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state',
     function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state) {
+      var setCategoryNameOnPageLoad = function() {
+        if(!_.isEmpty($scope.categories) && !!$scope.selectedCategoryId) {
+          $scope.selectedCategoryName = _.result(_.find($scope.categories, function(category) {
+            return category.id.toString() === $scope.selectedCategoryId.toString();
+          }), 'name');
+        }
+      };
+
       $scope.app = appConstant.app;
       $scope.isLoading = false;
       $scope.viewMode = "list";
@@ -15,6 +23,7 @@ define(function(require) {
       if(!!categoryIdQueryString) {
         $scope.isCategorySelected = true;
         $scope.selectedCategoryId = categoryIdQueryString;
+        setCategoryNameOnPageLoad();
       }
 
       //$scope.isPreview = angular.isDefined($stateParams.docId);
@@ -57,6 +66,7 @@ define(function(require) {
               .success(function(resp) {
                 $scope.isLoading = false;
                 $scope.categories = resp.categories;
+                setCategoryNameOnPageLoad();
                 _.forEach($scope.categories, function(category) {
                   category.count = 0;
                 });
@@ -159,9 +169,10 @@ define(function(require) {
 
       $scope.preview = function(doc) {
         //$location.search('docId', doc.fileId);
-        $scope.isLoadingDocument = true;
-        $state.go('app.previewDocument', {docId: doc.fileId, onAction: 'onSite'}).then(function() {
-          $scope.isLoadingDocument = false;
+        $state.go('app.previewDocument', {
+          docId: doc.fileId,
+          onAction: 'onSite',
+          categoryId: $scope.selectedCategoryId
         });
       };
 
@@ -207,7 +218,7 @@ define(function(require) {
                   id: $scope.selectedCategoryId,
                   name: $scope.selectedCategoryName
                 };
-              } else if(!!$scope.selectedCategoryId){
+              } else if(!!$scope.selectedCategoryId) {
                 var category = _.find($scope.categories, {id: parseInt($scope.selectedCategoryId)});
                 return {
                   id: category.id,
@@ -312,6 +323,7 @@ define(function(require) {
       notifications.onCurrentProjectChange($scope, function(agrs) {
         $scope.isPreview = false;
         $scope.selectedDoc = null;
+        $scope.isLoading = true;
         $scope.comments = [];
         $scope.uploadedDocumentList = $scope.uploadedDocumentArrangedList = [];
         getUploadedDocumentList();
