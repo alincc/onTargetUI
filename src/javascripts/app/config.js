@@ -179,6 +179,7 @@ define(function(require) {
         userNotificationsInterval: 600000 // 10 minutes
       },
       dateFormat: 'MM/dd/yyyy',
+	  datetimeFormat: 'MM/dd/yyyy hh:mm a',
       statusColours: [
         '55d63c',
         'e2df05',

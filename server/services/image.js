@@ -125,9 +125,8 @@ exports.tiles = function(input, size, zoom, crop) {
     //    resolve();
     //  }
     //});
-    var cmd='convert "' + input + '" -resize ' + size + 'x -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" -background transparent -extent ' + crop + 'x' + crop + ' +repage +adjoin "' + destinationFolder + '"';
-    console.log('Executing command: '+cmd);
-    exec('convert "' + input + '" -resize ' + size + 'x -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" -background transparent -extent ' + crop + 'x' + crop + ' +repage +adjoin "' + destinationFolder + '"', function(err) {
+
+    exec(config.convertCommand + ' "' + input + '" -resize ' + size + 'x -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" -background transparent -extent ' + crop + 'x' + crop + ' +repage +adjoin "' + destinationFolder + '"', function(err) {
       if(err) {
         console.log('Splice level ' + zoom + ' failed!', err.message);
         reject(err);
