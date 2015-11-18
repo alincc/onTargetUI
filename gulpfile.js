@@ -512,6 +512,8 @@ gulp.task('build:server', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.server.maxFileSize))
+	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: ' + config.server.convertCommand))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: ' + config.server.gsCommand))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -534,6 +536,8 @@ gulp.task('build:serverlocal', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
+	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: ' + config.serverlocal.convertCommand))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: ' + config.serverlocal.gsCommand))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -555,6 +559,8 @@ gulp.task('build:serverintegration', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
+	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: ' + config.serverintegration.convertCommand))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: ' + config.serverintegration.gsCommand))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -577,6 +583,8 @@ gulp.task('build:serverbeta', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
+	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: ' + config.serverbeta.convertCommand))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: ' + config.serverbeta.gsCommand))
     .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
@@ -599,6 +607,8 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: ' + config.serversagarmatha01.convertCommand))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: ' + config.serversagarmatha01.gsCommand))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -620,6 +630,8 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
     .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: ' + config.serversagarmatha01.convertCommand))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: ' + config.serversagarmatha01.gsCommand))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([

@@ -291,7 +291,7 @@ function exportPdf2(req, res) {
             if(/\.pdf$/.test(document.projectFile.filePath)) {
               // convert pdf pages to images
               console.log('Merging images to pdf...');
-              exec('gm convert "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 -compress jpeg "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
+              exec(config.convertCommand + ' "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 -compress jpeg "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
                 if(error) {
                   console.log('Error while converting pdf to image', error.message);
                 }

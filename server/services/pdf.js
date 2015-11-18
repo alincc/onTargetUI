@@ -9,6 +9,7 @@ var gm = require('gm');
 var imageService = require('./image');
 var Promise = require('promise');
 var _ = require('lodash');
+var config = require('./../config');
 
 var exports = {};
 
@@ -34,7 +35,7 @@ function parse(relativePath) {
     }
 
     // convert pdf pages to images
-    exec('gm convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
+    exec(config.convertCommand + ' -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
       if(error) {
         reject(error);
       } else {
