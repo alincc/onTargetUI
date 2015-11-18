@@ -27,6 +27,9 @@ app.use(express.static(process.env.ROOT));
 // Initialize routes
 require('./server/routes')(app);
 
+// Initialize queues
+require('./server/services/queue').init();
+
 //app.get('/', function(req, res){
 //  res.sendFile("index.html");
 //});

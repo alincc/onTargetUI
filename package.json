@@ -42,6 +42,7 @@
     "promise": "^7.0.4",
     "pusher": "^1.0.6",
     "querystring": "^0.2.0",
+	"queue": "^3.1.0",
     "readline": "^1.0.1",
     "request": "^2.61.0",
     "rimraf": "^2.4.2",
