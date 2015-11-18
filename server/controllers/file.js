@@ -51,6 +51,36 @@ function getFileInfo(req, res) {
   }
 }
 
+function tryAgain(tryList, triedTime, cb) {
+  var promises = [];
+  _.each(tryList, function(el) {
+    promises.push(imageService.tiles(el.input, el.size, el.zoom));
+  });
+  Promise.all(promises)
+    .then(function() {
+      cb();
+    }, function(err) {
+      if(triedTime < 3) {
+        triedTime = triedTime + 1;
+        tryAgain(err, triedTime, cb);
+      }
+    });
+}
+
+function updateConversionComplete(docId, baseRequest) {
+  request({
+      method: 'POST',
+      body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
+      json: true,
+      url: config.PROXY_URL + '/upload/updateConversionComplete'
+    },
+    function(error, response, body) {
+      if(!error && response.statusCode == 200) {
+        console.log('Starting convert pdf to images progress...Done!');
+      }
+    });
+}
+
 function convertPdfToImage(req, res) {
   var tmpNumber = new Date().getTime();
   var relativePath = req.body.path;
@@ -66,6 +96,7 @@ function convertPdfToImage(req, res) {
   var destinationFilePath = path.join(destinationFolder, tmpNumber + '_' + fileName + '.jpg');
   var exportedFile = path.join(outputFolder, 'converted_' + fileName + '.jpg');
   var relativeExportedFilePath = fileFolder + '/converted_' + fileName + '.jpg';
+  var triedTime = 0;
 
   if(/\.pdf$/.test(relativePath)) {
     pdfService.parse(relativePath).then(function() {
@@ -81,18 +112,13 @@ function convertPdfToImage(req, res) {
       });
       Promise.all(promises)
         .then(function() {
-          request({
-              method: 'POST',
-              body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
-              json: true,
-              url: config.PROXY_URL + '/upload/updateConversionComplete'
-            },
-            function(error, response, body) {
-              if(!error && response.statusCode == 200) {
-
-              }
-            });
-        })
+          updateConversionComplete(docId, baseRequest);
+        }, function(){
+			triedTime = triedTime + 1;
+			  tryAgain(err, triedTime, function() {
+				updateConversionComplete(docId, baseRequest);
+			  });
+		});
     }, function() {
       console.log('Failed to parse pdf to image!');
     });
