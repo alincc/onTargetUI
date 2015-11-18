@@ -34,7 +34,7 @@ function parse(relativePath) {
     }
 
     // convert pdf pages to images
-    exec('gm convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
+    exec('convert -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) {
       if(error) {
         reject(error);
       } else {
