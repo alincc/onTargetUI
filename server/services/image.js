@@ -3,6 +3,7 @@ var mime = require('mime');
 var fs = require('fs');
 var config = require('./../config');
 var util = require('./util');
+var queue = require('./queue');
 var Promise = require('promise');
 var exec = require('child_process').exec;
 var path = require('path');
@@ -116,25 +117,33 @@ exports.tiles = function(input, size, zoom, crop) {
   destinationFolder = path.join(destinationFolder, '%[filename:tile].png');
 
   return new Promise(function(resolve, reject) {
-    //exec('convert "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"', function(err) {
-    //  if(err) {
-    //    console.log('Splice level ' + zoom + ' failed!', err.message);
-    //    reject(err);
-    //  } else {
-    //    console.log('Splice level ' + zoom + ' successful!');
-    //    resolve();
-    //  }
-    //});
+    
+	  (function(rs, rf) {
+        queue.add(function(done) {
+          console.time("SplicingImagesIntoTilesLevel" + zoom);
+          exec(config.convertCommand+' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"', function(err) {
+            if(err) {
+              console.log('Splice level ' + zoom + ' failed!', err.message);
+              rf(err);
+            } else {
+              console.log('Splice level ' + zoom + ' successful!');
+              rs();
+            }
+            console.timeEnd("SplicingImagesIntoTilesLevel" + zoom);
+            done();
+          });
+        });
+      })(resolve, reject);
 
-    exec(config.convertCommand + ' "' + input + '" -resize ' + size + 'x -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" -background transparent -extent ' + crop + 'x' + crop + ' +repage +adjoin "' + destinationFolder + '"', function(err) {
-      if(err) {
-        console.log('Splice level ' + zoom + ' failed!', err.message);
-        reject(err);
-      } else {
-        console.log('Splice level ' + zoom + ' successful!');
-        resolve();
-      }
-    });
+      //exec('convert "' + input + '" -resize ' + size + 'x -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" -background transparent -extent ' + crop + 'x' + crop + ' +repage +adjoin "' + destinationFolder + '"', function(err) {
+      //  if(err) {
+      //    console.log('Splice level ' + zoom + ' failed!', err.message);
+      //    reject(err);
+      //  } else {
+      //    console.log('Splice level ' + zoom + ' successful!');
+      //    resolve();
+      //  }
+      //});
   });
 };
 

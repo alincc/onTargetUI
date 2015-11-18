@@ -509,11 +509,12 @@ gulp.task('build:server', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.server.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.server.maxFileSize))
 	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.server.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.server.gsCommand + '\''))
+	.pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.server.concurrencyImageProcesses))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -533,11 +534,12 @@ gulp.task('build:serverlocal', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
 	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverlocal.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverlocal.gsCommand + '\''))
+	.pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverlocal.concurrencyImageProcesses))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -556,11 +558,12 @@ gulp.task('build:serverintegration', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
 	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverintegration.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverintegration.gsCommand + '\''))
+	.pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverintegration.concurrencyImageProcesses))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -580,11 +583,12 @@ gulp.task('build:serverbeta', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverbeta.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
 	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverbeta.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverbeta.gsCommand + '\''))
+	.pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverbeta.concurrencyImageProcesses))
     .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
@@ -604,11 +608,12 @@ gulp.task('build:serversagarmatha01', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
 	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
+	.pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -627,11 +632,12 @@ gulp.task('build:serversagarmatha01', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
     .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
 	.pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
+	.pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
