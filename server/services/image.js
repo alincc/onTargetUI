@@ -100,7 +100,6 @@ exports.cropImageSquare = function(input, output, size, cb) {
 
 exports.tiles = function(input, size, zoom, crop) {
   return new Promise(function(resolve, reject) {
-    console.log('Splicing image zoom level ' + zoom + '...');
     crop = crop || 512;
     var fileFolder = path.dirname(input);
     var fileName = path.basename(input);
@@ -120,8 +119,9 @@ exports.tiles = function(input, size, zoom, crop) {
 
     (function(rs, rj) {
       queue.add(function(done) {
+        console.log('Splicing image zoom level ' + zoom + '...');
+        console.log('Execution command: ' + config.convertCommand + ' -depth 8 "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin -bench 10 "' + destinationFolder + '"');
         console.time("SplicingImagesIntoTilesLevel" + zoom);
-        console.log(config.convertCommand + ' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"');
         exec(config.convertCommand + ' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"', function(err) {
           if(err) {
             console.log('Splice level ' + zoom + ' failed!', err.message);

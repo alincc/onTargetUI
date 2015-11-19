@@ -23,7 +23,7 @@ pusher.port = 443;
 var myArgs = process.argv.slice(2);
 var folder = myArgs[0] || 'app';
 var port = myArgs[1] || 3214;
-//var cors = require('cors');
+var cors = require('cors');
 var app = express();
 var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrs/services';
 var BIM_SERVER = 'http://216.14.121.204:8080';
@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(methodOverride());
-//app.use(cors());
+app.use(cors());
 app.use(express.static(__dirname + '/' + folder));
 
 // Push implementation
@@ -745,7 +745,7 @@ app.get('/bim*', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-  res.sendfile("index.html");
+  res.sendFile("index.html");
 });
 
 app.listen(app.get('port'), function() {

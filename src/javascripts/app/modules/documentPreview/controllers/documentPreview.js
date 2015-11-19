@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state', 'document', '$timeout',
-    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state, document, $timeout) {
+  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state', 'document', '$timeout', 'toaster',
+    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state, document, $timeout, toaster) {
 
       var getFileId = function() {
         if($scope.selectedDoc.versionProjectFiles.length > 0) {
@@ -24,7 +24,6 @@ define(function(require) {
           }
         }
         $scope.selectedDoc.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
-        $scope.docImagePath = document.imagePath;
         $scope.isPdf = /(pdf$)/.test(filePath);
         $scope.isImage = /(png|jpg|jpeg|gif)/.test(fileExtension);
       };
@@ -32,15 +31,10 @@ define(function(require) {
       $scope.selectedDoc = document.projectFile;
       $scope.originalDoc = angular.copy(document.projectFile);
       $scope.versions = document.versions.reverse();
-      $scope.parentDocument = document.parentDocument;
       $scope.currentVersion = _.find($scope.versions, {fileId: $scope.selectedDoc.fileId}) ?
         _.find($scope.versions, {fileId: $scope.selectedDoc.fileId}) : {versionNo: 'Original'};
       $scope.onAction = $stateParams.onAction;
-      $scope.pdfImagePages = _.map(document.pages, function(el) {
-        return {
-          imagePath: el
-        };
-      });
+      $scope.categoryId = $stateParams.categoryId;
       $scope.parseTag = function(tags) {
         _.each(tags, function(el) {
           var pageNumber = /.*\|\sPage\-(\d+)/.exec(el.title)[1];
@@ -56,13 +50,7 @@ define(function(require) {
         });
 
       };
-      $scope.currentPageIndex = 0;
-      $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
-      $scope.isNexting = false;
-      $scope.haveNextPage = $scope.pdfImagePages.length > 1;
-      $scope.havePrevPage = false;
-      $scope.parseTag(document.tags);
-      $scope.showDocPreview = true;
+      $scope.showDocPreview = false;
 
       // Comments
       $scope.comments = [];
@@ -115,7 +103,7 @@ define(function(require) {
 
       $scope.backToList = function() {
         if($scope.onAction === 'onSite') {
-          $state.go("app.onSite");
+          $state.go("app.onSite", {categoryId: $scope.categoryId});
         }
         else {
           window.history.back();
@@ -123,10 +111,148 @@ define(function(require) {
       };
 
       $scope.editDoc = function(doc) {
-        onSiteFactory.getDocumentTags(doc.fileId).then(function(resp) {
-          $scope.parseTag(resp.data.tags);
-          $scope.showDocPreview = true;
-        });
+        if($scope.isPdf) {
+          // Check document conversion status
+          if(!$scope.selectedDoc.conversionComplete) {
+            toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+          } else {
+            // Original
+            if($scope.selectedDoc.parentProjectFileId === 0) {
+              // Get pdf images
+              onSiteFactory.getPdfImagePages($scope.selectedDoc.filePath)
+                .success(function(p) {
+                  if(p.pages.length === 0) {
+                    toaster.pop('error', 'Error', 'Cannot found any images for this file!');
+                  }
+                  else {
+                    // Get document tags
+                    onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
+                      .success(function(documentTag) {
+                        $scope.pdfImagePages = _.map(p.pages, function(el) {
+                          return {
+                            imagePath: el
+                          };
+                        });
+                        $scope.currentPageIndex = 0;
+                        $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
+                        $scope.isNexting = false;
+                        $scope.haveNextPage = $scope.pdfImagePages.length > 1;
+                        $scope.havePrevPage = false;
+                        $scope.parentDocument = null;
+                        $scope.parseTag(documentTag.tags);
+                        $scope.showDocPreview = true;
+                      })
+                      .error(function(err) {
+                        console.log(err);
+                        toaster.pop('error', 'Error', 'Get document tags failed');
+                      });
+                  }
+                })
+                .error(function(err) {
+                  toaster.pop('error', 'Error', 'Get pdf images failed');
+                });
+            }
+            else {
+              // Version
+              documentFactory.getDocumentDetail({
+                projectId: $rootScope.currentProjectInfo.projectId,
+                projectFileId: $scope.selectedDoc.parentProjectFileId
+              })
+                .success(function(parentDocument) {
+                // Get pdf images
+                onSiteFactory.getPdfImagePages(parentDocument.projectFile.filePath)
+                  .success(function(p) {
+                    if(p.pages.length === 0) {
+                      toaster.pop('error', 'Error', 'Cannot found any images for this file!');
+                    }
+                    else {
+                      // Get document tags
+                      onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
+                        .success(function(documentTag) {
+                          $scope.pdfImagePages = _.map(p.pages, function(el) {
+                            return {
+                              imagePath: el
+                            };
+                          });
+                          $scope.currentPageIndex = 0;
+                          $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
+                          $scope.isNexting = false;
+                          $scope.haveNextPage = $scope.pdfImagePages.length > 1;
+                          $scope.havePrevPage = false;
+                          $scope.parentDocument = parentDocument.projectFile;
+                          $scope.parseTag(documentTag.tags);
+                          $scope.showDocPreview = true;
+                        })
+                        .error(function(err) {
+                          console.log(err);
+                          toaster.pop('error', 'Error', 'Get document tags failed');
+                        });
+                    }
+                  })
+                  .error(function(err) {
+                    toaster.pop('error', 'Error', 'Get pdf images failed');
+                  });
+              })
+                .error(function(err) {
+                  toaster.pop('error', 'Error', 'Get document details failed');
+                });
+            }
+          }
+        }
+        else {
+          // Get versions
+          if($scope.selectedDoc.parentProjectFileId !== 0) {
+            documentFactory.getDocumentDetail({
+              projectId: $rootScope.currentProjectInfo.projectId,
+              projectFileId: $scope.selectedDoc.parentProjectFileId
+            }).success(function(v) {
+              // Get document tags
+              onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
+                .success(function(documentTag) {
+                  $scope.pdfImagePages = _.map([$scope.selectedDoc.filePath], function(el) {
+                    return {
+                      imagePath: el
+                    };
+                  });
+                  $scope.currentPageIndex = 0;
+                  $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
+                  $scope.isNexting = false;
+                  $scope.haveNextPage = $scope.pdfImagePages.length > 1;
+                  $scope.havePrevPage = false;
+                  $scope.parentDocument = v.projectFile;
+                  $scope.parseTag(documentTag.tags);
+                  $scope.showDocPreview = true;
+                })
+                .error(function(err) {
+                  console.log(err);
+                  toaster.pop('error', 'Error', 'Get document tags failed');
+                });
+            });
+          }
+          else {
+            // Get document tags
+            onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
+              .success(function(documentTag) {
+                $scope.pdfImagePages = _.map([$scope.selectedDoc.filePath], function(el) {
+                  return {
+                    imagePath: el
+                  };
+                });
+                $scope.currentPageIndex = 0;
+                $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
+                $scope.isNexting = false;
+                $scope.haveNextPage = $scope.pdfImagePages.length > 1;
+                $scope.havePrevPage = false;
+                $scope.parentDocument = null;
+                $scope.parseTag(documentTag.tags);
+                $scope.showDocPreview = true;
+              })
+              .error(function(err) {
+                console.log(err);
+                toaster.pop('error', 'Error', 'Get document tags failed');
+              });
+          }
+        }
       };
 
       $scope.cancelEdit = function() {
@@ -179,12 +305,12 @@ define(function(require) {
                   // Save tags to document
                   onSiteFactory.addTags(listTag)
                     .then(function(resp) {
-                    $state.go("app.onSite");
-                    onSiteFactory.exportPdf(docId, $rootScope.currentProjectInfo.projectId, $scope.pdfImagePages);
-                  }, function(err) {
-                    console.log(err);
-                    $scope._form.$setPristine();
-                  });
+                      $state.go("app.onSite");
+                      onSiteFactory.exportPdf(docId, $rootScope.currentProjectInfo.projectId, $scope.pdfImagePages);
+                    }, function(err) {
+                      console.log(err);
+                      $scope._form.$setPristine();
+                    });
 
                   //scope.addTag(listTag).then(function(resp) {
                   //  scope.$emit('pdfTaggingMarkUp.SaveDone');

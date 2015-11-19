@@ -16,7 +16,7 @@ module.exports = {
   pusher_appId: '152503',
   pusher_key: 'f0a0bf34cd094e438cba',
   pusher_secret: 'a2244d813cebbd30dc2e',
-  convertCommand: 'gm convert',
-  gsCommand: 'gs',
-  concurrencyImageProcesses: 5
+  convertCommand: 'convert',
+  gsCommand: 'gswin64c',
+  concurrencyImageProcesses: 1
 };

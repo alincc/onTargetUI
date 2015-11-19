@@ -110,7 +110,7 @@ define(function(require) {
       };
 
       services.getWeather = function(zip) {
-        return $http.get('https://app.ontargetcloud.com/data/2.5/weather', {
+        return $http.get(appConstant.weatherUrl, {
           params: {
             zip: zip,
             units: 'Imperial',

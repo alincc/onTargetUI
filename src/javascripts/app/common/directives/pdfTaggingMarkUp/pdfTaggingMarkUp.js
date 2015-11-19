@@ -122,7 +122,7 @@ define(function(require) {
             contextMenu = angular.element(elem[0].querySelector('.doc-menu')),
             pdfTaggingMarkUpMap = elem[0].querySelector('#pdfTaggingMarkUpMap'),
             $pdfTaggingMarkUpMap = angular.element(pdfTaggingMarkUpMap),
-            southWest, northEast, bounds, tileSize = 256;
+            southWest, northEast, bounds, tileSize = 512, maxZoom = 4;
 
           L.Icon.Default.imagePath = '/img/leaflet';
 
@@ -219,22 +219,22 @@ define(function(require) {
             //imgH = resp.height;
             //imgW = resp.width;
 
-            imgH = 512 * Math.pow(2, 5);
-            imgW = 512 * Math.pow(2, 5);
+            imgH = tileSize * Math.pow(2, maxZoom);
+            imgW = tileSize * Math.pow(2, maxZoom);
 
             // Custom CRS
             L.CRS.Screen = L.extend({}, L.CRS, {
               projection: L.Projection.LonLat,
               transformation: new L.Transformation(1, 0, 1, 0),
               scale: function(e) {
-                return 512 * Math.pow(2, e);
+                return tileSize * Math.pow(2, e);
               }
             });
 
 
             map = L.map('pdfTaggingMarkUpMap', {
               minZoom: 0,
-              maxZoom: 5,
+              maxZoom: maxZoom,
               center: [0, 0], // - , -
               zoom: 0,
               crs: L.CRS.Screen,
@@ -256,12 +256,12 @@ define(function(require) {
               '/{z}/{x}_{y}.png',
               {
                 minZoom: 0,
-                maxZoom: 5,
+                maxZoom: maxZoom,
                 // This map option disables world wrapping. by default, it is false.
                 continuousWorld: false,
                 // This option disables loading tiles outside of the world bounds.
                 noWrap: true,
-                tileSize: 512,
+                tileSize: tileSize,
                 bounds: bounds
               })
               .addTo(map);
@@ -271,7 +271,7 @@ define(function(require) {
 
             //var fitHeight = map.unproject([0, imgH], 0);
 
-            //map.setView([10, 10], 0);
+            map.setView([0.5, 0.5], 0);
 
             //leaflet.Draw
 
@@ -523,7 +523,7 @@ define(function(require) {
             map.on('zoomend', function(e) {
               scope.updatePageData();
             });
-console.log(scope.model);
+
             if(scope.model.tagList) {
               _.each(scope.model.tagList, function(tag) {
                 var attrs = tag.attributes;
@@ -877,33 +877,6 @@ console.log(scope.model);
             }, []);
           };
 
-          //scope.exportPdf = function(docId, fileName, width, height) {
-          //  var deferred = $q.defer();
-          //  var layers = angular.copy(scope.listLayers);
-          //  _.each(layers, function(l) {
-          //    if(l.layer && l.layer._leaflet_events) {
-          //      delete l.layer._leaflet_events;
-          //    }
-          //    if(l.layer && angular.isDefined(l.layer.editing)) {
-          //      delete l.layer.editing;
-          //    }
-          //  });
-          //  onSiteFactory.exportPdf({
-          //    path: scope.imgUrl,
-          //    geo: layers,
-          //    width: width,
-          //    height: height,
-          //    scale: x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth),
-          //    projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName,
-          //    fileName: fileName,
-          //    docId: docId
-          //  })
-          //    .success(function(dt) {
-          //      deferred.resolve(dt);
-          //    });
-          //  return deferred.promise;
-          //};
-
           scope.updatePageData = function() {
             var listTag = scope.extractListTags(scope.selectedDoc, scope.selectedDoc.fileId);
             var newListTag = _.each(listTag, function(el) {
@@ -923,55 +896,6 @@ console.log(scope.model);
             scope.model.tagList = newListTag;
             scope.model.layers = layers || [];
           };
-
-          //scope.$on('pdfTaggingMarkUp.SaveTheDoc', function(e, args) {
-          //  var img = document.querySelector('.leaflet-image-layer');
-          //  var doc = args.doc;
-          //  var width = img.width;
-          //  var height = img.height;
-          //  if(!doc) {
-          //    return;
-          //  }
-          //
-          //  onSiteFactory.getNextVersionName(scope.originalFilePath)
-          //    .success(function(resp) {
-          //      var newFilePath = resp.newVersionName;
-          //      var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
-          //      var data = {
-          //        "projectId": $rootScope.currentProjectInfo.projectId,
-          //        "name": $filter('fileName')(newFilePath),
-          //        "fileType": doc.fileType,
-          //        "createdBy": $rootScope.currentUserInfo.userId,
-          //        "modifiedBy": $rootScope.currentUserInfo.userId,
-          //        "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
-          //        "description": doc.description,
-          //        "parentProjectFileId": doc.parentProjectFileId === 0 ? doc.fileId : doc.parentProjectFileId,
-          //        "isConversionComplete": false,
-          //        "thumbnailImageName": $filter('fileThumbnail')(newFilePath),
-          //        "filePath": newFilePath
-          //      };
-          //      documentFactory.saveUploadedDocsInfo(data).then(function(resp) {
-          //        if(resp.data && resp.data.documentDetail) {
-          //          var docId = resp.data.documentDetail.fileId;
-          //          var listTag = scope.extractListTags(doc, docId);
-          //          scope.addTag(listTag).then(function(resp) {
-          //            scope.$emit('pdfTaggingMarkUp.SaveDone');
-          //            scope.exportPdf(docId, newFileName, width, height);
-          //          }, function(err) {
-          //            console.log(err);
-          //            scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-          //          });
-          //        }
-          //      }, function(err) {
-          //        console.log(err);
-          //        scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-          //      });
-          //    })
-          //    .error(function(err) {
-          //      console.log(err);
-          //      scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-          //    });
-          //});
 
           scope.getFileInfo()
             .success(render)

@@ -20,8 +20,31 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
+    BIM_SERVER: 'http://216.14.121.204:8080'
+  },
+  nois: {
+    port: 3214,
+    domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',
+    baseUrl: 'http://demo.newoceaninfosys.com:3214',
+    nodeServer: 'http://demo.newoceaninfosys.com:3215',
+    resourceUrl: 'http://demo.newoceaninfosys.com:3215',
+    bimServer: 'http://demo.newoceaninfosys.com:3214/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
+    bimCredential: {
+      username: 'bim@ontargetcloud.com',
+      password: 'admin'
+    },
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
+    // Proxy settings
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
   },
   local: {
@@ -41,6 +64,7 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://localhost:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -62,6 +86,7 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://localhost:8080/ontargetrs/services',
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -83,6 +108,7 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',		// API
     BIM_SERVER: 'http://216.14.121.204:8080'
@@ -104,6 +130,7 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',		// API
     BIM_SERVER: 'http://216.14.121.204:8080'		// API
@@ -123,7 +150,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
   },
   staging: {
     port: 0,
@@ -140,7 +168,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
   },
   sagarmatha01: {
     port: 9000,
@@ -159,6 +188,7 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
     BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
@@ -180,6 +210,7 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
     BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
@@ -188,64 +219,72 @@ module.exports = {
     PROXY_URL: 'http://app.ontargetcloud.com:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root and the location should end with slash '/' if not empty
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
+    concurrencyImageProcesses: 5
+  },
+  serverNois: {
+    PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
+    assetLocation: 'assets/', // empty is root and the location should end with slash '/' if not empty
+    maxFileSize: 25000000, // in bytes
+    convertCommand: 'convert',
+    gsCommand: 'gswin64c',
     concurrencyImageProcesses: 1
   },
   serverlocal: {
     PROXY_URL: 'http://localhost:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 5
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 5
   },
   serverbeta: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 5
   },
   servertesting: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 5
   },
   serverstaging: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 5
   },
   serversagarmatha01: {
     PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 5
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
     assetLocation: 'assets/', // empty is root
     maxFileSize: 25000000, // in bytes
-	convertCommand: 'convert',
+    convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 5
   }
 };

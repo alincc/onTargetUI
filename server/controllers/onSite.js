@@ -162,7 +162,7 @@ function exportPdf2(req, res) {
   var data = req.body.data;
   var projectId = req.body.projectId;
   var docId = req.body.docId;
-
+  console.log('Starting export image with markups, tagging to pdf...');
   documentService.getDocumentById(docId, projectId, baseRequest)
     .then(function(document) {
       docId = document.projectFile.fileId;
@@ -179,12 +179,14 @@ function exportPdf2(req, res) {
         return ('0' + Math.round((1 - opt) * 255).toString(16)).slice(-2);
       };
 
+      console.log('Starting merge markups, tags to images...');
       // loop pages
       _.each(data, function(el, pageIndex) {
         promises.push(new Promise(function(resolve, reject) {
           var imageUrl = el.imagePath;
           var listGeo = el.layers;
           var imgWidth, imgHeight;
+          console.log('Merging markups, tags to image "' + imageUrl + '"...');
           var g = gm(path.join(rootPath, imageUrl))
             .size(function(err, size) {
               if(!err) {
@@ -250,32 +252,39 @@ function exportPdf2(req, res) {
                 }
                 var tmpName = path.join(outputFolder, pageIndex + '.jpg');
 
-                g.write(tmpName, function() {
-                  var newG = gm()
-                    .in('-page', '+0+0')
-                    .in(tmpName);
-                  if(el.layers) {
-                    for(var i = 0; i < listGeo.length; i++) {
-                      var type = listGeo[i].geometry.type;
-                      var coords = listGeo[i].geometry.coordinates;
-                      if(listGeo[i].type === 'marker') {
-                        newG = newG.in('-page', '+' + coords[0] + '+' + coords[1])
-                          .in(markerUrl);
+                g.write(tmpName, function(err) {
+                  if(err) {
+                    console.log('Merging markups to image "' + imageUrl + '"...Failed!', err.message);
+                    reject(err);
+                  } else {
+                    var newG = gm()
+                      .in('-page', '+0+0')
+                      .in(tmpName);
+                    if(el.layers) {
+                      for(var i = 0; i < listGeo.length; i++) {
+                        var type = listGeo[i].geometry.type;
+                        var coords = listGeo[i].geometry.coordinates;
+                        if(listGeo[i].type === 'marker') {
+                          newG = newG.in('-page', '+' + coords[0] + '+' + coords[1])
+                            .in(markerUrl);
+                        }
                       }
                     }
+                    newG.mosaic()  // Merges the images as a matrix
+                      .write(tmpName, function(err) {
+                        if(err) {
+                          console.log('Merging tags to image "' + imageUrl + '"...Failed!');
+                          reject(err);
+                        }
+                        else {
+                          console.log('Merging markups, tags to image "' + imageUrl + '"...Done!');
+                          resolve();
+                        }
+                        //gm(tmpName).write(destinationPath, function() {
+                        //  convertPdfToImage();
+                        //});
+                      });
                   }
-                  newG.mosaic()  // Merges the images as a matrix
-                    .write(tmpName, function(err) {
-                      if(err) {
-                        error = err;
-                      }
-                      else {
-                        resolve();
-                      }
-                      //gm(tmpName).write(destinationPath, function() {
-                      //  convertPdfToImage();
-                      //});
-                    });
                 });
               }
             });
@@ -286,12 +295,17 @@ function exportPdf2(req, res) {
       Promise.all(promises)
         .then(function(data) {
           if(error) {
+            console.log('Starting export image with markups, tags to pdf...Failed!');
             console.log(error.message);
-          } else {
+          }
+          else {
+            console.log('Starting merge markups, tags to images...Done!');
             if(/\.pdf$/.test(document.projectFile.filePath)) {
               // convert pdf pages to images
               console.log('Merging images to pdf...');
+              console.time("MergingImagesToPdf");
               exec(config.convertCommand + ' "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 -compress jpeg "' + path.join(rootPath, document.projectFile.filePath) + '"', function(error) {
+                console.timeEnd("MergingImagesToPdf");
                 if(error) {
                   console.log('Error while converting pdf to image', error.message);
                 }
@@ -310,7 +324,8 @@ function exportPdf2(req, res) {
                     imageService.cropImageSquare(path.join(outputFolder, firstPage), thumbnail, 200, function(err) {
                       if(err) {
                         console.log('Failed to create image thumbnail!', error.message);
-                      } else {
+                      }
+                      else {
                         console.log('Updating document status');
                         request({
                           method: 'POST',
@@ -320,6 +335,7 @@ function exportPdf2(req, res) {
                         }, function(err) {
                           if(!err) {
                             console.log('Update document status successful!');
+                            console.log('Starting export image with markups, tags to pdf...Done!');
                           }
                         });
                       }
@@ -475,12 +491,12 @@ function getPdfImages(req, res) {
 
   if(!fs.existsSync(folder)) {
     sendResult([]);
-	return;
+    return;
   }
 
   if(!fs.existsSync(pageFolder)) {
     sendResult([]);
-	return;
+    return;
   }
 
   var files = _.filter(fs.readdirSync(pageFolder), function(fileName) {

@@ -105,7 +105,7 @@ function convertPdfToImage(req, res) {
       _.each(folder, function(el) {
         var fp = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages', el);
         if(fs.lstatSync(fp).isFile()) {
-          for(var size = 0; size < 6; size++) {
+          for(var size = 0; size < 5; size++) {
             promises.push(imageService.tiles(fp, 512 * Math.pow(2, size), size));
           }
         }
@@ -125,11 +125,13 @@ function convertPdfToImage(req, res) {
           //  updateConversionComplete(docId, baseRequest);
           //});
         });
+      res.send({
+        success: true
+      });
     }, function(error) {
       console.log('Parsing pdf to images...Failed!', error.message);
-    });
-    res.send({
-      success: true
+      res.status(400);
+      res.send(error);
     });
   }
   else {

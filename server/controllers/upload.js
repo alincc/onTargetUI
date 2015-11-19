@@ -53,9 +53,9 @@ function uploadFile(req, res) {
     .replace(/\"/g, '_');
 
   file.name = fileName;
-  console.log("Uploading the file"+ fileName +" with size: "+ file.size);
-  console.log("Max File size allowed:"+ maxFileSize);
-  console.log("is valid file??"+isValid(file.size, maxFileSize));
+  console.log("Uploading the file" + fileName + " with size: " + file.size);
+  console.log("Max File size allowed:" + maxFileSize);
+  console.log("is valid file??" + isValid(file.size, maxFileSize));
   if(isValid(file.size, maxFileSize)) {
     function upload(file) {
       moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, projectAssetFolderName, context, function() {

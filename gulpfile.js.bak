@@ -31,7 +31,7 @@ gulp.task('less', ['lint'], function() {
     .pipe(gulp.dest('./src/css/'));
 });
 
-gulp.task('lessOnly', function() {
+gulp.task('lessOnly', function(done) {
   return gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
@@ -70,26 +70,26 @@ gulp.task('images', ['fonts'], function() {
 });
 
 // Copy js to build
-gulp.task('script:requirejs', function() {
+gulp.task('script:requirejs', function(){
   return gulp.src([
     './src/bower_components/requirejs/*',
     './src/bower_components/requirejs/**/*.*'])
     .pipe(gulp.dest('./build/bower_components/requirejs'));
 });
 
-gulp.task('resources', function() {
+gulp.task('resources', function(){
   return gulp.src([
     './src/javascripts/app/common/resources/**/*.json'])
     .pipe(gulp.dest('./build/javascripts/app/common/resources'));
 });
 
-gulp.task('templates', function() {
+gulp.task('templates', function(){
   return gulp.src([
     './src/javascripts/app/common/templates/**/*'])
     .pipe(gulp.dest('./build/javascripts/app/common/templates'));
 });
 
-gulp.task('bimProjectData', function() {
+gulp.task('bimProjectData', function(){
   return gulp.src([
     './src/javascripts/app/modules/bimProject/**/*.html',
     './src/javascripts/app/modules/bimProject/**/*.version'])
@@ -210,6 +210,7 @@ gulp.task('build', ['requireJsOptimizer'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.default.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.default.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.default.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.default.weatherUrl + "'"))
     .pipe(gulp.dest('build/javascripts'));
 
   del([
@@ -291,43 +292,6 @@ gulp.task('build:integration', ['build'], function() {
     .pipe(rename('./package.json'))
     .pipe(gulp.dest('./build-integration'));
 });
-
-// ---- Integration -----
-gulp.task('build:beta', ['build'], function() {
-  // Copy all file in build folder
-  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-    .pipe(gulp.dest('./build-beta/app'));
-
-  // minify
-  gulp.src(['./src/javascripts/main.min.js'])
-    .pipe(replace(/domain: '.*'/, "domain: '" + config.beta.domain + "'")) // domain
-    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.beta.baseUrl + "'")) // base url
-    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.beta.nodeServer + "'")) // node server domain
-    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.beta.resourceUrl + "'"))
-    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.beta.baseUrl + "/bim'"))
-    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.beta.bimServerAddress + "'"))
-    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.beta.bimCredential.username + "'"))
-    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.beta.bimCredential.password + "'"))
-    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.beta.pusher.apiKey + "'"))
-    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.beta.weatherUrl + "'"))
-    .pipe(uglify())
-    .pipe(gulp.dest('./build-beta/app/javascripts'));
-
-  // Copy app.js and modify value
-  gulp.src('./app.js')
-    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.beta.port))
-    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.beta.API_SERVER + "'"))
-    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.beta.BIM_SERVER + "'"))
-    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.beta.pusher.appId + '\''))
-    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.beta.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.beta.pusher.secret + '\''))
-    .pipe(gulp.dest('./build-beta'));
-
-  gulp.src('./package.app.json')
-    .pipe(rename('./package.json'))
-    .pipe(gulp.dest('./build-beta'));
-});
-
 
 // ---- Testing -----
 gulp.task('build:testing', ['build'], function() {
@@ -437,114 +401,6 @@ gulp.task('build:production', ['build'], function() {
     .pipe(gulp.dest('./build-production'));
 });
 
-// ---- Production - sagarmatha01 -----
-gulp.task('build:sagarmatha01', ['build'], function() {
-  // Copy all file in build folder
-  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-    .pipe(gulp.dest('./build-sagarmatha01/app'));
-
-  // minify
-  gulp.src(['./src/javascripts/main.min.js'])
-    .pipe(replace(/domain: '.*'/, "domain: '" + config.sagarmatha01.domain + "'")) // domain
-    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.sagarmatha01.baseUrl + "'")) // base url
-    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha01.nodeServer + "'")) // node server domain
-    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha01.resourceUrl + "'"))
-    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha01.baseUrl + "/bim'"))
-    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.sagarmatha01.bimServerAddress + "'"))
-    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.sagarmatha01.bimCredential.username + "'"))
-    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.sagarmatha01.bimCredential.password + "'"))
-    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha01.pusher.apiKey + "'"))
-    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.sagarmatha01.weatherUrl + "'"))
-    .pipe(uglify())
-    .pipe(gulp.dest('./build-sagarmatha01/app/javascripts'));
-
-  // Copy app.js and modify value
-  gulp.src('./app.js')
-    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha01.port))
-    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha01.API_SERVER + "'"))
-    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha01.BIM_SERVER + "'"))
-    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.sagarmatha01.pusher.appId + '\''))
-    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.sagarmatha01.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.sagarmatha01.pusher.secret + '\''))
-    .pipe(gulp.dest('./build-sagarmatha01'));
-
-  gulp.src('./package.app.json')
-    .pipe(rename('./package.json'))
-    .pipe(gulp.dest('./build-sagarmatha01'));
-});
-
-// ---- Production sagarmatha 02 -----
-gulp.task('build:sagarmatha02', ['build'], function() {
-  // Copy all file in build folder
-  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-    .pipe(gulp.dest('./build-sagarmatha02/app'));
-
-  // minify
-  gulp.src(['./src/javascripts/main.min.js'])
-    .pipe(replace(/domain: '.*'/, "domain: '" + config.sagarmatha02.domain + "'")) // domain
-    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.sagarmatha02.baseUrl + "'")) // base url
-    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.sagarmatha02.nodeServer + "'")) // node server domain
-    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.sagarmatha02.resourceUrl + "'"))
-    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.sagarmatha02.baseUrl + "/bim'"))
-    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.sagarmatha02.bimServerAddress + "'"))
-    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.sagarmatha02.bimCredential.username + "'"))
-    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.sagarmatha02.bimCredential.password + "'"))
-    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha02.pusher.apiKey + "'"))
-    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.sagarmatha02.weatherUrl + "'"))
-    .pipe(uglify())
-    .pipe(gulp.dest('./build-sagarmatha02/app/javascripts'));
-
-  // Copy app.js and modify value
-  gulp.src('./app.js')
-    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.sagarmatha02.port))
-    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.sagarmatha02.API_SERVER + "'"))
-    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.sagarmatha02.BIM_SERVER + "'"))
-    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.sagarmatha02.pusher.appId + '\''))
-    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.sagarmatha02.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.sagarmatha02.pusher.secret + '\''))
-    .pipe(gulp.dest('./build-sagarmatha02'));
-
-  gulp.src('./package.app.json')
-    .pipe(rename('./package.json'))
-    .pipe(gulp.dest('./build-sagarmatha02'));
-});
-
-// ---- NOIS -----
-gulp.task('build:nois', ['build'], function() {
-  // Copy all file in build folder
-  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
-    .pipe(gulp.dest('./build-nois/app'));
-
-  // modify and minify
-  gulp.src(['./src/javascripts/main.min.js'])
-    .pipe(replace(/domain: '.*'/, "domain: '" + config.nois.domain + "'")) // domain
-    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.nois.baseUrl + "'")) // base url
-    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.nois.nodeServer + "'")) // node server domain
-    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.nois.resourceUrl + "'"))
-    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.nois.baseUrl + "/bim'"))
-    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.nois.bimServerAddress + "'"))
-    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.nois.bimCredential.username + "'"))
-    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.nois.bimCredential.password + "'"))
-    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.nois.pusher.apiKey + "'"))
-    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.nois.weatherUrl + "'"))
-    .pipe(uglify())
-    .pipe(gulp.dest('./build-local/app/javascripts'));
-
-  // Copy app.js and modify value
-  gulp.src('./app.js')
-    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.nois.port))
-    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.nois.API_SERVER + "'"))
-    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.nois.BIM_SERVER + "'"))
-    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.nois.pusher.appId + '\''))
-    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.nois.pusher.apiKey + '\''))
-    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.nois.pusher.secret + '\''))
-    .pipe(gulp.dest('./build-local'));
-
-  gulp.src('./package.app.json')
-    .pipe(rename('./package.json'))
-    .pipe(gulp.dest('./build-local'));
-});
-
 // Server build
 gulp.task('build:server', function() {
   gulp.src('package.json', {"base": "."})
@@ -554,160 +410,12 @@ gulp.task('build:server', function() {
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.server.PROXY_URL + '\''))
     .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
+    .pipe(replace(/imagePathRoot: '(.*)'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
     .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.server.maxFileSize))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.server.concurrencyImageProcesses))
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.server.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.server.gsCommand + '\''))
-    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.server.concurrencyImageProcesses))
     .pipe(gulp.dest('build-server'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-    .pipe(gulp.dest('build-server'));
-});
-
-
-// Server build local
-gulp.task('build:serverlocal', function() {
-  gulp.src('package.json', {"base": "."})
-    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-    .pipe(gulp.dest('build-server'));
-
-  gulp.src('server/config.js', {"base": "."})
-    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
-    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverlocal.convertCommand + '\''))
-    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverlocal.gsCommand + '\''))
-    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverlocal.concurrencyImageProcesses))
-    .pipe(gulp.dest('build-server'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-    .pipe(gulp.dest('build-server'));
-});
-
-// Server build local
-gulp.task('build:serverintegration', function() {
-  gulp.src('package.json', {"base": "."})
-    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-    .pipe(gulp.dest('build-server'));
-
-  gulp.src('server/config.js', {"base": "."})
-    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
-    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverintegration.convertCommand + '\''))
-    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverintegration.gsCommand + '\''))
-    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverintegration.concurrencyImageProcesses))
-    .pipe(gulp.dest('build-server'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-    .pipe(gulp.dest('build-server'));
-});
-
-
-// Server build local
-gulp.task('build:serverbeta', function() {
-  gulp.src('package.json', {"base": "."})
-    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-    .pipe(gulp.dest('build-server-beta'));
-
-  gulp.src('server/config.js', {"base": "."})
-    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverbeta.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
-    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverbeta.convertCommand + '\''))
-    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverbeta.gsCommand + '\''))
-    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverbeta.concurrencyImageProcesses))
-    .pipe(gulp.dest('build-server-beta'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-    .pipe(gulp.dest('build-server-beta'));
-});
-
-
-// Server build production - sagarmatha01
-gulp.task('build:serversagarmatha01', function() {
-  gulp.src('package.json', {"base": "."})
-    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-    .pipe(gulp.dest('build-server-sagarmatha01'));
-
-  gulp.src('server/config.js', {"base": "."})
-    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
-    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
-    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
-    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
-    .pipe(gulp.dest('build-server-sagarmatha01'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-    .pipe(gulp.dest('build-server-sagarmatha01'));
-});
-
-// Server build production - sagarmatha02
-gulp.task('build:serversagarmatha01', function() {
-  gulp.src('package.json', {"base": "."})
-    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-    .pipe(gulp.dest('build-server-sagarmatha01'));
-
-  gulp.src('server/config.js', {"base": "."})
-    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
-    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
-    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
-    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
-    .pipe(gulp.dest('build-server-sagarmatha01'));
-
-  return gulp.src([
-    'server/**/*',
-    '!server/config.js',
-    'server.js'
-  ], {"base": "."})
-    .pipe(gulp.dest('build-server-sagarmatha01'));
-});
-
-
-// NOIS Server build
-gulp.task('build:serverNois', function() {
-  gulp.src('package.json', {"base": "."})
-    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
-    .pipe(gulp.dest('build-server-nois'));
-
-  gulp.src('server/config.js', {"base": "."})
-    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverNois.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverNois.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: '(.*)'/g, 'imagePathRoot: \'' + config.serverNois.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverNois.maxFileSize))
-    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverNois.concurrencyImageProcesses))
-    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverNois.convertCommand + '\''))
-    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverNois.gsCommand + '\''))
-    .pipe(gulp.dest('build-server-nois'));
 
   return gulp.src([
     'server/**/*',
