@@ -121,6 +121,7 @@ exports.tiles = function(input, size, zoom, crop) {
     (function(rs, rj) {
       queue.add(function(done) {
         console.time("SplicingImagesIntoTilesLevel" + zoom);
+        console.log(config.convertCommand + ' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"');
         exec(config.convertCommand + ' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"', function(err) {
           if(err) {
             console.log('Splice level ' + zoom + ' failed!', err.message);
