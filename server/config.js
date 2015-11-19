@@ -9,7 +9,7 @@ module.exports = {
   assetsPath: assetsPath,
   uploadedFilesPath: assetsPath + '/',
   imagePathRoot: 'assets/',
-  maxFileSize: 5000000,
+  maxFileSize: 25000000,
   externalStorage: {
     googleDrive: {}
   },

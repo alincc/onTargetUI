@@ -125,13 +125,14 @@ function convertPdfToImage(req, res) {
           //  updateConversionComplete(docId, baseRequest);
           //});
         });
-      res.send({
-        success: true
-      });
     }, function(error) {
       console.log('Parsing pdf to images...Failed!', error.message);
       res.status(400);
       res.send(error);
+    });
+
+    res.send({
+      success: true
     });
   }
   else {

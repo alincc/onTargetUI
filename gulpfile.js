@@ -528,7 +528,7 @@ gulp.task('build:nois', ['build'], function() {
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.nois.pusher.apiKey + "'"))
     .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.nois.weatherUrl + "'"))
     .pipe(uglify())
-    .pipe(gulp.dest('./build-local/app/javascripts'));
+    .pipe(gulp.dest('./build-nois/app/javascripts'));
 
   // Copy app.js and modify value
   gulp.src('./app.js')
@@ -538,11 +538,11 @@ gulp.task('build:nois', ['build'], function() {
     .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.nois.pusher.appId + '\''))
     .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.nois.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.nois.pusher.secret + '\''))
-    .pipe(gulp.dest('./build-local'));
+    .pipe(gulp.dest('./build-nois'));
 
   gulp.src('./package.app.json')
     .pipe(rename('./package.json'))
-    .pipe(gulp.dest('./build-local'));
+    .pipe(gulp.dest('./build-nois'));
 });
 
 // Server build
