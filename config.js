@@ -188,7 +188,7 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
-    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
+    weatherUrl: 'https://app.ontargetcloud.com/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
     BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
@@ -210,7 +210,7 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
-    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
+    weatherUrl: 'https://app.ontargetcloud.com/data/2.5/weather',
     // Proxy settings
     API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
     BIM_SERVER: 'https://app.ontargetcloud.com/bimserver'
