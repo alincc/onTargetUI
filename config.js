@@ -221,7 +221,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    }
   },
   serverNois: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
@@ -229,7 +234,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gswin64c',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    }
   },
   serverlocal: {
     PROXY_URL: 'http://localhost:8080/ontargetrs/services',
@@ -237,7 +247,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    }
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
@@ -245,7 +260,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    }
   },
   serverbeta: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
@@ -253,7 +273,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    }
   },
   servertesting: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -261,7 +286,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    }
   },
   serverstaging: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -269,7 +299,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '138273',
+      apiKey: 'c2f5de73a4caa3763726',
+      secret: 'e2455e810e36cbed510e'
+    }
   },
   serversagarmatha01: {
     PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
@@ -277,7 +312,12 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '152503',
+      apiKey: 'f0a0bf34cd094e438cba',
+      secret: 'a2244d813cebbd30dc2e'
+    }
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
@@ -285,6 +325,11 @@ module.exports = {
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
     gsCommand: 'gs',
-    concurrencyImageProcesses: 1
+    concurrencyImageProcesses: 1,
+    pusher: {
+      appId: '152503',
+      apiKey: 'f0a0bf34cd094e438cba',
+      secret: 'a2244d813cebbd30dc2e'
+    }
   }
 };

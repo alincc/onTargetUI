@@ -517,9 +517,43 @@ function getPdfImages(req, res) {
   }
 }
 
+function getZoomLevel(req, res) {
+  var relativePath = req.body.path;
+  var filePath = path.join(rootPath, relativePath);
+  var fileFolder = path.join(rootPath, relativePath.substring(0, relativePath.lastIndexOf('/')));
+  var fileExt = path.extname(filePath);
+  var fileName = path.basename(filePath);
+  var fileNameWithoutExt = path.basename(filePath, fileExt);
+  var folder = path.join(fileFolder, utilService.getFolderNameFromFile(fileName));
+  var pageFolder = path.join(folder, 'pages');
+  var results = [];
+  var pageNumber = 1;
+  var zoomLevel = 0;
+  var pages = fs.readdirSync(pageFolder);
+  _.each(pages, function(el) {
+    var fp = path.join(pageFolder, el);
+    if(fs.lstatSync(fp).isDirectory()) {
+      var zoomFolders = fs.readdirSync(fp);
+      _.each(zoomFolders, function(el, idx) {
+        if(fs.existsSync(path.join(fp, el, 'loaded.txt'))) {
+          results.push({
+            page: pageNumber++,
+            zoomLevel: idx + 1
+          });
+        }
+        else {
+          return false;
+        }
+      });
+    }
+  });
+  res.send(results);
+}
+
 module.exports = {
   //exportPdf: exportPdf,
   exportPdf2: exportPdf2,
   getNextVersionName: getNextVersionName,
-  getPdfImages: getPdfImages
+  getPdfImages: getPdfImages,
+  getZoomLevel: getZoomLevel
 };

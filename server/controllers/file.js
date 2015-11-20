@@ -8,6 +8,7 @@ var exec = require('child_process').exec;
 var pdfService = require('./../services/pdf');
 var imageService = require('./../services/image');
 var utilService = require('./../services/util');
+var pushService = require('./../services/push');
 var config = require('./../config');
 var Promise = require('promise');
 var _ = require('lodash');
@@ -105,8 +106,13 @@ function convertPdfToImage(req, res) {
       _.each(folder, function(el) {
         var fp = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages', el);
         if(fs.lstatSync(fp).isFile()) {
-          for(var size = 0; size < 5; size++) {
-            promises.push(imageService.tiles(fp, 512 * Math.pow(2, size), size));
+          for(var size = 1; size <= 5; size++) {
+            promises.push(imageService.tiles(fp, 256 * Math.pow(2, size), size, 256, function(data) {
+              pushService.Pusher().trigger('onTarget', 'document.preview.' + docId, {
+                "name": "updateMaxNativeZoom",
+                "value": data.zoom
+              });
+            }));
           }
         }
       });

@@ -58,7 +58,8 @@ define(function(require) {
         scope: {
           selectedDoc: '=',
           model: '=',
-          pageNumber: '@'
+          pageNumber: '@',
+          maxNativeZoom: '='
         },
         controller: [
           '$scope',
@@ -87,13 +88,13 @@ define(function(require) {
             };
 
             $scope.markers = [];
+            $scope.maxNativeZoom = angular.isDefined($scope.maxNativeZoom) ? $scope.maxNativeZoom : null;
 
             $scope.docInfo = {
               docId: $state.params.docId
             };
 
             $scope.getFileInfo = function() {
-              console.log($scope.selectedDoc.originalFilePath);
               if($scope.selectedDoc.originalFilePath) {
                 return fileFactory.info($scope.selectedDoc.originalFilePath);
               } else {
@@ -118,11 +119,11 @@ define(function(require) {
             };
           }],
         link: function(scope, elem) {
-          var imgH, imgW, map, markerCount = 1,
+          var imgH, imgW, map, tile_layer, markerCount = 1,
             contextMenu = angular.element(elem[0].querySelector('.doc-menu')),
             pdfTaggingMarkUpMap = elem[0].querySelector('#pdfTaggingMarkUpMap'),
             $pdfTaggingMarkUpMap = angular.element(pdfTaggingMarkUpMap),
-            southWest, northEast, bounds, tileSize = 512, maxZoom = 4;
+            southWest, northEast, bounds, tileSize = 256, maxZoom = 5, minZoom = 1;
 
           L.Icon.Default.imagePath = '/img/leaflet';
 
@@ -233,10 +234,10 @@ define(function(require) {
 
 
             map = L.map('pdfTaggingMarkUpMap', {
-              minZoom: 0,
+              minZoom: minZoom,
               maxZoom: maxZoom,
               center: [0, 0], // - , -
-              zoom: 0,
+              zoom: 1,
               crs: L.CRS.Screen,
               fullscreenControl: true,
               fullscreenControlOptions: { // optional
@@ -247,31 +248,37 @@ define(function(require) {
 
             /*southWest = map.unproject([0, imgH], 2);
              northEast = map.unproject([imgW, 0], 2);*/
-            southWest = map.unproject([0, imgH], 0);
-            northEast = map.unproject([imgW, 0], 0);
+            southWest = map.unproject([0, imgH], minZoom);
+            northEast = map.unproject([imgW, 0], minZoom);
             bounds = new L.LatLngBounds(southWest, northEast);
-            L.tileLayer(constant.resourceUrl + '/' +
+
+            tile_layer = L.tileLayer(constant.resourceUrl + '/' +
               scope.model.imagePath.substring(0, scope.model.imagePath.lastIndexOf('/')) + '/' +
               scope.model.imagePath.substring(scope.model.imagePath.lastIndexOf('/') + 1).replace(/\./g, '_') + '_tiles' +
               '/{z}/{x}_{y}.png',
               {
-                minZoom: 0,
+                minZoom: minZoom,
                 maxZoom: maxZoom,
                 // This map option disables world wrapping. by default, it is false.
                 continuousWorld: false,
                 // This option disables loading tiles outside of the world bounds.
                 noWrap: true,
                 tileSize: tileSize,
-                bounds: bounds
+                bounds: bounds,
+                maxNativeZoom: scope.maxNativeZoom
               })
               .addTo(map);
             //L.imageOverlay($filter('filePath')(resp.url), bounds).addTo(map);
             //map.setMaxBounds(bounds);
             //map.fitBounds(bounds);
 
+            tile_layer.on("tileerror", function(e) {
+              console.log("tileerror", e);
+            });
+
             //var fitHeight = map.unproject([0, imgH], 0);
 
-            map.setView([0.5, 0.5], 0);
+            map.setView([0.5, 0.5], minZoom);
 
             //leaflet.Draw
 
@@ -896,6 +903,13 @@ define(function(require) {
             scope.model.tagList = newListTag;
             scope.model.layers = layers || [];
           };
+
+          scope.$on('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', function(e, v) {
+            if(tile_layer.options.maxNativeZoom < v) {
+              tile_layer.options.maxNativeZoom = v;
+              tile_layer.redraw();
+            }
+          });
 
           scope.getFileInfo()
             .success(render)

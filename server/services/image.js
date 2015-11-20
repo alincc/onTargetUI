@@ -98,7 +98,7 @@ exports.cropImageSquare = function(input, output, size, cb) {
   });
 };
 
-exports.tiles = function(input, size, zoom, crop) {
+exports.tiles = function(input, size, zoom, crop, cb) {
   return new Promise(function(resolve, reject) {
     crop = crop || 512;
     var fileFolder = path.dirname(input);
@@ -115,20 +115,36 @@ exports.tiles = function(input, size, zoom, crop) {
       fs.mkdirSync(destinationFolder);
     }
 
-    destinationFolder = path.join(destinationFolder, '%[filename:tile].png');
+    var destinationFile = path.join(destinationFolder, '%[filename:tile].png');
 
     (function(rs, rj) {
       queue.add(function(done) {
         console.log('Splicing image zoom level ' + zoom + '...');
-        console.log('Execution command: ' + config.convertCommand + ' -depth 8 "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin -bench 10 "' + destinationFolder + '"');
+        console.log('Execution command: ' + config.convertCommand + ' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFile + '"');
         console.time("SplicingImagesIntoTilesLevel" + zoom);
-        exec(config.convertCommand + ' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFolder + '"', function(err) {
+        exec(config.convertCommand + ' "' + input + '" -resize ' + size + 'x' + size + ' -background transparent -extent ' + size + 'x' + size + ' -crop ' + crop + 'x' + crop + ' -set filename:tile "%[fx:page.x/' + crop + ']_%[fx:page.y/' + crop + ']" +repage +adjoin "' + destinationFile + '"', function(err) {
           if(err) {
             console.log('Splice level ' + zoom + ' failed!', err.message);
             rj(err);
           } else {
             console.log('Splice level ' + zoom + ' successful!');
-            rs();
+            // create loaded.txt file to tell this level was completely loaded
+            fs.writeFile(path.join(destinationFolder, 'loaded.txt'), 'loaded', function(err) {
+              if(err) {
+                rj(err);
+              }
+              else {
+                if(cb) {
+                  cb({
+                    input: input,
+                    size: size,
+                    crop: crop,
+                    zoom: zoom
+                  });
+                }
+                rs();
+              }
+            });
           }
           console.timeEnd("SplicingImagesIntoTilesLevel" + zoom);
           done();

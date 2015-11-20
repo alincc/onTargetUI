@@ -30,6 +30,9 @@ require('./server/routes')(app);
 // Initialize queues
 require('./server/services/queue').init();
 
+// Initialize pusher
+require('./server/services/push').init();
+
 //app.get('/', function(req, res){
 //  res.sendFile("index.html");
 //});

@@ -98,6 +98,12 @@ define(function(require) {
       });
     };
 
+    services.getDocumentZoomLevel = function(path){
+      return $http.post(constant.nodeServer + '/node/onsite/getZoomLevel', {
+        path: path
+      });
+    };
+
     return services;
   }]);
   return module;

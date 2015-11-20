@@ -559,6 +559,9 @@ gulp.task('build:server', function() {
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.server.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.server.gsCommand + '\''))
     .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.server.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.server.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.server.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.server.pusher.secret + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -584,6 +587,9 @@ gulp.task('build:serverlocal', function() {
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverlocal.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverlocal.gsCommand + '\''))
     .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverlocal.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverlocal.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverlocal.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverlocal.pusher.secret + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -608,6 +614,9 @@ gulp.task('build:serverintegration', function() {
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverintegration.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverintegration.gsCommand + '\''))
     .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverintegration.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverintegration.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverintegration.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverintegration.pusher.secret + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -633,6 +642,9 @@ gulp.task('build:serverbeta', function() {
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverbeta.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverbeta.gsCommand + '\''))
     .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverbeta.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverbeta.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverbeta.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverbeta.pusher.secret + '\''))
     .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
@@ -658,6 +670,9 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
     .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -682,6 +697,9 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
     .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -707,6 +725,9 @@ gulp.task('build:serverNois', function() {
     .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverNois.concurrencyImageProcesses))
     .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverNois.convertCommand + '\''))
     .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverNois.gsCommand + '\''))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverNois.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverNois.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverNois.pusher.secret + '\''))
     .pipe(gulp.dest('build-server-nois'));
 
   return gulp.src([
@@ -714,7 +735,7 @@ gulp.task('build:serverNois', function() {
     '!server/config.js',
     'server.js'
   ], {"base": "."})
-    .pipe(gulp.dest('build-server'));
+    .pipe(gulp.dest('build-server-nois'));
 });
 
 ////////////////////////////////////

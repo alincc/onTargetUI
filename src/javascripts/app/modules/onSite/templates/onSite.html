@@ -57,7 +57,7 @@
                             <article>
                                 <div class="item" ng-click="chooseCategory(category)">
                                     <img src="./img/icons/folder-graphite.jpg">
-                                    <p>{{category.name}} <span ng-show="category.count > 0"> ({{category.count}})</span>
+                                    <p>{{::category.name}} <span ng-show="category.count > 0"> ({{::category.count}})</span>
                                     </p>
                                 </div>
                             </article>
@@ -89,14 +89,14 @@
                                     <td class="file-icon">
                                         <div class="thumbnail-icon">
                                             <a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                                    on-image-error="{{doc.name}}"
-                                                    ng-src="{{doc.thumbnailImageName | filePath}}"/></a>
+                                                    on-image-error="{{::doc.name}}"
+                                                    ng-src="{{::doc.thumbnailImageName | filePath}}"/></a>
                                         </div>
                                     </td>
                                     <td><a href="javascript:void(0)" ng-click="preview(doc)"
-                                           ng-bind="doc.name | fileName"></a></td>
-                                    <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                                    <td ng-bind="doc.createdDate | date:app.datetimeFormat"></td>
+                                           ng-bind="::doc.name | fileName"></a></td>
+                                    <td ng-bind="::doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
+                                    <td ng-bind="::doc.createdDate | date:app.datetimeFormat"></td>
                                     <td></td>
                                     <td>
                                         <div>
@@ -119,16 +119,16 @@
                                     <td class="file-icon">
                                         <div class="thumbnail-icon">
                                             <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])"><img
-                                                    on-image-error="{{doc.name}}"
-                                                    ng-src="{{doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/></a>
+                                                    on-image-error="{{::doc.name}}"
+                                                    ng-src="{{::doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/></a>
                                         </div>
                                     </td>
                                     <td>
                                         <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])"
-                                           ng-bind="doc.versionProjectFiles[0].name | fileName"></a></td>
-                                    <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                                    <td ng-bind="doc.createdDate | date:app.datetimeFormat"></td>
-                                    <td ng-bind="doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></td>
+                                           ng-bind="::doc.versionProjectFiles[0].name | fileName"></a></td>
+                                    <td ng-bind="::doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
+                                    <td ng-bind="::doc.createdDate | date:app.datetimeFormat"></td>
+                                    <td ng-bind="::doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></td>
                                     <td>
                                         <div>
                                             <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
@@ -166,8 +166,8 @@
                                         <div class="file-thumbnail">
                                             <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])">
                                                 <img
-                                                    on-image-error="{{doc.name}}"
-                                                    ng-src="{{doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/>
+                                                    on-image-error="{{::doc.name}}"
+                                                    ng-src="{{::doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/>
                                             </a>
                                         </div>
                                         <div style="text-align:left">
@@ -191,20 +191,20 @@
 
                                             <h5 class="doc-name">
                                                 Document name:
-                                                <a ng-click="preview(doc.versionProjectFiles[0])" ng-bind="doc.versionProjectFiles[0].name | fileName"></a>
+                                                <a ng-click="preview(doc.versionProjectFiles[0])" ng-bind="::doc.versionProjectFiles[0].name | fileName"></a>
                                             </h5>
                                             <h5>
-                                                Uploaded on: <span ng-bind="doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></span>
+                                                Uploaded on: <span ng-bind="::doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></span>
                                             </h5>
                                             <h5>
-                                                Uploaded by: <span ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></span>
+                                                Uploaded by: <span ng-bind="::doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></span>
                                             </h5>
                                         </div>
                                     </div>
                                     <div ng-if="doc.versionProjectFiles.length <= 0">
                                         <div class="file-thumbnail">
                                             <a href="javascript:void(0)" ng-click="preview(doc)">
-                                                <img ng-src="{{doc.thumbnailImageName | filePath}}" on-image-error="{{doc.name}}"/>
+                                                <img ng-src="{{::doc.thumbnailImageName | filePath}}" on-image-error="{{::doc.name}}"/>
                                             </a>
                                         </div>
                                         <div style="text-align:left">
@@ -228,13 +228,13 @@
 
                                             <h5 class="doc-name">
                                                 Document name:
-                                                <a ng-click="preview(doc)">{{doc.name | fileName}}</a>
+                                                <a ng-click="preview(doc)">{{::doc.name | fileName}}</a>
                                             </h5>
                                             <h5>
-                                                Uploaded on: {{doc.createdDate | date:app.datetimeFormat}}
+                                                Uploaded on: {{::doc.createdDate | date:app.datetimeFormat}}
                                             </h5>
                                             <h5>
-                                                Uploaded by: {{doc.createdByContact.firstName + ' ' +
+                                                Uploaded by: {{::doc.createdByContact.firstName + ' ' +
                                                 doc.createdByContact.lastName}}
                                             </h5>
                                         </div>
@@ -250,9 +250,9 @@
             <div class="row">
                 <div class="col-xs-12 col-md-8 p-r-0 preview-section">
                     <div class="panel panel-default">
-                        <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
+                        <div class="panel-heading" ng-bind="::selectedDoc.name | fileName"></div>
                         <div class="panel-body">
-                            <doc-previewer path="{{selectedDoc.fileName}}"></doc-previewer>
+                            <doc-previewer path="{{::selectedDoc.fileName}}"></doc-previewer>
                         </div>
                     </div>
                 </div>
@@ -269,17 +269,17 @@
                             <ul class="list-group no-bg no-borders pull-in">
                                 <li class="list-group-item" ng-repeat="com in comments track by $index">
                                     <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
-                                        <img path="{{com.commenterContact.userImagePath}}" file-path alt="..."
+                                        <img path="{{::com.commenterContact.userImagePath}}" file-path alt="..."
                                              class="img-circle">
                                     </a>
 
                                     <div class="clear comment-content">
                                         <div class="commenter"><a href="javascript:void(0)"
-                                                                  ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
+                                                                  ng-bind="::com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
                                             said:
                                         </div>
-                                        <div class="date" ng-bind="com.commentedDate | date:app.datetimeFormat"></div>
-                                        <small class="text-muted" ng-bind="com.comment"></small>
+                                        <div class="date" ng-bind="::com.commentedDate | date:app.datetimeFormat"></div>
+                                        <small class="text-muted" ng-bind="::com.comment"></small>
                                     </div>
                                 </li>
                             </ul>

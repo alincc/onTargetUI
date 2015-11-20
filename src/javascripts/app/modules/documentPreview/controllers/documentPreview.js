@@ -1,8 +1,47 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', '$q', 'documentFactory', '$modal', 'storage', '$stateParams', '$location', 'onSiteFactory', 'appConstant', '$filter', 'utilFactory', '$sce', '$window', 'notifications', '$state', 'document', '$timeout', 'toaster',
-    function($scope, $rootScope, $q, documentFactory, $modal, storage, $stateParams, $location, onSiteFactory, appConstant, $filter, utilFactory, $sce, $window, notifications, $state, document, $timeout, toaster) {
+  var controller = [
+    '$scope',
+    '$rootScope',
+    '$q',
+    'documentFactory',
+    '$modal',
+    'storage',
+    '$stateParams',
+    '$location',
+    'onSiteFactory',
+    'appConstant',
+    '$filter',
+    'utilFactory',
+    '$sce',
+    '$window',
+    'notifications',
+    '$state',
+    'document',
+    '$timeout',
+    'toaster',
+    'pushFactory',
+    function($scope,
+             $rootScope,
+             $q,
+             documentFactory,
+             $modal,
+             storage,
+             $stateParams,
+             $location,
+             onSiteFactory,
+             appConstant,
+             $filter,
+             utilFactory,
+             $sce,
+             $window,
+             notifications,
+             $state,
+             document,
+             $timeout,
+             toaster,
+             pushFactory) {
 
       var getFileId = function() {
         if($scope.selectedDoc.versionProjectFiles.length > 0) {
@@ -51,6 +90,7 @@ define(function(require) {
 
       };
       $scope.showDocPreview = false;
+      $scope.maxNativeZoom = null;
 
       // Comments
       $scope.comments = [];
@@ -112,53 +152,61 @@ define(function(require) {
 
       $scope.editDoc = function(doc) {
         if($scope.isPdf) {
-          // Check document conversion status
-          if(!$scope.selectedDoc.conversionComplete) {
-            toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-          } else {
-            // Original
-            if($scope.selectedDoc.parentProjectFileId === 0) {
-              // Get pdf images
-              onSiteFactory.getPdfImagePages($scope.selectedDoc.filePath)
-                .success(function(p) {
-                  if(p.pages.length === 0) {
-                    toaster.pop('error', 'Error', 'Cannot found any images for this file!');
-                  }
-                  else {
-                    // Get document tags
-                    onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
-                      .success(function(documentTag) {
-                        $scope.pdfImagePages = _.map(p.pages, function(el) {
-                          return {
-                            imagePath: el
-                          };
-                        });
-                        $scope.currentPageIndex = 0;
-                        $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
-                        $scope.isNexting = false;
-                        $scope.haveNextPage = $scope.pdfImagePages.length > 1;
-                        $scope.havePrevPage = false;
-                        $scope.parentDocument = null;
-                        $scope.parseTag(documentTag.tags);
-                        $scope.showDocPreview = true;
-                      })
-                      .error(function(err) {
-                        console.log(err);
-                        toaster.pop('error', 'Error', 'Get document tags failed');
-                      });
-                  }
-                })
-                .error(function(err) {
-                  toaster.pop('error', 'Error', 'Get pdf images failed');
-                });
-            }
-            else {
-              // Version
-              documentFactory.getDocumentDetail({
-                projectId: $rootScope.currentProjectInfo.projectId,
-                projectFileId: $scope.selectedDoc.parentProjectFileId
+          // Original
+          if($scope.selectedDoc.parentProjectFileId === 0) {
+            // Get pdf images
+            onSiteFactory.getPdfImagePages($scope.selectedDoc.filePath)
+              .success(function(p) {
+                if(p.pages.length === 0) {
+                  toaster.pop('error', 'Error', 'Cannot found any images for this file!');
+                }
+                else {
+                  // Get document zoom level
+                  onSiteFactory.getDocumentZoomLevel($scope.selectedDoc.filePath)
+                    .success(function(zooms) {
+                      if(zooms.length > 0) {
+                        // Get document tags
+                        onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
+                          .success(function(documentTag) {
+                            $scope.pdfImagePages = _.map(p.pages, function(el, idx) {
+                              return {
+                                imagePath: el,
+                                maxZoom: zooms[idx].zoomLevel
+                              };
+                            });
+                            $scope.currentPageIndex = 0;
+                            $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
+                            $scope.isNexting = false;
+                            $scope.haveNextPage = $scope.pdfImagePages.length > 1;
+                            $scope.havePrevPage = false;
+                            $scope.parentDocument = null;
+                            $scope.parseTag(documentTag.tags);
+                            $scope.showDocPreview = true;
+                          })
+                          .error(function(err) {
+                            console.log(err);
+                            toaster.pop('error', 'Error', 'Get document tags failed');
+                          });
+                      } else {
+                        toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                      }
+                    })
+                    .error(function() {
+                      toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                    });
+                }
               })
-                .success(function(parentDocument) {
+              .error(function(err) {
+                toaster.pop('error', 'Error', 'Get pdf images failed');
+              });
+          }
+          else {
+            // Version
+            documentFactory.getDocumentDetail({
+              projectId: $rootScope.currentProjectInfo.projectId,
+              projectFileId: $scope.selectedDoc.parentProjectFileId
+            })
+              .success(function(parentDocument) {
                 // Get pdf images
                 onSiteFactory.getPdfImagePages(parentDocument.projectFile.filePath)
                   .success(function(p) {
@@ -166,26 +214,38 @@ define(function(require) {
                       toaster.pop('error', 'Error', 'Cannot found any images for this file!');
                     }
                     else {
-                      // Get document tags
-                      onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
-                        .success(function(documentTag) {
-                          $scope.pdfImagePages = _.map(p.pages, function(el) {
-                            return {
-                              imagePath: el
-                            };
-                          });
-                          $scope.currentPageIndex = 0;
-                          $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
-                          $scope.isNexting = false;
-                          $scope.haveNextPage = $scope.pdfImagePages.length > 1;
-                          $scope.havePrevPage = false;
-                          $scope.parentDocument = parentDocument.projectFile;
-                          $scope.parseTag(documentTag.tags);
-                          $scope.showDocPreview = true;
+                      // Get document zoom level
+                      onSiteFactory.getDocumentZoomLevel($scope.selectedDoc.filePath)
+                        .success(function(zooms) {
+                          if(zooms.length > 0) {
+                            // Get document tags
+                            onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
+                              .success(function(documentTag) {
+                                $scope.pdfImagePages = _.map(p.pages, function(el, idx) {
+                                  return {
+                                    imagePath: el,
+                                    maxZoom: zooms[idx].zoomLevel
+                                  };
+                                });
+                                $scope.currentPageIndex = 0;
+                                $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
+                                $scope.isNexting = false;
+                                $scope.haveNextPage = $scope.pdfImagePages.length > 1;
+                                $scope.havePrevPage = false;
+                                $scope.parentDocument = parentDocument.projectFile;
+                                $scope.parseTag(documentTag.tags);
+                                $scope.showDocPreview = true;
+                              })
+                              .error(function(err) {
+                                console.log(err);
+                                toaster.pop('error', 'Error', 'Get document tags failed');
+                              });
+                          } else {
+                            toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                          }
                         })
-                        .error(function(err) {
-                          console.log(err);
-                          toaster.pop('error', 'Error', 'Get document tags failed');
+                        .error(function() {
+                          toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
                         });
                     }
                   })
@@ -193,10 +253,9 @@ define(function(require) {
                     toaster.pop('error', 'Error', 'Get pdf images failed');
                   });
               })
-                .error(function(err) {
-                  toaster.pop('error', 'Error', 'Get document details failed');
-                });
-            }
+              .error(function(err) {
+                toaster.pop('error', 'Error', 'Get document details failed');
+              });
           }
         }
         else {
@@ -211,7 +270,8 @@ define(function(require) {
                 .success(function(documentTag) {
                   $scope.pdfImagePages = _.map([$scope.selectedDoc.filePath], function(el) {
                     return {
-                      imagePath: el
+                      imagePath: el,
+                      maxZoom: null
                     };
                   });
                   $scope.currentPageIndex = 0;
@@ -235,7 +295,8 @@ define(function(require) {
               .success(function(documentTag) {
                 $scope.pdfImagePages = _.map([$scope.selectedDoc.filePath], function(el) {
                   return {
-                    imagePath: el
+                    imagePath: el,
+                    maxZoom: null
                   };
                 });
                 $scope.currentPageIndex = 0;
@@ -393,6 +454,17 @@ define(function(require) {
       if($scope.onAction === 'onSite') {
         $scope.loadComment();
       }
+
+      // Register/UnRegister push events
+      pushFactory.bind('document.preview.' + $scope.selectedDoc.fileId, function(evt) {
+        if(evt.name === 'updateMaxNativeZoom') {
+          $scope.$broadcast('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', evt.value);
+        }
+      });
+
+      $scope.$on('$destroy', function() {
+        pushFactory.unbind('document.preview.' + $scope.selectedDoc.fileId);
+      });
     }];
   return controller;
 });
