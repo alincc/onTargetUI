@@ -19795,6 +19795,36 @@ ul.list-justified li {
 .clear-left {
   clear: left;
 }
+/* MODAL */
+.modal.width90 > .modal-dialog {
+  width: 90%;
+  height: 100%;
+}
+.modal.width90 > .modal-dialog > .modal-content {
+  height: 90%;
+}
+.modal.width90 > .modal-dialog > .modal-content > .modal-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.modal.width90 > .modal-dialog > .modal-content > .modal-body {
+  padding-bottom: 65px;
+  height: 100%;
+  text-align: center;
+  padding-top: 65px;
+}
+.modal.width90 > .modal-dialog > .modal-content > .modal-body > img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.modal.width90 > .modal-dialog > .modal-content > .modal-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
 .butterbar {
   position: relative;
   margin-bottom: -3px;

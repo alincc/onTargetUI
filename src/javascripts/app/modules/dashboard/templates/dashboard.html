@@ -182,7 +182,7 @@
                                         <div class="task-item" ng-repeat="task in tasks.pastDue track by $index" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.pastDue.length && !taskLoading">
-                                            No tasks was found
+                                            No tasks found
                                         </div>
                                         <div class="task-loading text-center" ng-if="taskLoading">
                                             <spinner text="Loading..."></spinner>
