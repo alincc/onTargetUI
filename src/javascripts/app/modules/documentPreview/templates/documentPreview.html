@@ -4,15 +4,9 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onSite'">
+                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW">
                         onSITE
                         <button class="btn btn-default pull-right" ng-click="backToList()"><i
-                                class="fa fa-arrow-left"></i> Back to list
-                        </button>
-                    </h1>
-                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onTime'">
-                        onTIME
-                        <button class="btn btn-default pull-right" ng-click="backToAttachments()"><i
                                 class="fa fa-arrow-left"></i> Back to list
                         </button>
                     </h1>
@@ -22,40 +16,45 @@
         <div class="wrapper-md p-r-none" permission="ONSITE_VIEW">
             <div class="row">
                 <div class="col-xs-12 preview-section"
-                     ng-class="{'col-md-8 p-r-0': onAction == 'onSite', 'col-md-12': onAction == 'onTime'}">
+                     ng-class="{'col-md-8 p-r-0': hideComments == false, 'col-md-12': hideComments == true}">
                     <div class="panel panel-default">
                         <form name="_form" novalidate ng-submit="saveChanges(selectedDoc)">
                             <div class="panel-heading">
                                 <span ng-bind="selectedDoc.name | fileName"></span>
+                                <button class="btn btn-primary btn-xs pull-right m-l-xs" type="button" ng-disabled="isPreparingData"
+                                        ng-click="showHideComment()">
+                                    <span>{{hideComments ? 'Show' : 'Hide'}} comments</span>
+                                </button>
                                 <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="cancelEdit()"
                                         ng-disabled="_form.$submitted"
                                         ng-show="showDocPreview">Cancel
                                 </button>
                                 <button class="btn btn-primary btn-xs pull-right" type="button"
-                                        ng-click="editDoc(selectedDoc)" ng-if="onAction == 'onSite'"
+                                        ng-click="editDoc(selectedDoc)"
+                                        ng-disabled="isPreparingData"
                                         ng-show="!showDocPreview">Markup/Tag
                                 </button>
-                                <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
+                                <button class="btn btn-info btn-xs pull-right m-r-xs"
                                         ng-show="showDocPreview"
                                         type="submit" size="xs"
                                         ng-disabled="_form.$submitted"
                                         loading-button="_form.$submitted">Save changes
                                 </button>
-                                <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
+                                <button class="btn btn-info btn-xs pull-right m-r-xs"
                                         type="button"
                                         ng-show="showDocPreview && pdfImagePages.length > 1"
                                         ng-click="nextPage()"
                                         ng-disabled="!haveNextPage">Next >
                                 </button>
                                 <span class="page-info" ng-show="showDocPreview && pdfImagePages.length > 1">Page {{currentPageIndex + 1}} of {{pdfImagePages.length}}</span>
-                                <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
+                                <button class="btn btn-info btn-xs pull-right m-r-xs"
                                         type="button"
                                         ng-show="showDocPreview && pdfImagePages.length > 1"
                                         ng-click="prevPage()"
                                         ng-disabled="!havePrevPage">< Previous
                                 </button>
                             </div>
-                            <div class="panel-body" ng-if="showDocPreview && onAction == 'onSite'">
+                            <div class="panel-body" ng-if="showDocPreview">
                                 <pdf-tagging-mark-up ng-if="!isNexting"
                                                      model="currentPage"
                                                      page-number="{{currentPageIndex + 1}}"
@@ -71,10 +70,8 @@
                             </div>
                         </form>
                     </div>
-                </div>
-                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT"
-                     ng-if="onAction == 'onSite'">
-                    <div class="panel panel-default">
+                </div><div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
+                    <div class="panel panel-default" ng-show="!hideComments">
                         <div class="panel-heading">
                             <span>Comments</span>
                             <!--<div class="pull-right" ng-if="selectedDoc.versionProjectFiles.length > 0">-->

@@ -200,7 +200,7 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function addTaskComment() {
+  function addTaskComment(data) {
     request({
         method: 'POST',
         body: req.body,
@@ -209,6 +209,19 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
+          getUserDetails(baseRequest.loggedInUserId, function(user) {
+            pusher.trigger('onTarget', 'task.comment.' + req.body.taskId, {
+              "name": "onTimeAddComment",
+              "value":{
+                "comment": data.comment,
+                "commentedBy": user.userId,
+                "commentedDate": data.commentedDate,
+                "taskCommentId": data.taskCommentId,
+                "taskId": data.taskId,
+                "commenterContact": user.contact
+              }
+            });
+          });
           res.send(response.body);
         } else {
           res.send(error);
@@ -216,7 +229,7 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
       });
   }
 
-  addTaskComment();
+  addTaskComment(data);
 
   getTaskDetails(data.taskId, baseRequest, function(task) {
     getUserDetails(baseRequest.loggedInUserId, function(user1) {
@@ -318,7 +331,7 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function addComment() {
+  function addComment(data) {
     request({
         method: 'POST',
         body: req.body,
@@ -327,6 +340,17 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
+          getUserDetails(baseRequest.loggedInUserId, function(user) {
+            pusher.trigger('onTarget', 'document.comment.' + data.projectFileId, {
+              "name": "onSiteAddComment",
+              "value":{
+                "comment": data.comment,
+                "commentedBy": user.userId,
+                "commentedDate": data.commentedDate,
+                "commenterContact": user.contact
+              }
+            });
+          });
           res.send(response.body.taskAttachments);
         } else {
           res.send(error);
@@ -362,7 +386,7 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
       });
   }
 
-  addComment();
+  addComment(data);
 
   getTaskComments(function(taskComments) {
     // commenters

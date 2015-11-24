@@ -320,7 +320,7 @@ function exportPdf2(req, res) {
                     if(!fs.existsSync(folder)) {
                       fs.mkdirSync(folder);
                     }
-
+                    console.log('Makig thumbnail...');
                     imageService.cropImageSquare(path.join(outputFolder, firstPage), thumbnail, 200, function(err) {
                       if(err) {
                         console.log('Failed to create image thumbnail!', error.message);
@@ -442,20 +442,20 @@ function getNextVersionName(req, res) {
   var fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
   var fullFilePath = [rootPath, filePath].join('/');
   var versionName = filePath.substring(0, filePath.lastIndexOf('/'));
-  var reg = new RegExp(fileNameWithoutExt + '\\-\\d+\\.' + fileExt + '$');
+  var reg = new RegExp(fileNameWithoutExt + '\\_v\\d+\\.' + fileExt + '$');
   if(fs.existsSync(fullFilePath)) {
     var files = fs.readdirSync(path.join(fullFilePath.substring(0, fullFilePath.lastIndexOf('/'))));
     var versions = _.filter(files, function(file) {
       return reg.test(file);
     });
     if(versions.length <= 0) {
-      versionName = versionName + '/' + fileNameWithoutExt + '-1.' + fileExt;
+      versionName = versionName + '/' + fileNameWithoutExt + '_v1.' + fileExt;
     } else {
       var lastVersionName = _.sortBy(versions).reverse()[0];
-      var versionNumber = /.*\-(\d+)\./.exec(lastVersionName)[1];
-      lastVersionName = lastVersionName.substring(0, lastVersionName.lastIndexOf('-'));
+      var versionNumber = /.*_v(\d+)\./.exec(lastVersionName)[1];
+      lastVersionName = lastVersionName.substring(0, lastVersionName.lastIndexOf('_v'));
       if(versionNumber) {
-        versionName = versionName + '/' + lastVersionName + '-' + (parseInt(versionNumber) + 1) + '.' + fileExt;
+        versionName = versionName + '/' + lastVersionName + '_v' + (parseInt(versionNumber) + 1) + '.' + fileExt;
       }
     }
 
@@ -534,20 +534,43 @@ function getZoomLevel(req, res) {
     var fp = path.join(pageFolder, el);
     if(fs.lstatSync(fp).isDirectory()) {
       var zoomFolders = fs.readdirSync(fp);
+      zoomLevel = 0;
       _.each(zoomFolders, function(el, idx) {
         if(fs.existsSync(path.join(fp, el, 'loaded.txt'))) {
-          results.push({
-            page: pageNumber++,
-            zoomLevel: idx + 1
-          });
+          zoomLevel++;
         }
         else {
           return false;
         }
       });
+      results.push({
+        page: pageNumber++,
+        zoomLevel: zoomLevel
+      });
     }
   });
   res.send(results);
+}
+
+function checkFileStatus(req, res) {
+  var status = "UnProceeded";
+  var relativePath = req.body.path;
+  var filePath = path.join(rootPath, relativePath);
+  var fileFolder = path.join(rootPath, relativePath.substring(0, relativePath.lastIndexOf('/')));
+  var fileExt = path.extname(filePath);
+  var fileName = path.basename(filePath);
+  var fileNameWithoutExt = path.basename(filePath, fileExt);
+  var folder = path.join(fileFolder, utilService.getFolderNameFromFile(fileName));
+  var pageFolder = path.join(folder, 'pages');
+
+  if(fs.existsSync(folder)) {
+    status = "Done";
+  }
+
+  res.send({
+    success: true,
+    status: status
+  });
 }
 
 module.exports = {
@@ -555,5 +578,6 @@ module.exports = {
   exportPdf2: exportPdf2,
   getNextVersionName: getNextVersionName,
   getPdfImages: getPdfImages,
-  getZoomLevel: getZoomLevel
+  getZoomLevel: getZoomLevel,
+  checkFileStatus: checkFileStatus
 };

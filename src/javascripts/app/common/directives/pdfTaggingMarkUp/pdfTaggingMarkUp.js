@@ -905,9 +905,28 @@ define(function(require) {
           };
 
           scope.$on('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', function(e, v) {
-            if(tile_layer.options.maxNativeZoom < v) {
-              tile_layer.options.maxNativeZoom = v;
+            console.log('Data: ', v);
+            console.log('Current page: ', scope.pageNumber);
+            if(tile_layer && tile_layer.options.maxNativeZoom < v.maxNativeZoom && scope.pageNumber === v.page) {
+              tile_layer.options.maxNativeZoom = v.maxNativeZoom;
               tile_layer.redraw();
+            }
+          });
+
+          scope.$on('documentPreview.showHideComment', function(e, v) {
+            //if(v) {
+            //  // hide comments
+            //}
+            //else {
+            //  // show comments
+            //}
+
+            if(map) {
+              $timeout(function() {
+                scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
+                scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
+                map.invalidateSize(false);
+              }, 150);
             }
           });
 

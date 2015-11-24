@@ -1221,10 +1221,45 @@ ul.list-justified {
   color: #000;
 }
 
-.no-resize{
+.no-resize {
   resize: none;
 }
 
-.clear-left{
+.clear-left {
   clear: left;
+}
+
+/* MODAL */
+.modal {
+  &.width90 {
+    > .modal-dialog {
+      width: 90%;
+      height: 100%;
+      > .modal-content {
+        height: 90%;
+        > .modal-header {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+        }
+        > .modal-body {
+          padding-bottom: 65px;
+          height: 100%;
+          text-align: center;
+          padding-top: 65px;
+          > img {
+            max-width: 100%;
+            max-height: 100%;
+          }
+        }
+        > .modal-footer {
+          position: absolute;
+          width: 100%;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
 }

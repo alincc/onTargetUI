@@ -208,7 +208,7 @@ define(function(require) {
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'
     },
     weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
-    pusher_api_key: 'f0a0bf34cd094e438cba',
+    pusher_api_key: 'c2f5de73a4caa3763726',
     pusher_channel: 'onTarget',
     bim_user: 'bim@ontargetcloud.com',
     bim_password: 'admin',

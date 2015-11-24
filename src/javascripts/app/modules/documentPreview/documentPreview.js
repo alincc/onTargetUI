@@ -36,67 +36,51 @@ define(function(require) {
       function($stateProvider) {
         $stateProvider
           .state('app.previewDocument', {
-            url: '/preview?onAction&docId?categoryId',
+            url: '/preview?docId?categoryId',
             templateUrl: 'documentPreview/templates/documentPreview.html',
             controller: 'PreviewDocumentController',
             resolve: {
               document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'onSiteFactory', 'toaster', '$timeout',
                 function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, onSiteFactory, toaster, $timeout) {
                   var deferred = $q.defer();
-                  switch($stateParams.onAction) {
-                    case 'onSite' :
-                      if($stateParams.docId) {
-                        // Get document details
+                  if($stateParams.docId) {
+                    // Get document details
+                    documentFactory.getDocumentDetail({
+                      projectId: $rootScope.currentProjectInfo.projectId,
+                      projectFileId: parseInt($stateParams.docId)
+                    }).success(function(currentDocument) {
+                      // Original
+                      if(currentDocument.projectFile.parentProjectFileId === 0) {
+                        deferred.resolve({
+                          projectFile: currentDocument.projectFile,
+                          versions: currentDocument.projectFile.versionProjectFiles
+                        });
+                      }
+                      else {
+                        // Version
                         documentFactory.getDocumentDetail({
                           projectId: $rootScope.currentProjectInfo.projectId,
-                          projectFileId: parseInt($stateParams.docId)
-                        }).success(function(currentDocument) {
-                          // Original
-                          if(currentDocument.projectFile.parentProjectFileId === 0) {
+                          projectFileId: currentDocument.projectFile.parentProjectFileId
+                        })
+                          .success(function(parentDocument) {
                             deferred.resolve({
                               projectFile: currentDocument.projectFile,
-                              versions: currentDocument.projectFile.versionProjectFiles
+                              versions: parentDocument.projectFile.versionProjectFiles
                             });
-                          }
-                          else {
-                            // Version
-                            documentFactory.getDocumentDetail({
-                              projectId: $rootScope.currentProjectInfo.projectId,
-                              projectFileId: currentDocument.projectFile.parentProjectFileId
-                            })
-                              .success(function(parentDocument) {
-                                deferred.resolve({
-                                  projectFile: currentDocument.projectFile,
-                                  versions: parentDocument.projectFile.versionProjectFiles
-                                });
-                              })
-                              .error(function(err) {
-                                toaster.pop('error', 'Error', 'Get document details failed');
-                              });
-                          }
-
-                        })
+                          })
                           .error(function(err) {
-                            console.log(err);
-                            deferred.reject();
                             toaster.pop('error', 'Error', 'Get document details failed');
                           });
-                      } else {
-                        $window.location.href = $state.href('app.onSite');
                       }
-                      break;
-                    case 'onTime' :
-                      if($rootScope.fileAttachment) {
-                        var doc = $rootScope.fileAttachment;
-                        doc.name = doc.fileName;
-                        deferred.resolve({
-                          projectFile: doc,
-                          pages: [doc.location]
-                        });
-                      } else {
-                        $window.location.href = $state.href('app.onTime');
-                      }
-                      break;
+
+                    })
+                      .error(function(err) {
+                        console.log(err);
+                        deferred.reject();
+                        toaster.pop('error', 'Error', 'Get document details failed');
+                      });
+                  } else {
+                    $window.location.href = $state.href('app.onSite');
                   }
 
                   return deferred.promise;

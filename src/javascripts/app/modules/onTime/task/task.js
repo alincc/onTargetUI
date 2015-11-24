@@ -17,6 +17,7 @@ define(function(require){
     progressController = require('./controllers/progress'),
     attachmentController = require('./controllers/attachment'),
     budgetController = require('./controllers/budget'),
+    viewTaskAttachmentController = require('./controllers/viewAttachment'),
     template = require('text!./templates/task.html'),
     createTemplate = require('text!./templates/create.html'),
     editTemplate = require('text!./templates/edit.html'),
@@ -28,6 +29,7 @@ define(function(require){
     commentTemplate = require('text!./templates/comment.html'),
     progressTemplate = require('text!./templates/progress.html'),
     attachmentTemplate = require('text!./templates/attachment.html'),
+    viewAttachmentTemplate = require('text!./templates/viewAttachment.html'),
     budgetTemplate = require('text!./templates/budget.html'),
     projectServiceModule = require('app/common/services/project'),
     activityServiceModule = require('app/common/services/activity'),
@@ -64,6 +66,7 @@ define(function(require){
     $templateCache.put('onTime/task/templates/progress.html', progressTemplate);
     $templateCache.put('onTime/task/templates/attachment.html', attachmentTemplate);
     $templateCache.put('onTime/task/templates/budget.html', budgetTemplate);
+    $templateCache.put('onTime/task/templates/viewAttachment.html', viewAttachmentTemplate);
     $templateCache.put('budgetEditorTemplate', budgetEditorTemplate);
   }]);
 
@@ -78,6 +81,7 @@ define(function(require){
   module.controller('CommentTaskController', commentController);
   module.controller('ProgressTaskController', progressController);
   module.controller('AttachmentTaskController', attachmentController);
+  module.controller('ViewTaskAttachmentController', viewTaskAttachmentController);
   module.controller('BudgetTaskController', budgetController);
 
   // Directives

@@ -23,13 +23,14 @@ define(function(require) {
       });
     };
 
-    services.addComment = function(fileId, comment, fileName, fileOwnerId) {
+    services.addComment = function(fileId, comment, fileName, fileOwnerId, currentDate) {
       return $http.post(constant.domain + '/upload/addComment', {
         projectFileId: fileId,
         commentId: null,
         comment: comment,
         fileName: fileName,
-        fileOwnerId: fileOwnerId
+        fileOwnerId: fileOwnerId,
+        commentedDate: currentDate
       });
     };
 
@@ -101,6 +102,19 @@ define(function(require) {
     services.getDocumentZoomLevel = function(path){
       return $http.post(constant.nodeServer + '/node/onsite/getZoomLevel', {
         path: path
+      });
+    };
+
+    services.checkFileStatus = function(path){
+      return $http.post(constant.nodeServer + '/node/onsite/checkFileStatus', {
+        path: path
+      });
+    };
+
+    services.updateDocumentConversionStatus = function(docId, status){
+      return $http.post(constant.domain + '/upload/updateConversionComplete', {
+        projectFileId: docId,
+        isConversionComplete: status
       });
     };
 

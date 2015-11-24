@@ -29,4 +29,5 @@ module.exports = function(app) {
   app.post('/node/onsite/getNextVersionName', onSiteController.getNextVersionName);
   app.post('/node/onsite/getPdfImages', onSiteController.getPdfImages);
   app.post('/node/onsite/getZoomLevel', onSiteController.getZoomLevel);
+  app.post('/node/onsite/checkFileStatus', onSiteController.checkFileStatus);
 };

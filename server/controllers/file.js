@@ -103,14 +103,17 @@ function convertPdfToImage(req, res) {
       console.time('ImagesSplicing');
       var promises = [];
       var folder = fs.readdirSync(path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages'));
-      _.each(folder, function(el) {
+      _.each(folder, function(el, pageIdx) {
         var fp = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages', el);
         if(fs.lstatSync(fp).isFile()) {
           for(var size = 1; size <= 5; size++) {
             promises.push(imageService.tiles(fp, 256 * Math.pow(2, size), size, 256, function(data) {
               pushService.Pusher().trigger('onTarget', 'document.preview.' + docId, {
                 "name": "updateMaxNativeZoom",
-                "value": data.zoom
+                "value": {
+                  page: pageIdx + 1,
+                  maxNativeZoom: data.zoom
+                }
               });
             }));
           }

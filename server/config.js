@@ -13,9 +13,9 @@ module.exports = {
   externalStorage: {
     googleDrive: {}
   },
-  pusher_appId: '152503',
-  pusher_key: 'f0a0bf34cd094e438cba',
-  pusher_secret: 'a2244d813cebbd30dc2e',
+  pusher_appId: '138273',
+  pusher_key: 'c2f5de73a4caa3763726',
+  pusher_secret: 'e2455e810e36cbed510e',
   convertCommand: 'convert',
   gsCommand: 'gswin64c',
   concurrencyImageProcesses: 1

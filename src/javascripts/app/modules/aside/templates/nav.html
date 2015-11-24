@@ -13,7 +13,7 @@
             <span>Dashboard</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item" ng-class="{'menu-selected': $state.current.name == 'app.previewDocument' && $state.params.onAction == 'onTime'}" menu-permission="ONTIME">
+    <li ui-sref-active="selected" class="item" menu-permission="ONTIME">
         <a ui-sref="app.onTime">
             <img src="img/icons/onTime-icon-white.png" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -21,7 +21,7 @@
             <span>punchList</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item" ng-class="{'menu-selected': $state.current.name == 'app.previewDocument' && $state.params.onAction == 'onSite'}" menu-permission="ONSITE">
+    <li ui-sref-active="selected" class="item" ng-class="{'menu-selected': $state.current.name == 'app.previewDocument'}" menu-permission="ONSITE">
         <a ui-sref="app.onSite">
             <img src="img/icons/onSite-icon-white.png" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
@@ -29,7 +29,7 @@
             <span>onSITE</span>
         </a>
     </li>
-    <li ui-sref-active="selected"  class="item" menu-permission="ONFILE">
+    <li ui-sref-active="selected" class="item" menu-permission="ONFILE">
         <a ui-sref="app.onFile">
             <img src="img/icons/onFile-icon-white.png" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />

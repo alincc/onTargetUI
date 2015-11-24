@@ -171,7 +171,6 @@ define(function(require) {
         //$location.search('docId', doc.fileId);
         $state.go('app.previewDocument', {
           docId: doc.fileId,
-          onAction: 'onSite',
           categoryId: $scope.selectedCategoryId
         });
       };
