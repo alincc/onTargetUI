@@ -21,40 +21,38 @@
                         <form name="_form" novalidate ng-submit="saveChanges(selectedDoc)">
                             <div class="panel-heading">
                                 <span ng-bind="selectedDoc.name | fileName"></span>
-                                <button class="btn btn-primary btn-xs pull-right m-l-xs" type="button" ng-disabled="isPreparingData"
+                                <button class="btn btn-default btn-xs pull-right m-l-xs" type="button"
                                         ng-click="showHideComment()">
                                     <span>{{hideComments ? 'Show' : 'Hide'}} comments</span>
                                 </button>
-                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="cancelEdit()"
+                                <button class="btn btn-danger btn-xs pull-right" type="button" ng-click="cancelEdit()"
                                         ng-disabled="_form.$submitted"
-                                        ng-show="showDocPreview">Cancel
+                                        ng-show="isEdit">Cancel
                                 </button>
                                 <button class="btn btn-primary btn-xs pull-right" type="button"
                                         ng-click="editDoc(selectedDoc)"
-                                        ng-disabled="isPreparingData"
-                                        ng-show="!showDocPreview">Markup/Tag
+                                        ng-show="!isEdit">Markup/Tag
                                 </button>
-                                <button class="btn btn-info btn-xs pull-right m-r-xs"
-                                        ng-show="showDocPreview"
-                                        type="submit" size="xs"
-                                        ng-disabled="_form.$submitted"
-                                        loading-button="_form.$submitted">Save changes
+                                <button class="btn btn-success btn-xs pull-right m-r-xs"
+                                        ng-show="isEdit"
+                                        type="submit"
+                                        ng-disabled="_form.$submitted">Save changes
                                 </button>
                                 <button class="btn btn-info btn-xs pull-right m-r-xs"
                                         type="button"
-                                        ng-show="showDocPreview && pdfImagePages.length > 1"
+                                        ng-show="pdfImagePages.length > 1"
                                         ng-click="nextPage()"
                                         ng-disabled="!haveNextPage">Next >
                                 </button>
-                                <span class="page-info" ng-show="showDocPreview && pdfImagePages.length > 1">Page {{currentPageIndex + 1}} of {{pdfImagePages.length}}</span>
+                                <span class="page-info" ng-show="pdfImagePages.length > 1">Page {{currentPageIndex + 1}} of {{pdfImagePages.length}}</span>
                                 <button class="btn btn-info btn-xs pull-right m-r-xs"
                                         type="button"
-                                        ng-show="showDocPreview && pdfImagePages.length > 1"
+                                        ng-show="pdfImagePages.length > 1"
                                         ng-click="prevPage()"
                                         ng-disabled="!havePrevPage">< Previous
                                 </button>
                             </div>
-                            <div class="panel-body" ng-if="showDocPreview">
+                            <div class="panel-body" ng-if="isPdf || isImage" ng-class="{'hide-toolbox': !isEdit}">
                                 <pdf-tagging-mark-up ng-if="!isNexting"
                                                      model="currentPage"
                                                      page-number="{{currentPageIndex + 1}}"
@@ -62,15 +60,13 @@
                                                      max-native-zoom="currentPage.maxZoom"
                                                      selected-doc="selectedDoc"></pdf-tagging-mark-up>
                             </div>
-                            <div class="panel-body normal-preview" ng-if="!showDocPreview">
-                                <pdf-viewer src="{{trustSrc(selectedDoc.fullFilePath)}}" ng-if="isPdf"></pdf-viewer>
-                                <img ng-if="isImage" ng-src="{{selectedDoc.fullFilePath}}"/>
-
-                                <p ng-if="!isImage && !isPdf">Sorry, this kind of file not supporte preview.</p>
+                            <div class="panel-body normal-preview" ng-if="!isPdf && !isImage">
+                                <p>Sorry, this kind of file not supported preview.</p>
                             </div>
                         </form>
                     </div>
-                </div><div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
+                </div>
+                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
                     <div class="panel panel-default" ng-show="!hideComments">
                         <div class="panel-heading">
                             <span>Comments</span>

@@ -24,6 +24,7 @@
       border-top: 1px solid #ddd;
     }
   }
+
   .file-thumbnail {
     max-height: 200px;
     display: table;
@@ -38,6 +39,7 @@
       }
     }
   }
+
   .preview-section {
     .panel-heading {
       .page-info {
@@ -63,7 +65,16 @@
         }
       }
     }
+    .hide-toolbox {
+      .leaflet-draw.leaflet-control {
+        display: none;
+      }
+      .add_comment_form{
+        display: none;
+      }
+    }
   }
+
   .comment-section {
     .panel-body {
       height: @onSite-height;
@@ -127,14 +138,17 @@
     }
     margin-left: -1px;
   }
+
   .search {
     width: 300px;
   }
+
   .doc-name {
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 250px;
   }
+
   .header-title {
     .spliter {
       width: 10px;

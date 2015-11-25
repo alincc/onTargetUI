@@ -902,12 +902,14 @@ define(function(require) {
             });
             scope.model.tagList = newListTag;
             scope.model.layers = layers || [];
+            console.log(scope.model);
           };
 
           scope.$on('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', function(e, v) {
             console.log('Data: ', v);
             console.log('Current page: ', scope.pageNumber);
-            if(tile_layer && tile_layer.options.maxNativeZoom < v.maxNativeZoom && scope.pageNumber === v.page) {
+            if(tile_layer && tile_layer.options.maxNativeZoom < v.maxNativeZoom && parseInt(scope.pageNumber) === v.page) {
+              console.log('Redraw...');
               tile_layer.options.maxNativeZoom = v.maxNativeZoom;
               tile_layer.redraw();
             }

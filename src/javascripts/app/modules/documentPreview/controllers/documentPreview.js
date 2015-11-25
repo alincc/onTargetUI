@@ -22,7 +22,6 @@ define(function(require) {
     '$timeout',
     'toaster',
     'pushFactory',
-    'fileFactory',
     function($scope,
              $rootScope,
              $q,
@@ -42,8 +41,7 @@ define(function(require) {
              document,
              $timeout,
              toaster,
-             pushFactory,
-             fileFactory) {
+             pushFactory) {
 
       var getFileId = function() {
         if($scope.selectedDoc.versionProjectFiles.length > 0) {
@@ -69,8 +67,8 @@ define(function(require) {
         $scope.isImage = /(png|jpg|jpeg|gif)/.test(fileExtension);
       };
 
-      $scope.selectedDoc = document.projectFile;
-      $scope.originalDoc = angular.copy(document.projectFile);
+      $scope.selectedDoc = document.currentDocument.projectFile;
+      $scope.originalDoc = angular.copy(document.currentDocument.projectFile);
       $scope.versions = document.versions.reverse();
       $scope.currentVersion = _.find($scope.versions, {fileId: $scope.selectedDoc.fileId}) ?
         _.find($scope.versions, {fileId: $scope.selectedDoc.fileId}) : {versionNo: 'Original'};
@@ -88,12 +86,18 @@ define(function(require) {
             }
           }
         });
-
       };
-      $scope.showDocPreview = false;
-      $scope.maxNativeZoom = null;
       $scope.hideComments = true;
       $scope.isPreparingData = false;
+      $scope.pdfImagePages = document.pdfImagePages;
+      $scope.currentPageIndex = 0;
+      $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
+      $scope.isNexting = false;
+      $scope.haveNextPage = $scope.pdfImagePages.length > 1;
+      $scope.havePrevPage = false;
+      $scope.parentDocument = document.parentDocument ? document.parentDocument.projectFile : null;
+      $scope.parseTag(document.documentTags);
+      $scope.isEdit = false;
 
       // Comments
       $scope.comments = [];
@@ -156,209 +160,7 @@ define(function(require) {
       };
 
       $scope.editDoc = function(doc) {
-        $scope.isPreparingData = true;
-        // Check file status
-        onSiteFactory.checkFileStatus($scope.selectedDoc.filePath)
-          .success(function(stt) {
-            if(stt.status === "UnProceeded") {
-              // Update document conversion status
-              onSiteFactory.updateDocumentConversionStatus($scope.selectedDoc.fileId, false)
-                .success(function() {
-                  // Start conversion progress
-                  fileFactory.convertPDFToImage($scope.selectedDoc.filePath, $scope.selectedDoc.fileId)
-                    .then(function() {
-                      toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-                    });
-                  $scope.isPreparingData = false;
-                })
-                .error(function(err) {
-                  console.log("Update document status failed!", err);
-                  $scope.isPreparingData = false;
-                });
-            } else {
-              if($scope.isPdf) {
-                // Original
-                if($scope.selectedDoc.parentProjectFileId === 0) {
-                  // Get pdf images
-                  onSiteFactory.getPdfImagePages($scope.selectedDoc.filePath)
-                    .success(function(p) {
-                      if(p.pages.length === 0) {
-                        $scope.isPreparingData = false;
-                        toaster.pop('error', 'Error', 'Cannot found any images for this file!');
-                      }
-                      else {
-                        // Get document zoom level
-                        onSiteFactory.getDocumentZoomLevel($scope.selectedDoc.filePath)
-                          .success(function(zooms) {
-                            if(zooms.length > 0) {
-                              // Get document tags
-                              onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
-                                .success(function(documentTag) {
-                                  $scope.pdfImagePages = _.map(p.pages, function(el, idx) {
-                                    return {
-                                      imagePath: el,
-                                      maxZoom: zooms[idx].zoomLevel
-                                    };
-                                  });
-                                  $scope.currentPageIndex = 0;
-                                  $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
-                                  $scope.isNexting = false;
-                                  $scope.haveNextPage = $scope.pdfImagePages.length > 1;
-                                  $scope.havePrevPage = false;
-                                  $scope.parentDocument = null;
-                                  $scope.parseTag(documentTag.tags);
-                                  $scope.showDocPreview = true;
-                                  $scope.isPreparingData = false;
-                                })
-                                .error(function(err) {
-                                  console.log(err);
-                                  $scope.isPreparingData = false;
-                                  toaster.pop('error', 'Error', 'Get document tags failed');
-                                });
-                            } else {
-                              $scope.isPreparingData = false;
-                              toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-                            }
-                          })
-                          .error(function() {
-                            $scope.isPreparingData = false;
-                            toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-                          });
-                      }
-                    })
-                    .error(function(err) {
-                      $scope.isPreparingData = false;
-                      toaster.pop('error', 'Error', 'Get pdf images failed');
-                    });
-                }
-                else {
-                  // Version
-                  documentFactory.getDocumentDetail({
-                    projectId: $rootScope.currentProjectInfo.projectId,
-                    projectFileId: $scope.selectedDoc.parentProjectFileId
-                  })
-                    .success(function(parentDocument) {
-                      // Get pdf images
-                      onSiteFactory.getPdfImagePages(parentDocument.projectFile.filePath)
-                        .success(function(p) {
-                          if(p.pages.length === 0) {
-                            $scope.isPreparingData = false;
-                            toaster.pop('error', 'Error', 'Cannot found any images for this file!');
-                          }
-                          else {
-                            // Get document zoom level
-                            onSiteFactory.getDocumentZoomLevel(parentDocument.projectFile.filePath)
-                              .success(function(zooms) {
-                                if(zooms.length > 0) {
-                                  // Get document tags
-                                  onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
-                                    .success(function(documentTag) {
-                                      $scope.pdfImagePages = _.map(p.pages, function(el, idx) {
-                                        return {
-                                          imagePath: el,
-                                          maxZoom: zooms[idx].zoomLevel
-                                        };
-                                      });
-                                      $scope.currentPageIndex = 0;
-                                      $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
-                                      $scope.isNexting = false;
-                                      $scope.haveNextPage = $scope.pdfImagePages.length > 1;
-                                      $scope.havePrevPage = false;
-                                      $scope.parentDocument = parentDocument.projectFile;
-                                      $scope.parseTag(documentTag.tags);
-                                      $scope.showDocPreview = true;
-                                      $scope.isPreparingData = false;
-                                    })
-                                    .error(function(err) {
-                                      console.log(err);
-                                      $scope.isPreparingData = false;
-                                      toaster.pop('error', 'Error', 'Get document tags failed');
-                                    });
-                                } else {
-                                  $scope.isPreparingData = false;
-                                  toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-                                }
-                              })
-                              .error(function() {
-                                $scope.isPreparingData = false;
-                                toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-                              });
-                          }
-                        })
-                        .error(function(err) {
-                          $scope.isPreparingData = false;
-                          toaster.pop('error', 'Error', 'Get pdf images failed');
-                        });
-                    })
-                    .error(function(err) {
-                      $scope.isPreparingData = false;
-                      toaster.pop('error', 'Error', 'Get document details failed');
-                    });
-                }
-              }
-              else {
-                // Get versions
-                if($scope.selectedDoc.parentProjectFileId !== 0) {
-                  documentFactory.getDocumentDetail({
-                    projectId: $rootScope.currentProjectInfo.projectId,
-                    projectFileId: $scope.selectedDoc.parentProjectFileId
-                  })
-                    .success(function(v) {
-                      // Get document tags
-                      onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
-                        .success(function(documentTag) {
-                          $scope.pdfImagePages = _.map([$scope.selectedDoc.filePath], function(el) {
-                            return {
-                              imagePath: el,
-                              maxZoom: null
-                            };
-                          });
-                          $scope.currentPageIndex = 0;
-                          $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
-                          $scope.isNexting = false;
-                          $scope.haveNextPage = $scope.pdfImagePages.length > 1;
-                          $scope.havePrevPage = false;
-                          $scope.parentDocument = v.projectFile;
-                          $scope.parseTag(documentTag.tags);
-                          $scope.showDocPreview = true;
-                          $scope.isPreparingData = false;
-                        })
-                        .error(function(err) {
-                          console.log(err);
-                          $scope.isPreparingData = false;
-                          toaster.pop('error', 'Error', 'Get document tags failed');
-                        });
-                    });
-                }
-                else {
-                  // Get document tags
-                  onSiteFactory.getDocumentTags($scope.selectedDoc.fileId)
-                    .success(function(documentTag) {
-                      $scope.pdfImagePages = _.map([$scope.selectedDoc.filePath], function(el) {
-                        return {
-                          imagePath: el,
-                          maxZoom: null
-                        };
-                      });
-                      $scope.currentPageIndex = 0;
-                      $scope.currentPage = $scope.pdfImagePages[$scope.currentPageIndex];
-                      $scope.isNexting = false;
-                      $scope.haveNextPage = $scope.pdfImagePages.length > 1;
-                      $scope.havePrevPage = false;
-                      $scope.parentDocument = null;
-                      $scope.parseTag(documentTag.tags);
-                      $scope.showDocPreview = true;
-                      $scope.isPreparingData = false;
-                    })
-                    .error(function(err) {
-                      console.log(err);
-                      $scope.isPreparingData = false;
-                      toaster.pop('error', 'Error', 'Get document tags failed');
-                    });
-                }
-              }
-            }
-          });
+        $scope.isEdit = true;
       };
 
       $scope.cancelEdit = function() {
@@ -370,11 +172,12 @@ define(function(require) {
           delete el.scale;
           delete el.tagList;
         });
-        $scope.showDocPreview = false;
+        $scope.isEdit = false;
       };
 
       $scope.saveChanges = function(doc) {
-        onSiteFactory.getNextVersionName($scope.parentDocument ? $scope.parentDocument.filePath : $scope.selectedDoc.filePath)
+        console.log($scope.versions);
+        onSiteFactory.getNextVersionName($scope.parentDocument ? $scope.parentDocument.filePath : $scope.selectedDoc.filePath, $scope.versions.length)
           .success(function(resp) {
             var newFilePath = resp.newVersionName;
             var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
@@ -387,14 +190,16 @@ define(function(require) {
               "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
               "description": doc.description,
               "parentProjectFileId": doc.parentProjectFileId === 0 ? doc.fileId : doc.parentProjectFileId,
-              "isConversionComplete": false,
+              "isConversionComplete": true,
               "projectFileId": 0,
               "thumbnailImageName": $filter('fileThumbnail')(newFilePath),
               "filePath": newFilePath
             };
             documentFactory.saveUploadedDocsInfo(data)
               .then(function(resp) {
+                console.log(resp.data);
                 if(resp.data && resp.data.documentDetail) {
+                  var document = resp.data.documentDetail;
                   var docId = resp.data.documentDetail.fileId;
                   var listTag = [];
                   // Join tags from pages
@@ -410,9 +215,14 @@ define(function(require) {
 
                   // Save tags to document
                   onSiteFactory.addTags(listTag)
-                    .then(function(resp) {
-                      $state.go("app.onSite");
-                      onSiteFactory.exportPdf(docId, $rootScope.currentProjectInfo.projectId, $scope.pdfImagePages);
+                    .then(function() {
+                      console.log($scope.pdfImagePages);
+                      $state.transitionTo('app.previewDocument', {
+                        docId: document.fileId,
+                        categoryId: document.projectFileCategoryId.projectFileCategoryId
+                      });
+                      //$state.go("app.onSite");
+                      //onSiteFactory.exportPdf(docId, $rootScope.currentProjectInfo.projectId, $scope.pdfImagePages);
                     }, function(err) {
                       console.log(err);
                       $scope._form.$setPristine();

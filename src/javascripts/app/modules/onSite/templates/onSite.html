@@ -100,7 +100,7 @@
                                             <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc)" ng-if="doc.conversionComplete">
                                                 <i class="fa fa-comment"></i> Comment
                                             </button>
-                                            <button type="button" class="btn btn-xs btn-info" ng-click="download(doc)" ng-if="doc.conversionComplete">
+                                            <button type="button" ng-disabled="doc.isDownloading" class="btn btn-xs btn-info" ng-click="download(doc)" ng-if="doc.conversionComplete">
                                                 <i class="fa fa-download"></i> Download
                                             </button>
                                             <button type="button" class="btn btn-xs btn-info" ng-click="editDocument(doc)" permission="ONSITE_DELETE">
@@ -131,7 +131,7 @@
                                             <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
                                                 <i class="fa fa-comment"></i> Comment
                                             </button>
-                                            <button type="button" class="btn btn-xs btn-info" ng-click="download(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
+                                            <button type="button" class="btn btn-xs btn-info" ng-disabled="doc.versionProjectFiles[0].isDownloading" ng-click="download(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
                                                 <i class="fa fa-download"></i> Download
                                             </button>
                                             <button type="button" class="btn btn-xs btn-info" ng-click="editDocument(doc.versionProjectFiles[0])" permission="ONSITE_DELETE">
@@ -177,6 +177,9 @@
                                                         ng-click="deleteDocument(doc.versionProjectFiles[0])" permission="ONSITE_DELETE">
                                                     <i class="fa fa-trash"></i> Delete
                                                 </button>
+                                                <button type="button" class="btn btn-xs btn-info" ng-disabled="doc.versionProjectFiles[0].isDownloading" ng-click="download(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
+                                                    <i class="fa fa-download"></i> Download
+                                                </button>
                                             </div>
                                             <div ng-if="!doc.versionProjectFiles[0].conversionComplete">
                                                 <div class="progress task-status-active" style="height: 5px;margin-bottom: 0;margin-top: 10px;">
@@ -213,6 +216,9 @@
                                                 <button type="button" class="btn btn-xs btn-warning"
                                                         ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
                                                     <i class="fa fa-trash"></i> Delete
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-info" ng-disabled="doc.isDownloading" ng-click="download(doc)" ng-if="doc.conversionComplete">
+                                                    <i class="fa fa-download"></i> Download
                                                 </button>
                                             </div>
                                             <div ng-if="!doc.conversionComplete">

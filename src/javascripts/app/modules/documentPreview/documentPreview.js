@@ -40,48 +40,293 @@ define(function(require) {
             templateUrl: 'documentPreview/templates/documentPreview.html',
             controller: 'PreviewDocumentController',
             resolve: {
-              document: ['$rootScope', '$location', '$q', '$state', '$stateParams', 'documentFactory', '$window', 'onSiteFactory', 'toaster', '$timeout',
-                function($rootScope, $location, $q, $state, $stateParams, documentFactory, $window, onSiteFactory, toaster, $timeout) {
-                  var deferred = $q.defer();
-                  if($stateParams.docId) {
-                    // Get document details
+              document: [
+                '$rootScope',
+                '$location',
+                '$q',
+                '$state',
+                '$stateParams',
+                'documentFactory',
+                '$window',
+                'onSiteFactory',
+                'toaster',
+                'fileFactory',
+                'utilFactory',
+                '$filter',
+                function($rootScope,
+                         $location,
+                         $q,
+                         $state,
+                         $stateParams,
+                         documentFactory,
+                         $window,
+                         onSiteFactory,
+                         toaster,
+                         fileFactory,
+                         utilFactory,
+                         $filter) {
+                  var deferred = $q.defer(), currentDocument = null, parentDocument = null, versions = [], pages = [], zooms = [], documentTags, isPdf, isImage;
+
+                  function getDocumentInfo(cb) {
                     documentFactory.getDocumentDetail({
                       projectId: $rootScope.currentProjectInfo.projectId,
                       projectFileId: parseInt($stateParams.docId)
-                    }).success(function(currentDocument) {
-                      // Original
-                      if(currentDocument.projectFile.parentProjectFileId === 0) {
-                        deferred.resolve({
-                          projectFile: currentDocument.projectFile,
-                          versions: currentDocument.projectFile.versionProjectFiles
-                        });
-                      }
-                      else {
-                        // Version
-                        documentFactory.getDocumentDetail({
-                          projectId: $rootScope.currentProjectInfo.projectId,
-                          projectFileId: currentDocument.projectFile.parentProjectFileId
-                        })
-                          .success(function(parentDocument) {
-                            deferred.resolve({
-                              projectFile: currentDocument.projectFile,
-                              versions: parentDocument.projectFile.versionProjectFiles
-                            });
-                          })
-                          .error(function(err) {
-                            toaster.pop('error', 'Error', 'Get document details failed');
-                          });
-                      }
-
                     })
+                      .success(function(cD) {
+                        currentDocument = cD;
+                        isPdf = /\.(pdf)$/.test(currentDocument.projectFile.filePath);
+                        isImage = /\.(jpg|jpeg|png|gif)$/.test(currentDocument.projectFile.filePath);
+                        // Original
+                        if(currentDocument.projectFile.parentProjectFileId === 0) {
+                          versions = currentDocument.projectFile.versionProjectFiles;
+                          cb();
+                        }
+                        else {
+                          // Version
+                          documentFactory.getDocumentDetail({
+                            projectId: $rootScope.currentProjectInfo.projectId,
+                            projectFileId: currentDocument.projectFile.parentProjectFileId
+                          })
+                            .success(function(pD) {
+                              parentDocument = pD;
+                              versions = parentDocument.projectFile.versionProjectFiles;
+                              cb();
+                            })
+                            .error(function(err) {
+                              toaster.pop('error', 'Error', 'Get document details failed');
+                              deferred.reject();
+                            });
+                        }
+                      })
                       .error(function(err) {
                         console.log(err);
                         deferred.reject();
                         toaster.pop('error', 'Error', 'Get document details failed');
                       });
-                  } else {
-                    $window.location.href = $state.href('app.onSite');
                   }
+
+                  function convertPdfToImages(document) {
+                    // Update document conversion status to false (not completed)
+                    onSiteFactory.updateDocumentConversionStatus(document.projectFile.fileId, false)
+                      .success(function() {
+                        // Start conversion progress
+                        fileFactory.convertPDFToImage(document.projectFile.filePath, document.projectFile.fileId)
+                          .then(function() {
+                            toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                            console.log('This file is not converted yet');
+                            deferred.reject();
+                          }, function(err) {
+                            toaster.pop('error', 'Error', 'Failed to start pdf to image conversion!');
+                            deferred.reject();
+                          });
+                      })
+                      .error(function(err) {
+                        toaster.pop('error', 'Error', 'Failed to update document status!');
+                        console.log("Update document status failed!", err);
+                        deferred.reject();
+                      });
+                  }
+
+                  function getPdfPageImages(filePath, cb) {
+                    onSiteFactory.getPdfImagePages(filePath)
+                      .success(function(p) {
+                        if(p.pages.length === 0) {
+                          toaster.pop('error', 'Error', 'Cannot found any images for this file!');
+                          deferred.reject();
+                        }
+                        else {
+                          pages = p.pages;
+                          cb(p.pages);
+                        }
+                      })
+                      .error(function(err) {
+                        toaster.pop('error', 'Error', 'Get pdf images failed');
+                        deferred.reject();
+                      });
+                  }
+
+                  function getDocumentZoom(filePath, cb) {
+                    // Get document zoom level
+                    onSiteFactory.getDocumentZoomLevel(filePath)
+                      .success(function(z) {
+                        if(z.length > 0) {
+                          zooms = z;
+                          cb(z);
+                        } else {
+                          toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                          console.log('Zooms not found');
+                          deferred.reject();
+                        }
+                      })
+                      .error(function() {
+                        toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                        console.log('Get zoom document failed');
+                        deferred.reject();
+                      });
+                  }
+
+                  function getDocumentTags(fileId, cb) {
+                    // Get document tags
+                    onSiteFactory.getDocumentTags(fileId)
+                      .success(function(dt) {
+                        documentTags = dt.tags;
+                        cb(dt.tags);
+                      })
+                      .error(function(err) {
+                        console.log(err);
+                        toaster.pop('error', 'Error', 'Get document tags failed');
+                        deferred.reject();
+                      });
+                  }
+
+                  function generateData() {
+                    var result = {};
+                    result.pdfImagePages = _.map(pages, function(el, idx) {
+                      return {
+                        imagePath: el,
+                        maxZoom: zooms[idx].zoomLevel
+                      };
+                    });
+                    result.parentDocument = parentDocument;
+                    result.currentDocument = currentDocument;
+                    result.zooms = zooms;
+                    result.documentTags = documentTags;
+                    result.pages = pages;
+                    result.versions = versions;
+                    return result;
+                  }
+
+                  getDocumentInfo(function() {
+                    if(parentDocument) {
+                      onSiteFactory.checkFileStatus(parentDocument.projectFile.filePath)
+                        .success(function(stt) {
+                          if(stt.status === "UnProceeded") {
+                            convertPdfToImages(parentDocument);
+                          } else {
+                            if(isPdf) {
+                              // Original
+                              if(!parentDocument) {
+                                // Get pdf images
+                                getPdfPageImages(currentDocument.projectFile.filePath, function() {
+                                  // Get document zoom level
+                                  getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                                    if(zooms[0].zoomLevel <= 0) {
+                                      toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                                      console.log('Zoom page 1 not ready');
+                                      deferred.reject();
+                                      return;
+                                    }
+                                    // Get document tags
+                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                      deferred.resolve(generateData());
+                                    });
+                                  });
+                                });
+                              }
+                              else {
+                                // Version
+                                // Get pdf images
+                                getPdfPageImages(parentDocument.projectFile.filePath, function() {
+                                  // Get document zoom level
+                                  getDocumentZoom(parentDocument.projectFile.filePath, function() {
+                                    // Get document tags
+                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                      deferred.resolve(generateData());
+                                    });
+                                  });
+                                });
+                              }
+                            }
+                            else {
+                              pages = [];
+                              // Get versions
+                              if(parentDocument) {
+                                // Get document zoom level
+                                getDocumentZoom(parentDocument.projectFile.filePath, function() {
+                                  // Get document tags
+                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                    deferred.resolve(generateData());
+                                  });
+                                });
+                              }
+                              else {
+                                // Get document zoom level
+                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                                  // Get document tags
+                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                    deferred.resolve(generateData());
+                                  });
+                                });
+                              }
+                            }
+                          }
+                        });
+                    } else {
+                      onSiteFactory.checkFileStatus(currentDocument.projectFile.filePath)
+                        .success(function(stt) {
+                          if(stt.status === "UnProceeded") {
+                            convertPdfToImages(currentDocument);
+                          } else {
+                            if(isPdf) {
+                              // Original
+                              if(!parentDocument) {
+                                // Get pdf images
+                                getPdfPageImages(currentDocument.projectFile.filePath, function() {
+                                  // Get document zoom level
+                                  getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                                    if(zooms[0].zoomLevel <= 0) {
+                                      toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                                      console.log('Zoom page 1 not ready');
+                                      deferred.reject();
+                                      return;
+                                    }
+                                    // Get document tags
+                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                      deferred.resolve(generateData());
+                                    });
+                                  });
+                                });
+                              }
+                              else {
+                                // Version
+                                // Get pdf images
+                                getPdfPageImages(parentDocument.projectFile.filePath, function() {
+                                  // Get document zoom level
+                                  getDocumentZoom(parentDocument.projectFile.filePath, function() {
+                                    // Get document tags
+                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                      deferred.resolve(generateData());
+                                    });
+                                  });
+                                });
+                              }
+                            }
+                            else {
+                              pages = [];
+                              // Get versions
+                              if(parentDocument) {
+                                // Get document zoom level
+                                getDocumentZoom(parentDocument.projectFile.filePath, function() {
+                                  // Get document tags
+                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                    deferred.resolve(generateData());
+                                  });
+                                });
+                              }
+                              else {
+                                // Get document zoom level
+                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                                  // Get document tags
+                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                    deferred.resolve(generateData());
+                                  });
+                                });
+                              }
+                            }
+                          }
+                        });
+                    }
+                  });
 
                   return deferred.promise;
                 }]
