@@ -16,14 +16,14 @@
         <div class="wrapper-md p-r-none" permission="ONSITE_VIEW">
             <div class="row">
                 <div class="col-xs-12 preview-section"
-                     ng-class="{'col-md-8 p-r-0': hideComments == false, 'col-md-12': hideComments == true}">
+                     ng-class="{'col-md-8 p-r-0': hideRightSide == false, 'col-md-12': hideRightSide == true}">
                     <div class="panel panel-default">
                         <form name="_form" novalidate ng-submit="saveChanges(selectedDoc)">
                             <div class="panel-heading">
                                 <span ng-bind="selectedDoc.name | fileName"></span>
                                 <button class="btn btn-default btn-xs pull-right m-l-xs" type="button"
                                         ng-click="showHideComment()">
-                                    <span>{{hideComments ? 'Show' : 'Hide'}} comments</span>
+                                    <span>{{hideRightSide ? 'Show' : 'Hide'}} comments</span>
                                 </button>
                                 <button class="btn btn-danger btn-xs pull-right" type="button" ng-click="cancelEdit()"
                                         ng-disabled="_form.$submitted"
@@ -67,8 +67,8 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
-                    <div class="panel panel-default" ng-show="!hideComments">
-                        <div class="panel-heading">
+                    <div class="panel panel-default" ng-show="!hideRightSide">
+                        <div class="panel-heading" ng-show="!showLinkTask">
                             <span>Comments</span>
                             <!--<div class="pull-right" ng-if="selectedDoc.versionProjectFiles.length > 0">-->
                             <div class="pull-right">
@@ -90,7 +90,7 @@
                                 </section>
                             </div>
                         </div>
-                        <div class="panel-body" custom-scroll>
+                        <div class="panel-body" custom-scroll ng-show="!showLinkTask">
                             <div class="text-center" ng-if="isLoadingComment">
                                 <spinner text="Loading comments..."></spinner>
                             </div>
@@ -131,6 +131,12 @@
                                     </div>
                                 </form>
                             </div>
+                        </div>
+                        <div class="panel-heading" ng-if="showLinkTask">
+                            <span>Link task</span>
+                        </div>
+                        <div class="panel-body no-padder" ng-if="showLinkTask">
+                            <link-task></link-task>
                         </div>
                     </div>
                 </div>

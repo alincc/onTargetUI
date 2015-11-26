@@ -22,6 +22,7 @@ define(function(require) {
     '$timeout',
     'toaster',
     'pushFactory',
+    'taskFactory',
     function($scope,
              $rootScope,
              $q,
@@ -41,7 +42,8 @@ define(function(require) {
              document,
              $timeout,
              toaster,
-             pushFactory) {
+             pushFactory,
+             taskFactory) {
 
       var getFileId = function() {
         if($scope.selectedDoc.versionProjectFiles.length > 0) {
@@ -87,7 +89,7 @@ define(function(require) {
           }
         });
       };
-      $scope.hideComments = true;
+      $scope.hideRightSide = true;
       $scope.isPreparingData = false;
       $scope.pdfImagePages = document.pdfImagePages;
       $scope.currentPageIndex = 0;
@@ -98,6 +100,7 @@ define(function(require) {
       $scope.parentDocument = document.parentDocument ? document.parentDocument.projectFile : null;
       $scope.parseTag(document.documentTags);
       $scope.isEdit = false;
+      $scope.showLinkTask = false;
 
       // Comments
       $scope.comments = [];
@@ -149,8 +152,8 @@ define(function(require) {
       };
 
       $scope.showHideComment = function() {
-        $scope.hideComments = !$scope.hideComments;
-        $scope.$broadcast('documentPreview.showHideComment', $scope.hideComments);
+        $scope.hideRightSide = !$scope.hideRightSide;
+        $scope.$broadcast('pdfTaggingMarkup.resize');
       };
 
       // End comments
@@ -353,6 +356,15 @@ define(function(require) {
             "projectFileCommentId": 0
           });
         }
+      });
+
+      $scope.$on('pdfTaggingMarkup.Tag.AddLink', function(){
+        taskFactory.getContacts($rootScope.currentProjectInfo.projectId).then(function(resp) {
+          $rootScope.contactList = resp.data.projectMemberList;
+          $scope.showLinkTask = true;
+          $scope.hideRightSide = false;
+          $scope.$broadcast('pdfTaggingMarkup.resize');
+        });
       });
 
       $scope.$on('$destroy', function() {

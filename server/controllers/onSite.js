@@ -617,9 +617,11 @@ function downloadFile(req, res) {
   id = id.replace(/\s/g, '+');
   id = CryptoJS.AES.decrypt(id, key, cfg).toString(CryptoJS.enc.Utf8);
   id = parseInt(id);
-
+  console.log('Start download file with id: ' + id);
+  console.log('Getting document...');
   documentService.getDocumentById(id, projectId, baseRequest)
     .then(function(document) {
+      console.log('Getting document...Done!');
       // document.projectFile
       var markerUrl = 'server/assets/img/marker-icon.png';
       var promises = [], errors = [], outputFolder = path.join(rootPath, 'assets', 'temp', utilService.newGuidId()), tmpFileName = utilService.newGuidId(), data = [], pages = [];
@@ -661,168 +663,176 @@ function downloadFile(req, res) {
       };
 
       var parseTagsToCoordinates = function() {
-        _.each(data, function(dt) {
-          _.each(dt.tagList, function(tag) {
-            var layer = {};
-            var attrs = tag.attributes;
-            // Get type
-            var type = _.filter(attrs, function(a) {
-              return a.key === 'type';
-            });
-            if(type.length) {
-              var t = type[0].value, geo, coords;
-              layer.type = t;
-              layer.geometry = {
-                type: t === "circle" ? "Point" :
-                  t === "polygon" ? "Polygon" :
-                    t === "polyline" ? "LineString" :
-                      t === "marker" ? "Marker" : "Rectangle"
-              };
+        try {
+          _.each(data, function(dt) {
+            console.log(dt.imagePath);
+            _.each(dt.tagList, function(tag) {
+              var layer = {};
+              var attrs = tag.attributes;
+              // Get type
+              var type = _.filter(attrs, function(a) {
+                return a.key === 'type';
+              });
+              if(type.length) {
+                var t = type[0].value, geo, coords;
+                layer.type = t;
+                layer.geometry = {
+                  type: t === "circle" ? "Point" :
+                    t === "polygon" ? "Polygon" :
+                      t === "polyline" ? "LineString" :
+                        t === "marker" ? "Marker" : "Rectangle"
+                };
 
-              var options = _.reduce(attrs, function(memo, a) {
-                if(a.key.startsWith('options.')) {
-                  var keys = a.key.split('.')[1], value = a.value;
-                  memo[keys] = value;
-                }
-                return memo;
-              }, {});
-              layer.options = options;
-
-              var radius = _.find(attrs, {"key": "_mRadius"});
-              layer._mRadius = radius ? parseFloat(radius.value) : 0;
-
-              switch(t) {
-                case 'rectangle':
-                {
-                  geo = _.filter(attrs, function(a) {
-                    return a.key.startsWith('geo.');
-                  });
-                  coords = _.reduce(geo, function(memo, g) {
-                    var key = g.key,
-                      value = parseFloat(g.value);
-                    var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                    if(memo[id]) {
-                      memo[id][id2] = value;
-                    } else {
-                      var obj = [];
-                      obj[id2] = value;
-                      memo[id] = obj;
-                    }
-                    return memo;
-                  }, []);
-                  layer.geometry.coordinates = coords;
-                  break;
-                }
-                case 'polygon':
-                {
-                  geo = _.filter(attrs, function(a) {
-                    return a.key.startsWith('geo.');
-                  });
-                  coords = _.reduce(geo, function(memo, g) {
-                    var key = g.key,
-                      value = parseFloat(g.value);
-                    var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                    if(memo[id]) {
-                      memo[id][id2] = value;
-                    } else {
-                      var obj = [];
-                      obj[id2] = value;
-                      memo[id] = obj;
-                    }
-                    return memo;
-                  }, []);
-                  layer.geometry.coordinates = coords;
-                  break;
-                }
-                case 'polyline':
-                {
-                  geo = _.filter(attrs, function(a) {
-                    return a.key.startsWith('geo.');
-                  });
-                  coords = _.reduce(geo, function(memo, g) {
-                    var key = g.key,
-                      value = parseFloat(g.value);
-                    var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                    if(memo[id]) {
-                      memo[id][id2] = value;
-                    } else {
-                      var obj = [];
-                      obj[id2] = value;
-                      memo[id] = obj;
-                    }
-                    return memo;
-                  }, []);
-                  layer.geometry.coordinates = coords;
-                  break;
-                }
-                case 'circle':
-                {
-                  var radius = _.filter(attrs, function(a) {
-                    return a.key.startsWith('radius');
-                  });
-                  var circleRadius = 0;
-                  if(radius.length) {
-                    circleRadius = parseFloat(radius[0].value);
+                layer.options = _.reduce(attrs, function(memo, a) {
+                  if(/^options\./.test(a.key)) {
+                    var keys = a.key.split('.')[1], value = a.value;
+                    memo[keys] = value;
                   }
-                  geo = _.filter(attrs, function(a) {
-                    return a.key.startsWith('geo.');
-                  });
-                  coords = _.reduce(geo, function(memo, g) {
-                    var key = g.key,
-                      value = parseFloat(g.value);
-                    var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                    if(memo[id]) {
-                      memo[id][id2] = value;
-                    } else {
-                      var obj = [];
-                      obj[id2] = value;
-                      memo[id] = obj;
+                  return memo;
+                }, {});
+
+                var r = _.find(attrs, {"key": "_mRadius"});
+                layer._mRadius = r ? parseFloat(r.value) : 0;
+
+                switch(t) {
+                  case 'rectangle':
+                  {
+                    geo = _.filter(attrs, function(a) {
+                      return /^geo\./.test(a.key);
+                    });
+                    coords = _.reduce(geo, function(memo, g) {
+                      var key = g.key,
+                        value = parseFloat(g.value);
+                      var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                      if(memo[id]) {
+                        memo[id][id2] = value;
+                      } else {
+                        var obj = [];
+                        obj[id2] = value;
+                        memo[id] = obj;
+                      }
+                      return memo;
+                    }, []);
+                    layer.geometry.coordinates = coords;
+                    break;
+                  }
+                  case 'polygon':
+                  {
+                    geo = _.filter(attrs, function(a) {
+                      return /^geo\./.test(a.key);
+                    });
+                    coords = _.reduce(geo, function(memo, g) {
+                      var key = g.key,
+                        value = parseFloat(g.value);
+                      var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                      if(memo[id]) {
+                        memo[id][id2] = value;
+                      } else {
+                        var obj = [];
+                        obj[id2] = value;
+                        memo[id] = obj;
+                      }
+                      return memo;
+                    }, []);
+                    layer.geometry.coordinates = coords;
+                    break;
+                  }
+                  case 'polyline':
+                  {
+                    geo = _.filter(attrs, function(a) {
+                      return /^geo\./.test(a.key);
+                    });
+                    coords = _.reduce(geo, function(memo, g) {
+                      var key = g.key,
+                        value = parseFloat(g.value);
+                      var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                      if(memo[id]) {
+                        memo[id][id2] = value;
+                      } else {
+                        var obj = [];
+                        obj[id2] = value;
+                        memo[id] = obj;
+                      }
+                      return memo;
+                    }, []);
+                    layer.geometry.coordinates = coords;
+                    break;
+                  }
+                  case 'circle':
+                  {
+                    var radius = _.filter(attrs, function(a) {
+                      return /^radius/.test(a.key);
+                    });
+                    var circleRadius = 0;
+                    if(radius.length) {
+                      circleRadius = parseFloat(radius[0].value);
                     }
-                    return memo;
-                  }, []);
-                  layer.geometry.coordinates = coords[0];
-                  break;
-                }
-                case 'marker':
-                {
-                  geo = _.filter(attrs, function(a) {
-                    return a.key.startsWith('geo.');
-                  });
-                  coords = _.reduce(geo, function(memo, g) {
-                    var key = g.key,
-                      value = parseFloat(g.value);
-                    var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                    if(memo[id]) {
-                      memo[id][id2] = value;
-                    } else {
-                      var obj = [];
-                      obj[id2] = value;
-                      memo[id] = obj;
-                    }
-                    return memo;
-                  }, []);
-                  layer.geometry.coordinates = coords;
-                  break;
+                    geo = _.filter(attrs, function(a) {
+                      return /^geo\./.test(a.key);
+                    });
+                    coords = _.reduce(geo, function(memo, g) {
+                      var key = g.key,
+                        value = parseFloat(g.value);
+                      var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                      if(memo[id]) {
+                        memo[id][id2] = value;
+                      } else {
+                        var obj = [];
+                        obj[id2] = value;
+                        memo[id] = obj;
+                      }
+                      return memo;
+                    }, []);
+                    layer.geometry.coordinates = coords[0];
+                    break;
+                  }
+                  case 'marker':
+                  {
+                    geo = _.filter(attrs, function(a) {
+                      return /^geo\./.test(a.key);
+                    });
+                    coords = _.reduce(geo, function(memo, g) {
+                      var key = g.key,
+                        value = parseFloat(g.value);
+                      var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                      if(memo[id]) {
+                        memo[id][id2] = value;
+                      } else {
+                        var obj = [];
+                        obj[id2] = value;
+                        memo[id] = obj;
+                      }
+                      return memo;
+                    }, []);
+                    layer.geometry.coordinates = coords;
+                    break;
+                  }
                 }
               }
-            }
 
-            if(!dt.layers) {
-              dt.layers = []
-            }
-            dt.layers.push(layer);
+              if(!dt.layers) {
+                dt.layers = []
+              }
+              dt.layers.push(layer);
+            });
           });
-        });
+        }
+        catch(err) {
+          console.log(err);
+        }
       };
 
       var exportPdf = function(document, filePath) {
+
+        console.log('Getting pdf images...');
         pages = _getPdfImage(filePath);
+        console.log('Getting pdf images...Done');
 
         // Create temp folder if not exists
         if(!fs.existsSync(outputFolder)) {
           fs.mkdirSync(outputFolder);
         }
-
+        console.log('Generating data...');
         // Combine data
         data = _.map(pages, function(p) {
           return {
@@ -831,14 +841,17 @@ function downloadFile(req, res) {
             layers: []
           };
         });
-
+        console.log('Generating data...Done');
+        console.log('Getting document tags...');
         getDocumentTags(function(tags) {
+          console.log('Getting document tags...Done');
+          console.log('Extracting document tags...');
           extractTags(tags);
-
+          console.log('Extracting document tags...Done');
+          console.log('Parsing document tags to coordinates...');
           parseTagsToCoordinates();
-
+          console.log('Parsing document tags to coordinates...Done');
           console.log('Starting merge markups, tags to images...');
-
           // loop pages
           _.each(data, function(el, pageIndex) {
             promises.push(new Promise(function(resolve, reject) {
@@ -966,7 +979,6 @@ function downloadFile(req, res) {
                 });
             }));
           });
-
           // all promises are resolved
           Promise.all(promises)
             .then(function(data) {
@@ -989,6 +1001,7 @@ function downloadFile(req, res) {
                     }
                     else {
                       console.log('Merge images to pdf successful!');
+                      console.log('Exporting document to pdf...Done');
                       res.send({
                         success: true,
                         filePath: document.projectFile.filePath
@@ -1113,6 +1126,7 @@ function downloadFile(req, res) {
       };
 
       if(fs.existsSync(path.join(rootPath, document.projectFile.filePath))) {
+        console.log('File already exported, proceed to download');
         res.send({
           success: true,
           filePath: document.projectFile.filePath
@@ -1120,12 +1134,16 @@ function downloadFile(req, res) {
       }
       else {
         if(document.projectFile.parentProjectFileId !== 0) {
+          console.log('Get parent document...');
           documentService.getDocumentById(document.projectFile.parentProjectFileId, projectId, baseRequest)
             .then(function(parentDocument) {
+              console.log('Get parent document...Done');
+              console.log('Exporting document to pdf...');
               exportPdf(document, parentDocument.projectFile.filePath);
             });
         }
         else {
+          console.log('Exporting document to pdf...');
           exportPdf(document, document.projectFile.filePath);
         }
       }

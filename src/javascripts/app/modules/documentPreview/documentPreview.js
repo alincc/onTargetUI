@@ -24,13 +24,17 @@ define(function(require) {
     notificationServiceModule = require('app/common/services/notifications'),
     taskServiceModule = require('app/common/services/task'),
     pdfViewerDirectiveModule = require('app/common/directives/pdfViewer'),
-    ngSanitize = require('angularSanitize');
-  var module = angular.module('app.documentPreview', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.task', 'common.directives.pdfViewer', 'ngSanitize']);
+    ngSanitize = require('angularSanitize'),
+    activityServiceModule = require('app/common/services/activity'),
+    linkTaskTpl = require('text!./templates/linkTask.html'),
+    linkTaskDirective = require('./directives/linkTask');
+  var module = angular.module('app.documentPreview', ['ui.router', 'mentio', 'app.config', 'common.context.project', 'common.services.document', 'angularLocalStorage', 'ui.select', 'common.services.file', 'common.services.onSite', 'common.services.util', 'ngSanitize', 'common.services.googleDrive', 'common.services.box', 'toaster', 'common.services.permission', 'common.services.dropBox', 'common.filters.fileThumbnail', 'common.services.notifications', 'common.filters.fileDownloadPath', 'common.services.task', 'common.directives.pdfViewer', 'ngSanitize', 'common.services.activity']);
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('documentPreview/templates/documentPreview.html', previewTemplate);
+    $templateCache.put('documentPreview/templates/linkTask.html', linkTaskTpl);
   }]);
   module.controller('PreviewDocumentController', previewController);
-
+  module.directive('linkTask', linkTaskDirective);
   module.config(
     ['$stateProvider',
       function($stateProvider) {

@@ -1,0 +1,44 @@
+<h4 class="padder" ng-if="!activitySelected">Select Activity</h4>
+<h4 class="padder" ng-if="activitySelected && !isCreateTask">Select Task <button class="btn btn-default btn-xs pull-right" ng-click="backToSelectActivity()">Back to select activity</button><button class="btn btn-info btn-xs pull-right m-r-xs" ng-click="createTask()">Add Task</button></h4>
+<h4 class="padder" ng-if="activitySelected && isCreateTask">Add Task <button class="btn btn-default btn-xs pull-right" ng-click="backToSelectTask()">Back to select task</button></h4>
+<div class="list-container" ng-class="{'select-task': activitySelected}">
+    <div class="activity-list m-t-none" custom-scroll ng-show="!activitySelected">
+        <div class="activity-loading text-center" ng-if="isLoadingActivity">
+            <spinner text="Loading..."></spinner>
+        </div>
+        <div class="text-center" ng-if="!isLoadingActivity && !activities.length">
+            No activities
+        </div>
+        <div class="activity-item"
+             ng-class="{'activity-selected-item': activity.projectId == activitySelected.projectId }"
+             ng-repeat="activity in activities | filter:search:projectName"
+             ng-click="selectActivity(activity)">
+            <div class="info">
+                <div class="title">{{activity.projectName}}</div>
+                <div class="date">
+                    <span>{{activity.startDate|date:app.dateFormat}}</span> -
+                    <span>{{activity.endDate|date:app.dateFormat}}</span>
+                </div>
+                <div class="tasks">
+                    <span ng-repeat="taskCount in activity.taskCountByStatus | filter : {statusType : 'Active'}">{{taskCount.taskCount}} {{taskCount.taskCount>1?'Actives':'Active'}}</span>
+                    |
+                    <span ng-repeat="taskCount in activity.taskCountByStatus | filter : {statusType : 'Pending'}">{{taskCount.taskCount}} {{taskCount.taskCount>1?'Pendings':'Pending'}}</span>
+                </div>
+            </div>
+            <div class="status">
+                <div class="percentage">
+                    {{activity.percentageComplete}}%
+                </div>
+            </div>
+            <div class="arrow-icon">
+                <i class="fa fa-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+    <div class="task-list" custom-scroll ng-show="activitySelected && !isCreateTask">
+        Task list
+    </div>
+    <div class="create-task" ng-if="activitySelected && isCreateTask">
+        <add-task task="newTask"></add-task>
+    </div>
+</div>

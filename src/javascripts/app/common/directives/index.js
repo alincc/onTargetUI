@@ -15,7 +15,8 @@ define(function(require) {
     permission = require('./permission'),
     menuPermission = require('./menuPermission'),
     loadingButton = require('./loadingButton'),
-    onImageError = require('./onImageError');
+    onImageError = require('./onImageError'),
+    addTask = require('./addTask/addTask');
 
   var module = angular.module('common.directives',
     [
@@ -33,7 +34,8 @@ define(function(require) {
       'common.directives.permission',
       'common.directives.menuPermission',
       'common.directives.loadingButton',
-      'common.directives.onImageError'
+      'common.directives.onImageError',
+      'common.directives.addTask'
     ]);
   return module;
 });

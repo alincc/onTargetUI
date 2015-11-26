@@ -152,40 +152,43 @@ define(function(require) {
                 }
                 _.remove(scope.markers, {id: obj.id});
               };
+              markerScope.marker.addLink = function() {
+                $rootScope.$broadcast('pdfTaggingMarkup.Tag.AddLink');
+              };
 
               $compile(marker._popup._contentNode)(markerScope);
             }
 
             marker.on("popupopen", function(e) {
-              // Reverse the popup if exceed the top
-              // saving old anchor point X Y
-              if(!e.popup.options.oldOffset) {
-                e.popup.options.oldOffset = e.popup.options.offset;
-              }
-              var px = map.project(e.popup._latlng);
-              // we calculate popup content height (jQuery)
-              var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
-              var temp = px.y - heightOpeningPopup;
-              var temp2 = heightOpeningPopup + 42;
-              if(temp < 100) { // if it will go above the world, we prevent it to do so
-                // we make the popup go below the poi instead of above
-                e.popup.options.offset = new L.Point(6, temp2);
-                // we make the popup tip to be pointing upward (jQuery)
-                $pdfTaggingMarkUpMap.addClass("reverse-popup");
-                e.popup.update();
-              }
-              else { // we allow auto pan if the popup can open in the normal upward way
-                e.popup.options.offset = e.popup.options.oldOffset;
-                e.popup.options.autoPan = true;
-                $pdfTaggingMarkUpMap.removeClass("reverse-popup");
-                e.popup.update();
-              }
-
-              // Fix close button
-              var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
-              if(closeButton) {
-                closeButton.setAttribute('href', '');
-              }
+              //// Reverse the popup if exceed the top
+              //// saving old anchor point X Y
+              //if(!e.popup.options.oldOffset) {
+              //  e.popup.options.oldOffset = e.popup.options.offset;
+              //}
+              //var px = map.project(e.popup._latlng);
+              //// we calculate popup content height (jQuery)
+              //var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
+              //var temp = px.y - heightOpeningPopup;
+              //var temp2 = heightOpeningPopup + 42;
+              //if(temp < 100) { // if it will go above the world, we prevent it to do so
+              //  // we make the popup go below the poi instead of above
+              //  e.popup.options.offset = new L.Point(6, temp2);
+              //  // we make the popup tip to be pointing upward (jQuery)
+              //  $pdfTaggingMarkUpMap.addClass("reverse-popup");
+              //  e.popup.update();
+              //}
+              //else { // we allow auto pan if the popup can open in the normal upward way
+              //  e.popup.options.offset = e.popup.options.oldOffset;
+              //  e.popup.options.autoPan = true;
+              //  $pdfTaggingMarkUpMap.removeClass("reverse-popup");
+              //  e.popup.update();
+              //}
+              //
+              //// Fix close button
+              //var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
+              //if(closeButton) {
+              //  closeButton.setAttribute('href', '');
+              //}
 
               // Compile popup content
               compileMarker();
@@ -380,40 +383,43 @@ define(function(require) {
 
                     scope.updatePageData();
                   };
+                  markerScope.marker.addLink = function() {
+                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.AddLink');
+                  };
 
                   $compile(layer._popup._contentNode)(markerScope);
                 };
 
                 layer.on("popupopen", function(e) {
-                  // Reverse the popup if exceed the top
-                  // saving old anchor point X Y
-                  if(!e.popup.options.oldOffset) {
-                    e.popup.options.oldOffset = e.popup.options.offset;
-                  }
-                  var px = map.project(e.popup._latlng);
-                  // we calculate popup content height (jQuery)
-                  var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
-                  var temp = px.y - heightOpeningPopup;
-                  var temp2 = heightOpeningPopup + 42;
-                  if(temp < 100) { // if it will go above the world, we prevent it to do so
-                    // we make the popup go below the poi instead of above
-                    e.popup.options.offset = new L.Point(6, temp2);
-                    // we make the popup tip to be pointing upward (jQuery)
-                    $pdfTaggingMarkUpMap.addClass("reverse-popup");
-                    e.popup.update();
-                  }
-                  else { // we allow auto pan if the popup can open in the normal upward way
-                    e.popup.options.offset = e.popup.options.oldOffset;
-                    e.popup.options.autoPan = true;
-                    $pdfTaggingMarkUpMap.removeClass("reverse-popup");
-                    e.popup.update();
-                  }
-
-                  // Fix close button
-                  var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
-                  if(closeButton) {
-                    closeButton.setAttribute('href', '');
-                  }
+                  //// Reverse the popup if exceed the top
+                  //// saving old anchor point X Y
+                  //if(!e.popup.options.oldOffset) {
+                  //  e.popup.options.oldOffset = e.popup.options.offset;
+                  //}
+                  //var px = map.project(e.popup._latlng);
+                  //// we calculate popup content height (jQuery)
+                  //var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
+                  //var temp = px.y - heightOpeningPopup;
+                  //var temp2 = heightOpeningPopup + 42;
+                  //if(temp < 100) { // if it will go above the world, we prevent it to do so
+                  //  // we make the popup go below the poi instead of above
+                  //  e.popup.options.offset = new L.Point(6, temp2);
+                  //  // we make the popup tip to be pointing upward (jQuery)
+                  //  $pdfTaggingMarkUpMap.addClass("reverse-popup");
+                  //  e.popup.update();
+                  //}
+                  //else { // we allow auto pan if the popup can open in the normal upward way
+                  //  e.popup.options.offset = e.popup.options.oldOffset;
+                  //  e.popup.options.autoPan = true;
+                  //  $pdfTaggingMarkUpMap.removeClass("reverse-popup");
+                  //  e.popup.update();
+                  //}
+                  //
+                  //// Fix close button
+                  //var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
+                  //if(closeButton) {
+                  //  closeButton.setAttribute('href', '');
+                  //}
 
                   // Compile popup content
                   compileMarker();
@@ -539,7 +545,7 @@ define(function(require) {
                 });
                 console.log(type, attrs);
                 var options = _.reduce(attrs, function(memo, a) {
-                  if(a.key.startsWith('options.')) {
+                  if(/^options\./.test(a.key)) {
                     var keys = a.key.split('.')[1], value = a.value;
                     memo[keys] = value;
                   }
@@ -553,7 +559,7 @@ define(function(require) {
                     case 'rectangle':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       console.log(geo);
                       coords = _.reduce(geo, function(memo, g) {
@@ -579,7 +585,7 @@ define(function(require) {
                     case 'polygon':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
@@ -603,7 +609,7 @@ define(function(require) {
                     case 'polyline':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
@@ -627,7 +633,7 @@ define(function(require) {
                     case 'circle':
                     {
                       var radius = _.filter(attrs, function(a) {
-                        return a.key.startsWith('radius');
+                        return /^radius/.test(a.key);
                       });
                       console.log(radius);
                       var circleRadius = 0;
@@ -635,7 +641,7 @@ define(function(require) {
                         circleRadius = parseFloat(radius[0].value);
                       }
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       console.log(geo);
                       coords = _.reduce(geo, function(memo, g) {
@@ -661,7 +667,7 @@ define(function(require) {
                     case 'marker':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
@@ -902,7 +908,6 @@ define(function(require) {
             });
             scope.model.tagList = newListTag;
             scope.model.layers = layers || [];
-            console.log(scope.model);
           };
 
           scope.$on('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', function(e, v) {
@@ -915,7 +920,7 @@ define(function(require) {
             }
           });
 
-          scope.$on('documentPreview.showHideComment', function(e, v) {
+          scope.$on('pdfTaggingMarkup.resize', function(e, v) {
             //if(v) {
             //  // hide comments
             //}
@@ -928,7 +933,12 @@ define(function(require) {
                 scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
                 scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
                 map.invalidateSize(false);
-              }, 150);
+                $timeout(function() {
+                  scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
+                  scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
+                  map.invalidateSize(false);
+                }, 50);
+              }, 50);
             }
           });
 
