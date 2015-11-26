@@ -11,7 +11,7 @@ define(function(require) {
       return function(value, name) {
         var url = constant.resourceUrl + '/download/file?id=' + utilFactory.hash(encodeURIComponent(value));
         if(name) {
-          url += '&name=' + encodeURIComponent(name)
+          url += '&name=' + encodeURIComponent(name);
         }
         return url;
       };

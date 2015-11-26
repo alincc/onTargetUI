@@ -122,7 +122,7 @@ gulp.task('BIMCss', function() {
 });
 
 // Copy css
-gulp.task('css', ['BIMCss'], function() {
+gulp.task('css', ['html', 'BIMCss'], function() {
   return gulp.src('src/css/main.min.css')
     .pipe(gulp.dest('build/css'));
 });
@@ -145,7 +145,7 @@ gulp.task('lint', function() {
 // Window r.js command line fix (It conflict between r.js and r.cmd.js)
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
 // del node_modules\.bin\r.js
-gulp.task('requireJsOptimizer', ['html', 'css'], shell.task([
+gulp.task('requireJsOptimizer', ['css'], shell.task([
   // This is the command
   'r.js -o src/javascripts/build.js'
 ]));

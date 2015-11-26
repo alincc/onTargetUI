@@ -39,6 +39,12 @@ define([
         return angular.isNumber(value) && !isNaN(value);
       }
 
+      function changeViewValue(value) {
+        ngModelCtrl.$viewValue = value;
+        ngModelCtrl.$commitViewValue();
+        ngModelCtrl.$render();
+      }
+
       function updateValuePrecision() {
         var modelValue = ngModelCtrl.$modelValue;
 
@@ -51,13 +57,6 @@ define([
           lastValidViewValue = ngModelCtrl.$viewValue;
         }
       }
-
-      function changeViewValue(value) {
-        ngModelCtrl.$viewValue = value;
-        ngModelCtrl.$commitViewValue();
-        ngModelCtrl.$render();
-      }
-
 
       ngModelCtrl.$parsers.push(function (value) {
         if (ngModelCtrl.$isEmpty(value)) {

@@ -5,6 +5,21 @@ define(function(require) {
     function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal, $window, $filter, document, contactList, permissionFactory) {
       var memberList = contactList;
 
+      var removeUserSelected = function() {
+        //remove user
+        $scope.contactNameList = [];
+        angular.forEach($scope.contactLists, function(projectMember, key) {
+          var fullName = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
+          if(projectMember.userId !== $scope.document.keyValues.receiverId) {
+            $scope.contactNameList.push({userId: projectMember.userId, name: fullName});
+          }
+        });
+        console.log($scope.document.keyValues.attention);
+        _.remove($scope.document.keyValues.attention, function(attention) {
+          return attention === $scope.document.keyValues.receiverId;
+        });
+      };
+
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
         if(document.createdBy === userContext.authentication().userData.userId) {
@@ -335,21 +350,6 @@ define(function(require) {
         }), 'companyName');
 
         removeUserSelected();
-      };
-
-      var removeUserSelected = function() {
-        //remove user
-        $scope.contactNameList = [];
-        angular.forEach($scope.contactLists, function(projectMember, key) {
-          var fullName = projectMember.contact.firstName + ' ' + projectMember.contact.lastName;
-          if(projectMember.userId !== $scope.document.keyValues.receiverId) {
-            $scope.contactNameList.push({userId: projectMember.userId, name: fullName});
-          }
-        });
-        console.log($scope.document.keyValues.attention);
-        _.remove($scope.document.keyValues.attention, function(attention) {
-          return attention === $scope.document.keyValues.receiverId;
-        });
       };
 
       var uploadModalInstance;

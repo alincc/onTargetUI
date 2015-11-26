@@ -233,7 +233,7 @@ module.exports = {
     assetLocation: 'assets/', // empty is root and the location should end with slash '/' if not empty
     maxFileSize: 25000000, // in bytes
     convertCommand: 'convert',
-    gsCommand: 'gswin64c',
+    gsCommand: 'gs',
     concurrencyImageProcesses: 1,
     pusher: {
       appId: '138273',
