@@ -40,8 +40,8 @@ function parse(relativePath) {
     // convert pdf pages to images
     //console.log('Executing command: ' + config.convertCommand + ' -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"');
     //exec(config.convertCommand + ' -density 300 "' + filePath + '" -quality 100 "' + destinationFilePath + '"', function(error) { // gm convert
-    console.log('Executing command: ' + config.gsCommand + ' -dNumRenderingThreads=2 -dNOPAUSE -sDEVICE=jpeg -sOutputFile="' + destinationFilePath + '" -dJPEGQ=100 -r250 -q "' + filePath + '" -c quit');
-    exec(config.gsCommand + ' -dNumRenderingThreads=2 -dNOPAUSE -sDEVICE=jpeg -sOutputFile="' + destinationFilePath + '" -dJPEGQ=100 -r250 -q "' + filePath + '" -c quit', function(error) { //gs convert
+    console.log('Executing command: ' + config.gsCommand + ' -dNumRenderingThreads=2 -dNOPAUSE -sDEVICE=jpeg -sOutputFile="' + destinationFilePath + '" -dJPEGQ=100 -r350 -q "' + filePath + '" -c quit');
+    exec(config.gsCommand + ' -dNumRenderingThreads=2 -dNOPAUSE -sDEVICE=jpeg -sOutputFile="' + destinationFilePath + '" -dJPEGQ=100 -r350 -q "' + filePath + '" -c quit', function(error) { //gs convert
       console.timeEnd('ConvertPdfToImages');
       if(error) {
         reject(error);

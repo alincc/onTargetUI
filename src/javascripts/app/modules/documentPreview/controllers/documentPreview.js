@@ -177,13 +177,14 @@ define(function(require) {
 
       $scope.saveChanges = function(doc) {
         console.log($scope.versions);
-        onSiteFactory.getNextVersionName($scope.parentDocument ? $scope.parentDocument.filePath : $scope.selectedDoc.filePath, $scope.versions.length)
+        var fileName = $scope.parentDocument ? $scope.parentDocument.name : $scope.selectedDoc.name;
+        var filePath = $scope.parentDocument ? $scope.parentDocument.filePath : $scope.selectedDoc.filePath;
+        onSiteFactory.getNextVersionName(filePath, $scope.versions.length)
           .success(function(resp) {
             var newFilePath = resp.newVersionName;
-            var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
             var data = {
               "projectId": $rootScope.currentProjectInfo.projectId,
-              "name": $filter('fileName')(newFilePath),
+              "name": fileName,
               "fileType": doc.fileType,
               "createdBy": $rootScope.currentUserInfo.userId,
               "modifiedBy": $rootScope.currentUserInfo.userId,
@@ -192,7 +193,7 @@ define(function(require) {
               "parentProjectFileId": doc.parentProjectFileId === 0 ? doc.fileId : doc.parentProjectFileId,
               "isConversionComplete": true,
               "projectFileId": 0,
-              "thumbnailImageName": $filter('fileThumbnail')(newFilePath),
+              "thumbnailImageName": $filter('fileThumbnail')(filePath),
               "filePath": newFilePath
             };
             documentFactory.saveUploadedDocsInfo(data)

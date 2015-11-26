@@ -170,7 +170,7 @@ function exportPdf2(req, res) {
     .then(function(document) {
       docId = document.projectFile.fileId;
       var markerUrl = 'server/assets/img/marker-icon.png';
-      var promises = [], error, outputFolder = path.join(rootPath, 'assets', 'temp', utilService.newGuidId());
+      var promises = [], errors = [], outputFolder = path.join(rootPath, 'assets', 'temp', utilService.newGuidId());
 
       // Create temp folder if not exists
       if(!fs.existsSync(outputFolder)) {
@@ -261,6 +261,7 @@ function exportPdf2(req, res) {
                 g.write(tmpName, function(err) {
                   if(err) {
                     console.log('Merging markups to image "' + imageUrl + '"...Failed!', err.message);
+                    errors.push(err.message);
                     reject(err);
                   } else {
                     var newG = gm()
@@ -280,6 +281,7 @@ function exportPdf2(req, res) {
                       .write(tmpName, function(err) {
                         if(err) {
                           console.log('Merging tags to image "' + imageUrl + '"...Failed!');
+                          errors.push(err.message);
                           reject(err);
                         }
                         else {
@@ -300,9 +302,10 @@ function exportPdf2(req, res) {
       // all promises are resolved
       Promise.all(promises)
         .then(function(data) {
-          if(error) {
+          console.log(data);
+          if(errors.length) {
             console.log('Starting export image with markups, tags to pdf...Failed!');
-            console.log(error.message);
+            console.log(errors.join(', '));
           }
           else {
             console.log('Starting merge markups, tags to images...Done!');
@@ -619,9 +622,9 @@ function downloadFile(req, res) {
     .then(function(document) {
       // document.projectFile
       var markerUrl = 'server/assets/img/marker-icon.png';
-      var promises = [], error, outputFolder = path.join(rootPath, 'assets', 'temp', utilService.newGuidId()), tmpFileName = utilService.newGuidId(), data = [], pages = [];
+      var promises = [], errors = [], outputFolder = path.join(rootPath, 'assets', 'temp', utilService.newGuidId()), tmpFileName = utilService.newGuidId(), data = [], pages = [];
 
-      var failure = function(errorMessage){
+      var failure = function(errorMessage) {
         res.status(400);
         res.send(errorMessage);
       };
@@ -926,7 +929,8 @@ function downloadFile(req, res) {
                     g.write(tmpName, function(err) {
                       if(err) {
                         console.log('Merging markups to image "' + imageUrl + '"...Failed!', err.message);
-                        reject(err);
+                        errors.push(err.message);
+                        resolve(err);
                       } else {
                         var newG = gm()
                           .in('-page', '+0+0')
@@ -945,7 +949,8 @@ function downloadFile(req, res) {
                           .write(tmpName, function(err) {
                             if(err) {
                               console.log('Merging tags to image "' + imageUrl + '"...Failed!');
-                              reject(err);
+                              errors.push(err.message);
+                              resolve(err);
                             }
                             else {
                               console.log('Merging markups, tags to image "' + imageUrl + '"...Done!');
@@ -965,10 +970,10 @@ function downloadFile(req, res) {
           // all promises are resolved
           Promise.all(promises)
             .then(function(data) {
-              if(error) {
+              if(errors.length) {
+                console.log(data);
                 console.log('Starting export image with markups, tags to pdf...Failed!');
-                console.log(error.message);
-                failure(error.message);
+                failure("Cannot download the file!");
               }
               else {
                 console.log('Starting merge markups, tags to images...Done!');
@@ -1096,7 +1101,7 @@ function downloadFile(req, res) {
                             console.log(err);
                           }
                         });
-                      }else{
+                      } else {
                         failure(err.message);
                       }
                     });

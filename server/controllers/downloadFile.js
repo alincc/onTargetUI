@@ -18,16 +18,16 @@ function downloadFile(req, res) {
   var url = req.query.url;
   if(req.query.id) {
     var id = req.query.id;
-    id = id.replace(/\s/g,'+');
+    id = id.replace(/\s/g, '+');
     url = CryptoJS.AES.decrypt(id, key, cfg).toString(CryptoJS.enc.Utf8);
     url = decodeURIComponent(url);
-    if(/^\?/.test(url)){
+    if(/^\?/.test(url)) {
       url = url.substring(1, url.length);
     }
   }
 
   var file = rootPath + '/' + url,
-    fileName = path.basename(file);
+    fileName = req.query.name ? decodeURIComponent(req.query.name) : path.basename(file);
 
   if(fs.existsSync(file)) {
     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);

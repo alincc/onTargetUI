@@ -97,6 +97,7 @@ define(function(require) {
           var fileExtension = utilFactory.getFileExtension(el.name);
           var filePath = $filter('filePath')(el.name);
           el.filePath = filePath;
+          el.originalFilePath = el.filePath;
           el.fileName = el.name;
           el.previewPath = filePath;
           el.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
@@ -231,9 +232,16 @@ define(function(require) {
         console.log(doc);
         doc.isDownloading = true;
         onSiteFactory.downloadFile(doc.fileId, $rootScope.currentProjectInfo.projectId)
-          .success(function(resp){
+          .success(function(resp) {
             doc.isDownloading = false;
-            $window.open($filter('fileDownloadPathHash')(resp.filePath));
+            var fileExt = resp.filePath.substring(resp.filePath.lastIndexOf('.') + 1).toLowerCase();
+            // If custom file name extension same as the file type, then use the custom file name, otherwise, use custom file name with real file type extension
+            var fileName = new RegExp('\\.' + fileExt + '$', 'i').test(doc.name) ? doc.name : (doc.name + '.' + fileExt);
+            $window.open($filter('fileDownloadPathHash')(resp.filePath, fileName));
+          })
+          .error(function(err) {
+            console.log(err);
+            doc.isDownloading = false;
           });
         //$window.open($filter('fileDownloadPathHash')(doc.name));
       };
@@ -280,7 +288,8 @@ define(function(require) {
 
       $scope.filterByCategoryId = function(document) {
         if($scope.selectedCategoryId) {
-          return document.projectFileCategoryId.projectFileCategoryId.toString() === $scope.selectedCategoryId.toString();
+          var id = document.projectFileCategoryId.projectFileCategoryId ? document.projectFileCategoryId.projectFileCategoryId : document.projectFileCategoryId.id;
+          return id.toString() === $scope.selectedCategoryId.toString();
         }
       };
 
@@ -318,7 +327,7 @@ define(function(require) {
 
       $scope.editDocument = function(document) {
         // open modal
-        $modal.open({
+        var editModalInstance = $modal.open({
           templateUrl: 'onSite/templates/edit.html',
           controller: 'EditDocumentController',
           size: 'lg',
@@ -334,11 +343,13 @@ define(function(require) {
             }
           }
         });
-      };
 
-      $scope.$on('updateSuccess', function() {
-        getUploadedDocumentList();
-      });
+        editModalInstance.result.then(function (selectedItem) {
+          getUploadedDocumentList();
+        }, function () {
+
+        });
+      };
 
       load();
     }];
