@@ -23,6 +23,13 @@
         var currentUserFirstName = $('#currentUserFirstName').val();
         var currentUserLastName = $('#currentUserLastName').val();
         var currentUserAvatarPath = $('#currentUserAvatarPath').val();
+        var pusherKey = $('#pusherClientApiKey').val();
+        var pusherChannel = $('#pusherChannel').val();
+
+        var pusher = new Pusher(pusherKey, {
+            encrypted: true
+        });
+        var channel = pusher.subscribe(pusherChannel);
 
         othis.selectedId = oid;
 
@@ -129,22 +136,28 @@
                         "loggedInUserProjectId": parseInt(projectId)
                     },
                     "projectBIMFileId": parseInt(projectBimFileId),
-                    "comment": containerDiv.find('#commentText').val()
+                    "comment": containerDiv.find('#commentText').val(),
+                    "commentedDate": new Date().toISOString(),
+                    "commenterContact": {
+                        firstName: currentUserFirstName,
+                        lastName: currentUserLastName,
+                        userImagePath: currentUserAvatarPath
+                    }
                 }),
                 dataType: "json",
                 contentType: 'application/json',
                 success: function(data) {
                     if(data.returnVal === 'SUCCESS') {
-                        othis.appendComment({
-                            commentedDate: new Date().toISOString(),
-                            commenterContact: {
-                                firstName: currentUserFirstName,
-                                lastName: currentUserLastName,
-                                userImagePath: currentUserAvatarPath
-                            },
-                            comment: containerDiv.find('#commentText').val()
-                        });
-                        containerDiv.find('#commentText').val('');
+//                        othis.appendComment({
+//                            commentedDate: new Date().toISOString(),
+//                            commenterContact: {
+//                                firstName: currentUserFirstName,
+//                                lastName: currentUserLastName,
+//                                userImagePath: currentUserAvatarPath
+//                            },
+//                            comment: containerDiv.find('#commentText').val()
+//                        });
+//                        containerDiv.find('#commentText').val('');
                     }
                 },
                 error: function(err) {
@@ -167,5 +180,22 @@
         containerDiv.find(".btnAddComment").click(othis.addComment);
 
         othis.loadComments();
+
+        // pusher
+        console.log('Listen event: ', 'onbim.comment.' + parseInt(projectBimFileId));
+        channel.bind('onBIM.comment.' + parseInt(projectBimFileId), function(evt) {
+            if(evt.name === 'onBIMAddComment') {
+                othis.appendComment({
+                    commentedDate: evt.value.commentedDate,
+                    commenterContact: evt.value.commenterContact,
+                    comment: evt.value.comment
+                });
+                containerDiv.find('#commentText').val('');
+            }
+        });
+
+        $(window).on('hashchange', function() {
+            channel.unbind('onBIM.comment.' + parseInt(projectBimFileId));
+        });
     }
 </script>

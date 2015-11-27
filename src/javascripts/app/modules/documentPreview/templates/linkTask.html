@@ -1,6 +1,14 @@
 <h4 class="padder" ng-if="!activitySelected">Select Activity</h4>
-<h4 class="padder" ng-if="activitySelected && !isCreateTask">Select Task <button class="btn btn-default btn-xs pull-right" ng-click="backToSelectActivity()">Back to select activity</button><button class="btn btn-info btn-xs pull-right m-r-xs" ng-click="createTask()">Add Task</button></h4>
-<h4 class="padder" ng-if="activitySelected && isCreateTask">Add Task <button class="btn btn-default btn-xs pull-right" ng-click="backToSelectTask()">Back to select task</button></h4>
+<h4 class="padder" ng-if="activitySelected && !isCreateTask">Select Task
+    <button class="btn btn-default btn-xs pull-right" ng-click="backToSelectActivity()">Back to select activity</button>
+    <button class="btn btn-info btn-xs pull-right m-r-xs" ng-click="createTask()">Add Task</button>
+</h4>
+<h4 class="padder" ng-if="activitySelected && isCreateTask">Add Task
+    <button class="btn btn-default btn-xs pull-right" ng-click="backToSelectTask()">Back to select task</button>
+    <button class="btn btn-info btn-xs pull-right m-r-xs" ng-disabled="task_form.$invalid || isCreatingTask"
+            ng-click="saveTask()">Save
+    </button>
+</h4>
 <div class="list-container" ng-class="{'select-task': activitySelected}">
     <div class="activity-list m-t-none" custom-scroll ng-show="!activitySelected">
         <div class="activity-loading text-center" ng-if="isLoadingActivity">
@@ -36,9 +44,46 @@
         </div>
     </div>
     <div class="task-list" custom-scroll ng-show="activitySelected && !isCreateTask">
-        Task list
+        <div class="task-loading text-center" ng-if="isLoadingTasks">
+            <spinner text="Loading..."></spinner>
+        </div>
+        <div class="task-item" ng-repeat="task in tasks | filter:search:title"
+             ng-click="selectTask(task)">
+            <div class="task-status">
+                <div class="percentage">{{task.percentageComplete}}%</div>
+                                            <span
+                                                    round-progress
+                                                    max="100"
+                                                    current="task.percentageComplete"
+                                                    color="#{{task.percentageComplete | taskStatusColor}}"
+                                                    bgcolor="#ececec"
+                                                    radius="25"
+                                                    stroke="5"
+                                                    semi="false"
+                                                    rounded="false"
+                                                    clockwise="true"
+                                                    responsive="false"
+                                                    iterations="10"
+                                                    animation="easeInOutQuart">
+                                            </span>
+            </div>
+            <div class="task-info">
+                <div class="title">{{task.title}}</div>
+                <div class="assignee">Assigned to: <span ng-repeat="as in task.assignee">{{as.contact.firstName}}&nbsp;{{as.contact.lastName}}{{$last?'':', '}}</span>
+                </div>
+                <div class="priority"><span class="task-severity-{{task.severity}}"
+                                            ng-bind="task.severity|taskSeverity"></span>
+                    priority
+                </div>
+            </div>
+        </div>
+        <div class="no-result text-center" ng-if="!tasks.length && !isLoadingTasks">
+            No tasks was found
+        </div>
     </div>
-    <div class="create-task" ng-if="activitySelected && isCreateTask">
-        <add-task task="newTask"></add-task>
-    </div>
+    <form name="task_form" no-validate class="form-validation">
+        <div class="create-task" ng-if="activitySelected && isCreateTask">
+            <add-task task="newTask"></add-task>
+        </div>
+    </form>
 </div>

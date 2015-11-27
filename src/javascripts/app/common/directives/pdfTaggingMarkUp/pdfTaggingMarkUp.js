@@ -143,7 +143,7 @@ define(function(require) {
             map.addLayer(marker);
             marker.bindPopup(markerTemplate);
 
-            function compileMarker() {
+            function compileMarker(cb) {
               markerScope = scope.$new(true);
               markerScope.marker = angular.copy(obj);
               markerScope.marker.remove = function() {
@@ -152,11 +152,15 @@ define(function(require) {
                 }
                 _.remove(scope.markers, {id: obj.id});
               };
-              markerScope.marker.addLink = function() {
-                $rootScope.$broadcast('pdfTaggingMarkup.Tag.AddLink');
+              markerScope.marker.linkTask = function() {
+                $rootScope.$broadcast('pdfTaggingMarkup.Tag.LinkTask');
               };
 
               $compile(marker._popup._contentNode)(markerScope);
+
+              if(cb) {
+                cb(markerScope);
+              }
             }
 
             marker.on("popupopen", function(e) {
@@ -184,14 +188,31 @@ define(function(require) {
               //  e.popup.update();
               //}
               //
-              //// Fix close button
-              //var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
-              //if(closeButton) {
-              //  closeButton.setAttribute('href', '');
-              //}
+              // Fix close button
+              var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
+              if(closeButton) {
+                closeButton.setAttribute('href', '');
+                angular.element(closeButton).on('click', function() {
+                  $timeout(function() {
+                    $rootScope.selectedProjetFileTag = null;
+                    $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+                    scope.updatePageData();
+                  });
+                });
+                marker.closeButton = closeButton;
+              }
 
               // Compile popup content
-              compileMarker();
+              compileMarker(function(markerScope) {
+                $timeout(function() {
+                  if(markerScope.marker.isLinked) {
+                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.ViewTask', {
+                      taskId: markerScope.marker.taskLink.taskId
+                    });
+                  }
+                  $rootScope.$broadcast('pdfTaggingMarkup.popupopen');
+                });
+              });
             });
 
             marker.on("popupclose", function(e) {
@@ -201,11 +222,22 @@ define(function(require) {
                 currentMarker.text = markerScope.marker.text;
               }
 
+              if(marker.closeButton) {
+                angular.element(marker.closeButton).off('click');
+              }
+
               if(markerScope) {
                 markerScope.$destroy();
               }
 
               e.popup.options.autoPan = false;
+
+              $timeout(function() {
+                $rootScope.selectedProjetFileTag = null;
+                $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+              });
+
+              scope.updatePageData();
             });
 
             if(open) {
@@ -337,21 +369,33 @@ define(function(require) {
               objLayer.r = layer._mRadius;
               objLayer.id = id;
               objLayer.type = type;
+              objLayer.projectFileTag = e.projectFileTag;
               if(type === 'marker') {
                 //var projectFileTagId = resp.data.tags[0].projectFileTagId;
                 //objLayer.id = projectFileTagId;
                 //layer.id = projectFileTagId;
                 objLayer.layer = angular.copy(layer);
-                if(true) {
-                  scope.listLayers.push(objLayer);
-                }
+                scope.listLayers.push(objLayer);
                 editableLayers.addLayer(layer);
 
-                layer.bindPopup(markerTemplate);
+                layer.bindPopup(markerTemplate, {
+                  minWidth: 300
+                });
                 var markerScope;
-                var compileMarker = function() {
+                var compileMarker = function(cb) {
                   markerScope = scope.$new(true);
                   markerScope.marker = angular.copy(objLayer);
+
+                  if(!objLayer.projectFileTag) {
+                    // New tag
+                    objLayer.projectFileTag = {
+                      isNew: true,
+                      projectFileTagId: utilFactory.newGuid(),
+                      taskLinks: [],
+                      comment: []
+                    };
+                  }
+
                   markerScope.marker.remove = function() {
                     if(map.hasLayer(layer)) {
                       map.removeLayer(layer);
@@ -383,11 +427,50 @@ define(function(require) {
 
                     scope.updatePageData();
                   };
-                  markerScope.marker.addLink = function() {
-                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.AddLink');
+
+                  markerScope.marker.linkTask = function() {
+                    $rootScope.currentProjectFileTag = objLayer.projectFileTag;
+                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.LinkTask');
+                  };
+                  markerScope.marker.isLinked = objLayer.projectFileTag.taskLinks.length > 0;
+                  markerScope.marker.taskLink = objLayer.projectFileTag.taskLinks[0];
+                  markerScope.marker.isNew = objLayer.projectFileTag.isNew;
+
+                  markerScope.marker.unLink = function(task) {
+                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.UnLinkTask', {
+                      projectFileTagId: objLayer.projectFileTag.projectFileTagId,
+                      projectTaskId: task.taskId
+                    });
                   };
 
+                  markerScope.$on('linkTask.Completed', function(event, dt) {
+                    if(objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
+                      markerScope.marker.isLinked = true;
+                      markerScope.marker.taskLink = {
+                        taskId: dt.taskId
+                      };
+                      e.projectFileTag.projectFileTagId = dt.projectFileTag.projectFileTagId;
+                      e.projectFileTag.taskLinks = [{
+                        taskId: dt.taskId
+                      }];
+                    }
+                  });
+
+                  markerScope.$on('unLinkTask.Completed', function(event, dt) {
+                    if(objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
+                      markerScope.marker.isLinked = false;
+                      markerScope.marker.taskLink = null;
+
+                      e.projectFileTag.projectFileTagId = dt.projectFileTag.projectFileTagId;
+                      e.projectFileTag.taskLinks = [];
+                    }
+                  });
+
                   $compile(layer._popup._contentNode)(markerScope);
+
+                  if(cb) {
+                    cb(markerScope, objLayer);
+                  }
                 };
 
                 layer.on("popupopen", function(e) {
@@ -415,14 +498,32 @@ define(function(require) {
                   //  e.popup.update();
                   //}
                   //
-                  //// Fix close button
-                  //var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
-                  //if(closeButton) {
-                  //  closeButton.setAttribute('href', '');
-                  //}
+                  // Fix close button
+                  var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
+                  if(closeButton) {
+                    closeButton.setAttribute('href', '');
+                    angular.element(closeButton).on('click', function() {
+                      $timeout(function() {
+                        $rootScope.selectedProjetFileTag = null;
+                        $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+                        scope.updatePageData();
+                      });
+                    });
+                    layer.closeButton = closeButton;
+                  }
 
                   // Compile popup content
-                  compileMarker();
+                  compileMarker(function(markerScope) {
+                    $timeout(function() {
+                      console.log(markerScope.marker);
+                      if(markerScope.marker.isLinked) {
+                        $rootScope.$broadcast('pdfTaggingMarkup.Tag.ViewTask', {
+                          taskId: markerScope.marker.taskLink.taskId
+                        });
+                      }
+                      $rootScope.$broadcast('pdfTaggingMarkup.popupopen');
+                    });
+                  });
                 });
 
                 layer.on("popupclose", function(e) {
@@ -432,25 +533,40 @@ define(function(require) {
                     currentMarker.text = markerScope.marker.text;
                   }
 
+                  if(layer.closeButton) {
+                    angular.element(layer.closeButton).off('click');
+                  }
+
                   if(markerScope) {
                     markerScope.$destroy();
                   }
 
                   e.popup.options.autoPan = false;
+
+                  $timeout(function() {
+                    $rootScope.selectedProjetFileTag = null;
+                    $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+                  });
+
+                  scope.updatePageData();
                 });
 
                 if(!hideOpenPopup) {
                   layer.openPopup();
-                } else {
-                  compileMarker();
+                }
+                else {
+                  compileMarker(function() {
+                    $timeout(function() {
+                      $rootScope.$broadcast('pdfTaggingMarkup.popupopen');
+                    });
+                  });
                 }
 
               }
               else {
                 objLayer.layer = angular.copy(layer);
-                if(true) {
-                  scope.listLayers.push(objLayer);
-                }
+                objLayer.projectFileTag = e.projectFileTag;
+                scope.listLayers.push(objLayer);
                 editableLayers.addLayer(layer);
               }
 
@@ -543,7 +659,6 @@ define(function(require) {
                 var type = _.filter(attrs, function(a) {
                   return a.key === 'type';
                 });
-                console.log(type, attrs);
                 var options = _.reduce(attrs, function(memo, a) {
                   if(/^options\./.test(a.key)) {
                     var keys = a.key.split('.')[1], value = a.value;
@@ -551,17 +666,14 @@ define(function(require) {
                   }
                   return memo;
                 }, {});
-                console.log(options);
                 if(type.length) {
                   var t = type[0].value, geo, coords;
-                  console.log(t);
                   switch(t) {
                     case 'rectangle':
                     {
                       geo = _.filter(attrs, function(a) {
                         return /^geo\./.test(a.key);
                       });
-                      console.log(geo);
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
                           value = parseFloat(g.value);
@@ -575,10 +687,10 @@ define(function(require) {
                         }
                         return memo;
                       }, []);
-                      console.log(coords);
                       var rectangle = L.rectangle(coords, options), rectangle2 = angular.copy(rectangle);
                       //rectangle2.addTo(map);
                       rectangle.layerType = t;
+                      rectangle.projectFileTag = tag;
                       onDrawCreated(rectangle, true, true);
                       break;
                     }
@@ -603,6 +715,7 @@ define(function(require) {
                       var polygon = L.polygon(coords, options), polygon2 = angular.copy(polygon);
                       //polygon2.addTo(map);
                       polygon.layerType = t;
+                      polygon.projectFileTag = tag;
                       onDrawCreated(polygon, true, true);
                       break;
                     }
@@ -627,6 +740,7 @@ define(function(require) {
                       var polyline = L.polyline(coords, options), polyline2 = angular.copy(polyline);
                       //polyline2.addTo(map);
                       polyline.layerType = t;
+                      polyline.projectFileTag = tag;
                       onDrawCreated(polyline, true, true);
                       break;
                     }
@@ -635,7 +749,6 @@ define(function(require) {
                       var radius = _.filter(attrs, function(a) {
                         return /^radius/.test(a.key);
                       });
-                      console.log(radius);
                       var circleRadius = 0;
                       if(radius.length) {
                         circleRadius = parseFloat(radius[0].value);
@@ -643,7 +756,6 @@ define(function(require) {
                       geo = _.filter(attrs, function(a) {
                         return /^geo\./.test(a.key);
                       });
-                      console.log(geo);
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
                           value = parseFloat(g.value);
@@ -657,10 +769,10 @@ define(function(require) {
                         }
                         return memo;
                       }, []);
-                      console.log(coords);
                       var circle = L.circle(coords[0], circleRadius, options), circle2 = angular.copy(circle);
                       //circle2.addTo(map);
                       circle.layerType = t;
+                      circle.projectFileTag = tag;
                       onDrawCreated(circle, true, true);
                       break;
                     }
@@ -686,11 +798,11 @@ define(function(require) {
                       //marker2.addTo(map);
                       marker.layerType = t;
                       marker.comments = tag.comment;
+                      marker.projectFileTag = tag;
                       onDrawCreated(marker, true, true);
                     }
                   }
                 }
-
               });
             }
           }
@@ -760,7 +872,8 @@ define(function(require) {
                       'projectFileTagAttributeId': null
                     }
                   ],
-                  comment: listComment
+                  comment: listComment,
+                  'linkTaskId': m.projectFileTag ? m.projectFileTag.linkTaskId : 0
                 };
               }
               var attr = [];
@@ -896,7 +1009,6 @@ define(function(require) {
               el.title = "Tag | Page-" + scope.pageNumber;
               return el;
             });
-            var img = document.querySelector('.leaflet-image-layer');
             var layers = angular.copy(scope.listLayers);
             _.each(layers, function(l) {
               if(l.layer && l.layer._leaflet_events) {

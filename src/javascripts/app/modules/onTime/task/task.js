@@ -12,12 +12,6 @@ define(function(require){
     deleteController = require('./controllers/delete'),
     infoController = require('./controllers/info'),
     logisticsController = require('./controllers/logistics'),
-    ownerController = require('./controllers/owner'),
-    commentController = require('./controllers/comment'),
-    progressController = require('./controllers/progress'),
-    attachmentController = require('./controllers/attachment'),
-    budgetController = require('./controllers/budget'),
-    viewTaskAttachmentController = require('./controllers/viewAttachment'),
     template = require('text!./templates/task.html'),
     createTemplate = require('text!./templates/create.html'),
     editTemplate = require('text!./templates/edit.html'),
@@ -25,12 +19,6 @@ define(function(require){
     createOrUpdateTemplate = require('text!./templates/_createOrUpdate.html'),
     infoTemplate = require('text!./templates/info.html'),
     logisticsTemplate = require('text!./templates/logistics.html'),
-    ownerTemplate = require('text!./templates/owner.html'),
-    commentTemplate = require('text!./templates/comment.html'),
-    progressTemplate = require('text!./templates/progress.html'),
-    attachmentTemplate = require('text!./templates/attachment.html'),
-    viewAttachmentTemplate = require('text!./templates/viewAttachment.html'),
-    budgetTemplate = require('text!./templates/budget.html'),
     projectServiceModule = require('app/common/services/project'),
     activityServiceModule = require('app/common/services/activity'),
     notificationServiceModule = require('app/common/services/notifications'),
@@ -45,8 +33,6 @@ define(function(require){
     ngFileUpload = require('ngFileUpload'),
     requireMultiple = require('app/common/validators/requireMultiple'),
     monthName = require('app/common/filters/monthName'),
-    budgetEditorDirective = require('./directives/budgetEditor'),
-    budgetEditorTemplate = require('text!./templates/budgetEditor.html'),
     userNotification = require('app/common/services/userNotifications'),
     permissionServiceModule = require('app/common/services/permission'),
     fileDownloadPath = require('app/common/filters/fileDownloadPath');
@@ -61,13 +47,6 @@ define(function(require){
     $templateCache.put('onTime/task/templates/delete.html', deleteTemplate);
     $templateCache.put('onTime/task/templates/info.html', infoTemplate);
     $templateCache.put('onTime/task/templates/logistics.html', logisticsTemplate);
-    $templateCache.put('onTime/task/templates/owner.html', ownerTemplate);
-    $templateCache.put('onTime/task/templates/comment.html', commentTemplate);
-    $templateCache.put('onTime/task/templates/progress.html', progressTemplate);
-    $templateCache.put('onTime/task/templates/attachment.html', attachmentTemplate);
-    $templateCache.put('onTime/task/templates/budget.html', budgetTemplate);
-    $templateCache.put('onTime/task/templates/viewAttachment.html', viewAttachmentTemplate);
-    $templateCache.put('budgetEditorTemplate', budgetEditorTemplate);
   }]);
 
   // Controllers
@@ -77,15 +56,6 @@ define(function(require){
   module.controller('DeleteTaskController', deleteController);
   module.controller('InfoTaskController', infoController);
   module.controller('LogisticsTaskController', logisticsController);
-  module.controller('OwnerTaskController', ownerController);
-  module.controller('CommentTaskController', commentController);
-  module.controller('ProgressTaskController', progressController);
-  module.controller('AttachmentTaskController', attachmentController);
-  module.controller('ViewTaskAttachmentController', viewTaskAttachmentController);
-  module.controller('BudgetTaskController', budgetController);
-
-  // Directives
-  module.directive('budgetEditor', budgetEditorDirective);
 
   return module;
 });

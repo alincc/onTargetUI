@@ -135,6 +135,28 @@ define(function(require) {
         });
       };
 
+      services.linkTask = function(projectFileTagId, projectTaskId) {
+        return $http.post(constant.domain + '/project/file/tag/task/link', {
+          projectFileTagId: projectFileTagId,
+          projectTaskId: projectTaskId
+        }, {
+          headers: {
+            AutoAlert: true
+          }
+        });
+      };
+
+      services.unLinkTask = function(projectFileTagId, projectTaskId) {
+        return $http.post(constant.domain + '/project/file/tag/task/unlink', {
+          projectFileTagId: projectFileTagId,
+          projectTaskId: projectTaskId
+        }, {
+          headers: {
+            AutoAlert: true
+          }
+        });
+      };
+
       return services;
     }]);
   return module;

@@ -101,6 +101,9 @@ define(function(require) {
       $scope.parseTag(document.documentTags);
       $scope.isEdit = false;
       $scope.showLinkTask = false;
+      $scope.showViewTask = false;
+      $scope.task = null;
+      $scope.contacts = [];
 
       // Comments
       $scope.comments = [];
@@ -201,7 +204,6 @@ define(function(require) {
             };
             documentFactory.saveUploadedDocsInfo(data)
               .then(function(resp) {
-                console.log(resp.data);
                 if(resp.data && resp.data.documentDetail) {
                   var document = resp.data.documentDetail;
                   var docId = resp.data.documentDetail.fileId;
@@ -358,13 +360,41 @@ define(function(require) {
         }
       });
 
-      $scope.$on('pdfTaggingMarkup.Tag.AddLink', function(){
-        taskFactory.getContacts($rootScope.currentProjectInfo.projectId).then(function(resp) {
-          $rootScope.contactList = resp.data.projectMemberList;
-          $scope.showLinkTask = true;
-          $scope.hideRightSide = false;
-          $scope.$broadcast('pdfTaggingMarkup.resize');
-        });
+      $scope.$on('pdfTaggingMarkup.Tag.LinkTask', function() {
+        $scope.showLinkTask = true;
+        $scope.hideRightSide = false;
+        $scope.showViewTask = false;
+        $scope.$broadcast('pdfTaggingMarkup.resize');
+      });
+
+      $scope.$on('pdfTaggingMarkup.Tag.UnLinkTask', function(e, dt) {
+        onSiteFactory.unLinkTask(dt.projectFileTagId, dt.projectTaskId)
+          .success(function(resp) {
+            $rootScope.$broadcast('unLinkTask.Completed', {
+              projectFileTag: {
+                projectFileTagId: dt.projectFileTagId
+              }
+            });
+            $scope.showLinkTask = false;
+            $scope.showViewTask = false;
+          })
+          .error(function(err) {
+            console.log(err);
+          });
+      });
+
+      $scope.$on('pdfTaggingMarkup.popupclose', function() {
+        $scope.showLinkTask = false;
+        $scope.showViewTask = false;
+      });
+
+      //$scope.$on('pdfTaggingMarkup.popupopen', function(e, dt){
+      //
+      //});
+
+      $scope.$on('linkTask.Completed', function() {
+        $scope.showLinkTask = false;
+        $scope.showViewTask = false;
       });
 
       $scope.$on('$destroy', function() {
@@ -373,6 +403,48 @@ define(function(require) {
         pushFactory.unbind('document.preview.' + $scope.selectedDoc.fileId);
         pushFactory.unbind('document.comment.' + $scope.selectedDoc.fileId);
       });
+
+      // View Task
+      $scope.$on('pdfTaggingMarkup.Tag.ViewTask', function(e, dt) {
+        taskFactory.getTaskById(dt.taskId)
+          .success(function(resp) {
+            $scope.task = resp.task;
+            $scope.hideRightSide = false;
+            $scope.showLinkTask = false;
+            $scope.showViewTask = true;
+            $scope.$broadcast('pdfTaggingMarkup.resize');
+          })
+          .error(function(err) {
+            console.log(err);
+          });
+      });
+
+      $scope.actions = {
+        info: {
+          name: "info"
+        },
+        owner: {
+          name: "owner"
+        },
+        comment: {
+          name: "comment"
+        },
+        budget: {
+          name: "budget"
+        },
+        progress: {
+          name: "progress"
+        },
+        attachment: {
+          name: "attachment"
+        }
+      };
+
+      $scope.action = $scope.actions.info;
+
+      $scope.openAction = function(action) {
+        $scope.action = action;
+      };
     }];
   return controller;
 });

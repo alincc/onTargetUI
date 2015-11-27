@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
                     <div class="panel panel-default" ng-show="!hideRightSide">
-                        <div class="panel-heading" ng-show="!showLinkTask">
+                        <div class="panel-heading" ng-show="!showLinkTask && !showViewTask">
                             <span>Comments</span>
                             <!--<div class="pull-right" ng-if="selectedDoc.versionProjectFiles.length > 0">-->
                             <div class="pull-right">
@@ -90,7 +90,7 @@
                                 </section>
                             </div>
                         </div>
-                        <div class="panel-body" custom-scroll ng-show="!showLinkTask">
+                        <div class="panel-body" custom-scroll ng-show="!showLinkTask && !showViewTask">
                             <div class="text-center" ng-if="isLoadingComment">
                                 <spinner text="Loading comments..."></spinner>
                             </div>
@@ -137,6 +137,65 @@
                         </div>
                         <div class="panel-body no-padder" ng-if="showLinkTask">
                             <link-task></link-task>
+                        </div>
+                        <div class="panel-heading" ng-if="showViewTask">
+                            <span>Task details</span>
+                        </div>
+                        <div class="task-logistic add-edit-task panel-body" ng-if="showViewTask">
+                            <div class="nav-container">
+                                <nav class="navbar navbar-default">
+                                    <div class="container-fluid">
+                                        <div>
+                                            <ul class="nav nav-pills nav-justified text-muted">
+                                                <li ng-class="{'active': action.name==='info'}"><a
+                                                        href="javascript:void(0)"
+                                                        ng-click="openAction(actions.info)">Info</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='owner'}"
+                                                    permission="VIEW_TASK_MEMBER"><a href="javascript:void(0)"
+                                                                                     ng-click="openAction(actions.owner)">Assignee</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='comment'}"
+                                                    permission="VIEW_TASK_COMMENT"><a href="javascript:void(0)"
+                                                                                      ng-click="openAction(actions.comment)">Comment</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='budget'}"
+                                                    permission="VIEW_TASK_BUDGET"><a href="javascript:void(0)"
+                                                                                     ng-click="openAction(actions.budget)">Budget</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='progress'}"
+                                                    permission="VIEW_TASK_PERCENTAGE"><a href="javascript:void(0)"
+                                                                                         ng-click="openAction(actions.progress)">Progress</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='attachment'}"
+                                                    permission="VIEW_TASK_ATTACHMENT"><a href="javascript:void(0)"
+                                                                                         ng-click="openAction(actions.attachment)">Attachments</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div ng-switch on="action.name" class="h-full tab-content">
+                                <div ng-switch-when="info" class="h-full">
+                                    <task-info task="task" class="block padder h-full"></task-info>
+                                </div>
+                                <div ng-switch-when="owner" permission="VIEW_TASK_MEMBER" class="h-full">
+                                    <task-assignee task="task" class="block h-full"></task-assignee>
+                                </div>
+                                <div ng-switch-when="comment" permission="VIEW_TASK_COMMENT" class="h-full">
+                                    <task-comment task="task" class="block h-full"></task-comment>
+                                </div>
+                                <div ng-switch-when="budget" permission="VIEW_TASK_BUDGET" class="h-full">
+                                    <task-budget task="task" class="block h-full"></task-budget>
+                                </div>
+                                <div ng-switch-when="progress" permission="VIEW_TASK_PERCENTAGE" class="h-full">
+                                    <task-progress task="task" class="block h-full"></task-progress>
+                                </div>
+                                <div ng-switch-when="attachment" permission="VIEW_TASK_ATTACHMENT" class="h-full">
+                                    <task-attachment task="task" class="block h-full"></task-attachment>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

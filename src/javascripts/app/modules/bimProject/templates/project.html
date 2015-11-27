@@ -8,5 +8,7 @@
     <input type="hidden" id="currentUserLastName" value="{{::currentUserInfo.contact.lastName}}" />
     <input type="hidden" id="currentUserAvatarPath" value="{{::currentUserInfo.contact.userImagePath}}" />
     <input type="hidden" id="bimServerAddress" value="{{::constant.bimServerAddress}}" />
+    <input type="hidden" id="pusherClientApiKey" value="{{::constant.pusher_api_key}}" />
+    <input type="hidden" id="pusherChannel" value="{{::constant.pusher_channel}}" />
     <div ng-include="'bimProject/templates/index.html'"></div>
 </section>

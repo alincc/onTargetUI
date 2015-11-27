@@ -1,0 +1,32 @@
+<div class="task-owner m-t-xs m-b-xs">
+    <div class="no-result text-muted m-b-xs" ng-if="!model.assignees.length">This task has not been assigned yet.</div>
+    <div ng-repeat="assignee in model.assignees" class="ow-item">
+        <span><i class="fa fa-user"></i>&nbsp;&nbsp;<span class="name">{{assignee.contact.firstName}}&nbsp;{{assignee.contact.lastName}}</span></span>
+        <button class="btn btn-xs btn-warning" ng-click="removeUserFromTask(assignee)" permission="REMOVE_TASK_MEMBER"><i class="fa fa-minus"></i>
+            Remove
+        </button>
+    </div>
+    <div class="control m-t-sm">
+        <div ng-show="onAddOwner" class="ow-add-box">
+            <form>
+                <div class="input-group">
+                    <ui-select ng-model="model.selectedAssignee"
+                               theme="bootstrap"
+                               reset-search-input="true">
+                        <ui-select-match placeholder="Enter assignee name">{{$select.selected.contact.firstName + ' ' + $select.selected.contact.lastName}}</ui-select-match>
+                        <ui-select-choices repeat="own in contacts track by $index">
+                            <div ng-bind="own.contact.firstName + ' ' + own.contact.lastName"></div>
+                        </ui-select-choices>
+                    </ui-select>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" ng-click="assignUserToTask()" ng-disabled="!model.selectedAssignee" permission="ADD_TASK_MEMBER"><i class="fa fa-plus"></i> Add</button>
+                  <button class="btn btn-warning" ng-click="onAddOwner = false"><i class="fa fa-minus"></i> Cancel</button>
+              </span>
+                </div>
+            </form>
+        </div>
+        <button class="btn btn-primary" ng-show="!onAddOwner" ng-click="addOwner()"><i class="fa fa-plus"></i> Add
+            Assignee
+        </button>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="form-group m-b-xs">
+    <label>Title:</label>
+    <p class="form-control-static text-muted no-padder" ng-bind="task.title"></p>
+</div>
+<div class="form-group m-b-xs">
+    <label>Description:</label>
+    <p class="form-control-static text-muted no-padder" ng-bind="task.description"></p>
+</div>
+<div class="form-group m-b-xs">
+    <label>Status:</label>
+    <p class="form-control-static text-muted no-padder" ng-bind="task.status|taskStatus"></p>
+</div>
+<div class="form-group m-b-xs">
+    <label>Priority:</label>
+    <p class="form-control-static text-muted no-padder" ng-bind="task.severity|taskSeverity"></p>
+</div>
+<div class="form-group m-b-xs">
+    <label>Date:</label>
+    <p class="form-control-static text-muted no-padder"><span>{{task.startDate|date:app.dateFormat}}</span> to <span>{{task.endDate|date:app.dateFormat}}</span></p>
+</div>

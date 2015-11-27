@@ -212,7 +212,7 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
           getUserDetails(baseRequest.loggedInUserId, function(user) {
             pusher.trigger('onTarget', 'task.comment.' + req.body.taskId, {
               "name": "onTimeAddComment",
-              "value":{
+              "value": {
                 "comment": data.comment,
                 "commentedBy": user.userId,
                 "commentedDate": data.commentedDate,
@@ -343,7 +343,7 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
           getUserDetails(baseRequest.loggedInUserId, function(user) {
             pusher.trigger('onTarget', 'document.comment.' + data.projectFileId, {
               "name": "onSiteAddComment",
-              "value":{
+              "value": {
                 "comment": data.comment,
                 "commentedBy": user.userId,
                 "commentedDate": data.commentedDate,
@@ -662,6 +662,25 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
   }
 
   addResponse(data);
+});
+
+app.post('/ontargetrs/services/bim/comment/save', function(req, res, next) {
+  var data = req.body,
+    baseRequest = req.body.baseRequest;
+
+  //getUserDetails(baseRequest.loggedInUserId, function(user) {
+  pusher.trigger('onTarget', 'onBIM.comment.' + data.projectBIMFileId, {
+    "name": "onBIMAddComment",
+    "value": {
+      "comment": data.comment,
+      "commentedDate": data.commentedDate,
+      "commenterContact": data.commenterContact,
+      "projectBIMFileID": data.projectBIMFileId
+    }
+  });
+  //});
+
+  next();
 });
 
 // onTarget services
