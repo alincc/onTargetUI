@@ -93,6 +93,17 @@ define(function(require) {
             timeout: canceler.promise
           });
         };
+
+        service.assignInvitedProjectToMember = function(token){
+          return $http.post(constant.domain + '/register/assignInvitedProjectToMember', {
+            token: token
+          }, {
+            headers: {
+              AutoAlert: true,
+              Authorization: false
+            }
+          });
+        };
         return service;
       }
     ]

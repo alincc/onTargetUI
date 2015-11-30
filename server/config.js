@@ -18,5 +18,6 @@ module.exports = {
   pusher_secret: 'e2455e810e36cbed510e',
   convertCommand: 'convert',
   gsCommand: 'gswin64c',
-  concurrencyImageProcesses: 1
+  concurrencyImageProcesses: 1,
+  domain: 'http://localhost:9001'
 };

@@ -46,8 +46,8 @@ define(function(require) {
              taskFactory) {
 
       var getFileId = function() {
-        if($scope.selectedDoc.versionProjectFiles.length > 0) {
-          return $scope.selectedDoc.versionProjectFiles[0].fileId;
+        if($scope.parentDocument) {
+          return $scope.parentDocument.fileId;
         } else {
           return $scope.selectedDoc.fileId;
         }

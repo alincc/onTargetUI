@@ -226,7 +226,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    domain: 'http://localhost:9001'
   },
   serverNois: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
@@ -239,7 +240,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    domain: 'http://demo.newoceaninfosys.com:3215'
   },
   serverlocal: {
     PROXY_URL: 'http://localhost:8080/ontargetrs/services',
@@ -252,7 +254,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    domain: 'http://localhost:9001'
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
@@ -265,7 +268,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    domain: 'http://int.app.ontargetcloud.com:9001'
   },
   serverbeta: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
@@ -278,7 +282,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    domain: 'http://localhost:9001'
   },
   servertesting: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -291,7 +296,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    domain: 'http://localhost:9001'
   },
   serverstaging: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -304,7 +310,8 @@ module.exports = {
       appId: '138273',
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
-    }
+    },
+    domain: 'http://localhost:9001'
   },
   serversagarmatha01: {
     PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
@@ -317,7 +324,8 @@ module.exports = {
       appId: '152503',
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
-    }
+    },
+    domain: 'http://localhost:9001'
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
@@ -330,6 +338,7 @@ module.exports = {
       appId: '152503',
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
-    }
+    },
+    domain: 'http://localhost:9001'
   }
 };

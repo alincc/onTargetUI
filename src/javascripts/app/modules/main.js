@@ -23,6 +23,7 @@ define(function (require){
     notification: require('./notifications/notifications'),
     documentPreview: require('./documentPreview/documentPreview'),
     onFile: require('./onFile/onFile'),
-    bimProject: require('./bimProject/bimProject')
+    bimProject: require('./bimProject/bimProject'),
+    inviteToProject: require('./inviteToProject/inviteToProject')
   };
 });

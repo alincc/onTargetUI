@@ -562,6 +562,7 @@ gulp.task('build:server', function() {
     .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.server.pusher.appId + '\''))
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.server.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.server.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.server.domain + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -590,6 +591,7 @@ gulp.task('build:serverlocal', function() {
     .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverlocal.pusher.appId + '\''))
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverlocal.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverlocal.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverlocal.domain + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -617,6 +619,7 @@ gulp.task('build:serverintegration', function() {
     .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverintegration.pusher.appId + '\''))
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverintegration.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverintegration.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverintegration.domain + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -645,6 +648,7 @@ gulp.task('build:serverbeta', function() {
     .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverbeta.pusher.appId + '\''))
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverbeta.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverbeta.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverbeta.domain + '\''))
     .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
@@ -673,6 +677,7 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serversagarmatha01.domain + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -700,6 +705,7 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serversagarmatha01.domain + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -728,6 +734,7 @@ gulp.task('build:serverNois', function() {
     .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverNois.pusher.appId + '\''))
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverNois.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverNois.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverNois.domain + '\''))
     .pipe(gulp.dest('build-server-nois'));
 
   return gulp.src([
