@@ -6,7 +6,7 @@
                 <div class="col-xs-12">
                     <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW">
                         onSITE
-                        <div class="buttons" ng-show="!isPreview">
+                        <div class="buttons">
                             <button class="btn btn-sm" ng-click="changeMode('grid')"
                                     ng-class="{'btn-info': viewMode==='grid'}"><i
                                     class="fa fa-th-large"></i></button>
@@ -14,15 +14,12 @@
                                     ng-class="{'btn-info': viewMode==='list'}"><i
                                     class="fa fa-reorder"></i></button>
                         </div>
-                        <button ng-if="isPreview" class="btn btn-default pull-right" ng-click="backToList()"><i
-                                class="fa fa-arrow-left"></i> Back to list
-                        </button>
                     </h1>
                 </div>
             </div>
         </div>
         <!-- / main header -->
-        <div class="wrapper-md p-r-none" ng-show="!isPreview" permission="ONSITE_VIEW">
+        <div class="wrapper-md p-r-none" permission="ONSITE_VIEW">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <button class="btn btn-primary" ng-click="upload()" permission="ONSITE_UPLOAD"><i class="fa fa-cloud-upload"></i> Upload
@@ -41,143 +38,214 @@
                     <div ng-if="isLoading" class="row text-center">
                         <spinner text="Loading..."></spinner>
                     </div>
-                    <div class="table-responsive" ng-if="viewMode === 'list' && !isLoading">
-                        <table class="table table-striped b-t b-light">
-                            <thead>
-                            <tr>
-                                <th style="width: 64px;"></th>
-                                <th>Document Name</th>
-                                <th>Uploaded by</th>
-                                <th>Uploaded on</th>
-                                <th style="width: 310px;">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-if="!isLoading && !uploadedDocumentList.length">
-                                <td colspan="5">
-                                    <alert type="info" class="text-center">No documents</alert>
-                                </td>
-                            </tr>
-                            <!--<tr ng-if="isLoading">
-                                <td colspan="5" class="text-center">
-                                    <spinner text="Loading..."></spinner>
-                                </td>
-                            </tr>-->
-                            <tr ng-repeat="doc in uploadedDocumentList | filter:search:name track by $index">
-                                <td class="file-icon">
-                                    <div class="thumbnail-icon">
-                                    <a href="javascript:void(0)" ng-click="preview(doc)"><img
-                                        ng-src="{{doc.name | fileThumbnail}}"/></a>
-                                    </div>
-                                </td>
-                                <td><a href="javascript:void(0)" ng-click="preview(doc)"
-                                       ng-bind="doc.name | fileName"></a></td>
-                                <td ng-bind="doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
-                                <td ng-bind="doc.createdDate | date:app.dateFormat"></td>
-                                <td>
-                                    <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc)">
-                                        <i class="fa fa-comment"></i> Comment
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-info" ng-click="download(doc)">
-                                        <i class="fa fa-download"></i> Download
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-warning" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
-                                        <i class="fa fa-trash"></i> Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <section ng-if="viewMode === 'grid'">
-                        <div class="row" ng-if="!isLoading && !uploadedDocumentList.length">
-                            <div class="col-xs-12 text-center">
-                                <alert type="info" class="text-center">No documents</alert>
-                            </div>
+
+                    <div class="row" ng-show="isCategorySelected">
+                        <div class="col-md-12 margin-bottom" ng-hide="isLoading">
+                            <h4 class="pull-left">{{selectedCategoryName}}</h4>
+                            <button class="btn btn-default pull-right" ng-click="backToCategories()">
+                                <i class="fa fa-arrow-left"></i> Back to categories
+                            </button>
                         </div>
-                        <div class="row" ng-repeat="docRow in uploadedDocumentArrangedList track by $index">
-                            <div class="col-md-3" data-ng-repeat="doc in docRow | filter:search:name track by $index">
+                    </div>
+
+                    <div class="row document-category" ng-hide="isCategorySelected">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-height" ng-hide="isLoading"
+                             ng-repeat="category in categories track by $index">
+                            <article>
+                                <div class="item" ng-click="chooseCategory(category)">
+                                    <img src="./img/icons/folder-graphite.jpg">
+                                    <p>{{::category.name}} <span ng-show="category.count > 0"> ({{::category.count}})</span>
+                                    </p>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div ng-if="viewMode === 'list' && !isLoading">
+                        <div class="table-responsive" ng-show="isCategorySelected">
+                            <table class="table b-t b-light">
+                                <thead>
+                                <tr>
+                                    <th style="width: 64px;"></th>
+                                    <th>Document Name</th>
+                                    <th>Created by</th>
+                                    <th>Created on</th>
+                                    <th>Updated on</th>
+                                    <th style="width: 310px;">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody ng-if="listResults.length === 0">
+                                    <tr>
+                                        <td colspan="6">
+                                            <alert type="info" class="text-center">No documents</alert>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody ng-repeat="doc in uploadedDocumentList | filter:filterByCategoryId | filter:filterBySearchBox as listResults track by $index">
+                                <tr ng-if="doc.versionProjectFiles.length <= 0" ng-class="!doc.conversionComplete ? 'success' : ''">
+                                    <td class="file-icon">
+                                        <div class="thumbnail-icon">
+                                            <a href="javascript:void(0)" ng-click="preview(doc)"><img
+                                                    on-image-error="{{::doc.name}}"
+                                                    ng-src="{{::doc.thumbnailImageName | filePath}}"/></a>
+                                        </div>
+                                    </td>
+                                    <td><a href="javascript:void(0)" ng-click="preview(doc)"
+                                           ng-bind="::doc.name | fileName"></a></td>
+                                    <td ng-bind="::doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
+                                    <td ng-bind="::doc.createdDate | date:app.datetimeFormat"></td>
+                                    <td></td>
+                                    <td>
+                                        <div>
+                                            <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc)" ng-if="doc.conversionComplete">
+                                                <i class="fa fa-comment"></i> Comment
+                                            </button>
+                                            <button type="button" ng-disabled="doc.isDownloading" class="btn btn-xs btn-info" ng-click="download(doc)" ng-if="doc.conversionComplete">
+                                                <i class="fa fa-download"></i> Download
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-info" ng-click="editDocument(doc)" permission="ONSITE_DELETE">
+                                                <i class="fa fa-pencil"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-warning" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr ng-if="doc.versionProjectFiles.length > 0" ng-class="!doc.versionProjectFiles[0].conversionComplete ? 'success' : ''">
+                                    <td class="file-icon">
+                                        <div class="thumbnail-icon">
+                                            <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])"><img
+                                                    on-image-error="{{::doc.name}}"
+                                                    ng-src="{{::doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/></a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])"
+                                           ng-bind="::doc.versionProjectFiles[0].name | fileName"></a></td>
+                                    <td ng-bind="::doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></td>
+                                    <td ng-bind="::doc.createdDate | date:app.datetimeFormat"></td>
+                                    <td ng-bind="::doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></td>
+                                    <td>
+                                        <div>
+                                            <button type="button" class="btn btn-xs btn-primary" ng-click="preview(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
+                                                <i class="fa fa-comment"></i> Comment
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-info" ng-disabled="doc.versionProjectFiles[0].isDownloading" ng-click="download(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
+                                                <i class="fa fa-download"></i> Download
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-info" ng-click="editDocument(doc.versionProjectFiles[0])" permission="ONSITE_DELETE">
+                                                <i class="fa fa-pencil"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-warning" ng-click="deleteDocument(doc.versionProjectFiles[0])" permission="ONSITE_DELETE">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <section ng-if="viewMode === 'grid' && !isLoading">
+                        <div class="row" ng-show="isCategorySelected">
+                            <article class="col-md-12" ng-if="gridResults.length === 0">
+                                <div class="text-center">
+                                    <alert type="info" class="text-center">No documents</alert>
+                                </div>
+                            </article>
+                            <div class="col-md-3"
+                                 ng-class="{'clear-left': $index >= 4 && $index % 4 === 0 }"
+                                 data-ng-repeat="doc in uploadedDocumentList | filter:filterByCategoryId | filter:filterBySearchBox as gridResults track by $index">
                                 <article>
-                                    <div class="file-thumbnail">
-                                        <a href="javascript:void(0)" ng-click="preview(doc)">
-                                            <img ng-src="{{doc.name | fileThumbnail}}" height="64px"/>
-                                        </a>
-                                        <span class="delete-button" ng-click="deleteDocument(doc)" permission="ONSITE_DELETE"><i class="fa fa-times-circle-o"></i></span>
+                                    <div ng-if="doc.versionProjectFiles.length > 0">
+                                        <div class="file-thumbnail">
+                                            <a href="javascript:void(0)" ng-click="preview(doc.versionProjectFiles[0])">
+                                                <img
+                                                    on-image-error="{{::doc.name}}"
+                                                    ng-src="{{::doc.versionProjectFiles[0].thumbnailImageName | filePath}}"/>
+                                            </a>
+                                        </div>
+                                        <div style="text-align:left">
+                                            <div class="m-t-sm">
+                                                <button type="button" class="btn btn-xs btn-info"
+                                                        ng-click="editDocument(doc.versionProjectFiles[0])" permission="ONSITE_DELETE">
+                                                    <i class="fa fa-pencil"></i> Edit
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-warning"
+                                                        ng-click="deleteDocument(doc.versionProjectFiles[0])" permission="ONSITE_DELETE">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-info" ng-disabled="doc.versionProjectFiles[0].isDownloading" ng-click="download(doc.versionProjectFiles[0])" ng-if="doc.versionProjectFiles[0].conversionComplete">
+                                                    <i class="fa fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                            <div ng-if="!doc.versionProjectFiles[0].conversionComplete">
+                                                <div class="progress task-status-active" style="height: 5px;margin-bottom: 0;margin-top: 10px;">
+                                                    <progressbar class="active progress-striped m-b-sm"
+                                                                 value="100"
+                                                                 type="success"></progressbar>
+                                                </div>
+                                            </div>
+
+                                            <h5 class="doc-name">
+                                                Document name:
+                                                <a ng-click="preview(doc.versionProjectFiles[0])" ng-bind="::doc.versionProjectFiles[0].name | fileName"></a>
+                                            </h5>
+                                            <h5>
+                                                Uploaded on: <span ng-bind="::doc.versionProjectFiles[0].createdDate | date:app.datetimeFormat"></span>
+                                            </h5>
+                                            <h5>
+                                                Uploaded by: <span ng-bind="::doc.createdByContact.firstName + ' ' + doc.createdByContact.lastName"></span>
+                                            </h5>
+                                        </div>
                                     </div>
-                                    <div style="text-align:left">
-                                        <h5 class="doc-name">
-                                            Document name:
-                                            <a ng-click="preview(doc)">{{doc.name | fileName}}</a>
-                                        </h5>
-                                        <h5>
-                                            Uploaded on: {{doc.createdDate | date:app.dateFormat}}
-                                        </h5>
-                                        <h5>
-                                            Uploaded by: {{doc.createdByContact.firstName + ' ' +
-                                            doc.createdByContact.lastName}}
-                                        </h5>
+                                    <div ng-if="doc.versionProjectFiles.length <= 0">
+                                        <div class="file-thumbnail">
+                                            <a href="javascript:void(0)" ng-click="preview(doc)">
+                                                <img ng-src="{{::doc.thumbnailImageName | filePath}}" on-image-error="{{::doc.name}}"/>
+                                            </a>
+                                        </div>
+                                        <div style="text-align:left">
+                                            <div class="m-t-sm">
+                                                <button type="button" class="btn btn-xs btn-info"
+                                                        ng-click="editDocument(doc)" permission="ONSITE_DELETE">
+                                                    <i class="fa fa-pencil"></i> Edit
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-warning"
+                                                        ng-click="deleteDocument(doc)" permission="ONSITE_DELETE">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-info" ng-disabled="doc.isDownloading" ng-click="download(doc)" ng-if="doc.conversionComplete">
+                                                    <i class="fa fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                            <div ng-if="!doc.conversionComplete">
+                                                <div class="progress task-status-active" style="height: 5px;margin-bottom: 0;margin-top: 10px;">
+                                                    <progressbar class="active progress-striped m-b-sm"
+                                                                 value="100"
+                                                                 type="success"></progressbar>
+                                                </div>
+                                            </div>
+
+                                            <h5 class="doc-name">
+                                                Document name:
+                                                <a ng-click="preview(doc)">{{::doc.name | fileName}}</a>
+                                            </h5>
+                                            <h5>
+                                                Uploaded on: {{::doc.createdDate | date:app.datetimeFormat}}
+                                            </h5>
+                                            <h5>
+                                                Uploaded by: {{::doc.createdByContact.firstName + ' ' +
+                                                doc.createdByContact.lastName}}
+                                            </h5>
+                                        </div>
                                     </div>
                                 </article>
                             </div>
                         </div>
                     </section>
-                </div>
-            </div>
-        </div>
-        <div class="wrapper-md p-r-none" ng-if="isPreview">
-            <div class="row">
-                <div class="col-xs-12 col-md-8 p-r-0 preview-section">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" ng-bind="selectedDoc.name | fileName"></div>
-                        <div class="panel-body">
-                            <doc-previewer path="{{selectedDoc.fileName}}"></doc-previewer>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-4 p-l-0 comment-section">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Comments</div>
-                        <div class="panel-body" custom-scroll>
-                            <div class="text-center" ng-if="isLoadingComment">
-                                <spinner text="Loading comments..."></spinner>
-                            </div>
-                            <div class="text-center" ng-if="!isLoadingComment && !comments.length">
-                                No comments
-                            </div>
-                            <ul class="list-group no-bg no-borders pull-in">
-                                <li class="list-group-item" ng-repeat="com in comments track by $index">
-                                    <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
-                                        <img path="{{com.commenterContact.userImagePath}}" file-path alt="..."
-                                             class="img-circle">
-                                    </a>
-
-                                    <div class="clear comment-content">
-                                        <div class="commenter"><a href="javascript:void(0)"
-                                                                  ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
-                                            said:
-                                        </div>
-                                        <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
-                                        <small class="text-muted" ng-bind="com.comment"></small>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="add-comment" ng-show="!isLoadingComment">
-                                <form name="add_comment_frm" no-validate
-                                      ng-submit="addComment(addCommentModel, add_comment_frm)">
-                                    <div class="textarea">
-                                        <textarea ng-model="addCommentModel.comment" auto-grow=""
-                                                  placeholder="Add a comment or reply here" rows="1" required
-                                                  novalidate></textarea>
-                                    </div>
-                                    <div class="button">
-                                        <button class="btn btn-primary" type="submit"
-                                                ng-disabled="add_comment_frm.$invalid || add_comment_frm.$submitted">
-                                            Send <i class="fa fa-paper-plan-o"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

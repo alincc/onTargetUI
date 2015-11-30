@@ -271,10 +271,11 @@ define(function(require) {
       };
 
       $scope.getCompanyOfUser = function() {
-        $scope.changeOrder.keyValues.company_name = '';
-        $scope.changeOrder.keyValues.company_name = _.result(_.find($scope.contactLists, function(contact) {
+        var userCompany = _.find($scope.contactLists, function(contact) {
           return contact.userId === $scope.changeOrder.keyValues.receiverId;
-        }), 'companyName');
+        });
+        $scope.changeOrder.keyValues.company_name = userCompany ? userCompany.companyName : '';
+        $scope.changeOrder.keyValues.company_id = userCompany ? userCompany.companyId : '';
       };
 
       var uploadModalInstance;

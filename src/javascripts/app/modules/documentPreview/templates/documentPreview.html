@@ -4,15 +4,9 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onSite'">
+                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW">
                         onSITE
                         <button class="btn btn-default pull-right" ng-click="backToList()"><i
-                                class="fa fa-arrow-left"></i> Back to list
-                        </button>
-                    </h1>
-                    <h1 class="m-n font-thin h3 text-black" permission="ONSITE_VIEW" ng-if="onAction == 'onTime'">
-                        onTIME
-                        <button class="btn btn-default pull-right" ng-click="backToAttachments()"><i
                                 class="fa fa-arrow-left"></i> Back to list
                         </button>
                     </h1>
@@ -22,43 +16,81 @@
         <div class="wrapper-md p-r-none" permission="ONSITE_VIEW">
             <div class="row">
                 <div class="col-xs-12 preview-section"
-                     ng-class="{'col-md-8 p-r-0': onAction == 'onSite', 'col-md-12': onAction == 'onTime'}">
+                     ng-class="{'col-md-8 p-r-0': hideRightSide == false, 'col-md-12': hideRightSide == true}">
                     <div class="panel panel-default">
-                        <form name="_form" novalidate ng-submit="saveDoc(selectedDoc)">
+                        <form name="_form" novalidate ng-submit="saveChanges(selectedDoc)">
                             <div class="panel-heading">
                                 <span ng-bind="selectedDoc.name | fileName"></span>
-                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="cancelEdit()"
-                                        ng-disabled="_form.$submitted"
-                                        ng-show="showDocPreview">Cancel
+                                <button class="btn btn-default btn-xs pull-right m-l-xs" type="button"
+                                        ng-click="showHideComment()">
+                                    <span>{{hideRightSide ? 'Show' : 'Hide'}} comments</span>
                                 </button>
-                                <button class="btn btn-primary btn-xs pull-right" type="button" ng-click="editDoc(selectedDoc)" ng-if="onAction == 'onSite'"
-                                        ng-show="!showDocPreview">Edit
-                                </button>
-                                <button class="btn btn-info btn-xs pull-right m-r-xs" ng-if="onAction == 'onSite'"
-                                        ng-show="showDocPreview"
-                                        type="submit" size="xs"
+                                <button class="btn btn-danger btn-xs pull-right" type="button" ng-click="cancelEdit()"
                                         ng-disabled="_form.$submitted"
-                                        loading-button="_form.$submitted">Done
+                                        ng-show="isEdit">Cancel
+                                </button>
+                                <button class="btn btn-primary btn-xs pull-right" type="button"
+                                        ng-click="editDoc(selectedDoc)"
+                                        ng-show="!isEdit">Markup/Tag
+                                </button>
+                                <button class="btn btn-success btn-xs pull-right m-r-xs"
+                                        ng-show="isEdit"
+                                        type="submit"
+                                        ng-disabled="_form.$submitted">Save changes
+                                </button>
+                                <button class="btn btn-info btn-xs pull-right m-r-xs"
+                                        type="button"
+                                        ng-show="pdfImagePages.length > 1"
+                                        ng-click="nextPage()"
+                                        ng-disabled="!haveNextPage">Next >
+                                </button>
+                                <span class="page-info" ng-show="pdfImagePages.length > 1">Page {{currentPageIndex + 1}} of {{pdfImagePages.length}}</span>
+                                <button class="btn btn-info btn-xs pull-right m-r-xs"
+                                        type="button"
+                                        ng-show="pdfImagePages.length > 1"
+                                        ng-click="prevPage()"
+                                        ng-disabled="!havePrevPage">< Previous
                                 </button>
                             </div>
-                            <div class="panel-body" ng-if="showDocPreview && onAction == 'onSite'">
-                                <pdf-tagging-mark-up path="{{selectedDoc.name}}"
-                                                     image-path="{[selectedDoc.filePath}}"
+                            <div class="panel-body" ng-if="isPdf || isImage" ng-class="{'hide-toolbox': !isEdit}">
+                                <pdf-tagging-mark-up ng-if="!isNexting"
+                                                     model="currentPage"
+                                                     page-number="{{currentPageIndex + 1}}"
+                                                     parent-doc="parentDocument"
+                                                     max-native-zoom="currentPage.maxZoom"
                                                      selected-doc="selectedDoc"></pdf-tagging-mark-up>
                             </div>
-                            <div class="panel-body normal-preview" ng-if="!showDocPreview">
-                                <pdf-viewer src="{{trustSrc(selectedDoc.filePath)}}" ng-if="isPdf"></pdf-viewer>
-                                <img ng-if="isImage" ng-src="{{selectedDoc.filePath}}"/>
-                                <p ng-if="!isImage && !isPdf">Sorry, this kind of file not supporte preview.</p>
+                            <div class="panel-body normal-preview" ng-if="!isPdf && !isImage">
+                                <p>Sorry, this kind of file not supported preview.</p>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT"
-                     ng-if="onAction == 'onSite'">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Comments</div>
-                        <div class="panel-body" custom-scroll>
+                <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
+                    <div class="panel panel-default" ng-show="!hideRightSide">
+                        <div class="panel-heading" ng-show="!showLinkTask && !showViewTask">
+                            <span>Comments</span>
+                            <!--<div class="pull-right" ng-if="selectedDoc.versionProjectFiles.length > 0">-->
+                            <div class="pull-right">
+
+                                <section class="project-chooser" dropdown on-toggle="toggled(open)">
+                                    <a href dropdown-toggle>
+                                        <span class="project-name">Version {{currentVersion.versionNo}}</span>
+                                        &nbsp;<i class="fa fa-sort"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li ng-class="{'selected': currentVersion.versionNo === 'Original'}">
+                                            <a href ng-click="selectVersion(null)">Original</a>
+                                        </li>
+                                        <li ng-repeat="v in versions"
+                                            ng-class="{'selected': currentVersion.versionNo === v.versionNo}">
+                                            <a href ng-bind="'Version ' + v.versionNo" ng-click="selectVersion(v)"></a>
+                                        </li>
+                                    </ul>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="panel-body" custom-scroll ng-show="!showLinkTask && !showViewTask">
                             <div class="text-center" ng-if="isLoadingComment">
                                 <spinner text="Loading comments..."></spinner>
                             </div>
@@ -77,7 +109,7 @@
                                                                   ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
                                             said:
                                         </div>
-                                        <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
+                                        <div class="date" ng-bind="com.commentedDate | date:app.datetimeFormat | lowercase"></div>
                                         <small class="text-muted"
                                                ng-bind-html="com.comment | escapeHtml | newLines"></small>
                                     </div>
@@ -98,6 +130,71 @@
                                             Send <i class="fa fa-paper-plan-o"></i></button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                        <div class="panel-heading" ng-if="showLinkTask">
+                            <span>Link task</span>
+                        </div>
+                        <div class="panel-body no-padder" ng-if="showLinkTask">
+                            <link-task></link-task>
+                        </div>
+                        <div class="panel-heading" ng-if="showViewTask">
+                            <span>Task details</span>
+                        </div>
+                        <div class="task-logistic add-edit-task panel-body" ng-if="showViewTask">
+                            <div class="nav-container">
+                                <nav class="navbar navbar-default">
+                                    <div class="container-fluid">
+                                        <div>
+                                            <ul class="nav nav-pills nav-justified text-muted">
+                                                <li ng-class="{'active': action.name==='info'}"><a
+                                                        href="javascript:void(0)"
+                                                        ng-click="openAction(actions.info)">Info</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='owner'}"
+                                                    permission="VIEW_TASK_MEMBER"><a href="javascript:void(0)"
+                                                                                     ng-click="openAction(actions.owner)">Assignee</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='comment'}"
+                                                    permission="VIEW_TASK_COMMENT"><a href="javascript:void(0)"
+                                                                                      ng-click="openAction(actions.comment)">Comment</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='budget'}"
+                                                    permission="VIEW_TASK_BUDGET"><a href="javascript:void(0)"
+                                                                                     ng-click="openAction(actions.budget)">Budget</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='progress'}"
+                                                    permission="VIEW_TASK_PERCENTAGE"><a href="javascript:void(0)"
+                                                                                         ng-click="openAction(actions.progress)">Progress</a>
+                                                </li>
+                                                <li ng-class="{'active': action.name==='attachment'}"
+                                                    permission="VIEW_TASK_ATTACHMENT"><a href="javascript:void(0)"
+                                                                                         ng-click="openAction(actions.attachment)">Attachments</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div ng-switch on="action.name" class="h-full tab-content">
+                                <div ng-switch-when="info" class="h-full">
+                                    <task-info task="task" class="block padder h-full"></task-info>
+                                </div>
+                                <div ng-switch-when="owner" permission="VIEW_TASK_MEMBER" class="h-full">
+                                    <task-assignee task="task" class="block h-full"></task-assignee>
+                                </div>
+                                <div ng-switch-when="comment" permission="VIEW_TASK_COMMENT" class="h-full">
+                                    <task-comment task="task" class="block h-full"></task-comment>
+                                </div>
+                                <div ng-switch-when="budget" permission="VIEW_TASK_BUDGET" class="h-full">
+                                    <task-budget task="task" class="block h-full"></task-budget>
+                                </div>
+                                <div ng-switch-when="progress" permission="VIEW_TASK_PERCENTAGE" class="h-full">
+                                    <task-progress task="task" class="block h-full"></task-progress>
+                                </div>
+                                <div ng-switch-when="attachment" permission="VIEW_TASK_ATTACHMENT" class="h-full">
+                                    <task-attachment task="task" class="block h-full"></task-attachment>
+                                </div>
                             </div>
                         </div>
                     </div>

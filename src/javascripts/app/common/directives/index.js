@@ -14,7 +14,15 @@ define(function(require) {
     spinner = require('./spinner'),
     permission = require('./permission'),
     menuPermission = require('./menuPermission'),
-    loadingButton = require('./loadingButton');
+    loadingButton = require('./loadingButton'),
+    onImageError = require('./onImageError'),
+    addTask = require('./addTask/addTask'),
+    taskInfo = require('./taskInfo/taskInfo'),
+    taskAssignee = require('./taskAssignee/taskAssignee'),
+    taskComment = require('./taskComment/taskComment'),
+    taskBudget = require('./taskBudget/taskBudget'),
+    taskProgress = require('./taskProgress/taskProgress'),
+    taskAttachment = require('./taskAttachment/taskAttachment');
 
   var module = angular.module('common.directives',
     [
@@ -31,7 +39,15 @@ define(function(require) {
       'common.directives.spinner',
       'common.directives.permission',
       'common.directives.menuPermission',
-      'common.directives.loadingButton'
+      'common.directives.loadingButton',
+      'common.directives.onImageError',
+      'common.directives.addTask',
+      'common.directives.taskInfo',
+      'common.directives.taskAssignee',
+      'common.directives.taskComment',
+      'common.directives.taskBudget',
+      'common.directives.taskProgress',
+      'common.directives.taskAttachment'
     ]);
   return module;
 });

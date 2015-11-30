@@ -101,12 +101,6 @@ define(function(require) {
             $scope.plot = {
               data: [
                 {
-                  data: earnedValueData, // [bottom, left]
-                  label: 'Earned',
-                  points: {show: true, radius: 4},
-                  lines: {show: true, fill: false, fillColor: {colors: [{opacity: 0.1}, {opacity: 0.1}]}}
-                },
-                {
                   data: actualValueData, // [bottom, left]
                   label: 'Actual',
                   points: {show: true, radius: 4},

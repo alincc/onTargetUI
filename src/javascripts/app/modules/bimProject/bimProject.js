@@ -189,15 +189,15 @@ define(function(require) {
               }],
               project: ['$stateParams', '$q', 'onBimFactory',
                 function($stateParams, $q, onBimFactory) {
-                  var deferred = $q.defer();
+                  var defferred = $q.defer();
                   if($stateParams.poid) {
                     onBimFactory.getBimProjectByPoid($stateParams.poid).success(
                       function(resp) {
-                        deferred.resolve(resp.response.result);
+                        defferred.resolve(resp.response.result);
                       }
                     );
                   }
-                  return deferred.promise;
+                  return defferred.promise;
                 }
               ]
             }

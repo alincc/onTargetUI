@@ -23,7 +23,7 @@ pusher.port = 443;
 var myArgs = process.argv.slice(2);
 var folder = myArgs[0] || 'app';
 var port = myArgs[1] || 3214;
-//var cors = require('cors');
+var cors = require('cors');
 var app = express();
 var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrs/services';
 var BIM_SERVER = 'http://216.14.121.204:8080';
@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(methodOverride());
-//app.use(cors());
+app.use(cors());
 app.use(express.static(__dirname + '/' + folder));
 
 // Push implementation
@@ -200,7 +200,7 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function addTaskComment() {
+  function addTaskComment(data) {
     request({
         method: 'POST',
         body: req.body,
@@ -209,6 +209,19 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
+          getUserDetails(baseRequest.loggedInUserId, function(user) {
+            pusher.trigger('onTarget', 'task.comment.' + req.body.taskId, {
+              "name": "onTimeAddComment",
+              "value": {
+                "comment": data.comment,
+                "commentedBy": user.userId,
+                "commentedDate": data.commentedDate,
+                "taskCommentId": data.taskCommentId,
+                "taskId": data.taskId,
+                "commenterContact": user.contact
+              }
+            });
+          });
           res.send(response.body);
         } else {
           res.send(error);
@@ -216,7 +229,7 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
       });
   }
 
-  addTaskComment();
+  addTaskComment(data);
 
   getTaskDetails(data.taskId, baseRequest, function(task) {
     getUserDetails(baseRequest.loggedInUserId, function(user1) {
@@ -318,7 +331,7 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  function addComment() {
+  function addComment(data) {
     request({
         method: 'POST',
         body: req.body,
@@ -327,6 +340,17 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
+          getUserDetails(baseRequest.loggedInUserId, function(user) {
+            pusher.trigger('onTarget', 'document.comment.' + data.projectFileId, {
+              "name": "onSiteAddComment",
+              "value": {
+                "comment": data.comment,
+                "commentedBy": user.userId,
+                "commentedDate": data.commentedDate,
+                "commenterContact": user.contact
+              }
+            });
+          });
           res.send(response.body.taskAttachments);
         } else {
           res.send(error);
@@ -362,7 +386,7 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
       });
   }
 
-  addComment();
+  addComment(data);
 
   getTaskComments(function(taskComments) {
     // commenters
@@ -640,6 +664,25 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
   addResponse(data);
 });
 
+app.post('/ontargetrs/services/bim/comment/save', function(req, res, next) {
+  var data = req.body,
+    baseRequest = req.body.baseRequest;
+
+  //getUserDetails(baseRequest.loggedInUserId, function(user) {
+  pusher.trigger('onTarget', 'onBIM.comment.' + data.projectBIMFileId, {
+    "name": "onBIMAddComment",
+    "value": {
+      "comment": data.comment,
+      "commentedDate": data.commentedDate,
+      "commenterContact": data.commenterContact,
+      "projectBIMFileID": data.projectBIMFileId
+    }
+  });
+  //});
+
+  next();
+});
+
 // onTarget services
 app.put('/ontargetrs/services*', function(req, res) {
   //var r = request.post({headers: req.headers, uri: API_SERVER + req.params[0], json: req.body});
@@ -745,7 +788,7 @@ app.get('/bim*', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-  res.sendfile("index.html");
+  res.sendFile("index.html");
 });
 
 app.listen(app.get('port'), function() {

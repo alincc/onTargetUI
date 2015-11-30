@@ -20,46 +20,46 @@ var paths = {
 };
 
 // Combine lesses
-gulp.task('less', ['lint'], function(done) {
-  gulp.src('./src/less/main.less')
+gulp.task('less', ['lint'], function() {
+  return gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
     .pipe(rename({extname: '.min.css'}))
-    .pipe(gulp.dest('./src/css/'))
-    .on('end', done);
+    .pipe(gulp.dest('./src/css/'));
 });
 
-gulp.task('lessOnly', function(done) {
-  gulp.src('./src/less/main.less')
+gulp.task('lessOnly', function() {
+  return gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
     .pipe(rename({extname: '.min.css'}))
-    .pipe(gulp.dest('./src/css/'))
-    .on('end', done);
+    .pipe(gulp.dest('./src/css/'));
 });
 
 // Copy Fonts
-gulp.task('fonts', ['less'], function() {
-  gulp.src([
+gulp.task('fonts:awesome', function() {
+  return gulp.src([
+    './src/bower_components/components-font-awesome/fonts/*'
+  ]).pipe(gulp.dest('./build/fonts/'));
+});
+
+gulp.task('fonts:bootstrap', function() {
+  return gulp.src([
+    './src/bower_components/bootstrap-css-only/fonts/*'
+  ]).pipe(gulp.dest('./build/fonts/'));
+});
+
+gulp.task('fonts', ['fonts:awesome', 'fonts:bootstrap', 'less'], function() {
+  return gulp.src([
     './src/fonts/*',
     './src/fonts/*/*'])
     .pipe(gulp.dest('./build/fonts/'));
-
-  // font-awesome fonts
-  gulp.src([
-    './src/bower_components/components-font-awesome/fonts/*'
-  ]).pipe(gulp.dest('./build/fonts/'));
-
-  // glyphicon font
-  gulp.src([
-    './src/bower_components/bootstrap-css-only/fonts/*'
-  ]).pipe(gulp.dest('./build/fonts/'));
 });
 
 // Copy Images
@@ -70,28 +70,36 @@ gulp.task('images', ['fonts'], function() {
 });
 
 // Copy js to build
-gulp.task('script', ['images'], function() {
-  gulp.src([
+gulp.task('script:requirejs', function() {
+  return gulp.src([
     './src/bower_components/requirejs/*',
     './src/bower_components/requirejs/**/*.*'])
     .pipe(gulp.dest('./build/bower_components/requirejs'));
+});
 
-  gulp.src([
-    './src/js/**/*'])
-    .pipe(gulp.dest('./build/js'));
-
-  gulp.src([
+gulp.task('resources', function() {
+  return gulp.src([
     './src/javascripts/app/common/resources/**/*.json'])
     .pipe(gulp.dest('./build/javascripts/app/common/resources'));
+});
 
-  gulp.src([
+gulp.task('templates', function() {
+  return gulp.src([
     './src/javascripts/app/common/templates/**/*'])
     .pipe(gulp.dest('./build/javascripts/app/common/templates'));
+});
 
-  gulp.src([
+gulp.task('bimProjectData', function() {
+  return gulp.src([
     './src/javascripts/app/modules/bimProject/**/*.html',
     './src/javascripts/app/modules/bimProject/**/*.version'])
     .pipe(gulp.dest('./build/javascripts/app/modules/bimProject'));
+});
+
+gulp.task('script', ['script:requirejs', 'resources', 'templates', 'bimProjectData', 'images'], function() {
+  return gulp.src([
+    './src/js/**/*'])
+    .pipe(gulp.dest('./build/js'));
 });
 
 // Copy index.html, rename main and css file
@@ -114,7 +122,7 @@ gulp.task('BIMCss', function() {
 });
 
 // Copy css
-gulp.task('css', ['BIMCss'], function() {
+gulp.task('css', ['html', 'BIMCss'], function() {
   return gulp.src('src/css/main.min.css')
     .pipe(gulp.dest('build/css'));
 });
@@ -137,7 +145,7 @@ gulp.task('lint', function() {
 // Window r.js command line fix (It conflict between r.js and r.cmd.js)
 // del %HOMEDRIVE%%HOMEPATH%\AppData\Roaming\npm\r.js
 // del node_modules\.bin\r.js
-gulp.task('requireJsOptimizer', ['html', 'css'], shell.task([
+gulp.task('requireJsOptimizer', ['css'], shell.task([
   // This is the command
   'r.js -o src/javascripts/build.js'
 ]));
@@ -229,6 +237,7 @@ gulp.task('build:local', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.local.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.local.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.local.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.local.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-local/app/javascripts'));
 
@@ -264,6 +273,7 @@ gulp.task('build:integration', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.integration.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.integration.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.integration.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.integration.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-integration/app/javascripts'));
 
@@ -299,6 +309,7 @@ gulp.task('build:beta', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.beta.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.beta.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.beta.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.beta.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-beta/app/javascripts'));
 
@@ -335,6 +346,7 @@ gulp.task('build:testing', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.testing.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.testing.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.testing.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.testing.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-testing/app/javascripts'));
 
@@ -370,6 +382,7 @@ gulp.task('build:staging', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.staging.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.staging.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.staging.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.staging.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-staging/app/javascripts'));
 
@@ -405,6 +418,7 @@ gulp.task('build:production', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.production.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.production.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.production.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.production.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-production/app/javascripts'));
 
@@ -440,6 +454,7 @@ gulp.task('build:sagarmatha01', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.sagarmatha01.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.sagarmatha01.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha01.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.sagarmatha01.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-sagarmatha01/app/javascripts'));
 
@@ -475,6 +490,7 @@ gulp.task('build:sagarmatha02', ['build'], function() {
     .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.sagarmatha02.bimCredential.username + "'"))
     .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.sagarmatha02.bimCredential.password + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.sagarmatha02.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.sagarmatha02.weatherUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-sagarmatha02/app/javascripts'));
 
@@ -493,6 +509,42 @@ gulp.task('build:sagarmatha02', ['build'], function() {
     .pipe(gulp.dest('./build-sagarmatha02'));
 });
 
+// ---- NOIS -----
+gulp.task('build:nois', ['build'], function() {
+  // Copy all file in build folder
+  gulp.src(['./build/**/*', '!./build/javascripts/main.min.js'])
+    .pipe(gulp.dest('./build-nois/app'));
+
+  // modify and minify
+  gulp.src(['./src/javascripts/main.min.js'])
+    .pipe(replace(/domain: '.*'/, "domain: '" + config.nois.domain + "'")) // domain
+    .pipe(replace(/baseUrl: '.*'/, "baseUrl: '" + config.nois.baseUrl + "'")) // base url
+    .pipe(replace(/nodeServer: '.*'/, "nodeServer: '" + config.nois.nodeServer + "'")) // node server domain
+    .pipe(replace(/resourceUrl: '.*'/, "resourceUrl: '" + config.nois.resourceUrl + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + config.nois.baseUrl + "/bim'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + config.nois.bimServerAddress + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + config.nois.bimCredential.username + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + config.nois.bimCredential.password + "'"))
+    .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + config.nois.pusher.apiKey + "'"))
+    .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + config.nois.weatherUrl + "'"))
+    .pipe(uglify())
+    .pipe(gulp.dest('./build-nois/app/javascripts'));
+
+  // Copy app.js and modify value
+  gulp.src('./app.js')
+    .pipe(replace(/myArgs\[1\]\s\|\|\s3214/, "myArgs[1] || " + config.nois.port))
+    .pipe(replace(/API_SERVER\s=\s'.*'/, "API_SERVER = '" + config.nois.API_SERVER + "'"))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + config.nois.BIM_SERVER + "'"))
+    .pipe(replace(/pusher_appId\s=\s'(.*)'/g, 'pusher_appId = \'' + config.nois.pusher.appId + '\''))
+    .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + config.nois.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + config.nois.pusher.secret + '\''))
+    .pipe(gulp.dest('./build-nois'));
+
+  gulp.src('./package.app.json')
+    .pipe(rename('./package.json'))
+    .pipe(gulp.dest('./build-nois'));
+});
+
 // Server build
 gulp.task('build:server', function() {
   gulp.src('package.json', {"base": "."})
@@ -501,9 +553,16 @@ gulp.task('build:server', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.server.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.server.maxFileSize))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.server.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.server.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.server.maxFileSize))
+    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.server.convertCommand + '\''))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.server.gsCommand + '\''))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.server.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.server.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.server.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.server.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.server.domain + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -523,9 +582,16 @@ gulp.task('build:serverlocal', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverlocal.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverlocal.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverlocal.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverlocal.maxFileSize))
+    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverlocal.convertCommand + '\''))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverlocal.gsCommand + '\''))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverlocal.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverlocal.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverlocal.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverlocal.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverlocal.domain + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -544,9 +610,16 @@ gulp.task('build:serverintegration', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverintegration.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverintegration.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverintegration.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverintegration.maxFileSize))
+    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverintegration.convertCommand + '\''))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverintegration.gsCommand + '\''))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverintegration.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverintegration.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverintegration.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverintegration.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverintegration.domain + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -566,9 +639,16 @@ gulp.task('build:serverbeta', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverbeta.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverbeta.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serverbeta.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverbeta.maxFileSize))
+    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverbeta.convertCommand + '\''))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverbeta.gsCommand + '\''))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverbeta.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverbeta.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverbeta.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverbeta.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverbeta.domain + '\''))
     .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
@@ -588,9 +668,16 @@ gulp.task('build:serversagarmatha01', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serversagarmatha01.domain + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -609,9 +696,16 @@ gulp.task('build:serversagarmatha01', function() {
 
   gulp.src('server/config.js', {"base": "."})
     .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serversagarmatha01.PROXY_URL + '\''))
-    .pipe(replace(/path\.join\(rootPath, 'assets'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
-    .pipe(replace(/imagePathRoot: 'assets\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
-    .pipe(replace(/maxFileSize: 1000000/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serversagarmatha01.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)\/'/g, 'imagePathRoot: \'' + config.serversagarmatha01.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serversagarmatha01.maxFileSize))
+    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serversagarmatha01.convertCommand + '\''))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serversagarmatha01.gsCommand + '\''))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serversagarmatha01.concurrencyImageProcesses))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serversagarmatha01.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serversagarmatha01.domain + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -620,6 +714,35 @@ gulp.task('build:serversagarmatha01', function() {
     'server.js'
   ], {"base": "."})
     .pipe(gulp.dest('build-server-sagarmatha01'));
+});
+
+
+// NOIS Server build
+gulp.task('build:serverNois', function() {
+  gulp.src('package.json', {"base": "."})
+    .pipe(replace(/"devDependencies":\s[\s\S]*},/g, '"devDependencies":{},'))
+    .pipe(gulp.dest('build-server-nois'));
+
+  gulp.src('server/config.js', {"base": "."})
+    .pipe(replace(/PROXY_URL: '(.*)'/g, 'PROXY_URL: \'' + config.serverNois.PROXY_URL + '\''))
+    .pipe(replace(/path\.join\(rootPath, '(.*)'\)/g, 'path.join(rootPath, \'' + config.serverNois.assetLocation + '\')'))
+    .pipe(replace(/imagePathRoot: '(.*)'/g, 'imagePathRoot: \'' + config.serverNois.assetLocation + '\''))
+    .pipe(replace(/maxFileSize: \d+/g, 'maxFileSize: ' + config.serverNois.maxFileSize))
+    .pipe(replace(/concurrencyImageProcesses: \d+/g, 'concurrencyImageProcesses: ' + config.serverNois.concurrencyImageProcesses))
+    .pipe(replace(/convertCommand: '(.*)'/g, 'convertCommand: \'' + config.serverNois.convertCommand + '\''))
+    .pipe(replace(/gsCommand: '(.*)'/g, 'gsCommand: \'' + config.serverNois.gsCommand + '\''))
+    .pipe(replace(/pusher_appId: '(.*)'/g, 'pusher_appId: \'' + config.serverNois.pusher.appId + '\''))
+    .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverNois.pusher.apiKey + '\''))
+    .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverNois.pusher.secret + '\''))
+    .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverNois.domain + '\''))
+    .pipe(gulp.dest('build-server-nois'));
+
+  return gulp.src([
+    'server/**/*',
+    '!server/config.js',
+    'server.js'
+  ], {"base": "."})
+    .pipe(gulp.dest('build-server-nois'));
 });
 
 ////////////////////////////////////

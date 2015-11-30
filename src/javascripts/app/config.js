@@ -179,6 +179,7 @@ define(function(require) {
         userNotificationsInterval: 600000 // 10 minutes
       },
       dateFormat: 'MM/dd/yyyy',
+      datetimeFormat: 'MM/dd/yyyy hh:mm a',
       statusColours: [
         '55d63c',
         'e2df05',
@@ -206,6 +207,7 @@ define(function(require) {
     openWeatherMap: {
       appId: 'd83ad50cdf64ae4f17132adbfd43cb90'
     },
+    weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
     pusher_api_key: 'c2f5de73a4caa3763726',
     pusher_channel: 'onTarget',
     bim_user: 'bim@ontargetcloud.com',

@@ -15,7 +15,7 @@ function generateNewFileName(filePath) {
   var fullFilePath = filePath;
   var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
   var newName = fileName;
-  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\).' + fileExt + '$');
+  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\)\\.' + fileExt + '$');
   var duplicates = _.filter(files, function(file) {
     return reg.test(file);
   });
@@ -53,7 +53,9 @@ function uploadFile(req, res) {
     .replace(/\"/g, '_');
 
   file.name = fileName;
-
+  console.log("Uploading the file" + fileName + " with size: " + file.size);
+  console.log("Max File size allowed:" + maxFileSize);
+  console.log("is valid file??" + isValid(file.size, maxFileSize));
   if(isValid(file.size, maxFileSize)) {
     function upload(file) {
       moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, projectAssetFolderName, context, function() {

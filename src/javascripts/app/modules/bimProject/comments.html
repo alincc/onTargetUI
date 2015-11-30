@@ -23,6 +23,13 @@
         var currentUserFirstName = $('#currentUserFirstName').val();
         var currentUserLastName = $('#currentUserLastName').val();
         var currentUserAvatarPath = $('#currentUserAvatarPath').val();
+        var pusherKey = $('#pusherClientApiKey').val();
+        var pusherChannel = $('#pusherChannel').val();
+
+        var pusher = new Pusher(pusherKey, {
+            encrypted: true
+        });
+        var channel = pusher.subscribe(pusherChannel);
 
         othis.selectedId = oid;
 
@@ -68,10 +75,20 @@
         this.appendComment = function(data) {
             var formattedDate = new Date(data.commentedDate);
             var d = formattedDate.getDate();
+            d = ("0" + d).slice(-2); // 2 digits format
             var m = formattedDate.getMonth();
             m += 1;  // JavaScript months are 0-11
+            m = ("0" + m).slice(-2); // 2 digits format
             var y = formattedDate.getFullYear();
-            var dateStr = m + '/' + d + '/' + y;
+            var hours = formattedDate.getHours();
+            var minutes = formattedDate.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = ("0" + minutes).slice(-2); // 2 digits format
+            hours = ("0" + hours).slice(-2); // 2 digits format
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            var dateStr = (m + '/' + d + '/' + y + ' ' + strTime).toLowerCase();
             var $tr = $('<tr class="comment-item">' +
                     '<td class="avt">' +
                     '<img class="avatar" src="' + data.commenterContact.userImagePath + '" />' +
@@ -83,7 +100,7 @@
                     '</td>' +
                     '</tr>');
 
-            if(containerDiv.find('tr.no-result').length){
+            if(containerDiv.find('tr.no-result').length) {
                 containerDiv.find('tr.no-result').remove();
             }
             containerDiv.find("table tbody").append($tr);
@@ -129,22 +146,28 @@
                         "loggedInUserProjectId": parseInt(projectId)
                     },
                     "projectBIMFileId": parseInt(projectBimFileId),
-                    "comment": containerDiv.find('#commentText').val()
+                    "comment": containerDiv.find('#commentText').val(),
+                    "commentedDate": new Date().toISOString(),
+                    "commenterContact": {
+                        firstName: currentUserFirstName,
+                        lastName: currentUserLastName,
+                        userImagePath: currentUserAvatarPath
+                    }
                 }),
                 dataType: "json",
                 contentType: 'application/json',
                 success: function(data) {
                     if(data.returnVal === 'SUCCESS') {
-                        othis.appendComment({
-                            commentedDate: new Date().toISOString(),
-                            commenterContact: {
-                                firstName: currentUserFirstName,
-                                lastName: currentUserLastName,
-                                userImagePath: currentUserAvatarPath
-                            },
-                            comment: containerDiv.find('#commentText').val()
-                        });
-                        containerDiv.find('#commentText').val('');
+//                        othis.appendComment({
+//                            commentedDate: new Date().toISOString(),
+//                            commenterContact: {
+//                                firstName: currentUserFirstName,
+//                                lastName: currentUserLastName,
+//                                userImagePath: currentUserAvatarPath
+//                            },
+//                            comment: containerDiv.find('#commentText').val()
+//                        });
+//                        containerDiv.find('#commentText').val('');
                     }
                 },
                 error: function(err) {
@@ -167,5 +190,22 @@
         containerDiv.find(".btnAddComment").click(othis.addComment);
 
         othis.loadComments();
+
+        // pusher
+        console.log('Listen event: ', 'onbim.comment.' + parseInt(projectBimFileId));
+        channel.bind('onBIM.comment.' + parseInt(projectBimFileId), function(evt) {
+            if(evt.name === 'onBIMAddComment') {
+                othis.appendComment({
+                    commentedDate: evt.value.commentedDate,
+                    commenterContact: evt.value.commenterContact,
+                    comment: evt.value.comment
+                });
+                containerDiv.find('#commentText').val('');
+            }
+        });
+
+        $(window).on('hashchange', function() {
+            channel.unbind('onBIM.comment.' + parseInt(projectBimFileId));
+        });
     }
 </script>

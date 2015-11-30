@@ -6,6 +6,17 @@ define(function() {
   var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', 'utilFactory', '$state',
     function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, utilFactory, $state) {
 
+      var getCountryFileName = function(countryCode) {
+        var fileName = _($scope.countries)
+          .filter(function(country) {
+            return country.code === countryCode;
+          })
+          .pluck('filename')
+          .value();
+
+        return fileName[0];
+      };
+
       $scope.projectModel = {
         projectId: null,
         projectParentId: $rootScope.mainProjectInfo.projectId,
@@ -81,17 +92,6 @@ define(function() {
         } else {
           $scope.states = [];
         }
-      };
-
-      var getCountryFileName = function(countryCode) {
-        var fileName = _($scope.countries)
-          .filter(function(country) {
-            return country.code === countryCode;
-          })
-          .pluck('filename')
-          .value();
-
-        return fileName[0];
       };
 
       $scope.save = function() {
