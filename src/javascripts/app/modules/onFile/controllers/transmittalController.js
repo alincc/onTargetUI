@@ -255,9 +255,11 @@ define(function(require) {
       };
 
       $scope.getCompanyOfUser = function() {
-        $scope.document.keyValues.company_name = _.result(_.find($scope.contactLists, function(contact) {
+        var userCompany = _.find($scope.contactLists, function(contact) {
           return contact.userId === $scope.document.keyValues.receiverId;
-        }), 'companyName');
+        });
+        $scope.document.keyValues.company_name = userCompany ? userCompany.companyName : '';
+        $scope.document.keyValues.company_id = userCompany ? userCompany.companyId : '';
       };
 
       var uploadModalInstance;

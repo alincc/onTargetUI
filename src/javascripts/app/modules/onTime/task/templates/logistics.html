@@ -5,7 +5,7 @@
                 <div class="container-fluid">
                     <div>
                         <ul class="nav nav-pills nav-justified text-muted">
-                            <li ng-class="{'active': action.name==='owner'}" permission="VIEW_TASK_MEMBER"><a href="javascript:void(0)" ng-click="openAction(actions.owner)">Asignee</a></li>
+                            <li ng-class="{'active': action.name==='owner'}" permission="VIEW_TASK_MEMBER"><a href="javascript:void(0)" ng-click="openAction(actions.owner)">Assignee</a></li>
                             <li ng-class="{'active': action.name==='comment'}" permission="VIEW_TASK_COMMENT"><a href="javascript:void(0)" ng-click="openAction(actions.comment)">Comment</a></li>
                             <li ng-class="{'active': action.name==='budget'}" permission="VIEW_TASK_BUDGET"><a href="javascript:void(0)" ng-click="openAction(actions.budget)">Budget</a></li>
                             <li ng-class="{'active': action.name==='progress'}" permission="VIEW_TASK_PERCENTAGE"><a href="javascript:void(0)" ng-click="openAction(actions.progress)">Progress</a></li>
@@ -17,19 +17,24 @@
         </div>
         <div ng-switch on="action.name">
             <div ng-switch-when="owner" permission="VIEW_TASK_MEMBER">
-                <div ng-include="'onTime/task/templates/owner.html'"></div>
+                <!--<div ng-include="'onTime/task/templates/owner.html'"></div>-->
+                <task-assignee task="currentTask"></task-assignee>
             </div>
             <div ng-switch-when="comment" permission="VIEW_TASK_COMMENT">
-                <div ng-include="'onTime/task/templates/comment.html'"></div>
+                <!--<div ng-include="'onTime/task/templates/comment.html'"></div>-->
+                <task-comment task="currentTask"></task-comment>
             </div>
             <div ng-switch-when="budget" permission="VIEW_TASK_BUDGET">
-                <div ng-include="'onTime/task/templates/budget.html'"></div>
+                <!--<div ng-include="'onTime/task/templates/budget.html'"></div>-->
+                <task-budget task="currentTask"></task-budget>
             </div>
             <div ng-switch-when="progress" permission="VIEW_TASK_PERCENTAGE">
-                <div ng-include="'onTime/task/templates/progress.html'"></div>
+                <!--<div ng-include="'onTime/task/templates/progress.html'"></div>-->
+                <task-progress task="currentTask"></task-progress>
             </div>
             <div ng-switch-when="attachment" permission="VIEW_TASK_ATTACHMENT">
-                <div ng-include="'onTime/task/templates/attachment.html'"></div>
+                <!--<div ng-include="'onTime/task/templates/attachment.html'"></div>-->
+                <task-attachment task="currentTask"></task-attachment>
             </div>
             <!--<div ng-switch-default>
                 <div ng-include="'onTime/task/templates/owner.html'"></div>

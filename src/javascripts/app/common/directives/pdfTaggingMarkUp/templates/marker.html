@@ -1,11 +1,15 @@
 <section class="marker">
-    <ul class="comment-list" ng-repeat="m in marker.comments">
-        <li class="comment">
-            <p class="author m-0"><b ng-bind="m.author"></b> <i>({{m.commentedDate | date:'MM/dd/yyyy HH:mm'}})</i>:</p>
-            {{m.comment}}
+    <p class="no-comment" ng-if="marker.comments.length<=0">
+        No comments
+    </p>
+    <ul class="comment-list">
+        <li class="comment" ng-class="{'last': $last}" ng-repeat="m in marker.comments">
+            <p class="author m-0"><b ng-bind="m.author"></b> <i>said</i></p> <span class="date"
+                                                                                   ng-bind="m.commentedDate | date:'MM/dd/yyyy HH:mm a'"></span>
+            <p class="message" ng-bind="m.comment"></p>
         </li>
     </ul>
-    <section ng-form name="add_comment_form">
+    <section ng-form name="add_comment_form" class="add_comment_form">
         <div class="form-group">
             <label>Please enter comment</label>
                 <textarea class="form-control" placeholder="Enter comment" ng-model="marker.comment"
@@ -14,6 +18,12 @@
         <button type="button" ng-click="marker.add()" class="btn btn-sm btn-success"
                 ng-disabled="add_comment_form.$invalid">Add comment
         </button>
-        <button type="button" ng-click="marker.remove()" class="btn btn-sm btn-primary">Delete tag</button>
+        <button type="button" ng-click="marker.remove()" class="btn btn-sm btn-danger">Delete tag</button>
+        <button type="button" ng-click="marker.linkTask()" class="btn btn-sm btn-info"
+                ng-if="!marker.isLinked && !marker.isNew">Link Task
+        </button>
+        <button type="button" ng-click="marker.unLink(marker.taskLink)" class="btn btn-sm btn-primary"
+                ng-if="marker.isLinked && !marker.isNew">UnLink Task
+        </button>
     </section>
 </section>

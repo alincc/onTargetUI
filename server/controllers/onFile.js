@@ -6,16 +6,18 @@ var path = require('path');
 var request = require('request');
 var _ = require('lodash');
 var rootPath = process.env.ROOT;
+var Promise = require('promise');
 
 module.exports = {
-  exportPdf: function (req, res){
+  exportPdf: function(req, res) {
     var data = req.body.document,
+      baseRequest = req.body.baseRequest,
       projectAssetFolderName = req.body.projectAssetFolderName,
       fileName,
       destinationPath,
       html;
 
-    switch (data.documentTemplate.documentTemplateId) {
+    switch(data.documentTemplate.documentTemplateId) {
       case 1:
         fileName = "purchase_order_" + data.documentId + ".pdf";
         break;
@@ -31,30 +33,59 @@ module.exports = {
     }
 
     destinationPath = path.join(rootPath, 'assets', 'projects', projectAssetFolderName);
-    if (!fs.existsSync(destinationPath)) {
+    if(!fs.existsSync(destinationPath)) {
       fs.mkdirSync(destinationPath);
     }
     destinationPath = path.join(destinationPath, 'onfile');
-    if (!fs.existsSync(destinationPath)) {
+    if(!fs.existsSync(destinationPath)) {
       fs.mkdirSync(destinationPath);
     }
     destinationPath = path.join(destinationPath, fileName);
 
     wkhtmltopdf.command = 'wkhtmltopdf';
 
-    function failure(err){
+    function getCompanyDetails(baseRequest) {
+      return new Promise(function(resolve, reject) {
+        request({
+          method: 'POST',
+          body: {"projectId": baseRequest.loggedInUserProjectId, "baseRequest": baseRequest},
+          json: true,
+          url: config.PROXY_URL + 'project/getProject'
+        }, function(err, response) {
+          if(!err) {
+            request({
+              method: 'POST',
+              body: {"companyId": response.body.project.company.companyLogoPath, "baseRequest": baseRequest},
+              json: true,
+              url: config.PROXY_URL + '/company/getCompanyInfo'
+            }, function(err, response) {
+              if(!err) {
+                resolve(config.domain + '/' + response.body.company.companyLogoPath);
+              } else {
+                resolve('');
+              }
+            });
+          } else {
+            resolve('');
+          }
+        });
+      });
+    }
+
+    function failure(err) {
       res.status(400);
       res.send('Error');
     }
 
-    function success(){
+    function success() {
       res.send({
         success: true,
         filePath: 'assets/projects/' + projectAssetFolderName + '/onfile/' + fileName
       });
     }
 
-    function fillPOData(html, data){
+    function fillPOData(html, data) {
+      html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
@@ -80,14 +111,15 @@ module.exports = {
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function (error){
+        .on("error", function(error) {
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
         .on("finish", success);
     }
 
-    function fillCOData(html, data){
+    function fillCOData(html, data) {
+      html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
@@ -125,7 +157,7 @@ module.exports = {
             <td>{{costCode}}</td>\
             <td>{{amount}}</td>\
         </tr>';
-      for (var i = 0; i < data.gridKeyValues.length; i++) {
+      for(var i = 0; i < data.gridKeyValues.length; i++) {
         var gridKey = temp;
         gridKey = gridKey.replace(/\{\{workDescription}}/g, data.gridKeyValues[i].workDescription || '');
         gridKey = gridKey.replace(/\{\{costCode}}/g, data.gridKeyValues[i].costCode || '');
@@ -138,14 +170,15 @@ module.exports = {
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function (error){
+        .on("error", function(error) {
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
         .on("finish", success);
     }
 
-    function fillTransData(html, data){
+    function fillTransData(html, data) {
+      html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
@@ -191,14 +224,15 @@ module.exports = {
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function (error){
+        .on("error", function(error) {
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
         .on("finish", success);
     }
 
-    function fillRFIData(html, data){
+    function fillRFIData(html, data) {
+      html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
       html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
       html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
@@ -228,9 +262,9 @@ module.exports = {
 
       var responseData = data.responseData;
 
-      var resHtml = ''
+      var resHtml = '';
 
-      for(var i=0; i<responseData.length; i++) {
+      for(var i = 0; i < responseData.length; i++) {
         var res = response;
         res = res.replace(/\{\{title}}/g, responseData[i].title || '');
         res = res.replace(/\{\{reply}}/g, responseData[i].response || '');
@@ -241,18 +275,17 @@ module.exports = {
       }
 
 
-
       /*response = response.replace(/\{\{title}}/g, responseData.title || '');
-      response = response.replace(/\{\{reply}}/g, responseData.reply || '');
-      response = response.replace(/\{\{responseBy}}/g, responseData.responsedBy ? responseData.responsedBy.contact ? responseData.responsedBy.contact.firstName + ' ' + responseData.responsedBy.contact.lastName : '' : '');
-      response = response.replace(/\{\{responsedDate}}/g, responseData.responsedDate.getDate() + '/' + responseData.responsedDate.getMonth() + '/' + responseData.responsedDate.getYear() || '');
-      response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime() || '');*/
+       response = response.replace(/\{\{reply}}/g, responseData.reply || '');
+       response = response.replace(/\{\{responseBy}}/g, responseData.responsedBy ? responseData.responsedBy.contact ? responseData.responsedBy.contact.firstName + ' ' + responseData.responsedBy.contact.lastName : '' : '');
+       response = response.replace(/\{\{responsedDate}}/g, responseData.responsedDate.getDate() + '/' + responseData.responsedDate.getMonth() + '/' + responseData.responsedDate.getYear() || '');
+       response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime() || '');*/
 
       html = html.replace(/\{\{responses}}/g, resHtml || '');
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
-        .on("error", function (error){
+        .on("error", function(error) {
           console.error("Problem copying file: " + error.stack);
           failure(error);
         })
@@ -283,22 +316,38 @@ module.exports = {
      data.gridKeyValues = parsedGridKeyValues;
      }*/
 
-    switch (data.documentTemplate.documentTemplateId) {
+    switch(data.documentTemplate.documentTemplateId) {
       case 1:
-        html = fs.readFileSync('server/assets/templates/purchaseOrder.html', 'utf8');
-        fillPOData(html, data);
+        getCompanyDetails(data.keyValues.company_id, baseRequest)
+          .then(function(companyLogoPath) {
+            data.companyLogoPath = companyLogoPath;
+            html = fs.readFileSync('server/assets/templates/purchaseOrder.html', 'utf8');
+            fillPOData(html, data);
+          });
         break;
       case 2:
-        html = fs.readFileSync('server/assets/templates/changeOrder.html', 'utf8');
-        fillCOData(html, data);
+        getCompanyDetails(data.keyValues.company_id, baseRequest)
+          .then(function(companyLogoPath) {
+            data.companyLogoPath = companyLogoPath;
+            html = fs.readFileSync('server/assets/templates/changeOrder.html', 'utf8');
+            fillCOData(html, data);
+          });
         break;
       case 3:
-        html = fs.readFileSync('server/assets/templates/requestForInformation.html', 'utf8');
-        fillRFIData(html, data);
+        getCompanyDetails(data.keyValues.company_id, baseRequest)
+          .then(function(companyLogoPath) {
+            data.companyLogoPath = companyLogoPath;
+            html = fs.readFileSync('server/assets/templates/requestForInformation.html', 'utf8');
+            fillRFIData(html, data);
+          });
         break;
       case 4:
-        html = fs.readFileSync('server/assets/templates/transmittal.html', 'utf8');
-        fillTransData(html, data);
+        getCompanyDetails(data.keyValues.company_id, baseRequest)
+          .then(function(companyLogoPath) {
+            data.companyLogoPath = companyLogoPath;
+            html = fs.readFileSync('server/assets/templates/transmittal.html', 'utf8');
+            fillTransData(html, data);
+          });
         break;
       default:
         res.status(404)        // HTTP status 404: NotFound

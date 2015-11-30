@@ -8,8 +8,12 @@ define(function(require) {
     config = require('app/config');
   var module = angular.module('common.filters.fileDownloadPathHash', ['app.config', 'common.services.util'])
     .filter('fileDownloadPathHash', ['appConstant', 'utilFactory', function(constant, utilFactory) {
-      return function(value) {
-        return constant.resourceUrl + '/download/file?id=' + utilFactory.hash(encodeURIComponent(value));
+      return function(value, name) {
+        var url = constant.resourceUrl + '/download/file?id=' + utilFactory.hash(encodeURIComponent(value));
+        if(name) {
+          url += '&name=' + encodeURIComponent(name);
+        }
+        return url;
       };
     }]);
   return module;

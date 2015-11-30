@@ -112,7 +112,7 @@ define(function(require) {
     };
 
     services.exportPdf = function(url) {
-      return $http.get('http://localhost:9001/node/exportPdf');
+      return $http.get(constant.nodeServer + '/node/exportPdf');
     };
 
     services.getImpacts = function() {

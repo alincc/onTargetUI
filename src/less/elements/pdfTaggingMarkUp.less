@@ -47,9 +47,14 @@
       margin: 0 0 10px 0;
       padding: 0;
       list-style: none;
+      max-height: 150px;
+      overflow-x: hidden;
+      overflow-y: scroll;
       li.comment {
         border-bottom: solid 1px #eaeaea;
         padding-bottom: 5px;
+        padding-top: 10px;
+        position: relative;
         p.author {
           margin: 0 0 5px 0;
           i {
@@ -57,7 +62,27 @@
             color: #999;
           }
         }
+        span.date {
+          position: absolute;
+          top: 13px;
+          right: 0;
+          font-size: 9px;
+          color: #BFBFBF;
+        }
+        p.message {
+          margin: 0;
+        }
+        &.last {
+          border-bottom: none;
+        }
       }
+    }
+    .no-comment {
+      text-align: center;
+    }
+    .add_comment_form {
+      border-top: solid 1px #D2D2D2;
+      padding-top: 10px;
     }
   }
 }

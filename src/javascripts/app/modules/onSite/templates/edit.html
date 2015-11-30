@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h3 class="modal-title">Edit document</h3>
+</div>
+<div class="modal-body on-site-upload-document-modal">
+  <form name="document_frm" class="form-validation" no-validate ng-submit="saveDocumentInfo(document)">
+    <div class="form-group">
+      <label>Name:</label>
+      <input ng-model="documentName" class="form-control" name="name" placeholder="File name" required />
+    </div>
+    <div class="form-group">
+      <label>Category:</label>
+      <ui-select ng-model="document.projectFileCategoryId"
+                 theme="bootstrap"
+                 ng-required="true"
+                 reset-search-input="false">
+        <ui-select-match placeholder="Select category">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="cat in categories" ng-hide="!$select.open">
+          <div ng-bind-html="cat.name"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="form-group">
+      <label class="m-t">Description:</label>
+      <textarea class="form-control" ng-model="document.description" required
+                name="description"></textarea>
+    </div>
+
+    <div class="m-t m-b text-right">
+      <button type="submit" ng-disabled="step2.$invalid || step2.$submitted"
+              loading-button="step2.$submitted" size="md"
+              class="btn btn-primary btn-rounded" ng-click="steps.step2=true"><i
+        class="fa fa-info-circle"></i> Save document info
+      </button>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

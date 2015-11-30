@@ -14,9 +14,9 @@ function generateNewFileName(filePath) {
   var fullFilePath = filePath;
   var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
   var newName = fileName;
-  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\).' + fileExt + '$');
+  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\)\\.' + fileExt + '$');
   var duplicates = _.filter(files, function(file) {
-    return reg.test(file);
+    return reg.test(file) /*fs.statSync(path.join(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')), file)).isFile()*/;
   });
   if(duplicates.length <= 0) {
     newName = fileNameWithoutExt + ' (1).' + fileExt;

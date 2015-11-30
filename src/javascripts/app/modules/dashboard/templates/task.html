@@ -1,11 +1,11 @@
 <section ng-click="selectTask(task)">
     <div class="task-status">
-        <div class="percentage">{{task.percentageComplete}}%</div>
+        <div class="percentage">{{::task.percentageComplete}}%</div>
                                             <span
                                                     round-progress
                                                     max="100"
                                                     current="task.percentageComplete"
-                                                    color="#{{task.percentageComplete | taskStatusColor}}"
+                                                    color="#{{::task.percentageComplete | taskStatusColor}}"
                                                     bgcolor="#ececec"
                                                     radius="25"
                                                     stroke="5"
@@ -18,18 +18,18 @@
                                             </span>
     </div>
     <div class="task-info">
-        <div class="title">{{task.title}}</div>
-        <div class="assignee">Assigned to: <span ng-repeat="as in task.assignee">{{as.contact.firstName}}&nbsp;{{as.contact.lastName}}{{$last?'':', '}}</span>
+        <div class="title">{{::task.title}}</div>
+        <div class="assignee">Assigned to: <span ng-repeat="as in task.assignee">{{::as.contact.firstName}}&nbsp;{{::as.contact.lastName}}{{$last?'':', '}}</span>
         </div>
-        <div class="priority"><span class="task-severity-{{task.severity}}"
-                                    ng-bind="task.severity|taskSeverity"></span>
+        <div class="priority"><span class="task-severity-{{::task.severity}}"
+                                    ng-bind="::task.severity|taskSeverity"></span>
             priority
         </div>
     </div>
     <div class="task-update-date">
-        Start Date: <span>{{task.startDate|date:'MM/dd/yyyy'}}</span>
+        Start Date: <span>{{::task.startDate|date:'MM/dd/yyyy'}}</span>
     </div>
     <div class="task-due-date">
-        Due Date: <span>{{task.endDate|date:'MM/dd/yyyy'}}</span>
+        Due Date: <span>{{::task.endDate|date:'MM/dd/yyyy'}}</span>
     </div>
 </section>

@@ -1,7 +1,8 @@
 <div ng-controller="EditTaskController">
     <form name="task_form" no-validate class="form-validation" ng-submit="save()">
         <div class="add-edit-task panel-body" custom-scroll id="task-edit-panel">
-            <div ng-include="'onTime/task/templates/_createOrUpdate.html'"></div>
+            <!--<div ng-include="'onTime/task/templates/_createOrUpdate.html'"></div>-->
+            <add-task task="task" edit="true"></add-task>
         </div>
         <div class="panel-footer bg-light lter">
             <button class="btn btn-xs btn-primary" type="submit"

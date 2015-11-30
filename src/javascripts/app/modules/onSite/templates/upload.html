@@ -28,8 +28,10 @@
             <tab heading="Document information" disabled="step1.$invalid || isUploading || !uploadModel.files.length"
                  active="steps.step2">
                 <form name="step2" class="form-validation" ng-submit="saveDocumentInfo(uploadModel)">
-                    <p>Category:</p>
-                    <ui-select ng-model="uploadModel.category"
+                    <p>Name:</p>
+                    <input ng-model="uploadModel.name" class="form-control" name="name" required />
+                    <p class="m-t">Category:</p>
+                    <ui-select ng-model="uiSelectModel.selectedItem"
                                theme="bootstrap"
                                ng-required="true"
                                reset-search-input="false">

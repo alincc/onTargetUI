@@ -39,6 +39,7 @@ define(function(require) {
     '$q',
     'fileFactory',
     'onSiteFactory',
+    'appConstant',
     function(utilFactory,
              $filter,
              $timeout,
@@ -48,15 +49,17 @@ define(function(require) {
              documentFactory,
              $q,
              fileFactory,
-             onSiteFactory) {
+             onSiteFactory,
+             constant) {
       return {
         restrict: 'E',
         replace: true,
         templateUrl: 'pdfTaggingMarkUpTemplate',
         scope: {
-          path: '@',
           selectedDoc: '=',
-          imagePath: '@'
+          model: '=',
+          pageNumber: '@',
+          maxNativeZoom: '='
         },
         controller: [
           '$scope',
@@ -69,37 +72,34 @@ define(function(require) {
                    $state,
                    fileFactory,
                    onSiteFactory) {
-            var fileExtension = $scope.path.substring($scope.path.lastIndexOf('.') + 1);
-            var fileName = $scope.path.substring($scope.path.lastIndexOf('/') + 1);
-            var fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+            $scope.fileExtension = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('.') + 1);
+            $scope.fileName = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('/') + 1);
+            $scope.fileNameWithoutExtension = $scope.fileName.substring(0, $scope.fileName.lastIndexOf('.'));
 
             // Generate original file path
-            $scope.originalFilePath = $scope.path;
-            if(/.*\-\d+\./.test(fileName)) {
-              $scope.originalFilePath =
-                $scope.path.substring(0, $scope.path.lastIndexOf('/')) + '/' +
-                fileNameWithoutExtension.substring(0, fileNameWithoutExtension.lastIndexOf('-')) +
-                '.' + fileExtension;
-            }
-
-            console.log($scope.path, $scope.originalFilePath);
+            $scope.originalFilePath = $scope.selectedDoc.filePath;
 
             $scope.pdfTaggingMarkUp = {
               isLoading: true,
-              fileExtension: fileExtension,
-              fileMimeType: utilFactory.getFileMimeType(fileExtension),
+              fileExtension: $scope.fileExtension,
+              fileMimeType: utilFactory.getFileMimeType($scope.fileExtension),
               containerHeight: 0,
               containerWidth: 0
             };
 
             $scope.markers = [];
+            $scope.maxNativeZoom = angular.isDefined($scope.maxNativeZoom) ? $scope.maxNativeZoom : null;
 
             $scope.docInfo = {
               docId: $state.params.docId
             };
 
             $scope.getFileInfo = function() {
-              return fileFactory.info($scope.originalFilePath);
+              if($scope.selectedDoc.originalFilePath) {
+                return fileFactory.info($scope.selectedDoc.originalFilePath);
+              } else {
+                return fileFactory.info($scope.model.imagePath);
+              }
             };
 
             $scope.addComment = function(id, comment) {
@@ -119,11 +119,11 @@ define(function(require) {
             };
           }],
         link: function(scope, elem) {
-          var imgH, imgW, map, markerCount = 1,
+          var imgH, imgW, map, tile_layer, markerCount = 1,
             contextMenu = angular.element(elem[0].querySelector('.doc-menu')),
             pdfTaggingMarkUpMap = elem[0].querySelector('#pdfTaggingMarkUpMap'),
             $pdfTaggingMarkUpMap = angular.element(pdfTaggingMarkUpMap),
-            southWest, northEast, bounds;
+            southWest, northEast, bounds, tileSize = 256, maxZoom = 5, minZoom = 1;
 
           L.Icon.Default.imagePath = '/img/leaflet';
 
@@ -131,17 +131,6 @@ define(function(require) {
           scope.selectedDoc.listLayer = scope.listLayers;
           scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
           scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
-
-          function guid() {
-            function s4() {
-              return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-            }
-
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-              s4() + '-' + s4() + s4() + s4();
-          }
 
           function x(a, b) {
             return Math.log2(a / b) + 1;
@@ -154,7 +143,7 @@ define(function(require) {
             map.addLayer(marker);
             marker.bindPopup(markerTemplate);
 
-            function compileMarker() {
+            function compileMarker(cb) {
               markerScope = scope.$new(true);
               markerScope.marker = angular.copy(obj);
               markerScope.marker.remove = function() {
@@ -163,43 +152,67 @@ define(function(require) {
                 }
                 _.remove(scope.markers, {id: obj.id});
               };
+              markerScope.marker.linkTask = function() {
+                $rootScope.$broadcast('pdfTaggingMarkup.Tag.LinkTask');
+              };
 
               $compile(marker._popup._contentNode)(markerScope);
+
+              if(cb) {
+                cb(markerScope);
+              }
             }
 
             marker.on("popupopen", function(e) {
-              // Reverse the popup if exceed the top
-              // saving old anchor point X Y
-              if(!e.popup.options.oldOffset) {
-                e.popup.options.oldOffset = e.popup.options.offset;
-              }
-              var px = map.project(e.popup._latlng);
-              // we calculate popup content height (jQuery)
-              var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
-              var temp = px.y - heightOpeningPopup;
-              var temp2 = heightOpeningPopup + 42;
-              if(temp < 100) { // if it will go above the world, we prevent it to do so
-                // we make the popup go below the poi instead of above
-                e.popup.options.offset = new L.Point(6, temp2);
-                // we make the popup tip to be pointing upward (jQuery)
-                $pdfTaggingMarkUpMap.addClass("reverse-popup");
-                e.popup.update();
-              }
-              else { // we allow auto pan if the popup can open in the normal upward way
-                e.popup.options.offset = e.popup.options.oldOffset;
-                e.popup.options.autoPan = true;
-                $pdfTaggingMarkUpMap.removeClass("reverse-popup");
-                e.popup.update();
-              }
-
+              //// Reverse the popup if exceed the top
+              //// saving old anchor point X Y
+              //if(!e.popup.options.oldOffset) {
+              //  e.popup.options.oldOffset = e.popup.options.offset;
+              //}
+              //var px = map.project(e.popup._latlng);
+              //// we calculate popup content height (jQuery)
+              //var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
+              //var temp = px.y - heightOpeningPopup;
+              //var temp2 = heightOpeningPopup + 42;
+              //if(temp < 100) { // if it will go above the world, we prevent it to do so
+              //  // we make the popup go below the poi instead of above
+              //  e.popup.options.offset = new L.Point(6, temp2);
+              //  // we make the popup tip to be pointing upward (jQuery)
+              //  $pdfTaggingMarkUpMap.addClass("reverse-popup");
+              //  e.popup.update();
+              //}
+              //else { // we allow auto pan if the popup can open in the normal upward way
+              //  e.popup.options.offset = e.popup.options.oldOffset;
+              //  e.popup.options.autoPan = true;
+              //  $pdfTaggingMarkUpMap.removeClass("reverse-popup");
+              //  e.popup.update();
+              //}
+              //
               // Fix close button
               var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
               if(closeButton) {
                 closeButton.setAttribute('href', '');
+                angular.element(closeButton).on('click', function() {
+                  $timeout(function() {
+                    $rootScope.selectedProjetFileTag = null;
+                    $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+                    scope.updatePageData();
+                  });
+                });
+                marker.closeButton = closeButton;
               }
 
               // Compile popup content
-              compileMarker();
+              compileMarker(function(markerScope) {
+                $timeout(function() {
+                  if(markerScope.marker.isLinked) {
+                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.ViewTask', {
+                      taskId: markerScope.marker.taskLink.taskId
+                    });
+                  }
+                  $rootScope.$broadcast('pdfTaggingMarkup.popupopen');
+                });
+              });
             });
 
             marker.on("popupclose", function(e) {
@@ -209,11 +222,22 @@ define(function(require) {
                 currentMarker.text = markerScope.marker.text;
               }
 
+              if(marker.closeButton) {
+                angular.element(marker.closeButton).off('click');
+              }
+
               if(markerScope) {
                 markerScope.$destroy();
               }
 
               e.popup.options.autoPan = false;
+
+              $timeout(function() {
+                $rootScope.selectedProjetFileTag = null;
+                $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+              });
+
+              scope.updatePageData();
             });
 
             if(open) {
@@ -228,16 +252,29 @@ define(function(require) {
           function render(resp) {
             scope.pdfTaggingMarkUp.isLoading = false;
             scope.imgUrl = resp.url;
-            imgH = resp.height;
-            imgW = resp.width;
+            //imgH = resp.height;
+            //imgW = resp.width;
+
+            imgH = tileSize * Math.pow(2, maxZoom);
+            imgW = tileSize * Math.pow(2, maxZoom);
+
+            // Custom CRS
+            L.CRS.Screen = L.extend({}, L.CRS, {
+              projection: L.Projection.LonLat,
+              transformation: new L.Transformation(1, 0, 1, 0),
+              scale: function(e) {
+                return tileSize * Math.pow(2, e);
+              }
+            });
+
+
             map = L.map('pdfTaggingMarkUpMap', {
-              minZoom: 1,
-              maxZoom: 4,
+              minZoom: minZoom,
+              maxZoom: maxZoom,
               center: [0, 0], // - , -
               zoom: 1,
-              crs: L.CRS.Simple,
+              crs: L.CRS.Screen,
               fullscreenControl: true,
-
               fullscreenControlOptions: { // optional
                 title: "Full Screen",
                 titleCancel: "Exit fullscreen mode"
@@ -245,17 +282,38 @@ define(function(require) {
             });
 
             /*southWest = map.unproject([0, imgH], 2);
-            northEast = map.unproject([imgW, 0], 2);*/
-            southWest = map.unproject([0, imgH], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
-            northEast = map.unproject([imgW, 0], x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth));
+             northEast = map.unproject([imgW, 0], 2);*/
+            southWest = map.unproject([0, imgH], minZoom);
+            northEast = map.unproject([imgW, 0], minZoom);
             bounds = new L.LatLngBounds(southWest, northEast);
-            L.imageOverlay($filter('filePath')(resp.url), bounds).addTo(map);
+
+            tile_layer = L.tileLayer(constant.resourceUrl + '/' +
+              scope.model.imagePath.substring(0, scope.model.imagePath.lastIndexOf('/')) + '/' +
+              scope.model.imagePath.substring(scope.model.imagePath.lastIndexOf('/') + 1).replace(/\./g, '_') + '_tiles' +
+              '/{z}/{x}_{y}.png',
+              {
+                minZoom: minZoom,
+                maxZoom: maxZoom,
+                // This map option disables world wrapping. by default, it is false.
+                continuousWorld: false,
+                // This option disables loading tiles outside of the world bounds.
+                noWrap: true,
+                tileSize: tileSize,
+                bounds: bounds,
+                maxNativeZoom: scope.maxNativeZoom
+              })
+              .addTo(map);
+            //L.imageOverlay($filter('filePath')(resp.url), bounds).addTo(map);
             //map.setMaxBounds(bounds);
             //map.fitBounds(bounds);
 
-            var fitHeight = map.unproject([0, imgH], x(imgH * 2, scope.pdfTaggingMarkUp.containerHeight));
+            tile_layer.on("tileerror", function(e) {
+              console.log("tileerror", e);
+            });
 
-            map.setView([fitHeight.lat/2, northEast.lng/2], 2);
+            //var fitHeight = map.unproject([0, imgH], 0);
+
+            map.setView([0.5, 0.5], minZoom);
 
             //leaflet.Draw
 
@@ -287,19 +345,21 @@ define(function(require) {
             };
 
             var drawControl = new L.Control.Draw(options);
+
             map.addControl(drawControl);
+
             function onDrawCreated(e, hideOpenPopup, ignoreToLayer) {
               var type = e.layerType,
                 layer = e.layer || e;
               var comments = e.comments;
-              var id = guid();
+              var id = utilFactory.newGuid();
               layer.id = id;
               var objLayer = layer.toGeoJSON();
               objLayer.comments = _.map(comments, function(cm) {
                 return {
                   comment: cm.comment,
                   userId: cm.commentedBy,
-                  author: cm.commenterContact.firstName + ' ' + cm.commenterContact.lastName,
+                  author: cm.commenterContact ? cm.commenterContact.firstName + ' ' + cm.commenterContact.lastName : cm.commentedBy,
                   commentedDate: cm.commentedDate,
                   loadedComment: true
                 };
@@ -309,21 +369,33 @@ define(function(require) {
               objLayer.r = layer._mRadius;
               objLayer.id = id;
               objLayer.type = type;
+              objLayer.projectFileTag = e.projectFileTag;
               if(type === 'marker') {
                 //var projectFileTagId = resp.data.tags[0].projectFileTagId;
                 //objLayer.id = projectFileTagId;
                 //layer.id = projectFileTagId;
                 objLayer.layer = angular.copy(layer);
-                if(true) {
-                  scope.listLayers.push(objLayer);
-                }
+                scope.listLayers.push(objLayer);
                 editableLayers.addLayer(layer);
 
-                layer.bindPopup(markerTemplate);
+                layer.bindPopup(markerTemplate, {
+                  minWidth: 300
+                });
                 var markerScope;
-                var compileMarker = function() {
+                var compileMarker = function(cb) {
                   markerScope = scope.$new(true);
                   markerScope.marker = angular.copy(objLayer);
+
+                  if(!objLayer.projectFileTag) {
+                    // New tag
+                    objLayer.projectFileTag = {
+                      isNew: true,
+                      projectFileTagId: utilFactory.newGuid(),
+                      taskLinks: [],
+                      comment: []
+                    };
+                  }
+
                   markerScope.marker.remove = function() {
                     if(map.hasLayer(layer)) {
                       map.removeLayer(layer);
@@ -352,44 +424,106 @@ define(function(require) {
                     //scope.addComment(objLayer.id, this.text);
 
                     //layer.closePopup();
+
+                    scope.updatePageData();
                   };
 
+                  markerScope.marker.linkTask = function() {
+                    $rootScope.currentProjectFileTag = objLayer.projectFileTag;
+                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.LinkTask');
+                  };
+                  markerScope.marker.isLinked = objLayer.projectFileTag.taskLinks.length > 0;
+                  markerScope.marker.taskLink = objLayer.projectFileTag.taskLinks[0];
+                  markerScope.marker.isNew = objLayer.projectFileTag.isNew;
+
+                  markerScope.marker.unLink = function(task) {
+                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.UnLinkTask', {
+                      projectFileTagId: objLayer.projectFileTag.projectFileTagId,
+                      projectTaskId: task.taskId
+                    });
+                  };
+
+                  markerScope.$on('linkTask.Completed', function(event, dt) {
+                    if(objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
+                      markerScope.marker.isLinked = true;
+                      markerScope.marker.taskLink = {
+                        taskId: dt.taskId
+                      };
+                      e.projectFileTag.projectFileTagId = dt.projectFileTag.projectFileTagId;
+                      e.projectFileTag.taskLinks = [{
+                        taskId: dt.taskId
+                      }];
+                    }
+                  });
+
+                  markerScope.$on('unLinkTask.Completed', function(event, dt) {
+                    if(objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
+                      markerScope.marker.isLinked = false;
+                      markerScope.marker.taskLink = null;
+
+                      e.projectFileTag.projectFileTagId = dt.projectFileTag.projectFileTagId;
+                      e.projectFileTag.taskLinks = [];
+                    }
+                  });
+
                   $compile(layer._popup._contentNode)(markerScope);
+
+                  if(cb) {
+                    cb(markerScope, objLayer);
+                  }
                 };
 
                 layer.on("popupopen", function(e) {
-                  // Reverse the popup if exceed the top
-                  // saving old anchor point X Y
-                  if(!e.popup.options.oldOffset) {
-                    e.popup.options.oldOffset = e.popup.options.offset;
-                  }
-                  var px = map.project(e.popup._latlng);
-                  // we calculate popup content height (jQuery)
-                  var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
-                  var temp = px.y - heightOpeningPopup;
-                  var temp2 = heightOpeningPopup + 42;
-                  if(temp < 100) { // if it will go above the world, we prevent it to do so
-                    // we make the popup go below the poi instead of above
-                    e.popup.options.offset = new L.Point(6, temp2);
-                    // we make the popup tip to be pointing upward (jQuery)
-                    $pdfTaggingMarkUpMap.addClass("reverse-popup");
-                    e.popup.update();
-                  }
-                  else { // we allow auto pan if the popup can open in the normal upward way
-                    e.popup.options.offset = e.popup.options.oldOffset;
-                    e.popup.options.autoPan = true;
-                    $pdfTaggingMarkUpMap.removeClass("reverse-popup");
-                    e.popup.update();
-                  }
-
+                  //// Reverse the popup if exceed the top
+                  //// saving old anchor point X Y
+                  //if(!e.popup.options.oldOffset) {
+                  //  e.popup.options.oldOffset = e.popup.options.offset;
+                  //}
+                  //var px = map.project(e.popup._latlng);
+                  //// we calculate popup content height (jQuery)
+                  //var heightOpeningPopup = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-content').offsetHeight;
+                  //var temp = px.y - heightOpeningPopup;
+                  //var temp2 = heightOpeningPopup + 42;
+                  //if(temp < 100) { // if it will go above the world, we prevent it to do so
+                  //  // we make the popup go below the poi instead of above
+                  //  e.popup.options.offset = new L.Point(6, temp2);
+                  //  // we make the popup tip to be pointing upward (jQuery)
+                  //  $pdfTaggingMarkUpMap.addClass("reverse-popup");
+                  //  e.popup.update();
+                  //}
+                  //else { // we allow auto pan if the popup can open in the normal upward way
+                  //  e.popup.options.offset = e.popup.options.oldOffset;
+                  //  e.popup.options.autoPan = true;
+                  //  $pdfTaggingMarkUpMap.removeClass("reverse-popup");
+                  //  e.popup.update();
+                  //}
+                  //
                   // Fix close button
                   var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
                   if(closeButton) {
                     closeButton.setAttribute('href', '');
+                    angular.element(closeButton).on('click', function() {
+                      $timeout(function() {
+                        $rootScope.selectedProjetFileTag = null;
+                        $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+                        scope.updatePageData();
+                      });
+                    });
+                    layer.closeButton = closeButton;
                   }
 
                   // Compile popup content
-                  compileMarker();
+                  compileMarker(function(markerScope) {
+                    $timeout(function() {
+                      console.log(markerScope.marker);
+                      if(markerScope.marker.isLinked) {
+                        $rootScope.$broadcast('pdfTaggingMarkup.Tag.ViewTask', {
+                          taskId: markerScope.marker.taskLink.taskId
+                        });
+                      }
+                      $rootScope.$broadcast('pdfTaggingMarkup.popupopen');
+                    });
+                  });
                 });
 
                 layer.on("popupclose", function(e) {
@@ -399,27 +533,44 @@ define(function(require) {
                     currentMarker.text = markerScope.marker.text;
                   }
 
+                  if(layer.closeButton) {
+                    angular.element(layer.closeButton).off('click');
+                  }
+
                   if(markerScope) {
                     markerScope.$destroy();
                   }
 
                   e.popup.options.autoPan = false;
+
+                  $timeout(function() {
+                    $rootScope.selectedProjetFileTag = null;
+                    $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
+                  });
+
+                  scope.updatePageData();
                 });
 
                 if(!hideOpenPopup) {
                   layer.openPopup();
-                } else {
-                  compileMarker();
+                }
+                else {
+                  compileMarker(function() {
+                    $timeout(function() {
+                      $rootScope.$broadcast('pdfTaggingMarkup.popupopen');
+                    });
+                  });
                 }
 
               }
               else {
                 objLayer.layer = angular.copy(layer);
-                if(true) {
-                  scope.listLayers.push(objLayer);
-                }
+                objLayer.projectFileTag = e.projectFileTag;
+                scope.listLayers.push(objLayer);
                 editableLayers.addLayer(layer);
               }
+
+              scope.updatePageData();
             }
 
             map.on('draw:created', onDrawCreated);
@@ -438,7 +589,10 @@ define(function(require) {
               //objLayer._mRadius = layer._mRadius;
               //scope.listLayers.push(objLayer);
               //editableLayers.addLayer(layer);
+
+              scope.updatePageData();
             });
+
             map.on('draw:edited', function(e) {
               var layers = e.layers._layers,
                 listGeo = e.layers.toGeoJSON().features;
@@ -458,6 +612,7 @@ define(function(require) {
                 editableLayers.addLayer(objLayer);
                 i = i + 1;
               });
+              console.log(layers, editableLayers);
               //var layers = e.layers._layers;
               //_.each(layers, function (objLayer, k){
               //  var id = objLayer.id;
@@ -466,7 +621,10 @@ define(function(require) {
               //  });
               //  scope.listLayers.push()
               //});
+
+              scope.updatePageData();
             });
+
             $timeout(function() {
               map._onResize();
               renderMarkers();
@@ -491,14 +649,18 @@ define(function(require) {
               //contextMenu.show();
             });
 
-            if($rootScope.pdfTaggingMarkUpEditData) {
-              _.each($rootScope.pdfTaggingMarkUpEditData, function(tag) {
+            map.on('zoomend', function(e) {
+              scope.updatePageData();
+            });
+
+            if(scope.model.tagList) {
+              _.each(scope.model.tagList, function(tag) {
                 var attrs = tag.attributes;
                 var type = _.filter(attrs, function(a) {
                   return a.key === 'type';
                 });
                 var options = _.reduce(attrs, function(memo, a) {
-                  if(a.key.startsWith('options.')) {
+                  if(/^options\./.test(a.key)) {
                     var keys = a.key.split('.')[1], value = a.value;
                     memo[keys] = value;
                   }
@@ -510,12 +672,12 @@ define(function(require) {
                     case 'rectangle':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -528,18 +690,19 @@ define(function(require) {
                       var rectangle = L.rectangle(coords, options), rectangle2 = angular.copy(rectangle);
                       //rectangle2.addTo(map);
                       rectangle.layerType = t;
+                      rectangle.projectFileTag = tag;
                       onDrawCreated(rectangle, true, true);
                       break;
                     }
                     case 'polygon':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -552,18 +715,19 @@ define(function(require) {
                       var polygon = L.polygon(coords, options), polygon2 = angular.copy(polygon);
                       //polygon2.addTo(map);
                       polygon.layerType = t;
+                      polygon.projectFileTag = tag;
                       onDrawCreated(polygon, true, true);
                       break;
                     }
                     case 'polyline':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -576,25 +740,26 @@ define(function(require) {
                       var polyline = L.polyline(coords, options), polyline2 = angular.copy(polyline);
                       //polyline2.addTo(map);
                       polyline.layerType = t;
+                      polyline.projectFileTag = tag;
                       onDrawCreated(polyline, true, true);
                       break;
                     }
                     case 'circle':
                     {
                       var radius = _.filter(attrs, function(a) {
-                        return a.key.startsWith('radius');
+                        return /^radius/.test(a.key);
                       });
                       var circleRadius = 0;
                       if(radius.length) {
                         circleRadius = parseFloat(radius[0].value);
                       }
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -607,18 +772,19 @@ define(function(require) {
                       var circle = L.circle(coords[0], circleRadius, options), circle2 = angular.copy(circle);
                       //circle2.addTo(map);
                       circle.layerType = t;
+                      circle.projectFileTag = tag;
                       onDrawCreated(circle, true, true);
                       break;
                     }
                     case 'marker':
                     {
                       geo = _.filter(attrs, function(a) {
-                        return a.key.startsWith('geo.');
+                        return /^geo\./.test(a.key);
                       });
                       coords = _.reduce(geo, function(memo, g) {
                         var key = g.key,
-                          value = parseInt(g.value, 10);
-                        var info = key.split('.'), id = parseInt(info[1], 10), id2 = parseInt(info[2], 10);
+                          value = parseFloat(g.value);
+                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
                         if(memo[id]) {
                           memo[id][id2] = value;
                         } else {
@@ -632,11 +798,11 @@ define(function(require) {
                       //marker2.addTo(map);
                       marker.layerType = t;
                       marker.comments = tag.comment;
+                      marker.projectFileTag = tag;
                       onDrawCreated(marker, true, true);
                     }
                   }
                 }
-
               });
             }
           }
@@ -657,21 +823,6 @@ define(function(require) {
 
             contextMenu.hide();
           };
-
-          if(/(png|jpg|jpeg)/i.test(scope.pdfTaggingMarkUp.fileExtension)) {
-            scope.getFileInfo()
-              .success(render)
-              .error(function(err) {
-                console.log(err);
-              });
-          }
-          else {
-            scope.getPdfImage()
-              .success(render)
-              .error(function(err) {
-                console.log(err);
-              });
-          }
 
           scope.addTag = function(tags) {
             return onSiteFactory.addTags(tags);
@@ -721,7 +872,8 @@ define(function(require) {
                       'projectFileTagAttributeId': null
                     }
                   ],
-                  comment: listComment
+                  comment: listComment,
+                  'linkTaskId': m.projectFileTag ? m.projectFileTag.linkTaskId : 0
                 };
               }
               var attr = [];
@@ -795,7 +947,7 @@ define(function(require) {
                 'projectFileId': docId,
                 'projectFileTagId': null,
                 'parentFileTagId': null,
-                'tag': 'TAg',
+                'tag': 'TAG',
                 'title': 'TAG',
                 'tagType': 'TAG',
                 'tagFilePath': '',
@@ -851,8 +1003,12 @@ define(function(require) {
             }, []);
           };
 
-          scope.exportPdf = function(fileName, width, height) {
-            var deferred = $q.defer();
+          scope.updatePageData = function() {
+            var listTag = scope.extractListTags(scope.selectedDoc, scope.selectedDoc.fileId);
+            var newListTag = _.each(listTag, function(el) {
+              el.title = "Tag | Page-" + scope.pageNumber;
+              return el;
+            });
             var layers = angular.copy(scope.listLayers);
             _.each(layers, function(l) {
               if(l.layer && l.layer._leaflet_events) {
@@ -862,75 +1018,47 @@ define(function(require) {
                 delete l.layer.editing;
               }
             });
-            onSiteFactory.exportPdf({
-              path: scope.imgUrl,
-              geo: layers,
-              width: width,
-              height: height,
-              scale: x(imgW * 2, scope.pdfTaggingMarkUp.containerWidth),
-              projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName,
-              fileName: fileName
-
-            })
-              .success(function(dt) {
-                deferred.resolve(dt);
-              });
-            return deferred.promise;
+            scope.model.tagList = newListTag;
+            scope.model.layers = layers || [];
           };
 
-          scope.$on('pdfTaggingMarkUp.SaveTheDoc', function(e, args) {
-            var img = document.querySelector('.leaflet-image-layer');
-            var doc = args.doc;
-            var width = img.width;
-            var height = img.height;
-            if(!doc) {
-              return;
+          scope.$on('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', function(e, v) {
+            console.log('Data: ', v);
+            console.log('Current page: ', scope.pageNumber);
+            if(tile_layer && tile_layer.options.maxNativeZoom < v.maxNativeZoom && parseInt(scope.pageNumber) === v.page) {
+              console.log('Redraw...');
+              tile_layer.options.maxNativeZoom = v.maxNativeZoom;
+              tile_layer.redraw();
             }
-
-            onSiteFactory.getNextVersionName(scope.originalFilePath)
-              .success(function(resp) {
-                var newFilePath = resp.newVersionName;
-                var newFileName = newFilePath.substring(newFilePath.lastIndexOf('/') + 1);
-                var data = {
-                  "projectId": $rootScope.currentProjectInfo.projectId,
-                  "name": newFilePath,
-                  "fileType": doc.fileType,
-                  "createdBy": $rootScope.currentUserInfo.userId,
-                  "modifiedBy": $rootScope.currentUserInfo.userId,
-                  "categoryId": doc.projectFileCategoryId.projectFileCategoryId,
-                  "description": doc.description
-                };
-                documentFactory.saveUploadedDocsInfo(data).then(function(resp) {
-                  if(resp.data && resp.data.documentDetail) {
-                    var docId = resp.data.documentDetail.fileId;
-                    var listTag = scope.extractListTags(doc, docId);
-                    scope.addTag(listTag).then(function(resp) {
-                      scope.exportPdf(newFileName, width, height).then(function(dt) {
-                        fileFactory.convertPDFToImage(dt.path).then(function(r) {
-                          scope.$emit('pdfTaggingMarkUp.SaveDone', {url: r.url, docId: docId});
-                        }, function(err) {
-                          console.log(err);
-                          scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                        });
-                      }, function(err) {
-                        console.log(err);
-                        scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                      });
-                    }, function(err) {
-                      console.log(err);
-                      scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                    });
-                  }
-                }, function(err) {
-                  console.log(err);
-                  scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-                });
-              })
-              .error(function(err) {
-                console.log(err);
-                scope.$emit('pdfTaggingMarkUp.SaveError', {error: err});
-              });
           });
+
+          scope.$on('pdfTaggingMarkup.resize', function(e, v) {
+            //if(v) {
+            //  // hide comments
+            //}
+            //else {
+            //  // show comments
+            //}
+
+            if(map) {
+              $timeout(function() {
+                scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
+                scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
+                map.invalidateSize(false);
+                $timeout(function() {
+                  scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
+                  scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
+                  map.invalidateSize(false);
+                }, 50);
+              }, 50);
+            }
+          });
+
+          scope.getFileInfo()
+            .success(render)
+            .error(function(err) {
+              console.log(err);
+            });
         }
       };
     }]);

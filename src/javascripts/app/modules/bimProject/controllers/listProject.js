@@ -4,6 +4,19 @@ define(function(require) {
     lodash = require('lodash');
   var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', '$modal', 'toaster',
     function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, $modal, toaster) {
+      var getProjectByPoid = function(poid) {
+        var deferred = $q.defer();
+        onBimFactory.getBimProjectByPoid(poid).success(
+          function(resp) {
+            //$scope.bimProjects.push(resp.response.result);
+            deferred.resolve(resp.response.result);
+          }
+        ).error(function(error) {
+            deferred.reject(error);
+          });
+        return deferred.promise;
+      };
+
       $scope.app = appConstant.app;
       $scope.bimProjects = [];
       $scope.projects = [];
@@ -41,19 +54,6 @@ define(function(require) {
             }
           }
         );
-      };
-
-      var getProjectByPoid = function(poid) {
-        var deferred = $q.defer();
-        onBimFactory.getBimProjectByPoid(poid).success(
-          function(resp) {
-            //$scope.bimProjects.push(resp.response.result);
-            deferred.resolve(resp.response.result);
-          }
-        ).error(function(error) {
-            deferred.reject(error);
-          });
-        return deferred.promise;
       };
 
       $scope.projectDetail = function(project) {

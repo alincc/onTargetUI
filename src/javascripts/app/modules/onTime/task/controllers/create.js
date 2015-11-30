@@ -17,49 +17,48 @@ define(function() {
       selectedAssignees: []
     };
 
-    $scope.minDate2 = $rootScope.activitySelected.startDate;
-    $scope.maxDate2 = $rootScope.activitySelected.endDate;
-    $scope.initStartDate = new Date($scope.minDate2);
-    $scope.$watchCollection('[task.startDate, task.endDate]', function(e) {
-      $scope.minDate = $scope.task.startDate ? $scope.task.startDate : $rootScope.activitySelected.startDate;
-      $scope.maxDate = $scope.task.endDate ? $scope.task.endDate : $rootScope.activitySelected.endDate;
-      $scope.initEndDate = new Date($scope.minDate);
-      $scope.task.startDate= $filter('date')($scope.task.startDate, 'yyyy-MM-dd');
-      $scope.task.endDate= $filter('date')($scope.task.endDate, 'yyyy-MM-dd');
-    });
-
+    //$scope.minDate2 = $rootScope.activitySelected.startDate;
+    //$scope.maxDate2 = $rootScope.activitySelected.endDate;
+    //$scope.initStartDate = new Date($scope.minDate2);
+    //$scope.$watchCollection('[task.startDate, task.endDate]', function(e) {
+    //  $scope.minDate = $scope.task.startDate ? $scope.task.startDate : $rootScope.activitySelected.startDate;
+    //  $scope.maxDate = $scope.task.endDate ? $scope.task.endDate : $rootScope.activitySelected.endDate;
+    //  $scope.initEndDate = new Date($scope.minDate);
+    //  $scope.task.startDate= $filter('date')($scope.task.startDate, 'yyyy-MM-dd');
+    //  $scope.task.endDate= $filter('date')($scope.task.endDate, 'yyyy-MM-dd');
+    //});
 
     $scope.model = {
       userId: userContext.authentication().userData.userId,
       task: $scope.task
     };
 
-    $scope.contacts = $rootScope.contactList || [];
+    //$scope.contacts = $rootScope.contactList || [];
 
-    $scope.taskStatuses = taskFactory.getTaskStatuses();
-    $scope.taskSeverities = taskFactory.getTaskSeverities();
+    //$scope.taskStatuses = taskFactory.getTaskStatuses();
+    //$scope.taskSeverities = taskFactory.getTaskSeverities();
 
-    $scope.startDate = {
-      options: {
-        formatYear: 'yyyy',
-        startingDay: 1
-      },
-      isOpen: false,
-      open: function($event) {
-        this.isOpen = true;
-      }
-    };
-
-    $scope.endDate = {
-      options: {
-        formatYear: 'yyyy',
-        startingDay: 1
-      },
-      isOpen: false,
-      open: function($event) {
-        this.isOpen = true;
-      }
-    };
+    //$scope.startDate = {
+    //  options: {
+    //    formatYear: 'yyyy',
+    //    startingDay: 1
+    //  },
+    //  isOpen: false,
+    //  open: function($event) {
+    //    this.isOpen = true;
+    //  }
+    //};
+    //
+    //$scope.endDate = {
+    //  options: {
+    //    formatYear: 'yyyy',
+    //    startingDay: 1
+    //  },
+    //  isOpen: false,
+    //  open: function($event) {
+    //    this.isOpen = true;
+    //  }
+    //};
 
     $scope.onSubmit = false;
 

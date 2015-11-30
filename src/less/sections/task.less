@@ -17,94 +17,97 @@
             font-weight: bold;
           }
         }
-        .task-list {
-          height: @onTime-height + 35;
-          .task-item {
-            display: table;
-            width: 100%;
-            border-bottom: solid 1px #ececec;
-            padding: 10px 0;
-            .task-status {
-              display: table-cell;
-              position: relative;
-              border-right: solid 1px #ececec;
-              padding: 0 10px;
-              vertical-align: middle;
-              .percentage {
-                position: absolute;
-                margin-left: -10px;
-                font-weight: 700;
-                margin-top: 15px;
-                width: 100%;
-                text-align: center;
-              }
-            }
-            .task-info {
-              display: table-cell;
-              vertical-align: top;
-              width: 100%;
-              padding: 0 10px;
-              .title {
-                color: #000000;
-                font-size: 16px;
-              }
-              .assignee {
-                color: #adadad;
-                span {
-                  color: #000000;
-                }
-              }
-              .priority {
-                color: #000000;
-                span {
-                  font-size: 20px;
-                  &.hight {
-                    color: red;
-                  }
-                }
-              }
-            }
-            .task-statistic {
-              display: table-cell;
-              white-space: nowrap;
-              padding-right: 15px;
-              position: relative;
-              vertical-align: bottom;
-              .date {
-                position: absolute;
-                width: 100%;
-                top: 0;
-                right: 15px;
-                text-align: right;
-              }
-              .statistic {
-                .stat-icon {
-                  display: inline-block;
-                  padding: 0px 10px;
-                  i {
-                    font-size: 18px;
-                  }
-                }
-              }
-            }
 
-            &.last {
-              border-bottom: solid 1px #eeeeee;
-            }
-            &:hover {
-              background-color: #e1fcff;
-              cursor: pointer;
-            }
-          }
-
-          .task-selected-item {
-            background-color: #e1fcff;
-          }
-        }
       }
     }
   }
 }
+
+.task-list {
+  height: @onTime-height + 35;
+  .task-item {
+    display: table;
+    width: 100%;
+    border-bottom: solid 1px #ececec;
+    padding: 10px 0;
+    .task-status {
+      display: table-cell;
+      position: relative;
+      border-right: solid 1px #ececec;
+      padding: 0 10px;
+      vertical-align: middle;
+      .percentage {
+        position: absolute;
+        margin-left: -10px;
+        font-weight: 700;
+        margin-top: 15px;
+        width: 100%;
+        text-align: center;
+      }
+    }
+    .task-info {
+      display: table-cell;
+      vertical-align: top;
+      width: 100%;
+      padding: 0 10px;
+      .title {
+        color: #000000;
+        font-size: 16px;
+      }
+      .assignee {
+        color: #adadad;
+        span {
+          color: #000000;
+        }
+      }
+      .priority {
+        color: #000000;
+        span {
+          font-size: 20px;
+          &.hight {
+            color: red;
+          }
+        }
+      }
+    }
+    .task-statistic {
+      display: table-cell;
+      white-space: nowrap;
+      padding-right: 15px;
+      position: relative;
+      vertical-align: bottom;
+      .date {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        right: 15px;
+        text-align: right;
+      }
+      .statistic {
+        .stat-icon {
+          display: inline-block;
+          padding: 0px 10px;
+          i {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+
+    &.last {
+      border-bottom: solid 1px #eeeeee;
+    }
+    &:hover {
+      background-color: #e1fcff;
+      cursor: pointer;
+    }
+  }
+
+  .task-selected-item {
+    background-color: #e1fcff;
+  }
+}
+
 .task-create-update-section {
   margin-left: 0px;
   .panel-right {
@@ -117,7 +120,6 @@
       border-left: 0px;
     }
     .panel {
-
       .panel-heading {
         .text {
           font-weight: bold;

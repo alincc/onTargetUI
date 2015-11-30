@@ -28,97 +28,98 @@
           }
         }
       }
-      .activity-list {
-        margin: 15px 0 0 0;
-        height: @onTime-height;
-        .activity-item {
-          padding: 10px 15px;
-          display: table;
-          width: 100%;
-          border-top: solid 1px #eeeeee;
-          .info {
-            display: table-cell;
-            vertical-align: top;
-            width: 100%;
-            .title {
-              //overflow: hidden;
-              //text-overflow: ellipsis;
-              //white-space: nowrap;
-            }
-            .date {
-              color: #9b9b9b;
-            }
-            .tasks {
-              color: #9b9b9b;
-            }
-          }
-          .status {
-            display: table-cell;
-            vertical-align: middle;
-            font-size: 32px;
-            padding: 0 10px;
-            font-weight: bold;
-          }
-          .arrow-icon {
-            display: table-cell;
-            vertical-align: middle;
-            i {
-              color: @brand-primary;
-            }
-          }
-          &.last {
-            border-bottom: solid 1px #eeeeee;
-          }
-          &:hover {
-            background-color: #e1fcff;
-            cursor: pointer;
-          }
-        }
-        .activity-selected-item {
-          padding: 10px 15px;
-          display: table;
-          width: 100%;
-          border-top: solid 1px #eeeeee;
-          background-color: #e1fcff;
-          .info {
-            display: table-cell;
-            vertical-align: top;
-            width: 100%;
-            .title {
-              //overflow: hidden;
-              //text-overflow: ellipsis;
-              //white-space: nowrap;
-            }
-            .date {
-              color: #9b9b9b;
-            }
-            .tasks {
-              color: #9b9b9b;
-            }
-          }
-          .status {
-            display: table-cell;
-            vertical-align: middle;
-            font-size: 32px;
-            padding: 0 10px;
-            font-weight: bold;
-          }
-          .arrow-icon {
-            display: table-cell;
-            vertical-align: middle;
-            i {
-              color: @brand-primary;
-            }
-          }
-          &.last {
-            border-bottom: solid 1px #eeeeee;
-          }
-          &:hover {
-            background-color: #e1fcff;
-            cursor: pointer;
-          }
-        }
+    }
+  }
+}
+
+.activity-list {
+  margin: 15px 0 0 0;
+  height: @onTime-height;
+  .activity-item {
+    padding: 10px 15px;
+    display: table;
+    width: 100%;
+    border-top: solid 1px #eeeeee;
+    .info {
+      display: table-cell;
+      vertical-align: top;
+      width: 100%;
+      .title {
+        //overflow: hidden;
+        //text-overflow: ellipsis;
+        //white-space: nowrap;
       }
+      .date {
+        color: #9b9b9b;
+      }
+      .tasks {
+        color: #9b9b9b;
+      }
+    }
+    .status {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 32px;
+      padding: 0 10px;
+      font-weight: bold;
+    }
+    .arrow-icon {
+      display: table-cell;
+      vertical-align: middle;
+      i {
+        color: @brand-primary;
+      }
+    }
+    &.last {
+      border-bottom: solid 1px #eeeeee;
+    }
+    &:hover {
+      background-color: #e1fcff;
+      cursor: pointer;
+    }
+  }
+  .activity-selected-item {
+    padding: 10px 15px;
+    display: table;
+    width: 100%;
+    border-top: solid 1px #eeeeee;
+    background-color: #e1fcff;
+    .info {
+      display: table-cell;
+      vertical-align: top;
+      width: 100%;
+      .title {
+        //overflow: hidden;
+        //text-overflow: ellipsis;
+        //white-space: nowrap;
+      }
+      .date {
+        color: #9b9b9b;
+      }
+      .tasks {
+        color: #9b9b9b;
+      }
+    }
+    .status {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 32px;
+      padding: 0 10px;
+      font-weight: bold;
+    }
+    .arrow-icon {
+      display: table-cell;
+      vertical-align: middle;
+      i {
+        color: @brand-primary;
+      }
+    }
+    &.last {
+      border-bottom: solid 1px #eeeeee;
+    }
+    &:hover {
+      background-color: #e1fcff;
+      cursor: pointer;
     }
   }
 }

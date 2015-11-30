@@ -1,14 +1,41 @@
-/**
- * Created by thophan on 8/21/2015.
- */
 define(function(require) {
-
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
 
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'fileFactory', '$timeout', '$filter', '$state', '$window',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, fileFactory, $timeout, $filter, $state, $window) {
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'countryFactory',
+    'projectFactory',
+    'userContext',
+    'projectContext',
+    'activityFactory',
+    'toaster',
+    'taskFactory',
+    'notifications',
+    'fileFactory',
+    '$timeout',
+    '$filter',
+    '$state',
+    '$window',
+    '$modal',
+    function($scope,
+             $rootScope,
+             countryFactory,
+             projectFactory,
+             userContext,
+             projectContext,
+             activityFactory,
+             toaster,
+             taskFactory,
+             notifications,
+             fileFactory,
+             $timeout,
+             $filter,
+             $state,
+             $window,
+             $modal) {
       $scope.attachments = [];
       $scope.isUploading = false;
       $scope.percentage = 0;
@@ -55,24 +82,41 @@ define(function(require) {
         });
       };
 
-      $scope.download = function(att){
+      $scope.download = function(att) {
         $window.open($filter('fileDownloadPathHash')(att.location));
       };
 
-      $scope.preview = function (att){
-        $rootScope.fileAttachment = att;
-        $state.go('app.previewDocument', {onAction: 'onTime'});
+      $scope.preview = function(att) {
+        //$rootScope.fileAttachment = att;
+        //$state.go('app.previewDocument', {onAction: 'onTime'});
+        if(!/(pdf|png|jpg|jpeg|gif)$/.test(att.fileName)) {
+          toaster.pop('error', 'Error', 'Sorry, this file can not be preview!');
+          return;
+        }
+
+        $modal.open({
+          animation: true,
+          templateUrl: 'onTime/task/templates/viewAttachment.html',
+          controller: 'ViewTaskAttachmentController',
+          size: 'lg',
+          windowClass: 'width90',
+            resolve: {
+            attachment: function() {
+              return att;
+            }
+          }
+        });
       };
 
       $scope.saveTaskFile = function() {
         taskFactory.saveTaskFile($scope.model).then(
           function(resp) {
             $scope.attachments.push({
-              "contact" : $rootScope.currentUserInfo.contact,
-              "fileName" : $scope.model.fileName,
-              "location" : $scope.model.location,
-              "taskId" : $rootScope.currentTask.projectTaskId,
-              "userId" : $rootScope.currentUserInfo.userInfo
+              "contact": $rootScope.currentUserInfo.contact,
+              "fileName": $scope.model.fileName,
+              "location": $scope.model.location,
+              "taskId": $rootScope.currentTask.projectTaskId,
+              "userId": $rootScope.currentUserInfo.userInfo
             });
 
             $scope.$broadcast("content.reload");
