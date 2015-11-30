@@ -109,7 +109,7 @@
                                                                   ng-bind="com.commenterContact.firstName+' '+com.commenterContact.lastName"></a>
                                             said:
                                         </div>
-                                        <div class="date" ng-bind="com.commentedDate | date:app.dateFormat"></div>
+                                        <div class="date" ng-bind="com.commentedDate | date:app.datetimeFormat | lowercase"></div>
                                         <small class="text-muted"
                                                ng-bind-html="com.comment | escapeHtml | newLines"></small>
                                     </div>

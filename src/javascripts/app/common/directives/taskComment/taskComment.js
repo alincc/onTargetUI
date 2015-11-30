@@ -1,10 +1,13 @@
 define(function(require) {
   'use strict';
   var angular = require('angular'),
+    config = require('app/config'),
     tpl = require('text!./templates/taskComment.html'),
     _ = require('lodash'),
     module;
-  module = angular.module('common.directives.taskComment', []);
+  module = angular.module('common.directives.taskComment', [
+    'app.config'
+  ]);
 
   module.run([
     '$templateCache',
@@ -24,10 +27,13 @@ define(function(require) {
         '$rootScope',
         'taskFactory',
         'pushFactory',
+        'appConstant',
         function($scope,
                  $rootScope,
                  taskFactory,
-                 pushFactory) {
+                 pushFactory,
+                 appConstant) {
+          $scope.app = appConstant.app;
           $scope.comments = $scope.task.comments;
           $scope.model = {
             comment: "",

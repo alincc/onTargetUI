@@ -8,7 +8,7 @@
             </a>
             <div class="cm-content text-muted">
                 <span class="cm-name">{{comment.commenterContact.firstName}}&nbsp;{{comment.commenterContact.lastName}}</span>&nbsp;<span>said:</span>
-                <span class="pull-right" ng-bind="comment.commentedDate | date:'MM/dd/yyyy hh:mm a' | lowercase"></span>
+                <span class="pull-right" ng-bind="comment.commentedDate | date: app.datetimeFormat | lowercase"></span>
                 <p>{{comment.comment}}</p>
             </div>
         </div>
