@@ -213,11 +213,15 @@ define(function(require) {
                     listTag = _.union(listTag, el.tagList);
                   });
 
-                  // Update new doc id for tags
+                  // Update new doc id and existing link task for tags
                   listTag = _.map(listTag, function(el) {
+                    // New document id
                     el.projectFileId = docId;
+                    // Existing taskLink
                     return el;
                   });
+
+                  console.log(listTag);
 
                   // Save tags to document
                   onSiteFactory.addTags(listTag)

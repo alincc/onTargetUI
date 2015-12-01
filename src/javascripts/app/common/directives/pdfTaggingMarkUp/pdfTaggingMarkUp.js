@@ -383,9 +383,9 @@ define(function(require) {
                 });
                 var markerScope;
                 var compileMarker = function(cb) {
+                  var isNewTag = false;
                   markerScope = scope.$new(true);
                   markerScope.marker = angular.copy(objLayer);
-
                   if(!objLayer.projectFileTag) {
                     // New tag
                     objLayer.projectFileTag = {
@@ -394,6 +394,7 @@ define(function(require) {
                       taskLinks: [],
                       comment: []
                     };
+                    isNewTag = true;
                   }
 
                   markerScope.marker.remove = function() {
@@ -406,26 +407,37 @@ define(function(require) {
                     if(!objLayer.comments) {
                       objLayer.comments = [];
                     }
-
                     objLayer.comments.push(
                       {
-                        comment: this.comment,
+                        comment: markerScope.marker.comment,
                         userId: $rootScope.currentUserInfo.userId,
                         author: $rootScope.currentUserInfo.contact.firstName + ' ' + $rootScope.currentUserInfo.contact.lastName,
                         commentedDate: new Date().toISOString(),
-                        loadedComment: false
+                        loadedComment: !isNewTag
                       });
 
                     markerScope.marker.comments = angular.copy(objLayer.comments);
-                    // clear textbox
-                    markerScope.marker.comment = "";
-                    markerScope.add_comment_form.$setPristine();
-
-                    //scope.addComment(objLayer.id, this.text);
 
                     //layer.closePopup();
+                    if(isNewTag) {
+                      // clear textbox
+                      markerScope.marker.comment = "";
+                      markerScope.add_comment_form.$setPristine();
 
-                    scope.updatePageData();
+                      scope.updatePageData();
+                    }
+                    else {
+                      // Existing tag
+                      // Add comment directly to tag
+                      scope.addComment(objLayer.projectFileTag.projectFileTagId, markerScope.marker.comment)
+                        .then(function() {
+                          // clear textbox
+                          markerScope.marker.comment = "";
+                          markerScope.add_comment_form.$setPristine();
+
+                          scope.updatePageData();
+                        });
+                    }
                   };
 
                   markerScope.marker.linkTask = function() {
@@ -870,12 +882,16 @@ define(function(require) {
                       key: 'geo.0.1',
                       value: m.layer.getLatLng().lng,
                       'projectFileTagAttributeId': null
+                    },
+                    {
+                      "key": "linkTaskId",
+                      "value": m.projectFileTag ? m.projectFileTag.taskLinks.length ? m.projectFileTag.taskLinks[0].taskId : 0 : 0
                     }
                   ],
-                  comment: listComment,
-                  'linkTaskId': m.projectFileTag ? m.projectFileTag.linkTaskId : 0
+                  comment: listComment
                 };
               }
+
               var attr = [];
               _.each(m.options, function(v, k) {
                 if(v) {
