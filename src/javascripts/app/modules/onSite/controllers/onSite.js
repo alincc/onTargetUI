@@ -96,8 +96,8 @@ define(function(require) {
           var newEl = el;
           var fileExtension = utilFactory.getFileExtension(el.name);
           var filePath = $filter('filePath')(el.name);
-          el.filePath = filePath;
           el.originalFilePath = el.filePath;
+          el.filePath = filePath;
           el.fileName = el.name;
           el.previewPath = filePath;
           el.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
@@ -230,19 +230,27 @@ define(function(require) {
       // Download
       $scope.download = function(doc) {
         console.log(doc);
-        doc.isDownloading = true;
-        onSiteFactory.downloadFile(doc.fileId, $rootScope.currentProjectInfo.projectId)
-          .success(function(resp) {
-            doc.isDownloading = false;
-            var fileExt = resp.filePath.substring(resp.filePath.lastIndexOf('.') + 1).toLowerCase();
-            // If custom file name extension same as the file type, then use the custom file name, otherwise, use custom file name with real file type extension
-            var fileName = new RegExp('\\.' + fileExt + '$', 'i').test(doc.name) ? doc.name : (doc.name + '.' + fileExt);
-            $window.open($filter('fileDownloadPathHash')(resp.filePath, fileName));
-          })
-          .error(function(err) {
-            console.log(err);
-            doc.isDownloading = false;
-          });
+        if(/\.(pdf|jpg|jpeg|png|gif)$/i.test(doc.filePath)) {
+          doc.isDownloading = true;
+          onSiteFactory.downloadFile(doc.fileId, $rootScope.currentProjectInfo.projectId)
+            .success(function(resp) {
+              doc.isDownloading = false;
+              var fileExt = resp.filePath.substring(resp.filePath.lastIndexOf('.') + 1).toLowerCase();
+              // If custom file name extension same as the file type, then use the custom file name, otherwise, use custom file name with real file type extension
+              var fileName = new RegExp('\\.' + fileExt + '$', 'i').test(doc.name) ? doc.name : (doc.name + '.' + fileExt);
+              $window.open($filter('fileDownloadPathHash')(resp.filePath, fileName));
+            })
+            .error(function(err) {
+              console.log(err);
+              doc.isDownloading = false;
+            });
+        } else {
+          var fileExt = doc.filePath.substring(doc.filePath.lastIndexOf('.') + 1).toLowerCase();
+          // If custom file name extension same as the file type, then use the custom file name, otherwise, use custom file name with real file type extension
+          var fileName = new RegExp('\\.' + fileExt + '$', 'i').test(doc.name) ? doc.name : (doc.name + '.' + fileExt);
+          $window.open($filter('fileDownloadPathHash')(doc.originalFilePath, fileName));
+        }
+
         //$window.open($filter('fileDownloadPathHash')(doc.name));
       };
 
@@ -344,9 +352,9 @@ define(function(require) {
           }
         });
 
-        editModalInstance.result.then(function (selectedItem) {
+        editModalInstance.result.then(function(selectedItem) {
           getUploadedDocumentList();
-        }, function () {
+        }, function() {
 
         });
       };

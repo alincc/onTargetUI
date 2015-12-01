@@ -47,7 +47,7 @@ define(function(require) {
             model.filePath = resp.url;
             model.fileName = resp.name;
             model.fileType = resp.type;
-            var isPdf = /\.pdf$/.test(model.filePath);
+            var convertable = /\.(pdf|jpg|png|jpeg|gif)$/i.test(model.filePath);
             var data = {
               "projectId": $rootScope.currentProjectInfo.projectId,
               "name": model.name,
@@ -58,17 +58,21 @@ define(function(require) {
               "description": model.description,
               "parentProjectFileId": 0,
               "projectFileId": 0,
-              "isConversionComplete": !isPdf,
+              "isConversionComplete": !convertable, // Pdf and images are only
               "thumbnailImageName": $filter('fileThumbnail')(model.filePath),
               "filePath": model.filePath
             };
 
             documentFactory.saveUploadedDocsInfo(data)
               .success(function(r) {
-                fileFactory.convertPDFToImage(resp.url, r.documentDetail.fileId)
-                  .then(function(){
-                    $modalInstance.close(data);
-                  });
+                if(convertable) {
+                  fileFactory.convertPDFToImage(resp.url, r.documentDetail.fileId)
+                    .then(function() {
+                      $modalInstance.close(data);
+                    });
+                } else {
+                  $modalInstance.close(data);
+                }
               })
               .error(function() {
                 $scope.document_frm.$setPristine();

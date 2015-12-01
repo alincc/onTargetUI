@@ -11,7 +11,7 @@ define(function(require) {
           var fileName = value.substring(value.lastIndexOf('/') + 1);
           var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
           var icon = 'file';
-          if(/(pdf)/.test(fileExtension)) {
+          if(/(pdf|jpg|jpeg|png|gif)/.test(fileExtension)) {
             return value.substring(0, value.lastIndexOf('/')) + '/' + fileName.replace(/\./g, '_') + '/' + fileNameWithoutExt + '.thumb.jpg';
           }
           else if(/(txt)/.test(fileExtension)) {
@@ -22,9 +22,6 @@ define(function(require) {
           }
           else if(/(xls|xlsx)/.test(fileExtension)) {
             icon = 'xls';
-          }
-          else if(/(jpg|jpeg|png|gif)/.test(fileExtension)) {
-            return value.substring(0, value.lastIndexOf('/')) + '/' + fileNameWithoutExt + '.thumb.jpg';
           }
           else if(/(tiff)/.test(fileExtension)) {
             icon = 'tiff';

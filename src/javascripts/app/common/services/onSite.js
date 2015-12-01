@@ -90,8 +90,8 @@ define(function(require) {
         });
       };
 
-      services.getPdfImagePages = function(path) {
-        return $http.post(constant.nodeServer + '/node/onsite/getPdfImages', {
+      services.getPages = function(path) {
+        return $http.post(constant.nodeServer + '/node/onsite/getPages', {
           path: path
         });
       };

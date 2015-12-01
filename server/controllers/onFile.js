@@ -46,16 +46,18 @@ module.exports = {
 
     function getCompanyDetails(baseRequest) {
       return new Promise(function(resolve, reject) {
+        // Get project details
         request({
           method: 'POST',
           body: {"projectId": baseRequest.loggedInUserProjectId, "baseRequest": baseRequest},
           json: true,
-          url: config.PROXY_URL + 'project/getProject'
+          url: config.PROXY_URL + '/project/getProject'
         }, function(err, response) {
           if(!err) {
+            // Get company info
             request({
               method: 'POST',
-              body: {"companyId": response.body.project.company.companyLogoPath, "baseRequest": baseRequest},
+              body: {"companyId": response.body.project.company.companyId, "baseRequest": baseRequest},
               json: true,
               url: config.PROXY_URL + '/company/getCompanyInfo'
             }, function(err, response) {
@@ -318,7 +320,7 @@ module.exports = {
 
     switch(data.documentTemplate.documentTemplateId) {
       case 1:
-        getCompanyDetails(data.keyValues.company_id, baseRequest)
+        getCompanyDetails(baseRequest)
           .then(function(companyLogoPath) {
             data.companyLogoPath = companyLogoPath;
             html = fs.readFileSync('server/assets/templates/purchaseOrder.html', 'utf8');
@@ -326,7 +328,7 @@ module.exports = {
           });
         break;
       case 2:
-        getCompanyDetails(data.keyValues.company_id, baseRequest)
+        getCompanyDetails(baseRequest)
           .then(function(companyLogoPath) {
             data.companyLogoPath = companyLogoPath;
             html = fs.readFileSync('server/assets/templates/changeOrder.html', 'utf8');
@@ -334,7 +336,7 @@ module.exports = {
           });
         break;
       case 3:
-        getCompanyDetails(data.keyValues.company_id, baseRequest)
+        getCompanyDetails(baseRequest)
           .then(function(companyLogoPath) {
             data.companyLogoPath = companyLogoPath;
             html = fs.readFileSync('server/assets/templates/requestForInformation.html', 'utf8');
@@ -342,7 +344,7 @@ module.exports = {
           });
         break;
       case 4:
-        getCompanyDetails(data.keyValues.company_id, baseRequest)
+        getCompanyDetails(baseRequest)
           .then(function(companyLogoPath) {
             data.companyLogoPath = companyLogoPath;
             html = fs.readFileSync('server/assets/templates/transmittal.html', 'utf8');
