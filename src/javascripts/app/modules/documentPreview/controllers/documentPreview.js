@@ -77,14 +77,27 @@ define(function(require) {
       $scope.categoryId = $stateParams.categoryId;
       $scope.parseTag = function(tags) {
         _.each(tags, function(el) {
-          var pageNumber = /.*\|\sPage\-(\d+)/.exec(el.title)[1];
-          if(angular.isDefined(pageNumber) && pageNumber !== null) {
-            pageNumber = parseInt(pageNumber);
+          var pageAttr = _.find(el.attributes, {"key": "page"}), pageNumber;
+          if(pageAttr) {
+            // New way: Save page as attribute
+            pageNumber = parseInt(pageAttr.value);
             if($scope.pdfImagePages[pageNumber - 1]) {
               if(!$scope.pdfImagePages[pageNumber - 1].tagList) {
                 $scope.pdfImagePages[pageNumber - 1].tagList = [];
               }
               $scope.pdfImagePages[pageNumber - 1].tagList.push(el);
+            }
+          } else {
+            // Old way: Save page as title
+            pageNumber = /.*\|\sPage\-(\d+)/.exec(el.title)[1];
+            if(angular.isDefined(pageNumber) && pageNumber !== null) {
+              pageNumber = parseInt(pageNumber);
+              if($scope.pdfImagePages[pageNumber - 1]) {
+                if(!$scope.pdfImagePages[pageNumber - 1].tagList) {
+                  $scope.pdfImagePages[pageNumber - 1].tagList = [];
+                }
+                $scope.pdfImagePages[pageNumber - 1].tagList.push(el);
+              }
             }
           }
         });

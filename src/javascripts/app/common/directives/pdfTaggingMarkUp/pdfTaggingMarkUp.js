@@ -1022,7 +1022,12 @@ define(function(require) {
           scope.updatePageData = function() {
             var listTag = scope.extractListTags(scope.selectedDoc, scope.selectedDoc.fileId);
             var newListTag = _.each(listTag, function(el) {
-              el.title = "Tag | Page-" + scope.pageNumber;
+              //el.title = "Tag | Page-" + scope.pageNumber;
+              _.remove(el.attributes, {"key": "page"});
+              el.attributes.push({
+                "key": "page",
+                "value": scope.pageNumber
+              });
               return el;
             });
             var layers = angular.copy(scope.listLayers);
