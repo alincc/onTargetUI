@@ -28,8 +28,8 @@ define(function(require) {
              utilFactory,
              $filter) {
       $scope.attachment = attachment;
-      $scope.fileExtension = utilFactory.getFileExtension(attachment.fileName);
-      $scope.filePath = $filter('filePath')(attachment.fileName);
+      $scope.fileExtension = utilFactory.getFileExtension(attachment.location);
+      $scope.filePath = $filter('filePath')(attachment.location);
       $scope.isPdf = /(pdf$)/.test($scope.filePath);
       $scope.isImage = /(png|jpg|jpeg|gif)/.test($scope.fileExtension);
       $scope.cancel = function() {
@@ -103,7 +103,7 @@ define(function(require) {
               $scope.percentage = progressPercentage;
             }).success(function(data, status, headers, config) {
               $timeout(function() {
-                $scope.model.fileName = data.url;
+                $scope.model.fileName = data.url.substring(data.url.lastIndexOf('/') + 1);
                 $scope.model.location = data.url;
                 $scope.isUploading = false;
                 $scope.saveTaskFile();
