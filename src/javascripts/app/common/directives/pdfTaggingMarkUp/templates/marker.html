@@ -15,14 +15,14 @@
                 <textarea class="form-control" placeholder="Enter comment" ng-model="marker.comment"
                           required></textarea>
         </div>
-        <button type="button" ng-click="marker.add()" class="btn btn-sm btn-success"
-                ng-disabled="add_comment_form.$invalid">Add comment
+        <button type="button" ng-click="marker.add()" class="btn btn-sm btn-success add-comment-button"
+                ng-disabled="add_comment_form.$invalid || add_comment_form.$submitted">Add comment
         </button>
-        <button type="button" ng-click="marker.remove()" class="btn btn-sm btn-danger">Delete tag</button>
-        <button type="button" ng-click="marker.linkTask()" class="btn btn-sm btn-info"
+        <button type="button" ng-click="marker.remove()" class="btn btn-sm btn-danger delete-tag-button">Delete tag</button>
+        <button type="button" ng-click="marker.linkTask()" class="btn btn-sm btn-info link-task-button"
                 ng-if="!marker.isLinked && !marker.isNew">Link Task
         </button>
-        <button type="button" ng-click="marker.unLink(marker.taskLink)" class="btn btn-sm btn-primary"
+        <button type="button" ng-click="marker.unLink(marker.taskLink)" class="btn btn-sm btn-primary unlink-task-button"
                 ng-if="marker.isLinked && !marker.isNew">UnLink Task
         </button>
     </section>
