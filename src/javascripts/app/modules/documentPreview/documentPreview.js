@@ -116,7 +116,7 @@ define(function(require) {
                         // Start conversion progress
                         fileFactory.convertPDFToImage(document.projectFile.filePath, document.projectFile.fileId)
                           .then(function() {
-                            toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                            toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
                             console.log('This file is not converted yet');
                             deferred.reject();
                           }, function(err) {
@@ -131,8 +131,8 @@ define(function(require) {
                       });
                   }
 
-                  function getPdfPageImages(filePath, cb) {
-                    onSiteFactory.getPdfImagePages(filePath)
+                  function getPages(filePath, cb) {
+                    onSiteFactory.getPages(filePath)
                       .success(function(p) {
                         if(p.pages.length === 0) {
                           toaster.pop('error', 'Error', 'Cannot found any images for this file!');
@@ -157,13 +157,13 @@ define(function(require) {
                           zooms = z;
                           cb(z);
                         } else {
-                          toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                          toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
                           console.log('Zooms not found');
                           deferred.reject();
                         }
                       })
                       .error(function() {
-                        toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
+                        toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
                         console.log('Get zoom document failed');
                         deferred.reject();
                       });
@@ -197,6 +197,7 @@ define(function(require) {
                     result.documentTags = documentTags;
                     result.pages = pages;
                     result.versions = versions;
+                    console.log(result);
                     return result;
                   }
 
@@ -207,44 +208,30 @@ define(function(require) {
                           if(stt.status === "UnProceeded") {
                             convertPdfToImages(parentDocument);
                           } else {
-                            if(isPdf) {
-                              // Original
-                              if(!parentDocument) {
-                                // Get pdf images
-                                getPdfPageImages(currentDocument.projectFile.filePath, function() {
-                                  // Get document zoom level
-                                  getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                                    if(zooms[0].zoomLevel <= 0) {
-                                      toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-                                      console.log('Zoom page 1 not ready');
-                                      deferred.reject();
-                                      return;
-                                    }
-                                    // Get document tags
-                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                      deferred.resolve(generateData());
-                                    });
+                            //if(isPdf) {
+                            // Original
+                            if(!parentDocument) {
+                              // Get pdf images
+                              getPages(currentDocument.projectFile.filePath, function() {
+                                // Get document zoom level
+                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                                  if(zooms[0].zoomLevel <= 0) {
+                                    toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
+                                    console.log('Zoom page 1 not ready');
+                                    deferred.reject();
+                                    return;
+                                  }
+                                  // Get document tags
+                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                    deferred.resolve(generateData());
                                   });
                                 });
-                              }
-                              else {
-                                // Version
-                                // Get pdf images
-                                getPdfPageImages(parentDocument.projectFile.filePath, function() {
-                                  // Get document zoom level
-                                  getDocumentZoom(parentDocument.projectFile.filePath, function() {
-                                    // Get document tags
-                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                      deferred.resolve(generateData());
-                                    });
-                                  });
-                                });
-                              }
+                              });
                             }
                             else {
-                              pages = [];
-                              // Get versions
-                              if(parentDocument) {
+                              // Version
+                              // Get pdf images
+                              getPages(parentDocument.projectFile.filePath, function() {
                                 // Get document zoom level
                                 getDocumentZoom(parentDocument.projectFile.filePath, function() {
                                   // Get document tags
@@ -252,17 +239,31 @@ define(function(require) {
                                     deferred.resolve(generateData());
                                   });
                                 });
-                              }
-                              else {
-                                // Get document zoom level
-                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                                  // Get document tags
-                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                    deferred.resolve(generateData());
-                                  });
-                                });
-                              }
+                              });
                             }
+                            //}
+                            //else {
+                            //  pages = [];
+                            //  // Get versions
+                            //  if(parentDocument) {
+                            //    // Get document zoom level
+                            //    getDocumentZoom(parentDocument.projectFile.filePath, function() {
+                            //      // Get document tags
+                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
+                            //        deferred.resolve(generateData());
+                            //      });
+                            //    });
+                            //  }
+                            //  else {
+                            //    // Get document zoom level
+                            //    getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                            //      // Get document tags
+                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
+                            //        deferred.resolve(generateData());
+                            //      });
+                            //    });
+                            //  }
+                            //}
                           }
                         });
                     } else {
@@ -271,44 +272,30 @@ define(function(require) {
                           if(stt.status === "UnProceeded") {
                             convertPdfToImages(currentDocument);
                           } else {
-                            if(isPdf) {
-                              // Original
-                              if(!parentDocument) {
-                                // Get pdf images
-                                getPdfPageImages(currentDocument.projectFile.filePath, function() {
-                                  // Get document zoom level
-                                  getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                                    if(zooms[0].zoomLevel <= 0) {
-                                      toaster.pop('info', 'Info', 'PDF file conversion is in progress. Please try again!');
-                                      console.log('Zoom page 1 not ready');
-                                      deferred.reject();
-                                      return;
-                                    }
-                                    // Get document tags
-                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                      deferred.resolve(generateData());
-                                    });
+                            //if(isPdf) {
+                            // Original
+                            if(!parentDocument) {
+                              // Get pdf images
+                              getPages(currentDocument.projectFile.filePath, function() {
+                                // Get document zoom level
+                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                                  if(zooms[0].zoomLevel <= 0) {
+                                    toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
+                                    console.log('Zoom page 1 not ready');
+                                    deferred.reject();
+                                    return;
+                                  }
+                                  // Get document tags
+                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
+                                    deferred.resolve(generateData());
                                   });
                                 });
-                              }
-                              else {
-                                // Version
-                                // Get pdf images
-                                getPdfPageImages(parentDocument.projectFile.filePath, function() {
-                                  // Get document zoom level
-                                  getDocumentZoom(parentDocument.projectFile.filePath, function() {
-                                    // Get document tags
-                                    getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                      deferred.resolve(generateData());
-                                    });
-                                  });
-                                });
-                              }
+                              });
                             }
                             else {
-                              pages = [];
-                              // Get versions
-                              if(parentDocument) {
+                              // Version
+                              // Get pdf images
+                              getPages(parentDocument.projectFile.filePath, function() {
                                 // Get document zoom level
                                 getDocumentZoom(parentDocument.projectFile.filePath, function() {
                                   // Get document tags
@@ -316,17 +303,31 @@ define(function(require) {
                                     deferred.resolve(generateData());
                                   });
                                 });
-                              }
-                              else {
-                                // Get document zoom level
-                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                                  // Get document tags
-                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                    deferred.resolve(generateData());
-                                  });
-                                });
-                              }
+                              });
                             }
+                            //}
+                            //else {
+                            //  pages = [];
+                            //  // Get versions
+                            //  if(parentDocument) {
+                            //    // Get document zoom level
+                            //    getDocumentZoom(parentDocument.projectFile.filePath, function() {
+                            //      // Get document tags
+                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
+                            //        deferred.resolve(generateData());
+                            //      });
+                            //    });
+                            //  }
+                            //  else {
+                            //    // Get document zoom level
+                            //    getDocumentZoom(currentDocument.projectFile.filePath, function() {
+                            //      // Get document tags
+                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
+                            //        deferred.resolve(generateData());
+                            //      });
+                            //    });
+                            //  }
+                            //}
                           }
                         });
                     }

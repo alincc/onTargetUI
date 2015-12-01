@@ -483,7 +483,7 @@ function getNextVersionName(req, res) {
   }
 }
 
-function _getPdfImage(relativePath) {
+function _getPages(relativePath) {
   var filePath = path.join(rootPath, relativePath);
   var fileFolder = path.join(rootPath, relativePath.substring(0, relativePath.lastIndexOf('/')));
   var fileName = path.basename(filePath);
@@ -500,7 +500,7 @@ function _getPdfImage(relativePath) {
   });
 }
 
-function getPdfImages(req, res) {
+function getPages(req, res) {
   var relativePath = req.body.path;
   var filePath = path.join(rootPath, relativePath);
   var fileFolder = path.join(rootPath, relativePath.substring(0, relativePath.lastIndexOf('/')));
@@ -530,7 +530,7 @@ function getPdfImages(req, res) {
     return;
   }
 
-  sendResult(_getPdfImage(relativePath));
+  sendResult(_getPages(relativePath));
 
   //var files = _.filter(fs.readdirSync(pageFolder), function(fileName) {
   //  return fs.lstatSync(path.join(pageFolder, fileName)).isFile();
@@ -822,10 +822,23 @@ function downloadFile(req, res) {
         }
       };
 
-      var exportPdf = function(document, filePath) {
+      var updateConversionProgress = function(docId, baseRequest) {
+        request({
+          method: 'POST',
+          body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
+          json: true,
+          url: config.PROXY_URL + '/upload/updateConversionComplete'
+        }, function(err) {
+          if(err) {
+            console.log(err);
+          }
+        });
+      };
+
+      var exportFile = function(document, filePath) {
 
         console.log('Getting pdf images...');
-        pages = _getPdfImage(filePath);
+        pages = _getPages(filePath);
         console.log('Getting pdf images...Done');
 
         // Create temp folder if not exists
@@ -1101,23 +1114,19 @@ function downloadFile(req, res) {
                     var fileName = path.basename(filePath, fileExt);
                     var thumbnail = path.join(fileFolder, fileName + '.thumb.jpg');
                     fse.copySync(tempFilePath, filePath);
-
-                    imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
-                      if(!err) {
-                        request({
-                          method: 'POST',
-                          body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
-                          json: true,
-                          url: config.PROXY_URL + '/upload/updateConversionComplete'
-                        }, function(err) {
-                          if(err) {
-                            console.log(err);
-                          }
-                        });
-                      } else {
-                        failure(err.message);
-                      }
+                    res.send({
+                      success: true,
+                      filePath: document.projectFile.filePath
                     });
+                    //imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
+                    //  if(!err) {
+                    //    //updateConversionProgress(document.projectFile.fileId, baseRequest);
+                    //  } else {
+                    //    failure(err.message);
+                    //  }
+                    //});
+                  } else {
+                    failure('Cannot export the file!');
                   }
                 }
               }
@@ -1138,13 +1147,13 @@ function downloadFile(req, res) {
           documentService.getDocumentById(document.projectFile.parentProjectFileId, projectId, baseRequest)
             .then(function(parentDocument) {
               console.log('Get parent document...Done');
-              console.log('Exporting document to pdf...');
-              exportPdf(document, parentDocument.projectFile.filePath);
+              console.log('Exporting document to pdf/image...');
+              exportFile(document, parentDocument.projectFile.filePath);
             });
         }
         else {
-          console.log('Exporting document to pdf...');
-          exportPdf(document, document.projectFile.filePath);
+          console.log('Exporting document to pdf/image...');
+          exportFile(document, document.projectFile.filePath);
         }
       }
     });
@@ -1154,7 +1163,7 @@ module.exports = {
   //exportPdf: exportPdf,
   exportPdf2: exportPdf2,
   getNextVersionName: getNextVersionName,
-  getPdfImages: getPdfImages,
+  getPages: getPages,
   getZoomLevel: getZoomLevel,
   checkFileStatus: checkFileStatus,
   generateThumbnail: generateThumbnail,

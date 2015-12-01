@@ -1,5 +1,6 @@
 var path = require('path');
 var fs = require("fs");
+var fse = require("fs-extra");
 var request = require('request');
 var rootPath = process.env.ROOT;
 var mime = require('mime');
@@ -12,6 +13,8 @@ var pushService = require('./../services/push');
 var config = require('./../config');
 var Promise = require('promise');
 var _ = require('lodash');
+var maxZoomLevel = 5;
+var tileSize = 256;
 
 function getFileInfo(req, res) {
   var relativePath = req.body.path;
@@ -93,7 +96,7 @@ function convertPdfToImage(req, res) {
   var fileName = path.basename(filePath, fileExt);
   var outputFolder = path.dirname(filePath);
   var triedTime = 0;
-  var destinationFolder = path.join(outputFolder, 'output');
+  var promises = [];
   console.log('Starting convert pdf to images progress...');
   if(/\.pdf$/.test(relativePath)) {
     console.log('Parsing pdf to images...');
@@ -101,13 +104,12 @@ function convertPdfToImage(req, res) {
       console.log('Parsing pdf to images...Done!');
       console.log('Starting images splicing...');
       console.time('ImagesSplicing');
-      var promises = [];
       var folder = fs.readdirSync(path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages'));
       _.each(folder, function(el, pageIdx) {
         var fp = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)), 'pages', el);
         if(fs.lstatSync(fp).isFile()) {
-          for(var size = 1; size <= 5; size++) {
-            promises.push(imageService.tiles(fp, 256 * Math.pow(2, size), size, 256, function(data) {
+          for(var size = 1; size <= maxZoomLevel; size++) {
+            promises.push(imageService.tiles(fp, tileSize * Math.pow(2, size), size, tileSize, function(data) {
               pushService.Pusher().trigger('onTarget', 'document.preview.' + docId, {
                 "name": "updateMaxNativeZoom",
                 "value": {
@@ -145,14 +147,61 @@ function convertPdfToImage(req, res) {
     });
   }
   else {
+    var fileNameFolder = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)));
+    var pageFolder = path.join(fileNameFolder, 'pages');
+    // Create folder if not exists
+    if(!fs.existsSync(fileNameFolder)) {
+      fs.mkdirSync(fileNameFolder);
+    }
+    if(!fs.existsSync(pageFolder)) {
+      fs.mkdirSync(pageFolder);
+    }
+
+    // Copy image file to folder as page 1
+    fse.copySync(filePath, path.join(pageFolder, path.basename(filePath)));
+
     console.log('Making thumbnail...');
-    var thumbnail = path.join(fileFolder, fileName + '.thumb.jpg');
+    var thumbnail = path.join(fileNameFolder, fileName + '.thumb.jpg');
     imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
       console.log('Making thumbnail...Done!');
       res.send({
         success: true
       });
     });
+
+    console.log('Starting images splicing...');
+    for(var size = 1; size <= maxZoomLevel; size++) {
+      promises.push(
+        imageService.tiles(
+          path.join(pageFolder, path.basename(filePath)),
+          tileSize * Math.pow(2, size),
+          size,
+          tileSize,
+          function(data) {
+            pushService.Pusher().trigger('onTarget', 'document.preview.' + docId, {
+              "name": "updateMaxNativeZoom",
+              "value": {
+                page: 1,
+                maxNativeZoom: data.zoom
+              }
+            });
+          }));
+    }
+
+    Promise.all(promises)
+      .then(function(resp) {
+        console.log(resp);
+        console.log('Starting images splicing...Done!');
+        console.timeEnd('ImagesSplicing');
+        updateConversionComplete(docId, baseRequest);
+      }, function(err) {
+        console.log('Starting images splicing...Failed!');
+        //triedTime = triedTime + 1;
+        //console.log('Re-start images splicing (' + triedTime + ')');
+        //tryAgain(err, triedTime, function() {
+        //  updateConversionComplete(docId, baseRequest);
+        //});
+      });
   }
 }
 

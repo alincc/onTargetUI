@@ -14,14 +14,18 @@
         .company-box {
             float: left;
             width: 40%;
-            margin-top: 20px;
         }
+
         .company-box p {
             text-align: center;
         }
 
-        .company-logo {
-            /*width: 300px;*/
+        .company-box .company-logo {
+            padding-right: 20px
+        }
+
+        .company-box .company-logo img {
+            width: 100%;
         }
 
         .box {
@@ -38,10 +42,12 @@
             width: 100%;
             margin-top: 20px;
         }
+
         .column {
             width: 50%;
             float: left;
         }
+
         .label {
             font-weight: bold;
         }
@@ -97,31 +103,42 @@
 
     <div class="box">
         <p class="column label">Contract number : {{contract_no}}</p>
+
         <p class="column label">Date Created : {{date_created}}</p>
+
         <p class="column label">Contract Title : {{contract_title}}</p>
     </div>
 </div>
 <div class="form-group">
     <p class="label">Change Order Details</p>
+
     <div class="box">
         <p class="column label">Priority : {{priority}}</p>
+
         <p class="column label">Discipline : {{discipline}}</p>
+
         <p class="column label">Category : {{category}}</p>
     </div>
 </div>
 <div class="form-group">
     <p class="label">Impact</p>
+
     <div class="box">
         <p class="column label">Schedule Impact : {{schedule_impact}}</p>
+
         <p class="column label">Cost Impact : {{cost_impact}}</p>
+
         <p class="column label">Time Impact : {{time_impact}}</p>
     </div>
 </div>
 <div class="form-group">
     <p class="label">Contract Document Details</p>
+
     <div class="box">
         <p class="column label">Specification Section : {{specification}}</p>
+
         <p class="column label">Drawing No : {{drawing}}</p>
+
         <p class="column label">Cost Code : {{cost_code}}</p>
     </div>
 </div>

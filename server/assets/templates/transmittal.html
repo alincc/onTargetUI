@@ -15,15 +15,18 @@
         .company-box {
             float: left;
             width: 40%;
-            margin-top: 20px;
         }
 
         .company-box p {
             text-align: center;
         }
 
-        .company-logo {
-            /*width: 300px;*/
+        .company-box .company-logo {
+            padding-right: 20px
+        }
+
+        .company-box .company-logo img {
+            width: 100%;
         }
 
         .box {
@@ -116,7 +119,8 @@
         <div class="column-4 check-box"><input type="checkbox" {{submit}}> Submit</div>
         <div class="column-4 check-box"><input type="checkbox" {{resubmitted}}> Re-submitted</div>
         <div class="column-4 check-box"><input type="checkbox" {{returned}}> Returned</div>
-        <div class="column-4 check-box"><input type="checkbox" {{returned_for_corrections}}> Returned for correction</div>
+        <div class="column-4 check-box"><input type="checkbox" {{returned_for_corrections}}> Returned for correction
+        </div>
         <div class="column-4 check-box"><input type="checkbox" {{resubmit}}> Re-submit</div>
         <div class="column-4 check-box"><input type="checkbox" {{received_as_noted}}> Received as Noted</div>
     </div>

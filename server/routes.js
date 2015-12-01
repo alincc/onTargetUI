@@ -27,7 +27,7 @@ module.exports = function(app) {
   app.post('/node/file/convertPdfToImage', fileController.convertPdfToImage);
   app.post('/node/onsite/exportPdf', onSiteController.exportPdf2);
   app.post('/node/onsite/getNextVersionName', onSiteController.getNextVersionName);
-  app.post('/node/onsite/getPdfImages', onSiteController.getPdfImages);
+  app.post('/node/onsite/getPages', onSiteController.getPages);
   app.post('/node/onsite/getZoomLevel', onSiteController.getZoomLevel);
   app.post('/node/onsite/checkFileStatus', onSiteController.checkFileStatus);
   app.post('/node/onsite/generateThumbnail', onSiteController.generateThumbnail);
