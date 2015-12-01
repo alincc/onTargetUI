@@ -401,7 +401,8 @@ define(function(require) {
                     if(map.hasLayer(layer)) {
                       map.removeLayer(layer);
                     }
-                    _.remove(scope.markers, {id: objLayer.id});
+                    _.remove(scope.listLayers, {id: objLayer.id});
+                    scope.updatePageData();
                   };
                   markerScope.marker.add = function() {
                     if(!objLayer.comments) {
@@ -466,6 +467,7 @@ define(function(require) {
                         taskId: dt.taskId
                       }];
                     }
+                    scope.updatePageData();
                   });
 
                   markerScope.$on('unLinkTask.Completed', function(event, dt) {
@@ -476,6 +478,7 @@ define(function(require) {
                       e.projectFileTag.projectFileTagId = dt.projectFileTag.projectFileTagId;
                       e.projectFileTag.taskLinks = [];
                     }
+                    scope.updatePageData();
                   });
 
                   $compile(layer._popup._contentNode)(markerScope);
@@ -527,7 +530,6 @@ define(function(require) {
                   // Compile popup content
                   compileMarker(function(markerScope) {
                     $timeout(function() {
-                      console.log(markerScope.marker);
                       if(markerScope.marker.isLinked) {
                         $rootScope.$broadcast('pdfTaggingMarkup.Tag.ViewTask', {
                           taskId: markerScope.marker.taskLink.taskId
@@ -540,7 +542,7 @@ define(function(require) {
 
                 layer.on("popupclose", function(e) {
                   // Update marker
-                  var currentMarker = _.find(scope.markers, {id: objLayer.id});
+                  var currentMarker = _.find(scope.listLayers, {id: objLayer.id});
                   if(currentMarker) {
                     currentMarker.text = markerScope.marker.text;
                   }
@@ -624,7 +626,6 @@ define(function(require) {
                 editableLayers.addLayer(objLayer);
                 i = i + 1;
               });
-              console.log(layers, editableLayers);
               //var layers = e.layers._layers;
               //_.each(layers, function (objLayer, k){
               //  var id = objLayer.id;
@@ -811,6 +812,16 @@ define(function(require) {
                       marker.layerType = t;
                       marker.comments = tag.comment;
                       marker.projectFileTag = tag;
+
+                      //var markerObj = {
+                      //  id: markerCount++,
+                      //  lat: lat,
+                      //  lng: lng,
+                      //  text: 'This is marker ' + markerCount
+                      //};
+                      //
+                      //scope.markers.push(markerObj);
+
                       onDrawCreated(marker, true, true);
                     }
                   }
@@ -843,6 +854,7 @@ define(function(require) {
           scope.extractListTags = function(doc, docId) {
             //return _.map(doc.listLayer, function(m) {
             var layers = angular.copy(scope.listLayers);
+            console.log(layers);
             return _.map(layers, function(m) {
               if(m.type === 'marker') {
                 var listComment = _.map(m.comments, function(cm) {
@@ -854,14 +866,14 @@ define(function(require) {
                     commenterContact: null
                   };
                 });
-                return {
+                var obj = {
                   'projectFileId': docId,
                   'projectFileTagId': null,
                   'parentFileTagId': null,
                   'tag': 'TAG',
                   'title': 'TAG',
-                  'lattitude': m.layer.getLatLng().lat,
-                  'longitude': m.layer.getLatLng().lng,
+                  'lattitude': m.layer ? m.layer.getLatLng().lat : m.geometry.coordinates[1],
+                  'longitude': m.layer ? m.layer.getLatLng().lng : m.geometry.coordinates[0],
                   'tagType': 'TAG',
                   'tagFilePath': '',
                   'status': null,
@@ -875,12 +887,12 @@ define(function(require) {
                     },
                     {
                       key: 'geo.0.0',
-                      value: m.layer.getLatLng().lat,
+                      value: m.layer ? m.layer.getLatLng().lat : m.geometry.coordinates[1],
                       'projectFileTagAttributeId': null
                     },
                     {
                       key: 'geo.0.1',
-                      value: m.layer.getLatLng().lng,
+                      value: m.layer ? m.layer.getLatLng().lng : m.geometry.coordinates[0],
                       'projectFileTagAttributeId': null
                     },
                     {
@@ -890,6 +902,7 @@ define(function(require) {
                   ],
                   comment: listComment
                 };
+                return obj;
               }
 
               var attr = [];
@@ -928,7 +941,8 @@ define(function(require) {
                     'projectFileTagAttributeId': null
                   });
                 }
-              } else {
+              }
+              else {
                 _.each(m.geometry.coordinates, function(c, k) {
                   attr.push({
                     key: 'geo.' + k + '.0',
