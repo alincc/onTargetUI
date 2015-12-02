@@ -79,7 +79,7 @@ define(function(require) {
             },
             {field: "action", title: "Action", show: true},
             {field: "createdDate", title: "Created date", show: false}
-          ]
+          ];
         },
         filterFn = function(params, data) {
           var sortKey = params.orderBy()[0],
