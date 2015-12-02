@@ -1,246 +1,269 @@
 {
-  "type": "userProfileResponse",
-  "authenticated": false,
-  "returnMessage": "Successfully retrieved user profile details",
-  "returnVal": "SUCCESS",
-  "featureList": [
-    {
-      "featureKey": "VIEW_DASHBOARD",
-      "featureName": "View Dashboard"
-    },
-    {
-      "featureKey": "ADD_PROJECT",
-      "featureName": "Add Project"
-    },
-    {
-      "featureKey": "EDIT_PROJECT",
-      "featureName": "Edit Project"
-    },
-    {
-      "featureKey": "VIEW_PROJECT",
-      "featureName": "View Project"
-    },
-    {
-      "featureKey": "DELETE_PROJECT",
-      "featureName": "Delete Project"
-    },
-    {
-      "featureKey": "ADD_ACTIVITY",
-      "featureName": "Add Activity"
-    },
-    {
-      "featureKey": "EDIT_ACTIVITY",
-      "featureName": "Edit Activity"
-    },
-    {
-      "featureKey": "VIEW_ACTIVITY",
-      "featureName": "View Activity"
-    },
-    {
-      "featureKey": "DELETE_ACTIVITY",
-      "featureName": "Delete Activity"
-    },
-    {
-      "featureKey": "ADD_TASK",
-      "featureName": "Add Task"
-    },
-    {
-      "featureKey": "EDIT_TASK",
-      "featureName": "Edit Task"
-    },
-    {
-      "featureKey": "VIEW_TASK",
-      "featureName": "View Task"
-    },
-    {
-      "featureKey": "DELETE_TASK",
-      "featureName": "Delete Task"
-    },
-    {
-      "featureKey": "ADD_TASK_COMMENT",
-      "featureName": "Add Task Comment"
-    },
-    {
-      "featureKey": "EDIT_TASK_COMMENT",
-      "featureName": "Edit Task Comment"
-    },
-    {
-      "featureKey": "VIEW_TASK_COMMENT",
-      "featureName": "View Task Comment"
-    },
-    {
-      "featureKey": "DELETE_TASK_COMMENT",
-      "featureName": "Delete Task Comment"
-    },
-    {
-      "featureKey": "ADD_TASK_ATTACHMENT",
-      "featureName": "Add Task Attachment"
-    },
-    {
-      "featureKey": "EDIT_TASK_ATTACHMENT",
-      "featureName": "Edit Task Attachment"
-    },
-    {
-      "featureKey": "VIEW_TASK_ATTACHMENT",
-      "featureName": "View Task Attachment"
-    },
-    {
-      "featureKey": "DELETE_TASK_ATTACHMENT",
-      "featureName": "Delete Task Attachment"
-    },
-    {
-      "featureKey": "ADD_TASK_PERCENTAGE",
-      "featureName": "Add Task Percentage"
-    },
-    {
-      "featureKey": "EDIT_TASK_PERCENTAGE",
-      "featureName": "Edit Task Percentage"
-    },
-    {
-      "featureKey": "VIEW_TASK_PERCENTAGE",
-      "featureName": "View Task Percentage"
-    },
-    {
-      "featureKey": "DELETE_TASK_PERCENTAGE",
-      "featureName": "Delete Task Percentage"
-    },
-    {
-      "featureKey": "IMPORT_ACTIVITY",
-      "featureName": "Import Activity"
-    },
-    {
-      "featureKey": "ADD_TASK_BUDGET",
-      "featureName": "Add Task Budget"
-    },
-    {
-      "featureKey": "EDIT_TASK_BUDGET",
-      "featureName": "Edit Task Budget"
-    },
-    {
-      "featureKey": "VIEW_TASK_BUDGET",
-      "featureName": "View Task Budget"
-    },
-    {
-      "featureKey": "DELETE_TASK_BUDGET",
-      "featureName": "Delete Task Budget"
-    },
-    {
-      "featureKey": "ADD_TASK_MEMBER",
-      "featureName": "Add Task Member"
-    },
-    {
-      "featureKey": "VIEW_TASK_MEMBER",
-      "featureName": "View Task Member"
-    },
-    {
-      "featureKey": "REMOVE_TASK_MEMBER",
-      "featureName": "Remove Task Member"
-    },
-    {
-      "featureKey": "INVITE_TO_COLLABORATE",
-      "featureName": "Invite To Collaborate"
-    },
-    {
-      "featureKey": "VIEW_GANTT_CHART",
-      "featureName": "View Gantt Chart"
-    },
-    {
-      "featureKey": "SEARCH",
-      "featureName": "Search"
-    },
-    {
-      "featureKey": "ONSITE_VIEW",
-      "featureName": "OnSite View"
-    },
-    {
-      "featureKey": "ONSITE_UPLOAD",
-      "featureName": "OnSite Upload"
-    },
-    {
-      "featureKey": "ONSITE_DELETE",
-      "featureName": "OnSite Delete"
-    },
-    {
-      "featureKey": "ONSITE_ADD_COMMENT",
-      "featureName": "OnSIte Add Comment"
-    },
-    {
-      "featureKey": "ONSITE_EDIT_COMMENT",
-      "featureName": "OnSite Edit Comment"
-    },
-    {
-      "featureKey": "ONSITE_DELETE_COMMENT",
-      "featureName": "OnSite Delete Comment"
-    },
-    {
-      "featureKey": "ONSITE_VIEW_COMMENT",
-      "featureName": "OnSite View Comment"
-    },
-    {
-      "featureKey": "VIEW_CONTACT",
-      "featureName": "View Contact"
-    },
-    {
-      "featureKey": "ONFILE_ADD",
-      "featureName": "OnFile Add"
-    },
-    {
-      "featureKey": "ONFILE_VIEW",
-      "featureName": "OnFile View"
-    },
-    {
-      "featureKey": "ONFILE_APPROVE",
-      "featureName": "OnFile Approve"
-    },
-    {
-      "featureKey": "ONFILE_REJECT",
-      "featureName": "OnFIle Reject"
-    }
-  ],
-  "menuList": [
-    {
-      "menuKey": "DASHBOARD",
-      "menuName": "Dashboard"
-    },
-    {
-      "menuKey": "ONTIME",
-      "menuName": "onTime"
-    },
-    {
-      "menuKey": "ONSITE",
-      "menuName": "onSite"
-    },
-    {
-      "menuKey": "ONFILE",
-      "menuName": "onFile"
-    },
-    {
-      "menuKey": "ONCONTACT",
-      "menuName": "onContact"
-    },
-    {
-      "menuKey": "ONBIM",
-      "menuName": "onBim"
-    },
-    {
-      "menuKey": "ONTARGET",
-      "menuName": "onTarget"
-    },
-    {
-      "menuKey": "ONREPORT",
-      "menuName": "onReport"
-    },
-    {
-      "menuKey": "INVITETOCOLLABORATE",
-      "menuName": "inviteToCollaborate"
-    },
-    {
-      "menuKey": "SEARCH",
-      "menuName": "search"
-    },
-    {
-      "menuKey": "GANTTCHART",
-      "menuName": "ganttChart"
-    }
-  ]
+  "type" : "userProfileResponse",
+  "authenticated" : false,
+  "returnMessage" : "Successfully retrieved user profile details",
+  "returnVal" : "SUCCESS",
+  "featureList" : [ {
+    "featureKey" : "VIEW_DASHBOARD",
+    "featureName" : "View Dashboard"
+  }, {
+    "featureKey" : "ADD_PROJECT",
+    "featureName" : "Add Project"
+  }, {
+    "featureKey" : "EDIT_PROJECT",
+    "featureName" : "Edit Project"
+  }, {
+    "featureKey" : "VIEW_PROJECT",
+    "featureName" : "View Project"
+  }, {
+    "featureKey" : "DELETE_PROJECT",
+    "featureName" : "Delete Project"
+  }, {
+    "featureKey" : "ADD_ACTIVITY",
+    "featureName" : "Add Activity"
+  }, {
+    "featureKey" : "EDIT_ACTIVITY",
+    "featureName" : "Edit Activity"
+  }, {
+    "featureKey" : "VIEW_ACTIVITY",
+    "featureName" : "View Activity"
+  }, {
+    "featureKey" : "DELETE_ACTIVITY",
+    "featureName" : "Delete Activity"
+  }, {
+    "featureKey" : "ADD_TASK",
+    "featureName" : "Add Task"
+  }, {
+    "featureKey" : "EDIT_TASK",
+    "featureName" : "Edit Task"
+  }, {
+    "featureKey" : "VIEW_TASK",
+    "featureName" : "View Task"
+  }, {
+    "featureKey" : "DELETE_TASK",
+    "featureName" : "Delete Task"
+  }, {
+    "featureKey" : "ADD_TASK_COMMENT",
+    "featureName" : "Add Task Comment"
+  }, {
+    "featureKey" : "EDIT_TASK_COMMENT",
+    "featureName" : "Edit Task Comment"
+  }, {
+    "featureKey" : "VIEW_TASK_COMMENT",
+    "featureName" : "View Task Comment"
+  }, {
+    "featureKey" : "DELETE_TASK_COMMENT",
+    "featureName" : "Delete Task Comment"
+  }, {
+    "featureKey" : "ADD_TASK_ATTACHMENT",
+    "featureName" : "Add Task Attachment"
+  }, {
+    "featureKey" : "EDIT_TASK_ATTACHMENT",
+    "featureName" : "Edit Task Attachment"
+  }, {
+    "featureKey" : "VIEW_TASK_ATTACHMENT",
+    "featureName" : "View Task Attachment"
+  }, {
+    "featureKey" : "DELETE_TASK_ATTACHMENT",
+    "featureName" : "Delete Task Attachment"
+  }, {
+    "featureKey" : "ADD_TASK_PERCENTAGE",
+    "featureName" : "Add Task Percentage"
+  }, {
+    "featureKey" : "EDIT_TASK_PERCENTAGE",
+    "featureName" : "Edit Task Percentage"
+  }, {
+    "featureKey" : "VIEW_TASK_PERCENTAGE",
+    "featureName" : "View Task Percentage"
+  }, {
+    "featureKey" : "DELETE_TASK_PERCENTAGE",
+    "featureName" : "Delete Task Percentage"
+  }, {
+    "featureKey" : "IMPORT_ACTIVITY",
+    "featureName" : "Import Activity"
+  }, {
+    "featureKey" : "ADD_TASK_BUDGET",
+    "featureName" : "Add Task Budget"
+  }, {
+    "featureKey" : "EDIT_TASK_BUDGET",
+    "featureName" : "Edit Task Budget"
+  }, {
+    "featureKey" : "VIEW_TASK_BUDGET",
+    "featureName" : "View Task Budget"
+  }, {
+    "featureKey" : "DELETE_TASK_BUDGET",
+    "featureName" : "Delete Task Budget"
+  }, {
+    "featureKey" : "ADD_TASK_MEMBER",
+    "featureName" : "Add Task Member"
+  }, {
+    "featureKey" : "VIEW_TASK_MEMBER",
+    "featureName" : "View Task Member"
+  }, {
+    "featureKey" : "REMOVE_TASK_MEMBER",
+    "featureName" : "Remove Task Member"
+  }, {
+    "featureKey" : "INVITE_TO_COLLABORATE",
+    "featureName" : "Invite To Collaborate"
+  }, {
+    "featureKey" : "VIEW_GANTT_CHART",
+    "featureName" : "View Gantt Chart"
+  }, {
+    "featureKey" : "SEARCH",
+    "featureName" : "Search"
+  }, {
+    "featureKey" : "ONSITE_VIEW",
+    "featureName" : "OnSite View"
+  }, {
+    "featureKey" : "ONSITE_UPLOAD",
+    "featureName" : "OnSite Upload"
+  }, {
+    "featureKey" : "ONSITE_DELETE",
+    "featureName" : "OnSite Delete"
+  }, {
+    "featureKey" : "ONSITE_ADD_COMMENT",
+    "featureName" : "OnSIte Add Comment"
+  }, {
+    "featureKey" : "ONSITE_EDIT_COMMENT",
+    "featureName" : "OnSite Edit Comment"
+  }, {
+    "featureKey" : "ONSITE_DELETE_COMMENT",
+    "featureName" : "OnSite Delete Comment"
+  }, {
+    "featureKey" : "ONSITE_VIEW_COMMENT",
+    "featureName" : "OnSite View Comment"
+  }, {
+    "featureKey" : "VIEW_CONTACT",
+    "featureName" : "View Contact"
+  }, {
+    "featureKey" : "ONFILE_ADD",
+    "featureName" : "OnFile Add"
+  }, {
+    "featureKey" : "ONFILE_VIEW",
+    "featureName" : "OnFile View"
+  }, {
+    "featureKey" : "ONFILE_APPROVE",
+    "featureName" : "OnFile Approve"
+  }, {
+    "featureKey" : "ONFILE_REJECT",
+    "featureName" : "OnFIle Reject"
+  }, {
+    "featureKey" : "VIEW_NOTIFICATION",
+    "featureName" : "View Notificaiton"
+  }, {
+    "featureKey" : "MARK_NOTIFICATION_SEEN",
+    "featureName" : "Mark Notificaiton Seen"
+  }, {
+    "featureKey" : "ONFILE_DOCUMENT_ATTACHMENT_UPLOAD",
+    "featureName" : "OnFile Attachment UPLOAD"
+  }, {
+    "featureKey" : "ONSITE_MARKUP_TAG_UPDATE",
+    "featureName" : "OnSite Upload"
+  }, {
+    "featureKey" : "ONSITE_MARKUP_TAG_ADD_COMMENT",
+    "featureName" : "OnSite Upload"
+  }, {
+    "featureKey" : "ONSITE_MARKUP_TAG_UPDATE_COMMENT",
+    "featureName" : "OnSite Upload"
+  }, {
+    "featureKey" : "ONSITE_MARKUP_TAG_DELETE_COMMENT",
+    "featureName" : "OnSite Upload"
+  }, {
+    "featureKey" : "ONBIM_ADD",
+    "featureName" : "onBim Add"
+  }, {
+    "featureKey" : "ONBIM_UPLOAD",
+    "featureName" : "onBim upload"
+  }, {
+    "featureKey" : "ONBIM_UPDATE",
+    "featureName" : "onBim update"
+  }, {
+    "featureKey" : "ONBIM_DELETE",
+    "featureName" : "OnFile delete"
+  }, {
+    "featureKey" : "ONBIM_VIEW",
+    "featureName" : "onBim View"
+  }, {
+    "featureKey" : "ONFILE_DOCUMENT_ATTACHMENT_VIEW",
+    "featureName" : "OnFile Attachment view"
+  }, {
+    "featureKey" : "ONFILE_DOCUMENT_ATTACHMENT_DELETE",
+    "featureName" : "OnFile Attachment delete"
+  }, {
+    "featureKey" : "ONSITE_MARKUP_TAG_VIEW_COMMENT",
+    "featureName" : "View markup tag comments"
+  }, {
+    "featureKey" : "ONSITE_MARKUP_TAG_VIEW",
+    "featureName" : "VIEW MARKUP TAGS"
+  }, {
+    "featureKey" : "ONBIM_THUMBNAIL_UPDATE",
+    "featureName" : "onBim thumbnail update"
+  }, {
+    "featureKey" : "ONBIM_COMMENT_SAVE",
+    "featureName" : "onBim comment save"
+  }, {
+    "featureKey" : "ONBIM_COMMENT_UPDATE",
+    "featureName" : "onBim comment update"
+  }, {
+    "featureKey" : "ONBIM_COMMENT_DELETE",
+    "featureName" : "onBim comment delete"
+  }, {
+    "featureKey" : "ONBIM_COMMENT_VIEW",
+    "featureName" : "onBim comment VIEW"
+  }, {
+    "featureKey" : "ONFILE_DOCUMENT_RESPONSE_SAVE",
+    "featureName" : "onBim response save"
+  }, {
+    "featureKey" : "ONFILE_DOCUMENT_RESPONSE_UPDATE",
+    "featureName" : "onBim response update"
+  }, {
+    "featureKey" : "ONFILE_DOCUMENT_RESPONSE_DELETE",
+    "featureName" : "onBim response delete"
+  }, {
+    "featureKey" : "ONFILE_DOCUMENT_RESPONSE_VIEW",
+    "featureName" : "onBim response VIEW"
+  }, {
+    "featureKey" : "ONFILE_UPDATE",
+    "featureName" : "OnFile UPDATE"
+  }, {
+    "featureKey" : "ONSITE_MARKUP_TAG_ADD",
+    "featureName" : "OnSite Upload"
+  } ],
+  "menuList" : [ {
+    "menuKey" : "DASHBOARD",
+    "menuName" : "Dashboard"
+  }, {
+    "menuKey" : "ONTIME",
+    "menuName" : "onTime"
+  }, {
+    "menuKey" : "ONSITE",
+    "menuName" : "onSite"
+  }, {
+    "menuKey" : "ONFILE",
+    "menuName" : "onFile"
+  }, {
+    "menuKey" : "ONCONTACT",
+    "menuName" : "onContact"
+  }, {
+    "menuKey" : "ONBIM",
+    "menuName" : "onBim"
+  }, {
+    "menuKey" : "ONTARGET",
+    "menuName" : "onTarget"
+  }, {
+    "menuKey" : "ONREPORT",
+    "menuName" : "onReport"
+  }, {
+    "menuKey" : "INVITETOCOLLABORATE",
+    "menuName" : "inviteToCollaborate"
+  }, {
+    "menuKey" : "SEARCH",
+    "menuName" : "search"
+  }, {
+    "menuKey" : "GANTTCHART",
+    "menuName" : "ganttChart"
+  }, {
+    "menuKey" : "NOTIFICATION",
+    "menuName" : "notification"
+  } ]
 }
