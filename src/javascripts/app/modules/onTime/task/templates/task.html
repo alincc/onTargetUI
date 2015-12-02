@@ -16,8 +16,9 @@
                         <div class="task-loading text-center" ng-if="isLoadingTasks">
                             <spinner text="Loading..."></spinner>
                         </div>
-                        <div class="task-item" ng-repeat="task in tasks | filter:search:title" ng-class="{'task-selected-item': task.projectTaskId == taskSelected.projectTaskId }"
-                             ng-click="selectTask(task)">
+                        <div class="task-item" ng-repeat="task in tasks | filter:search:title"
+                             ng-class="{'task-selected-item': task.projectTaskId == taskSelected.projectTaskId }"
+                             ng-click="selectTask(task,'info')">
                             <div class="task-status">
                                 <div class="percentage">{{task.percentageComplete}}%</div>
                                             <span
@@ -40,18 +41,31 @@
                                 <div class="title">{{task.title}}</div>
                                 <div class="assignee">Assigned to: <span ng-repeat="as in task.assignee">{{as.contact.firstName}}&nbsp;{{as.contact.lastName}}{{$last?'':', '}}</span>
                                 </div>
-                                <div class="priority"><span class="task-severity-{{task.severity}}" ng-bind="task.severity|taskSeverity"></span>
+                                <div class="priority"><span class="task-severity-{{task.severity}}"
+                                                            ng-bind="task.severity|taskSeverity"></span>
                                     priority
                                 </div>
                             </div>
                             <div class="task-statistic">
-                                <div class="date text-muted"><span ng-bind="task.startDate | date:app.dateFormat"></span> - <span ng-bind="task.endDate | date:app.dateFormat"></span></div>
+                                <div class="date text-muted"><span
+                                        ng-bind="task.startDate | date:app.dateFormat"></span> - <span
+                                        ng-bind="task.endDate | date:app.dateFormat"></span></div>
                                 <div class="statistic">
-                                    <div class="stat-icon text-muted"><i class="fa fa-user"></i></div>
-                                    <div class="stat-icon text-muted"><i class="fa fa-comment"></i></div>
-                                    <div class="stat-icon text-muted"><i class="fa fa-dollar"></i></div>
-                                    <div class="stat-icon text-muted"><i class="fa fa-bar-chart"></i></div>
-                                    <div class="stat-icon text-muted"><i class="fa fa-upload"></i></div>
+                                    <div class="stat-icon text-muted"
+                                         ng-click="$event.stopPropagation(); selectTask(task, 'owner')"><i
+                                            class="fa fa-user"></i></div>
+                                    <div class="stat-icon text-muted"
+                                         ng-click="$event.stopPropagation(); selectTask(task, 'comment')"><i
+                                            class="fa fa-comment"></i></div>
+                                    <div class="stat-icon text-muted"
+                                         ng-click="$event.stopPropagation(); selectTask(task, 'budget')"><i
+                                            class="fa fa-dollar"></i></div>
+                                    <div class="stat-icon text-muted"
+                                         ng-click="$event.stopPropagation(); selectTask(task, 'progress')"><i
+                                            class="fa fa-bar-chart"></i></div>
+                                    <div class="stat-icon text-muted"
+                                         ng-click="$event.stopPropagation(); selectTask(task, 'attachment')"><i
+                                            class="fa fa-upload"></i></div>
                                 </div>
                             </div>
                         </div>
@@ -61,9 +75,11 @@
                     </div>
                 </div>
                 <div class="panel-footer bg-light lter" id="task-panel-footer">
-                    <button class="btn btn-xs btn-primary" ng-click="addTask()" permission="ADD_TASK"><!--<i class="fa fa-plus"></i> -->Add Task
+                    <button class="btn btn-xs btn-primary" ng-click="addTask()" permission="ADD_TASK">
+                        <!--<i class="fa fa-plus"></i> -->Add Task
                     </button>
-                    <button class="btn btn-xs btn-danger" ng-click="openDeleteTaskModal()" ng-if="taskSelected" permission="DELETE_TASK"><!--<i class="fa fa-times"></i> -->Delete Task
+                    <button class="btn btn-xs btn-danger" ng-click="openDeleteTaskModal()" ng-if="taskSelected"
+                            permission="DELETE_TASK"><!--<i class="fa fa-times"></i> -->Delete Task
                     </button>
                 </div>
             </div>
@@ -77,10 +93,18 @@
                 </div>
                 <div class="panel-body">
                     <div ng-switch on="action.name">
-                        <div ng-switch-when="addTask"><div ng-include="'onTime/task/templates/create.html'"></div></div>
-                        <div ng-switch-when="editTask"><div ng-include="'onTime/task/templates/edit.html'"></div></div>
-                        <div ng-switch-when="infoTask"><div ng-include="'onTime/task/templates/info.html'"></div></div>
-                        <div ng-switch-when="logisticTask"><div ng-include="'onTime/task/templates/logistics.html'"></div></div>
+                        <div ng-switch-when="addTask">
+                            <div ng-include="'onTime/task/templates/create.html'"></div>
+                        </div>
+                        <div ng-switch-when="editTask">
+                            <div ng-include="'onTime/task/templates/edit.html'"></div>
+                        </div>
+                        <div ng-switch-when="infoTask">
+                            <div ng-include="'onTime/task/templates/info.html'"></div>
+                        </div>
+                        <div ng-switch-when="logisticTask">
+                            <div ng-include="'onTime/task/templates/logistics.html'"></div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,6 @@
+<input type="text" name="{{name}}" ng-disabled="$filterRow.disabled" ng-model="params.filter()[name]"
+       class="input-filter form-control"
+       datepicker-popup="MM/dd/yyyy"
+       is-open="onSite.submittal.dueDate.isOpen"
+       datepicker-options="onSite.submittal.dueDate.options"
+       ng-click="onSite.submittal.dueDate.isOpen = !onSite.submittal.dueDate.isOpen"/>

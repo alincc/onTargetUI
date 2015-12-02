@@ -5,6 +5,7 @@
                 <div class="container-fluid">
                     <div>
                         <ul class="nav nav-pills nav-justified text-muted">
+                            <li ng-class="{'active': action.name==='info'}"><a href="javascript:void(0)" ng-click="openAction(actions.info)">Info</a></li>
                             <li ng-class="{'active': action.name==='owner'}" permission="VIEW_TASK_MEMBER"><a href="javascript:void(0)" ng-click="openAction(actions.owner)">Assignee</a></li>
                             <li ng-class="{'active': action.name==='comment'}" permission="VIEW_TASK_COMMENT"><a href="javascript:void(0)" ng-click="openAction(actions.comment)">Comment</a></li>
                             <li ng-class="{'active': action.name==='budget'}" permission="VIEW_TASK_BUDGET"><a href="javascript:void(0)" ng-click="openAction(actions.budget)">Budget</a></li>
@@ -16,6 +17,9 @@
             </nav>
         </div>
         <div ng-switch on="action.name">
+            <div ng-switch-when="info">
+                <task-info task="currentTask"></task-info>
+            </div>
             <div ng-switch-when="owner" permission="VIEW_TASK_MEMBER">
                 <!--<div ng-include="'onTime/task/templates/owner.html'"></div>-->
                 <task-assignee task="currentTask"></task-assignee>

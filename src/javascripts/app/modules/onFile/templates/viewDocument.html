@@ -3,37 +3,15 @@
         <div ng-controller="ViewDocumentController" class="view-document-section">
             <tabset class="tab-container">
                 <tab heading="All">
-                    <table class="table table-striped table-hover">
-                        <tr class="table-header">
-                            <th>Type</th>
-                            <th>Document number</th>
-                            <th>Subject</th>
-                            <th>Due Date</th>
-                            <th>Status</th>
-                            <th>Submitted By</th>
-                            <th>Submitted To</th>
-                            <th>Action</th>
-                        </tr>
-                        <tr ng-if="isLoading">
-                            <td colspan="7">
-                                <div class="row text-center">
-                                    <spinner text="Loading..."></spinner>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr ng-if="!isLoading && all.length<=0">
-                            <td colspan="7">
-                                No document
-                            </td>
-                        </tr>
-                        <tr ng-repeat="doc in all" ng-click="previewDocument(doc)">
-                            <td valign="middle" class="file-name" ng-bind="::doc.documentTemplate.name"></td>
-                            <td valign="middle" class="file-name" ng-bind="::doc | documentNumber"></td>
+                    <table class="table table-striped table-hover" ng-table-dynamic="onSite.all.tableParams with onSite.all.cols" show-filter="true">
+                        <tr ng-repeat="doc in $data" ng-click="previewDocument(doc)">
+                            <td valign="middle" class="file-name" ng-bind="::doc.type" style="width: 230px"></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc.documentNumber"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.subject"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.dueDate | date: app.dateFormat"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
-                            <td valign="middle" class="file-name"><span ng-bind="::doc.creator.contact.firstName"></span>&nbsp;<span ng-bind="::doc.creator.contact.lastName"></span></td>
-                            <td valign="middle" class="file-name"><span ng-repeat="s in doc.submittedTo"><span ng-bind="s.contact.firstName + ' ' + s.contact.lastName"></span><span ng-if="!$last">,&nbsp;</span></span></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc.submittedBy"></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc.submittedToStr"></td>
                             <td valign="middle" class="file-name">
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
@@ -43,78 +21,45 @@
                             </td>
                         </tr>
                     </table>
+                    <div class="row text-center wrapper-sm" ng-if="isLoading">
+                        <spinner text="Loading..."></spinner>
+                    </div>
+                    <div class="row text-center wrapper-sm" ng-if="!isLoading && all.length<=0">
+                        No document
+                    </div>
                 </tab>
                 <tab heading="Submittals">
-                    <table class="table table-striped table-hover">
-                        <tr>
-                            <th>Type</th>
-                            <th>Document number</th>
-                            <th>Subject</th>
-                            <th>Due Date</th>
-                            <th>Status</th>
-                            <th>Submitted To</th>
-                            <th>Action</th>
-                        </tr>
-                        <tr ng-if="isLoading">
-                            <td colspan="7">
-                                <div class="row text-center">
-                                    <spinner text="Loading..."></spinner>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr ng-if="!isLoading && submittals.length<=0">
-                            <td colspan="7">
-                                No submittal document
-                            </td>
-                        </tr>
-                        <tr ng-repeat="doc in submittals"  ng-click="previewDocument(doc)">
-                            <td valign="middle" class="file-name" ng-bind="::doc.documentTemplate.name"></td>
-                            <td valign="middle" class="file-name" ng-bind="::doc | documentNumber"></td>
+                    <table class="table table-striped table-hover" ng-table-dynamic="onSite.submittal.tableParams with onSite.submittal.cols" show-filter="true">
+                        <tr ng-repeat="doc in $data" ng-click="previewDocument(doc)">
+                            <td valign="middle" class="file-name" ng-bind="::doc.type" style="width: 230px"></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc.documentNumber"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.subject"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.dueDate | date: app.dateFormat"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
-                            <td valign="middle" class="file-name"><span ng-repeat="s in doc.submittedTo"><span ng-bind="s.contact.firstName + ' ' + s.contact.lastName"></span><span ng-if="!$last">,&nbsp;</span></span></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc.submittedToStr"></td>
                             <td valign="middle" class="file-name">
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
-                                <!--<button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVED', $event)" ng-if="doc.approve && haveApprovePermission">Approve</button>-->
-                                <!--<button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'REJECTED', $event)" ng-if="doc.approve && haveRejectPermission">Reject</button>-->
-                                <!--<button class="btn btn-danger btn-xs" ng-click="changeStatus(doc, 'CLOSED', $event)" ng-if="doc.approve && doc.documentTemplate.documentTemplateId=='3'">Close</button>-->
                             </td>
                         </tr>
                     </table>
+                    <div class="row text-center wrapper-sm" ng-if="isLoading">
+                        <spinner text="Loading..."></spinner>
+                    </div>
+                    <div class="row text-center wrapper-sm" ng-if="!isLoading && submittals.length<=0">
+                        No document
+                    </div>
                 </tab>
                 <tab heading="Approvals">
-                    <table class="table table-striped table-hover">
-                        <tr>
-                            <th>Type</th>
-                            <th>Document number</th>
-                            <th>Subject</th>
-                            <th>Due Date</th>
-                            <th>Status</th>
-                            <th>Submitted By</th>
-                            <th>Action</th>
-                        </tr>
-                        <tr ng-if="isLoading">
-                            <td colspan="7">
-                                <div class="row text-center">
-                                    <spinner text="Loading..."></spinner>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr ng-if="!isLoading && approvals.length<=0">
-                            <td colspan="7">
-                                No approval document
-                            </td>
-                        </tr>
-                        <tr ng-repeat="doc in approvals"  ng-click="previewDocument(doc)">
-                            <td valign="middle" class="file-name" ng-bind="::doc.documentTemplate.name"></td>
-                            <td valign="middle" class="file-name" ng-bind="::doc | documentNumber"></td>
+                    <table class="table table-striped table-hover" ng-table-dynamic="onSite.approval.tableParams with onSite.approval.cols" show-filter="true">
+                        <tr ng-repeat="doc in $data" ng-click="previewDocument(doc)">
+                            <td valign="middle" class="file-name" ng-bind="::doc.type" style="width: 230px"></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc.documentNumber"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.subject"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.dueDate | date: app.dateFormat"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
-                            <td valign="middle" class="file-name"><span ng-bind="::doc.creator.contact.firstName"></span>&nbsp;<span ng-bind="::doc.creator.contact.lastName"></span></td>
+                            <td valign="middle" class="file-name" ng-bind="::doc.submittedBy"></td>
                             <td valign="middle" class="file-name">
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
@@ -124,6 +69,12 @@
                             </td>
                         </tr>
                     </table>
+                    <div class="row text-center wrapper-sm" ng-if="isLoading">
+                        <spinner text="Loading..."></spinner>
+                    </div>
+                    <div class="row text-center wrapper-sm" ng-if="!isLoading && approvals.length<=0">
+                        No document
+                    </div>
                 </tab>
             </tabset>
         </div>

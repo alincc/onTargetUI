@@ -54,7 +54,7 @@
                                         <div class="form-group">
                                             <label>Attention</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="(onView || onApprove) && attentionPersons.length">
                                                 <span ng-repeat="p in attentionPersons">
                                                     <span ng-bind="p.contact.firstName+' '+p.contact.lastName"></span><span
                                                         ng-if="!$last">,&nbsp;</span>

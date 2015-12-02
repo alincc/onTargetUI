@@ -1,11 +1,178 @@
-define(function() {
+define(function(require) {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state', 'permissionFactory',
-    function($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state, permissionFactory) {
+  var angular = require('angular'),
+    moment = require('moment');
+  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state', 'permissionFactory', 'NgTableParams', '$filter',
+    function($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state, permissionFactory, NgTableParams, $filter) {
+
       $scope.app = appConstant.app;
       $scope.isLoading = true;
       $scope.approvals = [];
       $scope.submittals = [];
+      $scope.statuses = [
+        {
+          id: '',
+          title: 'Any'
+        },
+        {
+          id: 'APPROVED',
+          title: 'APPROVED'
+        },
+        {
+          id: 'SUBMITTED',
+          title: 'SUBMITTED'
+        },
+        {
+          id: 'REJECTED',
+          title: 'REJECTED'
+        }
+      ];
+
+      var textFilter = function(data, f, fO) {
+          return _.filter(data, function(el) {
+            return el[f].indexOf(fO[f]) > -1;
+          });
+        },
+        dateFilter = function(data, f, fO) {
+          return _.filter(data, function(el) {
+            return moment(el[f]).isValid() && moment(fO[f]).isValid() && moment(el[f]).diff(fO[f], 'day') === 0;
+          });
+        },
+        cols = function(type) {
+          return [
+            {field: "type", title: "Type", show: true, filter: {type: "text"}},
+            {
+              field: "documentNumber",
+              title: "Document number",
+              sortable: "documentNumber",
+              filter: {documentNumber: "text"},
+              show: true
+            },
+            {field: "subject", title: "Subject", sortable: "subject", filter: {subject: "text"}, show: true},
+            {
+              field: "dueDate",
+              title: "Due date",
+              sortable: "dueDate",
+              show: true,
+              filter: {dueDate: "onFile/templates/" + (type === 'all' ? 'allDueDateFilter' : type === 'approval' ? 'approvalDueDateFilter' : 'submittalDueDateFilter') + ".html"}
+            },
+            {
+              field: "status",
+              title: "Status",
+              sortable: "status",
+              filter: {status: "select"},
+              filterData: $scope.statuses,
+              show: true
+            },
+            {
+              field: "submittedBy",
+              title: "Submitted by",
+              sortable: "submittedBy",
+              filter: {submittedBy: "text"},
+              show: type === 'all' || type === 'approval'
+            },
+            {
+              field: "submittedToStr",
+              title: "Submitted to",
+              show: type === 'all' || type === 'submittal',
+              filter: {submittedToStr: "text"}
+            },
+            {field: "action", title: "Action", show: true},
+            {field: "createdDate", title: "Created date", show: false}
+          ]
+        },
+        filterFn = function(params, data) {
+          var sortKey = params.orderBy()[0],
+            filterObj = params.filter(),
+            filteredData = angular.copy(data),
+            sortDir = sortKey ? /^\-/.test(sortKey) ? 'desc' : 'asc' : '';
+          // Filtering
+          if(filterObj) {
+            for(var f in filterObj) {
+              if(filterObj.hasOwnProperty(f)) {
+                if(angular.isString(filterObj[f]) && filterObj[f].length > 0) {
+                  // String filter
+                  filteredData = textFilter(filteredData, f, filterObj); // Happy JSHint
+                }
+                else if(angular.isDate(filterObj[f])) {
+                  // Date filter
+                  filteredData = dateFilter(filteredData, f, filterObj); // Happy JSHint
+                }
+              }
+            }
+          }
+
+          // Sorting
+          if(sortKey && sortDir) {
+            filteredData = _.sortBy(filteredData, sortKey.substring(1, sortKey.length));
+            if(sortDir === 'desc') {
+              filteredData = filteredData.reverse();
+            }
+          }
+
+          params.total(filteredData.length);
+          return filteredData;
+        };
+
+      $scope.onSite = {
+        all: {
+          cols: cols('all'),
+          tableParams: new NgTableParams({
+            // initial sort order
+            sorting: {
+              createdDate: "desc"
+            },
+            filter: {
+              status: ''
+            },
+            page: 1,
+            count: 20
+          }, {
+            counts: [],
+            getData: function($defer, params) {
+              return filterFn(params, $scope.all);
+            }
+          })
+        },
+        submittal: {
+          cols: cols('submittal'),
+          tableParams: new NgTableParams({
+            // initial sort order
+            sorting: {
+              createdDate: "desc"
+            },
+            filter: {
+              status: ''
+            },
+            page: 1,
+            count: 20
+          }, {
+            counts: [],
+            getData: function($defer, params) {
+              return filterFn(params, $scope.submittals);
+            }
+          })
+        },
+        approval: {
+          cols: cols('approval'),
+          tableParams: new NgTableParams({
+            // initial sort order
+            sorting: {
+              createdDate: "desc"
+            },
+            filter: {
+              status: ''
+            },
+            page: 1,
+            count: 20
+          }, {
+            counts: [],
+            getData: function($defer, params) {
+              return filterFn(params, $scope.approvals);
+            }
+          })
+        }
+      };
 
       var viewData = function(approvals, submittals) {
         approvals = _.map(approvals, function(el) {
@@ -15,7 +182,13 @@ define(function() {
           } else {
             newEl.view = true;
           }
-          newEl.subject = _.pluck(_.where(newEl.keyValues, {key: 'subject'}), 'value');
+          newEl.submittedBy = newEl.creator.contact.firstName + ' ' + newEl.creator.contact.lastName;
+          newEl.subject = _.pluck(_.where(newEl.keyValues, {key: 'subject'}), 'value')[0];
+          newEl.documentNumber = $filter('documentNumber')(newEl);
+          newEl.type = newEl.documentTemplate.name;
+          newEl.submittedToStr = _.map(newEl.submittedTo, function(el) {
+            return el.contact.firstName + ' ' + el.contact.lastName;
+          }).join(', ');
           return newEl;
         });
 
@@ -26,7 +199,13 @@ define(function() {
           } else {
             newEl.view = true;
           }
-          newEl.subject = _.pluck(_.where(newEl.keyValues, {key: 'subject'}), 'value');
+          newEl.submittedBy = newEl.creator.contact.firstName + ' ' + newEl.creator.contact.lastName;
+          newEl.subject = _.pluck(_.where(newEl.keyValues, {key: 'subject'}), 'value')[0];
+          newEl.documentNumber = $filter('documentNumber')(newEl);
+          newEl.type = newEl.documentTemplate.name;
+          newEl.submittedToStr = _.map(newEl.submittedTo, function(el) {
+            return el.contact.firstName + ' ' + el.contact.lastName;
+          }).join(', ');
           return newEl;
         });
 
@@ -35,6 +214,9 @@ define(function() {
         $scope.submittals = submittals.reverse();
 
         $scope.all = _.sortBy($scope.approvals.concat($scope.submittals), 'createdDate').reverse();
+        $scope.onSite.all.tableParams.reload();
+        $scope.onSite.approval.tableParams.reload();
+        $scope.onSite.submittal.tableParams.reload();
       };
 
       documentFactory.getUserDocument($rootScope.currentProjectInfo.projectId)

@@ -76,7 +76,8 @@ require.config({
     jqueryScrollTo: '../js/bim/jquery.scrollto',
     bimsurfer: '../js/bim/bimsurfer/api/BIMSURFER',
     bimsurferEvents: '../js/bim/bimsurfer/api/Events',
-    bimsurferViewer: '../js/bim/bimsurfer/api/Viewer'
+    bimsurferViewer: '../js/bim/bimsurfer/api/Viewer',
+    ngTable: '../bower_components/ng-table/dist/ng-table'
   },
 
   shim: {
@@ -215,6 +216,9 @@ require.config({
     },
     "bimsurferViewer":{
       deps: ['bimsurferEvents']
+    },
+    "ngTable": {
+      deps: ['angular']
     }
   }
 });

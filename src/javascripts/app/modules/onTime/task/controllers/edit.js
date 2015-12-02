@@ -96,7 +96,7 @@ define(function() {
 
     $scope.cancel = function() {
       notifications.taskSelection({
-        action: 'info'
+        action: 'logistic'
       });
     };
 
