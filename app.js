@@ -78,6 +78,10 @@ function getDocumentTemplateName(docTemplateId) {
   return docTemplates[docTemplateId];
 }
 
+function channel(projectId, userId){
+  return 'private-project-' + projectId + ':user-' + userId;
+}
+
 // Task assign
 app.post('/ontargetrs/services/task/assignUserToTask', function(req, res) {
   var data = req.body,
@@ -427,7 +431,7 @@ app.put('/ontargetrs/services/document', function(req, res) {
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
           notifications(data);
-          res.send(response.body);
+          res.send(response.bod);
         } else {
           res.send(error);
         }
@@ -455,7 +459,7 @@ app.put('/ontargetrs/services/document', function(req, res) {
     var receiver = data.assignees[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.userId), {
           "message": "Change Order has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -466,7 +470,7 @@ app.put('/ontargetrs/services/document', function(req, res) {
     var receiver = data.assignees[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.userId), {
           "message": "RFI has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -477,7 +481,7 @@ app.put('/ontargetrs/services/document', function(req, res) {
     var receiver = data.assignees[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.userId), {
           "message": "PO has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -488,7 +492,7 @@ app.put('/ontargetrs/services/document', function(req, res) {
     var receiver = data.assignees[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.userId), {
           "message": "Transmittal has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });

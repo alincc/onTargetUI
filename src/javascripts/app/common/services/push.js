@@ -16,37 +16,54 @@ define(function(require) {
         pusher, subscribedChannels = storage.get('onTargetSubscribedChannels') || [];
 
       services.initialize = function() {
+        // Create instance
         client = new Pusher(constant.pusher_api_key, {
           encrypted: true
         });
         pusher = $pusher(client);
+
+        // Subscribe channel
         channel = pusher.subscribe(constant.pusher_channel);
 
-        channel.unbind('onTargetAll');
-        _.each(subscribedChannels, function(el) {
-          channel.unbind('el');
-        });
+        // Unbind old events
+        services.unbindAll(true);
 
-        // bind global channel
-        pusher.bind('onTargetAll', function(data) {
-          $rootScope.$broadcast('pusher.notifications');
-        });
+        services.bindGlobalChannel();
 
         pusher.connection.bind_all(function(eventName, data) {
           // if (eventName == 'state_change') { ...
         });
       };
 
+      services.bindGlobalChannel = function(){
+        // bind global channel
+        channel.bind('onTargetAll', function(data) {
+          $rootScope.$broadcast('pusher.notifications');
+        });
+      };
+
       services.bind = function(evtName, cb) {
         subscribedChannels.push(evtName);
         storage.set('onTargetSubscribedChannels', subscribedChannels);
-        pusher.bind(evtName, cb);
+        channel.bind(evtName, cb);
       };
 
       services.unbind = function(evtName) {
         subscribedChannels = _.without(subscribedChannels, evtName);
         storage.set('onTargetSubscribedChannels', subscribedChannels);
         channel.unbind(evtName);
+      };
+
+      services.unbindAll = function(global) {
+        if(global) {
+          channel.unbind('onTargetAll');
+        }
+
+        _.each(subscribedChannels, function(evtName) {
+          channel.unbind(evtName);
+        });
+        subscribedChannels = [];
+        storage.set('onTargetSubscribedChannels', []);
       };
 
       return services;

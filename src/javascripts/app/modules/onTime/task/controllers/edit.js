@@ -1,8 +1,9 @@
 /**
  * Created by thophan on 8/17/2015.
  */
-define(function() {
+define(function(require) {
   'use strict';
+  var angular = require('angular');
   var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', '$filter', 'userNotificationsFactory', 'appConstant',
     function($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications, $filter, userNotificationsFactory, appConstant) {
 

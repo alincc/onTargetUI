@@ -61,7 +61,6 @@ define(function() {
       };
 
       $scope.edit = function(){
-        console.log($scope.currentTask)
         notifications.taskSelection({task: $scope.currentTask, action: 'edit'});
       };
 
