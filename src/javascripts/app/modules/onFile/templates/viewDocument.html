@@ -24,7 +24,7 @@
                     <div class="row text-center wrapper-sm" ng-if="isLoading">
                         <spinner text="Loading..."></spinner>
                     </div>
-                    <div class="row text-center wrapper-sm" ng-if="!isLoading && all.length<=0">
+                    <div class="row text-center wrapper-sm" ng-if="!isLoading && onSite.all.tableParams.data.length<=0">
                         No document
                     </div>
                 </tab>
@@ -47,7 +47,7 @@
                     <div class="row text-center wrapper-sm" ng-if="isLoading">
                         <spinner text="Loading..."></spinner>
                     </div>
-                    <div class="row text-center wrapper-sm" ng-if="!isLoading && submittals.length<=0">
+                    <div class="row text-center wrapper-sm" ng-if="!isLoading && onSite.submittal.tableParams.data.length<=0">
                         No document
                     </div>
                 </tab>
@@ -72,7 +72,7 @@
                     <div class="row text-center wrapper-sm" ng-if="isLoading">
                         <spinner text="Loading..."></spinner>
                     </div>
-                    <div class="row text-center wrapper-sm" ng-if="!isLoading && approvals.length<=0">
+                    <div class="row text-center wrapper-sm" ng-if="!isLoading && onSite.approval.tableParams.data.length<=0">
                         No document
                     </div>
                 </tab>

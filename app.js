@@ -664,12 +664,13 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
   addResponse(data);
 });
 
+// Add bim comment
 app.post('/ontargetrs/services/bim/comment/save', function(req, res, next) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
   //getUserDetails(baseRequest.loggedInUserId, function(user) {
-  pusher.trigger('onTarget', 'onBIM.comment.' + data.projectBIMFileId, {
+  pusher.trigger('onTarget', 'project-' + baseRequest.loggedInUserProjectId + '.onBIM.comment.' + data.projectBIMFileId, {
     "name": "onBIMAddComment",
     "value": {
       "comment": data.comment,
