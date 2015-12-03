@@ -60,6 +60,10 @@ define(function() {
         notifications.taskCancel();
       };
 
+      $scope.edit = function(){
+        notifications.taskSelection({task: $scope.currentTask, action: 'edit'});
+      };
+
       var setTaskListHeight = function() {
         var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
         // Todo: Need to refactor

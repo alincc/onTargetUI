@@ -24,10 +24,12 @@ define(function(require) {
         '$rootScope',
         'permissionFactory',
         'taskFactory',
+        'notifications',
         function($scope,
                  $rootScope,
                  permissionFactory,
-                 taskFactory) {
+                 taskFactory,
+                 notifications) {
           $scope.model = {
             percentageComplete: '',
             percentageType: "PERCENTAGE",
@@ -45,6 +47,14 @@ define(function(require) {
               taskProgressList: $scope.model
             }).then(function(resp) {
               $scope.task.percentageComplete = $scope.model.percentageComplete;
+              // Update task in list
+              notifications.taskUpdated({
+                projectTaskId: $rootScope.currentTask.projectTaskId,
+                clear: false,
+                task: {
+                  percentageComplete: $scope.model.percentageComplete
+                }
+              });
             });
           };
 

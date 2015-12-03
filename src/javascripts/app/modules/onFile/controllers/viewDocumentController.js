@@ -53,6 +53,7 @@ define(function(require) {
               field: "dueDate",
               title: "Due date",
               sortable: "dueDate",
+              class: "date",
               show: true,
               filter: {dueDate: "onFile/templates/" + (type === 'all' ? 'allDueDateFilter' : type === 'approval' ? 'approvalDueDateFilter' : 'submittalDueDateFilter') + ".html"}
             },

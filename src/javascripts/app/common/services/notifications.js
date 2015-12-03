@@ -32,6 +32,7 @@ define([
         _BUDGET_UPDATED_ = '_BUDGET_UPDATED_',
         _DOCUMENT_UPLOADED_ = '_DOCUMENT_UPLOADED_',
         _DOCUMENT_SELECTED_ = '_DOCUMENT_SELECTED_',
+        _CURRENT_PROJECT_CHANGED_ = '_CURRENT_PROJECT_CHANGED_',
 
         requestStarted = function (){
           $rootScope.$broadcast(_START_REQUEST_);
@@ -224,6 +225,14 @@ define([
           $scope.$on(_DOCUMENT_UPLOADED_, function (event, args){
             handler(args);
           });
+        },
+        currentProjectChanged = function (args){
+          $rootScope.$broadcast(_CURRENT_PROJECT_CHANGED_, args);
+        },
+        onCurrentProjectChanged = function ($scope, handler){
+          $scope.$on(_CURRENT_PROJECT_CHANGED_, function (event, args){
+            handler(args);
+          });
         };
 
       return {
@@ -274,7 +283,9 @@ define([
         documentUploaded: documentUploaded,
         onDocumentUploaded: onDocumentUploaded,
         documentSelected: documentSelected,
-        onDocumentSelected: onDocumentSelected
+        onDocumentSelected: onDocumentSelected,
+        currentProjectChanged: currentProjectChanged,
+        onCurrentProjectChanged: onCurrentProjectChanged
       };
     }]);
 });

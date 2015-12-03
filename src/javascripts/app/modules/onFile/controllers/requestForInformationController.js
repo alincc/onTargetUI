@@ -14,7 +14,6 @@ define(function(require) {
             $scope.contactNameList.push({userId: projectMember.userId, name: fullName});
           }
         });
-        console.log($scope.document.keyValues.attention);
         _.remove($scope.document.keyValues.attention, function(attention) {
           return attention === $scope.document.keyValues.receiverId;
         });
@@ -122,14 +121,12 @@ define(function(require) {
         }
         onFileFactory.getDocumentAttachmentsByDocumentId($scope.document.documentId)
           .success(function(resp) {
-            console.log(resp);
             $scope.attachments = $scope.attachments.concat(resp.attachments);
             $scope.attachments = _.map($scope.attachments, function(el) {
               var newEl = el;
               newEl.uploaded = true;
               return newEl;
             });
-            console.log($scope.attachments);
           });
       }
 
@@ -349,8 +346,6 @@ define(function(require) {
           return contact.userId === $scope.document.keyValues.receiverId;
         });
         $scope.document.keyValues.company_name = userCompany ? userCompany.companyName : '';
-        $scope.document.keyValues.company_id = userCompany ? userCompany.companyId : '';
-
         removeUserSelected();
       };
 
@@ -370,7 +365,6 @@ define(function(require) {
 
         // modal callbacks
         uploadModalInstance.result.then(function(data) {
-          console.log(data);
           if(data.from === 'main') {
             $scope.attachments = $scope.attachments.concat(data.result);
           }
@@ -386,7 +380,6 @@ define(function(require) {
       };
 
       $scope.saveDocumentInfo = function(file) {
-        console.log('Save file', file);
         var deferred = $q.defer();
         fileFactory.move(file.filePath, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'onfile')
           .success(function(resp) {
