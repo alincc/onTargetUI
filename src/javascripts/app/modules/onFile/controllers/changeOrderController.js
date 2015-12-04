@@ -70,7 +70,7 @@ define(function(require) {
         "projectId": $rootScope.currentProjectInfo.projectId,
         "documentTemplateId": documentTemplate.CO.document_template_id,
         "documentName": documentTemplate.CO.documentName,
-        "documentId": $scope.changeOrder.documentId || null,
+        "documentId": $scope.changeOrder.documentId || '',
         "dueDate": '',
         "keyValues": [],
         "gridKeyValues": [],
@@ -276,7 +276,6 @@ define(function(require) {
           return contact.userId === $scope.changeOrder.keyValues.receiverId;
         });
         $scope.changeOrder.keyValues.company_name = userCompany ? userCompany.companyName : '';
-        $scope.changeOrder.keyValues.company_id = userCompany ? userCompany.companyId : '';
       };
 
       var uploadModalInstance;
@@ -312,6 +311,7 @@ define(function(require) {
         data.document.keyValues.receiverName = $scope.receiverName;
         data.document.keyValues.receiver = _.find($scope.contactLists, {userId: data.document.keyValues.receiverId});
         data.document.creator = _.find($scope.contactLists, {userId: data.document.createdBy});
+
         onFileFactory.exportPdf(data)
           .success(function(resp) {
             if(download) {

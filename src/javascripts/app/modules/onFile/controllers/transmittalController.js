@@ -260,7 +260,6 @@ define(function(require) {
           return contact.userId === $scope.document.keyValues.receiverId;
         });
         $scope.document.keyValues.company_name = userCompany ? userCompany.companyName : '';
-        $scope.document.keyValues.company_id = userCompany ? userCompany.companyId : '';
       };
 
       var uploadModalInstance;

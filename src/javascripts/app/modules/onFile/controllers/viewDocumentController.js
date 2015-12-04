@@ -330,7 +330,45 @@ define(function(require) {
       $scope.haveApprovePermission = permissionFactory.checkFeaturePermission('ONFILE_APPROVE');
       $scope.haveRejectPermission = permissionFactory.checkFeaturePermission('ONFILE_REJECT');
       $scope.haveViewPermission = permissionFactory.checkFeaturePermission('ONFILE_VIEW');
+      $scope.updateApproveInformation = function(doc, cb) {
+        onFileFactory.getDocumentById(doc.documentId)
+          .success(function(resp) {
+            var keyValues = resp.document.keyValues;
+            var receiver = _.find(keyValues, {'key': 'receiverId'});
+            //var dueDate = _.find(keyValues, {'key': 'receiverId'});
+            var approveRejectDate = _.find(keyValues, {'key': 'approveRejectDate'});
+            if(!approveRejectDate) {
+              keyValues.push({
+                'key': 'approveRejectDate',
+                'value': new Date().toISOString()
+              });
+            }
+            if(receiver) {
+              onFileFactory.updateDocument({
+                "projectId": resp.document.projectId,
+                "documentTemplateId": resp.document.documentTemplate.documentTemplateId,
+                "documentName": resp.document.documentTemplate.name,
+                "documentId": resp.document.documentId,
+                "dueDate":resp.document.dueDate,
+                "keyValues": keyValues,
+                "submittedBy": resp.document.createdBy,
+                "assignees": [{"userId": receiver.value}]
+              })
+                .success(function(resp) {
+                  cb();
+                })
+                .error(function(err) {
+                  cb();
+                });
+            } else {
+              cb();
+            }
+          })
+          .error(function() {
+            cb();
+          });
 
+      };
       $scope.changeStatus = function(doc, status, $event, idx) {
         $event.stopImmediatePropagation();
         if(status === 'APPROVED' && !$scope.haveApprovePermission) {
@@ -339,15 +377,21 @@ define(function(require) {
         if(status === 'REJECTED' && !$scope.haveRejectPermission) {
           return;
         }
+        doc.isApproveReject = true;
         onFileFactory.updateStatus(doc.documentId, status, userContext.authentication().userData.userId)
           .success(function(resp) {
-            doc.approve = false;
-            doc.status = status;
-            doc.view = true;
-
-            //change status success
-            _.remove($scope.approvals, {documentId: doc.documentId});
-            _.remove($scope.all, {documentId: doc.documentId});
+            $scope.updateApproveInformation(doc, function() {
+              doc.approve = false;
+              doc.status = status;
+              doc.view = true;
+              doc.isApproveReject = false;
+              //change status success
+              _.remove($scope.approvals, {documentId: doc.documentId});
+              _.remove($scope.all, {documentId: doc.documentId});
+            });
+          })
+          .error(function() {
+            doc.isApproveReject = false;
           });
       };
 

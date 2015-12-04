@@ -93,9 +93,9 @@
                                         <div class="form-group">
                                             <label class="label-field">Subject</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="onView || onApprove">
                                                 {{changeOrder.keyValues.subject}}</p>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
                                             <input type="text" class="form-control" placeholder="Enter Subject"
                                                    ng-model="changeOrder.keyValues.subject"
                                                    name="subject"
@@ -135,7 +135,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="label-field">Description of Scope</label>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.description}}</p>
@@ -203,7 +203,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="label-field">Contract Title</label>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.contract_title}}</p>
@@ -462,10 +462,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-2 col-md-1 btn-group">
+                                    <div class="col-xs-2 col-md-1 btn-group" ng-if="!onView && !onApprove">
                                         <a class="btn btn-danger btn-sm btn-remove"
                                            ng-click="removeCostGrid($index)"
-                                           ng-repeat="cost in costGrid" ng-disabled="onView||onApprove"><i class="fa fa-times"></i> Remove
+                                           ng-repeat="cost in costGrid"><i class="fa fa-times"></i> Remove
                                         </a>
                                     </div>
                                 </div>

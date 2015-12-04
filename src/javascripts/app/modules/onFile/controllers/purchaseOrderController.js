@@ -221,7 +221,6 @@ define(function(require) {
           return contact.userId === $scope.purchaseOrder.keyValues.receiverId;
         });
         $scope.purchaseOrder.keyValues.company_name = userCompany ? userCompany.companyName : '';
-        $scope.purchaseOrder.keyValues.company_id = userCompany ? userCompany.companyId : '';
       };
 
 

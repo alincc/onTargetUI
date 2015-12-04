@@ -22,7 +22,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Receiver's Name</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">{{receiverName}}</p>
+                                            <p class="text-field" ng-if="onView || onApprove">{{receiverName}}</p>
                                             <select class="form-control" name="receiverId"
                                                     ng-model="document.keyValues.receiverId"
                                                     ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Company Name</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.company_name}}</p>
                                             <!--<select class="form-control" name="companyName" ng-model="document.keyValues.company_name"
                                                     ng-options="company.companyId as company.companyName for company in companies" required>
@@ -63,7 +63,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Transmittal #</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.transmittal}}</p>
                                             <input type="text" class="form-control" placeholder="Enter transmittal #"
                                                    ng-model="document.keyValues.transmittal"
@@ -79,7 +79,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Sent Via</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.sent_via}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Sent Via"
                                                    ng-model="document.keyValues.sent_via"
@@ -97,9 +97,9 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="label-field">Subject</label>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.subject}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Subject"
                                                    ng-model="document.keyValues.subject"
@@ -118,7 +118,7 @@
                                                     <input type="checkbox" ng-model="submittedFor.value"
                                                            ng-true-value="'YES'"
                                                            ng-false-value="'NO'" checked
-                                                           ng-disabled="onView||onApprove"><i></i> {{submittedFor.title}}
+                                                           ng-disabled="onView || onApprove"><i></i> {{submittedFor.title}}
                                                 </label>
                                             </div>
                                         </div>
@@ -136,15 +136,15 @@
                                                 <label class="i-checks">
                                                     <input type="checkbox" ng-model="action.value" ng-true-value="'YES'"
                                                            ng-false-value="'NO'" checked
-                                                           ng-disabled="onView||onApprove"><i></i> {{action.title}}
+                                                           ng-disabled="onView || onApprove"><i></i> {{action.title}}
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-4">
-                                            <p class="text-field" ng-if="onView||onApprove">
-                                                {{document.keyValues.due_by_date}}</p>
+                                            <p class="text-field" ng-if="onView || onApprove">
+                                                {{document.keyValues.due_by_date | date:app.dateFormat}}</p>
 
                                             <p class="input-group" ng-if="onEdit">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Date"
@@ -160,8 +160,8 @@
                                             </p>
                                         </div>
                                         <div class="col-lg-4">
-                                            <p class="text-field" ng-if="onView||onApprove">
-                                                {{document.keyValues.received_by_date}}</p>
+                                            <p class="text-field" ng-if="onView || onApprove">
+                                                {{document.keyValues.received_by_date | date:app.dateFormat}}</p>
 
                                             <p class="input-group" ng-if="onEdit">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Date"
@@ -178,8 +178,8 @@
                                             </p>
                                         </div>
                                         <div class="col-lg-4">
-                                            <p class="text-field" ng-if="onView||onApprove">
-                                                {{document.keyValues.sent_by_date}}</p>
+                                            <p class="text-field" ng-if="onView || onApprove">
+                                                {{document.keyValues.sent_by_date | date:app.dateFormat}}</p>
 
                                             <p class="input-group" ng-if="onEdit">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Date"
@@ -201,7 +201,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Items</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.items}}</p>
+                                            <p class="text-field" ng-if="onView || onApprove">{{document.keyValues.items}}</p>
                                             <select class="form-control" name="items" ng-model="document.keyValues.items"
                                                     ng-options="item.id as item.name for item in items" required
                                                     ng-if="onEdit">
@@ -218,7 +218,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Description</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.description}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Description"
                                                    ng-model="document.keyValues.description"
@@ -236,7 +236,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Due Date</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">{{document.dueDate}}</p>
+                                            <p class="text-field" ng-if="onView || onApprove" ng-bind="document.dueDate | date:app.dateFormat"></p>
 
                                             <p class="input-group" ng-if="onEdit">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Due date"
@@ -261,7 +261,7 @@
                                         <div class="form-group">
                                             <label class="label-field">Copies</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.copies}}</p>
+                                            <p class="text-field" ng-if="onView || onApprove">{{document.keyValues.copies}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Copies"
                                                    ng-model="document.keyValues.copies"
                                                    name="copies" required
@@ -278,9 +278,9 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="label-field">Comments</label>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
 
-                                            <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.comments}}
+                                            <p class="text-field" ng-if="onView || onApprove">{{document.keyValues.comments}}
                                                 &nbsp;</p>
                             <textarea type="text" class="form-control" placeholder="Enter Comments"
                                       ng-model="document.keyValues.comments"

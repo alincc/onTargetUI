@@ -459,8 +459,8 @@ app.put('/ontargetrs/services/document', function(req, res) {
     })[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.userId));
-        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.userId), {
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.value));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.value), {
           "message": "Change Order has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -501,8 +501,8 @@ app.put('/ontargetrs/services/document', function(req, res) {
     })[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.userId));
-        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.userId), {
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.value));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.value), {
           "message": "PO has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -515,8 +515,8 @@ app.put('/ontargetrs/services/document', function(req, res) {
     })[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.userId));
-        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.userId), {
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.value));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.value), {
           "message": "Transmittal has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });

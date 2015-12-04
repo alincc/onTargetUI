@@ -90,7 +90,7 @@
         display: none;
       }
       .add_comment_form {
-        .delete-tag-button{
+        .delete-tag-button {
           display: none;
         }
       }
@@ -98,8 +98,12 @@
   }
 
   .comment-section {
+    > .panel {
+      position: relative;
+    }
     .panel-body {
       height: @onSite-height;
+      padding-bottom: 45px;
       .comment-content {
         border: solid 1px #d5d5d5;
         padding: 5px;
@@ -119,46 +123,50 @@
           color: @text-muted
         }
       }
-      .add-comment {
-        position: relative;
-        border: solid 1px #d5d5d5;
-        border-radius: 5px;
-        padding: 5px 5px 0px 5px;
-        form {
-          display: table;
+    }
+    margin-left: -1px;
+
+    .add-comment {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      border: solid 1px #d5d5d5;
+      padding: 5px 5px 0 5px;
+      form {
+        display: table;
+        width: 100%;
+        .textarea {
+          display: table-cell;
+          vertical-align: top;
           width: 100%;
-          .textarea {
-            display: table-cell;
-            vertical-align: top;
+          textarea {
             width: 100%;
-            textarea {
-              width: 100%;
-              border: 0;
-              resize: none;
-              min-height: 29px;
-              border-radius: 5px;
-              padding-top: 5px;
-            }
+            border: 0;
+            resize: none;
+            min-height: 29px;
+            border-radius: 5px;
+            padding-top: 5px;
           }
-          .button {
-            display: table-cell;
-            vertical-align: top;
-            button {
-              padding: 3px 10px;
-            }
-            .ladda-button[data-style=expand-right][data-loading] {
-              padding-right: 30px;
-            }
-            .ladda-button[data-style=expand-right] {
-              .ladda-spinner {
-                right: -16px;
-              }
+        }
+        .button {
+          display: table-cell;
+          vertical-align: top;
+          button {
+            padding: 3px 10px;
+          }
+          .ladda-button[data-style=expand-right][data-loading] {
+            padding-right: 30px;
+          }
+          .ladda-button[data-style=expand-right] {
+            .ladda-spinner {
+              right: -16px;
             }
           }
         }
       }
     }
-    margin-left: -1px;
+
   }
 
   .search {

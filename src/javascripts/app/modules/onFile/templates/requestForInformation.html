@@ -98,7 +98,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="label-field">Subject</label>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
 
                                             <p class="text-field" ng-if="(onView || onApprove) && document.keyValues.subject.length">
                                                 {{document.keyValues.subject}}</p>
@@ -159,7 +159,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="label-field">Questions/Concerns</label>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
                                             <p class="text-field" ng-if="(onView || onApprove) && document.keyValues.question_or_concern.length">
                                                 {{document.keyValues.question_or_concern}}</p>
                                     <textarea type="text" class="form-control no-resize"
@@ -173,7 +173,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="label-field">Suggestion</label>
-                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
                                             <p class="text-field" ng-if="(onView || onApprove) && document.keyValues.suggestion.length">
                                                 {{document.keyValues.suggestion}}</p>
                                     <textarea type="text" class="form-control no-resize" placeholder="Enter Suggestion"

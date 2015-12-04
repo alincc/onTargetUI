@@ -93,7 +93,7 @@ module.exports = {
       });
     }
 
-    function createAttachmentsHtml(attachments){
+    function createAttachmentsHtml(attachments) {
       var attachmentHtml = '<p><a href="{{attachmentLink}}">{{attachmentName}}</a></p>', attHtml = '';
       _.each(attachments, function(att) {
         var attachmentHtmlCopy = attachmentHtml;
@@ -118,26 +118,26 @@ module.exports = {
 
     function fillPOData(html, data) {
       html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
-      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
-      html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
-      html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
+      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name);
+      html = html.replace(/\{\{createdBy}}/g, data.creator.contact.firstName + ' ' + data.creator.contact.lastName);
+      html = html.replace(/\{\{company}}/g, data.creator.companyName);
       html = html.replace(/\{\{createdDate}}/g, moment(data.keyValues.date_created).format('MM/DD/YYYY'));
       html = html.replace(/\{\{address}}/g, data.creator.companyAddress);
-      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName || '');
-      html = html.replace(/\{\{attention}}/g, data.keyValues.attention || '');
-      html = html.replace(/\{\{subject}}/g, data.keyValues.subject || '');
-      html = html.replace(/\{\{PO}}/g, data.keyValues.PO || '');
-      html = html.replace(/\{\{priority}}/g, data.keyValues.priority || '');
-      html = html.replace(/\{\{dueDate}}/g, data.dueDate || '');
-      html = html.replace(/\{\{shipping_method}}/g, data.keyValues.shipping_method || '');
-      html = html.replace(/\{\{shipping_terms}}/g, data.keyValues.shipping_terms || '');
-      html = html.replace(/\{\{shipping_name}}/g, data.keyValues.ship_to_name || '');
-      html = html.replace(/\{\{ship_to_company}}/g, data.keyValues.ship_to_company || '');
-      html = html.replace(/\{\{ship_to_address}}/g, data.keyValues.ship_to_address || '');
-      html = html.replace(/\{\{total_po_amount}}/g, data.keyValues.total_po_amount || '');
-      html = html.replace(/\{\{notes}}/g, data.keyValues.notes || '');
-      html = html.replace(/\{\{approvedBy}}/g, data.approvedBy || '');
-      html = html.replace(/\{\{approvedDate}}/g, data.approvedDate || '');
+      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName);
+      html = html.replace(/\{\{attention}}/g, data.keyValues.attention);
+      html = html.replace(/\{\{subject}}/g, data.keyValues.subject);
+      html = html.replace(/\{\{PO}}/g, data.keyValues.PO);
+      html = html.replace(/\{\{priority}}/g, data.keyValues.priority);
+      html = html.replace(/\{\{dueDate}}/g, moment(data.dueDate).format('MM/DD/YYYY'));
+      html = html.replace(/\{\{shipping_method}}/g, data.keyValues.shipping_method);
+      html = html.replace(/\{\{shipping_terms}}/g, data.keyValues.shipping_terms);
+      html = html.replace(/\{\{shipping_name}}/g, data.keyValues.ship_to_name);
+      html = html.replace(/\{\{ship_to_company}}/g, data.keyValues.ship_to_company);
+      html = html.replace(/\{\{ship_to_address}}/g, data.keyValues.ship_to_address);
+      html = html.replace(/\{\{total_po_amount}}/g, data.keyValues.total_po_amount);
+      html = html.replace(/\{\{notes}}/g, data.keyValues.notes);
+      html = html.replace(/\{\{approvedBy}}/g, data.keyValues.receiver.contact.firstName + ' ' + data.keyValues.receiver.contact.lastName);
+      html = html.replace(/\{\{approvedDate}}/g, data.keyValues.approveRejectDate ? moment(data.keyValues.approveRejectDate).format('MM/DD/YYYY') : '');
 
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
@@ -153,35 +153,35 @@ module.exports = {
 
     function fillCOData(html, data) {
       html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
-      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
-      html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
-      html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
+      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name);
+      html = html.replace(/\{\{createdBy}}/g, data.creator.contact.firstName + ' ' + data.creator.contact.lastName);
+      html = html.replace(/\{\{company}}/g, data.creator.companyName);
       html = html.replace(/\{\{createdDate}}/g, moment(data.keyValues.date_created).format('MM/DD/YYYY'));
       html = html.replace(/\{\{address}}/g, data.creator.companyAddress);
-      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName || '');
-      html = html.replace(/\{\{subject}}/g, data.keyValues.subject || '');
-      html = html.replace(/\{\{co}}/g, data.keyValues.co || '');
-      html = html.replace(/\{\{location}}/g, data.keyValues.location || '');
-      html = html.replace(/\{\{dueDate}}/g, data.dueDate || '');
-      html = html.replace(/\{\{description}}/g, data.keyValues.description || '');
-      html = html.replace(/\{\{contract_no}}/g, data.keyValues.contract_no || '');
-      html = html.replace(/\{\{date_created}}/g, data.keyValues.date_created || '');
-      html = html.replace(/\{\{contract_title}}/g, data.keyValues.contract_title || '');
-      html = html.replace(/\{\{priority}}/g, data.keyValues.priority || '');
-      html = html.replace(/\{\{discipline}}/g, data.keyValues.discipline || '');
-      html = html.replace(/\{\{category}}/g, data.keyValues.category || '');
-      html = html.replace(/\{\{schedule_impact}}/g, data.keyValues.schedule_impact || '');
-      html = html.replace(/\{\{cost_impact}}/g, data.keyValues.cost_impact || '');
-      html = html.replace(/\{\{time_impact}}/g, data.keyValues.time_impact || '');
-      html = html.replace(/\{\{specification}}/g, data.keyValues.specification || '');
-      html = html.replace(/\{\{drawing}}/g, data.keyValues.drawing || '');
+      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName);
+      html = html.replace(/\{\{subject}}/g, data.keyValues.subject);
+      html = html.replace(/\{\{co}}/g, data.keyValues.co);
+      html = html.replace(/\{\{location}}/g, data.keyValues.location);
+      html = html.replace(/\{\{dueDate}}/g, moment(data.dueDate).format('MM/DD/YYYY'));
+      html = html.replace(/\{\{description}}/g, data.keyValues.description);
+      html = html.replace(/\{\{contract_no}}/g, data.keyValues.contract_no);
+      html = html.replace(/\{\{date_created}}/g, moment(data.keyValues.date_created).format('MM/DD/YYYY'));
+      html = html.replace(/\{\{contract_title}}/g, data.keyValues.contract_title);
+      html = html.replace(/\{\{priority}}/g, data.keyValues.priority);
+      html = html.replace(/\{\{discipline}}/g, data.keyValues.discipline);
+      html = html.replace(/\{\{category}}/g, data.keyValues.category);
+      html = html.replace(/\{\{schedule_impact}}/g, data.keyValues.schedule_impact);
+      html = html.replace(/\{\{cost_impact}}/g, data.keyValues.cost_impact);
+      html = html.replace(/\{\{time_impact}}/g, data.keyValues.time_impact);
+      html = html.replace(/\{\{specification}}/g, data.keyValues.specification);
+      html = html.replace(/\{\{drawing}}/g, data.keyValues.drawing);
       html = html.replace(/\{\{cost.workDescription}}/g, '');
       html = html.replace(/\{\{cost.costCode}}/g, '');
       html = html.replace(/\{\{cost.amount}}/g, '');
-      html = html.replace(/\{\{cost_code}}/g, data.keyValues.cost_code || '');
-      html = html.replace(/\{\{approvedBy}}/g, data.approvedBy || '');
-      html = html.replace(/\{\{approvedDate}}/g, data.approvedDate || '');
-      html = html.replace(/\{\{amount}}/g, data.keyValues.amount || '');
+      html = html.replace(/\{\{cost_code}}/g, data.keyValues.cost_code);
+      html = html.replace(/\{\{approvedBy}}/g, data.keyValues.receiver.contact.firstName + ' ' + data.keyValues.receiver.contact.lastName);
+      html = html.replace(/\{\{approvedDate}}/g, data.keyValues.approveRejectDate ? moment(data.keyValues.approveRejectDate).format('MM/DD/YYYY') : '');
+      html = html.replace(/\{\{amount}}/g, '$' + data.keyValues.amount.toLocaleString());
 
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
@@ -194,14 +194,14 @@ module.exports = {
         </tr>';
       for(var i = 0; i < data.gridKeyValues.length; i++) {
         var gridKey = temp;
-        gridKey = gridKey.replace(/\{\{workDescription}}/g, data.gridKeyValues[i].workDescription || '');
-        gridKey = gridKey.replace(/\{\{costCode}}/g, data.gridKeyValues[i].costCode || '');
-        gridKey = gridKey.replace(/\{\{amount}}/g, data.gridKeyValues[i].amount || '');
+        gridKey = gridKey.replace(/\{\{workDescription}}/g, data.gridKeyValues[i].workDescription);
+        gridKey = gridKey.replace(/\{\{costCode}}/g, data.gridKeyValues[i].costCode);
+        gridKey = gridKey.replace(/\{\{amount}}/g, '$' + data.gridKeyValues[i].amount.toLocaleString());
 
         gridKeys = gridKeys + gridKey;
       }
 
-      html = html.replace(/\{\{gridKeyValues}}/g, gridKeys || '');
+      html = html.replace(/\{\{gridKeyValues}}/g, gridKeys);
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
@@ -214,15 +214,15 @@ module.exports = {
 
     function fillTransData(html, data) {
       html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
-      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
-      html = html.replace(/\{\{createdBy}}/g, data.createdBy || '');
-      html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
+      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name);
+      html = html.replace(/\{\{createdBy}}/g, data.creator.contact.firstName + ' ' + data.creator.contact.lastName);
+      html = html.replace(/\{\{company}}/g, data.creator.companyName);
       html = html.replace(/\{\{createdDate}}/g, moment(data.keyValues.date_created).format('MM/DD/YYYY'));
       html = html.replace(/\{\{address}}/g, data.creator.companyAddress);
-      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName || '');
-      html = html.replace(/\{\{sent_via}}/g, data.keyValues.sent_via || '');
-      html = html.replace(/\{\{subject}}/g, data.keyValues.subject || '');
-      html = html.replace(/\{\{transmittal}}/g, data.keyValues.transmittal || '');
+      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName);
+      html = html.replace(/\{\{sent_via}}/g, data.keyValues.sent_via);
+      html = html.replace(/\{\{subject}}/g, data.keyValues.subject);
+      html = html.replace(/\{\{transmittal}}/g, data.keyValues.transmittal);
 
       html = html.replace(/\{\{approval}}/g, data.keyValues.approval === 'YES' ? 'checked' : '');
       html = html.replace(/\{\{for_use}}/g, data.keyValues.for_use === 'YES' ? 'checked' : '');
@@ -243,18 +243,18 @@ module.exports = {
       html = html.replace(/\{\{received_by}}/g, data.keyValues.received_by === 'YES' ? 'checked' : '');
       html = html.replace(/\{\{sent_date}}/g, data.keyValues.sent_date === 'YES' ? 'checked' : '');
 
-      html = html.replace(/\{\{due_by_date}}/g, data.keyValues.due_by_date || '');
-      html = html.replace(/\{\{received_by_date}}/g, data.keyValues.received_by_date || '');
-      html = html.replace(/\{\{sent_by_date}}/g, data.keyValues.sent_by_date || '');
+      html = html.replace(/\{\{due_by_date}}/g, moment(data.keyValues.due_by_date).format('MM/DD/YYYY'));
+      html = html.replace(/\{\{received_by_date}}/g, moment(data.keyValues.received_by_date).format('MM/DD/YYYY'));
+      html = html.replace(/\{\{sent_by_date}}/g, moment(data.keyValues.sent_by_date).format('MM/DD/YYYY'));
 
-      html = html.replace(/\{\{items}}/g, data.keyValues.items || '');
-      html = html.replace(/\{\{description}}/g, data.keyValues.description || '');
-      html = html.replace(/\{\{dueDate}}/g, data.dueDate || '');
-      html = html.replace(/\{\{copies}}/g, data.keyValues.copies || '');
-      html = html.replace(/\{\{comment}}/g, data.keyValues.comment || '');
+      html = html.replace(/\{\{items}}/g, data.keyValues.items);
+      html = html.replace(/\{\{description}}/g, data.keyValues.description);
+      html = html.replace(/\{\{dueDate}}/g, moment(data.dueDate).format('MM/DD/YYYY'));
+      html = html.replace(/\{\{copies}}/g, data.keyValues.copies);
+      html = html.replace(/\{\{comment}}/g, data.keyValues.comments);
 
-      html = html.replace(/\{\{approvedBy}}/g, data.keyValues.approvedBy || '');
-      html = html.replace(/\{\{approvedDate}}/g, data.keyValues.approvedDate || '');
+      html = html.replace(/\{\{approvedBy}}/g, data.keyValues.receiver.contact.firstName + ' ' + data.keyValues.receiver.contact.lastName);
+      html = html.replace(/\{\{approvedDate}}/g, data.keyValues.approveRejectDate ? moment(data.keyValues.approveRejectDate).format('MM/DD/YYYY') : '');
 
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
@@ -270,20 +270,20 @@ module.exports = {
 
     function fillRFIData(html, data) {
       html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
-      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
+      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name);
       html = html.replace(/\{\{createdBy}}/g, data.creator.contact.firstName + ' ' + data.creator.contact.lastName);
-      html = html.replace(/\{\{company}}/g, data.keyValues.company || '');
+      html = html.replace(/\{\{company}}/g, data.creator.companyName);
       html = html.replace(/\{\{createdDate}}/g, moment(data.keyValues.date_created).format('MM/DD/YYYY'));
       html = html.replace(/\{\{address}}/g, data.creator.companyAddress);
-      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName || '');
+      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName);
       html = html.replace(/\{\{attention}}/g, _.map(data.keyValues.attention, function(el) {
         return el.contact.firstName + ' ' + el.contact.lastName;
       }).join(', '));
 
-      html = html.replace(/\{\{subject}}/g, data.keyValues.subject || '');
-      html = html.replace(/\{\{RFI}}/g, data.keyValues.RFI || '');
-      html = html.replace(/\{\{question_or_concern}}/g, data.keyValues.question_or_concern || '');
-      html = html.replace(/\{\{suggestion}}/g, data.keyValues.suggestion || '');
+      html = html.replace(/\{\{subject}}/g, data.keyValues.subject);
+      html = html.replace(/\{\{RFI}}/g, data.keyValues.RFI);
+      html = html.replace(/\{\{question_or_concern}}/g, data.keyValues.question_or_concern);
+      html = html.replace(/\{\{suggestion}}/g, data.keyValues.suggestion);
 
       html = html.replace(/\{\{rfi_is_a_change}}/g, data.keyValues.rfi_is_a_change === 'YES' ? 'checked' : '');
       html = html.replace(/\{\{open}}/g, data.status === 'SUBMITTED' ? 'checked' : '');
@@ -297,22 +297,21 @@ module.exports = {
       var resHtml = '';
       for(var i = 0; i < responseData.length; i++) {
         var res = response;
-        res = res.replace(/\{\{reply}}/g, responseData[i].response || '');
-        res = res.replace(/\{\{responseBy}}/g, responseData[i].responsedBy.contact.firstName + ' ' + responseData[i].responsedBy.contact.lastName || '');
+        res = res.replace(/\{\{reply}}/g, responseData[i].response);
+        res = res.replace(/\{\{responseBy}}/g, responseData[i].responsedBy.contact.firstName + ' ' + responseData[i].responsedBy.contact.lastName);
         res = res.replace(/\{\{responseDate}}/g, moment(responseData[i].responsedDate).format('MM/DD/YYYY hh:mm a'));
         resHtml = resHtml + res;
       }
-      html = html.replace(/\{\{responses}}/g, resHtml || '');
+      html = html.replace(/\{\{responses}}/g, resHtml);
 
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
 
-      /*response = response.replace(/\{\{title}}/g, responseData.title || '');
-       response = response.replace(/\{\{reply}}/g, responseData.reply || '');
+      /*response = response.replace(/\{\{title}}/g, responseData.title);
+       response = response.replace(/\{\{reply}}/g, responseData.reply);
        response = response.replace(/\{\{responseBy}}/g, responseData.responsedBy ? responseData.responsedBy.contact ? responseData.responsedBy.contact.firstName + ' ' + responseData.responsedBy.contact.lastName : '' : '');
-       response = response.replace(/\{\{responsedDate}}/g, responseData.responsedDate.getDate() + '/' + responseData.responsedDate.getMonth() + '/' + responseData.responsedDate.getYear() || '');
-       response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime() || '');*/
-
+       response = response.replace(/\{\{responsedDate}}/g, responseData.responsedDate.getDate() + '/' + responseData.responsedDate.getMonth() + '/' + responseData.responsedDate.getYear());
+       response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime());*/
 
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
