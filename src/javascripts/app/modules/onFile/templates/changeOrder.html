@@ -2,7 +2,7 @@
     <tab heading="View Document" ng-click="openAction(actions.viewDocument)">
     </tab>
     <tab heading="Change Order" ng-click="openAction(actions.changeOrder)" active="true">
-        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView||onApprove">Export PDF</button>
+        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF</button>
         <div>
             <div class="row">
                 <div class="col-md-12">
@@ -14,7 +14,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Name</label>
+                                            <label class="label-field">Name</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{receiverName}} &nbsp;</p>
                                             <select class="form-control" name="receiverId"
@@ -33,7 +33,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Company Name</label>
+                                            <label class="label-field">Company Name</label>
                                             <!--<select class="form-control" name="companyName" ng-model="changeOrder.keyValues.company_name"
                                                     ng-options="company.companyId as company.companyName for company in companies" required>
                                                 <option value="">&#45;&#45; Select Company Name &#45;&#45;</option>
@@ -54,7 +54,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Change Order</label>
+                                            <label class="label-field">Change Order</label>
                                             <!--<select class="form-control" name="co" ng-model="changeOrder.keyValues.co"
                                                     ng-options="receiverName.contact.contactId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
                                                 <option value="">&#45;&#45; Select Change Order &#45;&#45;</option>
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Location</label>
+                                            <label class="label-field">Location</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.location}}</p>
@@ -91,11 +91,11 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Subject</label>
+                                            <label class="label-field">Subject</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.subject}}</p>
-                                            <span class="pull-right">(Optional)</span>
+                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
                                             <input type="text" class="form-control" placeholder="Enter Subject"
                                                    ng-model="changeOrder.keyValues.subject"
                                                    name="subject"
@@ -106,7 +106,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Due Date</label>
+                                            <label class="label-field">Due Date</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{changeOrder.dueDate|date:
                                                 app.dateFormat}}</p>
@@ -134,8 +134,8 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Description of Scope</label>
-                                            <span class="pull-right">(Optional)</span>
+                                            <label class="label-field">Description of Scope</label>
+                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.description}}</p>
@@ -156,7 +156,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Contract Number</label>
+                                            <label class="label-field">Contract Number</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.contract_no}}</p>
@@ -172,9 +172,9 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Date Created</label>
+                                            <label class="label-field">Date Created</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="onView || onApprove">
                                                 {{changeOrder.keyValues.date_created|date: app.dateFormat}}</p>
 
                                             <p class="input-group" ng-if="onEdit">
@@ -202,8 +202,8 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Contract Title</label>
-                                            <span class="pull-right">(Optional)</span>
+                                            <label class="label-field">Contract Title</label>
+                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.contract_title}}</p>
@@ -224,7 +224,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Priority</label>
+                                            <label class="label-field">Priority</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.priority}}</p>
@@ -243,7 +243,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Discipline</label>
+                                            <label class="label-field">Discipline</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.discipline}}</p>
@@ -264,7 +264,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Category</label>
+                                            <label class="label-field">Category</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.category}}</p>
@@ -292,7 +292,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Schedule Impact</label>
+                                            <label class="label-field">Schedule Impact</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.schedule_impact}}</p>
@@ -314,7 +314,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Cost Impact</label>
+                                            <label class="label-field">Cost Impact</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.cost_impact}}</p>
@@ -338,7 +338,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Time Impact</label>
+                                            <label class="label-field">Time Impact</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.time_impact}}</p>
@@ -364,7 +364,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Specification Section</label>
+                                            <label class="label-field">Specification Section</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.specification}}</p>
@@ -380,7 +380,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Drawing No.</label>
+                                            <label class="label-field">Drawing No.</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.drawing}}</p>
@@ -398,7 +398,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Cost Code</label>
+                                            <label class="label-field">Cost Code</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{changeOrder.keyValues.cost_code}}</p>
@@ -419,7 +419,7 @@
                                         <div class="row">
                                             <div class="col-xs-4">
                                                 <div class="form-group">
-                                                    <label>Description of Work</label>
+                                                    <label class="label-field">Description of Work</label>
 
                                                     <p class="text-field" ng-if="onView||onApprove"
                                                        ng-repeat="cost in costGrid">{{cost.workDescription}}</p>
@@ -433,7 +433,7 @@
                                             </div>
                                             <div class="col-xs-4">
                                                 <div class="form-group">
-                                                    <label>Cost Code</label>
+                                                    <label class="label-field">Cost Code</label>
 
                                                     <p class="text-field" ng-if="onView||onApprove"
                                                        ng-repeat="cost in costGrid">{{cost.costCode}}</p>
@@ -447,7 +447,7 @@
                                             </div>
                                             <div class="col-xs-4">
                                                 <div class="form-group">
-                                                    <label>Amount</label>
+                                                    <label class="label-field">Amount</label>
 
                                                     <p class="text-field" ng-if="onView||onApprove"
                                                        ng-repeat="cost in costGrid">{{cost.amount}}</p>
@@ -483,7 +483,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <input type="hidden" ng-model="changeOrder.keyValues.amount" />
-                                            <label>Total Change Order Amount: <b ng-bind="(changeOrder.keyValues.amount || 0) | currency"></b></label>
+                                            <label class="label-field">Total Change Order Amount: <b ng-bind="(changeOrder.keyValues.amount || 0) | currency"></b></label>
                                         </div>
                                     </div>
                                 </div>

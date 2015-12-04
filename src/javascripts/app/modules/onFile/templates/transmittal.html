@@ -9,7 +9,7 @@
     <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)">
     </tab>
     <tab heading="Transmittal" ng-click="openAction(actions.transmittal)" active="true">
-        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView||onApprove">Export PDF</button>
+        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF</button>
         <div>
             <div class="row">
                 <div class="col-md-12">
@@ -20,7 +20,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Receiver's Name</label>
+                                            <label class="label-field">Receiver's Name</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{receiverName}}</p>
                                             <select class="form-control" name="receiverId"
@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Company Name</label>
+                                            <label class="label-field">Company Name</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.company_name}}</p>
@@ -61,7 +61,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Transmittal #</label>
+                                            <label class="label-field">Transmittal #</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.transmittal}}</p>
@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Sent Via</label>
+                                            <label class="label-field">Sent Via</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.sent_via}}</p>
@@ -96,8 +96,8 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Subject</label>
-                                            <span class="pull-right">(Optional)</span>
+                                            <label class="label-field">Subject</label>
+                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.subject}}</p>
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <label>Submitted for</label>
+                                        <label class="label-field">Submitted for</label>
 
                                         <div class="form-group">
                                             <div class="checkbox-inline" ng-repeat="submittedFor in submittedFors">
@@ -127,7 +127,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <label>Action as Noted Below</label>
+                                            <label class="label-field">Action as Noted Below</label>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -199,7 +199,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Items</label>
+                                            <label class="label-field">Items</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.items}}</p>
                                             <select class="form-control" name="items" ng-model="document.keyValues.items"
@@ -216,7 +216,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Description</label>
+                                            <label class="label-field">Description</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.description}}</p>
@@ -234,7 +234,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Due Date</label>
+                                            <label class="label-field">Due Date</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{document.dueDate}}</p>
 
@@ -259,7 +259,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Copies</label>
+                                            <label class="label-field">Copies</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.copies}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Copies"
@@ -277,8 +277,8 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Comments</label>
-                                            <span class="pull-right">(Optional)</span>
+                                            <label class="label-field">Comments</label>
+                                            <span class="pull-right" ng-if="!onView">(Optional)</span>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{document.keyValues.comments}}
                                                 &nbsp;</p>

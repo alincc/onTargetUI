@@ -13,7 +13,6 @@
                             <td valign="middle" class="file-name" ng-bind="::doc.submittedBy"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.submittedToStr"></td>
                             <td valign="middle" class="file-name">
-                                <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
                                 <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVED', $event, $index)" ng-if="doc.approve && haveApprovePermission">Approve</button>
@@ -38,7 +37,6 @@
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.submittedToStr"></td>
                             <td valign="middle" class="file-name">
-                                <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
                             </td>
@@ -61,7 +59,6 @@
                             <td valign="middle" class="file-name" ng-bind="::doc.status"></td>
                             <td valign="middle" class="file-name" ng-bind="::doc.submittedBy"></td>
                             <td valign="middle" class="file-name">
-                                <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.view">View</button>
                                 <button class="btn btn-primary btn-xs" ng-click="previewDocument(doc, $event)" ng-if="doc.edit">Edit</button>
                                 <button class="btn btn-danger btn-xs" ng-if="doc.edit" ng-click="deleteDoc(doc, $event)">Delete</button>
                                 <button class="btn btn-primary btn-xs" ng-click="changeStatus(doc, 'APPROVED', $event, $index)" ng-if="doc.approve && haveApprovePermission">Approve</button>

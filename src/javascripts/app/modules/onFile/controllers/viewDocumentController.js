@@ -112,7 +112,7 @@ define(function(require) {
           }
 
           params.total(filteredData.length);
-          return filteredData;
+          return filteredData.slice((params.page() - 1) * params.count(), params.page() * params.count());
         };
 
       $scope.onSite = {

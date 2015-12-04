@@ -64,7 +64,13 @@ define(function(require) {
             }
             else {
               if((response.config.url.indexOf(constant.domain) > -1 || response.config.url.indexOf(constant.domain) > -1) && response.config.headers['AutoAlert']) {
-                toaster.pop('success', 'Success', response.data.returnMessage);
+                if(response.data.length) {
+                  toaster.pop('success', 'Success', response.data.returnMessage);
+                } else {
+                  //toaster.pop('error', 'Error', 'Something goes wrong, cannot proceed the request!');
+                  //console.log(response);
+                  //defer.reject(response);
+                }
               }
               defer.resolve(response);
             }

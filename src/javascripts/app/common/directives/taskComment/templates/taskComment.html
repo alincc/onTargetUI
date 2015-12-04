@@ -1,6 +1,6 @@
 <div class="task-comment">
     <div class="no-result text-muted m-t-xs m-b-xs text-center" ng-if="!comments.length">No comments</div>
-    <div class="item-list" custom-scroll>
+    <div class="item-list" custom-scroll="taskComment">
         <div class="item" ng-repeat="comment in comments">
             <a href="javascript:void(0)" class="pull-left thumb-sm avatar m-r">
                 <img path="{{comment.commenterContact.userImagePath}}" file-path alt="..."
@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="comment-box item" permission="ADD_TASK_COMMENT">
-            <form name="comment_form" no-validate ng-submit="addComment(comment_form)">
+            <form name="comment_form" novalidate ng-submit="addComment(comment_form)">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Add a comment or reply here" ng-model="model.comment" name="comment" required />
                           <span class="input-group-btn">

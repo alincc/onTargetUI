@@ -35,7 +35,8 @@ define(function(require) {
         });
       };
 
-      services.bindGlobalChannel = function(){
+      services.bindGlobalChannel = function() {
+        console.log('Listen global events: onTargetAll');
         // bind global channel
         channel.bind('onTargetAll', function(data) {
           $rootScope.$broadcast('pusher.notifications');
@@ -43,18 +44,21 @@ define(function(require) {
       };
 
       services.bind = function(evtName, cb) {
+        console.log('Listen event: ' + evtName);
         subscribedChannels.push(evtName);
         storage.set('onTargetSubscribedChannels', subscribedChannels);
         channel.bind(evtName, cb);
       };
 
       services.unbind = function(evtName) {
+        console.log('UnListen event: ' + evtName);
         subscribedChannels = _.without(subscribedChannels, evtName);
         storage.set('onTargetSubscribedChannels', subscribedChannels);
         channel.unbind(evtName);
       };
 
       services.unbindAll = function(global) {
+        console.log('UnListen all events');
         if(global) {
           channel.unbind('onTargetAll');
         }

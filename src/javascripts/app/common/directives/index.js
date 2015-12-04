@@ -22,7 +22,8 @@ define(function(require) {
     taskComment = require('./taskComment/taskComment'),
     taskBudget = require('./taskBudget/taskBudget'),
     taskProgress = require('./taskProgress/taskProgress'),
-    taskAttachment = require('./taskAttachment/taskAttachment');
+    taskAttachment = require('./taskAttachment/taskAttachment'),
+    customScroll = require('./customScroll');
 
   var module = angular.module('common.directives',
     [
@@ -47,7 +48,8 @@ define(function(require) {
       'common.directives.taskComment',
       'common.directives.taskBudget',
       'common.directives.taskProgress',
-      'common.directives.taskAttachment'
+      'common.directives.taskAttachment',
+      'common.directives.customScroll'
     ]);
   return module;
 });

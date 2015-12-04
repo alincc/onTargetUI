@@ -55,6 +55,10 @@ define(function(require) {
       };
 
       service.clearInfo = function() {
+        notifications.currentProjectChanged({
+          oldProject: angular.copy($rootScope.currentProjectInfo),
+          newProject: null
+        });
         project = $rootScope.currentProjectInfo = {};
         allProjects = $rootScope.allProjects = [];
         mainProject = $rootScope.mainProjectInfo = {};

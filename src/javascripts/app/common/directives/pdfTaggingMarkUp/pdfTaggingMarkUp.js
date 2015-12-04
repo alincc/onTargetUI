@@ -854,7 +854,6 @@ define(function(require) {
           scope.extractListTags = function(doc, docId) {
             //return _.map(doc.listLayer, function(m) {
             var layers = angular.copy(scope.listLayers);
-            console.log(layers);
             return _.map(layers, function(m) {
               if(m.type === 'marker') {
                 var listComment = _.map(m.comments, function(cm) {

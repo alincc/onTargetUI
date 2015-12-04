@@ -26,7 +26,7 @@
         var pusherKey = $('#pusherClientApiKey').val();
         var pusherChannel = $('#pusherChannel').val();
         var $btn = containerDiv.find('.btnAddComment');
-        var scrollContainer = containerDiv.parents('.sidespanWrapper');
+        var scrollContainer = containerDiv.find('.comments');
         var isAllowSaveComment = Global.authenticationData ? jQuery.grep(Global.authenticationData.userData.featureListPermission, function(el) {
             return el.featureKey === 'ONBIM_COMMENT_SAVE';
         }).length > 0 : false;
@@ -51,6 +51,8 @@
         this.show = function() {
             containerDiv.show();
         };
+
+        this.comments = [];
 
         this.scrollDown = function() {
             if(scrollContainer.length) {
@@ -144,6 +146,7 @@
                             othis.appendComment(data.comments[i]);
                         }
                     }
+                    othis.comments = data.comments;
                 },
                 error: function(err) {
                     console.log(err);
@@ -174,19 +177,12 @@
                 contentType: 'application/json',
                 success: function(data) {
                     if(data.returnVal === 'SUCCESS') {
-//                        othis.appendComment({
-//                            commentedDate: new Date().toISOString(),
-//                            commenterContact: {
-//                                firstName: currentUserFirstName,
-//                                lastName: currentUserLastName,
-//                                userImagePath: currentUserAvatarPath
-//                            },
-//                            comment: containerDiv.find('#commentText').val()
-//                        });
-//                        containerDiv.find('#commentText').val('');
-//                        if(othis.isScrollAtBottom) {
-//                            othis.scrollDown();
-//                        }
+                        othis.comments.push(data.projectBIMFileComment);
+                        othis.appendComment(data.projectBIMFileComment);
+                        containerDiv.find('#commentText').val('');
+                        if(othis.isScrollAtBottom) {
+                            othis.scrollDown();
+                        }
                     }
                     $btn.removeAttr('disabled');
                 },
@@ -225,23 +221,24 @@
         if(currentProject) {
             // pusher
             console.log('Listen event: ', 'onbim.comment.' + parseInt(projectBimFileId));
-            channel.bind('project-' + currentProject.project.projectId + '.onBIM.comment.' + parseInt(projectBimFileId), function(evt) {
+            channel.bind('project-' + currentProject.project.projectId + ':onBIM-' + parseInt(projectBimFileId), function(evt) {
                 if(evt.name === 'onBIMAddComment') {
-                    othis.appendComment({
-                        commentedDate: evt.value.commentedDate,
-                        commenterContact: evt.value.commenterContact,
-                        comment: evt.value.comment
-                    });
-                    containerDiv.find('#commentText').val('');
+                    var found = othis.comments.filter(function(el) {
+                        return el.projectBIMFileCommentId === evt.value.projectBIMFileCommentId
+                    })[0];
 
-                    if(othis.isScrollAtBottom) {
-                        othis.scrollDown();
+                    if(!found) {
+                        othis.comments.push(evt.value);
+                        othis.appendComment(evt.value);
+                        if(othis.isScrollAtBottom) {
+                            othis.scrollDown();
+                        }
                     }
                 }
             });
 
             $(window).on('hashchange', function() {
-                channel.unbind('project-' + currentProject.project.projectId + '.onBIM.comment.' + parseInt(projectBimFileId));
+                channel.unbind('project-' + currentProject.project.projectId + ':onBIM-' + parseInt(projectBimFileId));
             });
         }
 
