@@ -133,6 +133,10 @@ define(function(require) {
               newEl.uploaded = true;
               return newEl;
             });
+          })
+          .error(function(err) {
+            console.log(err);
+            $scope.attachments = [];
           });
       }
 
@@ -307,8 +311,8 @@ define(function(require) {
       $scope.addResponse = function(form) {
         $scope.isAddingResponse = true;
         $scope.onSubmit = true;
-        onFileFactory.addResponse($scope.newResponse.response, $scope.document.documentId).success(
-          function(resp) {
+        onFileFactory.addResponse($scope.newResponse.response, $scope.document.documentId)
+          .success(function(resp) {
             //$state.go('app.onFile');
             var promises = [];
             _.each($scope.newResponse.attachments, function(file) {
@@ -331,8 +335,8 @@ define(function(require) {
             }, function(errors) {
               done(form);
             });
-
-          }, function(err) {
+          })
+          .error(function(err) {
             console.log(err);
             form.$setPristine();
             $scope.isAddingResponse = false;
@@ -341,12 +345,15 @@ define(function(require) {
       };
 
       $scope.getResponse = function() {
-        onFileFactory.getResponse($scope.document.documentId).success(
-          function(resp) {
+        onFileFactory.getResponse($scope.document.documentId)
+          .success(function(resp) {
             $scope.responses = resp.documentResponses;
             console.log($scope.responses);
-          }
-        );
+          })
+          .error(function(err) {
+            console.log(err);
+            $scope.responses = [];
+          });
       };
 
       $scope.getCompanyOfUser = function() {
@@ -395,13 +402,15 @@ define(function(require) {
               "documentId": $scope.documentId,
               "filePath": resp.url,
               "addedBy": userContext.authentication().userData.userId
-            }).success(
-              function(resp) {
+            })
+              .success(function(resp) {
                 deferred.resolve(resp);
-              }).error(function(error) {
+              })
+              .error(function(error) {
                 deferred.reject(error);
               });
-          }).error(function(error) {
+          })
+          .error(function(error) {
             deferred.reject(error);
           });
         return deferred.promise;
@@ -421,7 +430,7 @@ define(function(require) {
         data.document.keyValues.receiverName = $scope.receiverName;
         data.document.responseData = $scope.responses;
         data.document.attentionName = $scope.attentionName;
-        data.document.keyValues.attention = _.map(data.document.keyValues.attention, function(att){
+        data.document.keyValues.attention = _.map(data.document.keyValues.attention, function(att) {
           return _.find(memberList, {userId: att});
         });
         data.document.keyValues.receiver = _.find(memberList, {userId: data.document.keyValues.receiverId});
