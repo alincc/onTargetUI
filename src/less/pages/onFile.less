@@ -1,7 +1,7 @@
 .on-file-page {
   position: relative;
   .panel-heading {
-//    padding: 0px;
+    //    padding: 0px;
     .nav {
       margin: 0px;
     }
@@ -52,15 +52,19 @@
   }
   .view-document-section {
     .tab-content {
-      padding: 0px;
+      padding: 0;
       .table {
-        margin-bottom: 0px;
+        margin-bottom: 0;
         th {
-          border-top: 0px;
+          border-top: 0;
           font-weight: normal;
           background-color: #f4f4f4;
           color: #7a7a7a;
           padding: 8px 15px;
+          text-align: left;
+          &.date {
+            width: 180px;
+          }
         }
         tr:hover {
           //background-color: #e1fcff !important;
@@ -109,11 +113,15 @@
     right: 15px;
     top: 15px;
   }
-  
+
+  .label-field{
+    color: #3E3E3E;
+    font-weight: 600;
+  }
+
   .text-field {
-    border: solid 1px #cfdadd;
     border-radius: 2px;
-    padding: 5px 10px;
+    padding: 0 15px;
   }
   .comment-section {
     .panel-body {
@@ -171,14 +179,14 @@
         margin-top: 5px;
         font-size: 16px;
         color: #8E939B;
-        .update-button{
+        .update-button {
           padding: 3px;
           &:hover {
             color: green;
             cursor: pointer;
           }
         }
-        .danger-button{
+        .danger-button {
           padding: 3px;
           &:hover {
             color: red;

@@ -8,6 +8,7 @@ define(function(require) {
         keyValues: {}
       };
       $scope.attachments = [];
+      $scope.isExporting = false;
 
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
@@ -259,7 +260,6 @@ define(function(require) {
           return contact.userId === $scope.document.keyValues.receiverId;
         });
         $scope.document.keyValues.company_name = userCompany ? userCompany.companyName : '';
-        $scope.document.keyValues.company_id = userCompany ? userCompany.companyId : '';
       };
 
       var uploadModalInstance;
@@ -290,16 +290,21 @@ define(function(require) {
           document: angular.copy($scope.document),
           projectAssetFolderName: $rootScope.currentProjectInfo.projectAssetFolderName
         };
+        $scope.isExporting = true;
         data.document.keyValues.receiverName = $scope.receiverName;
+        data.document.keyValues.receiver = _.find($scope.contactLists, {userId: data.document.keyValues.receiverId});
+        data.document.creator = _.find($scope.contactLists, {userId: data.document.createdBy});
         onFileFactory.exportPdf(data)
           .success(function(resp) {
             if(download) {
               $window.open($filter('fileDownloadPathHash')(resp.filePath));
             }
             deferred.resolve();
+            $scope.isExporting = false;
           })
           .error(function(err) {
             deferred.resolve();
+            $scope.isExporting = false;
           });
         return deferred.promise;
       };

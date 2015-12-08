@@ -34,7 +34,6 @@
     "commit": "565ccee902674778d8dd2fa514ffeb388d8f0a9c"
   },
   "_source": "git://github.com/brunob/leaflet.fullscreen.git",
-  "_target": "~1.3.0",
-  "_originalSource": "leaflet.fullscreen",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "leaflet.fullscreen"
 }

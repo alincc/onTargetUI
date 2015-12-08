@@ -46,27 +46,10 @@ define(function(require) {
       $scope.projects = [];
       $scope.arrangedProjects = [];
 
-      /*$scope.getUserProject = function() {
-       $scope.isLoading = true;
-       projectFactory.getUserProject({
-       userId: userContext.authentication().userData.userId
-       }).then(
-       function(resp) {
-       var itemPerRow = $scope.viewMode === 'grid' ? 6 : 2;
-       $scope.projects = $scope.reMapData(resp.data.mainProject.projects);
-       $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
-       $scope.isLoading = false;
-
-       // save projects to local storage
-       projectContext.setProject(null, resp.data.projects);
-       },
-       function() {
-       $scope.isLoading = false;
-       }
-       );
-       };*/
-
       $scope.getUserProjectList = function() {
+        // Clear project context cache
+        projectContext.clearInfo();
+
         $scope.isLoading = true;
         projectFactory.getUserProjectList({
           userId: userContext.authentication().userData.userId
@@ -86,46 +69,7 @@ define(function(require) {
         );
       };
 
-      var createProjectModalInstance, editProjectModalInstance, deleteProjectModalInstance;
-
-      /*$scope.openCreateProjectModal = function() {
-       createProjectModalInstance = $modal.open({
-       templateUrl: 'project/templates/create.html',
-       controller: 'ProjectCreateController',
-       size: 'lg'
-       });
-
-       createProjectModalInstance.result.then(function() {
-       $scope.getUserProjectList();
-       }, function() {
-
-       });
-       };
-
-       $scope.editProjectModal = function(project) {
-       // prepare company list
-       companyFactory.search().success(function(resp) {
-       editProjectModalInstance = $modal.open({
-       templateUrl: 'project/templates/edit.html',
-       controller: 'ProjectEditController',
-       size: 'lg',
-       resolve: {
-       project: function() {
-       return project;
-       },
-       companies: function() {
-       return resp.companyList;
-       }
-       }
-       });
-
-       editProjectModalInstance.result.then(function() {
-       $scope.getUserProjectList();
-       }, function() {
-
-       });
-       });
-       };*/
+      var deleteProjectModalInstance;
 
       //edit project
       $scope.editProject = function(project) {
@@ -156,8 +100,9 @@ define(function(require) {
         if(!permissionFactory.checkFeaturePermission('VIEW_DASHBOARD')) {
           return;
         }
-        console.log(pj);
+        // Set and cache project context
         projectContext.setProject(pj);
+
         // get project details
         projectFactory.getProjectById(pj.projectId)
           .success(function(resp) {

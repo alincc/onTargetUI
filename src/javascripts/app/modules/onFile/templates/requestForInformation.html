@@ -4,7 +4,7 @@
     <tab heading="Change Order" ng-click="openAction(actions.changeOrder)">
     </tab>
     <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)" active="true">
-        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView||onApprove">Export PDF
+        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF
         </button>
         <div class="rfi-section">
             <div class="row">
@@ -16,7 +16,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Receiver's Name</label>
+                                            <label class="label-field">Receiver's Name</label>
 
                                             <p class="text-field" ng-if="onView||onApprove"
                                                ng-bind="::receiverName"></p>
@@ -34,7 +34,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Company Name</label>
+                                            <label class="label-field">Company Name</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.company_name}}</p>
@@ -52,9 +52,9 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Attention</label>
+                                            <label class="label-field">Attention</label>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="(onView || onApprove) && attentionPersons.length">
                                                 <span ng-repeat="p in attentionPersons">
                                                     <span ng-bind="p.contact.firstName+' '+p.contact.lastName"></span><span
                                                         ng-if="!$last">,&nbsp;</span>
@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>RFI#</label>
+                                            <label class="label-field">RFI#</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.RFI}}</p>
@@ -97,21 +97,21 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Subject</label>
-                                            <span class="pull-right">(Optional)</span>
+                                            <label class="label-field">Subject</label>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
 
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <p class="text-field" ng-if="(onView || onApprove) && document.keyValues.subject.length">
                                                 {{document.keyValues.subject}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Subject"
                                                    ng-model="document.keyValues.subject" name="subject"
-                                                   ng-if="onEdit || onAddNew"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Priority</label>
+                                            <label class="label-field">Priority</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.priority}}</p>
@@ -129,7 +129,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label>Due Date</label>
+                                            <label class="label-field">Due Date</label>
 
                                             <p class="text-field" ng-if="onView||onApprove">{{document.dueDate|date:
                                                 app.dateFormat}}</p>
@@ -158,29 +158,27 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Questions/Concerns</label>
-                                            <span class="pull-right">(Optional)</span>
-
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <label class="label-field">Questions/Concerns</label>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
+                                            <p class="text-field" ng-if="(onView || onApprove) && document.keyValues.question_or_concern.length">
                                                 {{document.keyValues.question_or_concern}}</p>
                                     <textarea type="text" class="form-control no-resize"
                                               placeholder="Enter Questions/Concerns"
                                               ng-model="document.keyValues.question_or_concern"
-                                              name="question_or_concern" ng-if="onEdit || onAddNew"/>
+                                              name="question_or_concern" ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label>Suggestion</label>
-                                            <span class="pull-right">(Optional)</span>
-
-                                            <p class="text-field" ng-if="onView||onApprove">
+                                            <label class="label-field">Suggestion</label>
+                                            <span class="pull-right" ng-if="!onView && !onApprove">(Optional)</span>
+                                            <p class="text-field" ng-if="(onView || onApprove) && document.keyValues.suggestion.length">
                                                 {{document.keyValues.suggestion}}</p>
                                     <textarea type="text" class="form-control no-resize" placeholder="Enter Suggestion"
                                               ng-model="document.keyValues.suggestion" name="suggestion"
-                                              ng-if="onEdit || onAddNew"/>
+                                              ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
@@ -231,7 +229,7 @@
                     </form>
 
                     <div class="panel panel-default comment-section" style="clear: both"
-                         ng-if="(onEdit || onApprove) && !onAddNew">
+                         ng-if="(onEdit || onApprove || onView) && !onAddNew">
                         <div class="panel-heading"><b>Responses</b></div>
                         <div class="panel-body">
                             <div class="pull-none" style="clear:both;">
@@ -254,10 +252,10 @@
                                                  ng-bind="response.responsedDate | date:app.dateFormat"></div>
                                             <small class="text-muted"
                                                    ng-bind-html="response.response | escapeHtml | newLines"></small>
-                                            <div class="pull-right reponse-group-button control-group-button" ng-if="response.responsedBy.contact.user.userId==currentUserId">
-                                                <span class="default-button" ng-click="openUpdateResponse(response)"><i class="fa fa-pencil-square-o"></i></span>
-                                                <span class="default-button" ng-click="openDeleteModal(response)"><i class="fa fa-trash-o"></i></span>
-                                            </div>
+                                            <!--<div class="pull-right reponse-group-button control-group-button" ng-if="response.responsedBy.contact.user.userId==currentUserId">-->
+                                                <!--<span class="default-button" ng-click="openUpdateResponse(response)"><i class="fa fa-pencil-square-o"></i></span>-->
+                                                <!--<span class="default-button" ng-click="openDeleteModal(response)"><i class="fa fa-trash-o"></i></span>-->
+                                            <!--</div>-->
                                         </div>
                                         <div ng-show="response.onEdit" class="clear">
                                             <div>
@@ -291,18 +289,18 @@
                                                     ng-disabled="_response_form.$invalid || _response_form.$submitted">
                                                 Submit
                                             </button>
-                                            <button class="btn btn-primary" ng-click="openUploadModal('response')">
+                                            <button class="btn btn-primary" ng-click="openUploadModal('response')" type="button">
                                                 Choose
                                                 File
                                             </button>
                                             <button class="btn btn-danger pull-right" type="button"
-                                                    ng-click="changeStatus('REJECTED')" ng-disabled="onSubmit"
+                                                    ng-click="changeStatus('REJECTED')" ng-disabled="onSubmit || isAddingResponse"
                                                     loading-button="onRejecting"
                                                     ng-if="(onEdit || onApprove) && document.keyValues.receiverId === currentUserInfo.userId && haveRejectPermission">
                                                 Reject
                                             </button>
                                             <button class="btn btn-info pull-right m-r-xs" type="button"
-                                                    ng-click="changeStatus('APPROVED')" ng-disabled="onSubmit"
+                                                    ng-click="changeStatus('APPROVED')" ng-disabled="onSubmit || isAddingResponse"
                                                     loading-button="onApproving"
                                                     ng-if="(onEdit || onApprove) && document.keyValues.receiverId === currentUserInfo.userId && haveApprovePermission">
                                                 Approve

@@ -78,6 +78,10 @@ function getDocumentTemplateName(docTemplateId) {
   return docTemplates[docTemplateId];
 }
 
+function channel(projectId, userId) {
+  return 'private-project-' + projectId + ':user-' + userId;
+}
+
 // Task assign
 app.post('/ontargetrs/services/task/assignUserToTask', function(req, res) {
   var data = req.body,
@@ -122,7 +126,7 @@ app.post('/ontargetrs/services/task/assignUserToTask', function(req, res) {
             taskAssignee.push(el);
             var d = _.uniq(taskAssignee);
             _.each(d, function(el2) {
-              pusher.trigger('onTarget', 'private-user-' + el2, {
+              pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el2), {
                 "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has assigned ' + task.title + ' to ' + user2.contact.firstName + ' ' + user2.contact.lastName
               });
             });
@@ -166,7 +170,7 @@ app.post('/ontargetrs/services/task/addTask', function(req, res) {
         if(beforeUpdateTask.status !== task.status) {
           var taskNewStatus = _.find(taskStatuses, {id: task.status});
           _.each(assignees, function(el) {
-            pusher.trigger('onTarget', 'private-user-' + el.userId, {
+            pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el.userId), {
               "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has changed the status of task to ' + (taskNewStatus ? taskNewStatus.name : task.status)
             });
           });
@@ -174,7 +178,7 @@ app.post('/ontargetrs/services/task/addTask', function(req, res) {
 
         // Task edit notification
         _.each(assignees, function(el) {
-          pusher.trigger('onTarget', 'private-user-' + el.userId, {
+          pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el.userId), {
             "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has made an updated ' + task.title
           });
         });
@@ -186,7 +190,7 @@ app.post('/ontargetrs/services/task/addTask', function(req, res) {
     getUserDetails(baseRequest.loggedInUserId, function(user1) {
       _.each(task.assignees, function(el) {
         getUserDetails(el, function(user2) {
-          pusher.trigger('onTarget', 'private-user-' + el, {
+          pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el), {
             "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has assigned ' + task.title + ' to ' + user2.contact.firstName + ' ' + user2.contact.lastName
           });
         });
@@ -209,19 +213,22 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
       },
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
-          getUserDetails(baseRequest.loggedInUserId, function(user) {
-            pusher.trigger('onTarget', 'task.comment.' + req.body.taskId, {
-              "name": "onTimeAddComment",
-              "value": {
-                "comment": data.comment,
-                "commentedBy": user.userId,
-                "commentedDate": data.commentedDate,
-                "taskCommentId": data.taskCommentId,
-                "taskId": data.taskId,
-                "commenterContact": user.contact
-              }
-            });
+          //getUserDetails(baseRequest.loggedInUserId, function(user) {
+          //
+          //});
+
+          pusher.trigger('onTarget', 'project-' + baseRequest.loggedInUserProjectId + ':onTime:task-' + req.body.taskId, {
+            "name": "onTimeAddComment",
+            "value": {
+              "comment": response.body.taskComment.comment,
+              "commentedBy": response.body.taskComment.commentedBy,
+              "commentedDate": data.commentedDate,
+              "taskCommentId": response.body.taskComment.taskCommentId,
+              "taskId": response.body.taskComment.taskId,
+              "commenterContact": response.body.taskComment.commenterContact
+            }
           });
+
           res.send(response.body);
         } else {
           res.send(error);
@@ -235,7 +242,7 @@ app.post('/ontargetrs/services/task/addComment', function(req, res) {
     getUserDetails(baseRequest.loggedInUserId, function(user1) {
       var assignees = task.assignee;
       _.each(assignees, function(el) {
-        pusher.trigger('onTarget', 'private-user-' + el.userId, {
+        pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el.userId), {
           "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has commented on ' + task.title
         });
       });
@@ -270,7 +277,7 @@ app.post('/ontargetrs/services/task/saveTaskFile', function(req, res) {
     getUserDetails(baseRequest.loggedInUserId, function(user1) {
       var assignees = task.assignee;
       _.each(assignees, function(el) {
-        pusher.trigger('onTarget', 'private-user-' + el.userId, {
+        pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el.userId), {
           "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has made an attachment on ' + task.title
         });
       });
@@ -318,7 +325,7 @@ app.post('/ontargetrs/services/upload/saveUploadedDocsInfo', function(req, res) 
   getUserDetails(baseRequest.loggedInUserId, function(user1) {
     getProjectMembers(baseRequest.loggedInUserProjectId, function(pmData) {
       _.each(pmData.projectMemberList, function(el) {
-        pusher.trigger('onTarget', 'private-user-' + el.userId, {
+        pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el.userId), {
           "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has uploaded ' + data.name.substring(data.name.lastIndexOf('/') + 1)
         });
       })
@@ -341,17 +348,12 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
       function(error, response, body) {
         if(!error && response.statusCode == 200) {
           getUserDetails(baseRequest.loggedInUserId, function(user) {
-            pusher.trigger('onTarget', 'document.comment.' + data.projectFileId, {
+            pusher.trigger('onTarget', 'project-' + baseRequest.loggedInUserProjectId + ':onSite-' + data.projectFileId, {
               "name": "onSiteAddComment",
-              "value": {
-                "comment": data.comment,
-                "commentedBy": user.userId,
-                "commentedDate": data.commentedDate,
-                "commenterContact": user.contact
-              }
+              "value": response.body.comment
             });
           });
-          res.send(response.body.taskAttachments);
+          res.send(response.body);
         } else {
           res.send(error);
         }
@@ -406,7 +408,7 @@ app.post('/ontargetrs/services/upload/addComment', function(req, res) {
       getUserDetails(baseRequest.loggedInUserId, function(user1) {
         var d = _.uniq(userList);
         _.each(d, function(el) {
-          pusher.trigger('onTarget', 'private-user-' + el, {
+          pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el), {
             "message": user1.contact.firstName + ' ' + user1.contact.lastName + ' has commented on the ' + data.fileName.substring(data.fileName.lastIndexOf('/') + 1)
           });
         });
@@ -452,10 +454,13 @@ app.put('/ontargetrs/services/document', function(req, res) {
   }
 
   function coNotification(data) {
-    var receiver = data.assignees[0];
+    var receiver = _.filter(data.keyValues, function(el) {
+      return el.key === 'receiverId' || el.key === 'username';
+    })[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.value));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.value), {
           "message": "Change Order has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -463,21 +468,41 @@ app.put('/ontargetrs/services/document', function(req, res) {
   }
 
   function rfiNotification(data) {
-    var receiver = data.assignees[0];
-    if(receiver) {
-      getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+    var attention = [], receiverId;
+    _.each(data.keyValues, function(el) {
+      if(/^attention\d+/.test(el.key)) {
+        attention.push(el.value);
+      } else if(el.key === 'receiverId' || el.key === 'username') {
+        receiverId = el.value;
+      }
+    });
+
+    getUserDetails(data.submittedBy, function(user) {
+      if(receiverId) {
+        // Send notification to receiver
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiverId));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiverId), {
           "message": "RFI has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
+      }
+      // Send notifications to attention
+      _.each(_.uniq(attention), function(el) {
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, el));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, el), {
+          "message": "RFI has been submitted by " + user.contact.firstName + " " + user.contact.lastName
+        });
       });
-    }
+    });
   }
 
   function poNotification(data) {
-    var receiver = data.assignees[0];
+    var receiver = _.filter(data.keyValues, function(el) {
+      return el.key === 'receiverId' || el.key === 'username';
+    })[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.value));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.value), {
           "message": "PO has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -485,10 +510,13 @@ app.put('/ontargetrs/services/document', function(req, res) {
   }
 
   function trNotification(data) {
-    var receiver = data.assignees[0];
+    var receiver = _.filter(data.keyValues, function(el) {
+      return el.key === 'receiverId' || el.key === 'username';
+    })[0];
     if(receiver) {
       getUserDetails(data.submittedBy, function(user) {
-        pusher.trigger('onTarget', 'private-user-' + receiver.userId, {
+        console.log('Sending notifications: ', channel(data.baseRequest.loggedInUserProjectId, receiver.value));
+        pusher.trigger('onTarget', channel(data.baseRequest.loggedInUserProjectId, receiver.value), {
           "message": "Transmittal has been submitted by " + user.contact.firstName + " " + user.contact.lastName + " for your review"
         });
       });
@@ -535,39 +563,69 @@ app.post('/ontargetrs/services/document/status', function(req, res) {
   }
 
   function pushNotification(data) {
-    console.log(data);
     getDocument(data.documentId, function(document) {
       getUserDetails(baseRequest.loggedInUserId, function(user) {
-        var actionText = data.newStatus === 'APPROVE' ? 'Approved' : 'Rejected';
+        var actionText = data.newStatus === 'APPROVED' ? 'Approved' : 'Rejected';
+        var parsedKeyValues = {}, attention = [];
+
+        _.each(document.keyValues, function(el) {
+          if(/^attention\d+/.test(el.key)) {
+            attention.push(el.value);
+          }
+          else {
+            var value = el.value;
+            if(el.key === 'date_created' || el.key === 'date' || el.key === 'received_by_date' || el.key === 'sent_by_date' || el.key === 'due_by_date') {
+              value = new Date(el.value);
+            }
+            parsedKeyValues[el.key] = value;
+          }
+        });
+
+        parsedKeyValues['attention'] = attention;
+
+        if(parsedKeyValues.receiverId || parsedKeyValues.username) {
+          // Receiver
+          attention.push(parsedKeyValues.receiverId ? parsedKeyValues.receiverId : parsedKeyValues.username);
+        }
+
+        // Creator
+        attention.push(document.createdBy);
 
         switch(document.documentTemplate.documentTemplateId) {
-          case 1:
-            pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
-              "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the PO"
+          case 1: // PO
+            // Send notifications
+            _.each(attention, function(el) {
+              console.log('Sending notifications: ', channel(baseRequest.loggedInUserProjectId, el));
+              pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el), {
+                "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the PO"
+              });
             });
             break;
-          case 2:
-            pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
-              "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the Change Order"
+          case 2: // CO
+            // Send notifications
+            _.each(attention, function(el) {
+              console.log('Sending notifications: ', channel(baseRequest.loggedInUserProjectId, el));
+              pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el), {
+                "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the Change Order"
+              });
             });
             break;
-          case 3:
-            //pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
-            //  "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the RFI"
-            //});
-            //var userAttentions = [];
-            //for(var obj in document.keyValues){
-            //  if(document.keyValues.hasOwnProperty(obj) && /^attention\d+/.test(obj)){
-            //    userAttentions.push(document.keyValues[obj]);
-            //    pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
-            //      "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the RFI"
-            //    });
-            //  }
-            //}
+          case 3: // RFI
+            // Send notifications
+            _.each(attention, function(el) {
+              console.log('Sending notifications: ', channel(baseRequest.loggedInUserProjectId, el));
+              pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el), {
+                "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the RFI"
+              });
+            });
             break;
-          case 4:
-            pusher.trigger('onTarget', 'private-user-' + document.createdBy, {
-              "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the Transmittal"
+          case 4: // TR
+            // Send notifications
+            _.each(attention, function(el) {
+              console.log('Sending notifications: ', channel(baseRequest.loggedInUserProjectId, el));
+              pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el), {
+                "message": user.contact.firstName + " " + user.contact.lastName + " has " + actionText + " the Transmittal"
+              });
             });
             break;
         }
@@ -633,7 +691,7 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
       var parsedKeyValues = {}, attention = [];
       _.each(document.keyValues, function(el) {
         if(/^attention\d+/.test(el.key)) {
-          attention.push(el.key);
+          attention.push(el.value);
         } else {
           var value = el.value;
           if(el.key === 'date_created' || el.key === 'date' || el.key === 'received_by_date' || el.key === 'sent_by_date' || el.key === 'due_by_date') {
@@ -644,16 +702,18 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
       });
       parsedKeyValues['attention'] = attention;
 
+      if(parsedKeyValues.receiverId || parsedKeyValues.username) {
+        // Receiver
+        attention.push(parsedKeyValues.receiverId ? parsedKeyValues.receiverId : parsedKeyValues.username);
+      }
+
+      // Creator
+      attention.push(document.createdBy);
+
       getUserDetails(baseRequest.loggedInUserId, function(user) {
-        if(parsedKeyValues.receiverId) {
-          attention.push(parsedKeyValues.receiverId);
-        }
-        else if(parsedKeyValues.username) {
-          attention.push(parsedKeyValues.username);
-        }
         var d = _.uniq(attention);
         _.each(d, function(el) {
-          pusher.trigger('onTarget', 'private-user-' + el, {
+          pusher.trigger('onTarget', channel(baseRequest.loggedInUserProjectId, el), {
             "message": user.contact.firstName + " " + user.contact.lastName + " has replied to the RFI"
           });
         });
@@ -664,23 +724,28 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
   addResponse(data);
 });
 
-app.post('/ontargetrs/services/bim/comment/save', function(req, res, next) {
+// Add bim comment
+app.post('/ontargetrs/services/bim/comment/save', function(req, res) {
   var data = req.body,
     baseRequest = req.body.baseRequest;
 
-  //getUserDetails(baseRequest.loggedInUserId, function(user) {
-  pusher.trigger('onTarget', 'onBIM.comment.' + data.projectBIMFileId, {
-    "name": "onBIMAddComment",
-    "value": {
-      "comment": data.comment,
-      "commentedDate": data.commentedDate,
-      "commenterContact": data.commenterContact,
-      "projectBIMFileID": data.projectBIMFileId
-    }
-  });
-  //});
-
-  next();
+  request({
+      method: 'POST',
+      body: req.body,
+      json: true,
+      url: API_SERVER + '/bim/comment/save'
+    },
+    function(error, response, body) {
+      if(!error && response.statusCode == 200) {
+        res.send(response.body);
+        pusher.trigger('onTarget', 'project-' + baseRequest.loggedInUserProjectId + ':onBIM-' + data.projectBIMFileId, {
+          "name": "onBIMAddComment",
+          "value": response.body.projectBIMFileComment
+        });
+      } else {
+        res.send(error);
+      }
+    });
 });
 
 // onTarget services

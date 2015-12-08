@@ -150,26 +150,6 @@ define(function(require) {
       }
     };
   }]);
-  module.directive('customScroll', [function() {
-    return {
-      restrict: 'A',
-      link: function(scope, elem, attrs) {
-        elem.mCustomScrollbar({
-          axis: "y", // horizontal scrollbar
-          scrollInertia: 200,
-          scrollbarPosition: "outside"
-        });
-
-        scope.$on('content.reload', function() {
-          elem.mCustomScrollbar("update");
-        });
-
-        scope.$on('$destroy', function() {
-          elem.mCustomScrollbar("destroy");
-        });
-      }
-    };
-  }]);
   module.directive('setFixedHeight', [function() {
     return {
       restrict: 'A',

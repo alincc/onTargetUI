@@ -1,3 +1,6 @@
+var config = require('./../config');
+var CryptoJS = require("crypto-js");
+
 module.exports = {
   makeId: function(l) {
     var text = "";
@@ -16,5 +19,8 @@ module.exports = {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
+  },
+  hash: function(str){
+    return CryptoJS.AES.encrypt(str, config.downloadPathHashKey, {}).toString();
   }
 };

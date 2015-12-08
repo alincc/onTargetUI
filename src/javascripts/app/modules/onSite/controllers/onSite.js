@@ -184,49 +184,6 @@ define(function(require) {
         $scope.selectedDoc = null;
       };
 
-      // Comments
-      $scope.comments = [];
-      $scope.isLoadingComment = false;
-      $scope.addCommentModel = {
-        comment: ''
-      };
-
-      $scope.loadComment = function() {
-        $scope.isLoadingComment = true;
-        onSiteFactory.getFileComment($scope.selectedDoc.fileId)
-          .success(function(resp) {
-            $scope.comments = resp.comments;
-            // update scroll
-            $scope.$broadcast('content.reload');
-            $scope.isLoadingComment = false;
-          })
-          .error(function(err) {
-            console.log(err);
-            $scope.isLoadingComment = false;
-          });
-      };
-
-      $scope.addComment = function(model, form) {
-        if($scope.selectedDoc) {
-          onSiteFactory.addComment($scope.selectedDoc.fileId, model.comment, $scope.selectedDoc.name, $scope.selectedDoc.createdBy)
-            .success(function(resp) {
-              $scope.comments.push({
-                "comment": model.comment,
-                "commentedBy": $rootScope.currentUserInfo.userId,
-                "commentedDate": new Date().toISOString(),
-                "commenterContact": $rootScope.currentUserInfo.contact,
-                "projectFileCommentId": 0
-              });
-              $scope.addCommentModel.comment = '';
-              form.$setPristine();
-              $scope.$broadcast('autosize:update');
-            })
-            .error(function(err) {
-              console.log(err);
-            });
-        }
-      };
-
       // Download
       $scope.download = function(doc) {
         console.log(doc);

@@ -45,10 +45,6 @@ define(function(require) {
       $scope.taskSelected = null;
 
       $scope.actions = {
-        infoTask: {
-          name: "infoTask",
-          text: "Information"
-        },
         addTask: {
           name: "addTask",
           text: "Add Task"
@@ -65,7 +61,7 @@ define(function(require) {
 
       $scope.isLoadingTasks = false;
 
-      $scope.action = $scope.actions.infoTask;
+      $scope.action = $scope.actions.logistic;
 
       $scope.addTask = function() {
         taskFactory.getContacts($rootScope.currentProjectInfo.projectId).then(function(resp) {
@@ -87,7 +83,8 @@ define(function(require) {
 
       $scope.tasks = [];
       var taskDetailsDefer;
-      $scope.selectTask = function(task) {
+      $scope.selectTask = function(task, tab) {
+        tab = tab || 'info';
         if(taskDetailsDefer) {
           taskDetailsDefer.resolve();
         }
@@ -95,16 +92,19 @@ define(function(require) {
         taskFactory.getTaskById(task.projectTaskId, taskDetailsDefer)
           .success(function(resp) {
             $scope.taskSelected = $rootScope.currentTask = resp.task;
-            if($rootScope.backtoAttachments)
-            {
-              $scope.action = $scope.actions.logistic;
-              notifications.taskSelection({task: $scope.taskSelected, action: 'logistic'});
-            } else {
-              $scope.action = $scope.actions.infoTask;
-              notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
-            }
+            //if($rootScope.backtoAttachments) {
+            //  $scope.action = $scope.actions.logistic;
+            //  notifications.taskSelection({task: $scope.taskSelected, action: 'logistic'});
+            //} else {
+            //  $scope.action = $scope.actions.infoTask;
+            //  notifications.taskSelection({task: $scope.taskSelected, action: 'info'});
+            //}
+
+            $scope.action = $scope.actions.logistic;
+            notifications.taskSelection({task: $scope.taskSelected, action: 'logistic', tab: tab});
+
             // update route
-            $location.search('taskId', $scope.taskSelected.projectTaskId);
+            $location.search('taskId', $scope.taskSelected.projectTaskId).search('tab', tab);
           });
       };
 
@@ -172,7 +172,7 @@ define(function(require) {
         if($stateParams.taskId) {
           var foundTask = _.find($scope.tasks, {projectTaskId: parseInt($stateParams.taskId)});
           if(foundTask) {
-            $scope.selectTask(foundTask);
+            $scope.selectTask(foundTask, $stateParams.tab);
           } else {
             // Update route
             $location.search('taskId', null);
@@ -234,10 +234,7 @@ define(function(require) {
       });
 
       notifications.onTaskSelection($scope, function(args) {
-        if(args.action === 'info') {
-          $scope.action = $scope.actions.infoTask;
-        }
-        else if(args.action === 'add') {
+        if(args.action === 'add') {
           $scope.action = $scope.actions.addTask;
         }
         else if(args.action === 'edit') {
@@ -248,11 +245,11 @@ define(function(require) {
         }
       });
 
-      var setTaskListHeight = function (){
+      var setTaskListHeight = function() {
         var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
         //var activityFootHeight = document.getElementById('activity-panel-footer').offsetHeight;
 
-        document.getElementById('task-list').setAttribute("style","height:" + (activityHeadingHeight + 516)  + "px");
+        document.getElementById('task-list').setAttribute("style", "height:" + (activityHeadingHeight + 516) + "px");
         //document.getElementById('activity-panel-footer').setAttribute("style","height:" + (activityFootHeight)  + "px");
       };
 

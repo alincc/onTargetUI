@@ -11,6 +11,9 @@ define(function(require) {
     uploadTemplate = require('text!./templates/upload.html'),
     deleteReponseTemplate = require('text!./templates/deleteResponse.html'),
     attachmentListTemplate = require('text!./templates/attachmentList.html'),
+    allDueDateFilterTpl = require('text!./templates/allDueDateFilter.html'),
+    submittalDueDateFilterTpl = require('text!./templates/submittalDueDateFilter.html'),
+    approvalDueDateFilterTpl = require('text!./templates/approvalDueDateFilter.html'),
     attachmentListDirective = require('./directives/attachmentList'),
     controller = require('./controllers/onFileController'),
     purchaseOrderController = require('./controllers/purchaseOrderController'),
@@ -31,20 +34,40 @@ define(function(require) {
     uploadBoxModule = require('app/common/directives/uploadBox/uploadBox'),
     userContext = require('app/common/context/user'),
     documentServiceModule = require('app/common/services/document'),
-    angularUiSelect = require('angularUiSelect');
-  var module = angular.module('app.onFile', ['ui.router', 'app.config', 'common.context.project', 'common.services.permission', 'common.services.notifications', 'common.services.task', 'common.services.onFile', 'common.services.company', 'common.services.onContact', 'common.services.file', 'common.services.document', 'ui.select', 'common.directives.uploadBox']);
+    angularUiSelect = require('angularUiSelect'),
+    ngTable = require('ngTable');
+  var module = angular.module('app.onFile', [
+    'ui.router',
+    'app.config',
+    'common.context.project',
+    'common.services.permission',
+    'common.services.notifications',
+    'common.services.task',
+    'common.services.onFile',
+    'common.services.company',
+    'common.services.onContact',
+    'common.services.file',
+    'common.services.document',
+    'ui.select',
+    'common.directives.uploadBox',
+    'ngTable'
+  ]);
 
-  module.run(['$templateCache', function($templateCache) {
-    $templateCache.put('onFile/templates/onFile.html', template);
-    $templateCache.put('purchaseOrder/templates/purchaseOrder.html', purchaseOrderTemplate);
-    $templateCache.put('changeOrder/templates/changeOrder.html', changeOrderTemplate);
-    $templateCache.put('viewDocument/templates/viewDocument.html', viewDocumentTemplate);
-    $templateCache.put('requestForInformation/templates/requestForInformation.html', requestForInformationTemplate);
-    $templateCache.put('transmittal/templates/transmittal.html', transmittalTemplate);
-    $templateCache.put('onFile/templates/upload.html', uploadTemplate);
-    $templateCache.put('onFile/templates/attachmentList.html', attachmentListTemplate);
-    $templateCache.put('onFile/templates/deleteResponse.html', deleteReponseTemplate);
-  }]);
+  module.run([
+    '$templateCache', function($templateCache) {
+      $templateCache.put('onFile/templates/onFile.html', template);
+      $templateCache.put('purchaseOrder/templates/purchaseOrder.html', purchaseOrderTemplate);
+      $templateCache.put('changeOrder/templates/changeOrder.html', changeOrderTemplate);
+      $templateCache.put('viewDocument/templates/viewDocument.html', viewDocumentTemplate);
+      $templateCache.put('requestForInformation/templates/requestForInformation.html', requestForInformationTemplate);
+      $templateCache.put('transmittal/templates/transmittal.html', transmittalTemplate);
+      $templateCache.put('onFile/templates/upload.html', uploadTemplate);
+      $templateCache.put('onFile/templates/attachmentList.html', attachmentListTemplate);
+      $templateCache.put('onFile/templates/deleteResponse.html', deleteReponseTemplate);
+      $templateCache.put('onFile/templates/allDueDateFilter.html', allDueDateFilterTpl);
+      $templateCache.put('onFile/templates/submittalDueDateFilter.html', submittalDueDateFilterTpl);
+      $templateCache.put('onFile/templates/approvalDueDateFilter.html', approvalDueDateFilterTpl);
+    }]);
 
   module.controller('OnFileController', controller);
   module.controller('PurchaseOrderController', purchaseOrderController);
@@ -57,8 +80,8 @@ define(function(require) {
 
   module.directive('attachmentList', attachmentListDirective);
 
-  module.config(
-    ['$stateProvider',
+  module.config([
+      '$stateProvider',
       function($stateProvider) {
         $stateProvider
           .state('app.onFile', {
@@ -67,16 +90,27 @@ define(function(require) {
             controller: 'OnFileController',
             reloadOnSearch: false,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory',
-                function($location, projectContext, $q, $state, $window, permissionFactory) {
-                var deferred = $q.defer();
-                if(projectContext.valid() && permissionFactory.checkMenuPermission('ONFILE')) {
-                  deferred.resolve();
-                } else {
-                  $window.location.href = $state.href('app.projectlist');
-                }
-                return deferred.promise;
-              }]
+              projectValid: [
+                '$location',
+                'projectContext',
+                '$q',
+                '$state',
+                '$window',
+                'permissionFactory',
+                function($location,
+                         projectContext,
+                         $q,
+                         $state,
+                         $window,
+                         permissionFactory) {
+                  var deferred = $q.defer();
+                  if(projectContext.valid() && permissionFactory.checkMenuPermission('ONFILE')) {
+                    deferred.resolve();
+                  } else {
+                    $window.location.href = $state.href('app.projectlist');
+                  }
+                  return deferred.promise;
+                }]
             }
           })
           .state('app.onFile.CO', {
@@ -85,66 +119,78 @@ define(function(require) {
             controller: 'ChangeOrderController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams', function($location, $q, $state, $window, onFileFactory, $stateParams) {
-                var deferred = $q.defer();
-                //parse key values
-                function transformKeyValues(keyValues) {
-                  var newKeyValues = {};
-                  for(var i = 0; i < keyValues.length; i++) {
-                    var keyValue = keyValues[i];
-                    var key = keyValue.key;
-                    var value = keyValue.value;
-                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
-                      value = new Date(value);
-                    }
-                    else if(keyValue.key === 'receiverId') {
-                      value = parseInt(value);
-                    }
-                    newKeyValues[key] = value;
-                  }
-                  return newKeyValues;
-                }
-
-                //parse grid key value
-                function transformGridKeyValues(gridKeyValues) {
-                  var newGridKeyValues = [];
-                  for(var i = 0; i < gridKeyValues.length; i++) {
-                    var grid = gridKeyValues[i];
-                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
-                      newGridKeyValues[grid.gridRowIndex] = {};
-                      var key = grid.key;
-                      var value = grid.value;
-                      newGridKeyValues[grid.gridRowIndex][key] = value;
-                    } else {
-                      newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
-                    }
-                  }
-                  return newGridKeyValues;
-                }
-
-                if(!$stateParams.docId) {
-                  deferred.resolve();
-                } else {
-                  onFileFactory.getDocumentById($stateParams.docId).success(
-                    function(resp) {
-                      var document = resp.document;
-                      if(document.documentTemplate.documentTemplateId !== 2) {
-                        $window.location.href = $state.href('app.onFile');
+              document: [
+                '$location',
+                '$q',
+                '$state',
+                '$window',
+                'onFileFactory',
+                '$stateParams',
+                function($location,
+                         $q,
+                         $state,
+                         $window,
+                         onFileFactory,
+                         $stateParams) {
+                  var deferred = $q.defer();
+                  //parse key values
+                  function transformKeyValues(keyValues) {
+                    var newKeyValues = {};
+                    for(var i = 0; i < keyValues.length; i++) {
+                      var keyValue = keyValues[i];
+                      var key = keyValue.key;
+                      var value = keyValue.value;
+                      if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                        value = new Date(value);
                       }
-                      var keyValues = transformKeyValues(document.keyValues);
-                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
-                        document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                      else if(keyValue.key === 'receiverId') {
+                        value = parseInt(value);
                       }
+                      newKeyValues[key] = value;
+                    }
+                    return newKeyValues;
+                  }
 
-                      document.keyValues = keyValues;
-                      deferred.resolve(document);
-                    }).error(function(error) {
-                      $location.search('taskId', null);
-                      deferred.resolve();
-                    });
-                }
-                return deferred.promise;
-              }]
+                  //parse grid key value
+                  function transformGridKeyValues(gridKeyValues) {
+                    var newGridKeyValues = [];
+                    for(var i = 0; i < gridKeyValues.length; i++) {
+                      var grid = gridKeyValues[i];
+                      if(newGridKeyValues[grid.gridRowIndex] === undefined) {
+                        newGridKeyValues[grid.gridRowIndex] = {};
+                        var key = grid.key;
+                        var value = grid.value;
+                        newGridKeyValues[grid.gridRowIndex][key] = value;
+                      } else {
+                        newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
+                      }
+                    }
+                    return newGridKeyValues;
+                  }
+
+                  if(!$stateParams.docId) {
+                    deferred.resolve();
+                  } else {
+                    onFileFactory.getDocumentById($stateParams.docId).success(
+                      function(resp) {
+                        var document = resp.document;
+                        if(document.documentTemplate.documentTemplateId !== 2) {
+                          $window.location.href = $state.href('app.onFile');
+                        }
+                        var keyValues = transformKeyValues(document.keyValues);
+                        if(document.gridKeyValues && document.gridKeyValues.length > 0) {
+                          document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                        }
+
+                        document.keyValues = keyValues;
+                        deferred.resolve(document);
+                      }).error(function(error) {
+                        $location.search('taskId', null);
+                        deferred.resolve();
+                      });
+                  }
+                  return deferred.promise;
+                }]
             }
           })
           .state('app.onFile.PO', {
@@ -153,68 +199,79 @@ define(function(require) {
             controller: 'PurchaseOrderController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams',
-                function($location, $q, $state, $window, onFileFactory, $stateParams) {
-                var deferred = $q.defer();
+              document: [
+                '$location',
+                '$q',
+                '$state',
+                '$window',
+                'onFileFactory',
+                '$stateParams',
+                function($location,
+                         $q,
+                         $state,
+                         $window,
+                         onFileFactory,
+                         $stateParams) {
+                  var deferred = $q.defer();
 
-                //parse key values
-                function transformKeyValues(keyValues) {
-                  var newKeyValues = {};
-                  for(var i = 0; i < keyValues.length; i++) {
-                    var keyValue = keyValues[i];
-                    var key = keyValue.key;
-                    var value = keyValue.value;
-                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
-                      value = new Date(value);
-                    }
-                    else if(keyValue.key === 'receiverId' || keyValue.key === 'ship_to_company') {
-                      value = parseInt(value);
-                    }
-                    newKeyValues[key] = value;
-                  }
-                  return newKeyValues;
-                }
-
-                //parse grid key value
-                function transformGridKeyValues(gridKeyValues) {
-                  var newGridKeyValues = [];
-                  for(var i = 0; i < gridKeyValues.length; i++) {
-                    var grid = gridKeyValues[i];
-                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
-                      newGridKeyValues[grid.gridRowIndex] = {};
-                      var key = grid.key;
-                      var value = grid.value;
-                      newGridKeyValues[grid.gridRowIndex][key] = value;
-                    } else {
-                      newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
-                    }
-                  }
-                  return newGridKeyValues;
-                }
-
-                if(!$stateParams.docId) {
-                  deferred.resolve();
-                } else {
-                  onFileFactory.getDocumentById($stateParams.docId).success(
-                    function(resp) {
-                      var document = resp.document;
-                      if(document.documentTemplate.documentTemplateId !== 1) {
-                        $window.location.href = $state.href('app.onFile');
+                  //parse key values
+                  function transformKeyValues(keyValues) {
+                    var newKeyValues = {};
+                    for(var i = 0; i < keyValues.length; i++) {
+                      var keyValue = keyValues[i];
+                      var key = keyValue.key;
+                      var value = keyValue.value;
+                      if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                        value = new Date(value);
                       }
-                      var keyValues = transformKeyValues(document.keyValues);
-                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
-                        document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                      else if(keyValue.key === 'receiverId' || keyValue.key === 'ship_to_company') {
+                        value = parseInt(value);
                       }
+                      newKeyValues[key] = value;
+                    }
+                    return newKeyValues;
+                  }
 
-                      document.keyValues = keyValues;
-                      deferred.resolve(document);
-                    }).error(function(error) {
-                      $location.search('taskId', null);
-                      deferred.resolve();
-                    });
-                }
-                return deferred.promise;
-              }]
+                  //parse grid key value
+                  function transformGridKeyValues(gridKeyValues) {
+                    var newGridKeyValues = [];
+                    for(var i = 0; i < gridKeyValues.length; i++) {
+                      var grid = gridKeyValues[i];
+                      if(newGridKeyValues[grid.gridRowIndex] === undefined) {
+                        newGridKeyValues[grid.gridRowIndex] = {};
+                        var key = grid.key;
+                        var value = grid.value;
+                        newGridKeyValues[grid.gridRowIndex][key] = value;
+                      } else {
+                        newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
+                      }
+                    }
+                    return newGridKeyValues;
+                  }
+
+                  if(!$stateParams.docId) {
+                    deferred.resolve();
+                  } else {
+                    onFileFactory.getDocumentById($stateParams.docId).success(
+                      function(resp) {
+                        var document = resp.document;
+                        if(document.documentTemplate.documentTemplateId !== 1) {
+                          $window.location.href = $state.href('app.onFile');
+                        }
+                        var keyValues = transformKeyValues(document.keyValues);
+                        if(document.gridKeyValues && document.gridKeyValues.length > 0) {
+                          document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                        }
+
+                        document.keyValues = keyValues;
+                        deferred.resolve(document);
+                      }).error(function(error) {
+                        $location.search('taskId', null);
+                        deferred.resolve();
+                      });
+                  }
+                  return deferred.promise;
+                }]
             }
           })
           .state('app.onFile.RIF', {
@@ -223,80 +280,96 @@ define(function(require) {
             controller: 'RequestForInformationController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams',
-                function($location, $q, $state, $window, onFileFactory, $stateParams) {
-                var deferred = $q.defer();
+              document: [
+                '$location',
+                '$q',
+                '$state',
+                '$window',
+                'onFileFactory',
+                '$stateParams',
+                function($location,
+                         $q,
+                         $state,
+                         $window,
+                         onFileFactory,
+                         $stateParams) {
+                  var deferred = $q.defer();
 
-                //parse key values
-                function transformKeyValues(keyValues) {
-                  var newKeyValues = {};
-                  for(var i = 0; i < keyValues.length; i++) {
-                    var keyValue = keyValues[i];
-                    var key = keyValue.key;
-                    var value = keyValue.value;
-                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
-                      value = new Date(value);
-                    }
-                    else if(keyValue.key === 'receiverId') {
-                      value = parseInt(value);
-                    }
-                    newKeyValues[key] = value;
-                  }
-                  return newKeyValues;
-                }
-
-                //parse grid key value
-                function transformGridKeyValues(gridKeyValues) {
-                  var newGridKeyValues = [];
-                  for(var i = 0; i < gridKeyValues.length; i++) {
-                    var grid = gridKeyValues[i];
-                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
-                      newGridKeyValues[grid.gridRowIndex] = {};
-                      var key = grid.key;
-                      var value = grid.value;
-                      newGridKeyValues[grid.gridRowIndex][key] = value;
-                    } else {
-                      newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
-                    }
-                  }
-                  return newGridKeyValues;
-                }
-
-                if(!$stateParams.docId) {
-                  deferred.resolve();
-                } else {
-                  onFileFactory.getDocumentById($stateParams.docId).success(
-                    function(resp) {
-                      var document = resp.document;
-                      if(document.documentTemplate.documentTemplateId !== 3) {
-                        $window.location.href = $state.href('app.onFile');
+                  //parse key values
+                  function transformKeyValues(keyValues) {
+                    var newKeyValues = {};
+                    for(var i = 0; i < keyValues.length; i++) {
+                      var keyValue = keyValues[i];
+                      var key = keyValue.key;
+                      var value = keyValue.value;
+                      if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                        value = new Date(value);
                       }
-                      var keyValues = transformKeyValues(document.keyValues);
-                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
-                        document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                      else if(keyValue.key === 'receiverId') {
+                        value = parseInt(value);
                       }
+                      newKeyValues[key] = value;
+                    }
+                    return newKeyValues;
+                  }
 
-                      document.keyValues = keyValues;
-                      deferred.resolve(document);
-                    }).error(function(error) {
-                      $location.search('taskId', null);
-                      deferred.resolve();
+                  //parse grid key value
+                  function transformGridKeyValues(gridKeyValues) {
+                    var newGridKeyValues = [];
+                    for(var i = 0; i < gridKeyValues.length; i++) {
+                      var grid = gridKeyValues[i];
+                      if(newGridKeyValues[grid.gridRowIndex] === undefined) {
+                        newGridKeyValues[grid.gridRowIndex] = {};
+                        var key = grid.key;
+                        var value = grid.value;
+                        newGridKeyValues[grid.gridRowIndex][key] = value;
+                      } else {
+                        newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
+                      }
+                    }
+                    return newGridKeyValues;
+                  }
+
+                  if(!$stateParams.docId) {
+                    deferred.resolve();
+                  } else {
+                    onFileFactory.getDocumentById($stateParams.docId).success(
+                      function(resp) {
+                        var document = resp.document;
+                        if(document.documentTemplate.documentTemplateId !== 3) {
+                          $window.location.href = $state.href('app.onFile');
+                        }
+                        var keyValues = transformKeyValues(document.keyValues);
+                        if(document.gridKeyValues && document.gridKeyValues.length > 0) {
+                          document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                        }
+
+                        document.keyValues = keyValues;
+                        deferred.resolve(document);
+                      }).error(function(error) {
+                        $location.search('taskId', null);
+                        deferred.resolve();
+                      });
+                  }
+                  return deferred.promise;
+                }],
+              contactList: [
+                'onContactFactory',
+                '$rootScope',
+                '$q',
+                function(onContactFactory,
+                         $rootScope,
+                         $q) {
+                  var deferred = $q.defer();
+                  onContactFactory.getContactList($rootScope.currentProjectInfo.projectId, $rootScope.currentUserInfo.userId)
+                    .success(function(content) {
+                      deferred.resolve(content.projectMemberList);
+                    })
+                    .error(function(content) {
+                      deferred.resolve([]);
                     });
-                }
-                return deferred.promise;
-              }],
-              contactList: ['onContactFactory', '$rootScope', '$q',
-                function(onContactFactory, $rootScope, $q) {
-                var deferred = $q.defer();
-                onContactFactory.getContactList($rootScope.currentProjectInfo.projectId, $rootScope.currentUserInfo.userId)
-                  .success(function(content) {
-                    deferred.resolve(content.projectMemberList);
-                  })
-                  .error(function(content) {
-                    deferred.resolve([]);
-                  });
-                return deferred.promise;
-              }]
+                  return deferred.promise;
+                }]
             }
           })
           .state('app.onFile.Trans', {
@@ -305,68 +378,79 @@ define(function(require) {
             controller: 'TransmittalController',
             reloadOnSearch: false,
             resolve: {
-              document: ['$location', '$q', '$state', '$window', 'onFileFactory', '$stateParams',
-                function($location, $q, $state, $window, onFileFactory, $stateParams) {
-                var deferred = $q.defer();
+              document: [
+                '$location',
+                '$q',
+                '$state',
+                '$window',
+                'onFileFactory',
+                '$stateParams',
+                function($location,
+                         $q,
+                         $state,
+                         $window,
+                         onFileFactory,
+                         $stateParams) {
+                  var deferred = $q.defer();
 
-                //parse key values
-                function transformKeyValues(keyValues) {
-                  var newKeyValues = {};
-                  for(var i = 0; i < keyValues.length; i++) {
-                    var keyValue = keyValues[i];
-                    var key = keyValue.key;
-                    var value = keyValue.value;
-                    if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
-                      value = new Date(value);
-                    }
-                    else if(keyValue.key === 'receiverId') {
-                      value = parseInt(value);
-                    }
-                    newKeyValues[key] = value;
-                  }
-                  return newKeyValues;
-                }
-
-                //parse grid key value
-                function transformGridKeyValues(gridKeyValues) {
-                  var newGridKeyValues = [];
-                  for(var i = 0; i < gridKeyValues.length; i++) {
-                    var grid = gridKeyValues[i];
-                    if(newGridKeyValues[grid.gridRowIndex] === undefined) {
-                      newGridKeyValues[grid.gridRowIndex] = {};
-                      var key = grid.key;
-                      var value = grid.value;
-                      newGridKeyValues[grid.gridRowIndex][key] = value;
-                    } else {
-                      newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
-                    }
-                  }
-                  return newGridKeyValues;
-                }
-
-                if(!$stateParams.docId) {
-                  deferred.resolve();
-                } else {
-                  onFileFactory.getDocumentById($stateParams.docId).success(
-                    function(resp) {
-                      var document = resp.document;
-                      if(document.documentTemplate.documentTemplateId !== 4) {
-                        $window.location.href = $state.href('app.onFile');
+                  //parse key values
+                  function transformKeyValues(keyValues) {
+                    var newKeyValues = {};
+                    for(var i = 0; i < keyValues.length; i++) {
+                      var keyValue = keyValues[i];
+                      var key = keyValue.key;
+                      var value = keyValue.value;
+                      if(keyValue.key === 'date_created' || keyValue.key === 'date' || keyValue.key === 'received_by_date' || keyValue.key === 'sent_by_date' || keyValue.key === 'due_by_date') {
+                        value = new Date(value);
                       }
-                      var keyValues = transformKeyValues(document.keyValues);
-                      if(document.gridKeyValues && document.gridKeyValues.length > 0) {
-                        document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                      else if(keyValue.key === 'receiverId') {
+                        value = parseInt(value);
                       }
+                      newKeyValues[key] = value;
+                    }
+                    return newKeyValues;
+                  }
 
-                      document.keyValues = keyValues;
-                      deferred.resolve(document);
-                    }).error(function(error) {
-                      $location.search('taskId', null);
-                      deferred.resolve();
-                    });
-                }
-                return deferred.promise;
-              }]
+                  //parse grid key value
+                  function transformGridKeyValues(gridKeyValues) {
+                    var newGridKeyValues = [];
+                    for(var i = 0; i < gridKeyValues.length; i++) {
+                      var grid = gridKeyValues[i];
+                      if(newGridKeyValues[grid.gridRowIndex] === undefined) {
+                        newGridKeyValues[grid.gridRowIndex] = {};
+                        var key = grid.key;
+                        var value = grid.value;
+                        newGridKeyValues[grid.gridRowIndex][key] = value;
+                      } else {
+                        newGridKeyValues[grid.gridRowIndex][grid.key] = grid.value;
+                      }
+                    }
+                    return newGridKeyValues;
+                  }
+
+                  if(!$stateParams.docId) {
+                    deferred.resolve();
+                  } else {
+                    onFileFactory.getDocumentById($stateParams.docId).success(
+                      function(resp) {
+                        var document = resp.document;
+                        if(document.documentTemplate.documentTemplateId !== 4) {
+                          $window.location.href = $state.href('app.onFile');
+                        }
+                        var keyValues = transformKeyValues(document.keyValues);
+                        if(document.gridKeyValues && document.gridKeyValues.length > 0) {
+                          document.gridKeyValues = transformGridKeyValues(document.gridKeyValues);
+                        }
+
+                        document.keyValues = keyValues;
+                        deferred.resolve(document);
+                      }).error(function(error) {
+                        $location.search('taskId', null);
+                        deferred.resolve();
+                      });
+                  }
+                  return deferred.promise;
+                }]
             }
           });
       }

@@ -1,9 +1,11 @@
-define(function() {
+define(function(require) {
   'use strict';
+  var _ = require('lodash');
   var controller = ['$scope', 'appConstant', 'accountFactory', '$state', '$location', 'notifications', '$rootScope', '$modal', 'companyFactory', 'pushFactory', 'userNotificationsFactory', 'toaster', '$q',
     function($scope, appConstant, accountFactory, $state, $location, notifications, $rootScope, $modal, companyFactory, pushFactory, userNotificationsFactory, toaster, $q) {
       $scope.app = appConstant.app;
       $scope.viewNotifications = [];
+      var canceler;
 
       function bindInfo() {
         $scope.userInfo = {
@@ -21,15 +23,49 @@ define(function() {
         $scope.viewNotifications = $rootScope.userNotifications.notificationList;
       }
 
+      function getAllNotifications() {
+        if(canceler) {
+          canceler.resolve();
+        }
+        canceler = $q.defer();
+        userNotificationsFactory.getAll({
+          "pageNumber": 1,
+          "perPageLimit": 5
+        }, canceler).then(function(resp) {
+          $rootScope.userNotifications = resp.data;
+          notifications.getNotificationSuccess();
+        });
+      }
+
+      function bindProjectEvent(projectId) {
+        pushFactory.bind('private-project-' + projectId + ':user-' + $rootScope.currentUserInfo.userId, function(data) {
+          console.log('Incoming data for ' + 'private-project-' + projectId + ':user-' + $rootScope.currentUserInfo.userId + ': ', data);
+          getAllNotifications();
+          toaster.pop('info', 'Info', data.message);
+        });
+      }
+
+      function bindChannel() {
+        if($rootScope.currentUserInfo.userId) {
+          pushFactory.bind('private-user-' + $rootScope.currentUserInfo.userId, function(data) {
+            console.log('Incoming data for ' + 'private-user-' + $rootScope.currentUserInfo.userId + ': ', data);
+            getAllNotifications();
+            toaster.pop('info', 'Info', data.message);
+          });
+        }
+
+        if($rootScope.currentProjectInfo.projectId) {
+          bindProjectEvent($rootScope.currentProjectInfo.projectId);
+        }
+      }
+
       if($rootScope.currentUserInfo && $rootScope.currentUserInfo.contact) {
         bindInfo();
       }
 
       $scope.logout = function() {
         // unbind channels
-        pushFactory.unbind('onTargetAll');
-        console.log('Unbind: ' + 'private-user-' + $rootScope.currentUserInfo.userId);
-        pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
+        pushFactory.unbindAll(true);
         accountFactory.logout()
           .then(function() {
             notifications.logoutSuccess();
@@ -67,36 +103,22 @@ define(function() {
         bindUserNotifications();
       });
 
-      var canceler;
-      var getAllNotifications = function() {
-        if(canceler) {
-          canceler.resolve();
+      notifications.onCurrentProjectChanged($scope, _.debounce(function(data) {
+        // Unbind old project event
+        if(data.oldProject) {
+          pushFactory.unbind('private-project-' + data.oldProject.projectId + ':user-' + $rootScope.currentUserInfo.userId);
         }
-        canceler = $q.defer();
-        userNotificationsFactory.getAll({
-          "pageNumber": 1,
-          "perPageLimit": 5
-        }, canceler).then(function(resp) {
-          $rootScope.userNotifications = resp.data;
-          notifications.getNotificationSuccess();
-        });
-      };
-
-      function bindChannel() {
-        if($rootScope.currentUserInfo.userId) {
-          pushFactory.bind('private-user-' + $rootScope.currentUserInfo.userId, function(data) {
-            if($rootScope.currentUserInfo.userId) {
-              getAllNotifications();
-              toaster.pop('info', 'Info', data.message);
-            }
-          });
+        if(data.newProject) {
+          // Bind new project event
+          bindProjectEvent(data.newProject.projectId);
         }
-      }
+      }, 1000));
 
       bindChannel();
 
       notifications.onLoginSuccess($scope, function() {
-        pushFactory.unbind('private-user-' + $rootScope.currentUserInfo.userId);
+        pushFactory.unbindAll(true);
+        pushFactory.bindGlobalChannel();
         bindChannel();
       });
 

@@ -149,13 +149,7 @@ define(function(require) {
           var currentDate = new Date().toISOString();
           onSiteFactory.addComment(getFileId(), model.comment, $scope.selectedDoc.name, $scope.selectedDoc.createdBy, currentDate)
             .success(function(resp) {
-              //$scope.comments.unshift({
-              //  "comment": model.comment,
-              //  "commentedBy": $rootScope.currentUserInfo.userId,
-              //  "commentedDate": currentDate,
-              //  "commenterContact": $rootScope.currentUserInfo.contact,
-              //  "projectFileCommentId": 0
-              //});
+              $scope.comments.unshift(resp.comment);
               $scope.addCommentModel.comment = '';
               form.$setPristine();
               $scope.$broadcast('autosize:update');
@@ -353,9 +347,7 @@ define(function(require) {
       $scope.loadComment();
 
       // Register/UnRegister push events
-      console.log('Listen event: ', 'document.preview.' + $scope.selectedDoc.fileId);
       pushFactory.bind('document.preview.' + $scope.selectedDoc.fileId, function(evt) {
-        console.log('Incoming notifications: ', evt);
         if(evt.name === 'updateMaxNativeZoom') {
           $scope.$broadcast('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', {
             page: evt.value.page,
@@ -364,16 +356,18 @@ define(function(require) {
         }
       });
 
-      console.log('Listen event: ', 'document.comment.' + $scope.selectedDoc.fileId);
-      pushFactory.bind('document.comment.' + $scope.selectedDoc.fileId, function(evt) {
+      pushFactory.bind('project-' + $rootScope.currentProjectInfo.projectId + ':onSite-' + getFileId(), function(evt) {
         if(evt.name === 'onSiteAddComment') {
-          $scope.comments.unshift({
-            "comment": evt.value.comment,
-            "commentedBy": evt.value.commentedBy,
-            "commentedDate": evt.value.commentedDate,
-            "commenterContact": evt.value.commenterContact,
-            "projectFileCommentId": 0
-          });
+          var found = _.find($scope.comments, {projectFileCommentId: evt.value.projectFileCommentId});
+          if(!found) {
+            $scope.comments.unshift({
+              "comment": evt.value.comment,
+              "commentedBy": evt.value.commentedBy,
+              "commentedDate": evt.value.commentedDate,
+              "commenterContact": evt.value.commenterContact,
+              "projectFileCommentId": evt.value.projectFileCommentId
+            });
+          }
         }
       });
 
@@ -415,10 +409,8 @@ define(function(require) {
       });
 
       $scope.$on('$destroy', function() {
-        console.log('UnListen event: ', 'document.preview.' + $scope.selectedDoc.fileId);
-        console.log('UnListen event: ', 'document.comment.' + $scope.selectedDoc.fileId);
         pushFactory.unbind('document.preview.' + $scope.selectedDoc.fileId);
-        pushFactory.unbind('document.comment.' + $scope.selectedDoc.fileId);
+        pushFactory.unbind('project-' + $rootScope.currentProjectInfo.projectId + ':onSite-' + getFileId());
       });
 
       // View Task

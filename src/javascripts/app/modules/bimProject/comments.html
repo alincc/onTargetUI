@@ -3,13 +3,13 @@
         <thead></thead>
         <tbody></tbody>
     </table>
-    <div class=comment-form>
-        <div class="input-group">
-            <input type="text" id="commentText" class="form-control" placeholder="Enter your comment">
+</div>
+<div class="comment-form">
+    <div class="input-group">
+        <input type="text" id="commentText" class="form-control" placeholder="Enter your comment">
           <span class="input-group-btn">
             <button class="btn btn-default btnAddComment" type="button" disabled="disabled">Add</button>
           </span>
-        </div>
     </div>
 </div>
 <script>
@@ -25,6 +25,12 @@
         var currentUserAvatarPath = $('#currentUserAvatarPath').val();
         var pusherKey = $('#pusherClientApiKey').val();
         var pusherChannel = $('#pusherChannel').val();
+        var $btn = containerDiv.find('.btnAddComment');
+        var scrollContainer = containerDiv.find('.comments');
+        var isAllowSaveComment = Global.authenticationData ? jQuery.grep(Global.authenticationData.userData.featureListPermission, function(el) {
+            return el.featureKey === 'ONBIM_COMMENT_SAVE';
+        }).length > 0 : false;
+        var currentProject = Global.projectData;
 
         var pusher = new Pusher(pusherKey, {
             encrypted: true
@@ -36,12 +42,22 @@
         this.close = function() {
         };
 
+        this.isScrollAtBottom = false;
+
         this.hide = function() {
             containerDiv.hide();
         };
 
         this.show = function() {
             containerDiv.show();
+        };
+
+        this.comments = [];
+
+        this.scrollDown = function() {
+            if(scrollContainer.length) {
+                scrollContainer.scrollTop(scrollContainer[0].scrollHeight);
+            }
         };
 
         this.appendNoCommentMessage = function() {
@@ -122,6 +138,7 @@
                 dataType: "json",
                 contentType: 'application/json',
                 success: function(data) {
+                    data.comments = data.comments.reverse();
                     if(data.comments.length === 0) {
                         othis.appendNoCommentMessage();
                     } else {
@@ -129,6 +146,7 @@
                             othis.appendComment(data.comments[i]);
                         }
                     }
+                    othis.comments = data.comments;
                 },
                 error: function(err) {
                     console.log(err);
@@ -137,6 +155,7 @@
         };
 
         this.addComment = function() {
+            $btn.attr('disabled', 'disabled');
             $.ajax({
                 url: domain + '/bim/comment/save',
                 method: 'POST',
@@ -158,31 +177,34 @@
                 contentType: 'application/json',
                 success: function(data) {
                     if(data.returnVal === 'SUCCESS') {
-//                        othis.appendComment({
-//                            commentedDate: new Date().toISOString(),
-//                            commenterContact: {
-//                                firstName: currentUserFirstName,
-//                                lastName: currentUserLastName,
-//                                userImagePath: currentUserAvatarPath
-//                            },
-//                            comment: containerDiv.find('#commentText').val()
-//                        });
-//                        containerDiv.find('#commentText').val('');
+                        othis.comments.push(data.projectBIMFileComment);
+                        othis.appendComment(data.projectBIMFileComment);
+                        containerDiv.find('#commentText').val('');
+                        if(othis.isScrollAtBottom) {
+                            othis.scrollDown();
+                        }
                     }
+                    $btn.removeAttr('disabled');
                 },
                 error: function(err) {
                     console.log(err);
+                    $btn.removeAttr('disabled');
                 }
             });
         };
 
         this.onCommentKeyup = function(e) {
             var val = containerDiv.find('#commentText').val();
-            var $btn = containerDiv.find('.btnAddComment');
-            if(val.trim().length === 0) {
-                $btn.attr('disabled', 'disabled');
-            } else {
-                $btn.removeAttr('disabled');
+            if(e.keyCode === 13) {
+                // Enter
+                othis.addComment();
+            }
+            else {
+                if(val.trim().length === 0) {
+                    $btn.attr('disabled', 'disabled');
+                } else {
+                    $btn.removeAttr('disabled');
+                }
             }
         };
 
@@ -191,21 +213,41 @@
 
         othis.loadComments();
 
-        // pusher
-        console.log('Listen event: ', 'onbim.comment.' + parseInt(projectBimFileId));
-        channel.bind('onBIM.comment.' + parseInt(projectBimFileId), function(evt) {
-            if(evt.name === 'onBIMAddComment') {
-                othis.appendComment({
-                    commentedDate: evt.value.commentedDate,
-                    commenterContact: evt.value.commenterContact,
-                    comment: evt.value.comment
-                });
-                containerDiv.find('#commentText').val('');
-            }
-        });
+        // Hide comment box based on permission
+        if(!isAllowSaveComment) {
+            containerDiv.find('.comment-form').remove();
+        }
 
-        $(window).on('hashchange', function() {
-            channel.unbind('onBIM.comment.' + parseInt(projectBimFileId));
-        });
+        if(currentProject) {
+            // pusher
+            console.log('Listen event: ', 'onbim.comment.' + parseInt(projectBimFileId));
+            channel.bind('project-' + currentProject.project.projectId + ':onBIM-' + parseInt(projectBimFileId), function(evt) {
+                if(evt.name === 'onBIMAddComment') {
+                    var found = othis.comments.filter(function(el) {
+                        return el.projectBIMFileCommentId === evt.value.projectBIMFileCommentId
+                    })[0];
+
+                    if(!found) {
+                        othis.comments.push(evt.value);
+                        othis.appendComment(evt.value);
+                        if(othis.isScrollAtBottom) {
+                            othis.scrollDown();
+                        }
+                    }
+                }
+            });
+
+            $(window).on('hashchange', function() {
+                channel.unbind('project-' + currentProject.project.projectId + ':onBIM-' + parseInt(projectBimFileId));
+            });
+        }
+
+        // Check if scroll at bottom
+        if(scrollContainer) {
+            scrollContainer.on('scroll', function() {
+                othis.isScrollAtBottom = scrollContainer.scrollTop() + scrollContainer.innerHeight() >= scrollContainer[0].scrollHeight;
+            });
+        }
+
     }
 </script>

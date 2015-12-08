@@ -14,7 +14,6 @@ define(function(require) {
             $scope.contactNameList.push({userId: projectMember.userId, name: fullName});
           }
         });
-        console.log($scope.document.keyValues.attention);
         _.remove($scope.document.keyValues.attention, function(attention) {
           return attention === $scope.document.keyValues.receiverId;
         });
@@ -22,17 +21,21 @@ define(function(require) {
 
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
-        if(document.createdBy === userContext.authentication().userData.userId) {
-          if(document.status === 'SUBMITTED') {
-            $scope.onEdit = true;
-          } else {
-            $scope.onView = true;
-          }
+        if(!$scope.haveApprovePermission && !$scope.haveRejectPermission) {
+          $scope.onView = true;
         } else {
-          if(document.status === 'SUBMITTED') {
-            $scope.onApprove = true;
+          if(document.createdBy === userContext.authentication().userData.userId) {
+            if(document.status === 'SUBMITTED') {
+              $scope.onEdit = true;
+            } else {
+              $scope.onView = true;
+            }
           } else {
-            $scope.onView = true;
+            if(document.status === 'SUBMITTED') {
+              $scope.onApprove = true;
+            } else {
+              $scope.onView = true;
+            }
           }
         }
       };
@@ -45,9 +48,11 @@ define(function(require) {
       $scope.onApproving = false;
       $scope.onSubmit = false;
       $scope.isAllowAddResponse = false;
+      $scope.isExporting = false;
       $scope.attachments = [];
       $scope.currentUserId = $rootScope.currentUserInfo.userId;
-
+      $scope.haveApprovePermission = permissionFactory.checkFeaturePermission('ONFILE_APPROVE');
+      $scope.haveRejectPermission = permissionFactory.checkFeaturePermission('ONFILE_REJECT');
       $scope.isAddingResponse = false;
 
       if(document) {
@@ -122,14 +127,16 @@ define(function(require) {
         }
         onFileFactory.getDocumentAttachmentsByDocumentId($scope.document.documentId)
           .success(function(resp) {
-            console.log(resp);
             $scope.attachments = $scope.attachments.concat(resp.attachments);
             $scope.attachments = _.map($scope.attachments, function(el) {
               var newEl = el;
               newEl.uploaded = true;
               return newEl;
             });
-            console.log($scope.attachments);
+          })
+          .error(function(err) {
+            console.log(err);
+            $scope.attachments = [];
           });
       }
 
@@ -304,8 +311,8 @@ define(function(require) {
       $scope.addResponse = function(form) {
         $scope.isAddingResponse = true;
         $scope.onSubmit = true;
-        onFileFactory.addResponse($scope.newResponse.response, $scope.document.documentId).success(
-          function(resp) {
+        onFileFactory.addResponse($scope.newResponse.response, $scope.document.documentId)
+          .success(function(resp) {
             //$state.go('app.onFile');
             var promises = [];
             _.each($scope.newResponse.attachments, function(file) {
@@ -319,6 +326,7 @@ define(function(require) {
               $scope.newResponse = {};
               form.$setPristine();
               $scope.isAddingResponse = false;
+              $scope.onSubmit = false;
               loadDocumentAttachments(true);
             }
 
@@ -327,21 +335,25 @@ define(function(require) {
             }, function(errors) {
               done(form);
             });
-
-          }, function(err) {
+          })
+          .error(function(err) {
             console.log(err);
             form.$setPristine();
             $scope.isAddingResponse = false;
+            $scope.onSubmit = false;
           });
       };
 
       $scope.getResponse = function() {
-        onFileFactory.getResponse($scope.document.documentId).success(
-          function(resp) {
+        onFileFactory.getResponse($scope.document.documentId)
+          .success(function(resp) {
             $scope.responses = resp.documentResponses;
             console.log($scope.responses);
-          }
-        );
+          })
+          .error(function(err) {
+            console.log(err);
+            $scope.responses = [];
+          });
       };
 
       $scope.getCompanyOfUser = function() {
@@ -349,8 +361,6 @@ define(function(require) {
           return contact.userId === $scope.document.keyValues.receiverId;
         });
         $scope.document.keyValues.company_name = userCompany ? userCompany.companyName : '';
-        $scope.document.keyValues.company_id = userCompany ? userCompany.companyId : '';
-
         removeUserSelected();
       };
 
@@ -370,7 +380,6 @@ define(function(require) {
 
         // modal callbacks
         uploadModalInstance.result.then(function(data) {
-          console.log(data);
           if(data.from === 'main') {
             $scope.attachments = $scope.attachments.concat(data.result);
           }
@@ -386,7 +395,6 @@ define(function(require) {
       };
 
       $scope.saveDocumentInfo = function(file) {
-        console.log('Save file', file);
         var deferred = $q.defer();
         fileFactory.move(file.filePath, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'onfile')
           .success(function(resp) {
@@ -394,13 +402,15 @@ define(function(require) {
               "documentId": $scope.documentId,
               "filePath": resp.url,
               "addedBy": userContext.authentication().userData.userId
-            }).success(
-              function(resp) {
+            })
+              .success(function(resp) {
                 deferred.resolve(resp);
-              }).error(function(error) {
+              })
+              .error(function(error) {
                 deferred.reject(error);
               });
-          }).error(function(error) {
+          })
+          .error(function(error) {
             deferred.reject(error);
           });
         return deferred.promise;
@@ -411,6 +421,7 @@ define(function(require) {
       };
 
       $scope.exportPdf = function(download) {
+        $scope.isExporting = true;
         var deferred = $q.defer();
         var data = {
           document: angular.copy($scope.document),
@@ -419,14 +430,21 @@ define(function(require) {
         data.document.keyValues.receiverName = $scope.receiverName;
         data.document.responseData = $scope.responses;
         data.document.attentionName = $scope.attentionName;
+        data.document.keyValues.attention = _.map(data.document.keyValues.attention, function(att) {
+          return _.find(memberList, {userId: att});
+        });
+        data.document.keyValues.receiver = _.find(memberList, {userId: data.document.keyValues.receiverId});
+        data.document.creator = _.find(memberList, {userId: data.document.createdBy});
         onFileFactory.exportPdf(data)
           .success(function(resp) {
             if(download) {
               $window.open($filter('fileDownloadPathHash')(resp.filePath));
             }
+            $scope.isExporting = false;
             deferred.resolve();
           })
           .error(function(err) {
+            $scope.isExporting = false;
             deferred.resolve();
           });
         return deferred.promise;
@@ -449,9 +467,6 @@ define(function(require) {
         //$scope.document.keyValues.receiverId =
 
       };
-
-      $scope.haveApprovePermission = permissionFactory.checkFeaturePermission('ONFILE_APPROVE');
-      $scope.haveRejectPermission = permissionFactory.checkFeaturePermission('ONFILE_REJECT');
 
       $scope.changeStatus = function(status) {
         if(status === 'APPROVED' && !$scope.haveApprovePermission) {
@@ -477,15 +492,15 @@ define(function(require) {
 
       load();
 
-      $scope.openUpdateResponse = function (response){
+      $scope.openUpdateResponse = function(response) {
         response.onEdit = true;
         response.updateResponse = response.response;
       };
 
-      $scope.updateResponse = function (response){
+      $scope.updateResponse = function(response) {
         if(response.updateReponse !== '') {
           onFileFactory.updateResponse(response.documentResponseId, response.updateResponse).success(
-            function (resp){
+            function(resp) {
               response.onEdit = false;
               $scope.getResponse();
             }
@@ -494,8 +509,8 @@ define(function(require) {
       };
 
       var deleteResponseModalInstance;
-      
-      $scope.openDeleteModal = function (response){
+
+      $scope.openDeleteModal = function(response) {
         deleteResponseModalInstance = $modal.open({
           templateUrl: 'onFile/templates/deleteResponse.html',
           controller: 'DeleteResponseController',
@@ -514,9 +529,9 @@ define(function(require) {
         });
       };
 
-      $scope.deleteResponse = function (response){
+      $scope.deleteResponse = function(response) {
         onFileFactory.deleteResponse(response.documentResponseId).success(
-          function (resp){
+          function(resp) {
             $scope.getResponse();
           }
         );

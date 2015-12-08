@@ -23,7 +23,7 @@ define(function(require) {
       function($stateProvider) {
         $stateProvider
           .state('app.onTime', {
-            url: '/onTime?activityId&taskId',
+            url: '/onTime?activityId&taskId&tab',
             templateUrl: 'onTime/templates/onTime.html',
             controller: 'OnTimeController',
             reloadOnSearch: false,

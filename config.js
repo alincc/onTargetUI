@@ -325,7 +325,7 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
-    domain: 'http://localhost:9001'
+    domain: 'https://app.ontargetcoud.com'
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
@@ -339,6 +339,6 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
-    domain: 'http://localhost:9001'
+    domain: 'https://app.ontargetcoud.com'
   }
 };

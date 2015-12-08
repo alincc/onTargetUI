@@ -24,11 +24,10 @@ define(function() {
 
       $scope.openAction = function(action) {
         var addPermission = permissionFactory.checkFeaturePermission('ONFILE_ADD');
-        if(!addPermission) {
+        if(!addPermission && action !== $scope.actions.viewDocument) {
           return;
         }
         delete $rootScope.onFileDocument;
-        //$scope.action = action;
         switch(action) {
           case $scope.actions.changeOrder:
             $state.go('app.onFile.CO');
