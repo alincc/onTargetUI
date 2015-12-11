@@ -11,6 +11,7 @@ module.exports = {
     resourceUrl: 'http://int.app.ontargetcloud.com:9001',
     bimServer: 'http://localhost:3214/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -33,6 +34,7 @@ module.exports = {
     resourceUrl: 'http://demo.newoceaninfosys.com:3215',
     bimServer: 'http://demo.newoceaninfosys.com:3214/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -55,6 +57,7 @@ module.exports = {
     resourceUrl: 'http://localhost:9001',
     bimServer: 'http://localhost:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -77,6 +80,7 @@ module.exports = {
     resourceUrl: 'http://localhost:9003',
     bimServer: 'http://localhost:9002/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -99,6 +103,7 @@ module.exports = {
     resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
     bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -121,6 +126,7 @@ module.exports = {
     resourceUrl: 'http://int.app.ontargetcloud.com:9005', 					// This should be same as the node server because the resources are storing on the node server
     bimServer: 'http://int.app.ontargetcloud.com:9004/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -142,6 +148,7 @@ module.exports = {
     nodeServer: 'http://hostname:port',
     bimServer: 'http://hostname:port/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -160,6 +167,7 @@ module.exports = {
     nodeServer: 'http://hostname:port',
     bimServer: 'http://hostname:port/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -179,6 +187,7 @@ module.exports = {
     resourceUrl: 'https://app.ontargetcloud.com',
     bimServer: 'https://app.ontargetcloud.com/bim',
     bimServerAddress: 'https://app.ontargetcloud.com/bimserver',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'ontargetbim@ontargetcloud.com',
       password: '0nT4rg3tBIm2015'
@@ -201,6 +210,7 @@ module.exports = {
     resourceUrl: 'https://app.ontargetcloud.com',
     bimServer: 'https://app.ontargetcloud.com/bim',
     bimServerAddress: 'https://app.ontargetcloud.com/bimserver',
+    newBimServer: 'http://115.75.6.162:3216',
     bimCredential: {
       username: 'ontargetbim@ontargetcloud.com',
       password: '0nT4rg3tBIm2015'

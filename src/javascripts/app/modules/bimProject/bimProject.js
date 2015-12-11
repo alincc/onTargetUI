@@ -191,11 +191,10 @@ define(function(require) {
                 function($stateParams, $q, onBimFactory) {
                   var defferred = $q.defer();
                   if($stateParams.poid) {
-                    onBimFactory.getBimProjectByPoid($stateParams.poid).success(
-                      function(resp) {
-                        defferred.resolve(resp.response.result);
-                      }
-                    );
+                    onBimFactory.getById($stateParams.projectBimFileId)
+                      .success(function(resp) {
+                        defferred.resolve(resp.projectBimFileDTO);
+                      });
                   }
                   return defferred.promise;
                 }

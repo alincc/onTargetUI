@@ -16,10 +16,12 @@ define(function(require) {
       '$http',
       '$q',
       'storage',
+      'Upload',
       function(constant,
                $http,
                $q,
-               storage) {
+               storage,
+               Upload) {
         var service = {},
           authentication = {
             isAuth: false,
@@ -116,11 +118,23 @@ define(function(require) {
           return $http.post(constant.domain + '/bim/getAll', {projectId: projectId});
         };
 
-        service.addProject = function(projectId, poid, projectBimFileLocation) {
-          return $http.post(constant.domain + '/bim/save', {
-            "projectid": projectId,
-            "poid": poid,
-            "projectBimFileLocation": projectBimFileLocation
+        service.addProject = function(data) {
+          return $http.post(constant.domain + '/bim/save', data);
+        };
+
+        service.uploadIfc = function(file, projectAssetFolderName, data, newFileName) {
+          newFileName = newFileName || file.name;
+          return Upload.upload({
+            url: constant.newBimServer + '/bim/upload',
+            file: file,
+            fields: {
+              'fileName': newFileName,
+              'data': data,
+              'projectAssetFolderName': projectAssetFolderName
+            },
+            headers: {
+              'Authorization': false
+            }
           });
         };
 
@@ -362,10 +376,13 @@ define(function(require) {
             });
         };
 
-        service.updateBimThumbnail = function(projectBimFileId, bimThumbnailPath) {
-          return $http.post(constant.domain + '/bim/updateThumbnailPath', {
-            "projectBimFileId": projectBimFileId,
-            "bimThumbnailPath": bimThumbnailPath
+        service.updateProject = function(data) {
+          return $http.post(constant.domain + '/bim/save', data);
+        };
+
+        service.getById = function(id) {
+          return $http.post(constant.domain + '/bim/get', {
+            "projectBimFileId": id
           });
         };
 

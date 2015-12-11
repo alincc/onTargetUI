@@ -1,13 +1,13 @@
-define(function(require){
+define(function(require) {
   'use strict';
   var angular = require('angular');
   var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', 'fileFactory', '$timeout', 'toaster', 'utilFactory',
-    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster, utilFactory){
+    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster, utilFactory) {
       $scope.app = appConstant.app;
       $scope.project = {};
       $scope.updateData = {};
       $scope.oid = '';
-      $scope.projectAssetFolderName = utilFactory.makeId(20);
+      $scope.projectAssetFolderName = $rootScope.currentProjectInfo.projectAssetFolderName;
 
       $scope.picture = {
         file: null,
@@ -16,54 +16,110 @@ define(function(require){
         isUploadedPicture: false
       };
 
-      var load = function (){
+      $scope.ifc = {
+        file: null,
+        isValid: false,
+        validate: function(file) {
+          if(file && !/\.ifc$/i.test(file.name)) {
+            toaster.pop('error', 'File invalid', 'Please select IFC file');
+            $scope.ifc.isValid = false;
+          }else if(file && /\.ifc$/i.test(file.name)){
+            $scope.ifc.isValid = true;
+          }
+        }
+      };
+
+      var load = function() {
         $scope.uniformLengthMeasure = onBimFactory.getUniformLengthMeasure();
         $scope.schema = onBimFactory.getSchema();
       };
 
-      $scope.addBimProject = function (){
+      $scope.addBimProject = function() {
+        if(!$scope.ifc.isValid){
+          return;
+        }
+
+        function addProject(){
+          onBimFactory.addProject({
+            "projectid": $rootScope.currentProjectInfo.projectId,
+            "poid": $scope.oid,
+            "projectBimFileLocation": $scope.project.projectBimFileLocation,
+            "projectBimFileJSONLocation": '',
+            "projectBimFileIFCLocation": '',
+            "isIfcFileConversionComplete": 'N',
+            "name": $scope.project.projectName,
+            "description": $scope.project.description
+          }).success(function(resp) {
+            onBimFactory.uploadIfc($scope.ifc.file, $scope.projectAssetFolderName, {
+              projectBimFileId: resp.projectBimFileDTO.projectBimFileId,
+              baseRequest: {
+                "loggedInUserId": $rootScope.currentUserInfo.userId,
+                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : $rootScope.mainProjectInfo.projectId
+              }
+            })
+              .progress(function(evt) {
+                // Progress event
+              })
+              .success(function(ifcInfo, status, headers, config) {
+                // Update IFC and JSON file path
+                onBimFactory.updateProject({
+                  "projectid": $rootScope.currentProjectInfo.projectId,
+                  "poid": resp.projectBimFileDTO.poid,
+                  "projectBimFileLocation": resp.projectBimFileDTO.bimThumbnailPath,
+                  "projectBimFileJSONLocation": ifcInfo.jsonFile,
+                  "projectBimFileIFCLocation": ifcInfo.ifcFile,
+                  "isIfcFileConversionComplete": 'N',
+                  "name": resp.projectBimFileDTO.name,
+                  "description": resp.projectBimFileDTO.description,
+                  "projectBimFileId": resp.projectBimFileDTO.projectBimFileId
+                })
+                  .success(function(){
+                    $state.go('app.bimProject.project', {poid: $scope.oid});
+                  })
+                  .error(function() {
+                    console.log('Failed to update project bim');
+                  });
+              })
+              .error(function() {
+                console.log('Failed to upload IFC file');
+              });
+          })
+            .error(function(){
+              $scope._form.$setPristine();
+              $scope.ifc.isValid = false;
+            });
+        }
+
         onBimFactory.addBimProject($scope.project.projectName, $scope.project.schema)
-          .success(function (resp){
+          .success(function(resp) {
             if(!resp.response.exception) {
               var updateData = resp.response.result;
               $scope.oid = updateData.oid;
               updateData.description = $scope.project.description;
               updateData.exportLengthMeasurePrefix = $scope.project.exportLengthMeasurePrefix;
               onBimFactory.updateBimProject(updateData).success(
-                function (resp){
+                function(resp) {
                   if($scope.picture.isUploadedPicture) {
-                    fileFactory.move($scope.project.projectBimFileLocation, null, 'projects', $scope.projectAssetFolderName, 'onbim').success(
-                      function (resp){
+                    fileFactory.move($scope.project.projectBimFileLocation, null, 'projects', $scope.projectAssetFolderName, 'onbim')
+                      .success(function(resp) {
                         $scope.project.projectBimFileLocation = resp.url;
-
-                        onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation).success(function (resp){
-                          //update thumbnail path
-                          $scope._form.$setPristine();
-                          $state.go('app.bimProject.project', {poid: $scope.oid});
-                          ///$state.go('app.bimProject.listProject');
-                        });
-                      }
-                    ).finally(
-                      function (){
+                        addProject();
+                      })
+                      .error(function() {
                         $scope._form.$setPristine();
-                      }
-                    );
+                        $scope.ifc.isValid = false;
+                      });
                   } else {
-                    onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation).success(function (resp){
-                      //update thumbnail path
-                      $scope._form.$setPristine();
-                      $state.go('app.bimProject.project', {poid: $scope.oid});
-                      ///$state.go('app.bimProject.listProject');
-                    });
+                    addProject();
                   }
                 }
               );
-            } else {
+            }
+            else {
               toaster.pop('error', 'Error', resp.response.exception.message);
               $scope._form.$setPristine();
             }
-          }
-        );
+          });
       };
 
       $scope.$watch('picture.file', function() {

@@ -1,18 +1,19 @@
-define(function(require){
+define(function(require) {
   'use strict';
   var angular = require('angular');
   var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', 'fileFactory', '$timeout', 'toaster', 'project', '$stateParams', 'utilFactory',
-    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster, project, $stateParams, utilFactory){
+    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster, project, $stateParams, utilFactory) {
       $scope.app = appConstant.app;
       $scope.project = {};
       $scope.updateData = {};
       $scope.oid = '';
+      //$scope.project = angular.copy($rootScope.currentBimProject);
       $scope.project = project;
-      $scope.projectAssetFolderName = utilFactory.makeId(20);
-      if($rootScope.currentBimProject) {
-        $scope.projectBimFileLocation = $rootScope.currentBimProject.bimThumbnailPath;
+      console.log($scope.project);
+      $scope.projectAssetFolderName = $rootScope.currentProjectInfo.projectAssetFolderName;
+      if($scope.project) {
+        $scope.projectBimFileLocation = $scope.project.bimThumbnailPath;
       }
-
 
       $scope.picture = {
         file: null,
@@ -21,29 +22,43 @@ define(function(require){
         isUploadedPicture: false
       };
 
-      var load = function (){
+      var load = function() {
         $scope.uniformLengthMeasure = onBimFactory.getUniformLengthMeasure();
         $scope.schema = onBimFactory.getSchema();
       };
 
-      $scope.updateBimProject = function (){
-        onBimFactory.updateBimProject($scope.project).success(
-          function (resp){
-            if($scope.picture.isUploadedPicture) {
-              fileFactory.move($scope.projectBimFileLocation, null, 'projects', $scope.projectAssetFolderName, 'onbim').success(
-                function (resp){
-                  $scope.projectBimFileLocation = resp.url;
+      $scope.updateBimProject = function() {
 
-                  onBimFactory.updateBimThumbnail($stateParams.projectBimFileId, $scope.projectBimFileLocation).success(
-                    function (resp){
-                      $state.go('app.bimProject.listProject');
-                    }
-                  );
+        function update() {
+          onBimFactory.updateProject({
+            "projectid": $rootScope.currentProjectInfo.projectId,
+            "poid": $scope.project.oid,
+            "projectBimFileLocation": $scope.projectBimFileLocation,
+            "projectBimFileJSONLocation": $scope.project.bimProjectJSONFilePath,
+            "projectBimFileIFCLocation": $scope.project.bimProjectIFCFilePath,
+            "isIfcFileConversionComplete": $scope.project.isBimIFCConversionComplete,
+            "name": $scope.project.name,
+            "description": $scope.project.description,
+            "projectBimFileId": parseInt($stateParams.projectBimFileId)
+          })
+            .success(function(resp) {
+              $state.go('app.bimProject.listProject');
+            });
+        }
+
+        onBimFactory.updateBimProject($scope.project)
+          .success(function(resp) {
+            if($scope.picture.isUploadedPicture) {
+              fileFactory.move($scope.projectBimFileLocation, null, 'projects', $scope.projectAssetFolderName, 'onbim')
+                .success(function(resp) {
+                  $scope.projectBimFileLocation = resp.url;
+                  update();
                 }
               );
+            } else {
+              update();
             }
-          }
-        );
+          });
       };
 
       $scope.$watch('picture.file', function() {

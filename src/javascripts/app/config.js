@@ -153,6 +153,7 @@ define(function(require) {
     resourceUrl: 'http://localhost:9001',
     bimServer: 'http://localhost:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
+    newBimServer: 'http://115.75.6.162:3216',
     app: {
       name: "OnTarget",
       id: "OnTarget",
