@@ -149,11 +149,11 @@ define(function(require) {
   module.constant('appConstant', {
     domain: 'http://localhost:9000/ontargetrs/services',
     baseUrl: 'http://localhost:9000',
-    nodeServer: 'http://localhost:9001',
-    resourceUrl: 'http://localhost:9001',
+    nodeServer: 'http://int.app.ontargetcloud.com:9001',
+    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
     bimServer: 'http://localhost:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
-    newBimServer: 'http://115.75.6.162:3216',
+    newBimServer: 'http://int.app.ontargetcloud.com:9002',
     app: {
       name: "OnTarget",
       id: "OnTarget",

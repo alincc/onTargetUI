@@ -12,7 +12,12 @@ define(function(require) {
         var service = {};
 
         service.invite = function(param) {
-          return $http.post(constant.domain + '/register/inviteUserIntoProject', param);
+          return $http.post(constant.domain + '/register/inviteUserIntoProject', param,
+            {
+              headers: {
+                AutoAlert: true
+              }
+            });
         };
 
         return service;

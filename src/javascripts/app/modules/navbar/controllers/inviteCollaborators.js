@@ -1,23 +1,30 @@
-define(function (require) {
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     companyTypesData = require('text!app/common/resources/companyTypes.json');
   var controller = ['$scope', 'companies', 'countryFactory', '$modalInstance', 'accountFactory',
     'inviteCollaboratorFactory', '$rootScope',
-    function ($scope, companies, countryFactory, $modalInstance, accountFactory,
-              inviteCollaboratorFactory, $rootScope) {
+    function($scope, companies, countryFactory, $modalInstance, accountFactory,
+             inviteCollaboratorFactory, $rootScope) {
       $scope.addNewCompany = false;
       $scope.sentSuccess = false;
       $scope.companies = companies;
+      console.log(companies);
+      // Add "Add new company" option
+      $scope.companies.push({
+        companyName: 'Add new company',
+        companyId: 0
+      });
+
       $scope.companyTypes = angular.fromJson(companyTypesData);
       $scope.newCollaborator = {};
       $scope.countries = countryFactory.getCountryList();
 
       $scope.existingCompany = {};
 
-      var getCountryFileName = function (countryCode) {
+      var getCountryFileName = function(countryCode) {
         var fileName = _($scope.countries)
-          .filter(function (country) {
+          .filter(function(country) {
             return country.code === countryCode;
           })
           .pluck('filename')
@@ -26,33 +33,29 @@ define(function (require) {
         return fileName[0];
       };
 
-      $scope.getStateList = function () {
+      $scope.getStateList = function() {
         var fileName = getCountryFileName($scope.newCollaborator.country);
-        if (fileName !== undefined) {
+        if(fileName !== undefined) {
           countryFactory.getStateList(fileName).then(
-            function (resp) {
+            function(resp) {
               $scope.states = resp;
-            }, function (err) {
+            }, function(err) {
               $scope.states = {};
             }
           );
-        } else {
+        }
+        else {
           $scope.states = {};
         }
       };
 
-      if ($scope.newCollaborator.country) {
-        $scope.getStateList();
-      }
-
-      $scope.cancel = function () {
+      $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
       };
-
-      $scope.inviteCollaborator = function () {
+      $scope.inviteCollaborator = function() {
         var requestPayload;
-        if ($rootScope.currentProjectInfo) {
-          if (!$scope.addNewCompany) {
+        if($rootScope.currentProjectInfo && $rootScope.currentProjectInfo.projectId) {
+          if(!$scope.addNewCompany) {
             requestPayload = {
               projectId: $rootScope.currentProjectInfo.projectId,
               firstName: $scope.firstName,
@@ -60,7 +63,8 @@ define(function (require) {
               email: $scope.email,
               companyId: $scope.existingCompany.id
             };
-          } else {
+          }
+          else {
             requestPayload = {
               companyAddress1: $scope.newCollaborator.addressOne,
               companyAddress2: $scope.newCollaborator.addressTwo,
@@ -73,21 +77,30 @@ define(function (require) {
               email: $scope.email,
               firstName: $scope.firstName,
               lastName: $scope.lastName,
-              projectId: 49,
+              projectId: $rootScope.currentProjectInfo.projectId,
               companyId: 0
             };
           }
         }
 
         inviteCollaboratorFactory.invite(requestPayload)
-          .success(function (resp) {
+          .success(function(resp) {
             $scope.sentSuccess = true;
             $scope.cancel();
-          }).error(function (error) {
+          })
+          .error(function(error) {
             $scope.form.$setPristine();
             $scope.sentSuccess = false;
           });
       };
+
+      $scope.companyChanged = function() {
+        $scope.addNewCompany = $scope.existingCompany.id === 0;
+      };
+
+      if($scope.newCollaborator.country) {
+        $scope.getStateList();
+      }
     }
   ];
 

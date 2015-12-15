@@ -124,6 +124,9 @@
     "_": true,
     "tinymce": true,
     "gapi": true,
-    "Pusher": true
+    "Pusher": true,
+    "THREE": true,
+    "TWEEN": true,
+    "Stats": true
   }
 }

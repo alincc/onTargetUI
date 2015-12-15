@@ -77,7 +77,18 @@ require.config({
     bimsurfer: '../js/bim/bimsurfer/api/BIMSURFER',
     bimsurferEvents: '../js/bim/bimsurfer/api/Events',
     bimsurferViewer: '../js/bim/bimsurfer/api/Viewer',
-    ngTable: '../bower_components/ng-table/dist/ng-table'
+    ngTable: '../bower_components/ng-table/dist/ng-table',
+    // 3D model viewer libraries
+    assimpJsonLoader: '../js/modelViewer/AssimpJSONLoader',
+    deviceOrientationControls: '../js/modelViewer/DeviceOrientationControls',
+    helvetiker_regular_typeface: '../js/modelViewer/helvetiker_regular.typeface',
+    orbitControl: '../js/modelViewer/OrbitControls',
+    stats: '../js/modelViewer/stats.min',
+    stereoEffect: '../js/modelViewer/StereoEffect',
+    three: '../js/modelViewer/three',
+    tween: '../js/modelViewer/Tween',
+    // tree view
+    jstree: '../bower_components/jstree/dist/jstree'
   },
 
   shim: {
@@ -205,21 +216,28 @@ require.config({
     "jquery.ui.widget": {
       deps: ['jQuery']
     },
-    "jqueryUpload" :{
+    "jqueryUpload": {
       deps: ['jQuery', 'jquery.ui.widget']
     },
-    "jqueryScrollTo" : {
+    "jqueryScrollTo": {
       deps: ['jQuery']
     },
-    "bimsurferEvents" : {
+    "bimsurferEvents": {
       deps: ['bimsurfer']
     },
-    "bimsurferViewer":{
+    "bimsurferViewer": {
       deps: ['bimsurferEvents']
     },
     "ngTable": {
       deps: ['angular']
-    }
+    },
+    deviceOrientationControls: {deps: ['three']},
+    helvetiker_regular_typeface: {deps: ['three']},
+    orbitControl: {deps: ['three']},
+    stereoEffect: {deps: ['three']},
+    assimpJsonLoader: {deps: ['stereoEffect', 'deviceOrientationControls', 'orbitControl', 'helvetiker_regular_typeface', 'stats']},
+    tween: {deps: ['assimpJsonLoader']},
+    jstree: {deps: ['jQuery']}
   }
 });
 

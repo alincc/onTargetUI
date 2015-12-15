@@ -1,0 +1,43 @@
+<form name="comment_frm" novalidate class="h-full">
+    <div class="commentWrapper">
+        <div class="comments">
+            <table class="table table-no-top">
+                <tbody>
+                <tr>
+                    <td colspan="2" class="text-center" ng-if="!comments.length && !isLoading">
+                        No comment
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" ng-if="isLoading">
+                        <spinner text="Loading comments..."></spinner>
+                    </td>
+                </tr>
+                <tr class="comment-item" ng-repeat="com in comments track by $index">
+                    <td class="avt">
+                        <img path="{{com.commenterContact.userImagePath}}" file-path alt="..."
+                             class="avatar img-circle"/></td>
+                    <td class="content"><p class="author">
+                        <b>{{com.commenterContact.firstName + ' ' + com.commenterContact.lastName}}</b> said:</p>
+                        <span class="date" ng-bind="com.commentedDate | date:app.datetimeFormat | lowercase"></span>
+
+                        <p class="message" ng-bind-html="com.comment | escapeHtml | newLines"></p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="comment-form">
+            <div class="input-group">
+                <textarea id="commentText" class="form-control" ng-model="commentModel.text"
+                       placeholder="Enter your comment..."></textarea>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btnAddComment" type="button"
+                            ng-click="addComment(commentModel)"
+                            ng-disabled="comment_frm.$invalid || comment_frm.$submitted">Add
+                    </button>
+                  </span>
+            </div>
+        </div>
+    </div>
+</form>

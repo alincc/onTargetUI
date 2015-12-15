@@ -1,0 +1,5 @@
+<ul class="list-group">
+    <li class="list-group-item">Type: {{minfo[0]}}</li>
+    <li class="list-group-item">UUID: {{minfo[2]}}</li>
+    <li class="list-group-item" ng-repeat="metadatum in mobject.metadata track by $index">{{metadatum.key}} : {{metadatum.value}}</li>
+</ul>

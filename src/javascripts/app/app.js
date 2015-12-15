@@ -15,9 +15,7 @@ define(function(require) {
     angularUiEvent = require('angularUiEvent'),
     angularSanitize = require('angularSanitize'),
     angularLoadingBar = require('angularLoadingBar'),
-    userNotificationModule = require('./common/services/userNotifications'),
-    mockServiceModule = require('./common/services/mock'),
-    pushServiceModule = require('./common/services/push');
+    serviceModule = require('./common/services/index');
 
   var app = angular.module('app', [
     //libraries
@@ -34,9 +32,7 @@ define(function(require) {
     'common.filters',
     'common.context.user',
     'common.context.project',
-    'common.services.userNotifications',
-    'common.services.mock',
-    'common.services.push',
+    'common.services',
 
     // modules
     'app.main',
@@ -61,8 +57,9 @@ define(function(require) {
     'app.onTarget',
     'app.documentPreview',
     'app.onFile',
-    'app.bimProject',
-    'app.inviteToProject'
+    //'app.bimProject',
+    'app.inviteToProject',
+    'app.onBim'
   ]);
 
   app

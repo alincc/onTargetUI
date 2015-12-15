@@ -23,7 +23,11 @@ define(function(require) {
     taskBudget = require('./taskBudget/taskBudget'),
     taskProgress = require('./taskProgress/taskProgress'),
     taskAttachment = require('./taskAttachment/taskAttachment'),
-    customScroll = require('./customScroll');
+    bim3dViewer = require('./bim3dViewer/bim3dViewer'),
+    treeView = require('./treeView'),
+    customScroll = require('./customScroll'),
+    fixHeight = require('./fixHeight'),
+    fullScreen = require('./fullScreen');
 
   var module = angular.module('common.directives',
     [
@@ -49,7 +53,11 @@ define(function(require) {
       'common.directives.taskBudget',
       'common.directives.taskProgress',
       'common.directives.taskAttachment',
-      'common.directives.customScroll'
+      'common.directives.customScroll',
+      'common.directives.bim3dViewer',
+      'common.directives.treeView',
+      'common.directives.fixHeight',
+      'common.directives.fullScreen'
     ]);
   return module;
 });

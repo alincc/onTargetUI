@@ -1,0 +1,103 @@
+<div class="onbim-project-detail">
+    <!-- main header -->
+    <div class="bg-light lter b-b wrapper-md">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="m-n font-thin h3 text-black">
+                    onBim - Project details
+                    <a class="btn btn-default pull-right" ui-sref="app.onBim"><i
+                            class="fa fa-arrow-left"></i> Back to project list
+                    </a>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <!-- / main header -->
+    <div class="wrapper-md p-r-none" fix-height ng-class="{'has-sidebar': settings.isShow}">
+        <div class="my-fluid-container h-full">
+            <div class="row h-full">
+                <div class="indexcontainer col-md-12 h-full">
+                    <div class="main h-full">
+                        <div class="maincontainer h-full">
+                            <div class="project h-full">
+                                <div class="row row-off-canvas h-full">
+                                    <div class="rightCol h-full"
+                                         ng-class="{'col-md-8': settings.isShow, 'col-md-12': !settings.isShow}">
+                                        <div class="rightpanel h-full">
+                                            <div class="panel panel-default h-full">
+                                                <div class="panel-heading btn-group threedviewTabs"
+                                                     data-toggle="buttons">
+                                                    <label class="btn btn-default button3d active">3D</label>
+                                                    <button type="button"
+                                                            class="btn btn-default pull-right toggle-button glyphicon"
+                                                            ng-class="{'glyphicon-menu-right': settings.isShow, 'glyphicon-menu-left': !settings.isShow}"
+                                                            ng-click="settings.toggleRightSide()"></button>
+                                                    <button type="button"
+                                                            class="btn btn-default pull-right fullscreen-button glyphicon glyphicon-resize-full"
+                                                            full-screen=".model-3d-viewer-container"></button>
+                                                </div>
+                                                <div class="panel-body h-full ">
+                                                    <!-- 3d model -->
+                                                    <bim-3d-viewer class="model-3d-viewer-container"
+                                                                   bim-project="bimProject"
+                                                                   update-properties="updateProperties(foo)"
+                                                                   set-tree-view="setTreeView(scene)"
+                                                                   set-types-view="setTypesView(typelist)"></bim-3d-viewer>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 leftCol h-full" ng-show="settings.isShow" id="sidebar">
+                                        <div class="panel panel-default h-full">
+                                            <div class="panel-heading btn-group projectTabs" data-toggle="buttons"
+                                                 style="padding: 0; width: 100%">
+                                                <label class="btnProjectTree btn btn-default"
+                                                       ng-class="{'active': settings.state==='trees'}"
+                                                       ng-click="settings.changeState('trees')">
+                                                    Tree
+                                                </label>
+                                                <label class="btnTypes btn btn-default"
+                                                       ng-class="{'active': settings.state==='types'}"
+                                                       ng-click="settings.changeState('types')">
+                                                    Types
+                                                </label>
+                                                <label class="btnProperties btn btn-default"
+                                                       ng-class="{'active': settings.state==='properties'}"
+                                                       ng-click="settings.changeState('properties')">
+                                                    Properties
+                                                </label>
+                                                <label class="btnComments btn btn-default"
+                                                       ng-class="{'active': settings.state==='comments'}"
+                                                       ng-click="settings.changeState('comments')">
+                                                    Comments
+                                                </label>
+                                            </div>
+                                            <div class="panel-body sidespanWrapper h-full" ng-switch on="settings.state"
+                                                 ng-if="settings.isShow"
+                                                 ng-class="{
+                                                 'onbim-trees': settings.state === 'trees',
+                                                 'onbim-types': settings.state === 'types',
+                                                 'onbim-properties': settings.state === 'properties',
+                                                 'onbim-comments': settings.state === 'comments'
+                                                 }">
+                                                <div ng-switch-when="trees" bim-project="bimProject" onbim-trees
+                                                     mtreeview="mtreeview" class="h-full"></div>
+                                                <div ng-switch-when="types" bim-project="bimProject" onbim-types
+                                                     mtypesview="mtypesview" class="h-full"></div>
+                                                <div ng-switch-when="properties" bim-project="bimProject"
+                                                     onbim-properties minfo="minfo" mobject="mobject"
+                                                     class="h-full"></div>
+                                                <div ng-switch-when="comments" bim-project="bimProject" onbim-comments
+                                                     class="h-full"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
