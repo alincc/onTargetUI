@@ -57,7 +57,7 @@ module.exports = {
     resourceUrl: 'http://localhost:9001',
     bimServer: 'http://localhost:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
-    newBimServer: 'http://115.75.6.162:3216',
+    newBimServer: 'http://localhost:9002',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
@@ -103,7 +103,7 @@ module.exports = {
     resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
     bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
-    newBimServer: 'http://115.75.6.162:3216',
+    newBimServer: 'http://int.app.ontargetcloud.com:9002',
     bimCredential: {
       username: 'bim@ontargetcloud.com',
       password: 'admin'
