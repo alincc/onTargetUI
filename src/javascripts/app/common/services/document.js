@@ -42,6 +42,11 @@ define(function(require) {
           return $http.post(constant.domain + '/upload/getDocumentById', model);
         };
 
+
+        service.getDocumentStatus = function(){
+          return $http.post(constant.domain + '/document/getDocumentStats', {});
+        };
+
         return service;
       }
     ]

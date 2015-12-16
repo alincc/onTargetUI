@@ -25,7 +25,7 @@ define(function(require) {
                 var deferred = $q.defer();
 
                 companyFactory.get({
-                  "companyId" : $rootScope.mainProjectInfo.companyId
+                  "companyId" : 0 // mainproject
                 }).success(function(response) {
                   deferred.resolve(response.company);
                 }).error(function(response) {

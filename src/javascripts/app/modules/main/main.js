@@ -17,7 +17,31 @@ define(function(require) {
             url: '/app',
             templateUrl: "main/templates/main.html",
             controller: 'MainController',
-            abstract: true
+            abstract: true,
+            resolve: {
+                allProjects: [
+                  '$q',
+                  'projectFactory',
+                  'userContext',
+                  '$rootScope',
+                  function($q,
+                           projectFactory,
+                           userContext,
+                           $rootScope) {
+                    var deferred = $q.defer();
+                    projectFactory.getUserProjectList({
+                      userId: userContext.authentication().userData.userId
+                    }).then(function(resp) {
+                        $rootScope.allProjects = resp.data.projects;
+                        deferred.resolve();
+                      },
+                      function() {
+                        $rootScope.allProjects = [];
+                        deferred.resolve();
+                      });
+                    return deferred.promise;
+                  }]
+              }
           });
       }
     ]

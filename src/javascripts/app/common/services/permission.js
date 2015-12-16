@@ -1,23 +1,26 @@
-/**
- * Created by thophan on 8/19/2015.
- */
 define(function(require) {
   'use strict';
   var angular = require('angular'),
-    lodash = require('lodash'),
+    _ = require('lodash'),
     module;
 
-  module = angular.module('common.services.permission', ['app.config']);
+  module = angular.module('common.services.permission', [
+    'app.config'
+  ]);
 
-  module.factory('permissionFactory',
-    ['appConstant', '$rootScope',
-      function(constant, $rootScope) {
+  module.factory('permissionFactory', [
+      'appConstant',
+      '$rootScope',
+      'userContext',
+      function(constant,
+               $rootScope,
+               userContext) {
         var service = {};
 
         service.checkMenuPermission = function(nav) {
+          var permissions = userContext.getPermissions().menuListPermissions;
           //return true;
-          if($rootScope.currentUserInfo.menuListPermission) {
-            var permissions = $rootScope.currentUserInfo.menuListPermission;
+          if(permissions.length) {
             return angular.isDefined(_.find(permissions, {menuKey: nav}));
           }
           else {
@@ -26,9 +29,9 @@ define(function(require) {
         };
 
         service.checkFeaturePermission = function(nav) {
+          var permissions = userContext.getPermissions().featureListPermissions;
           //return true;
-          if($rootScope.currentUserInfo.featureListPermission) {
-            var permissions = $rootScope.currentUserInfo.featureListPermission;
+          if(permissions.length) {
             return angular.isDefined(_.find(permissions, {featureKey: nav}));
           }
           else {

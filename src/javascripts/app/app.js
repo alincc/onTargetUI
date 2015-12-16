@@ -68,6 +68,9 @@ define(function(require) {
         // Load Authentication data from localstorage
         userContext.loadFromLocal();
 
+        // Load permissions
+        userContext.getPermissions();
+
         // Load project context
         projectContext.loadProject();
 

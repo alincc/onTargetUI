@@ -19,7 +19,7 @@ define(function() {
 
       $scope.projectModel = {
         projectId: null,
-        projectParentId: $rootScope.mainProjectInfo.projectId,
+        projectParentId: 0,
         projectTypeId: "",
         projectAddress: {
           address1: "",
@@ -30,7 +30,7 @@ define(function() {
           zip: "",
           addressId: ""
         },
-        companyId: $rootScope.mainProjectInfo.companyId,
+        companyId: 0, // mainproject
         projectName: "",
         projectDescription: "",
         status: "",

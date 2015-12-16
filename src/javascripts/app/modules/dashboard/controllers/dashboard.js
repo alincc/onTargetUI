@@ -316,31 +316,32 @@ define(function(require) {
           }
         );
 
-        // Document Submittal
-        $scope.submittalStatus = {
-          colours: [
-            '#c1d64c',
-            '#63b2db'
-          ],
-          options: {
-            animationEasing: "linear",
-            animationSteps: 10
-          },
-          data: [],
-          labels: ['Approval', 'Submittal']
-        };
-        $scope.isSubmittalStatusLoading = true;
-        documentFactory.getUserDocument($scope.project.projectId).then(
-          function(resp) {
-            $scope.submittalStatus.data[0] = resp.data.totalApprovals;
-            $scope.submittalStatus.data[1] = resp.data.totalSubmits;
-            //$scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
-            $scope.isSubmittalStatusLoading = false;
-            console.log($scope.submittalStatus);
-          }, function(err) {
-            $scope.isSubmittalStatusLoading = false;
-          }
-        );
+        //// Document Submittal
+        //$scope.submittalStatus = {
+        //  colours: [
+        //    '#c1d64c',
+        //    '#63b2db'
+        //  ],
+        //  options: {
+        //    animationEasing: "linear",
+        //    animationSteps: 10
+        //  },
+        //  data: [],
+        //  labels: ['Approval', 'Submittal']
+        //};
+        //$scope.isSubmittalStatusLoading = true;
+        //documentFactory.getUserDocument($scope.project.projectId).then(
+        //  function(resp) {
+        //
+        //    $scope.submittalStatus.data[0] = resp.data.totalApprovals;
+        //    $scope.submittalStatus.data[1] = resp.data.totalSubmits;
+        //    //$scope.submittalStatus.all = resp.data.totalApprovals + resp.data.totalSubmits;
+        //    $scope.isSubmittalStatusLoading = false;
+        //    console.log($scope.submittalStatus);
+        //  }, function(err) {
+        //    $scope.isSubmittalStatusLoading = false;
+        //  }
+        //);
 
         // Activity
         $scope.activityLogs = [];
@@ -377,6 +378,49 @@ define(function(require) {
           document.getElementById('time-line').setAttribute("style", "height:" + (height - 52) + "px");
         });
       });
+
+      $scope.documentStatuses = [];
+      documentFactory.getDocumentStatus().then(function(resp) {
+        angular.forEach(resp.data.countByDocumentTemplateAndStatus.entry, function(value) {
+          var documentStatus = {
+            key: value.key,
+            colours: [
+              '#c1d64c',
+              '#63b2db',
+              '#eee'
+            ],
+            options: {
+              animationEasing: "linear",
+              animationSteps: 10
+            },
+            data: [],
+            labels: []
+          };
+
+          angular.forEach(value.value, function(data, key) {
+            documentStatus.data.push(data);
+            switch(key) {
+              case 'approvedCount':
+                documentStatus.labels.push('Approved');
+                break;
+              case 'rejectedCount':
+                documentStatus.labels.push('Rejected');
+                break;
+              case 'submittedCount':
+                documentStatus.labels.push('Submitted');
+                break;
+            }
+          });
+
+          $scope.documentStatuses.push(documentStatus);
+
+        });
+
+      }, function(err) {
+
+      });
+
+
     }];
   return controller;
 });

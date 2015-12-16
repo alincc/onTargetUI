@@ -60,19 +60,7 @@ define(function(require){
             templateUrl: "project/templates/list.html",
             controller: 'ProjectListController',
             authorization: true,
-            fullWidth: true,
-            resolve: {
-              permission: ['$q', '$state', '$window', 'permissionFactory',
-                function($q, $state, $window, permissionFactory){
-                  var deferred = $q.defer();
-                  if(permissionFactory.checkFeaturePermission('VIEW_PROJECT')) {
-                    deferred.resolve();
-                  } else {
-                    $window.location.href = $state.href('app.editprofile');
-                  }
-                  return deferred.promise;
-                }]
-            }
+            fullWidth: true
           })
           .state('app.createProject', {
             url: '/create-project',
@@ -81,10 +69,10 @@ define(function(require){
             authorization: true,
             fullWidth: true,
             resolve: {
-              permission: ['$q', '$state', '$window', 'permissionFactory',
-                function($q, $state, $window, permissionFactory){
+              permission: ['$q', '$state', '$window', 'userContext',
+                function($q, $state, $window, userContext){
                   var deferred = $q.defer();
-                  if(permissionFactory.checkFeaturePermission('ADD_PROJECT')) {
+                  if(userContext.authentication().isOwner) {
                     deferred.resolve();
                   } else {
                     $window.location.href = $state.href('app.projectlist');
@@ -116,10 +104,10 @@ define(function(require){
                   });
                 return deferred.promise;
               }],
-              permission: ['$q', '$state', '$window', 'permissionFactory',
-                function($q, $state, $window, permissionFactory){
+              permission: ['$q', '$state', '$window', 'userContext',
+                function($q, $state, $window, userContext){
                   var deferred = $q.defer();
-                  if(permissionFactory.checkFeaturePermission('EDIT_PROJECT')) {
+                  if(userContext.authentication().isOwner) {
                     deferred.resolve();
                   } else {
                     $window.location.href = $state.href('app.projectlist');

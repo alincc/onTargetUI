@@ -83,7 +83,7 @@ require.config({
     deviceOrientationControls: '../js/modelViewer/DeviceOrientationControls',
     helvetiker_regular_typeface: '../js/modelViewer/helvetiker_regular.typeface',
     orbitControl: '../js/modelViewer/OrbitControls',
-    stats: '../js/modelViewer/stats.min',
+    stats: '../js/modelViewer/Stats',
     stereoEffect: '../js/modelViewer/StereoEffect',
     three: '../js/modelViewer/three',
     tween: '../js/modelViewer/Tween',
@@ -232,11 +232,9 @@ require.config({
       deps: ['angular']
     },
     deviceOrientationControls: {deps: ['three']},
-    helvetiker_regular_typeface: {deps: ['three']},
     orbitControl: {deps: ['three']},
     stereoEffect: {deps: ['three']},
-    assimpJsonLoader: {deps: ['stereoEffect', 'deviceOrientationControls', 'orbitControl', 'helvetiker_regular_typeface', 'stats']},
-    tween: {deps: ['assimpJsonLoader']},
+    //assimpJsonLoader: {deps: ['stereoEffect', 'deviceOrientationControls', 'orbitControl', 'helvetiker_regular_typeface']},
     jstree: {deps: ['jQuery']}
   }
 });

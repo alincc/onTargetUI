@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require){
   'use strict';
   var angular = require('angular'),
     tpl = require('text!./templates/taskAttachment.html'),
@@ -9,7 +9,7 @@ define(function(require) {
 
   module.run([
     '$templateCache',
-    function($templateCache) {
+    function ($templateCache){
       $templateCache.put('taskAttachment/templates/taskAttachment.html', tpl);
       $templateCache.put('taskAttachment/templates/viewAttachment.html', viewAttachmentTpl);
     }]);
@@ -21,29 +21,53 @@ define(function(require) {
     '$sce',
     'utilFactory',
     '$filter',
-    function($scope,
-             attachment,
-             $modalInstance,
-             $sce,
-             utilFactory,
-             $filter) {
+    function ($scope,
+              attachment,
+              $modalInstance,
+              $sce,
+              utilFactory,
+              $filter){
       $scope.attachment = attachment;
       $scope.fileExtension = utilFactory.getFileExtension(attachment.location);
       $scope.filePath = $filter('filePath')(attachment.location);
       $scope.isPdf = /(pdf$)/.test($scope.filePath);
       $scope.isImage = /(png|jpg|jpeg|gif)/.test($scope.fileExtension);
-      $scope.cancel = function() {
+      $scope.cancel = function (){
         $modalInstance.dismiss('cancel');
       };
 
-      $scope.trustSrc = function(src) {
+      $scope.trustSrc = function (src){
         return $sce.trustAsResourceUrl(src);
+      };
+    }]);
+
+
+  module.controller('deletedTaskAttachmentController', [
+    '$scope',
+    '$modalInstance',
+    'taskFactory',
+    'task',
+    function ($scope,
+              $modalInstance,
+              taskFactory,
+              task){
+      $scope.delete = function (){
+        taskFactory.deletedTaskAttachment(task.taskFileId).then(
+          function (resp){
+            $modalInstance.close({});
+          }, function (err){
+
+          });
+      };
+
+      $scope.cancel = function (){
+        $modalInstance.dismiss('cancel');
       };
     }]);
 
   module.directive('taskAttachment', [
     '$customScroll',
-    function($customScroll) {
+    function ($customScroll){
       return {
         restrict: 'E',
         scope: {
@@ -60,15 +84,15 @@ define(function(require) {
           '$filter',
           'toaster',
           '$modal',
-          function($scope,
-                   $rootScope,
-                   taskFactory,
-                   fileFactory,
-                   $timeout,
-                   $window,
-                   $filter,
-                   toaster,
-                   $modal) {
+          function ($scope,
+                    $rootScope,
+                    taskFactory,
+                    fileFactory,
+                    $timeout,
+                    $window,
+                    $filter,
+                    toaster,
+                    $modal){
 
             $scope.attachments = [];
             $scope.isUploading = false;
@@ -84,46 +108,46 @@ define(function(require) {
               location: ''
             };
 
-            $scope.getTaskAttachments = function() {
+            $scope.getTaskAttachments = function (){
               $scope.isLoadingAttachments = true;
               taskFactory.getTaskAttachments({taskId: $scope.task.projectTaskId}).then(
-                function(resp) {
+                function (resp){
                   $scope.attachments = resp.data.taskAttachments;
                   $scope.isLoadingAttachments = false;
                   $scope.$broadcast("content.reload");
-                }, function(err) {
+                }, function (err){
                   console.log(err);
                   $scope.isLoadingAttachments = false;
                 });
             };
 
-            $scope.upload = function($files) {
+            $scope.upload = function ($files){
               $scope.isUploading = true;
               //$files: an array of files selected, each file has name, size, and type.
               var $file = $files[0];
-              fileFactory.upload($file, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'task').progress(function(evt) {
+              fileFactory.upload($file, null, 'projects', $rootScope.currentProjectInfo.projectAssetFolderName, 'task').progress(function (evt){
                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                 $scope.percentage = progressPercentage;
-              }).success(function(data, status, headers, config) {
-                $timeout(function() {
+              }).success(function (data, status, headers, config){
+                $timeout(function (){
                   $scope.model.fileName = data.url.substring(data.url.lastIndexOf('/') + 1);
                   $scope.model.location = data.url;
                   $scope.isUploading = false;
                   $scope.saveTaskFile();
                 });
-              }).error(function() {
+              }).error(function (){
                 $scope.isUploading = false;
               });
             };
 
-            $scope.download = function(att) {
+            $scope.download = function (att){
               $window.open($filter('fileDownloadPathHash')(att.location));
             };
 
-            $scope.preview = function(att) {
+            $scope.preview = function (att){
               //$rootScope.fileAttachment = att;
               //$state.go('app.previewDocument', {onAction: 'onTime'});
-              if(!/(pdf|png|jpg|jpeg|gif)$/.test(att.fileName)) {
+              if (!/(pdf|png|jpg|jpeg|gif)$/.test(att.fileName)) {
                 toaster.pop('error', 'Error', 'Sorry, this file can not be preview!');
                 return;
               }
@@ -135,16 +159,16 @@ define(function(require) {
                 size: 'lg',
                 windowClass: 'width90',
                 resolve: {
-                  attachment: function() {
+                  attachment: function (){
                     return att;
                   }
                 }
               });
             };
 
-            $scope.saveTaskFile = function() {
+            $scope.saveTaskFile = function (){
               taskFactory.saveTaskFile($scope.model).then(
-                function(resp) {
+                function (resp){
                   $scope.attachments.push({
                     "contact": $rootScope.currentUserInfo.contact,
                     "fileName": $scope.model.fileName,
@@ -154,30 +178,54 @@ define(function(require) {
                   });
 
                   $scope.$broadcast('taskAttachment.addAttachmentSuccessful');
-                }, function(err) {
+                }, function (err){
                   console.log(err);
                   $scope.$broadcast('taskAttachment.addAttachmentFailed');
                 });
             };
 
-            $scope.$watch('attachment.file', function() {
-              if($scope.attachment.file) {
+            $scope.$watch('attachment.file', function (){
+              if ($scope.attachment.file) {
                 $scope.upload([$scope.attachment.file]);
               }
             });
 
             $scope.getTaskAttachments();
+
+
+            $scope.deleted = function (att){
+              var deleteTaskModalInstance = $modal.open({
+                templateUrl: 'onTime/task/templates/delete.html',
+                controller: 'deletedTaskAttachmentController',
+                size: 'sm',
+                resolve: {
+                  task: function (){
+                    return att;
+                  }
+                }
+              });
+
+              deleteTaskModalInstance.result.then(function (){
+                _.remove($scope.attachments, function (e){
+                  return e.taskFileId === att.taskFileId;
+                });
+              }, function (){
+
+              });
+
+            };
+
           }],
-        link: function(scope) {
+        link: function (scope){
           var scroller = $customScroll.get('taskAttachment');
-          scope.$on('taskAttachment.addAttachmentSuccessful', function() {
+          scope.$on('taskAttachment.addAttachmentSuccessful', function (){
             scroller.updateScroll();
-            if(scroller.atBottom) {
+            if (scroller.atBottom) {
               scroller.scrollTo('bottom');
             }
           });
 
-          scope.$on('taskAttachment.addAttachmentFailed', function() {
+          scope.$on('taskAttachment.addAttachmentFailed', function (){
             console.log(scroller);
           });
         }

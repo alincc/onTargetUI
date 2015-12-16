@@ -28,7 +28,7 @@ define(function(require) {
             if(angular.isObject(config.data) && (!angular.isDefined(config.headers.Authorization) || config.headers.Authorization !== false)) {
               config.data["baseRequest"] = {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
-                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : $rootScope.mainProjectInfo.projectId
+                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : 0
               };
             }
             return config;

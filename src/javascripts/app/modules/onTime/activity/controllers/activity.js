@@ -59,7 +59,7 @@ define(function(require) {
         canceler = $q.defer();
         projectFactory.getUserProject($scope.model, canceler).then(
           function(resp) {
-            $scope.projects = resp.data.mainProject.projects;
+            $scope.projects = resp.data.projects;
             $scope.getCurrentProjectActivities();
           },
           function() {

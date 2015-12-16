@@ -94,14 +94,26 @@ module.exports = {
     }
 
     function createAttachmentsHtml(attachments) {
-      var attachmentHtml = '<p><a href="{{attachmentLink}}">{{attachmentName}}</a></p>', attHtml = '';
+      //var attachmentHtml = '<p><a href="{{attachmentLink}}">{{attachmentName}}</a></p>', attHtml = '';
+      //_.each(attachments, function(att) {
+      //  var attachmentHtmlCopy = attachmentHtml;
+      //  attachmentHtmlCopy = attachmentHtmlCopy.replace(/\{\{attachmentLink}}/g, config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)));
+      //  attachmentHtmlCopy = attachmentHtmlCopy.replace(/\{\{attachmentName}}/g, att.filePath.substring(att.filePath.lastIndexOf('/') + 1));
+      //  attHtml = attHtml + attachmentHtmlCopy;
+      //});
+      //return attHtml;
+
+      var attachmentHtml = '<table style="border: none; border-collapse: collapse; width: 100%;" border="0">', attHtml = '';
       _.each(attachments, function(att) {
-        var attachmentHtmlCopy = attachmentHtml;
-        attachmentHtmlCopy = attachmentHtmlCopy.replace(/\{\{attachmentLink}}/g, config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)));
-        attachmentHtmlCopy = attachmentHtmlCopy.replace(/\{\{attachmentName}}/g, att.filePath.substring(att.filePath.lastIndexOf('/') + 1));
-        attHtml = attHtml + attachmentHtmlCopy;
+        if(/\.(jpg|jpeg|png)$/i.test(att.filePath)) {
+          attachmentHtml += '<tr><td style="text-align:center; border: solid 1px #e5e5e5; padding: 5px;"><img style="max-width: 100%;" src="' + config.domain + '/' + att.filePath + '"><p style="margin: 10px 0;"><a style="color: #5B90BF; font-weight: bold;" href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">' + att.filePath.substring(att.filePath.lastIndexOf('/') + 1) + '</a></p></td></tr>';
+        }
+        else {
+          attachmentHtml += '<tr><td style="text-align:center; border: solid 1px #e5e5e5; padding: 5px;"><a style="color: #5B90BF; font-weight: bold;" href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">' + att.filePath.substring(att.filePath.lastIndexOf('/') + 1) + '</a></td></tr>';
+        }
       });
-      return attHtml;
+      attachmentHtml += '</table>';
+      return attachmentHtml;
     }
 
     function failure(err) {
@@ -141,6 +153,10 @@ module.exports = {
 
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
+
+      if(fs.existsSync(destinationPath)) {
+        fs.unlinkSync(destinationPath);
+      }
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
@@ -203,6 +219,10 @@ module.exports = {
 
       html = html.replace(/\{\{gridKeyValues}}/g, gridKeys);
 
+      if(fs.existsSync(destinationPath)) {
+        fs.unlinkSync(destinationPath);
+      }
+
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
         .on("error", function(error) {
@@ -259,6 +279,10 @@ module.exports = {
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
 
+      if(fs.existsSync(destinationPath)) {
+        fs.unlinkSync(destinationPath);
+      }
+
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream
         .on("error", function(error) {
@@ -269,21 +293,21 @@ module.exports = {
     }
 
     function fillRFIData(html, data) {
-      html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath);
-      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name);
+      html = html.replace(/\{\{company_logo}}/g, data.companyLogoPath || '');
+      html = html.replace(/\{\{company_name}}/g, data.keyValues.company_name || '');
       html = html.replace(/\{\{createdBy}}/g, data.creator.contact.firstName + ' ' + data.creator.contact.lastName);
-      html = html.replace(/\{\{company}}/g, data.creator.companyName);
+      html = html.replace(/\{\{company}}/g, data.creator.companyName || '');
       html = html.replace(/\{\{createdDate}}/g, moment(data.keyValues.date_created).format('MM/DD/YYYY'));
-      html = html.replace(/\{\{address}}/g, data.creator.companyAddress);
-      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName);
+      html = html.replace(/\{\{address}}/g, data.creator.companyAddress || '');
+      html = html.replace(/\{\{username}}/g, data.keyValues.receiverName || '');
       html = html.replace(/\{\{attention}}/g, _.map(data.keyValues.attention, function(el) {
         return el.contact.firstName + ' ' + el.contact.lastName;
       }).join(', '));
 
-      html = html.replace(/\{\{subject}}/g, data.keyValues.subject);
-      html = html.replace(/\{\{RFI}}/g, data.keyValues.RFI);
-      html = html.replace(/\{\{question_or_concern}}/g, data.keyValues.question_or_concern);
-      html = html.replace(/\{\{suggestion}}/g, data.keyValues.suggestion);
+      html = html.replace(/\{\{subject}}/g, data.keyValues.subject || '');
+      html = html.replace(/\{\{RFI}}/g, data.keyValues.RFI || '');
+      html = html.replace(/\{\{question_or_concern}}/g, data.keyValues.question_or_concern || '');
+      html = html.replace(/\{\{suggestion}}/g, data.keyValues.suggestion || '');
 
       html = html.replace(/\{\{rfi_is_a_change}}/g, data.keyValues.rfi_is_a_change === 'YES' ? 'checked' : '');
       html = html.replace(/\{\{open}}/g, data.status === 'SUBMITTED' ? 'checked' : '');
@@ -305,7 +329,8 @@ module.exports = {
       html = html.replace(/\{\{responses}}/g, resHtml);
 
       // Attachments
-      html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
+      var attachmentHtml = createAttachmentsHtml(data.attachments);
+      html = html.replace(/\{\{attachments}}/g, attachmentHtml);
 
       /*response = response.replace(/\{\{title}}/g, responseData.title);
        response = response.replace(/\{\{reply}}/g, responseData.reply);
@@ -313,6 +338,9 @@ module.exports = {
        response = response.replace(/\{\{responsedDate}}/g, responseData.responsedDate.getDate() + '/' + responseData.responsedDate.getMonth() + '/' + responseData.responsedDate.getYear());
        response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime());*/
 
+      if(fs.existsSync(destinationPath)) {
+        fs.unlinkSync(destinationPath);
+      }
 
       var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
       stream

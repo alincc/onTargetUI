@@ -3,7 +3,6 @@ define(function(require) {
   var angular = require('angular'),
     _ = require('lodash'),
     config = require('app/config'),
-    modelViewerLibraries = require('tween'),
     module;
 
   module = angular.module('common.directives.bim3dViewer', [
@@ -52,9 +51,85 @@ define(function(require) {
             glFrame = elem[0],
             $scope = scope,
             types,
-            rootobject;
+            rootobject,
+            materials = [],
+          //used for multi-material
+            materialNames = {},
+          //used for uniqueness;
+            totalLoadpasses = 0,
+            loadpass = 0,
+          //the loader
+            loader = new THREE.AssimpJSONLoader();
+
+          function render(dt) {
+            renderer.render(scene, camera);
+
+            renderer.render(scene, camera);
+            //switch to this for vr:
+            //effect.render(scene, camera);
+          }
+
+          function resize() {
+            var width = container.offsetWidth;
+            var height = container.offsetHeight;
+
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(width, height);
+            //effect.setSize(width, height);
+          }
+
+          function update(dt) {
+            resize();
+            //
+            controls.update(dt);
+            camera.updateProjectionMatrix();
+            stats.update();
+            TWEEN.update();
+          }
+
+          function animate() {
+
+            requestAnimationFrame(animate);
+
+            update(clock.getDelta());
+            render(clock.getDelta());
+          }
+
+          function fullscreen() {
+            if(container.requestFullscreen) {
+              container.requestFullscreen();
+            } else if(container.msRequestFullscreen) {
+              container.msRequestFullscreen();
+            } else if(container.mozRequestFullScreen) {
+              container.mozRequestFullScreen();
+            } else if(container.webkitRequestFullscreen) {
+              container.webkitRequestFullscreen();
+            }
+          }
+
+          function getURL(url, callback) {
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function() {
+              if(xmlhttp.readyState === 4) {
+                if(xmlhttp.status === 200) {
+                  callback(JSON.parse(xmlhttp.responseText));
+                }
+                else {
+                  console.log('We had an error, status code: ', xmlhttp.status);
+                }
+              }
+            };
+
+            xmlhttp.open('GET', url, true);
+            xmlhttp.send();
+          }
 
           function init(files) {
+            //used for UI
+            totalLoadpasses = files.length;
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.001, 2000);
             camera.position.set(50, 50, 50);
@@ -204,7 +279,7 @@ define(function(require) {
                   //add the mesh
                   for(var j = 0; node.meshes && j < node.meshes.length; ++j) {
 
-                    idx = node.meshes[j];
+                    var idx = node.meshes[j];
 
                     //console.log("idx: "+ idx);
                     node.add(new THREE.Mesh(rootobject.meshes[idx], //  , rootobject.materials[ 0 ] ) ); //fixme later
@@ -281,25 +356,11 @@ define(function(require) {
             rootobject.flatrefs = [];
             //used to accumulate between multiple loader instances.
 
-
-            var materials = [];
-            //used for multi-material
-            var materialNames = {};
-            //used for uniqueness
-
-
             properties = [];
             layers = [];
             types = {};
-            //used for UI
-            var loadpass = 0;
-            var totalLoadpasses = files.length;
+
             for(var i = 0; i < files.length; i++) {
-
-
-              //the loader
-              var loader = new THREE.AssimpJSONLoader(),
-                idx;
 
               console.log(files[i] + " loading...");
               loader.load(constant.newBimServer + '/' + files[i], rootobject,
@@ -311,75 +372,6 @@ define(function(require) {
             window.addEventListener('touchstart', touchstart, false);
             animate();
             //END INIT
-          }
-
-          function animate() {
-
-            requestAnimationFrame(animate);
-
-            update(clock.getDelta());
-            render(clock.getDelta());
-          }
-
-          function resize() {
-            var width = container.offsetWidth;
-            var height = container.offsetHeight;
-
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-
-            renderer.setSize(width, height);
-            //effect.setSize(width, height);
-          }
-
-          function update(dt) {
-            resize();
-            //
-            controls.update(dt);
-            camera.updateProjectionMatrix();
-            stats.update();
-            TWEEN.update();
-          }
-
-          function render(dt) {
-
-
-            renderer.render(scene, camera);
-
-
-            renderer.render(scene, camera);
-            //switch to this for vr:
-            //effect.render(scene, camera);
-          }
-
-          function fullscreen() {
-            if(container.requestFullscreen) {
-              container.requestFullscreen();
-            } else if(container.msRequestFullscreen) {
-              container.msRequestFullscreen();
-            } else if(container.mozRequestFullScreen) {
-              container.mozRequestFullScreen();
-            } else if(container.webkitRequestFullscreen) {
-              container.webkitRequestFullscreen();
-            }
-          }
-
-          function getURL(url, callback) {
-            var xmlhttp = new XMLHttpRequest();
-
-            xmlhttp.onreadystatechange = function() {
-              if(xmlhttp.readyState === 4) {
-                if(xmlhttp.status === 200) {
-                  callback(JSON.parse(xmlhttp.responseText));
-                }
-                else {
-                  console.log('We had an error, status code: ', xmlhttp.status);
-                }
-              }
-            };
-
-            xmlhttp.open('GET', url, true);
-            xmlhttp.send();
           }
 
           $scope.getChunks()

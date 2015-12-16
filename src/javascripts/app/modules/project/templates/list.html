@@ -4,9 +4,26 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <a ui-sref="app.createProject" class="btn btn-info pull-right" permission="ADD_PROJECT"><i
+                    <a ui-sref="app.createProject" class="btn btn-info pull-right" ng-if="isOwner"><i
                             class="fa fa-plus-circle"></i>
                         Add Project</a>
+
+                    <form role="search" target=".navbar-collapse" ui-shift="prependTo"
+                          class="navbar-form navbar-form-sm navbar-right shift ng-pristine ng-valid">
+                        <div class="form-group">
+                            <div class="input-group">
+                    <span class="input-group-btn">
+                <button class="btn btn-sm bg-light" type="submit"><i class="fa fa-search"></i></button>
+              </span>
+                                <input type="text" placeholder="Search projects..."
+                                       class="form-control input-sm bg-light no-border padder ng-pristine ng-valid ng-touched"
+                                       ng-model="projectObject.projectName"
+                                       ng-model-options="{ debounce: 500 }"
+                                       style="">
+                            </div>
+                        </div>
+                    </form>
+
 
                     <h1 class="m-n font-thin h3 text-black">PROJECT PORTFOLIO
                         <div class="buttons">
@@ -34,14 +51,15 @@
                 </div>
             </div>
             <div class="row project-grid" ng-repeat="r in arrangedProjects" ng-if="viewMode==='grid'">
-                <div ng-repeat="project in r"
+                <div ng-repeat="project in r | filter:projectObject:projectName"
                      class="col-xs-6 col-sm-4 col-md-3 project-box">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <!--project image-->
                             <div class="project-image" align="center">
                                 <a href="javascript:void(0)" ng-click="goDashboard(project)">
-                                    <img file-path="project" path="{{project.projectImagePath}}" class="img-responsive"/>
+                                    <img file-path="project" path="{{project.projectImagePath}}"
+                                         class="img-responsive"/>
                                 </a>
                             </div>
                             <!--project name-->
@@ -52,16 +70,16 @@
                                 <!--control-->
                                 <div align="center">
                                     <ul class="list-inline">
-                                        <li class="text-left"><a href="javascript:void(0)" permission="EDIT_PROJECT"
+                                        <li class="text-left"><a href="javascript:void(0)" ng-if="isOwner"
                                                                  ng-click="editProject(project)"><i
                                                 class="fa fa-pencil-square-o"></i>
                                             Edit</a>
                                         </li>
-                                        <li class="text-center"><a href="javascript:void(0)" permission="DELETE_PROJECT"
+                                        <li class="text-center"><a href="javascript:void(0)" ng-if="isOwner"
                                                                    ng-click="deleteProject(project)"><i
                                                 class="fa fa-trash-o"></i>
                                             Delete</a></li>
-                                        <li class="text-right"><a href="javascript:void(0)" permission="VIEW_DASHBOARD"
+                                        <li class="text-right"><a href="javascript:void(0)"
                                                                   ng-click="goDashboard(project)"><i
                                                 class="fa fa-clock-o"></i>
                                             Dashboard</a></li>
@@ -76,31 +94,35 @@
                 </div>
             </div>
             <div class="row project-list" ng-repeat="r in arrangedProjects" ng-if="viewMode==='list'">
-                <div ng-repeat="project in r"
+                <div ng-repeat="project in r | filter:projectObject:projectName"
                      class="col-xs-1 col-md-6 project-box">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <!--project image-->
                             <div class="project-image" align="center">
                                 <a href="javascript:void(0)" ng-click="goDashboard(project)">
-                                    <img file-path="project" path="{{project.projectImagePath}}" class="img-responsive"/>
+                                    <img file-path="project" path="{{project.projectImagePath}}"
+                                         class="img-responsive"/>
                                 </a>
                             </div>
-                            <div class="project-info" ng-class="{'has-address': project.fullAddress1.length || project.fullAddress2.length}">
+                            <div class="project-info"
+                                 ng-class="{'has-address': project.fullAddress1.length || project.fullAddress2.length}">
                                 <div class="project-name" ng-bind="project.projectName"></div>
-                                <div class="project-address" ng-if="project.fullAddress1.length || project.fullAddress2.length">
+                                <div class="project-address"
+                                     ng-if="project.fullAddress1.length || project.fullAddress2.length">
                                     <p ng-bind-html="project.fullAddress1"></p>
+
                                     <p ng-bind-html="project.fullAddress2" ng-if="project.fullAddress2.length"></p>
                                 </div>
                                 <div class="project-buttons">
                                     <div class="button button-edit">
-                                        <a href="javascript:void(0)" permission="EDIT_PROJECT"
+                                        <a href="javascript:void(0)" ng-if="isOwner"
                                            ng-click="editProject(project)"><i
                                                 class="fa fa-pencil-square-o"></i>
                                             Edit</a>
                                     </div>
                                     <div class="button button-delete">
-                                        <a href="javascript:void(0)" permission="DELETE_PROJECT"
+                                        <a href="javascript:void(0)" ng-if="isOwner"
                                            ng-click="deleteProject(project)"><i
                                                 class="fa fa-trash-o"></i>
                                             Delete</a>
@@ -131,9 +153,10 @@
                                     </span>
                                 </div>
                                 <div class="project-description">
-                                    <p ng-bind="project.projectDescription" project-description-width></p><a class="more"
-                                                                                                       href="javascript:void(0)"
-                                                                                                       ng-click="goDashboard(project)">more</a>
+                                    <p ng-bind="project.projectDescription" project-description-width></p><a
+                                        class="more"
+                                        href="javascript:void(0)"
+                                        ng-click="goDashboard(project)">more</a>
                                 </div>
                             </div>
                         </div>

@@ -64,7 +64,7 @@ define(function(require) {
       $scope.isLoadingGanttChart = true;
       projectFactory.getProjectByUser($scope.model, canceler).then(
         function(resp) {
-          $scope.projects = resp.data.mainProject.projects;
+          $scope.projects = resp.data.projects;
 
           $scope.getCurrentProjectActivities();
           load();

@@ -17,22 +17,12 @@ define(function(require) {
              $rootScope,
              notifications) {
       var service = {},
-        project = {},
-        parentProject = {
-          projectId: 1
-        },
-        allProjects = [],
-        mainProject = {};
+        project = {};
 
       $rootScope.currentProjectInfo = project;
       $rootScope.allProjects = [];
-      $rootScope.mainProjectInfo = mainProject;
 
-      service.getMainProject = function() {
-        return mainProject;
-      };
-
-      service.setProject = function(pj, mj) {
+      service.setProject = function(pj) {
         if(pj) {
           var oldProject = angular.copy($rootScope.currentProjectInfo);
           project = $rootScope.currentProjectInfo = pj;
@@ -42,15 +32,8 @@ define(function(require) {
           });
         }
 
-        if(mj) {
-          mainProject = $rootScope.mainProjectInfo = mj;
-          allProjects = $rootScope.allProjects = mj.projects;
-        }
-
         service.saveLocal({
-          project: project,
-          allProjects: allProjects || [],
-          mainProject: mainProject || {}
+          project: project
         });
       };
 
@@ -60,12 +43,9 @@ define(function(require) {
           newProject: null
         });
         project = $rootScope.currentProjectInfo = {};
-        allProjects = $rootScope.allProjects = [];
-        mainProject = $rootScope.mainProjectInfo = {};
+        $rootScope.allProjects = [];
         service.saveLocal({
-          project: project,
-          allProjects: allProjects,
-          mainProject: mainProject
+          project: project
         });
       };
 
@@ -77,25 +57,16 @@ define(function(require) {
       service.loadProject = function() {
         var data = storage.get('projectData');
         data = data || {};
-        service.setProject(data.project || null, data.mainProject || null);
+        service.setProject(data.project || null);
       };
 
       service.project = function() {
         return project;
       };
 
-      service.allProjects = function() {
-        return allProjects;
-      };
-
-      service.mainProject = function() {
-        return mainProject;
-      };
-
       service.valid = function() {
-        return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId) && $rootScope.mainProjectInfo && angular.isDefined($rootScope.mainProjectInfo.projectId);
+        return $rootScope.currentProjectInfo && angular.isDefined($rootScope.currentProjectInfo.projectId);
       };
-
 
       return service;
     }]);

@@ -46,10 +46,9 @@ define(function(require) {
                 // Get user permission
                 services.getUserProfileDetails(resp.data.user.userId)
                   .success(function(resp2) {
-                    var newObj = angular.copy($rootScope.currentUserInfo);
-                    newObj.menuListPermission = $rootScope.currentUserInfo.menuListPermission = resp2.menuList;
-                    newObj.featureListPermission = $rootScope.currentUserInfo.featureListPermission = resp2.featureList;
-                    userContext.fillInfo(newObj, true);
+                    var newObj = userContext.authentication();
+                    newObj.isOwner = resp2.membershipType === 'PROJ_OWNER';
+                    userContext.saveLocal(newObj);
                     deferred.resolve();
                   })
                   .error(function(err) {
@@ -166,6 +165,20 @@ define(function(require) {
             userId: $rootScope.currentUserInfo.userId
           }
         });
+      };
+
+      services.getUserProjectProfile = function(projectId) {
+        return $http.post(constant.domain + '/profile/userProjectProfileInfo', {
+            "baseRequest":{
+              "loggedInUserId": $rootScope.currentUserInfo.userId,
+              "loggedInUserProjectId": projectId ? projectId : $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : 0
+            }
+          },
+          {
+            headers: {
+              Authorization: false
+            }
+          });
       };
 
       return services;

@@ -5,8 +5,8 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', 'userNotificationsFactory', 'notifications', 'permissionFactory',
-    function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory, userNotificationsFactory, notifications, permissionFactory) {
+  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'appConstant', 'accountFactory', 'projectFactory', '$modal', 'companyFactory', 'projectContext', 'storage', 'utilFactory', 'userNotificationsFactory', 'notifications', 'permissionFactory', 'toaster',
+    function($scope, $rootScope, userContext, $state, appConstant, accountFactory, projectFactory, $modal, companyFactory, projectContext, storage, utilFactory, userNotificationsFactory, notifications, permissionFactory, toaster) {
       function arrangeData(data, itemPerRow) {
         var list = [];
         var row = [];
@@ -45,6 +45,7 @@ define(function(require) {
       };
       $scope.projects = [];
       $scope.arrangedProjects = [];
+      $scope.isOwner = userContext.authentication().isOwner;
 
       $scope.getUserProjectList = function() {
         // Clear project context cache
@@ -53,20 +54,16 @@ define(function(require) {
         $scope.isLoading = true;
         projectFactory.getUserProjectList({
           userId: userContext.authentication().userData.userId
-        }).then(
-          function(resp) {
+        }).then(function(resp) {
             var itemPerRow = $scope.viewMode === 'grid' ? 4 : 2;
-            $scope.projects = $scope.reMapData(resp.data.mainProject.projects);
+            $scope.projects = $scope.reMapData(resp.data.projects);
+            $rootScope.allProjects = resp.data.projects;
             $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
             $scope.isLoading = false;
-
-            // save projects to local storage
-            projectContext.setProject(null, resp.data.mainProject);
           },
           function() {
             $scope.isLoading = false;
-          }
-        );
+          });
       };
 
       var deleteProjectModalInstance;
@@ -97,31 +94,44 @@ define(function(require) {
       };
 
       $scope.goDashboard = function(pj) {
-        if(!permissionFactory.checkFeaturePermission('VIEW_DASHBOARD')) {
-          return;
-        }
-        // Set and cache project context
-        projectContext.setProject(pj);
 
-        // get project details
-        projectFactory.getProjectById(pj.projectId)
+        // Get and save project permissions
+        accountFactory.getUserProjectProfile(pj.projectId)
           .success(function(resp) {
-            projectContext.setProject(resp.project);
+            userContext.updatePermissions(resp.featureList, resp.menuList);
 
-            // get notifications
-            if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
-              userNotificationsFactory.getAll({
-                "pageNumber": 1,
-                "perPageLimit": 5
-              }).then(function(resp) {
-                $rootScope.userNotifications = resp.data;
-                notifications.getNotificationSuccess();
-              });
+            if(permissionFactory.checkFeaturePermission('VIEW_DASHBOARD')) {
+              // Set and cache project context
+              projectContext.setProject(pj);
 
-              notifications.currentProjectChange({project: pj});
+              // get project details
+              projectFactory.getProjectById(pj.projectId)
+                .success(function(resp) {
+                  projectContext.setProject(resp.project);
 
-              $state.go('app.dashboard');
+                  // get notifications
+                  if($rootScope.currentUserInfo && $rootScope.currentUserInfo.userId) {
+                    userNotificationsFactory.getAll({
+                      "pageNumber": 1,
+                      "perPageLimit": 5
+                    })
+                      .then(function(resp) {
+                        $rootScope.userNotifications = resp.data;
+                        notifications.getNotificationSuccess();
+                      });
+
+                    notifications.currentProjectChange({project: pj});
+
+                    $state.go('app.dashboard');
+                  }
+                });
             }
+            else {
+              toaster.pop('error','Error','Sorry you dont have permission to access project dashboard');
+            }
+          })
+          .error(function(err) {
+            console.log(err);
           });
       };
 
@@ -140,6 +150,13 @@ define(function(require) {
 
       //$scope.getUserProject();
       $scope.getUserProjectList();
+
+
+
+      //search projects
+      $scope.projectObject = {
+        projectName: ''
+      };
     }];
   return controller;
 });

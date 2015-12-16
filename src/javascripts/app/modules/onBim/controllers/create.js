@@ -71,7 +71,7 @@ define(function(require) {
               projectBimFileId: resp.projectBimFileDTO.projectBimFileId,
               baseRequest: {
                 "loggedInUserId": $rootScope.currentUserInfo.userId,
-                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : $rootScope.mainProjectInfo.projectId
+                "loggedInUserProjectId": $rootScope.currentProjectInfo.projectId ? $rootScope.currentProjectInfo.projectId : 0
               }
             })
               .progress(function(evt) {

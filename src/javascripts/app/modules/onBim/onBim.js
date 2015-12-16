@@ -20,7 +20,15 @@ define(function(require) {
     onbimPropertiesDirective = require('./directives/onbimProperties'),
     onbimPropertiesTpl = require('text!./templates/onbimProperties.html'),
     onbimCommentsDirective = require('./directives/onbimComments'),
-    onbimCommentsTpl = require('text!./templates/onbimComments.html');
+    onbimCommentsTpl = require('text!./templates/onbimComments.html'),
+    three = require('three'),
+    stereoEffect = require('stereoEffect'),
+    deviceOrientationControls = require('deviceOrientationControls'),
+    orbitControl = require('orbitControl'),
+    helvetiker_regular_typeface = require('helvetiker_regular_typeface'),
+    stats = require('stats'),
+    assimpJsonLoader = require('assimpJsonLoader'),
+    tween = require('tween');
   var module = angular.module('app.onBim', [
     'app.config'
   ]);
@@ -109,7 +117,7 @@ define(function(require) {
                   onBimFactory.getById($stateParams.projectId)
                     .success(function(resp) {
                       if(resp.projectBimFileDTO.isBimIFCConversionComplete === 'N') {
-                        toaster.pop('info','Info','IFC file conversion is in progress. Please try again!');
+                        toaster.pop('info', 'Info', 'IFC file conversion is in progress. Please try again!');
                         deferred.reject();
                       } else {
                         deferred.resolve(resp.projectBimFileDTO);

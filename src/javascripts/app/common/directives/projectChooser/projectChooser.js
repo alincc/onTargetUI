@@ -9,44 +9,59 @@ define(function(require) {
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('projectChooserTemplate', template);
   }]);
-  module.directive('projectChooser', ['$rootScope', 'notifications', 'projectContext', function($rootScope, notifications, projectContext) {
-    return {
-      restrict: 'E',
-      transclude: true,
-      templateUrl: 'projectChooserTemplate',
-      controller: ['$scope', function($scope) {
-        $scope.projects = $rootScope.allProjects;
-        $scope.currentProject = $rootScope.currentProjectInfo;
-        $scope.selectProject = function(pj) {
-          if(pj.projectId !== $scope.currentProject.projectId) {
-            projectContext.setProject(pj);
-            notifications.currentProjectChange({project: pj});
-          }
-        };
-
-        $scope.status = {
-          isopen: false
-        };
-
-        $scope.toggleDropdown = function() {
-          $scope.status.isopen = !$scope.status.isopen;
-        };
-
-        notifications.onCurrentProjectChange($scope, function(agrs) {
-          $scope.currentProject = $rootScope.currentProjectInfo;
+  module.directive('projectChooser', [
+    '$rootScope',
+    'notifications',
+    'projectContext',
+    'accountFactory',
+    'userContext',
+    function($rootScope,
+             notifications,
+             projectContext,
+             accountFactory,
+             userContext) {
+      return {
+        restrict: 'E',
+        transclude: true,
+        templateUrl: 'projectChooserTemplate',
+        controller: ['$scope', function($scope) {
           $scope.projects = $rootScope.allProjects;
-        });
-      }],
-      link: function(scope, elem, attrs) {
-        elem.parent().children('[toggle-project-chooser]').on('click', function(e) {
-          scope.$apply(scope.toggleDropdown);
-        });
+          $scope.currentProject = $rootScope.currentProjectInfo;
+          $scope.selectProject = function(pj) {
+            if(pj.projectId !== $scope.currentProject.projectId) {
+              // Get and save project permissions
+              accountFactory.getUserProjectProfile(pj.projectId)
+                .success(function(resp) {
+                  userContext.updatePermissions(resp.featureList, resp.menuList);
+                  projectContext.setProject(pj);
+                  notifications.currentProjectChange({project: pj});
+                });
+            }
+          };
 
-        scope.$on('$destroy', function() {
-          elem.parent().children('[toggle-project-chooser]').off('click');
-        });
-      }
-    };
-  }]);
+          $scope.status = {
+            isopen: false
+          };
+
+          $scope.toggleDropdown = function() {
+            $scope.status.isopen = !$scope.status.isopen;
+          };
+
+          notifications.onCurrentProjectChange($scope, function(agrs) {
+            $scope.currentProject = $rootScope.currentProjectInfo;
+            $scope.projects = $rootScope.allProjects;
+          });
+        }],
+        link: function(scope, elem, attrs) {
+          elem.parent().children('[toggle-project-chooser]').on('click', function(e) {
+            scope.$apply(scope.toggleDropdown);
+          });
+
+          scope.$on('$destroy', function() {
+            elem.parent().children('[toggle-project-chooser]').off('click');
+          });
+        }
+      };
+    }]);
   return module;
 });
