@@ -234,7 +234,8 @@ require.config({
     deviceOrientationControls: {deps: ['three']},
     orbitControl: {deps: ['three']},
     stereoEffect: {deps: ['three']},
-    //assimpJsonLoader: {deps: ['stereoEffect', 'deviceOrientationControls', 'orbitControl', 'helvetiker_regular_typeface']},
+    assimpJsonLoader: {deps: ['three']},
+    helvetiker_regular_typeface: {deps: ['three']},
     jstree: {deps: ['jQuery']}
   }
 });

@@ -109,7 +109,7 @@ define(function() {
         };
 
         if($scope.picture.isUploadedPicture) {
-          fileFactory.move($scope.projectModel.projectImagePath, null, 'projects', $scope.model.project.projectAssetFolderName)
+          fileFactory.move($filter('filePath')($scope.projectModel.projectImagePath, 'relative'), null, 'projects', $scope.model.project.projectAssetFolderName)
             .success(function(resp) {
               $scope.model.project.projectImagePath = resp.url;
               createProject();
@@ -149,7 +149,7 @@ define(function() {
             $scope.picture.percentage = progressPercentage;
           }).success(function(data, status, headers, config) {
             $timeout(function() {
-              $scope.projectModel.projectImagePath = data.url;
+              $scope.projectModel.projectImagePath = $filter('filePath')(data.url, 'node');
               $scope.picture.isUploadPicture = false;
               $scope.picture.isUploadedPicture = true;
             });

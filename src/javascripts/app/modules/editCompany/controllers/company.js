@@ -1,35 +1,27 @@
-define(function () {
+define(function() {
   'use strict';
-  var controller = ['$scope', 'companyFactory', 'company', 'countryFactory', '$q', 'fileFactory', 'appConstant', 'toaster',
-    function ($scope, companyFactory, company, countryFactory, $q, fileFactory, constant, toaster) {
-      console.log(company);
+  var controller = ['$scope', 'companyFactory', 'company', 'countryFactory', '$q', 'fileFactory', 'appConstant', 'toaster', '$filter',
+    function($scope, companyFactory, company, countryFactory, $q, fileFactory, constant, toaster, $filter) {
       $scope.company = company;
-
+      $scope.isCompanyLogoChanged = false;
       $scope.countries = countryFactory.getCountryList();
       $scope.uploadModel = {
         file: null
       };
 
-      $scope.$watch('uploadModel.file', function () {
-        if ($scope.uploadModel.file) {
-          if (constant.app.allowedImageExtension.test($scope.uploadModel.file.type)) {
-            var deferred = $q.defer();
-            fileFactory.upload($scope.uploadModel.file, null, 'companylogo', null, null, true)
-              .success(function (data, status, headers, config) {
-                $scope.company.companyLogoPath = data.url;
-
-                deferred.resolve({
-                  filePath: data.url,
-                  fileName: data.name,
-                  fileType: $scope.uploadModel.file.type
-                });
+      $scope.$watch('uploadModel.file', function() {
+        if($scope.uploadModel.file) {
+          if(constant.app.allowedImageExtension.test($scope.uploadModel.file.type)) {
+            fileFactory.upload($scope.uploadModel.file, null, 'temp', null, null, true)
+              //fileFactory.upload($scope.uploadModel.file, null, 'companylogo', null, null, true)
+              .success(function(data, status, headers, config) {
+                $scope.company.companyLogoPath = $filter('filePath')(data.url, 'node');
+                $scope.isCompanyLogoChanged = true;
               })
-              .error(function (err) {
-                deferred.reject(err);
+              .error(function(err) {
               });
 
             $scope.isLoading = false;
-            //return deferred.promise;
           }
           else {
             toaster.pop('error', 'Error', 'Only accept jpg, png file');
@@ -37,7 +29,7 @@ define(function () {
         }
       });
 
-      $scope.updateCompany = function () {
+      $scope.updateCompany = function(_form) {
         var param = {
           "company": {
             "companyId": $scope.company.companyId,
@@ -55,17 +47,35 @@ define(function () {
           }
         };
 
-        companyFactory.update(param)
-          .success(function (response) {
-            $scope.form.$setPristine();
-          }).error(function (response) {
-            $scope.form.$setPristine();
-          });
+        function update(param) {
+          console.log(_form);
+          companyFactory.update(param)
+            .success(function(response) {
+              _form.$setPristine();
+              $scope.isCompanyLogoChanged = false;
+            })
+            .error(function(response) {
+              _form.$setPristine();
+              $scope.isCompanyLogoChanged = false;
+            });
+        }
+
+        if($scope.isCompanyLogoChanged) {
+          fileFactory.move($filter('filePath')($scope.company.companyLogoPath, 'relative'), null, 'companylogo')
+            .success(function(resp) {
+              param.company.logoPath = resp.url;
+              $scope.company.companyLogoPath = resp.url;
+              update(param);
+            });
+        }
+        else {
+          update(param);
+        }
       };
 
-      var getCountryFileName = function (countryCode) {
+      var getCountryFileName = function(countryCode) {
         var fileName = _($scope.countries)
-          .filter(function (country) {
+          .filter(function(country) {
             return country.code === countryCode;
           })
           .pluck('filename')
@@ -74,13 +84,13 @@ define(function () {
         return fileName[0];
       };
 
-      $scope.getStateList = function () {
+      $scope.getStateList = function() {
         var fileName = getCountryFileName($scope.company.address.country);
-        if (fileName !== undefined) {
+        if(fileName !== undefined) {
           countryFactory.getStateList(fileName).then(
-            function (resp) {
+            function(resp) {
               $scope.states = resp;
-            }, function (err) {
+            }, function(err) {
               $scope.states = [];
             }
           );
@@ -89,7 +99,7 @@ define(function () {
         }
       };
 
-      if ($scope.company.address.country) {
+      if($scope.company.address.country) {
         $scope.getStateList();
       }
     }];

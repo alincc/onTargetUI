@@ -3,6 +3,7 @@ var fs = require("fs");
 var rootPath = process.env.ROOT;
 var mime = require('mime');
 var config = require('./../config');
+var aws = require('./../services/aws');
 var CryptoJS = require("crypto-js");
 var key = config.downloadPathHashKey;
 var cfg = {};
@@ -29,17 +30,20 @@ function downloadFile(req, res) {
   var file = rootPath + '/' + url,
     fileName = req.query.name ? decodeURIComponent(req.query.name) : path.basename(file);
 
-  if(fs.existsSync(file)) {
-    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-    res.setHeader('Content-type', mime.lookup(fileName.substring(fileName.lastIndexOf('.') + 1)));
 
-    var filestream = fs.createReadStream(file);
-    filestream.pipe(res);
-  }
-  else {
-    res.status(404)        // HTTP status 404: NotFound
-      .send('File not found');
-  }
+  aws.s3.isExists(url)
+    .then(function(){
+      res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+      res.setHeader('Content-type', string.path(fileName).mimeType);
+
+      //var filestream = fs.createReadStream(file);
+      //filestream.pipe(res);
+      var fileStream = aws.s3.getObject(url).createReadStream();
+      fileStream.pipe(res);
+    }, function(){
+      res.status(404)        // HTTP status 404: NotFound
+        .send('File not found');
+    });
 }
 
 module.exports = {

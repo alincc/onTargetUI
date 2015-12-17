@@ -263,34 +263,35 @@
                                 <div class="col-xs-12 col-md-6 submittal-status-section col-height">
                                     <div class="panel panel-default">
                                         <div class="panel-body">
-                                            <div class="row">
-                                                <!--<div class="col-sm-6">-->
+                                            <div class="canvas-document">
+                                                <div class="row" >
+                                                    <!--<div class="col-sm-6" >-->
                                                     <!--<h4>Submittal Status</h4>-->
                                                     <!--<div class="doughnut-container">-->
-                                                        <!--<canvas id="submittalStatus" height="160" class="chart chart-doughnut"-->
-                                                                <!--options="submittalStatus.options"-->
-                                                                <!--colours="submittalStatus.colours"-->
-                                                                <!--data="submittalStatus.data"-->
-                                                                <!--labels="submittalStatus.labels">-->
-                                                        <!--</canvas>-->
+                                                    <!--<canvas id="submittalStatus" height="160" class="chart chart-doughnut"-->
+                                                    <!--options="submittalStatus.options"-->
+                                                    <!--colours="submittalStatus.colours"-->
+                                                    <!--data="submittalStatus.data"-->
+                                                    <!--labels="submittalStatus.labels">-->
+                                                    <!--</canvas>-->
                                                     <!--</div>-->
-                                                <!--</div>-->
+                                                    <!--</div>-->
 
-                                                <div ng-repeat="documentStatus in documentStatuses"  class="col-sm-6">
-                                                    <h4 class="text-center">
-                                                        <span ng-bind="documentStatus.key"></span>
-                                                    </h4>
-                                                    <div class="doughnut-container">
-                                                        <canvas height="160" class="chart chart-doughnut"
-                                                                options="documentStatus.options"
-                                                                colours="documentStatus.colours"
-                                                                data="documentStatus.data"
-                                                                labels="documentStatus.labels">
-                                                        </canvas>
+                                                    <div ng-repeat="documentStatus in documentStatuses"  class="col-sm-6">
+                                                        <h4 class="text-center">
+                                                            <span ng-bind="documentStatus.key"></span>
+                                                        </h4>
+                                                        <div class="doughnut-container">
+                                                            <canvas height="160" class="chart chart-doughnut"
+                                                                    options="documentStatus.options"
+                                                                    colours="documentStatus.colours"
+                                                                    data="documentStatus.data"
+                                                                    labels="documentStatus.labels">
+                                                            </canvas>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>

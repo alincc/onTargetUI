@@ -1,32 +1,30 @@
 var path = require('path');
 var fs = require("fs");
 var request = require('request');
-var mkdirp = require("mkdirp");
 var mime = require('mime');
-//var cors = require('cors');
 var config = require('./../config');
-
-// paths/constants
-var uploadedFilesPath = config.uploadedFilesPath,
-  imagePathRoot = config.imagePathRoot;
+var utilService = require('./../services/util');
 
 function downloadFile(req, res) {
   var responseData = {
     success: false
   };
   var url = req.body.url;
-  var uuid = req.body.uuid;
+  var uuid = req.body.uuid || utilService.newGuidId();
   var fileName = req.body.fileName
-    .replace(/\'/g,'_')
-    .replace(/\"/g,'_');
-  var destinationDir = uploadedFilesPath + 'temp/';
-  var fileDestination = destinationDir + fileName;
+    .replace(/\'/g, '_')
+    .replace(/\"/g, '_');
+  var destinationDir = path.join(config.assetsPath, 'temp');
+  utilService.ensureFolderExist(destinationDir);
+  destinationDir = path.join(destinationDir, uuid);
+  utilService.ensureFolderExist(destinationDir);
+  var fileDestination = path.join(destinationDir, fileName);
 
   function success() {
     responseData.success = true;
-    responseData.url = imagePathRoot + "temp/" + fileName;
+    responseData.url = string.join('/', config.imagePathRoot, "temp", uuid, fileName);
     responseData.name = fileName;
-    responseData.type = mime.lookup(fileName.substring(fileName.lastIndexOf('.') + 1));
+    responseData.type =  string.path(fileName).mimeType;
     res.send(responseData);
   }
 
@@ -35,24 +33,17 @@ function downloadFile(req, res) {
     res.send(responseData);
   }
 
-  mkdirp(destinationDir, function(er) {
-    if(er) {
-      error(er);
-    }
-    else {
-      var writeStream = fs.createWriteStream(fileDestination);
+  var writeStream = fs.createWriteStream(fileDestination);
 
-      writeStream.on('finish', success);
+  writeStream.on('finish', success);
 
-      writeStream.on('error', error);
+  writeStream.on('error', error);
 
-      var readStream = request.get(url);
+  var readStream = request.get(url);
 
-      readStream.on('error', error);
+  readStream.on('error', error);
 
-      readStream.pipe(writeStream);
-    }
-  });
+  readStream.pipe(writeStream);
 }
 
 module.exports = {

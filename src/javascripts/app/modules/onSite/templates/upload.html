@@ -27,7 +27,7 @@
             </tab>
             <tab heading="Document information" disabled="step1.$invalid || isUploading || !uploadModel.files.length"
                  active="steps.step2">
-                <form name="step2" class="form-validation" ng-submit="saveDocumentInfo(uploadModel)">
+                <form name="step2" class="form-validation" ng-submit="saveDocumentInfo(uploadModel, step2)">
                     <p>Name:</p>
                     <input ng-model="uploadModel.name" class="form-control" name="name" required />
                     <p class="m-t">Category:</p>

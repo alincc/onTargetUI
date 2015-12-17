@@ -24,6 +24,9 @@ app.use(methodOverride());
 app.use(cors());
 app.use(express.static(process.env.ROOT));
 
+// Load utils
+require('./server/utils');
+
 // Initialize routes
 require('./server/routes')(app);
 

@@ -89,7 +89,7 @@ define(function(require) {
 
             $scope.markers = [];
             $scope.maxNativeZoom = angular.isDefined($scope.maxNativeZoom) ? $scope.maxNativeZoom : null;
-
+console.log('Max native zoom: ',$scope.maxNativeZoom);
             $scope.docInfo = {
               docId: $state.params.docId
             };
@@ -286,7 +286,7 @@ define(function(require) {
             southWest = map.unproject([0, imgH], minZoom);
             northEast = map.unproject([imgW, 0], minZoom);
             bounds = new L.LatLngBounds(southWest, northEast);
-
+console.log(scope.model.imagePath);
             tile_layer = L.tileLayer(constant.resourceUrl + '/' +
               scope.model.imagePath.substring(0, scope.model.imagePath.lastIndexOf('/')) + '/' +
               scope.model.imagePath.substring(scope.model.imagePath.lastIndexOf('/') + 1).replace(/\./g, '_') + '_tiles' +
@@ -1088,11 +1088,15 @@ define(function(require) {
             }
           });
 
-          scope.getFileInfo()
-            .success(render)
-            .error(function(err) {
-              console.log(err);
+          if(scope.selectedDoc.originalFilePath) {
+            render({
+              url: scope.selectedDoc.originalFilePath
             });
+          } else {
+            render({
+              url: scope.model.imagePath
+            });
+          }
         }
       };
     }]);

@@ -22,7 +22,22 @@ define(function(require) {
     projectChooserDirective = require('app/common/directives/projectChooser/projectChooser'),
     taskDirective = require('./directives/task'),
     angularChart = require('angularChart');
-  var module = angular.module('app.dashboard', ['ui.router', 'app.config', 'common.context.user', 'common.services.account', 'common.context.project', 'common.services.util', 'common.services.document', 'common.services.activity', 'common.filters.task', 'common.directives.projectChooser', 'common.services.notifications', 'common.services.permission', 'common.directives.jPlot', 'chart.js']);
+
+  var module = angular.module('app.dashboard', [
+    'ui.router',
+    'app.config',
+    'common.context.user',
+    'common.services.account',
+    'common.context.project',
+    'common.services.util',
+    'common.services.document',
+    'common.services.activity',
+    'common.filters.task',
+    'common.directives.projectChooser',
+    'common.services.notifications',
+    'common.services.permission',
+    'common.directives.jPlot',
+    'chart.js']);
 
   module.run(['$templateCache', function($templateCache) {
     $templateCache.put('dashboard/templates/dashboard.html', template);

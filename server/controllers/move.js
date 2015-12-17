@@ -1,38 +1,12 @@
 var path = require('path');
 var fs = require("fs");
 var request = require('request');
-var mkdirp = require("mkdirp");
 var rootPath = process.env.ROOT;
 var mime = require('mime');
 var config = require('./../config');
+var aws = require('./../services/aws');
+var utilService = require('./../services/util');
 var _ = require('lodash');
-
-function generateNewFileName(filePath) {
-  var fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
-  var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-  var fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
-  var fullFilePath = filePath;
-  var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
-  var newName = fileName;
-  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\)\\.' + fileExt + '$');
-  var duplicates = _.filter(files, function(file) {
-    return reg.test(file) /*fs.statSync(path.join(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')), file)).isFile()*/;
-  });
-  if(duplicates.length <= 0) {
-    newName = fileNameWithoutExt + ' (1).' + fileExt;
-  } else {
-    var lastDuplicateNumber = _.sortBy(duplicates).reverse()[0];
-    var duplicateNumber = /.*\s+\((\d+)\)\./.exec(lastDuplicateNumber)[1];
-    if(duplicateNumber) {
-      newName = fileNameWithoutExt + ' (' + (parseInt(duplicateNumber) + 1) + ').' + fileExt;
-    }
-  }
-  return newName;
-}
-
-// paths/constants
-var uploadedFilesPath = config.uploadedFilesPath,
-  imagePathRoot = config.imagePathRoot;
 
 function moveFile(req, res) {
   var responseData = {
@@ -45,128 +19,44 @@ function moveFile(req, res) {
   var fileName = req.body.fileName;
   var sourceFilePath = path.join(rootPath, filePath);
 
-  var url = uploadedFilesPath + rootFolder,
-    destinationDir,
-    fileDestination;
-
-  function success() {
-    var url = imagePathRoot + rootFolder + '/';
-    if(rootFolder === 'projects') {
-      if(context === '') {
-        url += projectAssetFolderName + '/' + fileName;
-      }
-      else {
-        url += projectAssetFolderName + '/' + context + '/' + fileName;
-      }
-    }
-    else if(rootFolder === 'profile') {
-      url += fileName; // profile
-    }
-    else {
-      res.status(400);
-      res.send('Folder not found!');
-    }
-
+  function success(absoluteUrl) {
     responseData.success = true;
-    responseData.url = url;
+    responseData.url = utilService.generateAssetPath(rootFolder, projectAssetFolderName, context, fileName);
     responseData.name = fileName;
-    responseData.type = mime.lookup(fileName.substring(fileName.lastIndexOf('.') + 1));
+    responseData.type = string.path(fileName).mimeType;
     res.send(responseData);
   }
 
-  function error(err) {
+  function failure(msg) {
     res.status(400);
-    res.send(JSON.stringify(err));
+    res.send(msg);
   }
 
-  function failure() {
-    res.status(400);
-    res.send('Problem moving the file!');
-  }
-
-  function moveFile(destinationDir, sourceFile, destinationFile, success, failure) {
-    mkdirp(destinationDir, function(error) {
-      var sourceStream, destStream;
-
-      if(error) {
-        console.error("Problem creating directory " + destinationDir + ": " + error);
-        failure();
-      }
-      else {
-        sourceStream = fs.createReadStream(sourceFile);
-        destStream = fs.createWriteStream(destinationFile);
-
-        sourceStream
-          .on("error", function(error) {
-            console.error("Problem copying file: " + error.stack);
-            failure();
-          })
-          .on("end", success)
-          .pipe(destStream);
-      }
-    });
+  function moveFile(sourceFile, success, failure) {
+    var sourceStream = fs.createReadStream(sourceFile);
+    var url = utilService.generateAssetPath(rootFolder, projectAssetFolderName, context, fileName);
+    url = aws.s3.ensureFileNotExists(url)
+      .then(function(k) {
+        url = k;
+        fileName = string.path(url).name;
+        aws.s3.upload(sourceStream, url, function(evt) {
+          // console.log(evt);
+        }).
+          then(function(data) {
+            console.log(data);
+            success(data.Location);
+          }, function(err) {
+            console.log(err);
+            failure(err.message)
+          });
+      });
   }
 
   if(fs.existsSync(sourceFilePath)) {
-    if(rootFolder === 'projects') {
-      mkdirp(url, function(error) {
-        if(error) {
-          console.error("Problem creating directory " + url + ": " + error);
-          failure();
-        }
-        else {
-          url += '/' + projectAssetFolderName;
-          if(context === '') {
-            destinationDir = url;
-            fileDestination = destinationDir + '/' + fileName;
-            // Check if file exist, then change file name
-            if(fs.existsSync(fileDestination)) {
-              fileName = generateNewFileName(fileDestination);
-              fileDestination = destinationDir + '/' + fileName;
-            }
-            moveFile(destinationDir, sourceFilePath, fileDestination, success, failure);
-          }
-          else {
-            mkdirp(url, function(error) {
-              if(error) {
-                console.error("Problem creating directory " + url + ": " + error);
-                failure();
-              }
-              else {
-                url += '/' + context;
-                destinationDir = url;
-                fileDestination = destinationDir + '/' + fileName;
-
-                // Check if file exist, then change file name
-                if(fs.existsSync(fileDestination)) {
-                  fileName = generateNewFileName(fileDestination);
-                  fileDestination = destinationDir + '/' + fileName;
-                }
-
-                moveFile(destinationDir, sourceFilePath, fileDestination, success, failure);
-              }
-            });
-          }
-        }
-      });
-    }
-    else if(rootFolder === 'profile') {
-      destinationDir = url;
-      fileDestination = destinationDir + '/' + fileName;
-      if(fs.existsSync(fileDestination)) {
-        fileName = generateNewFileName(fileDestination);
-        fileDestination = destinationDir + '/' + fileName;
-      }
-      moveFile(destinationDir, sourceFilePath, fileDestination, success, failure);
-    }
-    else {
-      res.status(400);
-      res.send('Folder not found!');
-    }
+    moveFile(sourceFilePath, success, failure);
   }
   else {
-    res.status(400);
-    res.send("File not exist!. " + path.join(rootPath, filePath));
+    failure("File not exist!. " + path.join(rootPath, filePath));
   }
 }
 

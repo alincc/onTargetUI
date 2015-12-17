@@ -35,13 +35,9 @@ module.exports = {
     }
 
     destinationPath = path.join(rootPath, 'assets', 'projects', projectAssetFolderName);
-    if(!fs.existsSync(destinationPath)) {
-      fs.mkdirSync(destinationPath);
-    }
+    utilService.ensureFolderExist(destinationPath);
     destinationPath = path.join(destinationPath, 'onfile');
-    if(!fs.existsSync(destinationPath)) {
-      fs.mkdirSync(destinationPath);
-    }
+    utilService.ensureFolderExist(destinationPath);
     destinationPath = path.join(destinationPath, fileName);
 
     wkhtmltopdf.command = 'wkhtmltopdf';
@@ -64,7 +60,7 @@ module.exports = {
               url: config.PROXY_URL + '/company/getCompanyInfo'
             }, function(err, response) {
               if(!err) {
-                resolve(config.domain + '/' + response.body.company.companyLogoPath);
+                resolve(string.join('/', config.resource_domain, response.body.company.companyLogoPath));
               } else {
                 resolve('');
               }
@@ -106,10 +102,10 @@ module.exports = {
       var attachmentHtml = '<table style="border: none; border-collapse: collapse; width: 100%;" border="0">', attHtml = '';
       _.each(attachments, function(att) {
         if(/\.(jpg|jpeg|png)$/i.test(att.filePath)) {
-          attachmentHtml += '<tr><td style="text-align:center; border: solid 1px #e5e5e5; padding: 5px;"><img style="max-width: 100%;" src="' + config.domain + '/' + att.filePath + '"><p style="margin: 10px 0;"><a style="color: #5B90BF; font-weight: bold;" href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">' + att.filePath.substring(att.filePath.lastIndexOf('/') + 1) + '</a></p></td></tr>';
+          attachmentHtml += '<tr><td style="text-align:center; border: solid 1px #e5e5e5; padding: 5px;"><img style="max-width: 100%;" src="' + string.join('/', config.domain, att.filePath) + '"><p style="margin: 10px 0;"><a style="color: #5B90BF; font-weight: bold;" href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">' + string.path(att.filePath).name + '</a></p></td></tr>';
         }
         else {
-          attachmentHtml += '<tr><td style="text-align:center; border: solid 1px #e5e5e5; padding: 5px;"><a style="color: #5B90BF; font-weight: bold;" href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">' + att.filePath.substring(att.filePath.lastIndexOf('/') + 1) + '</a></td></tr>';
+          attachmentHtml += '<tr><td style="text-align:center; border: solid 1px #e5e5e5; padding: 5px;"><a style="color: #5B90BF; font-weight: bold;" href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">' + string.path(att.filePath).name + '</a></td></tr>';
         }
       });
       attachmentHtml += '</table>';

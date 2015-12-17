@@ -131,42 +131,21 @@ define(function(require) {
                       });
                   }
 
-                  function getPages(filePath, cb) {
-                    onSiteFactory.getPages(filePath)
-                      .success(function(p) {
-                        if(p.pages.length === 0) {
-                          toaster.pop('error', 'Error', 'Cannot found any images for this file!');
-                          deferred.reject();
-                        }
-                        else {
-                          pages = p.pages;
-                          cb(p.pages);
-                        }
-                      })
-                      .error(function(err) {
-                        toaster.pop('error', 'Error', 'Get pdf images failed');
-                        deferred.reject();
-                      });
+                  function getPages(document, cb) {
+                    pages = _.map(_.sortBy(document.projectFile.projectFilePageDTOs, "imageName"), function(el, idx) {
+                      return el.imagePath;
+                    });
+                    cb(pages);
                   }
 
-                  function getDocumentZoom(filePath, cb) {
-                    // Get document zoom level
-                    onSiteFactory.getDocumentZoomLevel(filePath)
-                      .success(function(z) {
-                        if(z.length > 0) {
-                          zooms = z;
-                          cb(z);
-                        } else {
-                          toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
-                          console.log('Zooms not found');
-                          deferred.reject();
-                        }
-                      })
-                      .error(function() {
-                        toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
-                        console.log('Get zoom document failed');
-                        deferred.reject();
-                      });
+                  function getDocumentZoom(document, cb) {
+                    zooms = _.map(_.sortBy(document.projectFile.projectFilePageDTOs, "imageName"), function(el, idx) {
+                      return {
+                        page: idx + 1,
+                        zoomLevel: el.zoomLevel
+                      };
+                    });
+                    cb(zooms);
                   }
 
                   function getDocumentTags(fileId, cb) {
@@ -203,132 +182,32 @@ define(function(require) {
 
                   getDocumentInfo(function() {
                     if(parentDocument) {
-                      onSiteFactory.checkFileStatus(parentDocument.projectFile.filePath)
-                        .success(function(stt) {
-                          if(stt.status === "UnProceeded") {
-                            convertPdfToImages(parentDocument);
-                          } else {
-                            //if(isPdf) {
-                            // Original
-                            if(!parentDocument) {
-                              // Get pdf images
-                              getPages(currentDocument.projectFile.filePath, function() {
-                                // Get document zoom level
-                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                                  if(zooms[0].zoomLevel <= 0) {
-                                    toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
-                                    console.log('Zoom page 1 not ready');
-                                    deferred.reject();
-                                    return;
-                                  }
-                                  // Get document tags
-                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                    deferred.resolve(generateData());
-                                  });
-                                });
-                              });
-                            }
-                            else {
-                              // Version
-                              // Get pdf images
-                              getPages(parentDocument.projectFile.filePath, function() {
-                                // Get document zoom level
-                                getDocumentZoom(parentDocument.projectFile.filePath, function() {
-                                  // Get document tags
-                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                    deferred.resolve(generateData());
-                                  });
-                                });
-                              });
-                            }
-                            //}
-                            //else {
-                            //  pages = [];
-                            //  // Get versions
-                            //  if(parentDocument) {
-                            //    // Get document zoom level
-                            //    getDocumentZoom(parentDocument.projectFile.filePath, function() {
-                            //      // Get document tags
-                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
-                            //        deferred.resolve(generateData());
-                            //      });
-                            //    });
-                            //  }
-                            //  else {
-                            //    // Get document zoom level
-                            //    getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                            //      // Get document tags
-                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
-                            //        deferred.resolve(generateData());
-                            //      });
-                            //    });
-                            //  }
-                            //}
-                          }
+                      // Get pdf images
+                      getPages(parentDocument, function() {
+                        // Get document zoom level
+                        getDocumentZoom(parentDocument, function() {
+                          // Get document tags
+                          getDocumentTags(currentDocument.projectFile.fileId, function() {
+                            deferred.resolve(generateData());
+                          });
                         });
+                      });
                     } else {
-                      onSiteFactory.checkFileStatus(currentDocument.projectFile.filePath)
-                        .success(function(stt) {
-                          if(stt.status === "UnProceeded") {
-                            convertPdfToImages(currentDocument);
-                          } else {
-                            //if(isPdf) {
-                            // Original
-                            if(!parentDocument) {
-                              // Get pdf images
-                              getPages(currentDocument.projectFile.filePath, function() {
-                                // Get document zoom level
-                                getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                                  if(zooms[0].zoomLevel <= 0) {
-                                    toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
-                                    console.log('Zoom page 1 not ready');
-                                    deferred.reject();
-                                    return;
-                                  }
-                                  // Get document tags
-                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                    deferred.resolve(generateData());
-                                  });
-                                });
-                              });
+                        // Get pdf images
+                        getPages(currentDocument, function() {
+                          // Get document zoom level
+                          getDocumentZoom(currentDocument, function() {
+                            if(zooms[0].zoomLevel <= 0) {
+                              toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
+                              console.log('Zoom page 1 not ready');
+                              deferred.reject();
+                              return;
                             }
-                            else {
-                              // Version
-                              // Get pdf images
-                              getPages(parentDocument.projectFile.filePath, function() {
-                                // Get document zoom level
-                                getDocumentZoom(parentDocument.projectFile.filePath, function() {
-                                  // Get document tags
-                                  getDocumentTags(currentDocument.projectFile.fileId, function() {
-                                    deferred.resolve(generateData());
-                                  });
-                                });
-                              });
-                            }
-                            //}
-                            //else {
-                            //  pages = [];
-                            //  // Get versions
-                            //  if(parentDocument) {
-                            //    // Get document zoom level
-                            //    getDocumentZoom(parentDocument.projectFile.filePath, function() {
-                            //      // Get document tags
-                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
-                            //        deferred.resolve(generateData());
-                            //      });
-                            //    });
-                            //  }
-                            //  else {
-                            //    // Get document zoom level
-                            //    getDocumentZoom(currentDocument.projectFile.filePath, function() {
-                            //      // Get document tags
-                            //      getDocumentTags(currentDocument.projectFile.fileId, function() {
-                            //        deferred.resolve(generateData());
-                            //      });
-                            //    });
-                            //  }
-                            //}
-                          }
+                            // Get document tags
+                            getDocumentTags(currentDocument.projectFile.fileId, function() {
+                              deferred.resolve(generateData());
+                            });
+                          });
                         });
                     }
                   });

@@ -28,6 +28,11 @@ define(function(require) {
               if(/^\//.test(attrs.path)) {
                 avatarUrl = constant.resourceUrl + attrs.path;
               }
+
+              if(/^http/.test(attrs.path)) {
+                avatarUrl = attrs.path;
+              }
+
               var img = $document[0].createElement('img');
               img.onerror = function() {
                 showNoImage();

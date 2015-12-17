@@ -52,7 +52,7 @@
                                         ng-disabled="!havePrevPage">< Previous
                                 </button>
                             </div>
-                            <div class="panel-body" ng-if="isPdf || isImage" ng-class="{'hide-toolbox': !isEdit}">
+                            <div class="panel-body" ng-if="isPdf || isImage" ng-class="{'hide-toolbox': !isEdit}" fix-height="45">
                                 <pdf-tagging-mark-up ng-if="!isNexting"
                                                      model="currentPage"
                                                      page-number="{{currentPageIndex + 1}}"
@@ -60,14 +60,14 @@
                                                      max-native-zoom="currentPage.maxZoom"
                                                      selected-doc="selectedDoc"></pdf-tagging-mark-up>
                             </div>
-                            <div class="panel-body normal-preview" ng-if="!isPdf && !isImage">
+                            <div class="panel-body normal-preview" ng-if="!isPdf && !isImage" fix-height="45">
                                 <p>Sorry, this kind of file not supported preview.</p>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-4 p-l-0 comment-section" permission="ONSITE_VIEW_COMMENT">
-                    <div class="panel panel-default" ng-show="!hideRightSide">
+                    <div class="panel panel-default" ng-show="!hideRightSide" fix-height="45">
                         <div class="panel-heading" ng-show="!showLinkTask && !showViewTask">
                             <span>Comments</span>
                             <!--<div class="pull-right" ng-if="selectedDoc.versionProjectFiles.length > 0">-->

@@ -25,7 +25,7 @@ exports.crop = function(path, name, success, failure) {
         fs.mkdirSync(url);
       }
 
-      var croppedImagePath = url + '/' + util.makeId(8) + '.' + path.substring(path.lastIndexOf('.') + 1);
+      var croppedImagePath = string.join('/', url, util.makeId(8) + '.' + string.path(path).extension);
       var imgWidth = value.width;
       var imgHeight = value.height;
       var cropWidth = imgWidth;
@@ -103,17 +103,14 @@ exports.tiles = function(input, size, zoom, crop, cb) {
     crop = crop || 512;
     var fileFolder = path.dirname(input);
     var fileName = path.basename(input);
-    var destinationFolder = path.join(fileFolder, util.getFolderNameFromFile(fileName) + '_tiles');
+    var tileFolder = util.getFolderNameFromFile(fileName) + '_tiles';
+    var destinationFolder = path.join(fileFolder, tileFolder);
 
-    if(!fs.existsSync(destinationFolder)) {
-      fs.mkdirSync(destinationFolder);
-    }
+    util.ensureFolderExist(destinationFolder);
 
     destinationFolder = path.join(destinationFolder, zoom.toString());
 
-    if(!fs.existsSync(destinationFolder)) {
-      fs.mkdirSync(destinationFolder);
-    }
+    util.ensureFolderExist(destinationFolder);
 
     var destinationFile = path.join(destinationFolder, '%[filename:tile].png');
 
@@ -139,7 +136,8 @@ exports.tiles = function(input, size, zoom, crop, cb) {
                     input: input,
                     size: size,
                     crop: crop,
-                    zoom: zoom
+                    zoom: zoom,
+                    tileFolder: tileFolder
                   });
                 }
                 rs();

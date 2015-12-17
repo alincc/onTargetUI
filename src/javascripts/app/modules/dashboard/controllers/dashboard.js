@@ -369,15 +369,15 @@ define(function(require) {
         load();
       });
 
-      //timeline height
-      $scope.$on("$stateChangeSuccess", function(event, current, previous) {
-
-        $timeout(function() {
-          var height = document.getElementById('task-container').offsetHeight;
-
-          document.getElementById('time-line').setAttribute("style", "height:" + (height - 52) + "px");
-        });
-      });
+      ////timeline height
+      //$scope.$on("$stateChangeSuccess", function(event, current, previous) {
+      //
+      //  $timeout(function() {
+      //    var height = document.getElementById('task-container').offsetHeight;
+      //
+      //    document.getElementById('time-line').setAttribute("style", "height:" + (height - 52) + "px");
+      //  },1000);
+      //});
 
       $scope.documentStatuses = [];
       documentFactory.getDocumentStatus().then(function(resp) {

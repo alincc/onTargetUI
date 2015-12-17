@@ -573,6 +573,11 @@ gulp.task('build:server', function() {
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.server.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.server.pusher.secret + '\''))
     .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.server.domain + '\''))
+    .pipe(replace(/resource_domain: '(.*)'/g, 'resource_domain: \'' + config.server.resource_domain + '\''))
+    .pipe(replace(/aws_s3_accessKeyId: '(.*)'/g, 'aws_s3_accessKeyId: \'' + config.server.aws_s3_accessKeyId + '\''))
+    .pipe(replace(/aws_s3_secretAccessKey: '(.*)'/g, 'aws_s3_secretAccessKey: \'' + config.server.aws_s3_secretAccessKey + '\''))
+    .pipe(replace(/aws_s3_bucket: '(.*)'/g, 'aws_s3_bucket: \'' + config.server.aws_s3_bucket + '\''))
+    .pipe(replace(/aws_s3_region: '(.*)'/g, 'aws_s3_region: \'' + config.server.aws_s3_region + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -602,6 +607,11 @@ gulp.task('build:serverlocal', function() {
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverlocal.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverlocal.pusher.secret + '\''))
     .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverlocal.domain + '\''))
+    .pipe(replace(/resource_domain: '(.*)'/g, 'resource_domain: \'' + config.serverlocal.resource_domain + '\''))
+    .pipe(replace(/aws_s3_accessKeyId: '(.*)'/g, 'aws_s3_accessKeyId: \'' + config.serverlocal.aws_s3_accessKeyId + '\''))
+    .pipe(replace(/aws_s3_secretAccessKey: '(.*)'/g, 'aws_s3_secretAccessKey: \'' + config.serverlocal.aws_s3_secretAccessKey + '\''))
+    .pipe(replace(/aws_s3_bucket: '(.*)'/g, 'aws_s3_bucket: \'' + config.serverlocal.aws_s3_bucket + '\''))
+    .pipe(replace(/aws_s3_region: '(.*)'/g, 'aws_s3_region: \'' + config.serverlocal.aws_s3_region + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -630,6 +640,11 @@ gulp.task('build:serverintegration', function() {
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverintegration.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverintegration.pusher.secret + '\''))
     .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverintegration.domain + '\''))
+    .pipe(replace(/resource_domain: '(.*)'/g, 'resource_domain: \'' + config.serverintegration.resource_domain + '\''))
+    .pipe(replace(/aws_s3_accessKeyId: '(.*)'/g, 'aws_s3_accessKeyId: \'' + config.serverintegration.aws_s3_accessKeyId + '\''))
+    .pipe(replace(/aws_s3_secretAccessKey: '(.*)'/g, 'aws_s3_secretAccessKey: \'' + config.serverintegration.aws_s3_secretAccessKey + '\''))
+    .pipe(replace(/aws_s3_bucket: '(.*)'/g, 'aws_s3_bucket: \'' + config.serverintegration.aws_s3_bucket + '\''))
+    .pipe(replace(/aws_s3_region: '(.*)'/g, 'aws_s3_region: \'' + config.serverintegration.aws_s3_region + '\''))
     .pipe(gulp.dest('build-server'));
 
   return gulp.src([
@@ -659,6 +674,11 @@ gulp.task('build:serverbeta', function() {
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverbeta.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverbeta.pusher.secret + '\''))
     .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverbeta.domain + '\''))
+    .pipe(replace(/resource_domain: '(.*)'/g, 'resource_domain: \'' + config.serverbeta.resource_domain + '\''))
+    .pipe(replace(/aws_s3_accessKeyId: '(.*)'/g, 'aws_s3_accessKeyId: \'' + config.serverbeta.aws_s3_accessKeyId + '\''))
+    .pipe(replace(/aws_s3_secretAccessKey: '(.*)'/g, 'aws_s3_secretAccessKey: \'' + config.serverbeta.aws_s3_secretAccessKey + '\''))
+    .pipe(replace(/aws_s3_bucket: '(.*)'/g, 'aws_s3_bucket: \'' + config.serverbeta.aws_s3_bucket + '\''))
+    .pipe(replace(/aws_s3_region: '(.*)'/g, 'aws_s3_region: \'' + config.serverbeta.aws_s3_region + '\''))
     .pipe(gulp.dest('build-server-beta'));
 
   return gulp.src([
@@ -688,6 +708,11 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
     .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serversagarmatha01.domain + '\''))
+    .pipe(replace(/resource_domain: '(.*)'/g, 'resource_domain: \'' + config.serversagarmatha01.resource_domain + '\''))
+    .pipe(replace(/aws_s3_accessKeyId: '(.*)'/g, 'aws_s3_accessKeyId: \'' + config.serversagarmatha01.aws_s3_accessKeyId + '\''))
+    .pipe(replace(/aws_s3_secretAccessKey: '(.*)'/g, 'aws_s3_secretAccessKey: \'' + config.serversagarmatha01.aws_s3_secretAccessKey + '\''))
+    .pipe(replace(/aws_s3_bucket: '(.*)'/g, 'aws_s3_bucket: \'' + config.serversagarmatha01.aws_s3_bucket + '\''))
+    .pipe(replace(/aws_s3_region: '(.*)'/g, 'aws_s3_region: \'' + config.serversagarmatha01.aws_s3_region + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -716,6 +741,11 @@ gulp.task('build:serversagarmatha01', function() {
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serversagarmatha01.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serversagarmatha01.pusher.secret + '\''))
     .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serversagarmatha01.domain + '\''))
+    .pipe(replace(/resource_domain: '(.*)'/g, 'resource_domain: \'' + config.serversagarmatha01.resource_domain + '\''))
+    .pipe(replace(/aws_s3_accessKeyId: '(.*)'/g, 'aws_s3_accessKeyId: \'' + config.serversagarmatha01.aws_s3_accessKeyId + '\''))
+    .pipe(replace(/aws_s3_secretAccessKey: '(.*)'/g, 'aws_s3_secretAccessKey: \'' + config.serversagarmatha01.aws_s3_secretAccessKey + '\''))
+    .pipe(replace(/aws_s3_bucket: '(.*)'/g, 'aws_s3_bucket: \'' + config.serversagarmatha01.aws_s3_bucket + '\''))
+    .pipe(replace(/aws_s3_region: '(.*)'/g, 'aws_s3_region: \'' + config.serversagarmatha01.aws_s3_region + '\''))
     .pipe(gulp.dest('build-server-sagarmatha01'));
 
   return gulp.src([
@@ -745,6 +775,11 @@ gulp.task('build:serverNois', function() {
     .pipe(replace(/pusher_key: '(.*)'/g, 'pusher_key: \'' + config.serverNois.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret: '(.*)'/g, 'pusher_secret: \'' + config.serverNois.pusher.secret + '\''))
     .pipe(replace(/domain: '(.*)'/g, 'domain: \'' + config.serverNois.domain + '\''))
+    .pipe(replace(/resource_domain: '(.*)'/g, 'resource_domain: \'' + config.serverNois.resource_domain + '\''))
+    .pipe(replace(/aws_s3_accessKeyId: '(.*)'/g, 'aws_s3_accessKeyId: \'' + config.serverNois.aws_s3_accessKeyId + '\''))
+    .pipe(replace(/aws_s3_secretAccessKey: '(.*)'/g, 'aws_s3_secretAccessKey: \'' + config.serverNois.aws_s3_secretAccessKey + '\''))
+    .pipe(replace(/aws_s3_bucket: '(.*)'/g, 'aws_s3_bucket: \'' + config.serverNois.aws_s3_bucket + '\''))
+    .pipe(replace(/aws_s3_region: '(.*)'/g, 'aws_s3_region: \'' + config.serverNois.aws_s3_region + '\''))
     .pipe(gulp.dest('build-server-nois'));
 
   return gulp.src([

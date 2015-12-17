@@ -38,7 +38,7 @@ define(function(require) {
         $scope.$broadcast('uploadBox.DeleteFile', {idx: idx});
       };
 
-      $scope.saveDocumentInfo = function(model) {
+      $scope.saveDocumentInfo = function(model, _form) {
         if($scope.uploadModel.files.length === 0) {
           return;
         }
@@ -75,8 +75,11 @@ define(function(require) {
                 }
               })
               .error(function() {
-                $scope.document_frm.$setPristine();
+                _form.$setPristine();
               });
+          })
+          .error(function(){
+            _form.$setPristine();
           });
       };
 

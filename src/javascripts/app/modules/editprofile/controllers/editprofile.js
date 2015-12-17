@@ -1,8 +1,8 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'fileFactory', '$timeout', 'appConstant', 'toaster',
-    function($scope, $rootScope, userContext, $state, accountFactory, notifications, fileFactory, $timeout, appConstant, toaster) {
+  var controller = ['$scope', '$rootScope', 'userContext', '$state', 'accountFactory', 'notifications', 'fileFactory', '$timeout', 'appConstant', 'toaster', '$filter',
+    function($scope, $rootScope, userContext, $state, accountFactory, notifications, fileFactory, $timeout, appConstant, toaster, $filter) {
 
       $scope.editUserData = {
         userId: $rootScope.currentUserInfo.userId,
@@ -31,15 +31,18 @@ define(function(require) {
             userContext.fillInfo(angular.copy($rootScope.currentUserInfo), true);
 
             notifications.updateProfileSuccess();
+
+            $scope.isAvatarChanged = false;
           },
           function(er) {
             $scope.form.$setPristine();
+            $scope.isAvatarChanged = false;
           });
       }
 
       function submitUserProfile(model) {
         if($scope.isAvatarChanged) {
-          fileFactory.move($scope.editUserData.userImagePath, null, 'profile')
+          fileFactory.move($filter('filePath')($scope.editUserData.userImagePath, 'relative'), null, 'profile')
             .success(function(resp) {
               model.userImagePath = resp.url;
               $scope.editUserData.userImagePath = resp.url;
@@ -71,7 +74,7 @@ define(function(require) {
             $scope.percentage = progressPercentage;
           }).success(function(data, status, headers, config) {
             $timeout(function() {
-              $scope.editUserData.userImagePath = data.url;
+              $scope.editUserData.userImagePath = $filter('filePath')(data.url, 'node');
               $scope.isUploadAvatar = false;
               $scope.isAvatarChanged = true;
             });

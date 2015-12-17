@@ -61,6 +61,20 @@
   }
 
   .preview-section {
+    > .panel {
+      position: relative;
+      > form {
+        > .panel-heading {
+          position: absolute;
+          width: 100%;
+          top: 0;
+          left: 0;
+        }
+        > .panel-body {
+          padding-top: 55px;
+        }
+      }
+    }
     .panel-heading {
       .page-info {
         display: block;
@@ -98,12 +112,19 @@
   }
 
   .comment-section {
-    > .panel {
+    margin-left: -1px;
+    .panel {
       position: relative;
     }
+    .panel-heading {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
     .panel-body {
-      height: @onSite-height;
       padding-bottom: 45px;
+      padding-top: 55px;
       .comment-content {
         border: solid 1px #d5d5d5;
         padding: 5px;
@@ -124,8 +145,6 @@
         }
       }
     }
-    margin-left: -1px;
-
     .add-comment {
       position: absolute;
       width: 100%;
@@ -166,7 +185,6 @@
         }
       }
     }
-
   }
 
   .search {

@@ -46,6 +46,14 @@ Python excel: https://pypi.python.org/pypi/xlrd
     $ python setup.py install
  6. Ghostscript:
     $ sudo yum install ghostscript
+ 7. AWS
+    $ yum install unzip
+    $ curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+    $ unzip awscli-bundle.zip
+    $ sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+    $ echo $PATH | grep ~/bin     // See if $PATH contains ~/bin (output will be empty if it doesn't)
+    $ export PATH=~/bin:$PATH     // Add ~/bin to $PATH if necessary
+    - Configure credential in Code/.aws to ~/.aws (Readmore: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files)
 
 ===== PORT EXPOSE ======
 sudo firewall-cmd --zone=public --add-port=[port]/tcp --permanent

@@ -8,7 +8,7 @@ module.exports = {
     domain: 'http://localhost:3214/ontargetrs/services',
     baseUrl: 'http://localhost:3214',
     nodeServer: 'http://int.app.ontargetcloud.com:9001',
-    resourceUrl: 'http://int.app.ontargetcloud.com:9001',
+    resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
     bimServer: 'http://localhost:3214/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
     newBimServer: 'http://115.75.6.162:3216',
@@ -31,7 +31,7 @@ module.exports = {
     domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',
     baseUrl: 'http://demo.newoceaninfosys.com:3214',
     nodeServer: 'http://demo.newoceaninfosys.com:3215',
-    resourceUrl: 'http://demo.newoceaninfosys.com:3215',
+    resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
     bimServer: 'http://demo.newoceaninfosys.com:3214/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
     newBimServer: 'http://115.75.6.162:3216',
@@ -54,7 +54,7 @@ module.exports = {
     domain: 'http://localhost:9000/ontargetrs/services',
     baseUrl: 'http://localhost:9000',
     nodeServer: 'http://localhost:9001',
-    resourceUrl: 'http://localhost:9001',
+    resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
     bimServer: 'http://localhost:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
     newBimServer: 'http://localhost:9002',
@@ -77,7 +77,7 @@ module.exports = {
     domain: 'http://localhost:9002/ontargetrs/services',
     baseUrl: 'http://localhost:9002',
     nodeServer: 'http://localhost:9003',
-    resourceUrl: 'http://localhost:9003',
+    resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
     bimServer: 'http://localhost:9002/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
     newBimServer: 'http://115.75.6.162:3216',
@@ -100,7 +100,7 @@ module.exports = {
     domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services', 	// The domain should be same as the baseUrl because the proxy server was moved to the same Front-End web server
     baseUrl: 'http://int.app.ontargetcloud.com:9000', 						// Site domain
     nodeServer: 'http://int.app.ontargetcloud.com:9001', 					// Node server domain
-    resourceUrl: 'http://int.app.ontargetcloud.com:9001', 					// This should be same as the node server because the resources are storing on the node server
+    resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com', 					// This should be same as the node server because the resources are storing on the node server
     bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
     newBimServer: 'http://int.app.ontargetcloud.com:9002',
@@ -123,7 +123,7 @@ module.exports = {
     domain: 'http://int.app.ontargetcloud.com:9004/ontargetrs/services', 	// The domain should be same as the baseUrl because the proxy server was moved to the same Front-End web server
     baseUrl: 'http://int.app.ontargetcloud.com:9004', 						// Site domain
     nodeServer: 'http://int.app.ontargetcloud.com:9005', 					// Node server domain
-    resourceUrl: 'http://int.app.ontargetcloud.com:9005', 					// This should be same as the node server because the resources are storing on the node server
+    resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com', 					// This should be same as the node server because the resources are storing on the node server
     bimServer: 'http://int.app.ontargetcloud.com:9004/bim',
     bimServerAddress: 'http://216.14.121.204:8080',
     newBimServer: 'http://115.75.6.162:3216',
@@ -184,7 +184,7 @@ module.exports = {
     domain: 'https://app.ontargetcloud.com/ontargetrs/services',
     baseUrl: 'https://app.ontargetcloud.com',
     nodeServer: 'https://app.ontargetcloud.com',
-    resourceUrl: 'https://app.ontargetcloud.com',
+    resourceUrl: 'https://ontarget-assets.s3.amazonaws.com',
     bimServer: 'https://app.ontargetcloud.com/bim',
     bimServerAddress: 'https://app.ontargetcloud.com/bimserver',
     newBimServer: 'http://115.75.6.162:3216',
@@ -207,7 +207,7 @@ module.exports = {
     domain: 'https://app.ontargetcloud.com/ontargetrs/services',
     baseUrl: 'https://app.ontargetcloud.com',
     nodeServer: 'https://app.ontargetcloud.com',
-    resourceUrl: 'https://app.ontargetcloud.com',
+    resourceUrl: 'https://ontarget-assets.s3.amazonaws.com',
     bimServer: 'https://app.ontargetcloud.com/bim',
     bimServerAddress: 'https://app.ontargetcloud.com/bimserver',
     newBimServer: 'http://115.75.6.162:3216',
@@ -237,7 +237,12 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
-    domain: 'http://localhost:9001'
+    domain: 'http://localhost:9001',
+    resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets-test',
+    aws_s3_region: 'us-east-1'
   },
   serverNois: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
@@ -251,7 +256,12 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
-    domain: 'http://demo.newoceaninfosys.com:3215'
+    domain: 'http://demo.newoceaninfosys.com:3215',
+    resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets-test',
+    aws_s3_region: 'us-east-1'
   },
   serverlocal: {
     PROXY_URL: 'http://localhost:8080/ontargetrs/services',
@@ -265,7 +275,12 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
-    domain: 'http://localhost:9001'
+    domain: 'http://localhost:9001',
+    resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets-test',
+    aws_s3_region: 'us-east-1'
   },
   serverintegration: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
@@ -279,7 +294,12 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
-    domain: 'http://int.app.ontargetcloud.com:9001'
+    domain: 'http://int.app.ontargetcloud.com:9001',
+    resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets-test',
+    aws_s3_region: 'us-east-1'
   },
   serverbeta: {
     PROXY_URL: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',
@@ -293,7 +313,12 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
-    domain: 'http://localhost:9001'
+    domain: 'http://localhost:9001',
+    resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets-test',
+    aws_s3_region: 'us-east-1'
   },
   servertesting: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -307,7 +332,12 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
-    domain: 'http://localhost:9001'
+    domain: 'http://localhost:9001',
+    resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets-test',
+    aws_s3_region: 'us-east-1'
   },
   serverstaging: {
     PROXY_URL: 'http://hostname:port/ontargetrs/services',
@@ -321,7 +351,12 @@ module.exports = {
       apiKey: 'c2f5de73a4caa3763726',
       secret: 'e2455e810e36cbed510e'
     },
-    domain: 'http://localhost:9001'
+    domain: 'http://localhost:9001',
+    resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets',
+    aws_s3_region: 'us-east-1'
   },
   serversagarmatha01: {
     PROXY_URL: 'http://172.31.59.54:8080/ontargetrs/services',
@@ -335,7 +370,12 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
-    domain: 'https://app.ontargetcoud.com'
+    domain: 'https://app.ontargetcoud.com',
+    resource_domain: 'https://ontarget-assets.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets',
+    aws_s3_region: 'us-east-1'
   },
   serversagarmatha02: {
     PROXY_URL: 'http://172.31.48.59:8080/ontargetrs/services',
@@ -349,6 +389,11 @@ module.exports = {
       apiKey: 'f0a0bf34cd094e438cba',
       secret: 'a2244d813cebbd30dc2e'
     },
-    domain: 'https://app.ontargetcoud.com'
+    domain: 'https://app.ontargetcoud.com',
+    resource_domain: 'https://ontarget-assets.s3.amazonaws.com',
+    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets',
+    aws_s3_region: 'us-east-1'
   }
 };

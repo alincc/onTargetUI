@@ -1,46 +1,20 @@
 var express = require('express');
 var path = require('path');
 var fs = require("fs");
-var mkdirp = require("mkdirp");
+var mime = require('mime');
 var gm = require('gm');
 var rootPath = process.env.ROOT;
 var config = require('./../config');
 var imageService = require('./../services/image');
+var aws = require('./../services/aws');
+var utilService = require('./../services/util');
 var _ = require('lodash');
-
-function generateNewFileName(filePath) {
-  var fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
-  var fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-  var fileExt = fileName.substring(fileName.lastIndexOf('.') + 1);
-  var fullFilePath = filePath;
-  var files = fs.readdirSync(fullFilePath.substring(0, fullFilePath.lastIndexOf('/')));
-  var newName = fileName;
-  var reg = new RegExp(fileNameWithoutExt + ' \\(\\d+\\)\\.' + fileExt + '$');
-  var duplicates = _.filter(files, function(file) {
-    return reg.test(file);
-  });
-  if(duplicates.length <= 0) {
-    newName = fileNameWithoutExt + ' (1).' + fileExt;
-  } else {
-    var lastDuplicateNumber = _.sortBy(duplicates).reverse()[0];
-    var duplicateNumber = /.*\s+\((\d+)\)\./.exec(lastDuplicateNumber)[1];
-    if(duplicateNumber) {
-      newName = fileNameWithoutExt + ' (' + (parseInt(duplicateNumber) + 1) + ').' + fileExt;
-    }
-  }
-  return newName;
-}
 
 function uploadFile(req, res) {
   var fileInputName = config.fileInputName,
-    uploadedFilesPath = config.uploadedFilesPath,
-    imagePathRoot = config.imagePathRoot,
-    maxFileSize = config.maxFileSize, // in bytes
     fileName = '',
-    encryptedProjectFolderName = '';
-
-  var file = req.files[fileInputName],
-    uuid = req.body.uuid,
+    file = req.files[fileInputName],
+    uuid = req.body.uuid || utilService.newGuidId(),
     rootFolder = req.body.folder,
     projectAssetFolderName = req.body.projectAssetFolderName,
     context = req.body.context,
@@ -53,155 +27,71 @@ function uploadFile(req, res) {
     .replace(/\"/g, '_');
 
   file.name = fileName;
-  console.log("Uploading the file" + fileName + " with size: " + file.size);
-  console.log("Max File size allowed:" + maxFileSize);
-  console.log("is valid file??" + isValid(file.size, maxFileSize));
-  if(isValid(file.size, maxFileSize)) {
+  console.log("Uploading the file  " + fileName + " with size: " + file.size);
+  console.log("Max File size allowed:" + config.maxFileSize);
+  console.log("is valid file ?? " + isValid(file.size));
+  if(isValid(file.size)) {
+
+    function success(absoluteUrl) {
+      responseData.success = true;
+      responseData.url = utilService.generateAssetPath(rootFolder, projectAssetFolderName, context, fileName, uuid);
+      responseData.name = fileName;
+      responseData.type = string.path(fileName).mimeType;
+      responseData.size = file.size;
+      res.send(responseData);
+    }
+
+    function failure(msg) {
+      res.status(400);
+      res.send(msg);
+    }
+
     function upload(file) {
-      moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, projectAssetFolderName, context, function() {
-          var url = imagePathRoot + rootFolder + '/';
-          if(rootFolder === 'projects') {
-            if(context === '') {
-              url += projectAssetFolderName + '/' + fileName;
-            }
-            else {
-              url += projectAssetFolderName + '/' + context + '/' + fileName;
-            }
-          }
-          else if(rootFolder === 'profile') {
-            url += fileName; // profile
-          }
-          else {
-            url += uuid + '/' + fileName; // temp
-          }
-          responseData.success = true;
-          responseData.url = url;
-          responseData.name = fileName;
-          responseData.type = file.type;
-          responseData.size = file.size;
-          res.send(responseData);
-        },
-        function() {
-          res.status(400);
-          res.send('Problem copying the file!');
-        });
+      var sourceStream = fs.createReadStream(file.path);
+      var url = utilService.generateAssetPath(rootFolder, projectAssetFolderName, context, fileName, uuid);
+      if(rootFolder === 'temp') {
+        var destStream = fs.createWriteStream(path.join(rootPath, url));
+        sourceStream
+          .on("error", function(error) {
+            console.error("Problem copying file: " + error.stack);
+            failure();
+          })
+          .on("end", success)
+          .pipe(destStream);
+      } else {
+        url = aws.s3.ensureFileNotExists(url)
+          .then(function(k) {
+            url = k;
+            fileName = string.path(url).name;
+            aws.s3.upload(sourceStream, url, function(evt) {
+              // console.log(evt);
+            }).
+              then(function(data) {
+                console.log(data);
+                success(data.Location);
+              }, function(err) {
+                console.log(err);
+                failure(err.message)
+              });
+          });
+      }
     }
 
     if(crop) {
       imageService.crop(file.path, fileName, upload, function(err) {
-        res.status(400);
-        res.send(err);
+        failure(err.message);
       });
     } else {
       upload(file);
     }
   }
   else {
-    failWithTooBigFile(responseData, maxFileSize, res);
+    failure('File too big, please update file < ' + (config.maxFileSize / 1000000).toFixed(2) + 'MB');
   }
 }
 
-function failWithTooBigFile(responseData, maxFileSize, res) {
-  res.status(400);
-  res.send('File too big, please update file < ' + (maxFileSize / 1000000).toFixed(2) + 'MB');
-}
-
-function isValid(size, maxFileSize) {
-  return size < maxFileSize;
-}
-
-function moveFile(destinationDir, sourceFile, destinationFile, success, failure) {
-  mkdirp(destinationDir, function(error) {
-    var sourceStream, destStream;
-
-    if(error) {
-      console.error("Problem creating directory " + destinationDir + ": " + error);
-      failure();
-    }
-    else {
-      sourceStream = fs.createReadStream(sourceFile);
-      destStream = fs.createWriteStream(destinationFile);
-
-      sourceStream
-        .on("error", function(error) {
-          console.error("Problem copying file: " + error.stack);
-          failure();
-        })
-        .on("end", success)
-        .pipe(destStream);
-    }
-  });
-}
-
-function moveUploadedFile(file, fileName, uploadedFilesPath, uuid, rootFolder, projectAssetFolderName, context, success, failure) {
-  var url = uploadedFilesPath + rootFolder,
-    destinationDir,
-    fileDestination;
-
-  if(rootFolder === 'projects') {
-    mkdirp(url, function(error) {
-      if(error) {
-        console.error("Problem creating directory " + url + ": " + error);
-        failure();
-      }
-      else {
-        url += '/' + projectAssetFolderName;
-        if(context === '') {
-          destinationDir = url;
-          fileDestination = destinationDir + '/' + fileName;
-          // Check if file exist, then change file name
-          if(fs.existsSync(fileDestination)) {
-            fileName = generateNewFileName(fileDestination);
-            fileDestination = destinationDir + '/' + fileName;
-          }
-          moveFile(destinationDir, file.path, fileDestination, success, failure);
-        }
-        else {
-          mkdirp(url, function(error) {
-            if(error) {
-              console.error("Problem creating directory " + url + ": " + error);
-              failure();
-            }
-            else {
-              url += '/' + context;
-              destinationDir = url;
-              fileDestination = destinationDir + '/' + fileName;
-
-              // Check if file exist, then change file name
-              if(fs.existsSync(fileDestination)) {
-                fileName = generateNewFileName(fileDestination);
-                fileDestination = destinationDir + '/' + fileName;
-              }
-
-              moveFile(destinationDir, file.path, fileDestination, success, failure);
-            }
-          });
-        }
-      }
-    });
-  }
-  else if(rootFolder === 'profile') {
-    destinationDir = url;
-    fileDestination = destinationDir + '/' + fileName;
-    if(fs.existsSync(fileDestination)) {
-      fileName = generateNewFileName(fileDestination);
-      fileDestination = destinationDir + '/' + fileName;
-    }
-    moveFile(destinationDir, file.path, fileDestination, success, failure);
-  }
-  else {
-    mkdirp(url, function(error) {
-      if(error) {
-        console.error("Problem creating directory " + url + ": " + error);
-        failure();
-      }
-      else {
-        destinationDir = url + '/' + uuid + '/';
-        fileDestination = destinationDir + fileName;
-        moveFile(destinationDir, file.path, fileDestination, success, failure);
-      }
-    });
-  }
+function isValid(size) {
+  return size < config.maxFileSize;
 }
 
 module.exports = {
