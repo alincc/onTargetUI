@@ -14,12 +14,25 @@ define(function(require) {
       function(constant, $http, $q) {
         var service = {};
 
-        service.getActivityOfProject = function(projectId, canceler){
+        service.getActivityOfProject = function(projectId, canceler, baseRequest) {
           canceler = canceler || $q.defer();
+          var authData, authorization = true;
+          if(angular.isDefined(baseRequest) && baseRequest === false){
+            authorization = false;
+            authData = {
+              "loggedInUserId": $rootScope.currentUserInfo.userId,
+              "loggedInUserProjectId": projectId
+            };
+          }
+
           return $http.post(constant.domain + '/project/getActivityOfProject', {
-            projectId: projectId
+            projectId: projectId,
+            baseRequest: authData
           }, {
-            timeout: canceler.promise
+            timeout: canceler.promise,
+            headers: {
+              Authorization: authorization
+            }
           });
         };
 

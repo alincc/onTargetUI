@@ -24,7 +24,7 @@ define(function() {
       $scope.maxStartDate = project.endDate;
       $scope.minEndDate = project.startDate;
       var getActivityDateRange = function() {
-        activityFactory.getActivityOfProject(project.projectId)
+        activityFactory.getActivityOfProject(project.projectId, null, false)
           .success(function(resp) {
             var activities = resp.projects;
             _.forEach(activities, function(activity) {
