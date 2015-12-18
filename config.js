@@ -159,6 +159,9 @@ module.exports = {
       secret: 'e2455e810e36cbed510e'
     },
     weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
+    // Proxy settings
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',		// API
+    BIM_SERVER: 'http://216.14.121.204:8080'		// API
   },
   staging: {
     port: 0,
@@ -178,6 +181,9 @@ module.exports = {
       secret: 'e2455e810e36cbed510e'
     },
     weatherUrl: 'http://api.openweathermap.org/data/2.5/weather',
+    // Proxy settings
+    API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrsbeta/services',		// API
+    BIM_SERVER: 'http://216.14.121.204:8080'		// API
   },
   sagarmatha01: {
     port: 9000,
@@ -296,8 +302,8 @@ module.exports = {
     },
     domain: 'http://int.app.ontargetcloud.com:9001',
     resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
-    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
-    aws_s3_secretAccessKey: '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',
+    aws_s3_accessKeyId: 'AKIAIZJA3FXDMICMC4OA',
+    aws_s3_secretAccessKey: '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',
     aws_s3_bucket: 'ontarget-assets-test',
     aws_s3_region: 'us-east-1'
   },
@@ -315,8 +321,8 @@ module.exports = {
     },
     domain: 'http://localhost:9001',
     resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
-    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
-    aws_s3_secretAccessKey: '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',
+    aws_s3_accessKeyId: 'AKIAIZJA3FXDMICMC4OA',
+    aws_s3_secretAccessKey: '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',
     aws_s3_bucket: 'ontarget-assets-test',
     aws_s3_region: 'us-east-1'
   },
@@ -334,8 +340,8 @@ module.exports = {
     },
     domain: 'http://localhost:9001',
     resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
-    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
-    aws_s3_secretAccessKey: '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',
+    aws_s3_accessKeyId: 'AKIAIZJA3FXDMICMC4OA',
+    aws_s3_secretAccessKey: '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',
     aws_s3_bucket: 'ontarget-assets-test',
     aws_s3_region: 'us-east-1'
   },
@@ -353,9 +359,9 @@ module.exports = {
     },
     domain: 'http://localhost:9001',
     resource_domain: 'https://ontarget-assets-test.s3.amazonaws.com',
-    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
-    aws_s3_secretAccessKey: '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',
-    aws_s3_bucket: 'ontarget-assets',
+    aws_s3_accessKeyId: 'AKIAIZJA3FXDMICMC4OA',
+    aws_s3_secretAccessKey: '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',
+    aws_s3_bucket: 'ontarget-assets-test',
     aws_s3_region: 'us-east-1'
   },
   serversagarmatha01: {
@@ -372,8 +378,8 @@ module.exports = {
     },
     domain: 'https://app.ontargetcoud.com',
     resource_domain: 'https://ontarget-assets.s3.amazonaws.com',
-    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
-    aws_s3_secretAccessKey: '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',
+    aws_s3_accessKeyId: 'AKIAIJUQMFTTI52YKBUA',
+    aws_s3_secretAccessKey: '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',
     aws_s3_bucket: 'ontarget-assets',
     aws_s3_region: 'us-east-1'
   },
@@ -391,8 +397,8 @@ module.exports = {
     },
     domain: 'https://app.ontargetcoud.com',
     resource_domain: 'https://ontarget-assets.s3.amazonaws.com',
-    aws_s3_accessKeyId: 'AKIAIVHJTP4X5CBFYNLA',
-    aws_s3_secretAccessKey: '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',
+    aws_s3_accessKeyId: 'AKIAIJUQMFTTI52YKBUA',
+    aws_s3_secretAccessKey: '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',
     aws_s3_bucket: 'ontarget-assets',
     aws_s3_region: 'us-east-1'
   }
