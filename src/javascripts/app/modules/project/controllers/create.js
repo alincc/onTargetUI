@@ -30,7 +30,7 @@ define(function() {
           zip: "",
           addressId: ""
         },
-        companyId: 0, // mainproject
+        companyId: $rootScope.currentUserInfo.contact.company.companyId,
         projectName: "",
         projectDescription: "",
         status: "",
