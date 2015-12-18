@@ -80,38 +80,76 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-12 col-lg-9">
+                    <!--<div class="row">-->
+                        <!--<div class="panel panel-default">-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="weather-container">-->
+                                    <!--<section ng-if="weatherError" class="text-center text-danger">-->
+                                        <!--Cannot get weather-->
+                                    <!--</section>-->
+                                    <!--<section ng-if="!weatherError">-->
+                                        <!--<div class="icon">-->
+                                            <!--<i class="wi {{ getWeatherIconById() }}"></i>-->
+                                        <!--</div>-->
+                                        <!--<div class="info">-->
+                                            <!--<p class="temp" ng-bind="weather.temp+' F'"></p>-->
+
+                                            <!--<p class="humidity">Humidity: <span ng-bind="weather.humidity+'%'"></span></p>-->
+
+                                            <!--<p class="windspeed">Windspeed: <span-->
+                                                    <!--ng-bind="weather.windSpeed+'MPM NW'"></span>-->
+                                            <!--</p>-->
+                                        <!--</div>-->
+                                    <!--</section>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>                        -->
+                    <!--</div>-->
                     <div class="row">
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-4" ng-repeat="weather in weathers track by $index"  ng-if="$index < 3">
                             <div class="info-left-icon">
                                 <div class="icon">
-                                    <img src="img/icons/leaf.png"/>
+                                    <i class="wi {{ getWeatherIcon(weather.icon) }}"></i>
                                 </div>
-                                <div class="text"><span ng-bind="dashboardBi.treesSaved.treesSaved"
-                                                        class="number"></span> <span class="desc">Trees saved</span>
+                                <div class="text">
+                                    <span ng-bind="weather.temp" class="number"></span>
+                                    <div class="humidity">
+                                        Humidity: <span ng-bind="weather.humidity"></span>
+                                    </div>
+                                    <div class="windspeed">
+                                        Windspeed: <span ng-bind="weather.windSpeed"></span>
+                                    </div>
+                                    <div class="weather-date">
+                                        Date:
+                                        <span ng-bind="weather.dt_txt | date: app.dateFormat"></span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="info-left-icon">
-                                <div class="icon">
-                                    <img src="img/icons/lock.png"/>
-                                </div>
-                                <div class="text"><span ng-bind="dashboardBi.timeSaved.timeSavedValue"
-                                                        class="number"></span> <span class="desc">hrs Time Saved</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="info-left-icon">
-                                <div class="icon">
-                                    <img src="img/icons/first-aid.png"/>
-                                </div>
-                                <div class="text"><span ng-bind="dashboardBi.noAccident.noAccidentDays"
-                                                        class="number"></span> <span
-                                        class="desc">days w/o accidents</span></div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6" ng-repeat="weather in weathers track by $index" ng-if="$index >= 3">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <i class="wi {{ getWeatherIcon(weather.icon) }}"></i>
+                                </div>
+                                <div class="text">
+                                    <span ng-bind="weather.temp" class="number"></span>
+                                    <div class="humidity">
+                                        Humidity: <span ng-bind="weather.humidity"></span>
+                                    </div>
+                                    <div class="windspeed">
+                                        Windspeed: <span ng-bind="weather.windSpeed"></span>
+                                    </div>
+                                    <div class="weather-date">
+                                        Date:
+                                        <span ng-bind="weather.dt_txt | date: app.dateFormat"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="info-left-icon">
@@ -124,28 +162,39 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-12 col-lg-3">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="weather-container">
-                                <section ng-if="weatherError" class="text-center text-danger">
-                                    Cannot get weather
-                                </section>
-                                <section ng-if="!weatherError">
-                                    <div class="icon">
-                                        <i class="wi {{ getWeatherIconById() }}"></i>
-                                    </div>
-                                    <div class="info">
-                                        <p class="temp" ng-bind="weather.temp+' F'"></p>
-
-                                        <p class="name" ng-bind="weather.name"></p>
-
-                                        <p class="humidity">Humidity: <span ng-bind="weather.humidity+'%'"></span></p>
-
-                                        <p class="windspeed">Windspeed: <span
-                                                ng-bind="weather.windSpeed+'MPM NW'"></span>
-                                        </p>
-                                    </div>
-                                </section>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <img src="img/icons/leaf.png"/>
+                                </div>
+                                <div class="text"><span ng-bind="dashboardBi.treesSaved.treesSaved"
+                                                        class="number"></span> <span class="desc">Trees saved</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <img src="img/icons/lock.png"/>
+                                </div>
+                                <div class="text"><span ng-bind="dashboardBi.timeSaved.timeSavedValue"
+                                                        class="number"></span> <span class="desc">hrs Time Saved</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="info-left-icon">
+                                <div class="icon">
+                                    <img src="img/icons/first-aid.png"/>
+                                </div>
+                                <div class="text"><span ng-bind="dashboardBi.noAccident.noAccidentDays"
+                                                        class="number"></span> <span
+                                        class="desc">days w/o accidents</span></div>
                             </div>
                         </div>
                     </div>

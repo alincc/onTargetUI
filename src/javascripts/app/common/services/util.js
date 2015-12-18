@@ -114,7 +114,8 @@ define(function(require) {
           params: {
             zip: zip,
             units: 'Imperial',
-            APPID: appConstant.openWeatherMap.appId
+            APPID: appConstant.openWeatherMap.appId,
+            mode: 'json'
           }
         });
       };

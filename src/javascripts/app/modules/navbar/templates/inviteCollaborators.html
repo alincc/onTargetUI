@@ -37,13 +37,46 @@
       <div class="form-group">
         <label class="col-xs-3 col-xs-offset-1 control-label">Company <span class="label-required" ng-show="form.existingCompanyName.$error.required">*</span></label>
         <div class="col-xs-7">
-          <select class="form-control" name="existingCompanyName" ng-model="existingCompany.id"
-                  ng-change="companyChanged()"
-                  ng-options="company.companyId as company.companyName for company in companies" required>
-            <option value="">-- Select --</option>
-          </select>
+          <!--<select class="form-control" name="existingCompanyName" ng-model="existingCompany.id"-->
+                  <!--ng-change="companyChanged()"-->
+                  <!--ng-options="company.companyId as company.companyName for company in companies" required>-->
+            <!--<option value="">&#45;&#45; Select &#45;&#45;</option>-->
+          <!--</select>-->
+
+          <div class="dropdown" dropdown>
+            <button class="btn btn-default dropdown-toggle btn-custom-dropdown-menu" type="button" dropdown-toggle>
+              <i class="fa fa-plus" ng-if="existingCompany.id == 0"></i>
+              <span ng-bind="existingCompany.name"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu custom-dropdown-menu-contain">
+              <li>
+                <ul class="custom-dropdown-menu" ng-class="{ 'custom-dropdown-menu-scrolled' : companies.length > 2}">
+                  <li class="active" ng-class="{ 'active' : existingCompany.id == -1}">
+                    <a ng-click="companyChanged(-1, '-- Select --')">
+                      -- Select --
+                    </a>
+                  </li>
+                  <li ng-repeat="company in companies" ng-class="{ 'active' : existingCompany.id == company.companyId}">
+                    <a ng-click="companyChanged(company.companyId, company.companyName)">
+                      <span ng-bind="company.companyName"></span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li ng-class="{ 'active' : existingCompany.id == 0}">
+                <a ng-click="companyChanged(0, 'Add new company')">
+                  <i class="fa fa-plus"></i>
+                  <span>Add new company</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
           <span class="text-danger help-block m-b-none"
-                ng-show="form.existingCompanyName.$error.required && form.existingCompanyName.$dirty">Company Name is missing</span>
+                ng-show="existingCompany.id == -1 && existingCompany.isChanged">Company Name is missing</span>
         </div>
       </div>
       <!--<div class="form-group">-->
@@ -143,7 +176,7 @@
     </div>
     <div class="modal-footer">
       <div>
-        <input type="submit" class="btn btn-primary" ng-disabled="form.$invalid || form.$submitted" value="Invite"/>
+        <input type="submit" class="btn btn-primary" ng-disabled="form.$invalid || form.$submitted || existingCompany.id == -1" value="Invite"/>
         <input type="button" ng-click="cancel()" class="btn warning" value="Cancel"/>
       </div>
     </div>

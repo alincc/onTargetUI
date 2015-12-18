@@ -167,16 +167,10 @@ define(function(require) {
           remain: Math.ceil(daydiff(getCurrentDate(), new Date($scope.project.endDate)))
         };
         // Weather
-        $scope.weather = {
-          temp: 0,
-          humidity: 0,
-          windSpeed: 0,
-          name: '',
-          desc: '',
-          icon: ''
-        };
-        $scope.getWeatherIcon = function() {
-          switch($scope.weather.icon) {
+        $scope.weathers = [];
+
+        $scope.getWeatherIcon = function(icon) {
+          switch(icon) {
             case "01d":
               return "wi-day-sunny";
             case "01n":
@@ -215,14 +209,58 @@ define(function(require) {
           }
         };
 
-        $scope.getWeatherIconById = function() {
-          return "wi-owm-" + $scope.weather.id;
+        $scope.getWeatherIconById = function(id) {
+          return "wi-owm-" + id;
         };
 
         $scope.weatherError = false;
         $scope.isLoadingWeather = true;
         utilFactory.getWeather($scope.project.projectAddress.zip)
           .success(function(resp) {
+            var objectGroupBy = _.groupBy(resp.list, function(value){
+              return value.dt_txt.split(" ")[0];
+            });
+
+            var index = 0;
+            angular.forEach(objectGroupBy, function(data){
+              if(index == 0){
+                var value = _.findLast(data, function(n){
+                  var weatherDate = new Date(n.dt_txt);
+
+                  var isoDate = new Date().toISOString();
+                  var utcDateTime = new Date(isoDate);
+
+                  return weatherDate < utcDateTime;
+                });
+
+                var weather = {
+                  humidity: value.main.humidity + '%',
+                  windSpeed: value.wind.speed + 'MPM NW',
+                  temp: value.main.temp + ' F',
+                  iconId: value.weather[0].id,
+                  icon: value.weather[0].icon,
+                  dt_txt: value.dt_txt.split(" ")[0]
+                };
+
+                $scope.weathers.push(weather);
+              } else if(index < 5){
+                var value = _.first(data);
+
+                var weather = {
+                  humidity: value.main.humidity + '%',
+                  windSpeed: value.wind.speed + 'MPM NW',
+                  temp: value.main.temp + ' F',
+                  iconId: value.weather[0].id,
+                  icon: value.weather[0].icon,
+                  dt_txt: value.dt_txt.split(" ")[0]
+                };
+
+                $scope.weathers.push(weather);
+              }
+
+              index++;
+            });
+
             if(angular.isDefined(resp.cod) && angular.isDefined(resp.message)) {
               $scope.weatherError = true;
             } else {

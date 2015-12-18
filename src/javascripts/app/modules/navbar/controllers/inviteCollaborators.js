@@ -9,18 +9,16 @@ define(function(require) {
       $scope.addNewCompany = false;
       $scope.sentSuccess = false;
       $scope.companies = companies;
-      console.log(companies);
-      // Add "Add new company" option
-      $scope.companies.push({
-        companyName: 'Add new company',
-        companyId: 0
-      });
 
       $scope.companyTypes = angular.fromJson(companyTypesData);
       $scope.newCollaborator = {};
       $scope.countries = countryFactory.getCountryList();
 
-      $scope.existingCompany = {};
+      $scope.existingCompany = {
+        id: -1,
+        name: '-- Select --',
+        isChanged: false
+      };
 
       var getCountryFileName = function(countryCode) {
         var fileName = _($scope.countries)
@@ -94,7 +92,11 @@ define(function(require) {
           });
       };
 
-      $scope.companyChanged = function() {
+      $scope.companyChanged = function(id, name) {
+        $scope.existingCompany.id = id;
+        $scope.existingCompany.name = name;
+        $scope.existingCompany.isChanged = true;
+
         $scope.addNewCompany = $scope.existingCompany.id === 0;
       };
 
