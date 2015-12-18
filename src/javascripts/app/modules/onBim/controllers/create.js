@@ -91,7 +91,7 @@ define(function(require) {
                   "projectBimFileId": resp.projectBimFileDTO.projectBimFileId
                 })
                   .success(function() {
-                    $state.go('app.onBimDetails', {projectId: resp.projectBimFileDTO.projectBimFileId});
+                    $state.go('app.onBim');
                   })
                   .error(function() {
                     console.log('Failed to update project bim');
@@ -108,7 +108,7 @@ define(function(require) {
         }
 
         if($scope.picture.isUploadedPicture) {
-          fileFactory.move($scope.project.projectBimFileLocation, null, 'projects', $scope.projectAssetFolderName, 'onbim')
+          fileFactory.move($filter('filePath')($scope.project.projectBimFileLocation, 'relative'), null, 'projects', $scope.projectAssetFolderName, 'onbim')
             .success(function(resp) {
               $scope.project.projectBimFileLocation = resp.url;
               addProject();
@@ -142,7 +142,7 @@ define(function(require) {
             $scope.picture.percentage = progressPercentage;
           }).success(function(data, status, headers, config) {
             $timeout(function() {
-              $scope.project.projectBimFileLocation = data.url;
+              $scope.project.projectBimFileLocation = $filter('filePath')(data.url, 'node');
               $scope.picture.isUploadPicture = false;
               $scope.picture.isUploadedPicture = true;
             });

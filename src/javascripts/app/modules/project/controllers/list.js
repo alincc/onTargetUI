@@ -70,8 +70,8 @@ define(function(require) {
 
       //edit project
       $scope.editProject = function(project) {
-        $rootScope.editProject = project;
-        $state.go('app.editProject');
+        projectContext.setProject(project);
+        $state.go('app.editProject',{projectId: project.projectId});
       };
 
       $scope.deleteProject = function(project) {

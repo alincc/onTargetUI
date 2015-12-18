@@ -381,40 +381,65 @@ define(function(require) {
 
       $scope.documentStatuses = [];
       documentFactory.getDocumentStatus().then(function(resp) {
-        angular.forEach(resp.data.countByDocumentTemplateAndStatus.entry, function(value) {
+
+        for(var i = 0; i < 4; i++){
+
+          var key = '';
+          switch (i){
+            case 0:
+              key = 'Change Order';
+              break;
+            case 1:
+              key = 'Request For Information';
+              break;
+            case 2:
+              key = 'Purchase Order';
+              break;
+            case 3:
+              key = 'Transmittal';
+              break;
+          }
+
           var documentStatus = {
-            key: value.key,
+            key: key,
             colours: [
               '#c1d64c',
               '#63b2db',
-              '#eee'
+              '#F7464A',
+              '#DCDCDC'
             ],
             options: {
               animationEasing: "linear",
-              animationSteps: 10
+              animationSteps: 10,
+              animateScale: true
             },
-            data: [],
-            labels: []
+            data: [0, 0, 0],
+            labels: ['Submitted', 'Approved', 'Rejected']
           };
 
-          angular.forEach(value.value, function(data, key) {
-            documentStatus.data.push(data);
-            switch(key) {
-              case 'approvedCount':
-                documentStatus.labels.push('Approved');
-                break;
-              case 'rejectedCount':
-                documentStatus.labels.push('Rejected');
-                break;
-              case 'submittedCount':
-                documentStatus.labels.push('Submitted');
-                break;
-            }
-          });
+          if(angular.isDefined(resp.data.countByDocumentTemplateAndStatus.entry[i]))
+            angular.forEach(resp.data.countByDocumentTemplateAndStatus.entry[i].value, function(data, key) {
+              switch(key) {
+                case 'submittedCount':
+                  documentStatus.data[0] = data;
+                  break;
+                case 'approvedCount':
+                  documentStatus.data[1] = data;
+                  break;
+                case 'rejectedCount':
+                  documentStatus.data[2] = data;
+                  break;
+              }
+            });
+          else{
+            documentStatus.data.push(1);
+            documentStatus.labels.push('none');
+          }
 
           $scope.documentStatuses.push(documentStatus);
+        };
 
-        });
+
 
       }, function(err) {
 

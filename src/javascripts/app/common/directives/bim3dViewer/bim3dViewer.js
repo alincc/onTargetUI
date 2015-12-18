@@ -363,7 +363,7 @@ define(function(require) {
             for(var i = 0; i < files.length; i++) {
 
               console.log(files[i] + " loading...");
-              loader.load(constant.newBimServer + '/' + files[i], rootobject,
+              loader.load(constant.resourceUrl + '/' + files[i], rootobject,
                 loadObject, onProgress, onError);
             }
 

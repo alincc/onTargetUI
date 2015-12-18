@@ -23,7 +23,6 @@ define(function(require) {
             resolve: {
               company: ['companyFactory', '$q', '$rootScope', function(companyFactory, $q, $rootScope) {
                 var deferred = $q.defer();
-
                 companyFactory.get({
                   "companyId" : $rootScope.currentUserInfo.contact.company.companyId
                 }).success(function(response) {

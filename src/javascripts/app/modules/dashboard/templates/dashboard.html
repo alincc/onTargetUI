@@ -281,7 +281,8 @@
                                                         <h4 class="text-center">
                                                             <span ng-bind="documentStatus.key"></span>
                                                         </h4>
-                                                        <div class="doughnut-container">
+                                                        <div class="doughnut-container" style="position: relative">
+                                                            <div ng-if="documentStatus.labels.length > 3" style="position: absolute; width: 100%; height: 100%; z-index: 9999"></div>
                                                             <canvas height="160" class="chart chart-doughnut"
                                                                     options="documentStatus.options"
                                                                     colours="documentStatus.colours"

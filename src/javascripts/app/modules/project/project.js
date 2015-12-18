@@ -1,7 +1,7 @@
 /**
  * Created by thophan on 8/12/2015.
  */
-define(function(require){
+define(function(require) {
   'use strict';
   var angular = require('angular'),
     angularBootstrap = require('angularBootstrap'),
@@ -36,7 +36,7 @@ define(function(require){
     activityServiceModule = require('app/common/services/activity');
   var module = angular.module('app.project', ['ui.router', 'ui.bootstrap', 'angularLocalStorage', 'app.config', 'common.context.user', 'common.services.account', 'common.services.project', 'common.services.company', 'ngMessages', 'ngFileUpload', 'angular-svg-round-progress', 'common.services.util', 'ngSanitize', 'common.services.country', 'common.services.userNotifications', 'common.services.activity', 'common.directives.changeProjectImage', 'common.services.permission']);
 
-  module.run(['$templateCache', function($templateCache){
+  module.run(['$templateCache', function($templateCache) {
     $templateCache.put('project/templates/list.html', template);
     $templateCache.put('project/templates/_createOrUpdate.html', createOrUpdateTemplate);
     $templateCache.put('project/templates/create.html', createTemplate);
@@ -53,7 +53,7 @@ define(function(require){
 
   module.config(
     ['$stateProvider',
-      function($stateProvider){
+      function($stateProvider) {
         $stateProvider
           .state('app.projectlist', {
             url: '/projectlist',
@@ -70,7 +70,7 @@ define(function(require){
             fullWidth: true,
             resolve: {
               permission: ['$q', '$state', '$window', 'userContext',
-                function($q, $state, $window, userContext){
+                function($q, $state, $window, userContext) {
                   var deferred = $q.defer();
                   if(userContext.authentication().isOwner) {
                     deferred.resolve();
@@ -82,30 +82,34 @@ define(function(require){
             }
           })
           .state('app.editProject', {
-            url: '/edit-project',
+            url: '/edit-project/:projectId',
             templateUrl: 'project/templates/edit.html',
             controller: 'ProjectEditController',
             authorization: true,
             fullWidth: true,
             resolve: {
-              project: ['$q', 'projectFactory', '$rootScope', '$location', function($q, projectFactory, $rootScope, $location){
-                var project = $rootScope.editProject;
-                if(!project) {
-                  $location.path("/app/projectlist");
-                }
-                delete $rootScope.editProject;
-                return project;
-              }],
-              companies: ['$q', 'companyFactory', function($q, companyFactory){
+              project: ['$q', 'projectFactory', '$rootScope', '$location', '$stateParams', 'projectContext',
+                function($q, projectFactory, $rootScope, $location, $stateParams, projectContext) {
+                  var deferred = $q.defer();
+                  projectFactory.getProjectById($stateParams.projectId)
+                    .success(function(resp) {
+                      deferred.resolve(resp.project);
+                    })
+                    .error(function() {
+                      $location.path("/app/projectlist");
+                    });
+                  return deferred.promise;
+                }],
+              companies: ['$q', 'companyFactory', function($q, companyFactory) {
                 var deferred = $q.defer();
                 companyFactory.search()
-                  .success(function(resp){
+                  .success(function(resp) {
                     deferred.resolve(resp.companyList);
                   });
                 return deferred.promise;
               }],
               permission: ['$q', '$state', '$window', 'userContext',
-                function($q, $state, $window, userContext){
+                function($q, $state, $window, userContext) {
                   var deferred = $q.defer();
                   if(userContext.authentication().isOwner) {
                     deferred.resolve();
