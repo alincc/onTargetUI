@@ -217,14 +217,14 @@ define(function(require) {
         $scope.isLoadingWeather = true;
         utilFactory.getWeather($scope.project.projectAddress.zip)
           .success(function(resp) {
-            var objectGroupBy = _.groupBy(resp.list, function(value){
+            var objectGroupBy = _.groupBy(resp.list, function(value) {
               return value.dt_txt.split(" ")[0];
             });
 
-            var index = 0;
-            angular.forEach(objectGroupBy, function(data){
-              if(index == 0){
-                var value = _.findLast(data, function(n){
+            var index = 0, value, weather;
+            angular.forEach(objectGroupBy, function(data) {
+              if(index === 0) {
+                value = _.findLast(data, function(n) {
                   var weatherDate = new Date(n.dt_txt);
 
                   var isoDate = new Date().toISOString();
@@ -233,7 +233,7 @@ define(function(require) {
                   return weatherDate < utcDateTime;
                 });
 
-                var weather = {
+                weather = {
                   humidity: value.main.humidity + '%',
                   windSpeed: value.wind.speed + 'MPM NW',
                   temp: value.main.temp + ' F',
@@ -243,10 +243,10 @@ define(function(require) {
                 };
 
                 $scope.weathers.push(weather);
-              } else if(index < 5){
-                var value = _.first(data);
+              } else if(index < 5) {
+                value = _.first(data);
 
-                var weather = {
+                weather = {
                   humidity: value.main.humidity + '%',
                   windSpeed: value.wind.speed + 'MPM NW',
                   temp: value.main.temp + ' F',
@@ -419,11 +419,24 @@ define(function(require) {
 
       $scope.documentStatuses = [];
       documentFactory.getDocumentStatus().then(function(resp) {
+        var setData = function(data, key) {
+          switch(key) {
+            case 'submittedCount':
+              documentStatus.data[0] = data;
+              break;
+            case 'approvedCount':
+              documentStatus.data[1] = data;
+              break;
+            case 'rejectedCount':
+              documentStatus.data[2] = data;
+              break;
+          }
+        };
 
-        for(var i = 0; i < 4; i++){
-
+        for(var i = 0; i < 4; i++) {
           var key = '';
-          switch (i){
+          
+          switch(i) {
             case 0:
               key = 'Change Order';
               break;
@@ -455,28 +468,17 @@ define(function(require) {
             labels: ['Submitted', 'Approved', 'Rejected']
           };
 
-          if(angular.isDefined(resp.data.countByDocumentTemplateAndStatus.entry[i]))
-            angular.forEach(resp.data.countByDocumentTemplateAndStatus.entry[i].value, function(data, key) {
-              switch(key) {
-                case 'submittedCount':
-                  documentStatus.data[0] = data;
-                  break;
-                case 'approvedCount':
-                  documentStatus.data[1] = data;
-                  break;
-                case 'rejectedCount':
-                  documentStatus.data[2] = data;
-                  break;
-              }
-            });
-          else{
+          if(angular.isDefined(resp.data.countByDocumentTemplateAndStatus.entry[i])) {
+
+            angular.forEach(resp.data.countByDocumentTemplateAndStatus.entry[i].value, setData);
+          }
+          else {
             documentStatus.data.push(1);
             documentStatus.labels.push('none');
           }
 
           $scope.documentStatuses.push(documentStatus);
-        };
-
+        }
 
 
       }, function(err) {
