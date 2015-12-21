@@ -197,7 +197,7 @@ define(function(require) {
                         getPages(currentDocument, function() {
                           // Get document zoom level
                           getDocumentZoom(currentDocument, function() {
-                            if(zooms[0].zoomLevel <= 0) {
+                            if(!zooms[0] || zooms[0].zoomLevel <= 0) {
                               toaster.pop('info', 'Info', (isPdf ? 'PDF file' : 'Image file') + ' conversion is in progress. Please try again!');
                               console.log('Zoom page 1 not ready');
                               deferred.reject();
