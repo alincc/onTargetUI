@@ -215,6 +215,7 @@ define(function(require) {
 
         $scope.weatherError = false;
         $scope.isLoadingWeather = true;
+		$scope.weather = {};
         utilFactory.getWeather($scope.project.projectAddress.zip)
           .success(function(resp) {
             var objectGroupBy = _.groupBy(resp.list, function(value) {
