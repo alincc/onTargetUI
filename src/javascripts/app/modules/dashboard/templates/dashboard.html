@@ -79,89 +79,81 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-md-12 col-lg-9">
+                <div class="col-xs-12 col-md-12 col-lg-8">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-15" ng-repeat="weather in weathers track by $index">
+                            <div class="weather-col">
+                                <div class="weather-date">
+                                    <span ng-bind="weather.dt_txt | date: app.dateFormat"></span>
+                                </div>
+                                <div class="weather-contain">
+                                    <div class="weather-icon">
+                                        <i class="wi {{ getWeatherIcon(weather.icon) }}"></i>
+                                    </div>
+                                    <div class="weather-temperature">
+                                        <span ng-bind="weather.temp" class="weather-text"></span>
+                                        <span class="weather-f">o</span>
+                                        &nbsp;
+                                        &nbsp;
+                                        <span class="weather-text">F</span>
+                                    </div>
+                                    <div class="humidity">
+                                        Humidity: <span ng-bind="weather.humidity"></span>
+                                    </div>
+                                    <div class="humidity">
+                                        Windspeed: <span ng-bind="weather.windSpeed"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!--<div class="row">-->
-                        <!--<div class="panel panel-default">-->
-                            <!--<div class="panel-body">-->
-                                <!--<div class="weather-container">-->
-                                    <!--<section ng-if="weatherError" class="text-center text-danger">-->
-                                        <!--Cannot get weather-->
-                                    <!--</section>-->
-                                    <!--<section ng-if="!weatherError">-->
-                                        <!--<div class="icon">-->
-                                            <!--<i class="wi {{ getWeatherIconById() }}"></i>-->
-                                        <!--</div>-->
-                                        <!--<div class="info">-->
-                                            <!--<p class="temp" ng-bind="weather.temp+' F'"></p>-->
-
-                                            <!--<p class="humidity">Humidity: <span ng-bind="weather.humidity+'%'"></span></p>-->
-
-                                            <!--<p class="windspeed">Windspeed: <span-->
-                                                    <!--ng-bind="weather.windSpeed+'MPM NW'"></span>-->
-                                            <!--</p>-->
-                                        <!--</div>-->
-                                    <!--</section>-->
+                        <!--<div class="col-xs-12 col-md-4" ng-repeat="weather in weathers track by $index"  ng-if="$index < 3">-->
+                            <!--<div class="info-left-icon">-->
+                                <!--<div class="icon">-->
+                                    <!--<i class="wi {{ getWeatherIcon(weather.icon) }}"></i>-->
+                                <!--</div>-->
+                                <!--<div class="text">-->
+                                    <!--<span ng-bind="weather.temp" class="number"></span>-->
+                                    <!--<div class="humidity">-->
+                                        <!--Humidity: <span ng-bind="weather.humidity"></span>-->
+                                    <!--</div>-->
+                                    <!--<div class="windspeed">-->
+                                        <!--Windspeed: <span ng-bind="weather.windSpeed"></span>-->
+                                    <!--</div>-->
+                                    <!--<div class="weather-date">-->
+                                        <!--Date:-->
+                                        <!--<span ng-bind="weather.dt_txt | date: app.dateFormat"></span>-->
+                                    <!--</div>-->
                                 <!--</div>-->
                             <!--</div>-->
-                        <!--</div>                        -->
+                        <!--</div>-->
                     <!--</div>-->
-                    <div class="row">
-                        <div class="col-xs-12 col-md-4" ng-repeat="weather in weathers track by $index"  ng-if="$index < 3">
-                            <div class="info-left-icon">
-                                <div class="icon">
-                                    <i class="wi {{ getWeatherIcon(weather.icon) }}"></i>
-                                </div>
-                                <div class="text">
-                                    <span ng-bind="weather.temp" class="number"></span>
-                                    <div class="humidity">
-                                        Humidity: <span ng-bind="weather.humidity"></span>
-                                    </div>
-                                    <div class="windspeed">
-                                        Windspeed: <span ng-bind="weather.windSpeed"></span>
-                                    </div>
-                                    <div class="weather-date">
-                                        Date:
-                                        <span ng-bind="weather.dt_txt | date: app.dateFormat"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6" ng-repeat="weather in weathers track by $index" ng-if="$index >= 3">
-                            <div class="info-left-icon">
-                                <div class="icon">
-                                    <i class="wi {{ getWeatherIcon(weather.icon) }}"></i>
-                                </div>
-                                <div class="text">
-                                    <span ng-bind="weather.temp" class="number"></span>
-                                    <div class="humidity">
-                                        Humidity: <span ng-bind="weather.humidity"></span>
-                                    </div>
-                                    <div class="windspeed">
-                                        Windspeed: <span ng-bind="weather.windSpeed"></span>
-                                    </div>
-                                    <div class="weather-date">
-                                        Date:
-                                        <span ng-bind="weather.dt_txt | date: app.dateFormat"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="info-left-icon">
-                                <div class="icon">
-                                    <img src="img/icons/safety.png"/>
-                                </div>
-                                <div class="text"><span class="desc" ng-bind="safetyInfo"></span></div>
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="row">-->
+                        <!--<div class="col-xs-12 col-md-6" ng-repeat="weather in weathers track by $index" ng-if="$index >= 3">-->
+                            <!--<div class="info-left-icon">-->
+                                <!--<div class="icon">-->
+                                    <!--<i class="wi {{ getWeatherIcon(weather.icon) }}"></i>-->
+                                <!--</div>-->
+                                <!--<div class="text">-->
+                                    <!--<span ng-bind="weather.temp" class="number"></span>-->
+                                    <!--<div class="humidity">-->
+                                        <!--Humidity: <span ng-bind="weather.humidity"></span>-->
+                                    <!--</div>-->
+                                    <!--<div class="windspeed">-->
+                                        <!--Windspeed: <span ng-bind="weather.windSpeed"></span>-->
+                                    <!--</div>-->
+                                    <!--<div class="weather-date">-->
+                                        <!--Date:-->
+                                        <!--<span ng-bind="weather.dt_txt | date: app.dateFormat"></span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
-                <div class="col-xs-12 col-md-12 col-lg-3">
+                <div class="col-xs-12 col-md-12 col-lg-4">
                     <div class="row">
                         <div class="col-xs-12 col-md-12">
                             <div class="info-left-icon">
@@ -200,6 +192,19 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="info-left-icon">
+                        <div class="icon">
+                            <img src="img/icons/safety.png"/>
+                        </div>
+                        <div class="text"><span class="desc" ng-bind="safetyInfo"></span></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-xs-12 project-heath">
                     <div class="panel panel-default">
