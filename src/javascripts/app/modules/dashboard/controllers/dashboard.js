@@ -442,7 +442,7 @@ define(function(require) {
               key = 'Change Order';
               break;
             case 1:
-              key = 'Request For Information';
+              key = 'RFI';
               break;
             case 2:
               key = 'Purchase Order';
