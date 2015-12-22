@@ -517,6 +517,7 @@ define(function(require) {
             documentStatus.labels.push('none');
           }
 
+          console.log(documentStatus);
           $scope.documentStatuses.push(documentStatus);
         }
       }, function(err) {
