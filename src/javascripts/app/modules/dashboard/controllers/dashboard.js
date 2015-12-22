@@ -499,7 +499,7 @@ define(function(require) {
               documentStatus.key = 'Change Order';
               break;
             case 1:
-              key = 'RFI';
+              documentStatus.key = 'RFI';
               break;
             case 2:
               documentStatus.key = 'Purchase Order';
