@@ -213,53 +213,95 @@ define(function(require) {
           return "wi-owm-" + id;
         };
 
+        function getDayOfWeek(d) {
+          var weekday = new Array(7);
+          weekday[0] = "Sunday";
+          weekday[1] = "Monday";
+          weekday[2] = "Tuesday";
+          weekday[3] = "Wednesday";
+          weekday[4] = "Thursday";
+          weekday[5] = "Friday";
+          weekday[6] = "Saturday";
+          return weekday[d.getDay()];
+        }
+
         $scope.weatherError = false;
         $scope.isLoadingWeather = true;
-		$scope.weather = {};
+        $scope.weather = {};
         utilFactory.getWeather($scope.project.projectAddress.zip)
           .success(function(resp) {
             var objectGroupBy = _.groupBy(resp.list, function(value) {
               return value.dt_txt.split(" ")[0];
             });
 
-            var index = 0, value, weather;
+            var index = 0, value, weather, d;
             angular.forEach(objectGroupBy, function(data) {
-              if(index === 0) {
-                value = _.findLast(data, function(n) {
-                  var weatherDate = new Date(n.dt_txt);
+              value = _.findLast(data, function(n) {
+                var weatherDate = new Date(n.dt_txt);
 
-                  var isoDate = new Date().toISOString();
-                  var utcDateTime = new Date(isoDate);
+                var isoDate = new Date().toISOString();
+                var utcDateTime = new Date(isoDate);
 
-                  return weatherDate < utcDateTime;
-                });
+                return weatherDate.getHours() < utcDateTime.getHours();
+              });
 
-                weather = {
-                  humidity: value.main.humidity + '%',
-                  windSpeed: value.wind.speed + 'MPM NW',
-                  temp: value.main.temp + ' F',
-                  iconId: value.weather[0].id,
-                  icon: value.weather[0].icon,
-                  dt_txt: value.dt_txt.split(" ")[0]
-                };
-
-                $scope.weathers.push(weather);
-              } else if(index < 5) {
+              if(!angular.isDefined(value)) {
                 value = _.first(data);
-
-                weather = {
-                  humidity: value.main.humidity + '%',
-                  windSpeed: value.wind.speed + 'MPM NW',
-                  temp: value.main.temp + ' F',
-                  iconId: value.weather[0].id,
-                  icon: value.weather[0].icon,
-                  dt_txt: value.dt_txt.split(" ")[0]
-                };
-
-                $scope.weathers.push(weather);
               }
 
-              index++;
+              d = new Date(value.dt_txt);
+
+              weather = {
+                humidity: value.main.humidity + '%',
+                windSpeed: value.wind.speed + 'MPM NW',
+                temp: value.main.temp,
+                iconId: value.weather[0].id,
+                icon: value.weather[0].icon,
+                dt_txt: getDayOfWeek(d)
+              };
+
+              $scope.weathers.push(weather);
+
+              //if(index === 0) {
+              //  value = _.findLast(data, function(n) {
+              //    var weatherDate = new Date(n.dt_txt);
+              //
+              //    var isoDate = new Date().toISOString();
+              //    var utcDateTime = new Date(isoDate);
+              //
+              //    return weatherDate < utcDateTime;
+              //  });
+              //
+              //  d = new Date(value.dt_txt);
+              //
+              //  weather = {
+              //    humidity: value.main.humidity + '%',
+              //    windSpeed: value.wind.speed + 'MPM NW',
+              //    temp: value.main.temp,
+              //    iconId: value.weather[0].id,
+              //    icon: value.weather[0].icon,
+              //    dt_txt: getDayOfWeek(d)
+              //  };
+              //
+              //  $scope.weathers.push(weather);
+              //} else if(index < 5) {
+              //  value = _.first(data);
+              //
+              //  d = new Date(value.dt_txt);
+              //
+              //  weather = {
+              //    humidity: value.main.humidity + '%',
+              //    windSpeed: value.wind.speed + 'MPM NW',
+              //    temp: value.main.temp,
+              //    iconId: value.weather[0].id,
+              //    icon: value.weather[0].icon,
+              //    dt_txt: getDayOfWeek(d)
+              //  };
+              //
+              //  $scope.weathers.push(weather);
+              //}
+
+              //index++;
             });
 
             if(angular.isDefined(resp.cod) && angular.isDefined(resp.message)) {
@@ -420,6 +462,23 @@ define(function(require) {
 
       $scope.documentStatuses = [];
       documentFactory.getDocumentStatus().then(function(resp) {
+        var documentStatus = {
+          key: '',
+          colours: [
+            '#c1d64c',
+            '#63b2db',
+            '#F7464A',
+            '#DCDCDC'
+          ],
+          options: {
+            animationEasing: "linear",
+            animationSteps: 10,
+            animateScale: true
+          },
+          data: [0, 0, 0],
+          labels: ['Submitted', 'Approved', 'Rejected']
+        };
+
         var setData = function(data, key) {
           switch(key) {
             case 'submittedCount':
@@ -435,42 +494,22 @@ define(function(require) {
         };
 
         for(var i = 0; i < 4; i++) {
-          var key = '';
-          
           switch(i) {
             case 0:
-              key = 'Change Order';
+              documentStatus.key = 'Change Order';
               break;
             case 1:
               key = 'RFI';
               break;
             case 2:
-              key = 'Purchase Order';
+              documentStatus.key = 'Purchase Order';
               break;
             case 3:
-              key = 'Transmittal';
+              documentStatus.key = 'Transmittal';
               break;
           }
 
-          var documentStatus = {
-            key: key,
-            colours: [
-              '#c1d64c',
-              '#63b2db',
-              '#F7464A',
-              '#DCDCDC'
-            ],
-            options: {
-              animationEasing: "linear",
-              animationSteps: 10,
-              animateScale: true
-            },
-            data: [0, 0, 0],
-            labels: ['Submitted', 'Approved', 'Rejected']
-          };
-
           if(angular.isDefined(resp.data.countByDocumentTemplateAndStatus.entry[i])) {
-
             angular.forEach(resp.data.countByDocumentTemplateAndStatus.entry[i].value, setData);
           }
           else {
@@ -480,13 +519,9 @@ define(function(require) {
 
           $scope.documentStatuses.push(documentStatus);
         }
-
-
       }, function(err) {
 
       });
-
-
     }];
   return controller;
 });
