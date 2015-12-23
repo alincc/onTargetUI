@@ -81,7 +81,7 @@
             <div class="row">
                 <div class="col-xs-12 col-md-12 col-lg-8">
                     <div class="row">
-                        <div class="col-xs-12 col-md-15" ng-repeat="weather in weathers track by $index">
+                        <div class="col-xs-12 col-md-15" ng-repeat="weather in weathers track by $index | limitTo:5">
                             <div class="weather-col">
                                 <div class="weather-date">
                                     <span ng-bind="weather.dt_txt | date: app.dateFormat"></span>
