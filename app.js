@@ -31,8 +31,8 @@ var sns = new AWS.SNS();
 // End Amazon AWS SNS Configuration
 
 var myArgs = process.argv.slice(2);
-var folder = myArgs[0] || 'app';
-var port = myArgs[1] || 3214;
+var folder = 'app';
+var port = myArgs[0] || 3214;
 var cors = require('cors');
 var app = express();
 var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrs/services';
