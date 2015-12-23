@@ -273,6 +273,10 @@ gulp.task('build:server', function() {
     .pipe(gulp.dest('build-server-' + environment));
 });
 
+gulp.task('build:all', ['build:ui', 'build:server'], function(done) {
+  done();
+});
+
 ////////////////////////////////////
 ///////// SERVE TASKS //////////////
 ///////////////////////////////////
