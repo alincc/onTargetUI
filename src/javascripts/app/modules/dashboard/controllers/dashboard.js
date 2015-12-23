@@ -234,6 +234,8 @@ define(function(require) {
               return value.dt_txt.split(" ")[0];
             });
 
+              console.log(objectGroupBy);
+
             var index = 0, value, weather, d;
             angular.forEach(objectGroupBy, function(data) {
               value = _.findLast(data, function(n) {
@@ -259,6 +261,7 @@ define(function(require) {
                 icon: value.weather[0].icon,
                 dt_txt: getDayOfWeek(d)
               };
+
 
               $scope.weathers.push(weather);
 
@@ -304,6 +307,8 @@ define(function(require) {
               //index++;
             });
 
+
+
             if(angular.isDefined(resp.cod) && angular.isDefined(resp.message)) {
               $scope.weatherError = true;
             } else {
@@ -316,6 +321,8 @@ define(function(require) {
               $scope.weather.id = resp.weather[0].id;
             }
           });
+
+
 
         // Tasks
         $scope.tasks = {

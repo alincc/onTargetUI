@@ -25,6 +25,95 @@ module.exports = {
       concurrencyImageProcesses: 1,                                                 // Concurrency Image Process
       aws_s3_profile: 'default',                                                    // AWS Profile name
       aws_s3_bucket: 'ontarget-assets-test'                                         // AWS S3 Bucket name
+    },
+    local: {
+      domain: 'http://localhost:9000/ontargetrs/services',
+      baseUrl: 'http://localhost:9000',
+      nodeServer: 'http://localhost:9001',
+      resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
+      newBimServer: 'http://localhost:9002',
+      pusher: {
+        appId: '138273',
+        apiKey: 'c2f5de73a4caa3763726',
+        secret: 'e2455e810e36cbed510e'
+      },
+      weatherUrl: 'http://api.openweathermap.org/data/2.5/forecast',
+      // Proxy settings
+      API_SERVER: 'http://localhost:8080/ontargetrs/services',
+      assetLocation: 'assets/', // empty is root
+      maxFileSize: 25000000, // in bytes
+      convertCommand: 'convert',
+      gsCommand: 'gs',
+      concurrencyImageProcesses: 1,
+      aws_s3_profile: 'default',
+      aws_s3_bucket: 'ontarget-assets-test'
+    },
+    integration: {
+      domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services',
+      baseUrl: 'http://int.app.ontargetcloud.com:9000',
+      nodeServer: 'http://int.app.ontargetcloud.com:9001',
+      resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
+      newBimServer: 'http://int.app.ontargetcloud.com:9002',
+      pusher: {
+        appId: '138273',
+        apiKey: 'c2f5de73a4caa3763726',
+        secret: 'e2455e810e36cbed510e'
+      },
+      weatherUrl: 'http://api.openweathermap.org/data/2.5/forecast',
+      // Proxy settings
+      API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
+      assetLocation: 'assets/', // empty is root
+      maxFileSize: 25000000, // in bytes
+      convertCommand: 'convert',
+      gsCommand: 'gs',
+      concurrencyImageProcesses: 1,
+      aws_s3_profile: 'default',
+      aws_s3_bucket: 'ontarget-assets-test'
+
+    },
+    sagarmatha01: {
+      domain: 'https://app.ontargetcloud.com/ontargetrs/services',
+      baseUrl: 'https://app.ontargetcloud.com',
+      nodeServer: 'https://app.ontargetcloud.com',
+      resourceUrl: 'https://ontarget-assets.s3.amazonaws.com',
+      newBimServer: 'https://app.ontargetcloud.com/bim',
+      pusher: {
+        appId: '152503',
+        apiKey: 'f0a0bf34cd094e438cba',
+        secret: 'a2244d813cebbd30dc2e'
+      },
+      weatherUrl: 'https://app.ontargetcloud.com/data/2.5/forecast',
+      // Proxy settings
+      API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
+      assetLocation: 'assets/', // empty is root
+      maxFileSize: 25000000, // in bytes
+      convertCommand: 'convert',
+      gsCommand: 'gs',
+      concurrencyImageProcesses: 1,
+      aws_s3_profile: 'production',
+      aws_s3_bucket: 'ontarget-assets'
+    },
+    sagarmatha02: {
+      domain: 'https://app.ontargetcloud.com/ontargetrs/services',
+      baseUrl: 'https://app.ontargetcloud.com',
+      nodeServer: 'https://app.ontargetcloud.com',
+      resourceUrl: 'https://ontarget-assets.s3.amazonaws.com',
+      newBimServer: 'https://app.ontargetcloud.com/bim',
+      pusher: {
+        appId: '152503',
+        apiKey: 'f0a0bf34cd094e438cba',
+        secret: 'a2244d813cebbd30dc2e'
+      },
+      weatherUrl: 'https://app.ontargetcloud.com/data/2.5/forecast',
+      // Proxy settings
+      API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
+      assetLocation: 'assets/', // empty is root
+      maxFileSize: 25000000, // in bytes
+      convertCommand: 'convert',
+      gsCommand: 'gs',
+      concurrencyImageProcesses: 1,
+      aws_s3_profile: 'production',
+      aws_s3_bucket: 'ontarget-assets'
     }
   }
 };
