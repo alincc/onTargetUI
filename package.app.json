@@ -29,7 +29,8 @@
     "querystring": "^0.2.0",
     "request": "^2.61.0",
     "pusher": "^1.0.6",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "aws-sdk": "^2.2.21"
   },
   "devDependencies": {
   },

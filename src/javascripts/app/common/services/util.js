@@ -109,10 +109,14 @@ define(function(require) {
         return deferred.promise;
       };
 
-      services.getWeather = function(zip) {
+      services.getWeather = function(city, country) {
+        var q = city;
+        if(country) {
+          q += ',' + country;
+        }
         return $http.get(appConstant.weatherUrl, {
           params: {
-            zip: zip,
+            q: q,
             units: 'Imperial',
             APPID: appConstant.openWeatherMap.appId,
             mode: 'json'

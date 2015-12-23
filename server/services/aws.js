@@ -3,8 +3,8 @@ var Promise = require('promise');
 var _ = require('lodash');
 var config = require('./../config');
 var AWS = require('aws-sdk');
-AWS.config.region = config.aws_s3_region;
-AWS.config.update({accessKeyId: config.aws_s3_accessKeyId, secretAccessKey: config.aws_s3_secretAccessKey});
+var credentials = new AWS.SharedIniFileCredentials({profile: config.aws_s3_profile});
+AWS.config.credentials = credentials;
 var client = new AWS.S3({params: {Bucket: config.aws_s3_bucket}});
 
 function generateNewFileName(filePath, files) {

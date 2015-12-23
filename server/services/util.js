@@ -1,7 +1,7 @@
 var config = require('./../config');
 var CryptoJS = require("crypto-js");
 var fs = require('fs');
-var rootPath = process.env.ROOT;
+var rootPath = GLOBAL.ROOTPATH;
 var path = require('path');
 
 module.exports = {

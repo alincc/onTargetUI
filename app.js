@@ -6,7 +6,9 @@ var qs = require('querystring');
 var methodOverride = require('method-override');
 var _ = require('lodash');
 var fs = require('fs');
+var AWS = require('aws-sdk');
 
+// Pusher Configuration
 var pusher_appId = '138273';
 var pusher_key = 'c2f5de73a4caa3763726';
 var pusher_secret = 'e2455e810e36cbed510e';
@@ -19,6 +21,14 @@ var pusher = new Pusher({
   encrypted: true
 });
 pusher.port = 443;
+// End Pusher Configuration
+
+// Amazon AWS SNS Configuration
+var awsProfile = 'default';
+var credentials = new AWS.SharedIniFileCredentials({profile: awsProfile});
+AWS.config.credentials = credentials;
+var sns = new AWS.SNS();
+// End Amazon AWS SNS Configuration
 
 var myArgs = process.argv.slice(2);
 var folder = myArgs[0] || 'app';
@@ -26,7 +36,6 @@ var port = myArgs[1] || 3214;
 var cors = require('cors');
 var app = express();
 var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrs/services';
-var BIM_SERVER = 'http://216.14.121.204:8080';
 
 // Config
 app.set('port', port);
@@ -80,6 +89,37 @@ function getDocumentTemplateName(docTemplateId) {
 
 function channel(projectId, userId) {
   return 'private-project-' + projectId + ':user-' + userId;
+}
+
+function sendPushNotification(endpointArn, message) {
+  var payload = {
+    default: message,
+    APNS: {
+      aps: {
+        alert: message,
+        sound: 'default',
+        badge: 1
+      }
+    }
+  };
+
+  // first have to stringify the inner APNS object...
+  payload.APNS = JSON.stringify(payload.APNS);
+  // then have to stringify the entire message payload
+  payload = JSON.stringify(payload);
+
+  console.log('Sending push...');
+  sns.publish({
+    Message: payload,
+    MessageStructure: 'json',
+    TargetArn: endpointArn
+  }, function(err, data) {
+    if(err) {
+      console.log(err.stack);
+      return;
+    }
+    console.log('Push sent!');
+  });
 }
 
 // Task assign
@@ -795,46 +835,6 @@ app.post('/ontargetrs/services*', function(req, res) {
 
 app.get('/ontargetrs/services*', function(req, res) {
   var url = API_SERVER + req.params[0];
-  if(qs.stringify(req.query) !== "") {
-    url += '?' + qs.stringify(req.query);
-  }
-  console.log('GET request: ', url);
-  req.pipe(request({
-    url: url,
-    method: 'GET'//,
-    //headers: req.headers
-  }, function(error, response, body) {
-    if(error && error.code === 'ECONNREFUSED') {
-      console.error('Refused connection');
-    } else {
-      throw error;
-    }
-  })).pipe(res);
-});
-
-// onTarget BIM proxies
-app.post('/bim*', function(req, res) {
-  var url = BIM_SERVER + req.params[0];
-  if(qs.stringify(req.query) !== "") {
-    url += '?' + qs.stringify(req.query);
-  }
-  console.log(BIM_SERVER + req.params[0]);
-  req.pipe(request({
-    url: url,
-    method: req.method,
-    json: req.body//,
-    //headers: req.headers
-  }, function(error, response, body) {
-    if(error && error.code === 'ECONNREFUSED') {
-      console.error('Refused connection');
-    } else {
-      throw error;
-    }
-  }), {end: false}).pipe(res);
-});
-
-app.get('/bim*', function(req, res) {
-  var url = BIM_SERVER + req.params[0];
   if(qs.stringify(req.query) !== "") {
     url += '?' + qs.stringify(req.query);
   }

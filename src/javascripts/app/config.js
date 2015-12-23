@@ -151,8 +151,6 @@ define(function(require) {
     baseUrl: 'http://localhost:9000',
     nodeServer: 'http://localhost:9001',
     resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
-    bimServer: 'http://localhost:9000/bim',
-    bimServerAddress: 'http://216.14.121.204:8080',
     newBimServer: 'http://192.168.1.205:3216',
     app: {
       name: "OnTarget",

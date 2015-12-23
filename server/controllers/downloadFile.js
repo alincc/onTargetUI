@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require("fs");
-var rootPath = process.env.ROOT;
+var rootPath = GLOBAL.ROOTPATH;
 var mime = require('mime');
 var config = require('./../config');
 var aws = require('./../services/aws');

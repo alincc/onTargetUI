@@ -228,7 +228,7 @@ define(function(require) {
         $scope.weatherError = false;
         $scope.isLoadingWeather = true;
         $scope.weather = {};
-        utilFactory.getWeather($scope.project.projectAddress.zip)
+        utilFactory.getWeather($scope.project.projectAddress.city, $scope.project.projectAddress.country)
           .success(function(resp) {
             var objectGroupBy = _.groupBy(resp.list, function(value) {
               return value.dt_txt.split(" ")[0];
@@ -462,23 +462,7 @@ define(function(require) {
 
       $scope.documentStatuses = [];
       documentFactory.getDocumentStatus().then(function(resp) {
-        var documentStatus = {
-          key: '',
-          colours: [
-            '#c1d64c',
-            '#63b2db',
-            '#F7464A',
-            '#DCDCDC'
-          ],
-          options: {
-            animationEasing: "linear",
-            animationSteps: 10,
-            animateScale: true
-          },
-          data: [0, 0, 0],
-          labels: ['Submitted', 'Approved', 'Rejected']
-        };
-
+		var documentStatus;
         var setData = function(data, key) {
           switch(key) {
             case 'submittedCount':
@@ -494,15 +478,32 @@ define(function(require) {
         };
 
         for(var i = 0; i < 4; i++) {
+          documentStatus = {
+            key: '',
+            colours: [
+              '#c1d64c', // Submitted
+              '#dcdcdc', // Approved
+              '#F7464A', // Rejected
+              '#DCDCDC' // none
+            ],
+            options: {
+              animationEasing: "linear",
+              animationSteps: 10,
+              animateScale: true
+            },
+            data: [0, 0, 0],
+            labels: ['Submitted', 'Approved', 'Rejected']
+          };
+
           switch(i) {
             case 0:
               documentStatus.key = 'Change Order';
               break;
             case 1:
-              documentStatus.key = 'RFI';
+              documentStatus.key = 'Purchase Order';
               break;
             case 2:
-              documentStatus.key = 'Purchase Order';
+              documentStatus.key = 'RFI';
               break;
             case 3:
               documentStatus.key = 'Transmittal';
@@ -517,9 +518,9 @@ define(function(require) {
             documentStatus.labels.push('none');
           }
 
-          console.log(documentStatus);
           $scope.documentStatuses.push(documentStatus);
         }
+
       }, function(err) {
 
       });

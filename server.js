@@ -6,14 +6,11 @@ var cors = require('cors');
 var app = express();
 var myArgs = process.argv.slice(2);
 var port = myArgs[0] || 9000;
-var folder = myArgs[1];
+var rootFolder = myArgs[2] ? __dirname + '/' + myArgs[1] : __dirname;
+var env = myArgs[1] || 'nois';
 
-//process.env.ROOT = __dirname + '/' + folder;
-if(folder) {
-  process.env.ROOT = __dirname + '/' + folder;
-} else {
-  process.env.ROOT = __dirname;
-}
+GLOBAL.ROOTPATH = rootFolder;
+GLOBAL.ENVIRONMENT = env;
 
 // Config
 app.set('port', port);
@@ -22,7 +19,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(methodOverride());
 app.use(cors());
-app.use(express.static(process.env.ROOT));
+app.use(express.static(rootFolder));
 
 // Load utils
 require('./server/utils');
