@@ -139,14 +139,6 @@ define(function (){
         //$modalInstance.dismiss('cancel');
         notifications.cancelActivity();
       };
-
-      var setTaskListHeight = function (){
-        var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
-
-        document.getElementById('activity-edit-panel').setAttribute("style", "height:" + (activityHeadingHeight + 538) + "px");
-      };
-
-      setTaskListHeight();
     }];
   return controller;
 });

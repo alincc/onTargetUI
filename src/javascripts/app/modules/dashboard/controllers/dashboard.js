@@ -234,8 +234,6 @@ define(function(require) {
               return value.dt_txt.split(" ")[0];
             });
 
-              console.log(objectGroupBy);
-
             var index = 0, value, weather, d;
             angular.forEach(objectGroupBy, function(data) {
               value = _.findLast(data, function(n) {
@@ -261,7 +259,6 @@ define(function(require) {
                 icon: value.weather[0].icon,
                 dt_txt: getDayOfWeek(d)
               };
-
 
               $scope.weathers.push(weather);
 
@@ -307,11 +304,10 @@ define(function(require) {
               //index++;
             });
 
-
-
             if(angular.isDefined(resp.cod) && angular.isDefined(resp.message)) {
               $scope.weatherError = true;
-            } else {
+            }
+            else {
               $scope.weather.temp = resp.main.temp;
               $scope.weather.humidity = resp.main.humidity;
               $scope.weather.windSpeed = resp.wind.speed;
@@ -321,8 +317,6 @@ define(function(require) {
               $scope.weather.id = resp.weather[0].id;
             }
           });
-
-
 
         // Tasks
         $scope.tasks = {
@@ -469,7 +463,7 @@ define(function(require) {
 
       $scope.documentStatuses = [];
       documentFactory.getDocumentStatus().then(function(resp) {
-		var documentStatus;
+        var documentStatus, documentStatusData;
         var setData = function(data, key) {
           switch(key) {
             case 'submittedCount':
@@ -485,6 +479,10 @@ define(function(require) {
         };
 
         for(var i = 0; i < 4; i++) {
+          if(documentStatusData){
+            documentStatusData = null;
+          }
+
           documentStatus = {
             key: '',
             colours: [
@@ -505,20 +503,32 @@ define(function(require) {
           switch(i) {
             case 0:
               documentStatus.key = 'Change Order';
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+                return n.key === 'Change Order';
+              });
               break;
             case 1:
               documentStatus.key = 'Purchase Order';
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+                return n.key === 'Purchase Order';
+              });
               break;
             case 2:
               documentStatus.key = 'RFI';
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+                return n.key === 'Request For Information';
+              });
               break;
             case 3:
               documentStatus.key = 'Transmittal';
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+                return n.key === 'Transmittal';
+              });
               break;
           }
 
-          if(angular.isDefined(resp.data.countByDocumentTemplateAndStatus.entry[i])) {
-            angular.forEach(resp.data.countByDocumentTemplateAndStatus.entry[i].value, setData);
+          if(documentStatusData) {
+            angular.forEach(documentStatusData.value, setData);
           }
           else {
             documentStatus.data.push(1);

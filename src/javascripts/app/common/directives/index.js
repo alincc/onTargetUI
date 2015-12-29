@@ -27,7 +27,8 @@ define(function(require) {
     treeView = require('./treeView'),
     customScroll = require('./customScroll'),
     fixHeight = require('./fixHeight'),
-    fullScreen = require('./fullScreen');
+    fullScreen = require('./fullScreen'),
+    notificationLinkToPage = require('./notificationLinkToPage');
 
   var module = angular.module('common.directives',
     [
@@ -57,7 +58,8 @@ define(function(require) {
       'common.directives.bim3dViewer',
       'common.directives.treeView',
       'common.directives.fixHeight',
-      'common.directives.fullScreen'
+      'common.directives.fullScreen',
+      'common.directives.notificationLinkToPage'
     ]);
   return module;
 });

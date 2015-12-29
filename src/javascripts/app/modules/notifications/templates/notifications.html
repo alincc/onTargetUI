@@ -27,7 +27,8 @@
             </td>
           </tr>
           <tr dir-paginate="notification in notifications | itemsPerPage: 20" pagination-id="notifications-table"
-              total-items="totalNotifications" current-page="params.page" ng-class="{'new-notification': notification.status == 'NEW'}">
+              total-items="totalNotifications" current-page="params.page" ng-class="{'new-notification': notification.status == 'NEW'}"
+              notification-link-to-page="notification">
             <!--<td ng-bind="notification.notificationType"></td>-->
             <td ng-bind="notification.status"></td>
             <td ng-bind="notification.text"></td>

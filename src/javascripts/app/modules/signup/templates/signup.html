@@ -18,13 +18,15 @@
                         </div>
                         <img file-path path="{{user.userImagePath}}"/>
                     </a>
+
                     <div loading-bar="{{percentage}}" class="ng-hide loading-bar m-t-sm" ng-show="isUploadAvatar"></div>
                 </div>
                 <div class="col-xs-8">
                     <div class="form-group">
                         <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-user"></span><span class="label-required" ng-show="form.firstName.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/First-Name.png">
+                                    <span class="label-required" ng-show="form.firstName.$error.required">*</span>
                                 </span>
                             <input name="firstName" type="text" id="firstName" ng-model="user.firstName"
                                    class="form-control input-lg"
@@ -37,8 +39,9 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-user"></span><span class="label-required" ng-show="form.lastName.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Last-Name.png">
+                                    <span class="label-required" ng-show="form.lastName.$error.required">*</span>
                                 </span>
                             <input name="lastName" type="text" id="lastName" ng-model="user.lastName"
                                    class="form-control input-lg"
@@ -51,8 +54,9 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-envelope-o"></span><span class="label-required" ng-show="form.email.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Email.png">
+                                    <span class="label-required" ng-show="form.email.$error.required">*</span>
                                 </span>
                             <input name="email" type="email" id="email" ng-model="user.email"
                                    class="form-control input-lg"
@@ -67,7 +71,8 @@
                     <div class="form-group">
                         <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-user"></span><span class="label-required" ng-show="form.title.$error.required">*</span>
+                                    <span class="fa fa-child"></span><span class="label-required"
+                                                                           ng-show="form.title.$error.required">*</span>
                                 </span>
                             <input name="title" type="text" id="title" ng-model="user.title"
                                    class="form-control input-lg"
@@ -80,8 +85,9 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-phone"></span><span class="label-required" ng-show="form.phoneNumber.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Phone.png">
+                                    <span class="label-required" ng-show="form.phoneNumber.$error.required">*</span>
                                 </span>
                             <input name="phoneNumber" type="text" id="phoneNumber" ng-model="user.phoneNumber"
                                    class="form-control input-lg" ui-mask="{{'(999)-999-9999'}}"
@@ -95,7 +101,8 @@
                     <div class="form-group">
                         <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-user"></span><span class="label-required" ng-show="form.discipline.$error.required">*</span>
+                                    <span class="fa fa-street-view"></span><span class="label-required"
+                                                                                 ng-show="form.discipline.$error.required">*</span>
                                 </span>
                             <select name="discipline" class="form-control input-lg" ng-model="user.discipline" required>
                                 <option class="option_text_color" value="" selected>-- Select --</option>
@@ -118,7 +125,8 @@
                     <div class="form-group">
                         <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-user"></span><span class="label-required" ng-show="form.username.$error.required">*</span>
+                                    <span class="fa fa-user"></span><span class="label-required"
+                                                                          ng-show="form.username.$error.required">*</span>
                                 </span>
                             <input name="username" type="text" id="username" ng-model="user.username"
                                    class="form-control input-lg"
@@ -133,7 +141,8 @@
                     <div class="form-group">
                         <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-lock"></span><span class="label-required" ng-show="form.password.$error.required">*</span>
+                                    <span class="fa fa-lock"></span><span class="label-required"
+                                                                          ng-show="form.password.$error.required">*</span>
                                 </span>
                             <input name="password" type="password" id="password" ng-model="user.password"
                                    class="form-control input-lg"
@@ -147,7 +156,8 @@
                     <div class="form-group">
                         <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-lock"></span><span class="label-required" ng-show="form.confirmpassword.$error.required">*</span>
+                                    <span class="fa fa-lock"></span><span class="label-required"
+                                                                          ng-show="form.confirmpassword.$error.required">*</span>
                                 </span>
                             <input name="confirmpassword" type="password" id="confirmpassword"
                                    ng-model="confirmpassword"
@@ -160,11 +170,13 @@
                             <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Confirmation password is missing.</span>
                         </ng-messages>
                     </div>
-                    <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted = true" loading-button="form.$submitted" size="lg" ng-disabled="form.$submitted || form.$invalid">Save</button>
+                    <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-click="submitted = true"
+                            loading-button="form.$submitted" size="lg" ng-disabled="form.$submitted || form.$invalid">
+                        Save
+                    </button>
                 </div>
 
             </div>
-
 
 
             <div class="text-right m-t m-b"><a ui-sref="signin">Back to Sign in</a></div>

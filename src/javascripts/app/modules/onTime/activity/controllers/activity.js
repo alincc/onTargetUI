@@ -2,8 +2,8 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams', 'appConstant', 'permissionFactory',
-    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams, appConstant, permissionFactory) {
+  var controller = ['$scope', '$rootScope', '$modal', 'companyFactory', 'projectFactory', 'projectContext', 'userContext', 'notifications', 'activityFactory', '$q', '$location', '$stateParams', 'appConstant', 'permissionFactory', '$window',
+    function($scope, $rootScope, $modal, companyFactory, projectFactory, projectContext, userContext, notifications, activityFactory, $q, $location, $stateParams, appConstant, permissionFactory, $window) {
       var createActivityModalInstance, editActivityModalInstance, deleteActivityModalInstance;
       var currentProjectId;
       var canceler;
@@ -210,6 +210,10 @@ define(function(require) {
         }, function() {
 
         });
+      };
+
+      $scope.downloadTemplate = function(){
+        $window.open(appConstant.excelTemplateUrl);
       };
 
       //when task added, or deleted

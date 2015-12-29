@@ -62,6 +62,11 @@ define(function() {
           return false;
         }
 
+        //set city, address 1 and address 2 = space before signup
+        model.companyCity = ' ';
+        model.companyAddress1 = ' ';
+        model.companyAddress2 = ' ';
+
         accountFactory.demoSignup(model).then(
           function(resp) {
             $scope.signupMsg = 'Your registration request has been sent successfully.';

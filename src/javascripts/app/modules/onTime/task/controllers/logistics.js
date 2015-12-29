@@ -64,14 +64,6 @@ define(function() {
         notifications.taskSelection({task: $scope.currentTask, action: 'edit'});
       };
 
-      var setTaskListHeight = function() {
-        var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
-        // Todo: Need to refactor
-        document.getElementById('task-logistic-panel').setAttribute("style", "height:" + (activityHeadingHeight + 539) + "px");
-      };
-
-      setTaskListHeight();
-
       notifications.onTaskSelection($scope, function(args) {
         //$scope.action = $scope.actions[args.tab];
         $scope.openAction($scope.actions[args.tab]);

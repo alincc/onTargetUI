@@ -9,6 +9,7 @@ var rootPath = GLOBAL.ROOTPATH;
 var Promise = require('promise');
 var moment = require('moment');
 var utilService = require('./../services/util');
+var aws = require('./../services/aws');
 
 module.exports = {
   exportPdf: function(req, res) {
@@ -34,6 +35,10 @@ module.exports = {
         break;
     }
 
+    var key = string.join('/', 'assets', 'projects', projectAssetFolderName, 'onfile', fileName);
+
+    utilService.ensureFolderExist(path.join(rootPath, 'assets'));
+    utilService.ensureFolderExist(path.join(rootPath, 'assets', 'projects'));
     destinationPath = path.join(rootPath, 'assets', 'projects', projectAssetFolderName);
     utilService.ensureFolderExist(destinationPath);
     destinationPath = path.join(destinationPath, 'onfile');
@@ -150,17 +155,26 @@ module.exports = {
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
 
-      if(fs.existsSync(destinationPath)) {
-        fs.unlinkSync(destinationPath);
-      }
+      //if(fs.existsSync(destinationPath)) {
+      //  fs.unlinkSync(destinationPath);
+      //}
 
-      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
-      stream
-        .on("error", function(error) {
-          console.error("Problem copying file: " + error.stack);
-          failure(error);
-        })
-        .on("finish", success);
+      //var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      //stream
+      //  .on("error", function(error) {
+      //    console.error("Problem copying file: " + error.stack);
+      //    failure(error);
+      //  })
+      //  .on("finish", success);
+
+      aws.s3.removeFileIfExists(key)
+        .then(function() {
+          aws.s3.upload(wkhtmltopdf(html, {pageSize: 'letter'}), key)
+            .then(success, failure);
+        }, function(){
+          console.log('Cannot delete file from S3');
+          failure();
+        });
     }
 
     function fillCOData(html, data) {
@@ -215,17 +229,26 @@ module.exports = {
 
       html = html.replace(/\{\{gridKeyValues}}/g, gridKeys);
 
-      if(fs.existsSync(destinationPath)) {
-        fs.unlinkSync(destinationPath);
-      }
+      //if(fs.existsSync(destinationPath)) {
+      //  fs.unlinkSync(destinationPath);
+      //}
+      //
+      //var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      //stream
+      //  .on("error", function(error) {
+      //    console.error("Problem copying file: " + error.stack);
+      //    failure(error);
+      //  })
+      //  .on("finish", success);
 
-      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
-      stream
-        .on("error", function(error) {
-          console.error("Problem copying file: " + error.stack);
-          failure(error);
-        })
-        .on("finish", success);
+      aws.s3.removeFileIfExists(key)
+        .then(function() {
+          aws.s3.upload(wkhtmltopdf(html, {pageSize: 'letter'}), key)
+            .then(success, failure);
+        }, function(){
+          console.log('Cannot delete file from S3');
+          failure();
+        });
     }
 
     function fillTransData(html, data) {
@@ -275,17 +298,26 @@ module.exports = {
       // Attachments
       html = html.replace(/\{\{attachments}}/g, createAttachmentsHtml(data.attachments));
 
-      if(fs.existsSync(destinationPath)) {
-        fs.unlinkSync(destinationPath);
-      }
+      //if(fs.existsSync(destinationPath)) {
+      //  fs.unlinkSync(destinationPath);
+      //}
+      //
+      //var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      //stream
+      //  .on("error", function(error) {
+      //    console.error("Problem copying file: " + error.stack);
+      //    failure(error);
+      //  })
+      //  .on("finish", success);
 
-      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
-      stream
-        .on("error", function(error) {
-          console.error("Problem copying file: " + error.stack);
-          failure(error);
-        })
-        .on("finish", success);
+      aws.s3.removeFileIfExists(key)
+        .then(function() {
+          aws.s3.upload(wkhtmltopdf(html, {pageSize: 'letter'}), key)
+            .then(success, failure);
+        }, function(){
+          console.log('Cannot delete file from S3');
+          failure();
+        });
     }
 
     function fillRFIData(html, data) {
@@ -334,17 +366,26 @@ module.exports = {
        response = response.replace(/\{\{responsedDate}}/g, responseData.responsedDate.getDate() + '/' + responseData.responsedDate.getMonth() + '/' + responseData.responsedDate.getYear());
        response = response.replace(/\{\{responseTime}}/g, responseData.responsedDate.getTime());*/
 
-      if(fs.existsSync(destinationPath)) {
-        fs.unlinkSync(destinationPath);
-      }
+      //if(fs.existsSync(destinationPath)) {
+      //  fs.unlinkSync(destinationPath);
+      //}
 
-      var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
-      stream
-        .on("error", function(error) {
-          console.error("Problem copying file: " + error.stack);
-          failure(error);
-        })
-        .on("finish", success);
+      //var stream = wkhtmltopdf(html, {pageSize: 'letter'}).pipe(fs.createWriteStream(destinationPath));
+      //stream
+      //  .on("error", function(error) {
+      //    console.error("Problem copying file: " + error.stack);
+      //    failure(error);
+      //  })
+      //  .on("finish", success);
+
+      aws.s3.removeFileIfExists(key)
+        .then(function() {
+          aws.s3.upload(wkhtmltopdf(html, {pageSize: 'letter'}), key)
+            .then(success, failure);
+        }, function(){
+          console.log('Cannot delete file from S3');
+          failure();
+        });
     }
 
     switch(data.documentTemplate.documentTemplateId) {

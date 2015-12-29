@@ -81,7 +81,7 @@ s3.getDirectories = function(key) {
   });
 };
 
-s3.isExists = function(key) {
+function _isExists(key) {
   return new Promise(function(resolve, reject) {
     if(/\/$/.test(key)) {
       // remove last splash
@@ -117,13 +117,15 @@ s3.isExists = function(key) {
       });
     }
   });
-};
+}
+
+s3.isExists = _isExists;
 
 s3.getObject = function(key) {
   return client.getObject({Key: key});
 };
 
-s3.ensureFileNotExists = function(key) {
+s3.ensureFileNotExists = function(key, remove) {
   return new Promise(function(resolve, reject) {
     client.headObject({Key: key}, function(err, metadata) {
       if(err && err.code === 'NotFound') {
@@ -143,6 +145,34 @@ s3.ensureFileNotExists = function(key) {
             resolve(newKey);
           }
         });
+      }
+    });
+  });
+};
+
+s3.removeFileIfExists = function(key) {
+  return new Promise(function(resolve, reject) {
+    //_isExists(key)
+    //  .then(
+    //  function() {
+    //    // Exists
+    //    // Remove file
+    //
+    //  },
+    //  function() {
+    //    // No Exists
+    //    resolve();
+    //  })
+
+    client.deleteObject({
+      Key: key
+    }, function(err, data) {
+      if (err) {
+        console.log(err, err.stack); // an error occurred
+        reject();
+      }
+      else{
+        resolve();
       }
     });
   });

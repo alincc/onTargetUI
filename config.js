@@ -19,12 +19,13 @@ module.exports = {
       weatherUrl: 'http://api.openweathermap.org/data/2.5/forecast',                // Open weather api
       API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',      // API domain
       assetLocation: 'assets/',                                                     // empty is root and the location should end with slash '/' if not empty
-      maxFileSize: 25000000,                                                        // in bytes
+      maxFileSize: 600000000,                                                        // in bytes
       convertCommand: 'convert',                                                    // ImageMagick convert command
       gsCommand: 'gs',                                                              // Ghostscript command
       concurrencyImageProcesses: 1,                                                 // Concurrency Image Process
       aws_s3_profile: 'default',                                                    // AWS Profile name
-      aws_s3_bucket: 'ontarget-assets-test'                                         // AWS S3 Bucket name
+      aws_s3_bucket: 'ontarget-assets-test',                                        // AWS S3 Bucket name
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx' // Upload file to s3 manually, put it to assets folder, then copy the link
     },
     local: {
       domain: 'http://localhost:9000/ontargetrs/services',
@@ -41,12 +42,13 @@ module.exports = {
       // Proxy settings
       API_SERVER: 'http://localhost:8080/ontargetrs/services',
       assetLocation: 'assets/', // empty is root
-      maxFileSize: 25000000, // in bytes
+      maxFileSize: 600000000, // in bytes
       convertCommand: 'convert',
       gsCommand: 'gs',
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'default',
-      aws_s3_bucket: 'ontarget-assets-test'
+      aws_s3_bucket: 'ontarget-assets-test',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
     },
     integration: {
       domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services',
@@ -63,12 +65,13 @@ module.exports = {
       // Proxy settings
       API_SERVER: 'http://int.api.ontargetcloud.com:8080/ontargetrs/services',
       assetLocation: 'assets/', // empty is root
-      maxFileSize: 25000000, // in bytes
+      maxFileSize: 600000000, // in bytes
       convertCommand: 'convert',
       gsCommand: 'gs',
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'default',
-      aws_s3_bucket: 'ontarget-assets-test'
+      aws_s3_bucket: 'ontarget-assets-test',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
 
     },
     sagarmatha01: {
@@ -86,12 +89,13 @@ module.exports = {
       // Proxy settings
       API_SERVER: 'http://172.31.59.54:8080/ontargetrs/services',
       assetLocation: 'assets/', // empty is root
-      maxFileSize: 25000000, // in bytes
+      maxFileSize: 600000000, // in bytes
       convertCommand: 'convert',
       gsCommand: 'gs',
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
-      aws_s3_bucket: 'ontarget-assets'
+      aws_s3_bucket: 'ontarget-assets',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
     },
     sagarmatha02: {
       domain: 'https://app.ontargetcloud.com/ontargetrs/services',
@@ -108,12 +112,13 @@ module.exports = {
       // Proxy settings
       API_SERVER: 'http://172.31.48.59:8080/ontargetrs/services',
       assetLocation: 'assets/', // empty is root
-      maxFileSize: 25000000, // in bytes
+      maxFileSize: 600000000, // in bytes
       convertCommand: 'convert',
       gsCommand: 'gs',
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
-      aws_s3_bucket: 'ontarget-assets'
+      aws_s3_bucket: 'ontarget-assets',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
     }
   }
 };

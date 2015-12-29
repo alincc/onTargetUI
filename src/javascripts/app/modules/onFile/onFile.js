@@ -369,6 +369,23 @@ define(function(require) {
                       deferred.resolve([]);
                     });
                   return deferred.promise;
+                }],
+              responses: [
+                '$q',
+                'onFileFactory',
+                '$stateParams',
+                function($q,
+                         onFileFactory,
+                         $stateParams) {
+                  var deferred = $q.defer();
+                  onFileFactory.getResponse($stateParams.docId)
+                    .success(function(resp) {
+                      deferred.resolve(resp.documentResponses);
+                    })
+                    .error(function(){
+                      deferred.resolve([]);
+                    });
+                  return deferred.promise;
                 }]
             }
           })

@@ -245,16 +245,6 @@ define(function(require) {
         }
       });
 
-      var setTaskListHeight = function() {
-        var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
-        //var activityFootHeight = document.getElementById('activity-panel-footer').offsetHeight;
-
-        document.getElementById('task-list').setAttribute("style", "height:" + (activityHeadingHeight + 516) + "px");
-        //document.getElementById('activity-panel-footer').setAttribute("style","height:" + (activityFootHeight)  + "px");
-      };
-
-      setTaskListHeight();
-
     }];
   return controller;
 });

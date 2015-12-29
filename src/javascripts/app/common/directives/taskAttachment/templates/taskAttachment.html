@@ -2,7 +2,7 @@
     <div class="text-center" ng-show="isLoadingAttachments">
         <spinner text="Loading..."></spinner>
     </div>
-    <div class="item-list" custom-scroll="taskAttachment">
+    <div class="item-list" custom-scroll="taskAttachment" fix-height="{{height}}">
         <table class="table table-bordered" ng-show="attachments.length">
             <tr>
                 <th>DOCUMENT</th>

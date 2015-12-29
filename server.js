@@ -6,7 +6,7 @@ var cors = require('cors');
 var app = express();
 var myArgs = process.argv.slice(2);
 var port = myArgs[0] || 9000;
-var rootFolder = myArgs[2] ? __dirname + '/' + myArgs[1] : __dirname;
+var rootFolder = myArgs[2] ? __dirname + '/' + myArgs[2] : __dirname;
 var env = myArgs[1] || 'nois';
 
 GLOBAL.ROOTPATH = rootFolder;

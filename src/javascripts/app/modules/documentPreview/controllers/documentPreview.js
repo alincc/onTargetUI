@@ -67,6 +67,10 @@ define(function(require) {
         $scope.selectedDoc.isImage = /(png|jpg|jpeg|tiff|gif)/.test(fileExtension);
         $scope.isPdf = /(pdf$)/.test(filePath);
         $scope.isImage = /(png|jpg|jpeg|gif)/.test(fileExtension);
+        $scope.isVideo = /\.(mp4)$/.test(filePath);
+
+        $scope.filePath = filePath;
+        console.log('file path: ', filePath);
       };
 
       $scope.selectedDoc = document.currentDocument.projectFile;

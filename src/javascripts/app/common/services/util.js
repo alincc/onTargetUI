@@ -102,7 +102,8 @@ define(function(require) {
               state = resp;
               cont();
             }, cont);
-        } else {
+        }
+        else {
           cont();
         }
 

@@ -78,16 +78,19 @@
 
     </div>
     <div class="form-group" ng-if="!editTask">
-        <label>Task Assignee <span class="label-required-task" ng-show="task_form.assignees.$error.required">*</span></label>
-        <ui-select append-to-body="true" multiple tagging ng-model="task.selectedAssignees" theme="bootstrap" require-multiple name="assignees">
+        <label>
+            Task Assignee
+            <!--<span class="label-required-task" ng-show="task_form.assignees.$error.required">*</span>-->
+        </label>
+        <ui-select append-to-body="true" multiple tagging ng-model="task.selectedAssignees" theme="bootstrap" name="assignees">
             <ui-select-match placeholder="Select assignees">{{$item.contact.firstName}} {{$item.contact.lastName}}</ui-select-match>
             <ui-select-choices repeat="ct in contacts">
                 {{ct.contact.firstName}} {{ct.contact.lastName}}
             </ui-select-choices>
         </ui-select>
-        <ng-messages ng-if="task_form.assignees.$dirty"
-                     for="task_form.assignees.$error">
-            <span class="help-block m-b-none text-danger" ng-message when="required">Assignees is missing.</span>
-        </ng-messages>
+        <!--<ng-messages ng-if="task_form.assignees.$dirty"-->
+                     <!--for="task_form.assignees.$error">-->
+            <!--<span class="help-block m-b-none text-danger" ng-message when="required">Assignees is missing.</span>-->
+        <!--</ng-messages>-->
     </div>
 </section>

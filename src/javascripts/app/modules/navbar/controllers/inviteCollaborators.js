@@ -2,10 +2,20 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     companyTypesData = require('text!app/common/resources/companyTypes.json');
-  var controller = ['$scope', 'companies', 'countryFactory', '$modalInstance', 'accountFactory',
-    'inviteCollaboratorFactory', '$rootScope',
-    function($scope, companies, countryFactory, $modalInstance, accountFactory,
-             inviteCollaboratorFactory, $rootScope) {
+  var controller = ['$scope',
+    'companies',
+    'countryFactory',
+    '$modalInstance',
+    'accountFactory',
+    'inviteCollaboratorFactory',
+    '$rootScope',
+    function($scope,
+             companies,
+             countryFactory,
+             $modalInstance,
+             accountFactory,
+             inviteCollaboratorFactory,
+             $rootScope) {
       $scope.addNewCompany = false;
       $scope.sentSuccess = false;
       $scope.companies = companies;

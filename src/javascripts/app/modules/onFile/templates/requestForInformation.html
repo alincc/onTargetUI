@@ -17,13 +17,12 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="label-field">Receiver's Name</label>
-
                                             <p class="text-field" ng-if="onView||onApprove"
                                                ng-bind="::receiverName"></p>
                                             <select class="form-control" name="receiverId"
                                                     ng-model="document.keyValues.receiverId"
                                                     ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
-                                                    required ng-change="getCompanyOfUser()" ng-if="onEdit || onAddNew">
+                                                    required ng-change="getCompanyOfUser()" ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Receiver's Name --</option>
                                             </select>
                                             <ng-messages ng-if="_form.receiverId.$dirty" for="_form.receiverId.$error">
@@ -40,7 +39,7 @@
                                                 {{document.keyValues.company_name}}</p>
                                             <input type="text" class="form-control" placeholder="Enter Company Name"
                                                    ng-model="document.keyValues.company_name" name="companyName"
-                                                   required readonly ng-if="onEdit || onAddNew"/>
+                                                   required readonly ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.companyName.$dirty"
                                                          for="_form.companyName.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message
@@ -64,7 +63,7 @@
                                                        ng-model="document.keyValues.attention" theme="bootstrap"
                                                        ng-change="updateReceiverList()"
                                                        require-multiple
-                                                       name="attention" ng-if="onEdit || onAddNew">
+                                                       name="attention" ng-if="(onEdit || onAddNew) && !onView">
                                                 <ui-select-match placeholder="Select Name">{{$item.name}}
                                                 </ui-select-match>
                                                 <ui-select-choices repeat="ct.userId as ct in contactNameList">
@@ -85,7 +84,7 @@
                                                 {{document.keyValues.RFI}}</p>
                                             <input type="text" class="form-control" placeholder="Enter RFI#"
                                                    ng-model="document.keyValues.RFI" name="RFI" required
-                                                   ng-if="onEdit || onAddNew"
+                                                   ng-if="(onEdit || onAddNew) && !onView"
                                                     />
                                             <ng-messages ng-if="_form.RFI.$dirty" for="_form.RFI.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message
@@ -118,7 +117,7 @@
                                             <select class="form-control" name="priority"
                                                     ng-model="document.keyValues.priority"
                                                     ng-options="priority.id as priority.name for priority in priorities"
-                                                    required ng-if="onEdit || onAddNew">
+                                                    required ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Priority --</option>
                                             </select>
                                             <ng-messages ng-if="_form.priority.$dirty" for="_form.priority.$error">
@@ -134,7 +133,7 @@
                                             <p class="text-field" ng-if="onView||onApprove">{{document.dueDate|date:
                                                 app.dateFormat}}</p>
 
-                                            <p class="input-group" ng-if="onEdit || onAddNew">
+                                            <p class="input-group" ng-if="(onEdit || onAddNew) && !onView">
                                                 <input type="text" class="form-control"
                                                        placeholder="Enter/Select Due date"
                                                        required ng-model="document.dueDate"
@@ -195,7 +194,7 @@
                         <div class="panel panel-default" ng-if="attachments.length > 0">
                             <div class="panel-heading"><b>Attachments</b></div>
                             <div class="panel-body">
-                                <div class="form-group" ng-if="onEdit || onAddNew">
+                                <div class="form-group" ng-if="(onEdit || onAddNew) && !onView">
                                     <a class="btn btn-primary" ng-click="openUploadModal('main')"><i
                                             class="fa fa-cloud-upload"></i>
                                         Upload
@@ -223,7 +222,7 @@
                             <button ng-disabled="_form.$invalid || _form.$submitted || onSubmit"
                                     loading-button="_form.$submitted"
                                     class="btn btn-primary pull-right"
-                                    type="submit" ng-if="onEdit || onAddNew">Submit
+                                    type="submit" ng-if="(onEdit || onAddNew) && !onView">Submit
                             </button>
                         </div>
                     </form>

@@ -12,7 +12,20 @@ define(function(require){
       },
       templateUrl: 'budgetEditorTemplate',
       replace: true,
-      controller: ['$scope', '$rootScope', 'taskFactory', 'notifications', function($scope, $rootScope, taskFactory, notifications){
+      controller: [
+        '$scope',
+        '$rootScope',
+        'taskFactory',
+        'notifications',
+        function($scope,
+                 $rootScope,
+                 taskFactory,
+                 notifications){
+
+          var budgetType = _.find($rootScope.currentProjectInfo.projectConfiguration, function(n){
+            return n.configKey === "UNIT_OF_MEASUREMENT";
+          });
+          $scope.budget.isDollar = !budgetType ? true : (budgetType.configValue === 'DOLLAR' ? true : false);
 
         function updateBudget(){
           taskFactory.updateTaskBudget($scope.model.taskBudgetEstimates).then(function(resp){

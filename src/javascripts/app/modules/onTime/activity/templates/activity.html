@@ -18,7 +18,7 @@
                         </project-chooser>
                     </span>
                 </div>
-                <div class="activity-list" custom-scroll>
+                <div class="activity-list" custom-scroll fix-height="170">
                     <div class="activity-loading text-center" ng-if="isLoadingActivity">
                         <spinner text="Loading..."></spinner>
                     </div>
@@ -51,16 +51,16 @@
                 </div>
             </div>
             <div class="panel-footer bg-light lter" id="activity-panel-footer">
-                <button class="btn btn-xs btn-primary" ng-click="import()" permission="IMPORT_ACTIVITY"><!--<i class="fa fa-inbox"></i>--> Import</button>
-                <button class="btn btn-xs btn-primary" ng-click="createActivity()" permission="ADD_ACTIVITY"><!--<i class="fa fa-plus"></i>--> Add
-                    Activity
-                </button>
-                <button class="btn btn-xs btn-info" ng-click="editActivity()" ng-show="activitySelected" permission="EDIT_ACTIVITY"><!--<i
-                        class="fa fa-pencil-square-o"></i>--> Edit Activity
-                </button>
-                <button class="btn btn-xs btn-danger" ng-click="openDeleteActivityModal()" ng-show="activitySelected" permission="DELETE_ACTIVITY"><!--<i
-                        class="fa fa-times"></i> -->Delete Activity
-                </button>
+                <span dropdown class="dropup">
+                    <button class="btn btn-xs btn-primary" type="button" permission="IMPORT_ACTIVITY" dropdown-toggle>Import <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li role="menuitem"><a href="javascript:void(0);" ng-click="import()">Import Data</a></li>
+                        <li role="menuitem"><a href="javascript:void(0);" ng-click="downloadTemplate()">Download Template</a></li>
+                    </ul>
+                </span>
+                <button class="btn btn-xs btn-primary" ng-click="createActivity()" permission="ADD_ACTIVITY">Add Activity</button>
+                <button class="btn btn-xs btn-info" ng-click="editActivity()" ng-show="activitySelected" permission="EDIT_ACTIVITY">Edit Activity</button>
+                <button class="btn btn-xs btn-danger" ng-click="openDeleteActivityModal()" ng-show="activitySelected" permission="DELETE_ACTIVITY">Delete Activity</button>
             </div>
         </div>
     </div>

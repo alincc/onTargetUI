@@ -1,8 +1,44 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', 'fileFactory', '$timeout', '$q', '$modal', '$window', '$filter', 'document', 'contactList', 'permissionFactory',
-    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, fileFactory, $timeout, $q, $modal, $window, $filter, document, contactList, permissionFactory) {
+  var controller = ['$scope',
+    '$rootScope',
+    'notifications',
+    'taskFactory',
+    'onFileFactory',
+    'companyFactory',
+    'onContactFactory',
+    'userContext',
+    '$state',
+    'fileFactory',
+    '$timeout',
+    '$q',
+    '$modal',
+    '$window',
+    '$filter',
+    'document',
+    'contactList',
+    'permissionFactory',
+    'responses',
+    function($scope,
+             $rootScope,
+             notifications,
+             taskFactory,
+             onFileFactory,
+             companyFactory,
+             onContactFactory,
+             userContext,
+             $state,
+             fileFactory,
+             $timeout,
+             $q,
+             $modal,
+             $window,
+             $filter,
+             document, 
+             contactList,
+             permissionFactory,
+             responses) {
       var memberList = contactList;
 
       var removeUserSelected = function() {
@@ -31,7 +67,9 @@ define(function(require) {
               $scope.onView = true;
             }
           } else {
+
             if(document.status === 'SUBMITTED') {
+              $scope.onView = true;
               $scope.onApprove = true;
             } else {
               $scope.onView = true;
@@ -141,6 +179,7 @@ define(function(require) {
       }
 
       var load = function() {
+
         $scope.priorities = taskFactory.getTaskSeverities();
         companyFactory.search().success(function(resp) {
           $scope.companies = resp.companyList;
@@ -188,7 +227,11 @@ define(function(require) {
         }
 
         if($scope.document.documentId) {
-          $scope.getResponse();
+          $scope.responses = responses;
+
+          if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView){
+            $scope.onView = $scope.responses.length > 0;
+          }
         }
 
         if($scope.document.documentId) {
@@ -348,7 +391,10 @@ define(function(require) {
         onFileFactory.getResponse($scope.document.documentId)
           .success(function(resp) {
             $scope.responses = resp.documentResponses;
-            console.log($scope.responses);
+
+            if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView){
+              $scope.onView = $scope.responses.length > 0;
+            }
           })
           .error(function(err) {
             console.log(err);

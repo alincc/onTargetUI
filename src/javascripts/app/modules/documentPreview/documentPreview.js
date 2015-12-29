@@ -69,7 +69,7 @@ define(function(require) {
                          fileFactory,
                          utilFactory,
                          $filter) {
-                  var deferred = $q.defer(), currentDocument = null, parentDocument = null, versions = [], pages = [], zooms = [], documentTags, isPdf, isImage;
+                  var deferred = $q.defer(), currentDocument = null, parentDocument = null, versions = [], pages = [], zooms = [], documentTags, isPdf, isImage, isVideo;
 
                   function getDocumentInfo(cb) {
                     documentFactory.getDocumentDetail({
@@ -80,6 +80,7 @@ define(function(require) {
                         currentDocument = cD;
                         isPdf = /\.(pdf)$/.test(currentDocument.projectFile.filePath);
                         isImage = /\.(jpg|jpeg|png|gif)$/.test(currentDocument.projectFile.filePath);
+                        isVideo = /\.(mp4)$/.test(currentDocument.projectFile.filePath);
                         // Original
                         if(currentDocument.projectFile.parentProjectFileId === 0) {
                           versions = currentDocument.projectFile.versionProjectFiles;
@@ -182,17 +183,23 @@ define(function(require) {
 
                   getDocumentInfo(function() {
                     if(parentDocument) {
-                      // Get pdf images
-                      getPages(parentDocument, function() {
-                        // Get document zoom level
-                        getDocumentZoom(parentDocument, function() {
-                          // Get document tags
-                          getDocumentTags(currentDocument.projectFile.fileId, function() {
-                            deferred.resolve(generateData());
+                      if(isImage || isPdf) {
+                        // Get pdf images
+                        getPages(parentDocument, function() {
+                          // Get document zoom level
+                          getDocumentZoom(parentDocument, function() {
+                            // Get document tags
+                            getDocumentTags(currentDocument.projectFile.fileId, function() {
+                              deferred.resolve(generateData());
+                            });
                           });
                         });
-                      });
+                      }
+                      else {
+                        deferred.resolve(generateData());
+                      }
                     } else {
+                      if(isImage || isPdf) {
                         // Get pdf images
                         getPages(currentDocument, function() {
                           // Get document zoom level
@@ -209,6 +216,10 @@ define(function(require) {
                             });
                           });
                         });
+                      }
+                      else {
+                        deferred.resolve(generateData());
+                      }
                     }
                   });
 

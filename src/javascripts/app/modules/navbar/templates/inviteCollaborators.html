@@ -5,25 +5,25 @@
   <form name="form" class="form-horizontal form-validation" ng-submit="inviteCollaborator()" novalidate
         ng-show="!sentSuccess">
     <div class="modal-body">
-      <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">First Name <span class="label-required" ng-if="form.firstName.$error.required">*</span></label>
+      <!--<div class="form-group">-->
+        <!--<label class="col-xs-3 col-xs-offset-1 control-label">First Name <span class="label-required" ng-if="form.firstName.$error.required">*</span></label>-->
 
-        <div class="col-xs-7">
-          <input name="firstName" type="text" class="form-control" placeholder="First Name"
-                 ng-model="firstName" required>
-          <span class="text-danger help-block m-b-none"
-                ng-show="form.firstName.$error.required && form.firstName.$dirty">First Name is missing</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-xs-3 col-xs-offset-1 control-label">Last Name <span class="label-required" ng-if="form.lastName.$error.required">*</span></label>
+        <!--<div class="col-xs-7">-->
+          <!--<input name="firstName" type="text" class="form-control" placeholder="First Name"-->
+                 <!--ng-model="firstName" required>-->
+          <!--<span class="text-danger help-block m-b-none"-->
+                <!--ng-show="form.firstName.$error.required && form.firstName.$dirty">First Name is missing</span>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+        <!--<label class="col-xs-3 col-xs-offset-1 control-label">Last Name <span class="label-required" ng-if="form.lastName.$error.required">*</span></label>-->
 
-        <div class="col-xs-7">
-          <input name="lastName" type="text" class="form-control" placeholder="Last Name"
-                 ng-model="lastName" required>
-          <span class="text-danger help-block m-b-none" ng-show="form.lastName.$error.required && form.lastName.$dirty">Last Name is missing</span>
-        </div>
-      </div>
+        <!--<div class="col-xs-7">-->
+          <!--<input name="lastName" type="text" class="form-control" placeholder="Last Name"-->
+                 <!--ng-model="lastName" required>-->
+          <!--<span class="text-danger help-block m-b-none" ng-show="form.lastName.$error.required && form.lastName.$dirty">Last Name is missing</span>-->
+        <!--</div>-->
+      <!--</div>-->
       <div class="form-group">
         <label class="col-xs-3 col-xs-offset-1 control-label">Email <span class="label-required" ng-if="form.email.$error.required">*</span></label>
 

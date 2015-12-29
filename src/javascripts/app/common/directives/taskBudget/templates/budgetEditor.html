@@ -1,6 +1,20 @@
 <section class="budget-editor" ng-class="{'disabled': budgetEditor.isUpdating}">
     <form name="budget_editor_frm" class="form-validation" no-validate>
-        <span ng-hide="budgetEditor.isEdit" class="budget-text" ng-bind="budget.cost | currency: '$' : 0 | number"></span>
-        <input ng-show="budgetEditor.isEdit" ng-blur="update(budget)" type="number" ng-model="budget.cost" max="9999999" min="-9999999" class="budget-input"/>
+        <span ng-if="budget.isDollar"
+              ng-hide="budgetEditor.isEdit"
+              class="budget-text"
+              ng-bind="budget.cost | currency: '$' : 0 | number"></span>
+
+        <span ng-if="!budget.isDollar"
+              ng-hide="budgetEditor.isEdit"
+              class="budget-text"
+              ng-bind="(budget.cost | currency : '' : 0) + ' ' + (budget.cost > 1 ? 'HOURS' : 'HOUR')"></span>
+
+        <input ng-show="budgetEditor.isEdit"
+               ng-blur="update(budget)"
+               type="number"
+               ng-model="budget.cost"
+               max="9999999"
+               min="-9999999" class="budget-input"/>
     </form>
 </section>

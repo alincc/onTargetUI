@@ -134,6 +134,9 @@ define(function(require) {
           );
         }
       };
+
+      //first load notifications
+      getAllNotifications();
     }];
   return controller;
 });

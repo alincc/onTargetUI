@@ -21,7 +21,7 @@ var paths = {
 };
 
 // Combine lesses
-gulp.task('less', ['lint'], function() {
+gulp.task('less', function() {
   return gulp.src('./src/less/main.less')
     .pipe(less())
     .pipe(gulp.dest('./src/css/'))
@@ -223,6 +223,7 @@ gulp.task('build:ui', ['build'], function() {
     .pipe(replace(/newBimServer: '.*'/, "newBimServer: '" + envConfig.newBimServer + "'"))
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + envConfig.pusher.apiKey + "'"))
     .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + envConfig.weatherUrl + "'"))
+    .pipe(replace(/excelTemplateUrl: '.*'/, "excelTemplateUrl: '" + envConfig.excelTemplateUrl + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-' + environment + '/app/javascripts'));
 

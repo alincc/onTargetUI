@@ -8,7 +8,7 @@
         <div class="m-b-lg">
             <form name="form" class="form-horizontal form-validation" ng-submit="requestDemo(user)" no-validate>
                 <legend>
-                    Request Demo
+                    Register
                 </legend>
                 <div class="form-group">
                     <div class="input-group input-group-first">
@@ -25,7 +25,7 @@
                         <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="email">Invalid email format.</span>
                     </ng-messages>
                 </div>
-                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-disabled="form.$submitted || form.$invalid">Request demo
+                <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" ng-disabled="form.$submitted || form.$invalid">Register
                 </button>
 
                 <div class="text-right m-t m-b"><a ui-sref="signin">Back to Sign in</a></div>

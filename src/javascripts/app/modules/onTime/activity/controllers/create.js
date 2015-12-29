@@ -90,13 +90,6 @@ define(function (require){
         notifications.cancelActivity();
       };
 
-      var setTaskListHeight = function (){
-        var activityHeadingHeight = document.getElementById('activity-list-heading').offsetHeight;
-
-        document.getElementById('activity-create-panel').setAttribute("style", "height:" + (activityHeadingHeight + 538) + "px");
-      };
-
-      setTaskListHeight();
     }];
   return controller;
 });

@@ -13,10 +13,11 @@
             <form name="form" class="form-horizontal form-validation" ng-submit="demoSignup(user)" no-validate
                   autocomplete="false">
                 <legend>
-                    Request demo
+                    Register
                 </legend>
                 <div class="row text-center add-project">
-                    <h4>Logo</h4>
+                    <h4>Company Logo</h4>
+
                     <div class="picture-container align-center">
                         <a ngf-select ng-model="uploadModel.file" ngf-multiple="false">
                             <div class="overlay">
@@ -30,9 +31,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-envelope-o"></span><span class="label-required"
-                                                                                ng-show="form.email.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Email.png">
+                                    <span class="label-required"
+                                          ng-show="form.email.$error.required">*</span>
                                 </span>
                                 <input name="email" type="email" id="email" ng-model="user.email"
                                        class="form-control input-lg"
@@ -48,9 +50,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-phone"></span><span class="label-required"
-                                                                           ng-show="form.phoneNumber.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Phone.png">
+                                    <span class="label-required"
+                                          ng-show="form.phoneNumber.$error.required">*</span>
                                 </span>
                                 <input name="phoneNumber" type="text" id="phoneNumber" ng-model="user.phoneNumber"
                                        class="form-control input-lg" ui-mask="{{'(999)-999-9999'}}"
@@ -67,9 +70,10 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-user"></span><span class="label-required"
-                                                                          ng-show="form.firstName.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/First-Name.png">
+                                    <span class="label-required"
+                                          ng-show="form.firstName.$error.required">*</span>
                                 </span>
                                 <input name="firstName" type="text" id="firstName" ng-model="user.firstName"
                                        class="form-control input-lg"
@@ -84,9 +88,10 @@
                     <div class="col-md-3" style="padding-left: 0px;">
                         <div class="form-group">
                             <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-user"></span><span class="label-required"
-                                                                          ng-show="form.lastName.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Last-Name.png">
+                                    <span class="label-required"
+                                          ng-show="form.lastName.$error.required">*</span>
                                 </span>
                                 <input name="lastName" type="text" id="lastName" ng-model="user.lastName"
                                        class="form-control input-lg"
@@ -102,18 +107,12 @@
                         <div class="form-group">
                             <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-comment-o"></span><span class="label-required"
-                                                                               ng-show="form.msg.$error.required">*</span>
+                                    <span class="fa fa-comment-o"></span>
                                 </span>
                                 <input name="msg" type="text" id="msg" ng-model="user.msg"
                                        class="form-control input-lg"
-                                       placeholder="Message" required="">
+                                       placeholder="Message">
                             </div>
-                            <ng-messages ng-if="form.msg.$dirty"
-                                         for="form.msg.$error">
-                <span class="help-block m-b-none m-l-xxl text-danger" ng-message
-                      when="required">Message is missing.</span>
-                            </ng-messages>
                         </div>
                     </div>
                 </div>
@@ -121,9 +120,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-building-o"></span><span class="label-required"
-                                                                                ng-show="form.companyName.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Company-Name.png">
+                                    <span class="label-required"
+                                          ng-show="form.companyName.$error.required">*</span>
                                 </span>
                                 <input name="companyName" type="text" id="companyName" ng-model="user.companyName"
                                        class="form-control input-lg"
@@ -138,14 +138,14 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-building-o"></span><span class="label-required"
-                                                                                ng-show="form.companyType.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Company-Type.png">
+                                    <span class="label-required"
+                                          ng-show="form.companyType.$error.required">*</span>
                                 </span>
                                 <select name="companyType" class="form-control input-lg" ng-model="user.companyTypeId"
-                                        placeholder="Company Type"
-                                        required>
-                                    <option value="" selected>-- Select --</option>
+                                        placeholder="Company Type">
+                                    <option value="" selected>-- Company Type --</option>
                                     <option value="1">GENERAL CONTRACTOR</option>
                                     <option value="2">CONSTRUCTION MANAGER</option>
                                     <option value="3">SUBCONTRACTOR</option>
@@ -154,64 +154,85 @@
                                     <option value="6">ARCHITECTS/ENGINEERS</option>
                                 </select>
                             </div>
-                            <ng-messages ng-if="form.companyType.$dirty"
-                                         for="form.companyType.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Please select a company type.</span>
-                            </ng-messages>
                         </div>
                     </div>
                 </div>
+                <!--<div class="row">-->
+                <!--<div class="col-md-6">-->
+                <!--<div class="form-group">-->
+                <!--<div class="input-group input-group-first">-->
+                <!--<span class="input-group-addon">-->
+                <!--<span class="fa fa-road"></span><span class="label-required"-->
+                <!--ng-show="form.companyAddress1.$error.required">*</span>-->
+                <!--</span>-->
+                <!--<input name="companyAddress1" type="text" id="companyAddress1"-->
+                <!--ng-model="user.companyAddress1"-->
+                <!--class="form-control input-lg"-->
+                <!--placeholder="Address 1" required="">-->
+                <!--</div>-->
+                <!--<ng-messages ng-if="form.companyAddress1.$dirty"-->
+                <!--for="form.companyAddress1.$error">-->
+                <!--<span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Company address one is missing.</span>-->
+                <!--</ng-messages>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-6">-->
+                <!--<div class="form-group">-->
+                <!--<div class="input-group input-group-first">-->
+                <!--<span class="input-group-addon">-->
+                <!--<span class="fa fa-road"></span>-->
+                <!--</span>-->
+                <!--<input name="companyAddress2" type="text" id="companyAddress2"-->
+                <!--ng-model="user.companyAddress2"-->
+                <!--class="form-control input-lg"-->
+                <!--placeholder="Address 2">-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
                 <div class="row">
+                    <!--<div class="col-md-6">-->
+                    <!--<div class="form-group">-->
+                    <!--<div class="input-group input-group-first">-->
+                    <!--<span class="input-group-addon">-->
+                    <!--<span class="fa fa-building-o"></span><span class="label-required"-->
+                    <!--ng-show="form.companyCity.$error.required">*</span>-->
+                    <!--</span>-->
+                    <!--<input name="companyCity" type="text" id="companyCity" ng-model="user.companyCity"-->
+                    <!--class="form-control input-lg"-->
+                    <!--placeholder="City" required="">-->
+                    <!--</div>-->
+                    <!--<ng-messages ng-if="form.companyCity.$dirty"-->
+                    <!--for="form.companyCity.$error">-->
+                    <!--<span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">City is missing.</span>-->
+                    <!--</ng-messages>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
                                 <span class="input-group-addon">
-                                    <span class="fa fa-road"></span><span class="label-required"
-                                                                          ng-show="form.companyAddress1.$error.required">*</span>
+                                    <span class="fa fa-globe"></span>
+                                    <span class="label-required"
+                                          ng-show="form.companyCountry.$error.required">*</span>
                                 </span>
-                                <input name="companyAddress1" type="text" id="companyAddress1"
-                                       ng-model="user.companyAddress1"
-                                       class="form-control input-lg"
-                                       placeholder="Address 1" required="">
+                                <select name="companyCountry" class="form-control input-lg"
+                                        ng-model="user.companyCountry"
+                                        placeholder="State"
+                                        required
+                                        ng-options="country.code as country.name for country in countries"
+                                        ng-change="getStateList()">
+                                    <option value="">-- Country --</option>
+                                </select>
                             </div>
-                            <ng-messages ng-if="form.companyAddress1.$dirty"
-                                         for="form.companyAddress1.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Company address one is missing.</span>
+                            <ng-messages ng-if="form.companyCountry.$dirty"
+                                         for="form.companyCountry.$error">
+                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Please select a country.</span>
                             </ng-messages>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-road"></span>
-                                </span>
-                                <input name="companyAddress2" type="text" id="companyAddress2"
-                                       ng-model="user.companyAddress2"
-                                       class="form-control input-lg"
-                                       placeholder="Address 2">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-building-o"></span><span class="label-required"
-                                                                                ng-show="form.companyCity.$error.required">*</span>
-                                </span>
-                                <input name="companyCity" type="text" id="companyCity" ng-model="user.companyCity"
-                                       class="form-control input-lg"
-                                       placeholder="City" required="">
-                            </div>
-                            <ng-messages ng-if="form.companyCity.$dirty"
-                                         for="form.companyCity.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">City is missing.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
@@ -235,36 +256,15 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-globe"></span><span class="label-required"
-                                                                           ng-show="form.companyCountry.$error.required">*</span>
-                                </span>
-                                <select name="companyCountry" class="form-control input-lg"
-                                        ng-model="user.companyCountry"
-                                        placeholder="State"
-                                        required
-                                        ng-options="country.code as country.name for country in countries"
-                                        ng-change="getStateList()">
-                                    <option value="">-- Select --</option>
-                                </select>
-                            </div>
-                            <ng-messages ng-if="form.companyCountry.$dirty"
-                                         for="form.companyCountry.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Please select a country.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-building-o"></span><span class="label-required"
-                                                                                ng-show="form.companyState.$error.required">*</span>
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/State.png">
+                                    <span class="label-required"
+                                          ng-show="form.companyState.$error.required">*</span>
                                 </span>
                                 <select name="companyState" class="form-control input-lg" ng-model="user.companyState"
                                         placeholder="State"
                                         required ng-options="state.code as state.name for state in states">
-                                    <option value="">-- Select --</option>
+                                    <option value="">-- State --</option>
                                 </select>
                             </div>
                             <ng-messages ng-if="form.companyState.$dirty"
@@ -277,10 +277,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" loading-button="form.$submitted"
-                        size="lg" ng-disabled="form.$submitted || form.$invalid">Sign up
+                        size="lg" ng-disabled="form.$submitted || form.$invalid">Register now
                 </button>
 
-                <div class="text-right m-t m-b">Already have an account? <a ui-sref="signin">Sign in</a></div>
+                <div class="text-right m-t m-b">Already have an account? <a ui-sref="signin">Login</a></div>
             </form>
         </div>
     </div>

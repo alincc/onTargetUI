@@ -4,7 +4,7 @@
         <div class="bg-light lter b-b wrapper-md">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1 class="m-n font-thin h3 text-black">Dashboard
+                    <h1 class="m-n font-thin h3 text-black">DASHBOARD
                         <a class="btn btn-default pull-right" permission="VIEW_PROJECT" href="#/app/projectlist"><i
                                 class="fa fa-arrow-left"></i> Back to projects list
                         </a>
@@ -236,7 +236,7 @@
                                         <div class="task-item" ng-repeat="task in tasks.pastDue track by $index" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.pastDue.length && !taskLoading">
-                                            No tasks found
+                                            No tasks were found
                                         </div>
                                         <div class="task-loading text-center" ng-if="taskLoading">
                                             <spinner text="Loading..."></spinner>
@@ -248,7 +248,7 @@
                                         <div class="task-item" ng-repeat="task in tasks.active track by $index" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.active.length && !taskLoading">
-                                            No tasks found
+                                            No tasks were found
                                         </div>
                                         <div class="task-loading text-center" ng-if="taskLoading">
                                             <spinner text="Loading..."></spinner>
@@ -260,7 +260,7 @@
                                         <div class="task-item" ng-repeat="task in tasks.completed track by $index" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.completed.length && !taskLoading">
-                                            No tasks found
+                                            No tasks were found
                                         </div>
                                         <div class="task-loading text-center" ng-if="taskLoading">
                                             <spinner text="Loading..."></spinner>
@@ -272,7 +272,7 @@
                                         <div class="task-item" ng-repeat="task in tasks.dueIn7Day track by $index" dashboard-task>
                                         </div>
                                         <div class="no-result text-center" ng-if="!tasks.dueIn7Day.length && !taskLoading">
-                                            No tasks found
+                                            No tasks were found
                                         </div>
                                         <div class="task-loading text-center" ng-if="taskLoading">
                                             <spinner text="Loading..."></spinner>
@@ -283,7 +283,7 @@
                                     <div class="task-list" custom-scroll>
                                         <div class="task-item" ng-repeat="task in tasks.critical track by $index" dashboard-task></div>
                                         <div class="no-result text-center" ng-if="!tasks.critical.length && !taskLoading">
-                                            No tasks found
+                                            No tasks were found
                                         </div>
                                         <div class="task-loading text-center" ng-if="taskLoading">
                                             <spinner text="Loading..."></spinner>

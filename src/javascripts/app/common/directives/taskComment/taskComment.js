@@ -23,7 +23,8 @@ define(function(require) {
       return {
         restrict: 'E',
         scope: {
-          task: '=task'
+          task: '=task',
+          height: '@'
         },
         templateUrl: 'taskComment/templates/taskComment.html',
         controller: [
@@ -37,7 +38,7 @@ define(function(require) {
                    taskFactory,
                    pushFactory,
                    appConstant) {
-
+            $scope.height = $scope.height || 210;
             $scope.app = appConstant.app;
             $scope.comments = $scope.task.comments;
             $scope.model = {

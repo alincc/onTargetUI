@@ -77,7 +77,8 @@
                         </div>-->
                         <div class="list-group">
                             <a ng-repeat="notification in viewNotifications | limitTo: 5" class="media list-group-item"
-                               ng-class="{'new-notification': notification.status == 'NEW'}">
+                               ng-class="{'new-notification': notification.status == 'NEW'}"
+                               notification-link-to-page="notification">
                                 <div class="pull-left text-center thumb-sm">
                           <span class="fa fa-bell-o">
                           </span>
