@@ -1,14 +1,14 @@
 [
   {
-    "id": "CRITICAL",
+    "id": "1",
     "name": "CRITICAL"
   },
   {
-    "id": "HIGH",
+    "id": "2",
     "name": "HIGH"
   },
   {
-    "id": "LOW",
+    "id": "3",
     "name": "LOW"
   }
 ]
