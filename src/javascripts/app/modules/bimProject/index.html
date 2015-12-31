@@ -308,6 +308,8 @@
                             }
                             if(authenticationData) {
                                 authenticationData = jQuery.parseJSON(authenticationData.replace(/^(\"|\')|(\"|\')$/g, ''));
+                                authenticationData.userData = authenticationData.userData || {};
+                                authenticationData.userData.featureListPermission = authenticationData.userData.featureListPermission || [];
                             }
                             return authenticationData;
                         };

@@ -3,8 +3,8 @@
  *
  */
 module.exports = {
-  envs:{
-    nois:{
+  envs: {
+    nois: {
       // UI Configuration
       domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',           // Web UI Proxy api
       baseUrl: 'http://demo.newoceaninfosys.com:3214',                              // Web UI domain
@@ -25,7 +25,11 @@ module.exports = {
       concurrencyImageProcesses: 1,                                                 // Concurrency Image Process
       aws_s3_profile: 'default',                                                    // AWS Profile name
       aws_s3_bucket: 'ontarget-assets-test',                                        // AWS S3 Bucket name
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx' // Upload file to s3 manually, put it to assets folder, then copy the link
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx', // Upload file to s3 manually, put it to assets folder, then copy the link
+      bim_user: 'bim@ontargetcloud.com',
+      bim_password: 'admin',
+      bimServer: 'http://localhost:9000/bim',
+      bimServerAddress: 'http://216.14.121.204:8080'
     },
     local: {
       domain: 'http://localhost:9000/ontargetrs/services',
@@ -48,7 +52,11 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'default',
       aws_s3_bucket: 'ontarget-assets-test',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      bim_user: 'bim@ontargetcloud.com',
+      bim_password: 'admin',
+      bimServer: 'http://localhost:9000/bim',
+      bimServerAddress: 'http://216.14.121.204:8080'
     },
     integration: {
       domain: 'http://int.app.ontargetcloud.com:9000/ontargetrs/services',
@@ -71,7 +79,11 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'default',
       aws_s3_bucket: 'ontarget-assets-test',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      bim_user: 'bim@ontargetcloud.com',
+      bim_password: 'admin',
+      bimServer: 'http://localhost:9000/bim',
+      bimServerAddress: 'http://216.14.121.204:8080'
 
     },
     sagarmatha01: {
@@ -95,7 +107,11 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
       aws_s3_bucket: 'ontarget-assets',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      bim_user: 'bim@ontargetcloud.com',
+      bim_password: 'admin',
+      bimServer: 'http://localhost:9000/bim',
+      bimServerAddress: 'http://216.14.121.204:8080'
     },
     sagarmatha02: {
       domain: 'https://app.ontargetcloud.com/ontargetrs/services',
@@ -118,7 +134,11 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
       aws_s3_bucket: 'ontarget-assets',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx'
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      bim_user: 'bim@ontargetcloud.com',
+      bim_password: 'admin',
+      bimServer: 'http://localhost:9000/bim',
+      bimServerAddress: 'http://216.14.121.204:8080'
     }
   }
 };

@@ -37,16 +37,16 @@
             <span>SUBMITTALS</span>
         </a>
     </li>
-    <!--<li ui-sref-active="selected" class="item" menu-permission="ONTARGET">-->
-        <!--<a ui-sref="app.onTarget">-->
-            <!--<img src="img/icons/onTarget-icon-white.png" class="acti" />-->
-            <!--<img src="img/icons/select-arrow.png" class="arrow acti" />-->
-            <!--<img src="img/icons/onTarget-icon.png" class="inacti" />-->
-            <!--<span>ONTARGET</span>-->
-        <!--</a>-->
-    <!--</li>-->
-    <li ui-sref-active="selected"  class="item" menu-permission="ONBIM" ng-class="{'menu-selected': $state.current.name == 'app.onBimCreate' || $state.current.name == 'app.onBimUpdate' || $state.current.name == 'app.onBimDetails'}">
-        <a ui-sref="app.onBim">
+    <li ui-sref-active="selected" class="item" menu-permission="ONTARGET">
+        <a ui-sref="app.onTarget">
+            <img src="img/icons/onTarget-icon-white.png" class="acti" />
+            <img src="img/icons/select-arrow.png" class="arrow acti" />
+            <img src="img/icons/onTarget-icon.png" class="inacti" />
+            <span>onTARGET</span>
+        </a>
+    </li>
+    <li ui-sref-active="selected"  class="item" menu-permission="ONBIM" ng-class="{'menu-selected': $state.current.name == 'app.bimProject.addProject' || $state.current.name == 'app.bimProject.project'}">
+        <a ui-sref="app.bimProject.listProject">
             <img src="img/icons/onBim-icon-white.png" class="acti" />
             <img src="img/icons/select-arrow.png" class="arrow acti" />
             <img src="img/icons/onBim-icon.png" class="inacti" />

@@ -3,8 +3,38 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', '$state', 'companyFactory', 'project', 'companies', 'activityFactory', 'utilFactory',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, $state, companyFactory, project, companies, activityFactory, utilFactory) {
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'countryFactory',
+    'projectFactory',
+    'userContext',
+    'projectContext',
+    'fileFactory',
+    'appConstant',
+    'toaster',
+    '$timeout',
+    '$filter',
+    '$state',
+    'companyFactory',
+    'project',
+    'companies',
+    'activityFactory',
+    'utilFactory',
+    function($scope,
+             $rootScope,
+             countryFactory, projectFactory,
+             userContext, projectContext,
+             fileFactory, appConstant,
+             toaster,
+             $timeout,
+             $filter,
+             $state,
+             companyFactory,
+             project,
+             companies,
+             activityFactory,
+             utilFactory) {
 
       var getCountryFileName = function(countryCode) {
         var fileName = _($scope.countries)
@@ -122,6 +152,9 @@ define(function() {
       $scope.getStateList();
 
       $scope.save = function() {
+        $scope.model.project.startDate = $filter('datetime')($scope.model.project.startDate);
+        $scope.model.project.endDate = $filter('datetime')($scope.model.project.endDate);
+
         $scope.onSubmit = true;
 
         var updateProject = function() {

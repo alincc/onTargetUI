@@ -378,13 +378,18 @@ define(function(require) {
                          onFileFactory,
                          $stateParams) {
                   var deferred = $q.defer();
-                  onFileFactory.getResponse($stateParams.docId)
-                    .success(function(resp) {
-                      deferred.resolve(resp.documentResponses);
-                    })
-                    .error(function(){
-                      deferred.resolve([]);
-                    });
+                  if($stateParams.docId) {
+                    onFileFactory.getResponse($stateParams.docId)
+                      .success(function(resp) {
+                        deferred.resolve(resp.documentResponses);
+                      })
+                      .error(function() {
+                        deferred.resolve([]);
+                      });
+                  }
+                  else {
+                    deferred.resolve([]);
+                  }
                   return deferred.promise;
                 }]
             }

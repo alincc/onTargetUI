@@ -1,19 +1,28 @@
-define(function(require) {
+define(function(require){
   'use strict';
   var angular = require('angular');
   var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', 'fileFactory', '$timeout', 'toaster', 'project', '$stateParams', 'utilFactory',
-    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster, project, $stateParams, utilFactory) {
+    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, fileFactory, $timeout, toaster, project, $stateParams, utilFactory){
       $scope.app = appConstant.app;
-      $scope.project = {};
       $scope.updateData = {};
       $scope.oid = '';
-      //$scope.project = angular.copy($rootScope.currentBimProject);
-      $scope.project = project;
-      console.log($scope.project);
+      $scope.project = project || {};
+      
+      /*if(project) {
+        onBimFactory.getBimProjectByPoid(project.poid).success(
+          function(resp) {
+            $scope.project = resp.response.result;
+          }
+        ).error(function(error) {
+          });
+      }*/
+      
       $scope.projectAssetFolderName = $rootScope.currentProjectInfo.projectAssetFolderName;
-      if($scope.project) {
-        $scope.projectBimFileLocation = $scope.project.bimThumbnailPath;
+      
+      if($rootScope.currentBimProject) {
+        $scope.projectBimFileLocation = $rootScope.currentBimProject.bimThumbnailPath;
       }
+
 
       $scope.picture = {
         file: null,
@@ -22,43 +31,31 @@ define(function(require) {
         isUploadedPicture: false
       };
 
-      var load = function() {
+      var load = function (){
         $scope.uniformLengthMeasure = onBimFactory.getUniformLengthMeasure();
         $scope.schema = onBimFactory.getSchema();
       };
 
-      $scope.updateBimProject = function() {
-
-        function update() {
-          onBimFactory.updateProject({
-            "projectid": $rootScope.currentProjectInfo.projectId,
-            "poid": $scope.project.oid,
-            "projectBimFileLocation": $scope.projectBimFileLocation,
-            "projectBimFileJSONLocation": $scope.project.bimProjectJSONFilePath,
-            "projectBimFileIFCLocation": $scope.project.bimProjectIFCFilePath,
-            "isIfcFileConversionComplete": $scope.project.isBimIFCConversionComplete,
-            "name": $scope.project.name,
-            "description": $scope.project.description,
-            "projectBimFileId": parseInt($stateParams.projectBimFileId)
-          })
-            .success(function(resp) {
-              $state.go('app.bimProject.listProject');
-            });
-        }
-
-        onBimFactory.updateBimProject($scope.project)
-          .success(function(resp) {
+      $scope.updateBimProject = function (){
+        onBimFactory.updateBimProject($scope.project).success(
+          function (resp){
             if($scope.picture.isUploadedPicture) {
-              fileFactory.move($scope.projectBimFileLocation, null, 'projects', $scope.projectAssetFolderName, 'onbim')
-                .success(function(resp) {
+              fileFactory.move($filter('filePath')($scope.projectBimFileLocation, 'relative'), null, 'projects', $scope.projectAssetFolderName, 'onbim').success(
+                function (resp){
                   $scope.projectBimFileLocation = resp.url;
-                  update();
+
+                  onBimFactory.updateBimThumbnail($stateParams.projectBimFileId, $scope.projectBimFileLocation).success(
+                    function (resp){
+                      $state.go('app.bimProject.listProject');
+                    }
+                  );
                 }
               );
             } else {
-              update();
+              $state.go('app.bimProject.listProject');
             }
-          });
+          }
+        );
       };
 
       $scope.$watch('picture.file', function() {
@@ -80,7 +77,7 @@ define(function(require) {
             $scope.picture.percentage = progressPercentage;
           }).success(function(data, status, headers, config) {
             $timeout(function() {
-              $scope.projectBimFileLocation = data.url;
+              $scope.projectBimFileLocation = $filter('filePath')(data.url, 'node');
               $scope.picture.isUploadPicture = false;
               $scope.picture.isUploadedPicture = true;
             });

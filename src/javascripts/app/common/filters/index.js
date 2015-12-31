@@ -13,7 +13,8 @@ define(function(require) {
     fileThumbnail = require('./fileThumbnail'),
     fileDownloadPath = require('./fileDownloadPath'),
     fileDownloadPathHash = require('./fileDownloadPathHash'),
-    documentNumber = require('./documentNumber');
+    documentNumber = require('./documentNumber'),
+    datetimeUtc = require('./datetimeUtc');
 
   var module = angular.module('common.filters',
     [
@@ -29,7 +30,8 @@ define(function(require) {
       'common.filters.fileThumbnail',
       'common.filters.fileDownloadPath',
       'common.filters.fileDownloadPathHash',
-      'common.filters.documentNumber'
+      'common.filters.documentNumber',
+      'common.filters.datetimeUtc'
     ]);
   return module;
 });

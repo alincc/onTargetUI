@@ -10,8 +10,14 @@ define(function(require) {
   module = angular.module('common.services.activity', ['app.config']);
 
   module.factory('activityFactory',
-    ['appConstant', '$http', '$q',
-      function(constant, $http, $q) {
+    ['appConstant',
+      '$http',
+      '$q',
+      '$filter',
+      function(constant,
+               $http,
+               $q,
+               $filter) {
         var service = {};
 
         service.getActivityOfProject = function(projectId, canceler){

@@ -4,6 +4,7 @@ define(function(require) {
     lodash = require('lodash');
   var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', '$modal', 'toaster',
     function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, $modal, toaster) {
+      
       var getProjectByPoid = function(poid) {
         var deferred = $q.defer();
         onBimFactory.getBimProjectByPoid(poid).success(
@@ -26,7 +27,7 @@ define(function(require) {
         onBimFactory.getAllProjects($rootScope.currentProjectInfo.projectId)
           .then(function(resp) {
             $scope.projectList = resp.data.bimProjects;
-            //$scope.onLoading = false;
+            // $scope.onLoading = false;
 
             // Map bim project
             if($scope.projectList && $scope.projectList.length > 0) {

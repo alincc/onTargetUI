@@ -181,6 +181,7 @@ function _addPage(baseRequest, filePath, imagePath, documentId, cb) {
 
 function _updateZoomLevel(docId, baseRequest, pageData, level) {
   return new Promise(function(resolve, reject) {
+    console.log('Update zoom level to document');
     request({
         method: 'POST',
         body: {

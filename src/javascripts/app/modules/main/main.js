@@ -9,6 +9,12 @@ define(function(require) {
     $templateCache.put('main/templates/main.html', template);
   }]);
   module.controller('MainController', controller);
+  module.run(['$rootScope', function($rootScope) {
+    // Validate Authorization Page
+    $rootScope.$on('$stateChangeStart', function(event, toState) {
+      $rootScope.isProjectListPage = toState.name === 'app.projectlist';
+    });
+  }]);
   module.config(
     ['$stateProvider',
       function($stateProvider) {
@@ -19,16 +25,23 @@ define(function(require) {
             controller: 'MainController',
             abstract: true,
             resolve: {
-                allProjects: [
-                  '$q',
-                  'projectFactory',
-                  'userContext',
-                  '$rootScope',
-                  function($q,
-                           projectFactory,
-                           userContext,
-                           $rootScope) {
-                    var deferred = $q.defer();
+              allProjects: [
+                '$q',
+                'projectFactory',
+                'userContext',
+                '$rootScope',
+                '$state',
+                function($q,
+                         projectFactory,
+                         userContext,
+                         $rootScope,
+                         $state) {
+                  var deferred = $q.defer();
+                  console.log('Current state: \'' + $state.current.name + '\'');
+                  if($state.current.name === 'signin' || $rootScope.isProjectListPage) {
+                    deferred.resolve();
+                  }
+                  else {
                     projectFactory.getUserProjectList({
                       userId: userContext.authentication().userData.userId
                     }).then(function(resp) {
@@ -39,9 +52,10 @@ define(function(require) {
                         $rootScope.allProjects = [];
                         deferred.resolve();
                       });
-                    return deferred.promise;
-                  }]
-              }
+                  }
+                  return deferred.promise;
+                }]
+            }
           });
       }
     ]

@@ -20,10 +20,10 @@
         </button>
         <button type="button" ng-click="marker.remove()" class="btn btn-sm btn-danger delete-tag-button">Delete tag</button>
         <button type="button" ng-click="marker.linkTask()" class="btn btn-sm btn-info link-task-button"
-                ng-if="!marker.isLinked && !marker.isNew">Link Task
+                ng-if="!marker.isLinked">Link Task
         </button>
         <button type="button" ng-click="marker.unLink(marker.taskLink)" class="btn btn-sm btn-primary unlink-task-button"
-                ng-if="marker.isLinked && !marker.isNew">UnLink Task
+                ng-if="marker.isLinked">UnLink Task
         </button>
     </section>
 </section>

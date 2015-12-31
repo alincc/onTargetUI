@@ -2,8 +2,38 @@ define(function(require) {
   'use strict';
   var angular = require('angular');
 
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', 'fileFactory', '$timeout', '$state', '$modal', '$q', '$window', '$filter', 'document',
-    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, fileFactory, $timeout, $state, $modal, $q, $window, $filter, document) {
+  var controller = ['$scope',
+    '$rootScope',
+    'notifications',
+    'taskFactory',
+    'onFileFactory',
+    'companyFactory',
+    'onContactFactory',
+    'userContext',
+    'fileFactory',
+    '$timeout',
+    '$state',
+    '$modal',
+    '$q',
+    '$window',
+    '$filter',
+    'document',
+    function($scope,
+             $rootScope,
+             notifications,
+             taskFactory,
+             onFileFactory,
+             companyFactory,
+             onContactFactory,
+             userContext,
+             fileFactory,
+             $timeout,
+             $state,
+             $modal,
+             $q,
+             $window,
+             $filter,
+             document) {
 
       $scope.changeOrder = {
         keyValues: {}

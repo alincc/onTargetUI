@@ -66,6 +66,7 @@ define(function() {
         model.companyCity = ' ';
         model.companyAddress1 = ' ';
         model.companyAddress2 = ' ';
+        model.companyName = model.companyName.length > 0 ? model.companyName : ' ';
 
         accountFactory.demoSignup(model).then(
           function(resp) {

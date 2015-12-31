@@ -3,8 +3,28 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'taskFactory', 'toaster', 'projectContext', 'notifications', '$filter', 'userNotificationsFactory', 'appConstant',
-    function($scope, $rootScope, userContext, projectFactory, taskFactory, toaster, projectContext, notifications, $filter, userNotificationsFactory, appConstant) {
+  var controller = ['$scope',
+    '$rootScope',
+    'userContext',
+    'projectFactory',
+    'taskFactory',
+    'toaster',
+    'projectContext',
+    'notifications',
+    '$filter',
+    'userNotificationsFactory',
+    'appConstant',
+    function($scope,
+             $rootScope,
+             userContext,
+             projectFactory,
+             taskFactory,
+             toaster,
+             projectContext,
+             notifications,
+             $filter,
+             userNotificationsFactory,
+             appConstant) {
       $scope.task = {
         projectTaskId: null,
         title: "",
@@ -67,6 +87,9 @@ define(function() {
 
         /*$scope.task.startDate= "2015-08-10T00:00:00.000Z";
          $scope.task.endDate= "2015-08-11T00:00:00.000Z";*/
+
+        $scope.model.task.startDate = $filter('datetime')($scope.model.task.startDate);
+        $scope.model.task.endDate = $filter('datetime')($scope.model.task.endDate);
 
         // Filter assignees
         $scope.model.task.assignees = _.map($scope.model.task.selectedAssignees, function(el) {

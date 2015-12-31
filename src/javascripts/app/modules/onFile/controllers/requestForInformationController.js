@@ -35,7 +35,7 @@ define(function(require) {
              $modal,
              $window,
              $filter,
-             document, 
+             document,
              contactList,
              permissionFactory,
              responses) {
@@ -229,12 +229,10 @@ define(function(require) {
         if($scope.document.documentId) {
           $scope.responses = responses;
 
-          if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView){
+          if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView) {
             $scope.onView = $scope.responses.length > 0;
           }
-        }
 
-        if($scope.document.documentId) {
           loadDocumentAttachments(true);
         }
       };
@@ -392,7 +390,7 @@ define(function(require) {
           .success(function(resp) {
             $scope.responses = resp.documentResponses;
 
-            if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView){
+            if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView) {
               $scope.onView = $scope.responses.length > 0;
             }
           })

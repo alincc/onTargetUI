@@ -153,6 +153,8 @@ define(function(require) {
     resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',
     excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
     newBimServer: 'http://192.168.1.205:3216',
+    bimServer: 'http://localhost:9000/bim',
+    bimServerAddress: 'http://216.14.121.204:8080',
     app: {
       name: "OnTarget",
       id: "OnTarget",

@@ -15,8 +15,6 @@ define(function(require) {
       },
       link: function($scope, element, attrs) {
 
-        console.log($scope.notification);
-
         function getObjectUrl() {
           if(!$scope.notification.notificationType) {
             return undefined;

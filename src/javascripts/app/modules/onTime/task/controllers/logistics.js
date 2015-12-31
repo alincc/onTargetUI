@@ -3,8 +3,8 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'permissionFactory',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, permissionFactory) {
+  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'activityFactory', 'toaster', 'taskFactory', 'notifications', 'permissionFactory', '$stateParams', '$location',
+    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, activityFactory, toaster, taskFactory, notifications, permissionFactory, $stateParams, $location) {
 
       $scope.actions = {
         info: {
@@ -46,11 +46,17 @@ define(function() {
         $rootScope.backtoAttachments = false;
       } else {
         //checkPermission();
-        $scope.action = $scope.actions.info;
+        if($stateParams.tab && $scope.actions[$stateParams.tab]) {
+          $scope.action = $scope.actions[$stateParams.tab];
+        }
+        else {
+          $scope.action = $scope.actions.info;
+        }
       }
 
       $scope.openAction = function(action) {
         $scope.action = action;
+        $location.search('tab', action.name);
       };
 
       $scope.cancel = function() {
@@ -60,7 +66,7 @@ define(function() {
         notifications.taskCancel();
       };
 
-      $scope.edit = function(){
+      $scope.edit = function() {
         notifications.taskSelection({task: $scope.currentTask, action: 'edit'});
       };
 

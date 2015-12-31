@@ -1,11 +1,32 @@
 /**
  * Created by thophan on 8/17/2015.
  */
-define(function (require){
+define(function(require) {
   'use strict';
   var moment = require('moment');
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'activityFactory', 'toaster', 'projectContext', '$filter', 'notifications', 'userNotificationsFactory', 'appConstant',
-    function ($scope, $rootScope, userContext, projectFactory, activityFactory, toaster, projectContext, $filter, notifications, userNotificationsFactory, appConstant){
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'userContext',
+    'projectFactory',
+    'activityFactory',
+    'toaster',
+    'projectContext',
+    '$filter',
+    'notifications',
+    'userNotificationsFactory',
+    'appConstant',
+    function($scope,
+             $rootScope,
+             userContext,
+             projectFactory,
+             activityFactory,
+             toaster,
+             projectContext,
+             $filter,
+             notifications,
+             userNotificationsFactory,
+             appConstant) {
       $scope.currentProject = $rootScope.currentProjectInfo;
 
       $scope.project = {
@@ -31,7 +52,7 @@ define(function (require){
       $scope.minDate2 = $scope.currentProject.startDate;
       $scope.maxDate2 = $scope.currentProject.endDate;
       $scope.initStartDate = new Date($scope.minDate2);
-      $scope.$watchCollection('[project.startDate, project.endDate]', function (e){
+      $scope.$watchCollection('[project.startDate, project.endDate]', function(e) {
         $scope.minDate = $scope.project.startDate ? $scope.project.startDate : $scope.currentProject.startDate;
         $scope.maxDate = $scope.project.endDate ? $scope.project.endDate : $scope.currentProject.endDate;
         $scope.initEndDate = new Date($scope.minDate);
@@ -45,7 +66,7 @@ define(function (require){
           startingDay: 1
         },
         isOpen: false,
-        open: function ($event){
+        open: function($event) {
           this.isOpen = true;
         }
       };
@@ -56,17 +77,21 @@ define(function (require){
           startingDay: 1
         },
         isOpen: false,
-        open: function ($event){
+        open: function($event) {
           this.isOpen = true;
         }
       };
 
       $scope.onSubmit = false;
 
-      $scope.save = function (){
+      $scope.save = function() {
         $scope.onSubmit = true;
+
+        $scope.model.project.startDate = $filter('datetime')($scope.model.project.startDate);
+        $scope.model.project.endDate = $filter('datetime')($scope.model.project.endDate);
+
         activityFactory.addActivity($scope.model).then(
-          function (resp){
+          function(resp) {
             $scope.onSubmit = false;
             $scope.form.$setPristine();
             //$modalInstance.close({});
@@ -78,14 +103,14 @@ define(function (require){
             //  $rootScope.userNotifications = resp.data;
             //  notifications.getNotificationSuccess();
             //});
-          }, function (err){
+          }, function(err) {
             $scope.onSubmit = false;
             $scope.form.$setPristine();
           }
         );
       };
 
-      $scope.cancel = function (){
+      $scope.cancel = function() {
         //$modalInstance.dismiss('cancel');
         notifications.cancelActivity();
       };

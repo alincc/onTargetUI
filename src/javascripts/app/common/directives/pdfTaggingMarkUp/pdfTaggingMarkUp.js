@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash'),
@@ -24,7 +24,7 @@ define(function(require) {
 
   module.run([
     '$templateCache',
-    function($templateCache) {
+    function ($templateCache) {
       $templateCache.put('pdfTaggingMarkUpTemplate', template);
     }]);
 
@@ -40,17 +40,17 @@ define(function(require) {
     'fileFactory',
     'onSiteFactory',
     'appConstant',
-    function(utilFactory,
-             $filter,
-             $timeout,
-             $compile,
-             appConstant,
-             $rootScope,
-             documentFactory,
-             $q,
-             fileFactory,
-             onSiteFactory,
-             constant) {
+    function (utilFactory,
+      $filter,
+      $timeout,
+      $compile,
+      appConstant,
+      $rootScope,
+      documentFactory,
+      $q,
+      fileFactory,
+      onSiteFactory,
+      constant) {
       return {
         restrict: 'E',
         replace: true,
@@ -67,11 +67,11 @@ define(function(require) {
           '$state',
           'fileFactory',
           'onSiteFactory',
-          function($scope,
-                   appConstant,
-                   $state,
-                   fileFactory,
-                   onSiteFactory) {
+          function ($scope,
+            appConstant,
+            $state,
+            fileFactory,
+            onSiteFactory) {
             $scope.fileExtension = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('.') + 1);
             $scope.fileName = $scope.selectedDoc.filePath.substring($scope.selectedDoc.filePath.lastIndexOf('/') + 1);
             $scope.fileNameWithoutExtension = $scope.fileName.substring(0, $scope.fileName.lastIndexOf('.'));
@@ -89,36 +89,36 @@ define(function(require) {
 
             $scope.markers = [];
             $scope.maxNativeZoom = angular.isDefined($scope.maxNativeZoom) ? $scope.maxNativeZoom : null;
-console.log('Max native zoom: ',$scope.maxNativeZoom);
+            console.log('Max native zoom: ', $scope.maxNativeZoom);
             $scope.docInfo = {
               docId: $state.params.docId
             };
 
-            $scope.getFileInfo = function() {
-              if($scope.selectedDoc.originalFilePath) {
+            $scope.getFileInfo = function () {
+              if ($scope.selectedDoc.originalFilePath) {
                 return fileFactory.info($scope.selectedDoc.originalFilePath);
               } else {
                 return fileFactory.info($scope.model.imagePath);
               }
             };
 
-            $scope.addComment = function(id, comment) {
+            $scope.addComment = function (id, comment) {
               return onSiteFactory.addTagComment(id, comment);
             };
 
-            $scope.getPdfImage = function() {
+            $scope.getPdfImage = function () {
               return fileFactory.getPdfImage($scope.originalFilePath);
             };
 
-            $scope.addTags = function(tags) {
+            $scope.addTags = function (tags) {
               return onSiteFactory.addTags(tags);
             };
 
-            $scope.getProjectFileTagId = function(id) {
+            $scope.getProjectFileTagId = function (id) {
               return onSiteFactory.getTagsByDocument(id);
             };
           }],
-        link: function(scope, elem) {
+        link: function (scope, elem) {
           var imgH, imgW, map, tile_layer, markerCount = 1,
             contextMenu = angular.element(elem[0].querySelector('.doc-menu')),
             pdfTaggingMarkUpMap = elem[0].querySelector('#pdfTaggingMarkUpMap'),
@@ -146,24 +146,24 @@ console.log('Max native zoom: ',$scope.maxNativeZoom);
             function compileMarker(cb) {
               markerScope = scope.$new(true);
               markerScope.marker = angular.copy(obj);
-              markerScope.marker.remove = function() {
-                if(map.hasLayer(marker)) {
+              markerScope.marker.remove = function () {
+                if (map.hasLayer(marker)) {
                   map.removeLayer(marker);
                 }
-                _.remove(scope.markers, {id: obj.id});
+                _.remove(scope.markers, { id: obj.id });
               };
-              markerScope.marker.linkTask = function() {
+              markerScope.marker.linkTask = function () {
                 $rootScope.$broadcast('pdfTaggingMarkup.Tag.LinkTask');
               };
 
               $compile(marker._popup._contentNode)(markerScope);
 
-              if(cb) {
+              if (cb) {
                 cb(markerScope);
               }
             }
 
-            marker.on("popupopen", function(e) {
+            marker.on("popupopen", function (e) {
               //// Reverse the popup if exceed the top
               //// saving old anchor point X Y
               //if(!e.popup.options.oldOffset) {
@@ -190,10 +190,10 @@ console.log('Max native zoom: ',$scope.maxNativeZoom);
               //
               // Fix close button
               var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
-              if(closeButton) {
+              if (closeButton) {
                 closeButton.setAttribute('href', '');
-                angular.element(closeButton).on('click', function() {
-                  $timeout(function() {
+                angular.element(closeButton).on('click', function () {
+                  $timeout(function () {
                     $rootScope.selectedProjetFileTag = null;
                     $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
                     scope.updatePageData();
@@ -203,9 +203,9 @@ console.log('Max native zoom: ',$scope.maxNativeZoom);
               }
 
               // Compile popup content
-              compileMarker(function(markerScope) {
-                $timeout(function() {
-                  if(markerScope.marker.isLinked) {
+              compileMarker(function (markerScope) {
+                $timeout(function () {
+                  if (markerScope.marker.isLinked) {
                     $rootScope.$broadcast('pdfTaggingMarkup.Tag.ViewTask', {
                       taskId: markerScope.marker.taskLink.taskId
                     });
@@ -215,24 +215,24 @@ console.log('Max native zoom: ',$scope.maxNativeZoom);
               });
             });
 
-            marker.on("popupclose", function(e) {
+            marker.on("popupclose", function (e) {
               // Update marker
-              var currentMarker = _.find(scope.markers, {id: obj.id});
-              if(currentMarker) {
+              var currentMarker = _.find(scope.markers, { id: obj.id });
+              if (currentMarker) {
                 currentMarker.text = markerScope.marker.text;
               }
 
-              if(marker.closeButton) {
+              if (marker.closeButton) {
                 angular.element(marker.closeButton).off('click');
               }
 
-              if(markerScope) {
+              if (markerScope) {
                 markerScope.$destroy();
               }
 
               e.popup.options.autoPan = false;
 
-              $timeout(function() {
+              $timeout(function () {
                 $rootScope.selectedProjetFileTag = null;
                 $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
               });
@@ -240,7 +240,7 @@ console.log('Max native zoom: ',$scope.maxNativeZoom);
               scope.updatePageData();
             });
 
-            if(open) {
+            if (open) {
               marker.openPopup();
             }
           }
@@ -262,7 +262,7 @@ console.log('Max native zoom: ',$scope.maxNativeZoom);
             L.CRS.Screen = L.extend({}, L.CRS, {
               projection: L.Projection.LonLat,
               transformation: new L.Transformation(1, 0, 1, 0),
-              scale: function(e) {
+              scale: function (e) {
                 return tileSize * Math.pow(2, e);
               }
             });
@@ -286,7 +286,7 @@ console.log('Max native zoom: ',$scope.maxNativeZoom);
             southWest = map.unproject([0, imgH], minZoom);
             northEast = map.unproject([imgW, 0], minZoom);
             bounds = new L.LatLngBounds(southWest, northEast);
-console.log(scope.model.imagePath);
+            console.log(scope.model.imagePath);
             tile_layer = L.tileLayer(constant.resourceUrl + '/' +
               scope.model.imagePath.substring(0, scope.model.imagePath.lastIndexOf('/')) + '/' +
               scope.model.imagePath.substring(scope.model.imagePath.lastIndexOf('/') + 1).replace(/\./g, '_') + '_tiles' +
@@ -307,7 +307,7 @@ console.log(scope.model.imagePath);
             //map.setMaxBounds(bounds);
             //map.fitBounds(bounds);
 
-            tile_layer.on("tileerror", function(e) {
+            tile_layer.on("tileerror", function (e) {
               console.log("tileerror", e);
             });
 
@@ -355,7 +355,7 @@ console.log(scope.model.imagePath);
               var id = utilFactory.newGuid();
               layer.id = id;
               var objLayer = layer.toGeoJSON();
-              objLayer.comments = _.map(comments, function(cm) {
+              objLayer.comments = _.map(comments, function (cm) {
                 return {
                   comment: cm.comment,
                   userId: cm.commentedBy,
@@ -370,7 +370,7 @@ console.log(scope.model.imagePath);
               objLayer.id = id;
               objLayer.type = type;
               objLayer.projectFileTag = e.projectFileTag;
-              if(type === 'marker') {
+              if (type === 'marker') {
                 //var projectFileTagId = resp.data.tags[0].projectFileTagId;
                 //objLayer.id = projectFileTagId;
                 //layer.id = projectFileTagId;
@@ -382,11 +382,11 @@ console.log(scope.model.imagePath);
                   minWidth: 300
                 });
                 var markerScope;
-                var compileMarker = function(cb) {
+                var compileMarker = function (cb) {
                   var isNewTag = false;
                   markerScope = scope.$new(true);
                   markerScope.marker = angular.copy(objLayer);
-                  if(!objLayer.projectFileTag) {
+                  if (!objLayer.projectFileTag) {
                     // New tag
                     objLayer.projectFileTag = {
                       isNew: true,
@@ -397,15 +397,15 @@ console.log(scope.model.imagePath);
                     isNewTag = true;
                   }
 
-                  markerScope.marker.remove = function() {
-                    if(map.hasLayer(layer)) {
+                  markerScope.marker.remove = function () {
+                    if (map.hasLayer(layer)) {
                       map.removeLayer(layer);
                     }
-                    _.remove(scope.listLayers, {id: objLayer.id});
+                    _.remove(scope.listLayers, { id: objLayer.id });
                     scope.updatePageData();
                   };
-                  markerScope.marker.add = function() {
-                    if(!objLayer.comments) {
+                  markerScope.marker.add = function () {
+                    if (!objLayer.comments) {
                       objLayer.comments = [];
                     }
                     objLayer.comments.push(
@@ -420,7 +420,7 @@ console.log(scope.model.imagePath);
                     markerScope.marker.comments = angular.copy(objLayer.comments);
 
                     //layer.closePopup();
-                    if(isNewTag) {
+                    if (isNewTag) {
                       // clear textbox
                       markerScope.marker.comment = "";
                       markerScope.add_comment_form.$setPristine();
@@ -431,7 +431,7 @@ console.log(scope.model.imagePath);
                       // Existing tag
                       // Add comment directly to tag
                       scope.addComment(objLayer.projectFileTag.projectFileTagId, markerScope.marker.comment)
-                        .then(function() {
+                        .then(function () {
                           // clear textbox
                           markerScope.marker.comment = "";
                           markerScope.add_comment_form.$setPristine();
@@ -441,7 +441,7 @@ console.log(scope.model.imagePath);
                     }
                   };
 
-                  markerScope.marker.linkTask = function() {
+                  markerScope.marker.linkTask = function () {
                     $rootScope.currentProjectFileTag = objLayer.projectFileTag;
                     $rootScope.$broadcast('pdfTaggingMarkup.Tag.LinkTask');
                   };
@@ -449,29 +449,41 @@ console.log(scope.model.imagePath);
                   markerScope.marker.taskLink = objLayer.projectFileTag.taskLinks[0];
                   markerScope.marker.isNew = objLayer.projectFileTag.isNew;
 
-                  markerScope.marker.unLink = function(task) {
-                    $rootScope.$broadcast('pdfTaggingMarkup.Tag.UnLinkTask', {
-                      projectFileTagId: objLayer.projectFileTag.projectFileTagId,
-                      projectTaskId: task.taskId
-                    });
+                  markerScope.marker.unLink = function (task) {
+                    if (markerScope.marker.isNew) {
+                      objLayer.projectFileTag.taskLinks = [];
+                      markerScope.marker.isLinked = false;
+                      markerScope.marker.taskLink = null;
+                    } else {
+                      $rootScope.$broadcast('pdfTaggingMarkup.Tag.UnLinkTask', {
+                        projectFileTagId: objLayer.projectFileTag.projectFileTagId,
+                        projectTaskId: task.taskId
+                      });
+                    }
                   };
 
-                  markerScope.$on('linkTask.Completed', function(event, dt) {
-                    if(objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
+                  markerScope.$on('linkTask.Completed', function (event, dt) {
+                    if (objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
                       markerScope.marker.isLinked = true;
                       markerScope.marker.taskLink = {
                         taskId: dt.taskId
                       };
-                      e.projectFileTag.projectFileTagId = dt.projectFileTag.projectFileTagId;
-                      e.projectFileTag.taskLinks = [{
-                        taskId: dt.taskId
-                      }];
+                      if (markerScope.marker.isNew) {
+                        objLayer.projectFileTag.taskLinks = [{
+                          taskId: dt.taskId
+                        }];
+                      } else {
+                        e.projectFileTag.projectFileTagId = dt.projectFileTag.projectFileTagId;
+                        e.projectFileTag.taskLinks = [{
+                          taskId: dt.taskId
+                        }];
+                      }
                     }
                     scope.updatePageData();
                   });
 
-                  markerScope.$on('unLinkTask.Completed', function(event, dt) {
-                    if(objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
+                  markerScope.$on('unLinkTask.Completed', function (event, dt) {
+                    if (objLayer.projectFileTag.projectFileTagId === dt.projectFileTag.projectFileTagId) {
                       markerScope.marker.isLinked = false;
                       markerScope.marker.taskLink = null;
 
@@ -483,12 +495,12 @@ console.log(scope.model.imagePath);
 
                   $compile(layer._popup._contentNode)(markerScope);
 
-                  if(cb) {
+                  if (cb) {
                     cb(markerScope, objLayer);
                   }
                 };
 
-                layer.on("popupopen", function(e) {
+                layer.on("popupopen", function (e) {
                   //// Reverse the popup if exceed the top
                   //// saving old anchor point X Y
                   //if(!e.popup.options.oldOffset) {
@@ -515,10 +527,10 @@ console.log(scope.model.imagePath);
                   //
                   // Fix close button
                   var closeButton = pdfTaggingMarkUpMap.querySelector('.leaflet-popup-close-button');
-                  if(closeButton) {
+                  if (closeButton) {
                     closeButton.setAttribute('href', '');
-                    angular.element(closeButton).on('click', function() {
-                      $timeout(function() {
+                    angular.element(closeButton).on('click', function () {
+                      $timeout(function () {
                         $rootScope.selectedProjetFileTag = null;
                         $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
                         scope.updatePageData();
@@ -528,9 +540,9 @@ console.log(scope.model.imagePath);
                   }
 
                   // Compile popup content
-                  compileMarker(function(markerScope) {
-                    $timeout(function() {
-                      if(markerScope.marker.isLinked) {
+                  compileMarker(function (markerScope) {
+                    $timeout(function () {
+                      if (markerScope.marker.isLinked) {
                         $rootScope.$broadcast('pdfTaggingMarkup.Tag.ViewTask', {
                           taskId: markerScope.marker.taskLink.taskId
                         });
@@ -540,24 +552,24 @@ console.log(scope.model.imagePath);
                   });
                 });
 
-                layer.on("popupclose", function(e) {
+                layer.on("popupclose", function (e) {
                   // Update marker
-                  var currentMarker = _.find(scope.listLayers, {id: objLayer.id});
-                  if(currentMarker) {
+                  var currentMarker = _.find(scope.listLayers, { id: objLayer.id });
+                  if (currentMarker) {
                     currentMarker.text = markerScope.marker.text;
                   }
 
-                  if(layer.closeButton) {
+                  if (layer.closeButton) {
                     angular.element(layer.closeButton).off('click');
                   }
 
-                  if(markerScope) {
+                  if (markerScope) {
                     markerScope.$destroy();
                   }
 
                   e.popup.options.autoPan = false;
 
-                  $timeout(function() {
+                  $timeout(function () {
                     $rootScope.selectedProjetFileTag = null;
                     $rootScope.$broadcast('pdfTaggingMarkup.popupclose');
                   });
@@ -565,12 +577,12 @@ console.log(scope.model.imagePath);
                   scope.updatePageData();
                 });
 
-                if(!hideOpenPopup) {
+                if (!hideOpenPopup) {
                   layer.openPopup();
                 }
                 else {
-                  compileMarker(function() {
-                    $timeout(function() {
+                  compileMarker(function () {
+                    $timeout(function () {
                       $rootScope.$broadcast('pdfTaggingMarkup.popupopen');
                     });
                   });
@@ -589,12 +601,12 @@ console.log(scope.model.imagePath);
 
             map.on('draw:created', onDrawCreated);
 
-            map.on('draw:deleted', function(e) {
+            map.on('draw:deleted', function (e) {
               console.log('delete');
               var layers = e.layers._layers;
-              _.each(layers, function(objLayer, k) {
+              _.each(layers, function (objLayer, k) {
                 var id = objLayer.id;
-                scope.listLayers = _.filter(scope.listLayers, function(l) {
+                scope.listLayers = _.filter(scope.listLayers, function (l) {
                   return l.id !== id;
                 });
               });
@@ -607,13 +619,13 @@ console.log(scope.model.imagePath);
               scope.updatePageData();
             });
 
-            map.on('draw:edited', function(e) {
+            map.on('draw:edited', function (e) {
               var layers = e.layers._layers,
                 listGeo = e.layers.toGeoJSON().features;
               var i = 0;
-              _.each(layers, function(objLayer, k) {
+              _.each(layers, function (objLayer, k) {
                 var id = objLayer.id;
-                scope.listLayers = _.filter(scope.listLayers, function(l) {
+                scope.listLayers = _.filter(scope.listLayers, function (l) {
                   return l.id !== id;
                 });
                 var objL = listGeo[i];
@@ -638,12 +650,12 @@ console.log(scope.model.imagePath);
               scope.updatePageData();
             });
 
-            $timeout(function() {
+            $timeout(function () {
               map._onResize();
               renderMarkers();
             });
 
-            map.on('click', function(e) {
+            map.on('click', function (e) {
               //contextMenu.hide();
               scope.currentContextMenuEvent = e;
               //scope.addMarker();
@@ -652,7 +664,7 @@ console.log(scope.model.imagePath);
               //stopEditing();
             });
 
-            map.on('contextmenu', function(e) {
+            map.on('contextmenu', function (e) {
               //scope.currentContextMenuEvent = e;
               //contextMenu.css({
               //  'top': e.containerPoint.y + 10 + 'px',
@@ -662,175 +674,175 @@ console.log(scope.model.imagePath);
               //contextMenu.show();
             });
 
-            map.on('zoomend', function(e) {
+            map.on('zoomend', function (e) {
               scope.updatePageData();
             });
 
-            if(scope.model.tagList) {
-              _.each(scope.model.tagList, function(tag) {
+            if (scope.model.tagList) {
+              _.each(scope.model.tagList, function (tag) {
                 var attrs = tag.attributes;
-                var type = _.filter(attrs, function(a) {
+                var type = _.filter(attrs, function (a) {
                   return a.key === 'type';
                 });
-                var options = _.reduce(attrs, function(memo, a) {
-                  if(/^options\./.test(a.key)) {
+                var options = _.reduce(attrs, function (memo, a) {
+                  if (/^options\./.test(a.key)) {
                     var keys = a.key.split('.')[1], value = a.value;
                     memo[keys] = value;
                   }
                   return memo;
                 }, {});
-                if(type.length) {
+                if (type.length) {
                   var t = type[0].value, geo, coords;
-                  switch(t) {
+                  switch (t) {
                     case 'rectangle':
-                    {
-                      geo = _.filter(attrs, function(a) {
-                        return /^geo\./.test(a.key);
-                      });
-                      coords = _.reduce(geo, function(memo, g) {
-                        var key = g.key,
-                          value = parseFloat(g.value);
-                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                        if(memo[id]) {
-                          memo[id][id2] = value;
-                        } else {
-                          var obj = [];
-                          obj[id2] = value;
-                          memo[id] = obj;
-                        }
-                        return memo;
-                      }, []);
-                      var rectangle = L.rectangle(coords, options), rectangle2 = angular.copy(rectangle);
-                      //rectangle2.addTo(map);
-                      rectangle.layerType = t;
-                      rectangle.projectFileTag = tag;
-                      onDrawCreated(rectangle, true, true);
-                      break;
-                    }
-                    case 'polygon':
-                    {
-                      geo = _.filter(attrs, function(a) {
-                        return /^geo\./.test(a.key);
-                      });
-                      coords = _.reduce(geo, function(memo, g) {
-                        var key = g.key,
-                          value = parseFloat(g.value);
-                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                        if(memo[id]) {
-                          memo[id][id2] = value;
-                        } else {
-                          var obj = [];
-                          obj[id2] = value;
-                          memo[id] = obj;
-                        }
-                        return memo;
-                      }, []);
-                      var polygon = L.polygon(coords, options), polygon2 = angular.copy(polygon);
-                      //polygon2.addTo(map);
-                      polygon.layerType = t;
-                      polygon.projectFileTag = tag;
-                      onDrawCreated(polygon, true, true);
-                      break;
-                    }
-                    case 'polyline':
-                    {
-                      geo = _.filter(attrs, function(a) {
-                        return /^geo\./.test(a.key);
-                      });
-                      coords = _.reduce(geo, function(memo, g) {
-                        var key = g.key,
-                          value = parseFloat(g.value);
-                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                        if(memo[id]) {
-                          memo[id][id2] = value;
-                        } else {
-                          var obj = [];
-                          obj[id2] = value;
-                          memo[id] = obj;
-                        }
-                        return memo;
-                      }, []);
-                      var polyline = L.polyline(coords, options), polyline2 = angular.copy(polyline);
-                      //polyline2.addTo(map);
-                      polyline.layerType = t;
-                      polyline.projectFileTag = tag;
-                      onDrawCreated(polyline, true, true);
-                      break;
-                    }
-                    case 'circle':
-                    {
-                      var radius = _.filter(attrs, function(a) {
-                        return /^radius/.test(a.key);
-                      });
-                      var circleRadius = 0;
-                      if(radius.length) {
-                        circleRadius = parseFloat(radius[0].value);
+                      {
+                        geo = _.filter(attrs, function (a) {
+                          return /^geo\./.test(a.key);
+                        });
+                        coords = _.reduce(geo, function (memo, g) {
+                          var key = g.key,
+                            value = parseFloat(g.value);
+                          var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                          if (memo[id]) {
+                            memo[id][id2] = value;
+                          } else {
+                            var obj = [];
+                            obj[id2] = value;
+                            memo[id] = obj;
+                          }
+                          return memo;
+                        }, []);
+                        var rectangle = L.rectangle(coords, options), rectangle2 = angular.copy(rectangle);
+                        //rectangle2.addTo(map);
+                        rectangle.layerType = t;
+                        rectangle.projectFileTag = tag;
+                        onDrawCreated(rectangle, true, true);
+                        break;
                       }
-                      geo = _.filter(attrs, function(a) {
-                        return /^geo\./.test(a.key);
-                      });
-                      coords = _.reduce(geo, function(memo, g) {
-                        var key = g.key,
-                          value = parseFloat(g.value);
-                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                        if(memo[id]) {
-                          memo[id][id2] = value;
-                        } else {
-                          var obj = [];
-                          obj[id2] = value;
-                          memo[id] = obj;
+                    case 'polygon':
+                      {
+                        geo = _.filter(attrs, function (a) {
+                          return /^geo\./.test(a.key);
+                        });
+                        coords = _.reduce(geo, function (memo, g) {
+                          var key = g.key,
+                            value = parseFloat(g.value);
+                          var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                          if (memo[id]) {
+                            memo[id][id2] = value;
+                          } else {
+                            var obj = [];
+                            obj[id2] = value;
+                            memo[id] = obj;
+                          }
+                          return memo;
+                        }, []);
+                        var polygon = L.polygon(coords, options), polygon2 = angular.copy(polygon);
+                        //polygon2.addTo(map);
+                        polygon.layerType = t;
+                        polygon.projectFileTag = tag;
+                        onDrawCreated(polygon, true, true);
+                        break;
+                      }
+                    case 'polyline':
+                      {
+                        geo = _.filter(attrs, function (a) {
+                          return /^geo\./.test(a.key);
+                        });
+                        coords = _.reduce(geo, function (memo, g) {
+                          var key = g.key,
+                            value = parseFloat(g.value);
+                          var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                          if (memo[id]) {
+                            memo[id][id2] = value;
+                          } else {
+                            var obj = [];
+                            obj[id2] = value;
+                            memo[id] = obj;
+                          }
+                          return memo;
+                        }, []);
+                        var polyline = L.polyline(coords, options), polyline2 = angular.copy(polyline);
+                        //polyline2.addTo(map);
+                        polyline.layerType = t;
+                        polyline.projectFileTag = tag;
+                        onDrawCreated(polyline, true, true);
+                        break;
+                      }
+                    case 'circle':
+                      {
+                        var radius = _.filter(attrs, function (a) {
+                          return /^radius/.test(a.key);
+                        });
+                        var circleRadius = 0;
+                        if (radius.length) {
+                          circleRadius = parseFloat(radius[0].value);
                         }
-                        return memo;
-                      }, []);
-                      var circle = L.circle(coords[0], circleRadius, options), circle2 = angular.copy(circle);
-                      //circle2.addTo(map);
-                      circle.layerType = t;
-                      circle.projectFileTag = tag;
-                      onDrawCreated(circle, true, true);
-                      break;
-                    }
+                        geo = _.filter(attrs, function (a) {
+                          return /^geo\./.test(a.key);
+                        });
+                        coords = _.reduce(geo, function (memo, g) {
+                          var key = g.key,
+                            value = parseFloat(g.value);
+                          var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                          if (memo[id]) {
+                            memo[id][id2] = value;
+                          } else {
+                            var obj = [];
+                            obj[id2] = value;
+                            memo[id] = obj;
+                          }
+                          return memo;
+                        }, []);
+                        var circle = L.circle(coords[0], circleRadius, options), circle2 = angular.copy(circle);
+                        //circle2.addTo(map);
+                        circle.layerType = t;
+                        circle.projectFileTag = tag;
+                        onDrawCreated(circle, true, true);
+                        break;
+                      }
                     case 'marker':
-                    {
-                      geo = _.filter(attrs, function(a) {
-                        return /^geo\./.test(a.key);
-                      });
-                      coords = _.reduce(geo, function(memo, g) {
-                        var key = g.key,
-                          value = parseFloat(g.value);
-                        var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
-                        if(memo[id]) {
-                          memo[id][id2] = value;
-                        } else {
-                          var obj = [];
-                          obj[id2] = value;
-                          memo[id] = obj;
-                        }
-                        return memo;
-                      }, []);
-                      var marker = L.marker(coords[0]), marker2 = angular.copy(marker);
-                      //marker2.addTo(map);
-                      marker.layerType = t;
-                      marker.comments = tag.comment;
-                      marker.projectFileTag = tag;
+                      {
+                        geo = _.filter(attrs, function (a) {
+                          return /^geo\./.test(a.key);
+                        });
+                        coords = _.reduce(geo, function (memo, g) {
+                          var key = g.key,
+                            value = parseFloat(g.value);
+                          var info = key.split('.'), id = parseFloat(info[1]), id2 = parseFloat(info[2]);
+                          if (memo[id]) {
+                            memo[id][id2] = value;
+                          } else {
+                            var obj = [];
+                            obj[id2] = value;
+                            memo[id] = obj;
+                          }
+                          return memo;
+                        }, []);
+                        var marker = L.marker(coords[0]), marker2 = angular.copy(marker);
+                        //marker2.addTo(map);
+                        marker.layerType = t;
+                        marker.comments = tag.comment;
+                        marker.projectFileTag = tag;
 
-                      //var markerObj = {
-                      //  id: markerCount++,
-                      //  lat: lat,
-                      //  lng: lng,
-                      //  text: 'This is marker ' + markerCount
-                      //};
-                      //
-                      //scope.markers.push(markerObj);
+                        //var markerObj = {
+                        //  id: markerCount++,
+                        //  lat: lat,
+                        //  lng: lng,
+                        //  text: 'This is marker ' + markerCount
+                        //};
+                        //
+                        //scope.markers.push(markerObj);
 
-                      onDrawCreated(marker, true, true);
-                    }
+                        onDrawCreated(marker, true, true);
+                      }
                   }
                 }
               });
             }
           }
 
-          scope.addMarker = function() {
+          scope.addMarker = function () {
             var e = scope.currentContextMenuEvent;
             var lat = e.latlng.lat, lng = e.latlng.lng;
             var markerObj = {
@@ -847,16 +859,16 @@ console.log(scope.model.imagePath);
             contextMenu.hide();
           };
 
-          scope.addTag = function(tags) {
+          scope.addTag = function (tags) {
             return onSiteFactory.addTags(tags);
           };
 
-          scope.extractListTags = function(doc, docId) {
+          scope.extractListTags = function (doc, docId) {
             //return _.map(doc.listLayer, function(m) {
             var layers = angular.copy(scope.listLayers);
-            return _.map(layers, function(m) {
-              if(m.type === 'marker') {
-                var listComment = _.map(m.comments, function(cm) {
+            return _.map(layers, function (m) {
+              if (m.type === 'marker') {
+                var listComment = _.map(m.comments, function (cm) {
                   return {
                     commentId: null,
                     comment: cm.comment,
@@ -905,8 +917,8 @@ console.log(scope.model.imagePath);
               }
 
               var attr = [];
-              _.each(m.options, function(v, k) {
-                if(v) {
+              _.each(m.options, function (v, k) {
+                if (v) {
                   attr.push({
                     key: 'options.' + k,
                     value: v,
@@ -914,9 +926,9 @@ console.log(scope.model.imagePath);
                   });
                 }
               });
-              if(m.type !== 'polyline') {
-                if(m.geometry.coordinates[0].length) {
-                  _.each(m.geometry.coordinates[0], function(coo, k) {
+              if (m.type !== 'polyline') {
+                if (m.geometry.coordinates[0].length) {
+                  _.each(m.geometry.coordinates[0], function (coo, k) {
                     attr.push({
                       key: 'geo.' + k + '.1',
                       value: coo[0],
@@ -942,7 +954,7 @@ console.log(scope.model.imagePath);
                 }
               }
               else {
-                _.each(m.geometry.coordinates, function(c, k) {
+                _.each(m.geometry.coordinates, function (c, k) {
                   attr.push({
                     key: 'geo.' + k + '.0',
                     value: c[1],
@@ -1015,13 +1027,13 @@ console.log(scope.model.imagePath);
             });
           };
 
-          scope.extractListComment = function(doc) {
-            return _.reduce(doc.listLayer, function(memo, m) {
-              if(m.type === 'marker' && m.comments && m.comments.length) {
-                if(!memo) {
+          scope.extractListComment = function (doc) {
+            return _.reduce(doc.listLayer, function (memo, m) {
+              if (m.type === 'marker' && m.comments && m.comments.length) {
+                if (!memo) {
                   memo = [];
                 }
-                _.each(m.comments, function(comment) {
+                _.each(m.comments, function (comment) {
                   memo.push({
                     comment: comment.text,
                     projectFileTagId: doc.fileId
@@ -1032,11 +1044,11 @@ console.log(scope.model.imagePath);
             }, []);
           };
 
-          scope.updatePageData = function() {
+          scope.updatePageData = function () {
             var listTag = scope.extractListTags(scope.selectedDoc, scope.selectedDoc.fileId);
-            var newListTag = _.each(listTag, function(el) {
+            var newListTag = _.each(listTag, function (el) {
               //el.title = "Tag | Page-" + scope.pageNumber;
-              _.remove(el.attributes, {"key": "page"});
+              _.remove(el.attributes, { "key": "page" });
               el.attributes.push({
                 "key": "page",
                 "value": scope.pageNumber
@@ -1044,11 +1056,11 @@ console.log(scope.model.imagePath);
               return el;
             });
             var layers = angular.copy(scope.listLayers);
-            _.each(layers, function(l) {
-              if(l.layer && l.layer._leaflet_events) {
+            _.each(layers, function (l) {
+              if (l.layer && l.layer._leaflet_events) {
                 delete l.layer._leaflet_events;
               }
-              if(l.layer && angular.isDefined(l.layer.editing)) {
+              if (l.layer && angular.isDefined(l.layer.editing)) {
                 delete l.layer.editing;
               }
             });
@@ -1056,17 +1068,17 @@ console.log(scope.model.imagePath);
             scope.model.layers = layers || [];
           };
 
-          scope.$on('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', function(e, v) {
+          scope.$on('pdfTaggingMarkup.updateTileLayer.maxNativeZoom', function (e, v) {
             console.log('Data: ', v);
             console.log('Current page: ', scope.pageNumber);
-            if(tile_layer && tile_layer.options.maxNativeZoom < v.maxNativeZoom && parseInt(scope.pageNumber) === v.page) {
+            if (tile_layer && tile_layer.options.maxNativeZoom < v.maxNativeZoom && parseInt(scope.pageNumber) === v.page) {
               console.log('Redraw...');
               tile_layer.options.maxNativeZoom = v.maxNativeZoom;
               tile_layer.redraw();
             }
           });
 
-          scope.$on('pdfTaggingMarkup.resize', function(e, v) {
+          scope.$on('pdfTaggingMarkup.resize', function (e, v) {
             //if(v) {
             //  // hide comments
             //}
@@ -1074,12 +1086,12 @@ console.log(scope.model.imagePath);
             //  // show comments
             //}
 
-            if(map) {
-              $timeout(function() {
+            if (map) {
+              $timeout(function () {
                 scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
                 scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
                 map.invalidateSize(false);
-                $timeout(function() {
+                $timeout(function () {
                   scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
                   scope.pdfTaggingMarkUp.containerWidth = elem[0].offsetWidth;
                   map.invalidateSize(false);
@@ -1088,7 +1100,7 @@ console.log(scope.model.imagePath);
             }
           });
 
-          if(scope.selectedDoc.originalFilePath) {
+          if (scope.selectedDoc.originalFilePath) {
             render({
               url: scope.selectedDoc.originalFilePath
             });

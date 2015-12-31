@@ -23,8 +23,8 @@ define(function (require){
     notification: require('./notifications/notifications'),
     documentPreview: require('./documentPreview/documentPreview'),
     onFile: require('./onFile/onFile'),
-    //bimProject: require('./bimProject/bimProject'),
-    onBim: require('./onBim/onBim'),
+    bimProject: require('./bimProject/bimProject'),
+    // onBim: require('./onBim/onBim'),
     inviteToProject: require('./inviteToProject/inviteToProject')
   };
 });

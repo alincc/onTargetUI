@@ -28,13 +28,16 @@ define(function(require) {
           canceler.resolve();
         }
         canceler = $q.defer();
-        userNotificationsFactory.getAll({
-          "pageNumber": 1,
-          "perPageLimit": 5
-        }, canceler).then(function(resp) {
-          $rootScope.userNotifications = resp.data;
-          notifications.getNotificationSuccess();
-        });
+
+        if($rootScope.currentUserInfo.userId && $rootScope.currentProjectInfo.projectId) {
+          userNotificationsFactory.getAll({
+            "pageNumber": 1,
+            "perPageLimit": 5
+          }, canceler).then(function(resp) {
+            $rootScope.userNotifications = resp.data;
+            notifications.getNotificationSuccess();
+          });
+        }
       }
 
       function bindProjectEvent(projectId) {

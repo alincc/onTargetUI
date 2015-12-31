@@ -32,6 +32,56 @@
                         <div class="form-group">
                             <div class="input-group input-group-first">
                                 <span class="input-group-addon icon-image">
+                                    <img src="img/First-Name.png">
+                                    <span class="label-required"
+                                          ng-show="form.firstName.$error.required">*</span>
+                                </span>
+                                <input name="firstName" type="text" id="firstName" ng-model="user.firstName"
+                                       class="form-control input-lg"
+                                       placeholder="First name" required="">
+                            </div>
+                            <ng-messages ng-if="form.firstName.$dirty"
+                                         for="form.firstName.$error">
+                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">First name is missing.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group input-group-first">
+                                <span class="input-group-addon icon-image">
+                                    <img src="img/Last-Name.png">
+                                    <span class="label-required"
+                                          ng-show="form.lastName.$error.required">*</span>
+                                </span>
+                                <input name="lastName" type="text" id="lastName" ng-model="user.lastName"
+                                       class="form-control input-lg"
+                                       placeholder="Last name" required="">
+                            </div>
+                            <ng-messages ng-if="form.lastName.$dirty"
+                                         for="form.lastName.$error">
+                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Last name is missing.</span>
+                            </ng-messages>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="input-group input-group-first">-->
+                                <!--<span class="input-group-addon">-->
+                                    <!--<span class="fa fa-comment-o"></span>-->
+                                <!--</span>-->
+                                <!--<input name="msg" type="text" id="msg" ng-model="user.msg"-->
+                                       <!--class="form-control input-lg"-->
+                                       <!--placeholder="Message">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group input-group-first">
+                                <span class="input-group-addon icon-image">
                                     <img src="img/Email.png">
                                     <span class="label-required"
                                           ng-show="form.email.$error.required">*</span>
@@ -67,72 +117,22 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon icon-image">
-                                    <img src="img/First-Name.png">
-                                    <span class="label-required"
-                                          ng-show="form.firstName.$error.required">*</span>
-                                </span>
-                                <input name="firstName" type="text" id="firstName" ng-model="user.firstName"
-                                       class="form-control input-lg"
-                                       placeholder="First name" required="">
-                            </div>
-                            <ng-messages ng-if="form.firstName.$dirty"
-                                         for="form.firstName.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">First name is missing.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                    <div class="col-md-3" style="padding-left: 0px;">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon icon-image">
-                                    <img src="img/Last-Name.png">
-                                    <span class="label-required"
-                                          ng-show="form.lastName.$error.required">*</span>
-                                </span>
-                                <input name="lastName" type="text" id="lastName" ng-model="user.lastName"
-                                       class="form-control input-lg"
-                                       placeholder="Last name" required="">
-                            </div>
-                            <ng-messages ng-if="form.lastName.$dirty"
-                                         for="form.lastName.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Last name is missing.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-comment-o"></span>
-                                </span>
-                                <input name="msg" type="text" id="msg" ng-model="user.msg"
-                                       class="form-control input-lg"
-                                       placeholder="Message">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="input-group input-group-first">
                                 <span class="input-group-addon icon-image">
                                     <img src="img/Company-Name.png">
-                                    <span class="label-required"
-                                          ng-show="form.companyName.$error.required">*</span>
+                                    <!--<span class="label-required"-->
+                                          <!--ng-show="form.companyName.$error.required">*</span>-->
                                 </span>
                                 <input name="companyName" type="text" id="companyName" ng-model="user.companyName"
                                        class="form-control input-lg"
-                                       placeholder="Company name" required="">
+                                       placeholder="Company name" >
                             </div>
-                            <ng-messages ng-if="form.companyName.$dirty"
-                                         for="form.companyName.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Company name is missing.</span>
-                            </ng-messages>
+                            <!--<ng-messages ng-if="form.companyName.$dirty"-->
+                                         <!--for="form.companyName.$error">-->
+                                <!--<span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Company name is missing.</span>-->
+                            <!--</ng-messages>-->
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -190,91 +190,91 @@
                 <!--</div>-->
                 <!--</div>-->
                 <!--</div>-->
-                <div class="row">
+                <!--<div class="row">-->
+                    <!--&lt;!&ndash;<div class="col-md-6">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="input-group input-group-first">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span class="input-group-addon">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span class="fa fa-building-o"></span><span class="label-required"&ndash;&gt;-->
+                    <!--&lt;!&ndash;ng-show="form.companyCity.$error.required">*</span>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<input name="companyCity" type="text" id="companyCity" ng-model="user.companyCity"&ndash;&gt;-->
+                    <!--&lt;!&ndash;class="form-control input-lg"&ndash;&gt;-->
+                    <!--&lt;!&ndash;placeholder="City" required="">&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ng-messages ng-if="form.companyCity.$dirty"&ndash;&gt;-->
+                    <!--&lt;!&ndash;for="form.companyCity.$error">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">City is missing.</span>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ng-messages>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
                     <!--<div class="col-md-6">-->
-                    <!--<div class="form-group">-->
-                    <!--<div class="input-group input-group-first">-->
-                    <!--<span class="input-group-addon">-->
-                    <!--<span class="fa fa-building-o"></span><span class="label-required"-->
-                    <!--ng-show="form.companyCity.$error.required">*</span>-->
-                    <!--</span>-->
-                    <!--<input name="companyCity" type="text" id="companyCity" ng-model="user.companyCity"-->
-                    <!--class="form-control input-lg"-->
-                    <!--placeholder="City" required="">-->
-                    <!--</div>-->
-                    <!--<ng-messages ng-if="form.companyCity.$dirty"-->
-                    <!--for="form.companyCity.$error">-->
-                    <!--<span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">City is missing.</span>-->
-                    <!--</ng-messages>-->
-                    <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="input-group input-group-first">-->
+                                <!--<span class="input-group-addon">-->
+                                    <!--<span class="fa fa-globe"></span>-->
+                                    <!--<span class="label-required"-->
+                                          <!--ng-show="form.companyCountry.$error.required">*</span>-->
+                                <!--</span>-->
+                                <!--<select name="companyCountry" class="form-control input-lg"-->
+                                        <!--ng-model="user.companyCountry"-->
+                                        <!--placeholder="State"-->
+                                        <!--required-->
+                                        <!--ng-options="country.code as country.name for country in countries"-->
+                                        <!--ng-change="getStateList()">-->
+                                    <!--<option value="">&#45;&#45; Country &#45;&#45;</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                            <!--<ng-messages ng-if="form.companyCountry.$dirty"-->
+                                         <!--for="form.companyCountry.$error">-->
+                                <!--<span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Please select a country.</span>-->
+                            <!--</ng-messages>-->
+                        <!--</div>-->
                     <!--</div>-->
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-globe"></span>
-                                    <span class="label-required"
-                                          ng-show="form.companyCountry.$error.required">*</span>
-                                </span>
-                                <select name="companyCountry" class="form-control input-lg"
-                                        ng-model="user.companyCountry"
-                                        placeholder="State"
-                                        required
-                                        ng-options="country.code as country.name for country in countries"
-                                        ng-change="getStateList()">
-                                    <option value="">-- Country --</option>
-                                </select>
-                            </div>
-                            <ng-messages ng-if="form.companyCountry.$dirty"
-                                         for="form.companyCountry.$error">
-                                <span class="help-block m-b-none m-l-xxl text-danger" ng-message when="required">Please select a country.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon">
-                                    <span class="fa fa-envelope-o"></span><span class="label-required"
-                                                                                ng-show="form.companyZip.$error.required">*</span>
-                                </span>
-                                <input name="companyZip" type="text" id="companyZip" ng-model="user.companyZip"
-                                       class="form-control input-lg"
-                                       placeholder="Zipcode" required="">
-                            </div>
-                            <ng-messages ng-if="form.companyZip.$dirty"
-                                         for="form.companyZip.$error">
-                <span class="help-block m-b-none m-l-xxl text-danger" ng-message
-                      when="required">Zip code is missing.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="input-group input-group-first">
-                                <span class="input-group-addon icon-image">
-                                    <img src="img/State.png">
-                                    <span class="label-required"
-                                          ng-show="form.companyState.$error.required">*</span>
-                                </span>
-                                <select name="companyState" class="form-control input-lg" ng-model="user.companyState"
-                                        placeholder="State"
-                                        required ng-options="state.code as state.name for state in states">
-                                    <option value="">-- State --</option>
-                                </select>
-                            </div>
-                            <ng-messages ng-if="form.companyState.$dirty"
-                                         for="form.companyState.$error">
-                <span class="help-block m-b-none m-l-xxl text-danger" ng-message
-                      when="required">Please select a state.</span>
-                            </ng-messages>
-                        </div>
-                    </div>
-                </div>
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="input-group input-group-first">-->
+                                <!--<span class="input-group-addon">-->
+                                    <!--<span class="fa fa-envelope-o"></span><span class="label-required"-->
+                                                                                <!--ng-show="form.companyZip.$error.required">*</span>-->
+                                <!--</span>-->
+                                <!--<input name="companyZip" type="text" id="companyZip" ng-model="user.companyZip"-->
+                                       <!--class="form-control input-lg"-->
+                                       <!--placeholder="Zipcode" required="">-->
+                            <!--</div>-->
+                            <!--<ng-messages ng-if="form.companyZip.$dirty"-->
+                                         <!--for="form.companyZip.$error">-->
+                <!--<span class="help-block m-b-none m-l-xxl text-danger" ng-message-->
+                      <!--when="required">Zip code is missing.</span>-->
+                            <!--</ng-messages>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="input-group input-group-first">-->
+                                <!--<span class="input-group-addon icon-image">-->
+                                    <!--<img src="img/State.png">-->
+                                    <!--<span class="label-required"-->
+                                          <!--ng-show="form.companyState.$error.required">*</span>-->
+                                <!--</span>-->
+                                <!--<select name="companyState" class="form-control input-lg" ng-model="user.companyState"-->
+                                        <!--placeholder="State"-->
+                                        <!--required ng-options="state.code as state.name for state in states">-->
+                                    <!--<option value="">&#45;&#45; State &#45;&#45;</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                            <!--<ng-messages ng-if="form.companyState.$dirty"-->
+                                         <!--for="form.companyState.$error">-->
+                <!--<span class="help-block m-b-none m-l-xxl text-danger" ng-message-->
+                      <!--when="required">Please select a state.</span>-->
+                            <!--</ng-messages>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
                 <button type="submit" class="btn btn-lg btn-primary btn-block m-t-lg" loading-button="form.$submitted"
                         size="lg" ng-disabled="form.$submitted || form.$invalid">Register now

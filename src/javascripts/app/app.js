@@ -57,9 +57,9 @@ define(function(require) {
     'app.onTarget',
     'app.documentPreview',
     'app.onFile',
-    //'app.bimProject',
+    'app.bimProject',
     'app.inviteToProject',
-    'app.onBim'
+    // 'app.onBim'
   ]);
 
   app

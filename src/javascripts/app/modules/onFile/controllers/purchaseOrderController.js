@@ -1,8 +1,37 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'notifications', 'taskFactory', 'onFileFactory', 'companyFactory', 'onContactFactory', 'userContext', '$state', '$modal', '$q', 'fileFactory', '$window', '$filter', 'document',
-    function($scope, $rootScope, notifications, taskFactory, onFileFactory, companyFactory, onContactFactory, userContext, $state, $modal, $q, fileFactory, $window, $filter, document) {
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'notifications',
+    'taskFactory',
+    'onFileFactory',
+    'companyFactory',
+    'onContactFactory',
+    'userContext',
+    '$state',
+    '$modal',
+    '$q',
+    'fileFactory',
+    '$window',
+    '$filter',
+    'document',
+    function($scope,
+             $rootScope,
+             notifications,
+             taskFactory,
+             onFileFactory,
+             companyFactory,
+             onContactFactory,
+             userContext,
+             $state,
+             $modal,
+             $q,
+             fileFactory,
+             $window,
+             $filter,
+             document) {
 
       $scope.purchaseOrder = {
         keyValues: {}

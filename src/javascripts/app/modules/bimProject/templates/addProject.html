@@ -40,7 +40,7 @@
                             </ng-messages>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="col-lg-3 control-label">Schema</label>
                         <div class="col-lg-5">
                             <select class="form-control" name="schema"
@@ -54,7 +54,7 @@
                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
                             </ng-messages>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Project image</label>
                         <div class="col-lg-5">
@@ -69,16 +69,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="col-lg-3 control-label">IFC File</label>
                         <div class="col-lg-5">
                             <input type="file" ng-model="ifc.file" ngf-select="ifc.validate($file)"  />
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <div class="col-lg-3"></div>
                         <div class="col-lg-5">
-                            <button type="submit" class="btn btn-primary" ng-disabled="_form.$invalid || _form.$submitted || !ifc.isValid"
+                            <button type="submit" class="btn btn-primary" ng-disabled="_form.$invalid || _form.$submitted||picture.isUploadPicture"
                                     loading-button="_form.$submitted">Add</button>
                         </div>
                     </div>

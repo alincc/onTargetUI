@@ -1,10 +1,34 @@
 /**
  * Created by thophan on 8/17/2015.
  */
-define(function (){
+define(function (require){
   'use strict';
-  var controller = ['$scope', '$rootScope', 'userContext', 'projectFactory', 'activityFactory', 'toaster', '$filter', 'notifications', 'taskFactory', 'userNotificationsFactory', 'appConstant',
-    function ($scope, $rootScope, userContext, projectFactory, activityFactory, toaster, $filter, notifications, taskFactory, userNotificationsFactory, appConstant){
+
+  var moment = require('moment');
+
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'userContext',
+    'projectFactory',
+    'activityFactory',
+    'toaster',
+    '$filter',
+    'notifications',
+    'taskFactory',
+    'userNotificationsFactory',
+    'appConstant',
+    function ($scope,
+              $rootScope,
+              userContext,
+              projectFactory,
+              activityFactory,
+              toaster,
+              $filter,
+              notifications,
+              taskFactory,
+              userNotificationsFactory,
+              appConstant){
 
       $scope.currentProject = $rootScope.currentProjectInfo;
       var activity = $rootScope.activitySelected;
@@ -114,7 +138,11 @@ define(function (){
 
       $scope.onSubmit = false;
 
+
       $scope.save = function (){
+        $scope.model.project.startDate = $filter('datetime')($scope.model.project.startDate);
+        $scope.model.project.endDate = $filter('datetime')($scope.model.project.endDate);
+
         $scope.onSubmit = true;
         activityFactory.addActivity($scope.model).then(
           function (resp){

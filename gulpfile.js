@@ -224,6 +224,10 @@ gulp.task('build:ui', ['build'], function() {
     .pipe(replace(/pusher_api_key: '.*'/, "pusher_api_key: '" + envConfig.pusher.apiKey + "'"))
     .pipe(replace(/weatherUrl: '.*'/, "weatherUrl: '" + envConfig.weatherUrl + "'"))
     .pipe(replace(/excelTemplateUrl: '.*'/, "excelTemplateUrl: '" + envConfig.excelTemplateUrl + "'"))
+    .pipe(replace(/bim_user: '.*'/, "bim_user: '" + envConfig.bim_user + "'"))
+    .pipe(replace(/bim_password: '.*'/, "bim_password: '" + envConfig.bim_password + "'"))
+    .pipe(replace(/bimServer: '.*'/, "bimServer: '" + envConfig.bimServer + "'"))
+    .pipe(replace(/bimServerAddress: '.*'/, "bimServerAddress: '" + envConfig.bimServerAddress + "'"))
     .pipe(uglify())
     .pipe(gulp.dest('./build-' + environment + '/app/javascripts'));
 
@@ -234,6 +238,7 @@ gulp.task('build:ui', ['build'], function() {
     .pipe(replace(/pusher_key\s=\s'(.*)'/g, 'pusher_key = \'' + envConfig.pusher.apiKey + '\''))
     .pipe(replace(/pusher_secret\s=\s'(.*)'/g, 'pusher_secret = \'' + envConfig.pusher.secret + '\''))
     .pipe(replace(/awsProfile\s=\s'(.*)'/g, 'awsProfile = \'' + envConfig.aws_s3_profile + '\''))
+    .pipe(replace(/BIM_SERVER\s=\s'.*'/, "BIM_SERVER = '" + envConfig.bimServerAddress + "'"))
     .pipe(gulp.dest('./build-' + environment));
 
   gulp.src('./package.app.json')

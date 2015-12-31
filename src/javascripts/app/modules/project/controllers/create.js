@@ -3,8 +3,33 @@
  */
 define(function() {
   'use strict';
-  var controller = ['$scope', '$rootScope', 'countryFactory', 'projectFactory', 'userContext', 'projectContext', 'fileFactory', 'appConstant', 'toaster', '$timeout', '$filter', 'utilFactory', '$state',
-    function($scope, $rootScope, countryFactory, projectFactory, userContext, projectContext, fileFactory, appConstant, toaster, $timeout, $filter, utilFactory, $state) {
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'countryFactory',
+    'projectFactory',
+    'userContext',
+    'projectContext',
+    'fileFactory',
+    'appConstant',
+    'toaster',
+    '$timeout',
+    '$filter',
+    'utilFactory',
+    '$state',
+    function($scope,
+             $rootScope,
+             countryFactory,
+             projectFactory,
+             userContext,
+             projectContext,
+             fileFactory,
+             appConstant,
+             toaster,
+             $timeout,
+             $filter,
+             utilFactory,
+             $state) {
 
       var getCountryFileName = function(countryCode) {
         var fileName = _($scope.countries)
@@ -95,6 +120,9 @@ define(function() {
       };
 
       $scope.save = function() {
+        $scope.model.project.startDate = $filter('datetime')($scope.model.project.startDate);
+        $scope.model.project.endDate = $filter('datetime')($scope.model.project.endDate);
+
         $scope.onSubmit = true;
 
         var createProject = function() {

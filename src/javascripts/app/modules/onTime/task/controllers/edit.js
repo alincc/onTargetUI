@@ -4,8 +4,27 @@
 define(function(require) {
   'use strict';
   var angular = require('angular');
-  var controller = ['$scope', '$rootScope', 'userContext', 'taskFactory', 'activityFactory', 'toaster', 'notifications', '$filter', 'userNotificationsFactory', 'appConstant',
-    function($scope, $rootScope, userContext, taskFactory, activityFactory, toaster, notifications, $filter, userNotificationsFactory, appConstant) {
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'userContext',
+    'taskFactory',
+    'activityFactory',
+    'toaster',
+    'notifications',
+    '$filter',
+    'userNotificationsFactory',
+    'appConstant',
+    function($scope,
+             $rootScope,
+             userContext,
+             taskFactory,
+             activityFactory,
+             toaster,
+             notifications,
+             $filter,
+             userNotificationsFactory,
+             appConstant) {
 
       $scope.editTask = true;
       $scope.currenttask = $rootScope.currentTask;
@@ -63,6 +82,10 @@ define(function(require) {
 
       $scope.onSubmit = false;
       $scope.save = function() {
+
+        $scope.model.task.startDate = $filter('datetime')($scope.model.task.startDate);
+        $scope.model.task.endDate = $filter('datetime')($scope.model.task.endDate);
+
         $scope.onSubmit = true;
         taskFactory.updateTask($scope.model).then(
           function(resp) {
