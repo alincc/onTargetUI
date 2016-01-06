@@ -3,7 +3,13 @@ define(function(require) {
   var angular = require('angular'),
     lodash = require('lodash'),
     moment = require('moment');
-  var controller = ['$scope', '$rootScope', '$window', 'userContext', '$state', 'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', 'notifications', 'taskFactory',
+  var controller = [
+    '$scope',
+    '$rootScope',
+    '$window',
+    'userContext',
+    '$state',
+    'appConstant', 'projectFactory', 'accountFactory', 'utilFactory', 'documentFactory', 'activityFactory', '$timeout', 'notifications', 'taskFactory',
     function($scope, $rootScope, $window, userContext, $state, appConstant, projectFactory, accountFactory, utilFactory, documentFactory, activityFactory, $timeout, notifications, taskFactory) {
       $scope.app = appConstant.app;
       $scope.project = $scope.currentProject = $rootScope.currentProjectInfo;
@@ -541,6 +547,7 @@ define(function(require) {
       }, function(err) {
 
       });
+
     }];
   return controller;
 });

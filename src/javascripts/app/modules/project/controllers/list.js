@@ -59,6 +59,9 @@ define(function(require) {
             $scope.projects = $scope.reMapData(resp.data.projects);
             $rootScope.allProjects = resp.data.projects;
             $scope.arrangedProjects = arrangeData($scope.projects, itemPerRow);
+
+          console.log($scope.arrangedProjects);
+
             $scope.isLoading = false;
           },
           function() {

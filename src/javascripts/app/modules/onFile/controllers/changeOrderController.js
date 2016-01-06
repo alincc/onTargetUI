@@ -60,6 +60,9 @@ define(function(require) {
         }
       };
 
+
+      console.log('document: ', document);
+
       if(document) {
         getUserAction(document);
         $scope.documentId = document.documentId;
@@ -69,7 +72,7 @@ define(function(require) {
         $scope.approval = document.approval;
         $scope.costGrid = document.gridKeyValues;
       } else {
-        $scope.onEdit = true;
+        $scope.onEdit = false;
       }
 
       $scope.dueDate = {
