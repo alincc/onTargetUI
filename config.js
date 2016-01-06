@@ -82,7 +82,7 @@ module.exports = {
       excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
       bim_user: 'bim@ontargetcloud.com',
       bim_password: 'admin',
-      bimServer: 'http://localhost:9000/bim',
+      bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
       bimServerAddress: 'http://216.14.121.204:8080'
 
     },
