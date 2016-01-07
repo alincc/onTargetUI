@@ -55,6 +55,7 @@
                                          ng-click="$event.stopPropagation(); selectTask(task, 'owner')"><i
                                             class="fa fa-user"></i></div>
                                     <div class="stat-icon text-muted"
+                                         ng-class="{'active' : task.activeComment }"
                                          ng-click="$event.stopPropagation(); selectTask(task, 'comment')"><i
                                             class="fa fa-comment"></i></div>
                                     <div class="stat-icon text-muted"

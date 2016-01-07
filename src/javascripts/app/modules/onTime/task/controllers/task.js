@@ -88,10 +88,16 @@ define(function(require) {
         if(taskDetailsDefer) {
           taskDetailsDefer.resolve();
         }
+
+        _.each($scope.tasks, function(value){
+          value.activeComment = false;
+        });
+        $scope.taskSelected = $rootScope.currentTask = task;
+
         taskDetailsDefer = $q.defer();
         taskFactory.getTaskById(task.projectTaskId, taskDetailsDefer)
           .success(function(resp) {
-            $scope.taskSelected = $rootScope.currentTask = resp.task;
+            //$scope.taskSelected = $rootScope.currentTask = resp.task;
             //if($rootScope.backtoAttachments) {
             //  $scope.action = $scope.actions.logistic;
             //  notifications.taskSelection({task: $scope.taskSelected, action: 'logistic'});

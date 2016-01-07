@@ -35,6 +35,16 @@ define(function(require) {
       };
     }])
 
+    .filter('datetimeLocalFromNow', ['appConstant', function(constant) {
+      return function(dateUtc) {
+        if(!dateUtc) {
+          return undefined;
+        }
+
+        return moment(dateUtc).utc();
+      };
+    }])
+
       .filter('datetime', ['appConstant', function(constant) {
         return function(dateUtc, format) {
           if(!dateUtc) {
@@ -42,11 +52,11 @@ define(function(require) {
           }
 
           if(!format) {
-            format = 'YYYY-MM-DD HH:mm:ss';
+            format = 'YYYY-MM-DDTHH:mm:ss';
           }
 
-          var date = new Date(moment(dateUtc).format(format));
-          return date;
+          //var date = new Date(moment(dateUtc).format(format));
+          return moment(dateUtc).format(format);
         };
       }])
     ;

@@ -7,7 +7,13 @@ define(function(require) {
 
   module.directive('notificationLinkToPage', [
     '$state',
-    function($state) {
+    'notifications',
+    'taskFactory',
+    '$location',
+    function($state,
+             notifications,
+             taskFactory,
+             $location) {
     return {
       restrict: 'A',
       scope: {
@@ -23,64 +29,141 @@ define(function(require) {
           var url;
           switch($scope.notification.notificationType) {
             case 'TASK_ASSIGN':
-              url = {
-                name: 'app.onTime',
-                value: {
-                  activityId: $scope.notification.notificationAttributes[1].value,
-                  taskId: $scope.notification.notificationAttributes[0].value,
-                  tab: 'owner'
-                }
-              };
+              if($state.current.name === 'app.onTime'){
+                taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
+                  .success(function(resp) {
+                    console.log('resp', resp);
+
+                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'owner'});
+
+                    // update route
+                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'owner');
+                  });
+              } else{
+                url = {
+                  name: 'app.onTime',
+                  value: {
+                    activityId: $scope.notification.notificationAttributes[1].value,
+                    taskId: $scope.notification.notificationAttributes[0].value,
+                    tab: 'owner'
+                  }
+                };
+              }
+
               break;
             case 'TASK_ATTACHMENT':
-              url = {
-                name: 'app.onTime',
-                value: {
-                  activityId: $scope.notification.notificationAttributes[1].value,
-                  taskId: $scope.notification.notificationAttributes[0].value,
-                  tab: 'attachment'
-                }
-              };
+              if($state.current.name === 'app.onTime'){
+                taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
+                  .success(function(resp) {
+                    console.log('resp', resp);
+
+                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'attachment'});
+
+                    // update route
+                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'attachment');
+                  });
+              } else{
+                url = {
+                  name: 'app.onTime',
+                  value: {
+                    activityId: $scope.notification.notificationAttributes[1].value,
+                    taskId: $scope.notification.notificationAttributes[0].value,
+                    tab: 'attachment'
+                  }
+                };
+              }
+
               break;
             case 'TASK_STATUS':
-              url = {
-                name: 'app.onTime',
-                value: {
-                  activityId: $scope.notification.notificationAttributes[1].value,
-                  taskId: $scope.notification.notificationAttributes[0].value,
-                  tab: 'info'
-                }
-              };
+              if($state.current.name === 'app.onTime'){
+                taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
+                  .success(function(resp) {
+                    console.log('resp', resp);
+
+                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'info'});
+
+                    // update route
+                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'info');
+                  });
+              } else{
+                url = {
+                  name: 'app.onTime',
+                  value: {
+                    activityId: $scope.notification.notificationAttributes[1].value,
+                    taskId: $scope.notification.notificationAttributes[0].value,
+                    tab: 'info'
+                  }
+                };
+              }
+
               break;
             case 'TASK_PERCENTAGE':
-              url = {
-                name: 'app.onTime',
-                value: {
-                  activityId: $scope.notification.notificationAttributes[1].value,
-                  taskId: $scope.notification.notificationAttributes[0].value,
-                  tab: 'progress'
-                }
-              };
+              if($state.current.name === 'app.onTime'){
+                taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
+                  .success(function(resp) {
+                    console.log('resp', resp);
+
+                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'progress'});
+
+                    // update route
+                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'progress');
+                  });
+              } else{
+                url = {
+                  name: 'app.onTime',
+                  value: {
+                    activityId: $scope.notification.notificationAttributes[1].value,
+                    taskId: $scope.notification.notificationAttributes[0].value,
+                    tab: 'progress'
+                  }
+                };
+              }
               break;
             case 'TASK_COMMENT':
-              url = {
-                name: 'app.onTime',
-                value: {
-                  activityId: $scope.notification.notificationAttributes[1].value,
-                  taskId: $scope.notification.notificationAttributes[0].value,
-                  tab: 'comment'
-                }
-              };
+              if($state.current.name === 'app.onTime'){
+                taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
+                  .success(function(resp) {
+                    console.log('resp', resp);
+
+                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'comment'});
+
+                    // update route
+                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'comment');
+                  });
+              } else{
+                url = {
+                  name: 'app.onTime',
+                  value: {
+                    activityId: $scope.notification.notificationAttributes[1].value,
+                    taskId: $scope.notification.notificationAttributes[0].value,
+                    tab: 'comment'
+                  }
+                };
+              }
               break;
             case 'TASK':
-              url = {
-                name: 'app.onTime',
-                value: {
-                  activityId: $scope.notification.notificationAttributes[1].value,
-                  taskId: $scope.notification.notificationAttributes[0].value,
-                  tab: ''
-                }
-              };
+
+              if($state.current.name === 'app.onTime'){
+                taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
+                  .success(function(resp) {
+                    console.log('resp', resp);
+
+                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'info'});
+
+                    // update route
+                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'info');
+                  });
+              }
+              else{
+                url = {
+                  name: 'app.onTime',
+                  value: {
+                    activityId: $scope.notification.notificationAttributes[1].value,
+                    taskId: $scope.notification.notificationAttributes[0].value,
+                    tab: 'info'
+                  }
+                };
+              }
               break;
             case 'ACTIVITY':
               url = {

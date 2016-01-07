@@ -339,8 +339,7 @@ define(function(require) {
           $scope.taskLoading = true;
           taskFactory.getProjectTasks($scope.project.projectId)
             .success(function(resp) {
-              console.log(resp);
-              if(resp.tasks.length > 0) {
+              if(resp.tasks && resp.tasks.length > 0) {
                 _.each(resp.tasks, function(tsk) {
                   //$scope.tasks.scheduled.push(tsk);
 
@@ -366,9 +365,8 @@ define(function(require) {
                     $scope.tasks.critical.push(tsk);
                   }
                 });
-                $scope.taskLoading = false;
               }
-
+              $scope.taskLoading = false;
             })
             .error(function(err) {
               $scope.taskLoading = false;
@@ -485,7 +483,7 @@ define(function(require) {
         };
 
         for(var i = 0; i < 4; i++) {
-          if(documentStatusData){
+          if(documentStatusData) {
             documentStatusData = null;
           }
 
@@ -509,25 +507,25 @@ define(function(require) {
           switch(i) {
             case 0:
               documentStatus.key = 'Change Order';
-              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n) {
                 return n.key === 'Change Order';
               });
               break;
             case 1:
               documentStatus.key = 'Purchase Order';
-              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n) {
                 return n.key === 'Purchase Order';
               });
               break;
             case 2:
               documentStatus.key = 'RFI';
-              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n) {
                 return n.key === 'Request For Information';
               });
               break;
             case 3:
               documentStatus.key = 'Transmittal';
-              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n){
+              documentStatusData = _.find(resp.data.countByDocumentTemplateAndStatus.entry, function(n) {
                 return n.key === 'Transmittal';
               });
               break;
