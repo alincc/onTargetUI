@@ -60,7 +60,7 @@
                                 </span>
                             <input name="email" type="email" id="email" ng-model="user.email"
                                    class="form-control input-lg"
-                                   placeholder="Email address" required=""/>
+                                   placeholder="Email address" required="" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"/>
                         </div>
                         <ng-messages ng-if="form.email.$dirty"
                                      for="form.email.$error">
