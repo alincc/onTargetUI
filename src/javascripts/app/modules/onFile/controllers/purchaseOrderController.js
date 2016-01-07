@@ -139,6 +139,8 @@ define(function(require) {
       };
 
       $scope.submit = function(form) {
+        $scope.purchaseOrder.dueDate = $filter('datetime')($scope.purchaseOrder.dueDate);
+
         var newDocumentFormattedKeyValues = [];
         angular.forEach($scope.purchaseOrder.keyValues, function(value, key) {
           var keyValuePair = {

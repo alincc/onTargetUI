@@ -33,11 +33,13 @@ define(function(require) {
           'taskFactory',
           'pushFactory',
           'appConstant',
+          '$filter',
           function($scope,
                    $rootScope,
                    taskFactory,
                    pushFactory,
-                   appConstant) {
+                   appConstant,
+                   $filter) {
             $scope.height = $scope.height || 210;
             $scope.app = appConstant.app;
             $scope.comments = $scope.task.comments;
@@ -54,13 +56,13 @@ define(function(require) {
             };
 
             $scope.addComment = function(_form) {
-              $scope.model.commentedDate = new Date();
+              $scope.model.commentedDate = $filter('datetime')(new Date());
               taskFactory.createNewComment($scope.model).then(
                 function(resp) {
                   $scope.comments.push({
                     comment: resp.data.taskComment.comment,
                     commentedBy: resp.data.taskComment.commentedBy.userId,
-                    commentedDate: resp.data.taskComment.commentedDate,
+                    commentedDate: $scope.model.commentedDate,
                     commenterContact: resp.data.taskComment.commenterContact,
                     taskCommentId: resp.data.taskComment.taskCommentId,
                     taskId: resp.data.taskComment.taskId

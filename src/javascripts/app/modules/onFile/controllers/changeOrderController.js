@@ -173,6 +173,9 @@ define(function(require) {
       };
 
       $scope.submit = function(form) {
+        $scope.changeOrder.dueDate = $filter('datetime')($scope.changeOrder.dueDate);
+        $scope.changeOrder.keyValues.date_created = $filter('datetime')($scope.changeOrder.keyValues.date_created);
+
         $scope.onSubmit = true;
         var newDocumentFormattedKeyValues = [];
         angular.forEach($scope.changeOrder.keyValues, function(value, key) {

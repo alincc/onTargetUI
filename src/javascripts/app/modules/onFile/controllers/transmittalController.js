@@ -177,6 +177,11 @@ define(function(require) {
       };
 
       $scope.submit = function(form) {
+        $scope.document.dueDate = $filter('datetime')($scope.document.dueDate);
+        $scope.document.keyValues.due_by_date = $filter('datetime')($scope.document.keyValues.due_by_date);
+        $scope.document.keyValues.received_by_date = $filter('datetime')($scope.document.keyValues.received_by_date);
+        $scope.document.keyValues.sent_by_date = $filter('datetime')($scope.document.keyValues.sent_by_date);
+
         var newDocumentFormattedKeyValues = [];
         angular.forEach($scope.document.keyValues, function(value, key) {
           var keyValuePair =

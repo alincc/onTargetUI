@@ -10,7 +10,8 @@
       .heading {
         margin: 15px 15px 0 15px;
         .text {
-          display: inline-block;
+          display: block;
+          width: 100%;
           &:hover {
             cursor: pointer;
           }
@@ -19,11 +20,21 @@
           }
           .project-chooser {
             display: inline-block;
+            width: 100%;
             .dropdown-toggle {
               i {
                 font-size: 12px;
                 margin: 0 5px;
+                display: inline-block;
+                vertical-align: super;
               }
+            }
+            .project-name{
+              max-width: 90%;
+              display: inline-block;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
           }
         }
@@ -40,7 +51,7 @@
 }
 
 .activity-list {
-  margin: 15px 0 0 0;
+  margin: 5px 0 0 0;
   height: @onTime-height;
   .activity-item {
     padding: 10px 15px;

@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
   'use strict';
   var angular = require('angular'),
     uiRouter = require('uiRouter'),
@@ -12,7 +12,7 @@ define(function(require) {
     notification = require('app/common/services/notifications');
   var module = angular.module('app.onTime', ['ui.router', 'app.config', 'common.context.project', 'app.activity', 'app.task', 'common.services.permission', 'app.ganttChart', 'common.services.notifications']);
 
-  module.run(['$templateCache', function($templateCache) {
+  module.run(['$templateCache', function ($templateCache) {
     $templateCache.put('onTime/templates/onTime.html', template);
   }]);
 
@@ -20,7 +20,7 @@ define(function(require) {
 
   module.config(
     ['$stateProvider',
-      function($stateProvider) {
+      function ($stateProvider) {
         $stateProvider
           .state('app.onTime', {
             url: '/onTime?activityId&taskId&tab',
@@ -28,15 +28,27 @@ define(function(require) {
             controller: 'OnTimeController',
             reloadOnSearch: false,
             resolve: {
-              projectValid: ['$location', 'projectContext', '$q', '$state', '$window', 'permissionFactory', function($location, projectContext, $q, $state, $window, permissionFactory) {
-                var deferred = $q.defer();
-                if(projectContext.valid() && permissionFactory.checkMenuPermission('ONTIME')) {
-                  deferred.resolve();
-                } else {
-                  $window.location.href = $state.href('app.projectlist');
-                }
-                return deferred.promise;
-              }]
+              projectValid: [
+                '$location',
+                'projectContext',
+                '$q',
+                '$state',
+                '$window',
+                'permissionFactory',
+                function ($location,
+                          projectContext,
+                          $q,
+                          $state,
+                          $window,
+                          permissionFactory) {
+                  var deferred = $q.defer();
+                  if (projectContext.valid() && permissionFactory.checkMenuPermission('ONTIME')) {
+                    deferred.resolve();
+                  } else {
+                    $window.location.href = $state.href('app.projectlist');
+                  }
+                  return deferred.promise;
+                }]
             }
           });
       }

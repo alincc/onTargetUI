@@ -238,6 +238,9 @@ define(function(require) {
       };
 
       $scope.submit = function(form) {
+        $scope.document.dueDate = $filter('datetime')($scope.document.dueDate);
+
+
         $scope.document.keyValues.rfi_is_a_change = $scope.document.keyValues.rfi_is_a_change || 'NO';
         var newDocumentFormattedKeyValues = [];
         angular.forEach($scope.document.keyValues, function(value, key) {

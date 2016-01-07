@@ -84,7 +84,7 @@ define(function(require) {
         };
 
         service.getUserProjectList = function (model) {
-          return $http.post(constant.domain + '/project/v1/getUserProjectList', model);
+          return $http.post(constant.domain + '/project/getUserProjectList', model);
         };
 
         service.getProjectByUser = function (model, canceler){
