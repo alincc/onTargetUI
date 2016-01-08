@@ -23,6 +23,7 @@ define(function() {
           registrationToken: registrationTokenData.collaborateToken,
           firstName: registrationTokenData.userRegistration.firstName,
           lastName: registrationTokenData.userRegistration.lastName,
+          phoneNumber: registrationTokenData.userRegistration.phoneNumber,
           areaCode: registrationTokenData.userRegistration.companyZip ? registrationTokenData.userRegistration.companyZip : ''
         };
       }
