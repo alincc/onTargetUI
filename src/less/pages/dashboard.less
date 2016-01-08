@@ -526,10 +526,10 @@
             display: table-cell;
             vertical-align: middle;
             text-align: center;
-            .chart-doughnut {
-              max-width: 234px !important;
-              max-height: 124px !important;
-            }
+            //.chart-doughnut {
+            //  max-width: 234px !important;
+            //  max-height: 124px !important;
+            //}
           }
         }
         .canvas-document{
@@ -578,7 +578,7 @@
       border-color: #4279bd;
       padding: 15px 15px 15px 24px;
       &:before {
-        margin-left: -31px;
+        margin-left: -32px;
         background: #4279bd;
         border-width: 7px;
         box-shadow: 0 0 0 3px #fff;
@@ -749,5 +749,37 @@
   .col-lg-15 {
     width: 20%;
     float: left;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .chart-doughnut {
+    max-width: 234px !important;
+    max-height: 124px !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  .chart-doughnut {
+    max-width: 160px !important;
+    max-height: 80px !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1200px) {
+  .chart-doughnut {
+    max-width: 234px !important;
+    max-height: 124px !important;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1367px) {
+  .chart-doughnut {
+    max-width: 180px !important;
+    max-height: 90px !important;
+  }
+}
+@media (min-width: 1367px) {
+  .chart-doughnut {
+    max-width: 234px !important;
+    max-height: 124px !important;
   }
 }

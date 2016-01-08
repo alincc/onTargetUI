@@ -31,7 +31,7 @@ require.config({
     angularMessages: "../bower_components/angular-messages/angular-messages",
     angularResource: "../bower_components/angular-resource/angular-resource",
     angularBootstrap: "../bower_components/angular-bootstrap/ui-bootstrap-tpls",
-    angularMoment: '../bower_components/angular-moment/angular-moment',
+    angularMoment: '../js/angular-moment/angular-moment',
     uiRouter: '../bower_components/ui-router/release/angular-ui-router',
     lodash: '../bower_components/lodash/lodash',
     text: '../bower_components/requirejs-text/text',

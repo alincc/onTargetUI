@@ -85,8 +85,7 @@
                                 </div>
                                 <div class="clear block m-b-none">
                                     <div>{{notification.text}}</div>
-                                    <small class="text-muted" am-time-ago="notification.tsInsert/1000"
-                                           am-preprocess="unix"></small>
+                                    <small class="text-muted" am-time-ago="notification.tsInsert | amUtc | amLocal"></small>
                                 </div>
                             </a>
                         </div>

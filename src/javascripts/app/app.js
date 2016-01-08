@@ -14,12 +14,14 @@ define(function(require) {
     angularBootstrap = require('angularBootstrap'),
     angularUiEvent = require('angularUiEvent'),
     angularSanitize = require('angularSanitize'),
+    angularMoment = require('angularMoment'),
     angularLoadingBar = require('angularLoadingBar'),
     serviceModule = require('./common/services/index');
 
   var app = angular.module('app', [
     //libraries
     'ngAnimate',
+    'angularMoment',
     'ui.bootstrap',
     'ui.event',
     'angular-loading-bar',
