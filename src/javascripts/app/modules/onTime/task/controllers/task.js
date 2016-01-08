@@ -223,11 +223,19 @@ define(function(require) {
         $location.search('taskId', null);
       });
 
-      notifications.onActivitySelection($scope, function() {
-        $scope.tasks = [];
-        $scope.taskSelected = null;
-        // update route
-        $location.search('taskId', null);
+      notifications.onActivitySelection($scope, function(e, args) {
+
+
+        if(!e || !e.isCheckTask){
+          $scope.tasks = [];
+          $scope.taskSelected = null;
+
+          // update route
+          $location.search('taskId', null);
+        } else{
+          $scope.taskSelected = $rootScope.currentTask || null;
+        }
+
         bindTasks();
       });
 

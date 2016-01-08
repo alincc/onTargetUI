@@ -273,6 +273,11 @@ define(function(require) {
         $scope.loadActivity();
       });
 
+
+      notifications.onActivitySelection($scope, function(){
+        $scope.activitySelected = $rootScope.activitySelected;
+      });
+
     }];
   return controller;
 });

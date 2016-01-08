@@ -28,6 +28,7 @@ module.exports = {
   },
   generateAssetPath: function(rootFolder, projectAssetFolderName, context, fn, uuid) {
     var url = string.join('/', config.imagePathRoot, rootFolder + '/'); // assets/<root>
+    this.ensureFolderExist(path.join(rootPath, config.imagePathRoot));
     this.ensureFolderExist(path.join(rootPath, config.imagePathRoot, rootFolder));
     if(rootFolder === 'projects') {
       this.ensureFolderExist(path.join(rootPath, config.imagePathRoot, rootFolder, projectAssetFolderName));

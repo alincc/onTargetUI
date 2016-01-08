@@ -10,10 +10,16 @@ define(function(require) {
     'notifications',
     'taskFactory',
     '$location',
+    '$timeout',
+    'activityFactory',
+    '$rootScope',
     function($state,
              notifications,
              taskFactory,
-             $location) {
+             $location,
+             $timeout,
+             activityFactory,
+             $rootScope) {
     return {
       restrict: 'A',
       scope: {
@@ -32,12 +38,19 @@ define(function(require) {
               if($state.current.name === 'app.onTime'){
                 taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
                   .success(function(resp) {
-                    console.log('resp', resp);
+                    $rootScope.currentTask = resp.task;
+                    getActivity($scope.notification.notificationAttributes[1].value, function(){
+                      // update route
+                      $location.search('activityId', $scope.notification.notificationAttributes[1].value)
+                        .search('taskId', resp.task.projectTaskId)
+                        .search('tab', 'owner');
 
-                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'owner'});
+                      notifications.activitySelection();
 
-                    // update route
-                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'owner');
+                      $timeout(function(){
+                        notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'owner'});
+                      });
+                    });
                   });
               } else{
                 url = {
@@ -55,12 +68,19 @@ define(function(require) {
               if($state.current.name === 'app.onTime'){
                 taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
                   .success(function(resp) {
-                    console.log('resp', resp);
+                    $rootScope.currentTask = resp.task;
+                    getActivity($scope.notification.notificationAttributes[1].value, function(){
+                      // update route
+                      $location.search('activityId', $scope.notification.notificationAttributes[1].value)
+                        .search('taskId', resp.task.projectTaskId)
+                        .search('tab', 'attachment');
 
-                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'attachment'});
+                      notifications.activitySelection();
 
-                    // update route
-                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'attachment');
+                      $timeout(function(){
+                        notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'attachment'});
+                      });
+                    });
                   });
               } else{
                 url = {
@@ -78,12 +98,19 @@ define(function(require) {
               if($state.current.name === 'app.onTime'){
                 taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
                   .success(function(resp) {
-                    console.log('resp', resp);
+                    $rootScope.currentTask = resp.task;
+                    getActivity($scope.notification.notificationAttributes[1].value, function(){
+                      // update route
+                      $location.search('activityId', $scope.notification.notificationAttributes[1].value)
+                        .search('taskId', resp.task.projectTaskId)
+                        .search('tab', 'info');
 
-                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'info'});
+                      notifications.activitySelection();
 
-                    // update route
-                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'info');
+                      $timeout(function(){
+                        notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'info'});
+                      });
+                    });
                   });
               } else{
                 url = {
@@ -101,12 +128,19 @@ define(function(require) {
               if($state.current.name === 'app.onTime'){
                 taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
                   .success(function(resp) {
-                    console.log('resp', resp);
+                    $rootScope.currentTask = resp.task;
+                    getActivity($scope.notification.notificationAttributes[1].value, function(){
+                      // update route
+                      $location.search('activityId', $scope.notification.notificationAttributes[1].value)
+                        .search('taskId', resp.task.projectTaskId)
+                        .search('tab', 'progress');
 
-                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'progress'});
+                      notifications.activitySelection();
 
-                    // update route
-                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'progress');
+                      $timeout(function(){
+                        notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'progress'});
+                      });
+                    });
                   });
               } else{
                 url = {
@@ -123,12 +157,20 @@ define(function(require) {
               if($state.current.name === 'app.onTime'){
                 taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
                   .success(function(resp) {
-                    console.log('resp', resp);
+                    $rootScope.currentTask = resp.task;
+                    getActivity($scope.notification.notificationAttributes[1].value, function(){
 
-                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'comment'});
+                      // update route
+                      $location.search('activityId', $scope.notification.notificationAttributes[1].value)
+                        .search('taskId', resp.task.projectTaskId)
+                        .search('tab', 'comment');
 
-                    // update route
-                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'comment');
+                      notifications.activitySelection({isCheckTask: true});
+
+                      $timeout(function(){
+                        notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'comment'});
+                      });
+                    });
                   });
               } else{
                 url = {
@@ -142,16 +184,22 @@ define(function(require) {
               }
               break;
             case 'TASK':
-
               if($state.current.name === 'app.onTime'){
                 taskFactory.getTaskById($scope.notification.notificationAttributes[0].value)
                   .success(function(resp) {
-                    console.log('resp', resp);
+                    $rootScope.currentTask = resp.task;
+                    getActivity($scope.notification.notificationAttributes[1].value, function(){
+                      // update route
+                      $location.search('activityId', $scope.notification.notificationAttributes[1].value)
+                        .search('taskId', resp.task.projectTaskId)
+                        .search('tab', 'info');
 
-                    notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'info'});
+                      notifications.activitySelection();
 
-                    // update route
-                    $location.search('taskId', resp.task.projectTaskId).search('tab', 'info');
+                      $timeout(function(){
+                        notifications.taskSelection({task: resp.task, action: 'logistic', tab: 'info'});
+                      });
+                    });
                   });
               }
               else{
@@ -166,14 +214,19 @@ define(function(require) {
               }
               break;
             case 'ACTIVITY':
-              url = {
-                name: 'app.onTime',
-                value: {
-                  activityId: $scope.notification.notificationAttributes[1].value,
-                  taskId: '',
-                  tab: ''
-                }
-              };
+              if($state.current.name === 'app.onTime'){
+                notifications.activitySelection();
+              } else{
+                url = {
+                  name: 'app.onTime',
+                  value: {
+                    activityId: $scope.notification.notificationAttributes[1].value,
+                    taskId: '',
+                    tab: ''
+                  }
+                };
+              }
+
               break;
             case 'PROJECT_FILE_COMMENT':
               url = {
@@ -228,6 +281,20 @@ define(function(require) {
 
           return url;
         }
+
+        var getActivity = function(activityId, callBack){
+          //this case occur when current activity id as activity id get by notification
+          if($rootScope.activitySelected && $rootScope.activitySelected.projectId === activityId){
+            callBack();
+            return;
+          }
+
+          //this case occur when current activity is null or current activity id different activity id get by notification
+          activityFactory.getActivityById($scope.notification.notificationAttributes[1].value).success(function(resp){
+            $rootScope.activitySelected = resp.project;
+            callBack();
+          });
+        };
 
         element.on('click', function() {
           var urlObject = getObjectUrl();

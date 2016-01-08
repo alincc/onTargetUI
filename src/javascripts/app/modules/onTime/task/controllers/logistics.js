@@ -55,14 +55,16 @@ define(function() {
       }
 
       $scope.openAction = function(action) {
-        if(action.name === 'comment'){
-          $rootScope.currentTask.activeComment = true;
-        }else{
-          $rootScope.currentTask.activeComment = false;
-        }
+        if(angular.isDefined(action)){
+          if(action.name === 'comment'){
+            $rootScope.currentTask.activeComment = true;
+          }else{
+            $rootScope.currentTask.activeComment = false;
+          }
 
-        $scope.action = action;
-        $location.search('tab', action.name);
+          $scope.action = action;
+          $location.search('tab', action.name);
+        }
       };
 
       $scope.cancel = function() {

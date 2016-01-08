@@ -36,7 +36,9 @@
                                     <p ng-bind-html="project.fullAddress2"
                                        ng-if="project.fullAddress2.length"></p>
                                 </div>
-                                <div class="project-desc" ng-bind-html="project.projectDescription"></div>
+                                <div class="project-desc" custom-scroll>
+                                    <div ng-bind-html="project.projectDescription"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -404,7 +406,7 @@
                                         <!--ng-class="$index%2==0?'tl-item':'tl-item tl-left'"-->
 
                                         <div class="tl-wrap b-primary">
-                                            <span class="tl-date">{{activityLog.tsInsert|date:'hh:mm'}}</span>
+                                            <span class="tl-date">{{activityLog.tsInsert|date:'hh:mm a'}}</span>
                                             <span class="text-info">{{activityLog.tsInsert|date:'EEE dd MMM yyyy'}}</span>
                                             <div class="tl-content panel padder b-a block">
                                                 <span class="arrow left pull-up hidden-left"></span>
@@ -417,10 +419,9 @@
                                                 <!--<div>{{activityLog.tsInsert|date:'MMM yyyy'}}</div>-->
                                                 <!--</div>-->
                                                 <!--</div>-->
-                                                <!--<div class="tl-avatar">-->
-                                                <!--<img path="{{activityLog.userImage}}" class="image-circle"-->
-                                                <!--file-path/>-->
-                                                <!--</div>-->
+                                                <div class="tl-avatar">
+                                                    <img path="{{activityLog.userImage}}" class="image-circle" file-path/>
+                                                </div>
                                                 <div class="tl-content tl-log-text">{{activityLog.text}}</div>
                                             </div>
                                             <!--<div class="text-right tl-create-by">Create By</div>-->
