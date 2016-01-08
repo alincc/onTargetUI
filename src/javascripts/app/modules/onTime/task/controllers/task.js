@@ -224,8 +224,6 @@ define(function(require) {
       });
 
       notifications.onActivitySelection($scope, function(e, args) {
-
-
         if(!e || !e.isCheckTask){
           $scope.tasks = [];
           $scope.taskSelected = null;
