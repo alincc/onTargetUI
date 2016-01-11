@@ -28,7 +28,10 @@ define(function() {
     };
 
     $scope.reject = function(user, idx) {
-
+      accountRequestFactory.reject(user.id)
+        .success(function() {
+          $scope.results.splice(idx, 1);
+        });
     };
 
     $scope.loadData();

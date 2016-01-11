@@ -53,8 +53,12 @@ define(function(require) {
                     });
             }
 
-            getContactList();
+            $scope.$on('onContact.getContactList', function(){
+                getContactList();
+            });
 
+
+            $scope.$broadcast('onContact.getContactList');
 
 
         }];

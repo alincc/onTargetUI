@@ -27,6 +27,18 @@ define(function(require) {
       });
     };
 
+    services.reject = function(requestId) {
+      return $http.post(constant.domain + '/onTargetInvitation/rejectRequest', null, {
+        headers: {
+          Authorization: false,
+          AutoAlert: true
+        },
+        params: {
+          id: requestId
+        }
+      });
+    };
+
     return services;
   }]);
   return module;

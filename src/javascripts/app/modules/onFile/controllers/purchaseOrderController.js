@@ -65,7 +65,7 @@ define(function(require) {
         $scope.approval = document.approval;
         console.log($scope.purchaseOrder);
       } else {
-        $scope.onEdit = false;
+        $scope.onAddNew = true;
       }
 
       $scope.dueDate = {

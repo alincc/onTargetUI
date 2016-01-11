@@ -28,7 +28,7 @@
                                                     ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
                                                     required
                                                     ng-change="getCompanyOfUser()"
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Receiver's Name --</option>
                                             </select>
                                             <ng-messages ng-if="_form.receiverId.$dirty"
@@ -50,7 +50,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Company Name"
                                                    ng-model="document.keyValues.company_name"
                                                    name="companyName" required readonly
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.companyName.$dirty"
                                                          for="_form.companyName.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -68,7 +68,7 @@
                                             <input type="text" class="form-control" placeholder="Enter transmittal #"
                                                    ng-model="document.keyValues.transmittal"
                                                    name="transmittal" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.transmittal.$dirty"
                                                          for="_form.transmittal.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -84,7 +84,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Sent Via"
                                                    ng-model="document.keyValues.sent_via"
                                                    name="sent_via" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.sent_via.$dirty"
                                                          for="_form.sent_via.$error">
                                 <span class="help-block m-b-none text-danger" ng-message
@@ -104,7 +104,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Subject"
                                                    ng-model="document.keyValues.subject"
                                                    name="subject"
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@
                                             <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.due_by_date | date:app.dateFormat}}</p>
 
-                                            <p class="input-group" ng-if="onEdit">
+                                            <p class="input-group" ng-if="(onEdit || onAddNew) && !onView">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Date"
                                                        ng-model="document.keyValues.due_by_date"
                                                        datepicker-popup="MM/dd/yyyy" is-open="dueByDate.isOpen"
@@ -163,7 +163,7 @@
                                             <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.received_by_date | date:app.dateFormat}}</p>
 
-                                            <p class="input-group" ng-if="onEdit">
+                                            <p class="input-group" ng-if="(onEdit || onAddNew) && !onView">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Date"
                                                        ng-model="document.keyValues.received_by_date"
                                                        datepicker-popup="MM/dd/yyyy" is-open="receivedDate.isOpen"
@@ -181,7 +181,7 @@
                                             <p class="text-field" ng-if="onView || onApprove">
                                                 {{document.keyValues.sent_by_date | date:app.dateFormat}}</p>
 
-                                            <p class="input-group" ng-if="onEdit">
+                                            <p class="input-group" ng-if="(onEdit || onAddNew) && !onView">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Date"
                                                        ng-model="document.keyValues.sent_by_date"
                                                        datepicker-popup="MM/dd/yyyy" is-open="sentDate.isOpen"
@@ -204,7 +204,7 @@
                                             <p class="text-field" ng-if="onView || onApprove">{{document.keyValues.items}}</p>
                                             <select class="form-control" name="items" ng-model="document.keyValues.items"
                                                     ng-options="item.id as item.name for item in items" required
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Items --</option>
 
                                             </select>
@@ -223,7 +223,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Description"
                                                    ng-model="document.keyValues.description"
                                                    name="description" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.description.$dirty"
                                                          for="_form.description.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -238,7 +238,7 @@
 
                                             <p class="text-field" ng-if="onView || onApprove" ng-bind="document.dueDate | date:app.dateFormat"></p>
 
-                                            <p class="input-group" ng-if="onEdit">
+                                            <p class="input-group" ng-if="(onEdit || onAddNew) && !onView">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Due date"
                                                        required
                                                        ng-model="document.dueDate"
@@ -265,7 +265,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Copies"
                                                    ng-model="document.keyValues.copies"
                                                    name="copies" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.copies.$dirty"
                                                          for="_form.copies.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -284,7 +284,7 @@
                                                 &nbsp;</p>
                             <textarea type="text" class="form-control" placeholder="Enter Comments"
                                       ng-model="document.keyValues.comments"
-                                      name="comments" ng-if="onEdit"/>
+                                      name="comments" ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
@@ -294,7 +294,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading"><b>Attachments</b></div>
                             <div class="panel-body">
-                                <div class="form-group" ng-if="onEdit">
+                                <div class="form-group" ng-if="(onEdit || onAddNew) && !onView">
                                     <a class="btn btn-primary" ng-click="openUploadModal('main')"><i
                                             class="fa fa-cloud-upload"></i>
                                         Upload
@@ -322,7 +322,7 @@
                             <button ng-disabled="_form.$invalid || _form.$submitted"
                                     loading-button="_form.$submitted"
                                     class="btn btn-primary pull-right" type="submit"
-                                    ng-if="onEdit">Submit
+                                    ng-if="(onEdit || onAddNew) && !onView">Submit
                             </button>
                         </div>
                     </form>

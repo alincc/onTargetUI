@@ -35,6 +35,8 @@ define(function(require) {
                   userContext.updatePermissions(resp.featureList, resp.menuList);
                   projectContext.setProject(pj);
                   notifications.currentProjectChange({project: pj});
+
+                  $rootScope.$broadcast('onContact.getContactList');
                 });
             }
           };

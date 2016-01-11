@@ -9,18 +9,20 @@
   }
   .project-description {
     .panel-body {
-      display: table;
+      position: relative;
       width: 100%;
+      padding-left: 256px;
+      min-height: 256px;
       .project-image {
-        display: table-cell;
-        vertical-align: top;
-        padding-right: 15px;
+        position: absolute;
+        width: 241px;
+        top: 15px;
+        left: 15px;
         img {
           height: 226px;
         }
       }
       .project-info {
-        display: table-cell;
         vertical-align: top;
         width: 100%;
         h4 {
@@ -31,6 +33,18 @@
           }
           .project-chooser {
             display: inline-block;
+            width: 100%;
+            .project-name{
+              max-width: 87%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              display: inline-block;
+            }
+            .fa{
+              vertical-align: top;
+              margin-top: 3px !important;
+            }
             .dropdown-toggle {
               i {
                 margin: 0 5px;

@@ -62,7 +62,7 @@
                                             <ui-select append-to-body="true" multiple tagging
                                                        ng-model="document.keyValues.attention" theme="bootstrap"
                                                        ng-change="updateReceiverList()"
-                                                       require-multiple
+
                                                        name="attention" ng-if="(onEdit || onAddNew) && !onView">
                                                 <ui-select-match placeholder="Select Name">{{$item.name}}
                                                 </ui-select-match>
@@ -70,10 +70,10 @@
                                                     {{ct.name}}
                                                 </ui-select-choices>
                                             </ui-select>
-                                            <ng-messages ng-if="_form.attention.$dirty" for="_form.attention.$error">
-                                                <span class="help-block m-b-none text-danger" ng-message
-                                                      when="required">This is a required field.</span>
-                                            </ng-messages>
+                                            <!--<ng-messages ng-if="_form.attention.$dirty" for="_form.attention.$error">-->
+                                                <!--<span class="help-block m-b-none text-danger" ng-message-->
+                                                      <!--when="required">This is a required field.</span>-->
+                                            <!--</ng-messages>-->
                                         </div>
                                     </div>
                                     <div class="col-lg-6">

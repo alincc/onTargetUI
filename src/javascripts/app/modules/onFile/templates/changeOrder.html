@@ -22,7 +22,7 @@
                                                     ng-options="receiverName.userId as receiverName.name for receiverName in contacts"
                                                     required
                                                     ng-change="getCompanyOfUser()"
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Name --</option>
                                             </select>
                                             <ng-messages ng-if="_form.receiverId.$dirty"
@@ -43,7 +43,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Company Name"
                                                    ng-model="changeOrder.keyValues.company_name"
                                                    name="companyName" required readonly
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.companyName.$dirty"
                                                          for="_form.companyName.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -63,7 +63,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Change Order"
                                                    ng-model="changeOrder.keyValues.co"
                                                    name="co" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.co.$dirty"
                                                          for="_form.co.$error">
                                 <span class="help-block m-b-none text-danger" ng-message
@@ -80,7 +80,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Location"
                                                    ng-model="changeOrder.keyValues.location"
                                                    name="location" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.location.$dirty"
                                                          for="_form.location.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -99,7 +99,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Subject"
                                                    ng-model="changeOrder.keyValues.subject"
                                                    name="subject"
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                                             <p class="text-field" ng-if="onView||onApprove">{{changeOrder.dueDate|date:
                                                 app.dateFormat}}</p>
 
-                                            <p class="input-group" ng-if="onEdit">
+                                            <p class="input-group" ng-if="(onEdit || onAddNew) && !onView">
                                                 <input type="text" class="form-control" placeholder="Enter/Select Due date"
                                                        required
                                                        ng-model="changeOrder.dueDate"
@@ -142,7 +142,7 @@
                             <textarea type="text" class="form-control" placeholder="Enter Description of Scope"
                                       ng-model="changeOrder.keyValues.description"
                                       name="description"
-                                      ng-if="onEdit"/>
+                                      ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Contract Number"
                                                    ng-model="changeOrder.keyValues.contract_no"
                                                    name="contract_no" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.contract_no.$dirty"
                                                          for="_form.contract_no.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -177,7 +177,7 @@
                                             <p class="text-field" ng-if="onView || onApprove">
                                                 {{changeOrder.keyValues.date_created|date: app.dateFormat}}</p>
 
-                                            <p class="input-group" ng-if="onEdit">
+                                            <p class="input-group" ng-if="(onEdit || onAddNew) && !onView">
                                                 <input type="text" class="form-control"
                                                        placeholder="Enter/Select Date Created"
                                                        required
@@ -210,7 +210,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Contract Title"
                                                    ng-model="changeOrder.keyValues.contract_title"
                                                    name="contract_title"
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                         </div>
                                     </div>
                                 </div>
@@ -232,7 +232,7 @@
                                                     ng-model="changeOrder.keyValues.priority"
                                                     ng-options="priority.id as priority.name for priority in priorities"
                                                     required
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Priority --</option>
                                             </select>
                                             <ng-messages ng-if="_form.priority.$dirty"
@@ -251,7 +251,7 @@
                                                     ng-model="changeOrder.keyValues.discipline"
                                                     ng-options="discipline.id as discipline.name for discipline in disciplines"
                                                     required
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Discipline --</option>
                                             </select>
                                             <ng-messages ng-if="_form.discipline.$dirty"
@@ -272,7 +272,7 @@
                                                     ng-model="changeOrder.keyValues.category"
                                                     ng-options="category.id as category.name for category in categories"
                                                     required
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Category --</option>
                                             </select>
                                             <ng-messages ng-if="_form.category.$dirty"
@@ -300,7 +300,7 @@
                                                     ng-model="changeOrder.keyValues.schedule_impact"
                                                     ng-options="schedule_impact.id as schedule_impact.name for schedule_impact in scheduleImpacts"
                                                     required
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">-- Select Schedule Impact --</option>
                                             </select>
                                             <!--<input type="text" class="form-control" placeholder="Enter Schedule Impact"
@@ -322,7 +322,7 @@
                                                     ng-model="changeOrder.keyValues.cost_impact"
                                                     ng-options="cost_impact.id as cost_impact.name for cost_impact in costImpacts"
                                                     required
-                                                    ng-if="onEdit">
+                                                    ng-if="(onEdit || onAddNew) && !onView">
                                                 <option value="">&#45;&#45; Select Cost Impact &#45;&#45;</option>
                                             </select>
                                             <!--<input type="text" class="form-control" placeholder="Enter Cost Impact"
@@ -345,7 +345,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Time Impact"
                                                    ng-model="changeOrder.keyValues.time_impact"
                                                    name="time_impact" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.time_impact.$dirty"
                                                          for="_form.time_impact.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -371,7 +371,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Specification Section"
                                                    ng-model="changeOrder.keyValues.specification"
                                                    name="specification" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.specification.$dirty"
                                                          for="_form.specification.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -387,7 +387,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Drawing No."
                                                    ng-model="changeOrder.keyValues.drawing"
                                                    name="drawing" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.drawing.$dirty"
                                                          for="_form.drawing.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -405,7 +405,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Cost Code"
                                                    ng-model="changeOrder.keyValues.cost_code"
                                                    name="cost_code" required
-                                                   ng-if="onEdit"/>
+                                                   ng-if="(onEdit || onAddNew) && !onView"/>
                                             <ng-messages ng-if="_form.cost_code.$dirty"
                                                          for="_form.cost_code.$error">
                                                 <span class="help-block m-b-none text-danger" ng-message when="required">This is a required field.</span>
@@ -428,7 +428,7 @@
                                                            ng-model="cost.workDescription"
                                                            ng-repeat="cost in costGrid"
                                                            required
-                                                           ng-if="onEdit"/>
+                                                           ng-if="(onEdit || onAddNew) && !onView"/>
                                                 </div>
                                             </div>
                                             <div class="col-xs-4">
@@ -442,7 +442,7 @@
                                                            ng-model="cost.costCode"
                                                            ng-repeat="cost in costGrid"
                                                            required
-                                                           ng-if="onEdit"/>
+                                                           ng-if="(onEdit || onAddNew) && !onView"/>
                                                 </div>
                                             </div>
                                             <div class="col-xs-4">
@@ -457,7 +457,7 @@
                                                            required
                                                            ng-repeat="cost in costGrid"
                                                            ng-money min="0"
-                                                           ng-if="onEdit"/>
+                                                           ng-if="(onEdit || onAddNew) && !onView"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -470,7 +470,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row" ng-if="onEdit">
+                                <div class="row" ng-if="(onEdit || onAddNew) && !onView">
                                     <div class="col-xs-12">
                                         <div class="form-group pull-right">
                                             <a class="btn btn-primary btn-sm" ng-click="addCostGrid()">Add
@@ -494,7 +494,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading"><b>Attachments</b></div>
                             <div class="panel-body">
-                                <div class="form-group" ng-if="onEdit">
+                                <div class="form-group" ng-if="(onEdit || onAddNew) && !onView">
                                     <a class="btn btn-primary" ng-click="openUploadModal('main')"><i
                                             class="fa fa-cloud-upload"></i>
                                         Upload
@@ -522,7 +522,7 @@
                             <button ng-disabled="_form.$invalid || _form.$submitted"
                                     loading-button="_form.$submitted"
                                     class="btn btn-primary pull-right" type="submit"
-                                    ng-if="onEdit">Submit
+                                    ng-if="(onEdit || onAddNew) && !onView">Submit
                             </button>
                         </div>
                         <!--<div class="form-group">
