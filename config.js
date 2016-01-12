@@ -83,7 +83,7 @@ module.exports = {
       bim_user: 'bim@ontargetcloud.com',
       bim_password: 'admin',
       bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
-      bimServerAddress: 'http://216.14.121.204:8080'
+      bimServerAddress: 'http://52.70.82.38:8080/bimserver'
 
     },
     sagarmatha01: {
