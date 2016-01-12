@@ -20,8 +20,7 @@ define(function(require) {
           .state('app.pendingUserManagement', {
             url: '/pending-account-request',
             templateUrl: "pendingUserManagement/templates/pendingUserManagement.html",
-            controller: 'PendingUserManagementController',
-            authorization: false
+            controller: 'PendingUserManagementController'
           });
       }
     ]
