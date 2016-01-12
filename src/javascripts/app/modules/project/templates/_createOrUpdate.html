@@ -199,10 +199,11 @@
 
     <div class="col-xs-10">
         <input type="text" class="form-control" placeholder="Zip code" required
-               ng-model="projectModel.projectAddress.zip" name="zip"/>
+               ng-model="projectModel.projectAddress.zip" name="zip" ng-pattern="/(^\d{5}-?\d{4}$)|(^\d{5}$)/"/>
         <ng-messages ng-if="project_form.zip.$dirty"
                      for="project_form.zip.$error">
             <span class="help-block m-b-none text-danger" ng-message when="required">Please provide project address zip code</span>
+            <span class="help-block m-b-none text-danger" ng-message when="pattern">Zip code is not correct</span>
         </ng-messages>
     </div>
 </div>

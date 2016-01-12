@@ -25,7 +25,7 @@ module.exports = function(config) {
       "src/bower_components/angular-messages/angular-messages.js",
       "src/bower_components/angular-resource/angular-resource.js",
       "src/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
-      "src/js/ng-file-upload/dist/ng-file-upload-all.js",
+      "src/bower_components/ng-file-upload/ng-file-upload-all.js",
       //'src/bower_components/angular-moment/angular-moment.js',
       'src/bower_components/ui-router/release/angular-ui-router.js',
       "src/bower_components/angular-touch/angular-touch.js",

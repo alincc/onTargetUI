@@ -6,9 +6,9 @@ module.exports = {
   envs: {
     nois: {
       // UI Configuration
-      domain: 'http://demo.newoceaninfosys.com:3214/ontargetrs/services',           // Web UI Proxy api
-      baseUrl: 'http://demo.newoceaninfosys.com:3214',                              // Web UI domain
-      nodeServer: 'http://demo.newoceaninfosys.com:3215',                           // Node server domain
+      domain: 'http://nois2.newoceaninfosys.com:3214/ontargetrs/services',           // Web UI Proxy api
+      baseUrl: 'http://nois2.newoceaninfosys.com:3214',                              // Web UI domain
+      nodeServer: 'http://nois2.newoceaninfosys.com:3215',                           // Node server domain
       resourceUrl: 'https://ontarget-assets-test.s3.amazonaws.com',                 // Resource domain
       newBimServer: 'http://115.75.6.162:3216',                                     // Bim server domain
       pusher: {                                                                     //

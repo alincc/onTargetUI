@@ -33,7 +33,7 @@ define(function(require) {
         title: $scope.currenttask.title,
         description: $scope.currenttask.description,
         status: $scope.currenttask.status,
-        severity: $scope.currenttask.severity,
+        severity: $scope.currenttask.severity.taskPriorityId,
         startDate: $scope.currenttask.startDate,
         endDate: $scope.currenttask.endDate,
         projectId: $rootScope.activitySelected.projectId
@@ -108,7 +108,11 @@ define(function(require) {
             $rootScope.currentTask = angular.extend($rootScope.currentTask, {
               title: $scope.task.title,
               description: $scope.task.description,
-              severity: $scope.task.severity,
+              severity: {
+                taskPriorityId: $scope.task.severity,
+                code: $filter('taskSeverity')($scope.task.severity),
+                priority: $filter('taskSeverity')($scope.task.severity)
+              },
               status: $scope.task.status,
               endDate: $scope.task.endDate,
               startDate: $scope.task.startDate

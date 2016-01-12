@@ -93,6 +93,7 @@ define(function(require) {
           value.activeComment = false;
         });
         $scope.taskSelected = $rootScope.currentTask = task;
+        console.log($rootScope.currentTask);
 
         taskDetailsDefer = $q.defer();
         taskFactory.getTaskById(task.projectTaskId, taskDetailsDefer)

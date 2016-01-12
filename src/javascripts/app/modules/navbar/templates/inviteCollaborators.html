@@ -29,7 +29,7 @@
 
         <div class="col-xs-7">
           <input name="email" type="text" class="form-control" placeholder="Email"
-                 ng-model="email" required ng-pattern="/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/">
+                 ng-model="email" required ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/">
           <span class="text-danger help-block m-b-none" ng-show="form.email.$error.pattern">Email is not valid</span>
           <span class="text-danger help-block m-b-none" ng-show="form.email.$error.required && form.email.$dirty">Email is missing</span>
         </div>
@@ -167,9 +167,10 @@
           <label class="col-xs-3 col-xs-offset-1 control-label">Zip code <span class="label-required" ng-show="form.newZip.$error.required">*</span></label>
 
           <div class="col-xs-7">
-            <input name="newZip" type="text" class="form-control" placeholder="Zip code" ng-model="newCollaborator.zip"
+            <input name="newZip" type="text" class="form-control" placeholder="Zip code" ng-model="newCollaborator.zip" ng-pattern="/(^\d{5}-?\d{4}$)|(^\d{5}$)/"
                    required>
             <span class="text-danger help-block m-b-none" ng-show="form.newZip.$error.required && form.newZip.$dirty">Zip is missing</span>
+            <span class="text-danger help-block m-b-none" ng-show="form.newZip.$error.pattern && form.newZip.$dirty">Zip code is not correct</span>
           </div>
         </div>
       </div>

@@ -40,9 +40,17 @@ define(function(require) {
                    pushFactory,
                    appConstant,
                    $filter) {
+
+            //scroll to bottom
+            $timeout(function(){
+              var scroller = $customScroll.get('taskComment');
+              scroller.scrollTo('bottom');
+            });
+
             $scope.height = $scope.height || 210;
             $scope.app = appConstant.app;
             $scope.comments = $scope.task.comments;
+
             $scope.model = {
               comment: "",
               commentedBy: $rootScope.currentUserInfo.userId,
@@ -59,7 +67,7 @@ define(function(require) {
               $scope.model.commentedDate = $filter('datetime')(new Date());
               taskFactory.createNewComment($scope.model).then(
                 function(resp) {
-                  $scope.comments.push({
+                  $scope.task.comments.push({
                     comment: resp.data.taskComment.comment,
                     commentedBy: resp.data.taskComment.commentedBy.userId,
                     commentedDate: $scope.model.commentedDate,
@@ -84,9 +92,9 @@ define(function(require) {
 
             pushFactory.bind('project-' + $rootScope.currentProjectInfo.projectId + ':onTime:task-' + $scope.model.taskId, function(evt) {
               if(evt.name === 'onTimeAddComment') {
-                var found = _.find($scope.comments, {taskCommentId: evt.value.taskCommentId});
+                var found = _.find($scope.task.comments, {taskCommentId: evt.value.taskCommentId});
                 if(!found) {
-                  $scope.comments.push({
+                  $scope.task.comments.push({
                     comment: evt.value.comment,
                     commentedBy: evt.value.commentedBy,
                     commentedDate: evt.value.commentedDate,

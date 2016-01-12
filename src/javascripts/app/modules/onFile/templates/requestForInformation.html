@@ -59,14 +59,14 @@
                                                         ng-if="!$last">,&nbsp;</span>
                                                 </span>
                                             </p>
-                                            <ui-select append-to-body="true" multiple tagging
+
+                                            <ui-select append-to-body="true" multiple
                                                        ng-model="document.keyValues.attention" theme="bootstrap"
                                                        ng-change="updateReceiverList()"
 
                                                        name="attention" ng-if="(onEdit || onAddNew) && !onView">
-                                                <ui-select-match placeholder="Select Name">{{$item.name}}
-                                                </ui-select-match>
-                                                <ui-select-choices repeat="ct.userId as ct in contactNameList">
+                                                <ui-select-match placeholder="Select Name">{{$item.name}}</ui-select-match>
+                                                <ui-select-choices repeat="ct.userId as ct in contactNameList | filter:{name: $select.search}">
                                                     {{ct.name}}
                                                 </ui-select-choices>
                                             </ui-select>

@@ -102,8 +102,9 @@
 
                   <div class="col-xs-10">
                     <input required ng-model="company.address.zip" type="text" class="form-control"
-                           placeholder="Enter zip" name="zip"/>
+                           placeholder="Enter zip" name="zip" ng-pattern="/(^\d{5}-?\d{4}$)|(^\d{5}$)/"/>
                     <span class="text-danger help-block m-b-none" ng-show="form.zip.$error.required">Please provide Zip Code</span>
+                    <span class="text-danger help-block m-b-none" ng-show="form.zip.$error.pattern">Zip Code is not correct</span>
                   </div>
                 </div>
                 <div class="form-group">
