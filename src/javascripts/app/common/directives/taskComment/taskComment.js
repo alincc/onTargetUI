@@ -40,6 +40,13 @@ define(function(require) {
                    pushFactory,
                    appConstant,
                    $filter) {
+
+            //scroll to bottom
+            $timeout(function(){
+              var scroller = $customScroll.get('taskComment');
+              scroller.scrollTo('bottom');
+            });
+
             $scope.height = $scope.height || 210;
             $scope.app = appConstant.app;
             $scope.comments = $scope.task.comments;

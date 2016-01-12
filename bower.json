@@ -34,7 +34,6 @@
     "malihu-custom-scrollbar-plugin": "latest",
     "jquery-mousewheel": "latest",
     "ment.io": "~0.9.23",
-    "angular-ui-select": "0.12.1",
     "ngletteravatar": "latest",
     "angular-gantt": "latest",
     "angular-ui-tree": "latest",
@@ -50,5 +49,6 @@
     "crypto-js": "~3.1.5",
     "ng-table": "~0.8.3",
     "jstree": "~3.2.1",
+    "angular-ui-select": "~0.13.2"
   }
 }
