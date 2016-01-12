@@ -81,7 +81,7 @@ module.exports = {
       aws_s3_bucket: 'ontarget-assets-test',
       excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
       bim_user: 'ontargetintbim@ontargetcloud.com',
-      bim_password: 'ontargetint',
+      bim_password: '!ontargetintbim!',
       bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
       bimServerAddress: 'http://52.0.49.87:8080/bimserver'
 
