@@ -43,6 +43,8 @@ define(function(require) {
 
       $scope.attachments = [];
 
+      $scope.document = document;
+
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
         if(document.createdBy === userContext.authentication().userData.userId) {
@@ -161,14 +163,25 @@ define(function(require) {
         if($scope.changeOrder.documentId) {
           onFileFactory.getDocumentAttachmentsByDocumentId($scope.changeOrder.documentId).success(
             function(resp) {
+
               $scope.attachments = $scope.attachments.concat(resp.attachments);
               $scope.attachments = _.map($scope.attachments, function(el) {
                 var newEl = el;
                 newEl.uploaded = true;
                 return newEl;
               });
+
+
+
+              console.log('$scope.attachments', $scope.attachments);
             }
           );
+        }
+
+        if($scope.onView){
+          $scope.total = _.sum(document.gridKeyValues, function(n){
+            return n.amount;
+          });
         }
       };
 

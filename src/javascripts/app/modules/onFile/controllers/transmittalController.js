@@ -33,6 +33,7 @@ define(function(require) {
              $filter,
              document) {
 
+
       $scope.document = {
         keyValues: {}
       };
@@ -67,6 +68,7 @@ define(function(require) {
         $scope.onAddNew = true;
       }
 
+      console.log('document',  $scope.document);
       $scope.dueDate = {
         options: {
           formatYear: 'yyyy',

@@ -6,7 +6,7 @@
     <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)" active="true">
         <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF
         </button>
-        <div class="rfi-section">
+        <div class="rfi-section" ng-if="!onView">
             <div class="row">
                 <div class="col-md-12">
                     <form name="_form" no-validate class="form-validation" ng-submit="submit(_form)">
@@ -321,6 +321,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div ng-if="onView">
+            <div ng-include="'requestForInformation/templates/requestForInformationView.html'"></div>
         </div>
     </tab>
     <tab heading="Purchase Order" ng-click="openAction(actions.purchaseOrder)">

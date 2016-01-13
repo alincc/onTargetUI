@@ -25,7 +25,7 @@ module.exports = {
       concurrencyImageProcesses: 1,                                                 // Concurrency Image Process
       aws_s3_profile: 'default',                                                    // AWS Profile name
       aws_s3_bucket: 'ontarget-assets-test',                                        // AWS S3 Bucket name
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx', // Upload file to s3 manually, put it to assets folder, then copy the link
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx', // Upload file to s3 manually, put it to assets folder, then copy the link
       bim_user: 'bim@ontargetcloud.com',
       bim_password: 'admin',
       bimServer: 'http://localhost:9000/bim',
@@ -52,7 +52,7 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'default',
       aws_s3_bucket: 'ontarget-assets-test',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx',
       bim_user: 'bim@ontargetcloud.com',
       bim_password: 'admin',
       bimServer: 'http://localhost:9000/bim',
@@ -79,7 +79,7 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'default',
       aws_s3_bucket: 'ontarget-assets-test',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx',
       bim_user: 'ontargetintbim@ontargetcloud.com',
       bim_password: 'ontargetint',
       bimServer: 'http://int.app.ontargetcloud.com:9000/bim',
@@ -107,7 +107,7 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
       aws_s3_bucket: 'ontarget-assets',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx',
       bim_user: 'bim@ontargetcloud.com',
       bim_password: 'admin',
       bimServer: 'http://localhost:9000/bim',
@@ -134,7 +134,7 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
       aws_s3_bucket: 'ontarget-assets',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/ImportTemplate.xlsx',
+      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx',
       bim_user: 'bim@ontargetcloud.com',
       bim_password: 'admin',
       bimServer: 'http://localhost:9000/bim',

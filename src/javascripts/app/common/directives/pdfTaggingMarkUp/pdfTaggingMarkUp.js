@@ -127,6 +127,11 @@ define(function (require) {
 
           L.Icon.Default.imagePath = '/img/leaflet';
 
+          var layersBak = [];
+          var updateLayerBak = function(l){
+            layersBak.push(l);
+          };
+
           scope.listLayers = [];
           scope.selectedDoc.listLayer = scope.listLayers;
           scope.pdfTaggingMarkUp.containerHeight = elem[0].offsetHeight;
@@ -348,7 +353,7 @@ define(function (require) {
 
             map.addControl(drawControl);
 
-            function onDrawCreated(e, hideOpenPopup, ignoreToLayer) {
+            function onDrawCreated(e, hideOpenPopup, ignoreToLayer, cb) {
               var type = e.layerType,
                 layer = e.layer || e;
               var comments = e.comments;
@@ -597,6 +602,10 @@ define(function (require) {
               }
 
               scope.updatePageData();
+
+              if(cb){
+                cb(layer);
+              }
             }
 
             map.on('draw:created', onDrawCreated);
@@ -716,7 +725,7 @@ define(function (require) {
                         //rectangle2.addTo(map);
                         rectangle.layerType = t;
                         rectangle.projectFileTag = tag;
-                        onDrawCreated(rectangle, true, true);
+                        onDrawCreated(rectangle, true, true, updateLayerBak);
                         break;
                       }
                     case 'polygon':
@@ -741,7 +750,7 @@ define(function (require) {
                         //polygon2.addTo(map);
                         polygon.layerType = t;
                         polygon.projectFileTag = tag;
-                        onDrawCreated(polygon, true, true);
+                        onDrawCreated(polygon, true, true, updateLayerBak);
                         break;
                       }
                     case 'polyline':
@@ -766,7 +775,7 @@ define(function (require) {
                         //polyline2.addTo(map);
                         polyline.layerType = t;
                         polyline.projectFileTag = tag;
-                        onDrawCreated(polyline, true, true);
+                        onDrawCreated(polyline, true, true, updateLayerBak);
                         break;
                       }
                     case 'circle':
@@ -798,7 +807,7 @@ define(function (require) {
                         //circle2.addTo(map);
                         circle.layerType = t;
                         circle.projectFileTag = tag;
-                        onDrawCreated(circle, true, true);
+                        onDrawCreated(circle, true, true, updateLayerBak);
                         break;
                       }
                     case 'marker':
@@ -834,12 +843,26 @@ define(function (require) {
                         //
                         //scope.markers.push(markerObj);
 
-                        onDrawCreated(marker, true, true);
+                        onDrawCreated(marker, true, true, updateLayerBak);
                       }
                   }
                 }
               });
             }
+
+            scope.$on('layers.clear', function(){
+              editableLayers.eachLayer(function(l){
+                if(!_.some(layersBak, function(n){ return n.id === l.id; })){
+                  scope.listLayers = _.filter(scope.listLayers, function (sl) {
+                    return sl.id !== l.id;
+                  });
+
+                  editableLayers.removeLayer(l);
+                }
+              });
+
+              scope.updatePageData();
+            });
           }
 
           scope.addMarker = function () {

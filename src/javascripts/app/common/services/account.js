@@ -98,7 +98,11 @@ define(function(require) {
 
       //get profile
       services.userDetails = function(user) {
-        return $http.post(constant.domain + '/profile/getUserDetails', user);
+        return $http.post(constant.domain + '/profile/getUserDetails', user, {
+          headers: {
+            'Authorization': false
+          }
+        });
       };
 
       services.getUserProfileDetails = function(userId) {

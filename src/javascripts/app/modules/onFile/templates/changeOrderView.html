@@ -1,0 +1,426 @@
+<div class="submittal">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+            <div class="row">
+                <div class="col-md-6 col-xs-12 m-b-md">
+                    <div class="pdf-logo">
+                        <img src="img/logo3.jpg">
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12 m-b-md">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">FROM:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="title">
+                                <span ng-bind="document.fromUser.contact.firstName + ' ' + document.fromUser.contact.lastName"></span>
+                                <br/>
+                                <span ng-bind="document.fromUser.company.companyName"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">DATE:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="title">
+                                <span ng-bind="document.keyValues.date_created | date: 'MM/dd/yyyy'"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">ADDRESS:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="address" ng-bind="document.fromUser.company.address.address1"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">SUBMITTED TO:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="title" ng-bind="document.toUser.contact.firstName + ' ' + document.toUser.contact.lastName"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">COMPANY:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="address" ng-bind="document.fromUser.company.companyName"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pdf-nav m-b-lg">
+        <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1">
+            <strong>
+                Change Order
+            </strong>
+        </div>
+        <div class="col-md-4 col-xs-6 col-md-offset-4 col-xs-offset-2">
+            <strong>
+                <span class="order-number">Change order: #<span ng-bind="document.keyValues.co"></span></span>
+            </strong>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+            <div class="row">
+                <div class="col-md-2 col-xs-3">
+                    <strong>
+                <span class="text-default">
+                    SUBJECT:
+                </span>
+                    </strong>
+                </div>
+                <div class="col-md-10 col-xs-9">
+                    <div class="address" ng-bind="document.keyValues.subject">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-xs-3">
+                    <strong>
+                <span class="text-default">
+                    LOCATION:
+                </span>
+                    </strong>
+                </div>
+                <div class="col-md-10 col-xs-9">
+                    <div class="title" class="address" ng-bind="document.keyValues.location">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-xs-3">
+                    <strong>
+                <span class="text-default text-nowrap">
+                    DUE DATE:
+                </span>
+                    </strong>
+                </div>
+                <div class="col-md-10 col-xs-9">
+                    <div class="address" ng-bind="document.dueDate | date: 'MM/dd/yyyy'">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <strong>
+                <span class="text-default">
+                    DESCRIPTION OF SCOPE:
+                </span>
+                    </strong>
+                </div>
+            </div>
+            <div class="row m-b-md">
+                <div class="col-md-12 col-xs-12">
+                    <p class="title" ng-bind="document.keyValues.description">
+
+                    </p>
+                </div>
+            </div>
+
+            <hr class="line m-b-lg"/>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">PROJECT INFOMATION DETAIL</span>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="box">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Contract Number:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.contract_no"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Date Created:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title"  ng-bind="document.keyValues.date_created | date: 'MM/dd/yyyy'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Contract Title:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.contract_title"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">CHANGE ORDER DETAILS</span>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="box">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Priority:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.priority"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Discipline:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title"  ng-bind="document.keyValues.discipline"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Category:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.category"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">IMPACT</span>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="box">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Schedule Impact:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.schedule_impact"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Cost Impact:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.cost_impact"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Time Impact:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.time_impact"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">CONTRACT DOCUMENT DETAILS</span>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="box">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Specification Section:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.specification"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Drawing Number:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.drawing"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Cost Code:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title"  ng-bind="document.keyValues.cost_code"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">CHANGE DESCRIPTION</span>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="text-default">
+                                <th class="text-center">
+                                    Description
+                                </th>
+                                <th class="text-center">
+                                    Cost Code
+                                </th>
+                                <th class="text-center">
+                                    Amount
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-default" ng-repeat="grid in document.gridKeyValues">
+                                <td ng-bind="grid.workDescription">Additional Hours of 4D Modelling</td>
+                                <td class="text-right" ng-bind="grid.costCode.length ? grid.costCode : 'NA'"></td>
+                                <td class="text-right" ng-bind="grid.amount | currency"></td>
+                            </tr>
+                            <tr class="bg-light total">
+                                <td class="text-right" colspan="3">
+                                    <strong>
+                                        <span>TOTAL: <span ng-bind="total | currency"></span></span>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">
+                                            <strong>
+                                                <em>
+                                                    <span class="text-default">Approved By:</span>
+                                                </em>
+                                            </strong>
+                                            <em>
+                                                <span ng-bind="document.toUser.contact.firstName + ' ' + document.toUser.contact.lastName"></span>
+                                            </em>
+                                        </div>
+                                        <div class="col-md-6 col-xs-6 text-right">
+                                            <strong>
+                                                <em>
+                                                    <span class="text-default">Date:</span>
+                                                </em>
+                                            </strong>
+                                            <em>
+                                                <span ng-bind="document.keyValues.approveRejectDate | date: 'MM/dd/yyyy'"></span>
+                                            </em>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-2 m-b-xs">
+                    <span class="text-default">ATTACHMENTS:</span>
+                </div>
+                <div class="col-md-10">
+                    <div class="m-b-xs" ng-repeat="file in attachments" ng-if="!file.deleted">
+                        <a href="javascript: void(0)">
+                            <span class="file-name">
+                                <img ng-src="{{file.filePath | fileicon}}" alt=""/>
+                                <span ng-bind="file.filePath | fileName"></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
