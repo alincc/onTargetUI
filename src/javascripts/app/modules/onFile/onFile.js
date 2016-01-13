@@ -4,10 +4,14 @@ define(function(require) {
     uiRouter = require('uiRouter'),
     template = require('text!./templates/onFile.html'),
     purchaseOrderTemplate = require('text!./templates/purchaseOrder.html'),
+    purchaseOrderViewTemplate = require('text!./templates/purchaseOrderView.html'),
     changeOrderTemplate = require('text!./templates/changeOrder.html'),
+    changeOrderViewTemplate = require('text!./templates/changeOrderView.html'),
     viewDocumentTemplate = require('text!./templates/viewDocument.html'),
     requestForInformationTemplate = require('text!./templates/requestForInformation.html'),
+    requestForInformationViewTemplate = require('text!./templates/requestForInformationView.html'),
     transmittalTemplate = require('text!./templates/transmittal.html'),
+    transmittalViewTemplate = require('text!./templates/transmittalView.html'),
     uploadTemplate = require('text!./templates/upload.html'),
     deleteReponseTemplate = require('text!./templates/deleteResponse.html'),
     attachmentListTemplate = require('text!./templates/attachmentList.html'),
@@ -30,6 +34,7 @@ define(function(require) {
     onFileServiceModule = require('app/common/services/onFile'),
     companyServiceModule = require('app/common/services/company'),
     contactServiceModule = require('app/common/services/onContact'),
+    userServiceModule = require('app/common/services/user'),
     fileServiceModule = require('app/common/services/file'),
     uploadBoxModule = require('app/common/directives/uploadBox/uploadBox'),
     userContext = require('app/common/context/user'),
@@ -57,10 +62,14 @@ define(function(require) {
     '$templateCache', function($templateCache) {
       $templateCache.put('onFile/templates/onFile.html', template);
       $templateCache.put('purchaseOrder/templates/purchaseOrder.html', purchaseOrderTemplate);
+      $templateCache.put('purchaseOrder/templates/purchaseOrderView.html', purchaseOrderViewTemplate);
       $templateCache.put('changeOrder/templates/changeOrder.html', changeOrderTemplate);
+      $templateCache.put('changeOrder/templates/changeOrderView.html', changeOrderViewTemplate);
       $templateCache.put('viewDocument/templates/viewDocument.html', viewDocumentTemplate);
       $templateCache.put('requestForInformation/templates/requestForInformation.html', requestForInformationTemplate);
+      $templateCache.put('requestForInformation/templates/requestForInformationView.html', requestForInformationViewTemplate);
       $templateCache.put('transmittal/templates/transmittal.html', transmittalTemplate);
+      $templateCache.put('transmittal/templates/transmittalView.html', transmittalViewTemplate);
       $templateCache.put('onFile/templates/upload.html', uploadTemplate);
       $templateCache.put('onFile/templates/attachmentList.html', attachmentListTemplate);
       $templateCache.put('onFile/templates/deleteResponse.html', deleteReponseTemplate);
@@ -126,12 +135,16 @@ define(function(require) {
                 '$window',
                 'onFileFactory',
                 '$stateParams',
+                'accountFactory',
+                'companyFactory',
                 function($location,
                          $q,
                          $state,
                          $window,
                          onFileFactory,
-                         $stateParams) {
+                         $stateParams,
+                         accountFactory,
+                         companyFactory) {
                   var deferred = $q.defer();
                   //parse key values
                   function transformKeyValues(keyValues) {
@@ -171,8 +184,8 @@ define(function(require) {
                   if(!$stateParams.docId) {
                     deferred.resolve();
                   } else {
-                    onFileFactory.getDocumentById($stateParams.docId).success(
-                      function(resp) {
+                    onFileFactory.getDocumentById($stateParams.docId)
+                      .success(function(resp) {
                         var document = resp.document;
                         if(document.documentTemplate.documentTemplateId !== 2) {
                           $window.location.href = $state.href('app.onFile');
@@ -183,8 +196,29 @@ define(function(require) {
                         }
 
                         document.keyValues = keyValues;
+
+                        //get information
+                        accountFactory.userDetails({"userId": document.createdBy, "accountStatus": null}).then(function(value){
+                          document.fromUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.fromUser.company = company.data.company;
+                          });
+                        });
+
+                        accountFactory.userDetails({"userId": document.keyValues.receiverId, "accountStatus": null}).then(function(value){
+                          document.toUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.toUser.company = company.data.company;
+                          });
+                        });
+
                         deferred.resolve(document);
-                      }).error(function(error) {
+                      })
+                      .error(function(error) {
                         $location.search('taskId', null);
                         deferred.resolve();
                       });
@@ -206,12 +240,16 @@ define(function(require) {
                 '$window',
                 'onFileFactory',
                 '$stateParams',
+                'accountFactory',
+                'companyFactory',
                 function($location,
                          $q,
                          $state,
                          $window,
                          onFileFactory,
-                         $stateParams) {
+                         $stateParams,
+                         accountFactory,
+                         companyFactory) {
                   var deferred = $q.defer();
 
                   //parse key values
@@ -264,6 +302,26 @@ define(function(require) {
                         }
 
                         document.keyValues = keyValues;
+
+                        //get information
+                        accountFactory.userDetails({"userId": document.createdBy, "accountStatus": null}).then(function(value){
+                          document.fromUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.fromUser.company = company.data.company;
+                          });
+                        });
+
+                        accountFactory.userDetails({"userId": document.keyValues.receiverId, "accountStatus": null}).then(function(value){
+                          document.toUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.toUser.company = company.data.company;
+                          });
+                        });
+
                         deferred.resolve(document);
                       }).error(function(error) {
                         $location.search('taskId', null);
@@ -287,12 +345,16 @@ define(function(require) {
                 '$window',
                 'onFileFactory',
                 '$stateParams',
+                'accountFactory',
+                'companyFactory',
                 function($location,
                          $q,
                          $state,
                          $window,
                          onFileFactory,
-                         $stateParams) {
+                         $stateParams,
+                         accountFactory,
+                         companyFactory) {
                   var deferred = $q.defer();
 
                   //parse key values
@@ -345,6 +407,26 @@ define(function(require) {
                         }
 
                         document.keyValues = keyValues;
+
+                        //get information
+                        accountFactory.userDetails({"userId": document.createdBy, "accountStatus": null}).then(function(value){
+                          document.fromUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.fromUser.company = company.data.company;
+                          });
+                        });
+
+                        accountFactory.userDetails({"userId": document.keyValues.receiverId, "accountStatus": null}).then(function(value){
+                          document.toUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.toUser.company = company.data.company;
+                          });
+                        });
+
                         deferred.resolve(document);
                       }).error(function(error) {
                         $location.search('taskId', null);
@@ -407,12 +489,16 @@ define(function(require) {
                 '$window',
                 'onFileFactory',
                 '$stateParams',
+                'accountFactory',
+                'companyFactory',
                 function($location,
                          $q,
                          $state,
                          $window,
                          onFileFactory,
-                         $stateParams) {
+                         $stateParams,
+                         accountFactory,
+                         companyFactory) {
                   var deferred = $q.defer();
 
                   //parse key values
@@ -465,6 +551,26 @@ define(function(require) {
                         }
 
                         document.keyValues = keyValues;
+
+                        //get information
+                        accountFactory.userDetails({"userId": document.createdBy, "accountStatus": null}).then(function(value){
+                          document.fromUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.fromUser.company = company.data.company;
+                          });
+                        });
+
+                        accountFactory.userDetails({"userId": document.keyValues.receiverId, "accountStatus": null}).then(function(value){
+                          document.toUser = value.data.user;
+                          companyFactory.get({
+                            "companyId" : value.data.user.contact.company.companyId
+                          }).then(function(company) {
+                            document.toUser.company = company.data.company;
+                          });
+                        });
+
                         deferred.resolve(document);
                       }).error(function(error) {
                         $location.search('taskId', null);

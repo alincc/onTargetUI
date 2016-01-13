@@ -44,9 +44,8 @@ define(function(require) {
              toaster,
              pushFactory,
              taskFactory) {
-
       var getFileId = function() {
-        if($scope.parentDocument) {
+          if($scope.parentDocument) {
           return $scope.parentDocument.fileId;
         } else {
           return $scope.selectedDoc.fileId;
@@ -181,14 +180,16 @@ define(function(require) {
       };
 
       $scope.cancelEdit = function() {
-        _.each($scope.pdfImagePages, function(el) {
-          delete el.tagList;
-          delete el.layers;
-          delete el.width;
-          delete el.height;
-          delete el.scale;
-          delete el.tagList;
-        });
+        $rootScope.$broadcast('layers.clear');
+
+        //_.each($scope.pdfImagePages, function(el) {
+        //  delete el.layers;
+        //  delete el.width;
+        //  delete el.height;
+        //  delete el.scale;
+        //  delete el.tagList;
+        //});
+
         $scope.isEdit = false;
       };
 

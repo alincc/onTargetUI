@@ -1,0 +1,347 @@
+<div class="submittal">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+            <div class="row">
+                <div class="col-md-6 col-xs-12 m-b-md">
+                    <div class="pdf-logo">
+                        <img src="img/logo3.jpg">
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12 m-b-md">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">FROM:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="title">
+                                <span ng-bind="document.fromUser.contact.firstName + ' ' + document.fromUser.contact.lastName"></span>
+                                <br/>
+                                <span ng-bind="document.fromUser.company.companyName"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">DATE:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="title">
+                                <span ng-bind="document.keyValues.date_created | date: 'MM/dd/yyyy'"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">ADDRESS:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="address" ng-bind="document.fromUser.company.address.address1"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">SUBMITTED TO:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="title" ng-bind="document.toUser.contact.firstName + ' ' + document.toUser.contact.lastName"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">COMPANY:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="address" ng-bind="document.fromUser.company.companyName"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <span class="text-info">SENT VIA:</span>
+                        </div>
+                        <div class="col-md-9 col-xs-9">
+                            <div class="title" ng-bind="document.keyValues.sent_via"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pdf-nav m-b-lg">
+        <div class="col-md-3 col-xs-3 col-md-offset-1 col-xs-offset-1">
+            <strong>
+                TRANSMITTAL
+            </strong>
+        </div>
+        <div class="col-md-4 col-xs-6 col-md-offset-4 col-xs-offset-2">
+            <strong>
+                <span class="order-number">TRANSMITTAL: #<span ng-bind="document.keyValues.transmittal"></span></span>
+            </strong>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+            <div class="row">
+                <div class="col-md-2 col-xs-3">
+                    <strong>
+                <span class="text-default">
+                    SUBJECT:
+                </span>
+                    </strong>
+                </div>
+                <div class="col-md-10 col-xs-9">
+                    <div class="title" ng-bind="document.keyValues.subject">
+
+                    </div>
+                </div>
+            </div>
+
+            <hr class="line m-b-lg"/>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">SUBMITTED FOR:</span>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.approval === 'YES'"/>
+                        <span class="text-info">Approval</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.for_use === 'YES'" />
+                        <span class="text-info">For Use</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.as_requested === 'YES'" />
+                        <span class="text-info">As Requested</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.review_and_comment === 'YES'"/>
+                        <span class="text-info">Request & Comment</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.further_processing === 'YES'" />
+                        <span class="text-info">Further Proccessing</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">ACTION AS NOTED:</span>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.out_for_signature === 'YES'" />
+                        <span class="text-info">Out for Signature</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.approve_as_submitted === 'YES'" />
+                        <span class="text-info">Approve as Submitted</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.approve_as_noted === 'YES'"/>
+                        <span class="text-info">Approve as Noted</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.submit === 'YES'" />
+                        <span class="text-info">Submit</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.resubmitted === 'YES'" />
+                        <span class="text-info">Re-Submitted</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.returned === 'YES'"/>
+                        <span class="text-info">Return</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.returned_for_corrections === 'YES'" />
+                        <span class="text-info">Return for Correction</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.resubmitt === 'YES'"/>
+                        <span class="text-info">Re-Submit</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.received_as_noted === 'YES'" />
+                        <span class="text-info">Recevied as Noted</span>
+                    </label>
+                </div>
+
+
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.due_by === 'YES'" />
+                        <span class="text-info">Due By</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.received_by === 'YES'"/>
+                        <span class="text-info">Recevied By</span>
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="change">
+                        <input type="checkbox" disabled="disabled" ng-checked="document.keyValues.sent_date === 'YES'" />
+                        <span class="text-info">Sent Date</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">PROJECT INFOMATION DETAIL</span>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="box">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Received:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.received_by_date | date : 'MM/dd/yyyy'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Items:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.items"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Sent:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="address" ng-bind="document.keyValues.sent_by_date | date : 'MM/dd/yyyy'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Description:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="address" ng-bind="document.keyValues.description"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <strong>
+                                            <span class="text-default">Due Date:</span>
+                                        </strong>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        <div class="title" ng-bind="document.keyValues.dueDate | date : 'MM/dd/yyyy'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-xs-12 m-b-xs">
+                    <span class="text-default">COMMENTS:</span>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="description" ng-bind="document.keyValues.comments">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-6 col-xs-6">
+                    <strong>
+                        <em>
+                            <span class="text-default">Approved By:</span>
+                        </em>
+                    </strong>
+                    <em>
+                        <span ng-bind="document.toUser.contact.firstName + ' ' + document.toUser.contact.lastName"></span>
+                    </em>
+                </div>
+                <div class="col-md-6 col-xs-6 text-right">
+                    <strong>
+                        <em>
+                            <span class="text-default">Date:</span>
+                        </em>
+                    </strong>
+                    <em>
+                        <span ng-bind="document.keyValues.approveRejectDate | date: 'MM/dd/yyyy'"></span>
+                    </em>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-md-2 m-b-xs">
+                    <span class="text-default">ATTACHMENTS:</span>
+                </div>
+                <div class="col-md-10">
+                    <div class="m-b-xs" ng-repeat="file in attachments" ng-if="!file.deleted">
+                        <a href="javascript: void(0)">
+                            <span class="file-name">
+                                <img ng-src="{{file.filePath | fileicon}}" alt=""/>
+                                <span ng-bind="file.filePath | fileName"></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -20,7 +20,8 @@ define(function(require) {
       'common.services.onBim',
       'common.services.userNotifications',
       'common.services.mock',
-      'common.services.push'
+      'common.services.push',
+      'common.services.user'
     ]);
   return module;
 });

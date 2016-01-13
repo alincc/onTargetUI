@@ -235,6 +235,18 @@ define(function(require) {
 
           loadDocumentAttachments(true);
         }
+
+        if($scope.onView){
+          $scope.rfiDocument = document;
+          $scope.attentions = _.filter($scope.contactNameList, function(n){
+            return _.some(document.keyValues.attention, function(n1){
+              return n.userId === n1;
+            });
+          });
+
+
+          console.log('rfiDocument', $scope.rfiDocument);
+        }
       };
 
       $scope.submit = function(form) {

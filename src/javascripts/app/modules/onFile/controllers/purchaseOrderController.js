@@ -39,6 +39,8 @@ define(function(require) {
       $scope.attachments = [];
       $scope.isExporting = false;
 
+      $scope.document = document;
+
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
         if(document.createdBy === userContext.authentication().userData.userId) {

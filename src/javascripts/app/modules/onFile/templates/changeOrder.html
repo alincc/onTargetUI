@@ -3,7 +3,7 @@
     </tab>
     <tab heading="Change Order" ng-click="openAction(actions.changeOrder)" active="true">
         <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF</button>
-        <div>
+        <div ng-if="!onView">
             <div class="row">
                 <div class="col-md-12">
                     <form name="_form" no-validate class="form-validation" ng-submit="submit(_form)">
@@ -532,6 +532,9 @@
                     </form>
                 </div>
             </div>
+        </div>
+        <div ng-if="onView" ng-include="'changeOrder/templates/changeOrderView.html'">
+
         </div>
     </tab>
     <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)">

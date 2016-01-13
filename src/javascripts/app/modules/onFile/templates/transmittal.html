@@ -10,7 +10,7 @@
     </tab>
     <tab heading="Transmittal" ng-click="openAction(actions.transmittal)" active="true">
         <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF</button>
-        <div>
+        <div ng-if="!onView">
             <div class="row">
                 <div class="col-md-12">
                     <form name="_form" no-validate class="form-validation" ng-submit="submit(_form)" novalidate>
@@ -328,6 +328,10 @@
                     </form>
                 </div>
             </div>
+        </div>
+
+        <div ng-if="onView">
+            <div ng-include="'transmittal/templates/transmittalView.html'"></div>
         </div>
     </tab>
 </tabset>

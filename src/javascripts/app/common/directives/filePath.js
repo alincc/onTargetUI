@@ -24,6 +24,11 @@ define(function(require) {
             showNoImage();
           } else {
             $timeout(function() {
+              if(!attrs.path.length) {
+                showNoImage();
+                return;
+              }
+
               var avatarUrl = constant.resourceUrl + '/' + attrs.path;
               if(/^\//.test(attrs.path)) {
                 avatarUrl = constant.resourceUrl + attrs.path;
