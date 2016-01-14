@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-6 col-xs-12 m-b-md">
                     <div class="pdf-logo">
-                        <img src="img/logo3.jpg">
+                        <img ng-src="{{document.fromUser.company.companyLogoPath | filePath}}">
                     </div>
                 </div>
                 <div class="col-md-6 col-xs-12 m-b-md">
@@ -273,17 +273,11 @@
                     <span class="text-default">ATTACHMENTS:</span>
                 </div>
                 <div class="col-md-10">
-                    <div class="m-b-xs" ng-repeat="file in attachments" ng-if="!file.deleted">
-                        <a href="javascript: void(0)">
-                            <span class="file-name">
-                                <img ng-src="{{file.filePath | fileicon}}" alt=""/>
-                                <span ng-bind="file.filePath | fileName"></span>
-                            </span>
-                        </a>
-                    </div>
+                    <div pdf-attachment-list="attachments"></div>
                 </div>
 
             </div>
     </div>
 
+</div>
 </div>

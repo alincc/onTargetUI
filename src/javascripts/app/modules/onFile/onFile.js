@@ -15,10 +15,12 @@ define(function(require) {
     uploadTemplate = require('text!./templates/upload.html'),
     deleteReponseTemplate = require('text!./templates/deleteResponse.html'),
     attachmentListTemplate = require('text!./templates/attachmentList.html'),
+    pdfAttachmentListTemplate = require('text!./templates/pdfAttachmentList.html'),
     allDueDateFilterTpl = require('text!./templates/allDueDateFilter.html'),
     submittalDueDateFilterTpl = require('text!./templates/submittalDueDateFilter.html'),
     approvalDueDateFilterTpl = require('text!./templates/approvalDueDateFilter.html'),
     attachmentListDirective = require('./directives/attachmentList'),
+    pdfAttachmentListDirective = require('./directives/pdfAttachmentList'),
     controller = require('./controllers/onFileController'),
     purchaseOrderController = require('./controllers/purchaseOrderController'),
     changeOrderController = require('./controllers/changeOrderController'),
@@ -72,6 +74,7 @@ define(function(require) {
       $templateCache.put('transmittal/templates/transmittalView.html', transmittalViewTemplate);
       $templateCache.put('onFile/templates/upload.html', uploadTemplate);
       $templateCache.put('onFile/templates/attachmentList.html', attachmentListTemplate);
+      $templateCache.put('onFile/templates/pdfAttachmentList.html', pdfAttachmentListTemplate);
       $templateCache.put('onFile/templates/deleteResponse.html', deleteReponseTemplate);
       $templateCache.put('onFile/templates/allDueDateFilter.html', allDueDateFilterTpl);
       $templateCache.put('onFile/templates/submittalDueDateFilter.html', submittalDueDateFilterTpl);
@@ -88,6 +91,7 @@ define(function(require) {
   module.controller('DeleteResponseController', deleteResponseController);
 
   module.directive('attachmentList', attachmentListDirective);
+  module.directive('pdfAttachmentList', pdfAttachmentListDirective);
 
   module.config([
       '$stateProvider',

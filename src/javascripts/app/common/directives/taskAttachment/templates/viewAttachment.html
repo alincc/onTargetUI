@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body">
     <pdf-viewer src="{{trustSrc(filePath)}}" ng-if="isPdf"></pdf-viewer>
-    <img ng-if="isImage" ng-src="{{filePath}}"/>
+    <img ng-if="isImage" file-path path="{{filePath}}"/>
     <p ng-if="!isImage && !isPdf">Sorry, this kind of file not support preview.</p>
 </div>
 <div class="modal-footer">

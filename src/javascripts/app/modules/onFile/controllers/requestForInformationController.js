@@ -243,9 +243,10 @@ define(function(require) {
               return n.userId === n1;
             });
           });
+        }
 
-
-          console.log('rfiDocument', $scope.rfiDocument);
+        if($scope.onEdit){
+          $scope.document.keyValues.priority = parseInt($scope.document.keyValues.priority);
         }
       };
 

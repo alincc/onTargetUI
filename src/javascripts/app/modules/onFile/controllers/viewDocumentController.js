@@ -2,8 +2,29 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     moment = require('moment');
-  var controller = ['$scope', '$rootScope', 'notifications', 'onFileFactory', 'userContext', 'documentFactory', 'appConstant', '$state', 'permissionFactory', 'NgTableParams', '$filter',
-    function($scope, $rootScope, notifications, onFileFactory, userContext, documentFactory, appConstant, $state, permissionFactory, NgTableParams, $filter) {
+  var controller = [
+    '$scope',
+    '$rootScope',
+    'notifications',
+    'onFileFactory',
+    'userContext',
+    'documentFactory',
+    'appConstant',
+    '$state',
+    'permissionFactory',
+    'NgTableParams',
+    '$filter',
+    function($scope,
+             $rootScope,
+             notifications,
+             onFileFactory,
+             userContext,
+             documentFactory,
+             appConstant,
+             $state,
+             permissionFactory,
+             NgTableParams,
+             $filter) {
 
       $scope.app = appConstant.app;
       $scope.isLoading = true;

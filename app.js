@@ -611,7 +611,7 @@ app.post('/ontargetrs/services/document/status', function(req, res) {
 
         _.each(document.keyValues, function(el) {
           if(/^attention\d+/.test(el.key)) {
-            attention.push(el.value);
+            attention.push(el.value.toString());
           }
           else {
             var value = el.value;
@@ -626,11 +626,14 @@ app.post('/ontargetrs/services/document/status', function(req, res) {
 
         if(parsedKeyValues.receiverId || parsedKeyValues.username) {
           // Receiver
-          attention.push(parsedKeyValues.receiverId ? parsedKeyValues.receiverId : parsedKeyValues.username);
+          attention.push((parsedKeyValues.receiverId ? parsedKeyValues.receiverId : parsedKeyValues.username).toString());
         }
 
         // Creator
-        attention.push(document.createdBy);
+        attention.push(document.createdBy.toString());
+
+        // Uniq value
+        attention = _.uniq(attention);
 
         switch(document.documentTemplate.documentTemplateId) {
           case 1: // PO

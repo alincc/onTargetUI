@@ -183,6 +183,10 @@ define(function(require) {
             return n.amount;
           });
         }
+
+        if($scope.onEdit){
+          $scope.document.keyValues.priority = parseInt($scope.document.keyValues.priority);
+        }
       };
 
       $scope.submit = function(form) {

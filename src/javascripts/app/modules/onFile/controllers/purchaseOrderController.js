@@ -41,6 +41,9 @@ define(function(require) {
 
       $scope.document = document;
 
+
+      console.log('document', document);
+
       //user action : view, edit, create, approve
       var getUserAction = function(document) {
         if(document.createdBy === userContext.authentication().userData.userId) {
@@ -137,6 +140,10 @@ define(function(require) {
               });
             }
           );
+        }
+
+        if($scope.onEdit){
+          $scope.document.keyValues.priority = parseInt($scope.document.keyValues.priority);
         }
       };
 

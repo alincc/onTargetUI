@@ -2,7 +2,7 @@
     <tab heading="View Document" ng-click="openAction(actions.viewDocument)">
     </tab>
     <tab heading="Change Order" ng-click="openAction(actions.changeOrder)" active="true">
-        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF</button>
+        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView" ng-disabled="isExporting">Export PDF</button>
         <div ng-if="!onView">
             <div class="row">
                 <div class="col-md-12">

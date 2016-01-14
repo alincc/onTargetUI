@@ -132,6 +132,7 @@ define(function() {
             $state.go('app.projectlist');
           }, function(err) {
             $scope.onSubmit = false;
+            $scope.project_form.$setPristine();
             console.log(err);
           });
         };

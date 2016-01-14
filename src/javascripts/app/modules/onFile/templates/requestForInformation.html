@@ -4,7 +4,7 @@
     <tab heading="Change Order" ng-click="openAction(actions.changeOrder)">
     </tab>
     <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)" active="true">
-        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView || onApprove || onEdit" ng-disabled="isExporting">Export PDF
+        <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView" ng-disabled="isExporting">Export PDF
         </button>
         <div class="rfi-section" ng-if="!onView">
             <div class="row">
@@ -111,7 +111,6 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="label-field">Priority</label>
-
                                             <p class="text-field" ng-if="onView||onApprove">
                                                 {{document.keyValues.priority}}</p>
                                             <select class="form-control" name="priority"
