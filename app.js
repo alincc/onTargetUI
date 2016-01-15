@@ -36,7 +36,7 @@ var folder = myArgs[1] || 'app';
 var cors = require('cors');
 var app = express();
 var API_SERVER = 'http://int.api.ontargetcloud.com:8080/ontargetrs/services';
-var BIM_SERVER = 'http://216.14.121.204:8080';
+var BIM_SERVER = 'http://52.0.49.87:8080/bimserver';
 
 // Config
 app.set('port', port);

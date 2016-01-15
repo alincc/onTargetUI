@@ -43,7 +43,7 @@
 <script>
     function Project(containerDiv, main, project) {
         var othis = this;
-        var commentViewPermission = Global.authenticationData ? jQuery.grep(Global.authenticationData.userData.featureListPermission, function(el) {
+        var commentViewPermission = Global.permissionData ? jQuery.grep(Global.permissionData.featureListPermissions, function(el) {
             return el.featureKey === 'ONBIM_COMMENT_VIEW';
         }) : [];
         var isAllowViewComment = commentViewPermission.length > 0;

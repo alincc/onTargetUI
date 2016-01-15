@@ -26,10 +26,10 @@ module.exports = {
       aws_s3_profile: 'default',                                                    // AWS Profile name
       aws_s3_bucket: 'ontarget-assets-test',                                        // AWS S3 Bucket name
       excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx', // Upload file to s3 manually, put it to assets folder, then copy the link
-      bim_user: 'bim@ontargetcloud.com',
-      bim_password: 'admin',
+      bim_user: 'ontargetintbim@ontargetcloud.com',
+      bim_password: '!ontargetintbim!',
       bimServer: 'http://localhost:9000/bim',
-      bimServerAddress: 'http://216.14.121.204:8080'
+      bimServerAddress: 'http://52.0.49.87:8080/bimserver'
     },
     local: {
       domain: 'http://localhost:9000/ontargetrs/services',

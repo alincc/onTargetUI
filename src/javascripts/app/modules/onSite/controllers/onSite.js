@@ -66,7 +66,9 @@ define(function(require) {
               .success(function(resp) {
                 $scope.isLoading = false;
                 $scope.categories = resp.categories;
+
                 setCategoryNameOnPageLoad();
+
                 _.forEach($scope.categories, function(category) {
                   category.count = 0;
                 });
@@ -76,7 +78,6 @@ define(function(require) {
                   var category = _.find($scope.categories, function(cat) {
                     return cat.id === doc.projectFileCategoryId.projectFileCategoryId;
                   });
-
                   category.count += 1;
                 });
               })
@@ -232,11 +233,9 @@ define(function(require) {
 
       // Events
       notifications.onCurrentProjectChange($scope, function(agrs) {
-        $scope.isPreview = false;
-        $scope.selectedDoc = null;
         $scope.isLoading = true;
-        $scope.comments = [];
-        $scope.uploadedDocumentList = $scope.uploadedDocumentArrangedList = [];
+        $scope.uploadedDocumentList = [];
+        $scope.categories=[];
         getUploadedDocumentList();
       });
 

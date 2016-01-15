@@ -309,9 +309,32 @@
                             if(authenticationData) {
                                 authenticationData = jQuery.parseJSON(authenticationData.replace(/^(\"|\')|(\"|\')$/g, ''));
                                 authenticationData.userData = authenticationData.userData || {};
-                                authenticationData.userData.featureListPermission = authenticationData.userData.featureListPermission || [];
                             }
                             return authenticationData;
+                        };
+
+                        var getPermissionData = function(){
+                            var storage = (typeof window.localStorage === 'undefined') ? undefined : window.localStorage;
+                            var supportedLocalStorage = (typeof storage !== 'undefined');
+                            try {
+                                localStorage.setItem('1', '2');
+                                localStorage.removeItem('1');
+                            }
+                            catch(err) {
+                                supportedLocalStorage = false;
+                            }
+                            var permissionData = null;
+                            if(supportedLocalStorage) {
+                                permissionData = localStorage.getItem("permissionData")
+                            } else {
+                                permissionData = $.cookie("permissionData");
+                            }
+                            if(permissionData) {
+                                permissionData = jQuery.parseJSON(permissionData.replace(/^(\"|\')|(\"|\')$/g, ''));
+                                permissionData.menuListPermissions = permissionData.menuListPermissions || {};
+                                permissionData.featureListPermissions = permissionData.featureListPermissions || [];
+                            }
+                            return permissionData;
                         };
 
                         var getProjectData = function() {
@@ -347,6 +370,7 @@
                             if(token != null) {
                                 // Save authentication data to global
                                 Global.authenticationData = getAuthenticationData();
+                                Global.permissionData = getPermissionData();
                                 Global.projectData = getProjectData();
                                 Global.bimServerApi.setToken(token, function() {
                                     $(".indexcontainer").load(Global.templateDir + "main.html", function() {

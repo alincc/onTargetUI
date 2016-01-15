@@ -163,17 +163,13 @@ define(function(require) {
         if($scope.changeOrder.documentId) {
           onFileFactory.getDocumentAttachmentsByDocumentId($scope.changeOrder.documentId).success(
             function(resp) {
-
               $scope.attachments = $scope.attachments.concat(resp.attachments);
               $scope.attachments = _.map($scope.attachments, function(el) {
                 var newEl = el;
                 newEl.uploaded = true;
+                newEl.isImage = /(jpg|jpeg|png|bmp)$/i.test(newEl.filePath);
                 return newEl;
               });
-
-
-
-              console.log('$scope.attachments', $scope.attachments);
             }
           );
         }

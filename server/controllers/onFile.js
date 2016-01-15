@@ -65,13 +65,20 @@ module.exports = {
               url: config.PROXY_URL + '/company/getCompanyInfo'
             }, function(err, response) {
               if(!err) {
-                resolve(string.join('/', config.resource_domain, response.body.company.companyLogoPath));
+                resolve({
+                  path: string.join('/', config.resource_domain, response.body.company.companyLogoPath),
+                  key: response.body.company.companyLogoPath
+                });
               } else {
-                resolve('');
+                resolve({
+                  path: ''
+                });
               }
             });
           } else {
-            resolve('');
+            resolve({
+              path: ''
+            });
           }
         });
       });
@@ -115,6 +122,19 @@ module.exports = {
       });
       attachmentHtml += '</table>';
       return attachmentHtml;
+    }
+
+    function validateCompanyLogo(ipt) {
+      return new Promise(function(resolve, reject) {
+        aws.s3.isExists(ipt)
+          .then(function() {
+            // Exits
+            resolve(string.join('/', config.resource_domain, ipt));
+          }, function() {
+            // Not exits
+            resolve(string.join('/', config.domain, 'server', 'assets', 'img', 'no-image.png'));
+          });
+      });
     }
 
     function failure(err) {
@@ -171,30 +191,32 @@ module.exports = {
       //    failure(error);
       //  })
       //  .on("finish", success);
+      validateCompanyLogo(data.companyLogoKey)
+        .then(function(companyLogoPath) {
+          var queryString = 'doctype=po&' +
+            'v_logo=' + companyLogoPath + '&' +
+            'v_fromFirstName=' + data.creator.contact.firstName + '&' +
+            'v_fromLastName=' + data.creator.contact.lastName + '&' +
+            'v_fromCompany=' + data.creator.companyName + '&' +
+            'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
+            'v_address=' + data.creator.companyAddress + '&' +
+            'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
+            'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
+            'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
+            'v_id=' + data.keyValues.PO;
 
-      var queryString = 'doctype=po&' +
-        'v_logo=' + data.companyLogoPath + '&' +
-        'v_fromFirstName=' + data.creator.contact.firstName + '&' +
-        'v_fromLastName=' + data.creator.contact.lastName + '&' +
-        'v_fromCompany=' + data.creator.companyName + '&' +
-        'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
-        'v_address=' + data.creator.companyAddress + '&' +
-        'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
-        'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
-        'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
-        'v_id=' + data.keyValues.PO;
-
-      aws.s3.removeFileIfExists(key)
-        .then(function() {
-          aws.s3.upload(wkhtmltopdf(html, {
-            pageSize: 'letter',
-            "T": "60mm",
-            headerHtml: config.domain + '/server/assets/templates/header.html?'+ encodeURI(queryString)
-          }), key)
-            .then(success, failure);
-        }, function() {
-          console.log('Cannot delete file from S3');
-          failure();
+          aws.s3.removeFileIfExists(key)
+            .then(function() {
+              aws.s3.upload(wkhtmltopdf(html, {
+                pageSize: 'letter',
+                "T": "60mm",
+                headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
+              }), key)
+                .then(success, failure);
+            }, function() {
+              console.log('Cannot delete file from S3');
+              failure();
+            });
         });
     }
 
@@ -266,32 +288,34 @@ module.exports = {
       //    failure(error);
       //  })
       //  .on("finish", success);
+      validateCompanyLogo(data.companyLogoKey)
+        .then(function(companyLogoPath) {
+          var queryString = 'doctype=co&' +
+            'v_logo=' + companyLogoPath + '&' +
+            'v_fromFirstName=' + data.creator.contact.firstName + '&' +
+            'v_fromLastName=' + data.creator.contact.lastName + '&' +
+            'v_fromCompany=' + data.creator.companyName + '&' +
+            'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
+            'v_address=' + data.creator.companyAddress + '&' +
+            'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
+            'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
+            'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
+            'v_attention=' + '&' +
+            'v_sentVia=' + '&' +
+            'v_id=' + data.keyValues.co;
 
-      var queryString = 'doctype=co&' +
-        'v_logo=' + data.companyLogoPath + '&' +
-        'v_fromFirstName=' + data.creator.contact.firstName + '&' +
-        'v_fromLastName=' + data.creator.contact.lastName + '&' +
-        'v_fromCompany=' + data.creator.companyName + '&' +
-        'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
-        'v_address=' + data.creator.companyAddress + '&' +
-        'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
-        'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
-        'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
-        'v_attention=' + '&' +
-        'v_sentVia=' + '&' +
-        'v_id=' + data.keyValues.co;
-
-      aws.s3.removeFileIfExists(key)
-        .then(function() {
-          aws.s3.upload(wkhtmltopdf(html, {
-            pageSize: 'letter',
-            "T": "60mm",
-            headerHtml: config.domain + '/server/assets/templates/header.html?'+ encodeURI(queryString)
-          }), key)
-            .then(success, failure);
-        }, function() {
-          console.log('Cannot delete file from S3');
-          failure();
+          aws.s3.removeFileIfExists(key)
+            .then(function() {
+              aws.s3.upload(wkhtmltopdf(html, {
+                pageSize: 'letter',
+                "T": "60mm",
+                headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
+              }), key)
+                .then(success, failure);
+            }, function() {
+              console.log('Cannot delete file from S3');
+              failure();
+            });
         });
     }
 
@@ -360,45 +384,35 @@ module.exports = {
       //    failure(error);
       //  })
       //  .on("finish", success);
+      validateCompanyLogo(data.companyLogoKey)
+        .then(function(companyLogoPath) {
+          var queryString = 'doctype=tr&' +
+            'v_logo=' + companyLogoPath + '&' +
+            'v_fromFirstName=' + data.creator.contact.firstName + '&' +
+            'v_fromLastName=' + data.creator.contact.lastName + '&' +
+            'v_fromCompany=' + data.creator.companyName + '&' +
+            'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
+            'v_address=' + data.creator.companyAddress + '&' +
+            'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
+            'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
+            'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
+            'v_attention=' + '&' +
+            'v_sentVia=' + data.keyValues.sent_via + '&' +
+            'v_id=' + data.keyValues.transmittal;
 
-      var queryString = 'doctype=tr&' +
-        'v_logo=' + data.companyLogoPath + '&' +
-        'v_fromFirstName=' + data.creator.contact.firstName + '&' +
-        'v_fromLastName=' + data.creator.contact.lastName + '&' +
-        'v_fromCompany=' + data.creator.companyName + '&' +
-        'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
-        'v_address=' + data.creator.companyAddress + '&' +
-        'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
-        'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
-        'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
-        'v_attention=' + '&' +
-        'v_sentVia=' + data.keyValues.sent_via + '&' +
-        'v_id=' + data.keyValues.transmittal;
-
-      aws.s3.removeFileIfExists(key)
-        .then(function() {
-          aws.s3.upload(wkhtmltopdf(html, {
-            pageSize: 'letter',
-            "T": "70mm",
-            headerHtml: config.domain + '/server/assets/templates/header.html?'+ encodeURI(queryString)
-          }), key)
-            .then(success, failure);
-        }, function() {
-          console.log('Cannot delete file from S3');
-          failure();
+          aws.s3.removeFileIfExists(key)
+            .then(function() {
+              aws.s3.upload(wkhtmltopdf(html, {
+                pageSize: 'letter',
+                "T": "70mm",
+                headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
+              }), key)
+                .then(success, failure);
+            }, function() {
+              console.log('Cannot delete file from S3');
+              failure();
+            });
         });
-    }
-
-    function convert(content, success, failed) {
-      var rdName = utilService.newGuidId();
-      fs.writeFile(path.join(config.assetsPath, 'temp', rdName + '.html'), content, function(err) {
-        if(err) {
-          failed(err);
-        }
-        else {
-          success();
-        }
-      });
     }
 
     function fillRFIData(html, data) {
@@ -473,34 +487,37 @@ module.exports = {
       //  })
       //  .on("finish", success);
 
-      var queryString = 'doctype=rfi&' +
-        'v_logo=' + data.companyLogoPath + '&' +
-        'v_fromFirstName=' + data.creator.contact.firstName + '&' +
-        'v_fromLastName=' + data.creator.contact.lastName + '&' +
-        'v_fromCompany=' + data.creator.companyName + '&' +
-        'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
-        'v_address=' + data.creator.companyAddress + '&' +
-        'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
-        'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
-        'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
-        'v_attention=' + generalAttention(data.keyValues.attention) + '&' +
-        'v_sentVia=' + '&' +
-        'v_id=' + data.keyValues.RFI;
+      validateCompanyLogo(data.companyLogoKey)
+        .then(function(companyLogoPath) {
+          var queryString = 'doctype=rfi&' +
+            'v_logo=' + companyLogoPath + '&' +
+            'v_fromFirstName=' + data.creator.contact.firstName + '&' +
+            'v_fromLastName=' + data.creator.contact.lastName + '&' +
+            'v_fromCompany=' + data.creator.companyName + '&' +
+            'v_date=' + moment(data.keyValues.date_created).format('MM/DD/YYYY') + '&' +
+            'v_address=' + data.creator.companyAddress + '&' +
+            'v_toFirstName=' + data.keyValues.receiver.contact.firstName + '&' +
+            'v_toLastName=' + data.keyValues.receiver.contact.lastName + '&' +
+            'v_toCompany=' + data.keyValues.receiver.companyName + '&' +
+            'v_attention=' + generalAttention(data.keyValues.attention) + '&' +
+            'v_sentVia=' + '&' +
+            'v_id=' + data.keyValues.RFI;
 
-      aws.s3.removeFileIfExists(key)
-        .then(function() {
-          aws.s3.upload(wkhtmltopdf(html, {
-            pageSize: 'letter',
-            "T": "70mm",
-            "debugJavascript": true,
-            "headerHtml": config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
-          }, function(err) {
-            console.log(err);
-          }), key)
-            .then(success, failure);
-        }, function() {
-          console.log('Cannot delete file from S3');
-          failure();
+          aws.s3.removeFileIfExists(key)
+            .then(function() {
+              aws.s3.upload(wkhtmltopdf(html, {
+                pageSize: 'letter',
+                "T": "70mm",
+                "debugJavascript": true,
+                "headerHtml": config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
+              }, function(err) {
+                console.log(err);
+              }), key)
+                .then(success, failure);
+            }, function() {
+              console.log('Cannot delete file from S3');
+              failure();
+            });
         });
     }
 
@@ -522,35 +539,44 @@ module.exports = {
       var attachmentHtml = '';
       _.each(attachments, function(att) {
         attachmentHtml += '<div class="m-b-xs">' +
-          '<a href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">' +
-          '<span class="file-name">' +
-            //'<img src="' + string.join('/', config.domain, att.filePath) + '" alt=""/>' +
-          '<span>' + string.path(att.filePath).name + '</span>' +
-          '</span>' +
-          '</a>' +
+          '<a href="' + config.domain + '/download/file?id=' + utilService.hash(encodeURIComponent(att.filePath)) + '">';
+
+        if(/(jpg|jpeg|png|bmp)/.test(att.filePath)) {
+          attachmentHtml += '<span class="file-name">' +
+              '<img class="image" src="' + string.join('/', config.resource_domain, att.filePath) + '" alt=""/>' +
+            '</span>';
+        } else {
+          attachmentHtml += '<span class="file-name">' +
+              //'<img src="' + string.join('/', config.domain, att.filePath) + '" alt=""/>' +
+            '<span>' + string.path(att.filePath).name + '</span>' +
+            '</span>';
+        }
+
+        attachmentHtml += '</a>' +
           '</div>';
       });
 
       return attachmentHtml;
     }
 
-    function generalAttention(attention){
+    function generalAttention(attention) {
       var result = [];
-      _.each(attention, function(value){
+      _.each(attention, function(value) {
         result.push(value.contact.firstName + ' ' + value.contact.lastName);
       });
 
       return result.join(',');
-    };
+    }
 
     switch(data.documentTemplate.documentTemplateId) {
       case 1:
         getCompanyDetails(baseRequest)
-          .then(function(companyLogoPath) {
+          .then(function(dt) {
             getAttachments(baseRequest, data.documentId)
               .then(function(attachments) {
                 data.attachments = attachments;
-                data.companyLogoPath = companyLogoPath;
+                data.companyLogoPath = dt.path;
+                data.companyLogoKey = dt.key;
                 html = fs.readFileSync('server/assets/templates/purchaseOrder.html', 'utf8');
                 fillPOData(html, data);
               });
@@ -558,11 +584,12 @@ module.exports = {
         break;
       case 2:
         getCompanyDetails(baseRequest)
-          .then(function(companyLogoPath) {
+          .then(function(dt) {
             getAttachments(baseRequest, data.documentId)
               .then(function(attachments) {
                 data.attachments = attachments;
-                data.companyLogoPath = companyLogoPath;
+                data.companyLogoPath = dt.path;
+                data.companyLogoKey = dt.key;
                 html = fs.readFileSync('server/assets/templates/changeOrder.html', 'utf8');
                 fillCOData(html, data);
               });
@@ -570,12 +597,13 @@ module.exports = {
         break;
       case 3:
         getCompanyDetails(baseRequest)
-          .then(function(companyLogoPath) {
+          .then(function(dt) {
             // Get attachments
             getAttachments(baseRequest, data.documentId)
               .then(function(attachments) {
                 data.companyLogoPath = companyLogoPath;
-                data.attachments = attachments;
+                data.companyLogoPath = dt.path;
+                data.companyLogoKey = dt.key;
                 html = fs.readFileSync('server/assets/templates/requestForInformation.html', 'utf8');
                 fillRFIData(html, data);
               });
@@ -583,11 +611,12 @@ module.exports = {
         break;
       case 4:
         getCompanyDetails(baseRequest)
-          .then(function(companyLogoPath) {
+          .then(function(dt) {
             getAttachments(baseRequest, data.documentId)
               .then(function(attachments) {
                 data.attachments = attachments;
-                data.companyLogoPath = companyLogoPath;
+                data.companyLogoPath = dt.path;
+                data.companyLogoKey = dt.key;
                 html = fs.readFileSync('server/assets/templates/transmittal.html', 'utf8');
                 fillTransData(html, data);
               });

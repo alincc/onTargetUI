@@ -92,8 +92,11 @@
             color: #a6a8b1;
         }
 
-        .submittal .file-name img {
+        .submittal .file-name img.icon {
             width: 30px;
+        }
+        .submittal .file-name img.image {
+            height: 200px;
         }
 
         .submittal .change input[type=checkbox] {
@@ -218,14 +221,6 @@
                 </div>
             </div>
 
-            <div class="row m-b-lg">
-                <div class="col-xs-2 m-b-xs">
-                    <span class="text-default">ATTACHMENTS:</span>
-                </div>
-                <div class="col-xs-10">
-                    {{attachments}}
-                </div>
-            </div>
 
             <div class="row m-b-lg">
                 <div class="col-xs-12 m-b-xs">
@@ -252,6 +247,15 @@
                         <input type="checkbox" disabled="disabled" {{closed}}/>
                         <span class="text-info">Close</span>
                     </label>
+                </div>
+            </div>
+
+            <div class="row m-b-lg">
+                <div class="col-xs-2 m-b-xs">
+                    <span class="text-default">ATTACHMENTS:</span>
+                </div>
+                <div class="col-xs-10">
+                    {{attachments}}
                 </div>
             </div>
         </div>

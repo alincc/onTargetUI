@@ -40,7 +40,7 @@ define(function(require){
                         onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation)
                           .success(function (resp) {
                             $scope._form.$setPristine();
-                            $state.go('app.bimProject.project', { poid: $scope.oid });
+                            $state.go('app.bimProject.project', { poid: $scope.oid, projectBimFileId: resp.projectBimFileDTO.projectBimFileId });
                           });
                       });
                   }
@@ -56,9 +56,10 @@ define(function(require){
                 updateData.exportLengthMeasurePrefix = $scope.project.exportLengthMeasurePrefix;
                 onBimFactory.updateBimProject(updateData).success(
                   function (resp) {
-                    onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation).success(function (resp) {
+                    onBimFactory.addProject($rootScope.currentProjectInfo.projectId, $scope.oid, $scope.project.projectBimFileLocation)
+                      .success(function (resp) {
                       $scope._form.$setPristine();
-                      $state.go('app.bimProject.project', { poid: $scope.oid });
+                      $state.go('app.bimProject.project', { poid: $scope.oid, projectBimFileId: resp.projectBimFileDTO.projectBimFileId });
                     });
                   });
               }

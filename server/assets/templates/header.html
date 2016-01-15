@@ -23,40 +23,40 @@
         function subst() {
             var vars = {};
             var x = document.location.search.substring(1).split('&');
-            console.log(x);
-            for (var i in x) {
+            for(var i in x) {
                 var z = x[i].split('=', 2);
                 vars[z[0]] = unescape(z[1]);
             }
             var x = ['frompage', 'topage', 'page', 'webpage', 'section', 'subsection', 'subsubsection', 'doctype',
                 'v_fromFirstName', 'v_fromLastName', 'v_fromCompany', 'v_date', 'v_address', 'v_toFirstName', 'v_toLastName', 'v_toCompany',
                 'v_attention', 'v_sentVia', 'v_id'];
-            for (var i in x) {
+            for(var i in x) {
                 var y = document.getElementsByClassName(x[i]);
-                for (var j = 0; j < y.length; j++) {
+                for(var j = 0; j < y.length; j++) {
                     y[j].textContent = vars[x[i]];
                 }
             }
 
             var imgs = document.getElementsByClassName('logo');
 
-            for(var i = 0; i < imgs.length; i++){
+            for(var i = 0; i < imgs.length; i++) {
                 imgs[i].src = vars['v_logo'];
-            };
+            }
+            ;
 
-            if (vars['doctype'] === 'co') {
+            if(vars['doctype'] === 'co') {
                 // If page is 1, set header display to none
                 document.getElementById("header_co").style.display = 'block';
             }
-            else if (vars['doctype'] === 'po') {
+            else if(vars['doctype'] === 'po') {
                 // If page is 1, set header display to none
                 document.getElementById("header_po").style.display = 'block';
             }
-            else if (vars['doctype'] === 'rfi') {
+            else if(vars['doctype'] === 'rfi') {
                 // If page is 1, set header display to none
                 document.getElementById("header_rfi").style.display = 'block';
             }
-            else if (vars['doctype'] === 'tr') {
+            else if(vars['doctype'] === 'tr') {
                 // If page is 1, set header display to none
                 document.getElementById("header_tran").style.display = 'block';
             }
@@ -185,7 +185,11 @@
             color: #a6a8b1;
         }
 
-        .text-page{
+        .submittal .pdf-logo .logo {
+            max-height: 200px;
+        }
+
+        .text-page {
             color: #a6a8b1;
         }
 
@@ -202,7 +206,7 @@
             color: #58666e;
         }
 
-        .v_id{
+        .v_id {
             font-size: 16px;
         }
 

@@ -176,6 +176,24 @@ define(function(require) {
         return newGridKeyValues;
       };
 
+      var load = function() {
+        $scope.isLoading = true;
+        $scope.approvals = [];
+        $scope.submittals = [];
+        $scope.attentionsDocs = [];
+        $scope.all = [];
+
+        documentFactory.getUserDocument($rootScope.currentProjectInfo.projectId)
+          .success(function(resp) {
+            $scope.prepareViewData(resp.approvals, resp.submittals, resp.attentionsDocs);
+            $scope.isLoading = false;
+          })
+          .error(function(err) {
+            console.log(err);
+            $scope.isLoading = false;
+          });
+      };
+
       $scope.onSite = {
         all: {
           cols: cols('all'),
@@ -286,17 +304,6 @@ define(function(require) {
         $scope.onSite.approval.tableParams.reload();
         $scope.onSite.submittal.tableParams.reload();
       };
-
-      documentFactory.getUserDocument($rootScope.currentProjectInfo.projectId)
-        .success(function(resp) {
-          $scope.prepareViewData(resp.approvals, resp.submittals, resp.attentionsDocs);
-
-          $scope.isLoading = false;
-        })
-        .error(function(err) {
-          console.log(err);
-          $scope.isLoading = false;
-        });
 
       $scope.viewDocument = function(doc) {
         onFileFactory.getDocumentById(doc.documentId).success(
@@ -415,6 +422,10 @@ define(function(require) {
       $scope.deleteDoc = function(doc, $event) {
         $event.stopImmediatePropagation();
       };
+
+      load();
+
+      notifications.onCurrentProjectChange($scope, load);
 
     }];
   return controller;

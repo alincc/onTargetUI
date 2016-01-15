@@ -8,7 +8,6 @@ define(function(require) {
       restrict: "A",
       link: function(scope, elem, attrs) {
 
-
         function showNoImage() {
           if(attrs.filePath === 'project') {
             elem.attr("src", 'img/no-image.png');

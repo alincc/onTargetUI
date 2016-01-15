@@ -2,9 +2,32 @@ define(function(require) {
   'use strict';
   var angular = require('angular'),
     lodash = require('lodash');
-  var controller = ['$scope', '$rootScope', '$q', '$location', 'appConstant', '$filter', '$window', '$state', 'onBimFactory', '$modal', 'toaster',
-    function($scope, $rootScope, $q, $location, appConstant, $filter, $window, $state, onBimFactory, $modal, toaster) {
-      
+  var controller = [
+    '$scope',
+    '$rootScope',
+    '$q',
+    '$location',
+    'appConstant',
+    '$filter',
+    '$window',
+    '$state',
+    'onBimFactory',
+    '$modal',
+    'toaster',
+    'notifications',
+    function($scope,
+             $rootScope,
+             $q,
+             $location,
+             appConstant,
+             $filter,
+             $window,
+             $state,
+             onBimFactory,
+             $modal,
+             toaster,
+             notifications) {
+
       var getProjectByPoid = function(poid) {
         var deferred = $q.defer();
         onBimFactory.getBimProjectByPoid(poid).success(
@@ -24,6 +47,7 @@ define(function(require) {
 
       $scope.getProjectList = function() {
         $scope.onLoading = true;
+        $scope.projectList = [];
         onBimFactory.getAllProjects($rootScope.currentProjectInfo.projectId)
           .then(function(resp) {
             $scope.projectList = resp.data.bimProjects;
@@ -51,7 +75,7 @@ define(function(require) {
               $scope.onLoading = false;
             }
 
-          }, function (err){
+          }, function(err) {
             console.log(err.message);
             $scope.onLoading = false;
             if(err.message === 'Unexpected token U') {
@@ -97,12 +121,16 @@ define(function(require) {
         });
       };
 
-      $scope.editProject = function (project){
+      $scope.editProject = function(project) {
         $rootScope.currentBimProject = project;
         $state.go('app.bimProject.updateProject', {poid: project.poid, projectBimFileId: project.projectBimFileId});
       };
 
       $scope.getProjectList();
+
+      notifications.onCurrentProjectChange($scope, function(agrs) {
+        $scope.getProjectList();
+      });
     }
   ];
 

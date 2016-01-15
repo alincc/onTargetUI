@@ -1,8 +1,11 @@
 <div class="m-b-xs" ng-repeat="file in attachments" ng-if="!file.deleted">
     <a href="javascript: void(0)" ng-click="downloadAttachment(file)">
-                            <span class="file-name">
-                                <img ng-src="{{file.filePath | fileicon}}" alt=""/>
-                                <span ng-bind="file.filePath | fileName"></span>
-                            </span>
+        <span class="file-name" ng-if="file.isImage">
+            <img class="image" file-path="project" path="{{file.filePath}}" alt=""/>
+        </span>
+        <span class="file-name" ng-if="!file.isImage">
+            <img class="icon" ng-src="{{file.filePath | fileicon}}" alt=""/>
+            <span ng-bind="file.filePath | fileName"></span>
+        </span>
     </a>
 </div>
