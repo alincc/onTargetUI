@@ -14,7 +14,7 @@
                                theme="bootstrap"
                                reset-search-input="true">
                         <ui-select-match placeholder="Enter assignee name">{{$select.selected.contact.firstName + ' ' + $select.selected.contact.lastName}}</ui-select-match>
-                        <ui-select-choices repeat="own in contacts track by $index">
+                        <ui-select-choices repeat="own in contacts">
                             <div ng-bind="own.contact.firstName + ' ' + own.contact.lastName"></div>
                         </ui-select-choices>
                     </ui-select>
