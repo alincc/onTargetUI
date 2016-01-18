@@ -54,13 +54,13 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="label-field">Change Order</label>
+                                            <label class="label-field">Change Order #</label>
                                             <!--<select class="form-control" name="co" ng-model="changeOrder.keyValues.co"
                                                     ng-options="receiverName.contact.contactId as receiverName.contact.firstName + ' ' + receiverName.contact.lastName for receiverName in contacts" required>
                                                 <option value="">&#45;&#45; Select Change Order &#45;&#45;</option>
                                             </select>-->
                                             <p class="text-field" ng-if="onView||onApprove">{{changeOrder.keyValues.co}}</p>
-                                            <input type="text" class="form-control" placeholder="Enter Change Order"
+                                            <input type="text" class="form-control" placeholder="Enter Change Order Number"
                                                    ng-model="changeOrder.keyValues.co"
                                                    name="co" required
                                                    ng-if="(onEdit || onAddNew) && !onView"/>
