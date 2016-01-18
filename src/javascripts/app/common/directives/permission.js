@@ -21,11 +21,14 @@ define(function(require) {
           }
         }
         else {
+
           if(!permissionFactory.checkFeaturePermission(attrs.permission)) {
             element.remove();
           }
         }
       }
+
+      checkPermission();
 
       notifications.onCurrentProjectChange(scope, checkPermission);
     };

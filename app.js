@@ -752,7 +752,7 @@ app.put('/ontargetrs/services/document/response/save', function(req, res) {
       }
 
       // Creator
-      attention.push(document.createdBy);
+      attention.push(document.createdBy.toString());
 
       getUserDetails(baseRequest.loggedInUserId, function(user) {
         var d = _.uniq(attention);

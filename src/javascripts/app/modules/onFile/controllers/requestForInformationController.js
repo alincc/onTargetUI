@@ -92,6 +92,7 @@ define(function(require) {
       $scope.haveApprovePermission = permissionFactory.checkFeaturePermission('ONFILE_APPROVE');
       $scope.haveRejectPermission = permissionFactory.checkFeaturePermission('ONFILE_REJECT');
       $scope.isAddingResponse = false;
+      $scope.onResponsed = false;
 
       if(document) {
         getUserAction(document);
@@ -230,7 +231,7 @@ define(function(require) {
           $scope.responses = responses;
 
           if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView) {
-            $scope.onView = $scope.responses.length > 0;
+            $scope.onResponsed = $scope.responses.length > 0;
           }
 
           loadDocumentAttachments(true);
@@ -407,7 +408,7 @@ define(function(require) {
             $scope.responses = resp.documentResponses;
 
             if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView) {
-              $scope.onView = $scope.responses.length > 0;
+              $scope.onResponsed = $scope.responses.length > 0;
             }
           })
           .error(function(err) {
