@@ -41,14 +41,16 @@
                         </ui-select-choices>
                     </ui-select>
                     <p class="m-t">Description:</p>
-                    <textarea class="form-control" ng-model="uploadModel.description" required
+                    <textarea class="form-control" ng-model="uploadModel.description"
                               name="description"></textarea>
 
                     <div class="m-t m-b text-right">
                         <button type="submit" ng-disabled="step2.$invalid || step2.$submitted"
                                 loading-button="step2.$submitted" size="md"
-                                class="btn btn-primary btn-rounded" ng-click="steps.step2=true"><i
-                                class="fa fa-info-circle"></i> Save document info
+                                class="btn btn-primary btn-rounded" ng-click="steps.step2=true">
+                            <!--<i class="fa fa-info-circle"></i> -->
+                            <!--Save document info-->
+                            SAVE
                         </button>
                     </div>
                 </form>

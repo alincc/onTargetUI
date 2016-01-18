@@ -55,6 +55,12 @@ define(function(require) {
                   percentageComplete: $scope.model.percentageComplete
                 }
               });
+
+              if(parseInt($scope.model.percentageComplete) === 100){
+                $scope.task.status = '3';
+              }else{
+                $scope.task.status = '1';
+              }
             });
           };
 

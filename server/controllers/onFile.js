@@ -210,6 +210,8 @@ module.exports = {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
                 "T": "60mm",
+                disableSmartShrinking: true,
+                zoom: 0.6,
                 headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
               }), key)
                 .then(success, failure);
@@ -309,6 +311,8 @@ module.exports = {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
                 "T": "60mm",
+                disableSmartShrinking: true,
+                zoom: 0.6,
                 headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
               }), key)
                 .then(success, failure);
@@ -405,6 +409,8 @@ module.exports = {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
                 "T": "70mm",
+                disableSmartShrinking: true,
+                zoom: 0.6,
                 headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
               }), key)
                 .then(success, failure);
@@ -508,7 +514,8 @@ module.exports = {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
                 "T": "70mm",
-                "debugJavascript": true,
+                disableSmartShrinking: true,
+                zoom: 0.6,
                 "headerHtml": config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
               }, function(err) {
                 console.log(err);
@@ -543,7 +550,7 @@ module.exports = {
 
         if(/(jpg|jpeg|png|bmp)/.test(att.filePath)) {
           attachmentHtml += '<span class="file-name">' +
-              '<img class="image" src="' + string.join('/', config.resource_domain, att.filePath) + '" alt=""/>' +
+            '<img class="image" src="' + string.join('/', config.resource_domain, att.filePath) + '" alt=""/>' +
             '</span>';
         } else {
           attachmentHtml += '<span class="file-name">' +
