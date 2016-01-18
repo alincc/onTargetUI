@@ -90,7 +90,7 @@ module.exports = {
       domain: 'https://app.ontargetcloud.com/ontargetrs/services',
       baseUrl: 'https://app.ontargetcloud.com',
       nodeServer: 'https://app.ontargetcloud.com',
-      resourceUrl: 'https://ontarget-assets.s3.amazonaws.com',
+      resourceUrl: 'https://app.ontargetcloud.com',
       newBimServer: 'https://app.ontargetcloud.com/bim',
       pusher: {
         appId: '152503',
@@ -107,17 +107,17 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
       aws_s3_bucket: 'ontarget-assets',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx',
-      bim_user: 'bim@ontargetcloud.com',
-      bim_password: 'admin',
-      bimServer: 'http://localhost:9000/bim',
-      bimServerAddress: 'http://216.14.121.204:8080'
+      excelTemplateUrl: 'https://app.ontargetcloud.com/ontarget-assets/assets/onTarget+-+Import+Format.xlsx',
+      bim_user: 'ontargetbim@ontargetcloud.com',
+      bim_password: '0nT4rg3tBIm2015',
+      bimServer: 'https://app.ontargetcloud.com/bim',
+      bimServerAddress: 'https://app.ontargetcloud.com/bimserver'
     },
     sagarmatha02: {
       domain: 'https://app.ontargetcloud.com/ontargetrs/services',
       baseUrl: 'https://app.ontargetcloud.com',
       nodeServer: 'https://app.ontargetcloud.com',
-      resourceUrl: 'https://ontarget-assets.s3.amazonaws.com',
+      resourceUrl: 'https://app.ontargetcloud.com',
       newBimServer: 'https://app.ontargetcloud.com/bim',
       pusher: {
         appId: '152503',
@@ -134,11 +134,11 @@ module.exports = {
       concurrencyImageProcesses: 1,
       aws_s3_profile: 'production',
       aws_s3_bucket: 'ontarget-assets',
-      excelTemplateUrl: 'https://s3.amazonaws.com/ontarget-assets-test/assets/onTarget+-+Import+Format.xlsx',
-      bim_user: 'bim@ontargetcloud.com',
-      bim_password: 'admin',
-      bimServer: 'http://localhost:9000/bim',
-      bimServerAddress: 'http://216.14.121.204:8080'
+      excelTemplateUrl: 'https://app.ontargetcloud.com/ontarget-assets/assets/onTarget+-+Import+Format.xlsx',
+      bim_user: 'ontargetbim@ontargetcloud.com',
+      bim_password: '0nT4rg3tBIm2015',
+      bimServer: 'https://app.ontargetcloud.com/bim',
+      bimServerAddress: 'https://app.ontargetcloud.com/bimserver'
     }
   }
 };
