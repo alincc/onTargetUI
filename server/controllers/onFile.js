@@ -209,7 +209,7 @@ module.exports = {
             .then(function() {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
-                "T": "60mm",
+                "T": "50mm",
                 disableSmartShrinking: true,
                 zoom: 0.6,
                 headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
@@ -310,7 +310,7 @@ module.exports = {
             .then(function() {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
-                "T": "60mm",
+                "T": "50mm",
                 disableSmartShrinking: true,
                 zoom: 0.6,
                 headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
@@ -408,7 +408,7 @@ module.exports = {
             .then(function() {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
-                "T": "70mm",
+                "T": "50mm",
                 disableSmartShrinking: true,
                 zoom: 0.6,
                 headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
@@ -513,7 +513,7 @@ module.exports = {
             .then(function() {
               aws.s3.upload(wkhtmltopdf(html, {
                 pageSize: 'letter',
-                "T": "70mm",
+                "T": "50mm",
                 disableSmartShrinking: true,
                 zoom: 0.6,
                 "headerHtml": config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
@@ -608,7 +608,7 @@ module.exports = {
             // Get attachments
             getAttachments(baseRequest, data.documentId)
               .then(function(attachments) {
-                data.companyLogoPath = companyLogoPath;
+                data.attachments = attachments;
                 data.companyLogoPath = dt.path;
                 data.companyLogoKey = dt.key;
                 html = fs.readFileSync('server/assets/templates/requestForInformation.html', 'utf8');
