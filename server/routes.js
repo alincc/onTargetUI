@@ -11,6 +11,7 @@ var boxController = require('./controllers/box');
 var dropBoxController = require('./controllers/dropBox');
 var fileController = require('./controllers/file');
 var onSiteController = require('./controllers/onSite');
+var statusController = require('./controllers/status');
 
 module.exports = function(app) {
   app.post('/node/onfile/export', onFileController.exportPdf);
@@ -32,4 +33,8 @@ module.exports = function(app) {
   app.post('/node/onsite/checkFileStatus', onSiteController.checkFileStatus);
   app.post('/node/onsite/generateThumbnail', onSiteController.generateThumbnail);
   app.post('/node/onsite/downloadFile', onSiteController.downloadFile);
+
+
+  app.get('/node/status',statusController.status);
+
 };
