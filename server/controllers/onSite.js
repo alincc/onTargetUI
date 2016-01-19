@@ -630,6 +630,8 @@ function getZoomLevel(req, res) {
   //var zoomLevel = 0;
 
   var pagePromises = [];
+  console.log("Getting zoom level for path::");
+  console.log(string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/'));
 
   // Get pages
   aws.s3.getDirectories(string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/'))
@@ -641,6 +643,8 @@ function getZoomLevel(req, res) {
 
       Promise.all(pagePromises)
         .then(function (results) {
+            console.log("Results for check zoom level::")
+            console.log(results);
           res.send(results);
         });
     });
