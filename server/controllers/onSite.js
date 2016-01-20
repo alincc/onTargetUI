@@ -631,14 +631,14 @@ function getZoomLevel(req, res) {
 
   var pagePromises = [];
   console.log("Getting zoom level for path::");
-  var objectPath=string.join('/',string.path(relativePath).baseDir, fileFolderName, 'pages/');
+  var objectPath = string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/');
   console.log(objectPath);
 
   // Get pages
   aws.s3.getDirectories(objectPath)
     .then(function (pages) {
-        console.log("Pages for this asset: ");
-        console.log(pages);
+      console.log("Pages for this asset: ");
+      console.log(pages);
       _.each(pages, function (el, pageIndex) {
         // Pages
         pagePromises.push(_checkZoomLevel(el.Prefix, pageIndex));
@@ -646,8 +646,8 @@ function getZoomLevel(req, res) {
 
       Promise.all(pagePromises)
         .then(function (results) {
-            console.log("Results for check zoom level::")
-            console.log(results);
+          console.log("Results for check zoom level::")
+          console.log(results);
           res.send(results);
         });
     });
@@ -735,7 +735,14 @@ function downloadFile(req, res) {
         try {
           // Extract tags
           _.each(tags, function (el) {
-            var pageNumber = /.*\|\sPage\-(\d+)/.exec(el.title)[1];
+            var pageNumber;
+            var pageObj = _.find(el.attributes, {key: 'page'});
+            if (pageObj) {
+              pageNumber = pageObj.value;
+            } else {
+              pageNumber = /.*\|\sPage\-(\d+)/.exec(el.title)[1];
+            }
+
             if (typeof pageNumber !== "undefined" && pageNumber !== null) {
               pageNumber = parseInt(pageNumber);
               if (data[pageNumber - 1]) {
@@ -925,7 +932,8 @@ function downloadFile(req, res) {
         });
       };
 
-      var exportFile = function (document, filePath) {
+      var exportFile = function (document, filePath, uuid) {
+        var promiseDownLoads = [];
 
         console.log('Getting pdf images...');
         pages = _getPages(filePath)
@@ -953,299 +961,307 @@ function downloadFile(req, res) {
               parseTagsToCoordinates();
               console.log('Parsing document tags to coordinates...Done');
               console.log('Starting merge markups, tags to images...');
-              // loop pages
+
+              // assets/project/TBA.../onsite/.../...
+              // todo download page file to assets/temp/[uuid]
               _.each(data, function (el, pageIndex) {
-                promises.push(new Promise(function (resolve, reject) {
-                  var imageUrl = el.imagePath;
-                  var listGeo = el.layers;
-                  var imgWidth, imgHeight;
-                  console.log('Merging markups, tags to image "' + imageUrl + '"...');
-                  var g = gm(path.join(rootPath, imageUrl))
-                    .size(function (err, size) {
-                      if (!err) {
-                        imgWidth = size.width;
-                        imgHeight = size.height;
-                        //var scale = Math.pow(2, zoom);
-                        var scale = imgWidth;
-                        if (imgHeight > imgWidth) {
-                          scale = imgHeight;
-                        }
-                        /*Math.log(imgWidth / 512) / Math.log(2)*/
-                        if (el.layers) {
-                          for (var i = 0; i < listGeo.length; i++) {
-                            var type = listGeo[i].geometry.type;
-                            var coords = listGeo[i].geometry.coordinates;
-                            var style = listGeo[i].options;
-                            switch (type) {
-                              case "Rectangle":
-                              {
-                                var newCoordsStrRectangle = _.map(coords, function (d) {
-                                  var p = [];
-                                  p[0] = d[1] * scale;
-                                  p[1] = d[0] * scale;
-                                  return p.join(',')
-                                }).join(' ');
-                                g = g.fill(style.color + getOpacityStr(style.fillOpacity)).stroke(style.color + getOpacityStr(style.opacity), style.weight);
-                                g = g.draw('polygon', newCoordsStrRectangle);
-                                break;
-                              }
-                              case "Polygon":
-                              {
-                                var newCoordsStrPolygon = _.map(coords, function (d) {
-                                  var p = [];
-                                  p[0] = d[1] * scale;
-                                  p[1] = d[0] * scale;
-                                  return p.join(',')
-                                }).join(' ');
-                                g = g.fill(style.color + getOpacityStr(style.fillOpacity)).stroke(style.color + getOpacityStr(style.opacity), style.weight);
-                                g = g.draw('polygon', newCoordsStrPolygon);
-                                break;
-                              }
-                              case "LineString":
-                              {
-                                var newCoordsStrLine = _.map(coords, function (d) {
-                                  var p = [];
-                                  p[0] = d[1] * scale;
-                                  p[1] = d[0] * scale;
-                                  return p.join(',')
-                                }).join(' ');
-                                g = g.fill('transparent').stroke(style.color + getOpacityStr(style.opacity), style.weight);
-                                g = g.draw('polyline', newCoordsStrLine);
-                                break;
-                              }
-                              case "Point":
-                              {
-                                var radius = listGeo[i]._mRadius || 0;
-                                radius = radius * 2 * scale;
-                                var p1 = [];
-                                p1[0] = coords[1] * scale;
-                                p1[1] = coords[0] * scale;
-                                var coords2 = [p1[0] + radius, p1[1]];
+                var imgPath = el.imagePath;
+                el.imagePath = string.join('/', 'assets', 'temp', uuid, string.path(el.imagePath).name);
 
-
-                                if (radius > 0) {
-                                  g = g.fill(style.color + getOpacityStr(style.fillOpacity)).stroke(style.color + getOpacityStr(style.opacity), style.weight);
-                                  g = g.draw('circle', p1.join(',') + ' ' + coords2.join(','));
-                                }
-                                else {
-                                  // var imgPoint = gm('./../../assets/img/marker-icon.png');
-                                  // console.log('marker')
-                                  // g.in('-page', '+0+0')
-                                  // .in('marker-icon.png')
-                                }
-                                break;
-                              }
-                            }
-                          }
-                        }
-                        var tmpName = path.join(outputFolder, pageIndex + '.jpg');
-
-                        g.write(tmpName, function (err) {
-                          if (err) {
-                            console.log('Merging markups to image "' + imageUrl + '"...Failed!', err.message);
-                            errors.push(err.message);
-                            resolve(err);
-                          } else {
-                            var newG = gm()
-                              .in('-page', '+0+0')
-                              .in(tmpName);
-                            if (el.layers) {
-                              for (var i = 0; i < listGeo.length; i++) {
-                                var type = listGeo[i].geometry.type;
-                                var coords = listGeo[i].geometry.coordinates[0];
-                                if (coords && listGeo[i].type === 'marker') {
-                                  newG = newG.in('-page', '+' + (coords[1] * scale) + '+' + (coords[0] * scale))
-                                    .in(markerUrl);
-                                }
-                              }
-                            }
-                            newG.mosaic()  // Merges the images as a matrix
-                              .write(tmpName, function (err) {
-                                if (err) {
-                                  console.log('Merging tags to image "' + imageUrl + '"...Failed!');
-                                  errors.push(err.message);
-                                  resolve(err);
-                                }
-                                else {
-                                  console.log('Merging markups, tags to image "' + imageUrl + '"...Done!');
-                                  resolve();
-                                }
-                                //gm(tmpName).write(destinationPath, function() {
-                                //  convertPdfToImage();
-                                //});
-                              });
-                          }
-                        });
-                      }
-                    });
-                }));
+                promiseDownLoads.push(_downloadFile(imgPath, path.join(rootPath, el.imagePath)));
               });
-              // all promises are resolved
-              Promise.all(promises)
-                .then(function (data) {
-                  if (errors.length) {
-                    console.log(data);
-                    console.log('Starting export image with markups, tags to pdf...Failed!');
-                    failure("Cannot download the file!");
-                  }
-                  else {
-                    console.log('Starting merge markups, tags to images...Done!');
-                    if (/\.pdf$/.test(document.projectFile.filePath)) {
-                      // convert pdf pages to images
-                      console.log('Merging images to pdf...');
-                      console.time("MergingImagesToPdf");
-                      exec(config.convertCommand + ' "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 -compress jpeg "' + path.join(rootPath, document.projectFile.filePath) + '"', function (error) {
-                        console.timeEnd("MergingImagesToPdf");
-                        if (error) {
-                          console.log('Error while converting pdf to image', error.message);
-                          failure(error.message);
-                        }
-                        else {
-                          console.log('Merge images to pdf successful!');
-                          console.log('Exporting document to pdf...Done');
-                          res.send({
-                            success: true,
-                            filePath: document.projectFile.filePath
-                          });
-                          //var firstPage = fs.readdirSync(outputFolder)[0];
-                          //if(firstPage) {
-                          //  var filePath = path.join(rootPath, document.projectFile.filePath);
-                          //  var fileNameWithoutExt = path.basename(filePath, path.extname(filePath));
-                          //  var folder = path.join(path.dirname(filePath), utilService.getFolderNameFromFile(path.basename(filePath)));
-                          //  var thumbnail = path.join(folder, fileNameWithoutExt + '.thumb.jpg');
-                          //  if(!fs.existsSync(folder)) {
-                          //    fs.mkdirSync(folder);
-                          //  }
-                          //  console.log('Making thumbnail...');
-                          //  imageService.cropImageSquare(path.join(outputFolder, firstPage), thumbnail, 200, function(err) {
-                          //    if(err) {
-                          //      console.log('Failed to create image thumbnail!', error.message);
-                          //    }
-                          //    else {
-                          //      console.log('Updating document status');
-                          //      request({
-                          //        method: 'POST',
-                          //        body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
-                          //        json: true,
-                          //        url: config.PROXY_URL + '/upload/updateConversionComplete'
-                          //      }, function(err) {
-                          //        if(!err) {
-                          //          console.log('Update document status successful!');
-                          //          console.log('Starting export image with markups, tags to pdf...Done!');
-                          //        }
-                          //      });
-                          //    }
-                          //  });
-                          //}
 
-                          // Convert pdf to image
-                          //pdfService.parse(document.projectFile.filePath).then(function() {
-                          //  // Update document status
-                          //  console.log('Convert pdf to images successful!');
-                          //  console.log('Updating document status');
-                          //  request({
-                          //    method: 'POST',
-                          //    body: {"projectFileId": docId, isConversionComplete: true, "baseRequest": baseRequest},
-                          //    json: true,
-                          //    url: config.PROXY_URL + '/upload/updateConversionComplete'
-                          //  }, function(err) {
-                          //    if(!err) {
-                          //      console.log('Update document status successful!');
-                          //      //documentService.getDocumentById(document.projectFile.parentProjectFileId, projectId, baseRequest)
-                          //      //  .then(function(parentDocument) {
-                          //      //    //console.log('Copy images from parent document');
-                          //      //    //// Copy parent images to version
-                          //      //    //var filePath = path.join(rootPath, response.body.projectFile.filePath);
-                          //      //    //var fileFolder = path.join(rootPath, response.body.projectFile.filePath.substring(0, response.body.projectFile.filePath.lastIndexOf('/')));
-                          //      //    //var folder = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)));
-                          //      //    //var pageFolder = path.join(folder, 'pages');
-                          //      //    //
-                          //      //    //var fileDesPath = path.join(rootPath, document.projectFile.filePath);
-                          //      //    //var fileDesFolder = path.join(rootPath, document.projectFile.filePath.substring(0, document.projectFile.filePath.lastIndexOf('/')));
-                          //      //    //var destinationFolder = path.join(fileDesFolder, utilService.getFolderNameFromFile(path.basename(fileDesPath)));
-                          //      //    //var destPageFolder = path.join(destinationFolder, 'pages');
-                          //      //    //
-                          //      //    //if(!fs.existsSync(destinationFolder)) {
-                          //      //    //  fs.mkdirSync(destinationFolder);
-                          //      //    //}
-                          //      //    //
-                          //      //    //if(!fs.existsSync(destPageFolder)) {
-                          //      //    //  fs.mkdirSync(destPageFolder);
-                          //      //    //}
-                          //      //    //
-                          //      //    //var oldImage = fs.readdirSync(destPageFolder);
-                          //      //    //_.each(oldImage, function(el) {
-                          //      //    //  fs.unlinkSync(path.join(destPageFolder, el));
-                          //      //    //});
-                          //      //    //
-                          //      //    //var images = fs.readdirSync(pageFolder);
-                          //      //    //_.each(images, function(el) {
-                          //      //    //  fse.copySync(pageFolder, destPageFolder);
-                          //      //    //});
-                          //      //  });
-                          //    }
-                          //  });
-                          //}, function(err) {
-                          //  console.log('Failed to parse pdf to images', err.message);
-                          //});
+              Promise.all(promiseDownLoads).then(function () {
+                // loop pages
+                _.each(data, function (el, pageIndex) {
+                  promises.push(new Promise(function (resolve, reject) {
+                    var imageUrl = el.imagePath;
+                    var listGeo = el.layers;
+                    var imgWidth, imgHeight;
+                    console.log('Merging markups, tags to image "' + imageUrl + '"...');
+                    var g = gm(path.join(rootPath, imageUrl))
+                      .size(function (err, size) {
+                        if (!err) {
+                          imgWidth = size.width;
+                          imgHeight = size.height;
+                          //var scale = Math.pow(2, zoom);
+                          var scale = imgWidth;
+                          if (imgHeight > imgWidth) {
+                            scale = imgHeight;
+                          }
+                          /*Math.log(imgWidth / 512) / Math.log(2)*/
+                          if (el.layers) {
+                            for (var i = 0; i < listGeo.length; i++) {
+                              var type = listGeo[i].geometry.type;
+                              var coords = listGeo[i].geometry.coordinates;
+                              var style = listGeo[i].options;
+                              switch (type) {
+                                case "Rectangle":
+                                {
+                                  var newCoordsStrRectangle = _.map(coords, function (d) {
+                                    var p = [];
+                                    p[0] = d[1] * scale;
+                                    p[1] = d[0] * scale;
+                                    return p.join(',')
+                                  }).join(' ');
+                                  g = g.fill(style.color + getOpacityStr(style.fillOpacity)).stroke(style.color + getOpacityStr(style.opacity), style.weight);
+                                  g = g.draw('polygon', newCoordsStrRectangle);
+                                  break;
+                                }
+                                case "Polygon":
+                                {
+                                  var newCoordsStrPolygon = _.map(coords, function (d) {
+                                    var p = [];
+                                    p[0] = d[1] * scale;
+                                    p[1] = d[0] * scale;
+                                    return p.join(',')
+                                  }).join(' ');
+                                  g = g.fill(style.color + getOpacityStr(style.fillOpacity)).stroke(style.color + getOpacityStr(style.opacity), style.weight);
+                                  g = g.draw('polygon', newCoordsStrPolygon);
+                                  break;
+                                }
+                                case "LineString":
+                                {
+                                  var newCoordsStrLine = _.map(coords, function (d) {
+                                    var p = [];
+                                    p[0] = d[1] * scale;
+                                    p[1] = d[0] * scale;
+                                    return p.join(',')
+                                  }).join(' ');
+                                  g = g.fill('transparent').stroke(style.color + getOpacityStr(style.opacity), style.weight);
+                                  g = g.draw('polyline', newCoordsStrLine);
+                                  break;
+                                }
+                                case "Point":
+                                {
+                                  var radius = listGeo[i]._mRadius || 0;
+                                  radius = radius * 2 * scale;
+                                  var p1 = [];
+                                  p1[0] = coords[1] * scale;
+                                  p1[1] = coords[0] * scale;
+                                  var coords2 = [p1[0] + radius, p1[1]];
+
+
+                                  if (radius > 0) {
+                                    g = g.fill(style.color + getOpacityStr(style.fillOpacity)).stroke(style.color + getOpacityStr(style.opacity), style.weight);
+                                    g = g.draw('circle', p1.join(',') + ' ' + coords2.join(','));
+                                  }
+                                  else {
+                                    // var imgPoint = gm('./../../assets/img/marker-icon.png');
+                                    // console.log('marker')
+                                    // g.in('-page', '+0+0')
+                                    // .in('marker-icon.png')
+                                  }
+                                  break;
+                                }
+                              }
+                            }
+                          }
+                          var tmpName = path.join(outputFolder, pageIndex + '.jpg');
+
+                          g.write(tmpName, function (err) {
+                            if (err) {
+                              console.log('Merging markups to image "' + imageUrl + '"...Failed!', err.message);
+                              errors.push(err.message);
+                              resolve(err);
+                            } else {
+                              var newG = gm()
+                                .in('-page', '+0+0')
+                                .in(tmpName);
+                              if (el.layers) {
+                                for (var i = 0; i < listGeo.length; i++) {
+                                  var type = listGeo[i].geometry.type;
+                                  var coords = listGeo[i].geometry.coordinates[0];
+                                  if (coords && listGeo[i].type === 'marker') {
+                                    newG = newG.in('-page', '+' + (coords[1] * scale) + '+' + (coords[0] * scale))
+                                      .in(markerUrl);
+                                  }
+                                }
+                              }
+                              newG.mosaic()  // Merges the images as a matrix
+                                .write(tmpName, function (err) {
+                                  if (err) {
+                                    console.log('Merging tags to image "' + imageUrl + '"...Failed!');
+                                    errors.push(err.message);
+                                    resolve(err);
+                                  }
+                                  else {
+                                    console.log('Merging markups, tags to image "' + imageUrl + '"...Done!');
+                                    resolve();
+                                  }
+                                  //gm(tmpName).write(destinationPath, function() {
+                                  //  convertPdfToImage();
+                                  //});
+                                });
+                            }
+                          });
                         }
                       });
+                  }));
+                });
+                // all promises are resolved
+                Promise.all(promises)
+                  .then(function (data) {
+                    if (errors.length) {
+                      console.log(data);
+                      console.log('Starting export image with markups, tags to pdf...Failed!');
+                      failure("Cannot download the file!");
                     }
                     else {
-                      var tempFile = fs.readdirSync(outputFolder)[0];
-                      if (tempFile) {
-                        var tempFilePath = path.join(outputFolder, tempFile);
-                        var filePath = path.join(rootPath, document.projectFile.filePath);
-                        var fileFolder = path.join(rootPath, string.path(document.projectFile.filePath).baseDir);
-                        //var folder = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)));
-                        var fileExt = path.extname(filePath);
-                        var fileName = path.basename(filePath, fileExt);
-                        var thumbnail = path.join(fileFolder, fileName + '.thumb.jpg');
-                        fse.copySync(tempFilePath, filePath);
-                        res.send({
-                          success: true,
-                          filePath: document.projectFile.filePath
+                      console.log('Starting merge markups, tags to images...Done!');
+                      if (/\.pdf$/.test(document.projectFile.filePath)) {
+                        // convert pdf pages to images
+                        console.log('Merging images to pdf...');
+                        console.time("MergingImagesToPdf");
+                        exec(config.convertCommand + ' "' + outputFolder + '/*" -units "PixelsPerInch" -density 300 -compress jpeg "' + path.join(rootPath, string.join('/','assets','temp', uuid, string.path(document.projectFile.filePath).name)) + '"', function (error) {
+                          console.timeEnd("MergingImagesToPdf");
+                          if (error) {
+                            console.log('Error while converting pdf to image', error.message);
+                            failure(error.message);
+                          }
+                          else {
+                            console.log('Merge images to pdf successful!');
+                            console.log('Exporting document to pdf...Done');
+
+                            console.log('Upload file to S3...:: ', path.join(rootPath, string.join('/','assets','temp', uuid, string.path(document.projectFile.filePath).name)));
+
+                            aws.s3.upload(fs.createReadStream(path.join(rootPath, string.join('/','assets','temp', uuid, string.path(document.projectFile.filePath).name))), document.projectFile.filePath, function(evt) {
+                              // console.log(evt);
+                            }).
+                            then(function(data) {
+                              console.log(data);
+                              console.log('Upload file to S3...Done!');
+                              res.send({
+                                success: true,
+                                filePath: document.projectFile.filePath
+                              });
+                            }, function(err) {
+                              console.log(err);
+                              failure(err.message)
+                            });
+                          }
                         });
-                        //imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
-                        //  if(!err) {
-                        //    //updateConversionProgress(document.projectFile.fileId, baseRequest);
-                        //  } else {
-                        //    failure(err.message);
-                        //  }
-                        //});
-                      } else {
-                        failure('Cannot export the file!');
+                      }
+                      else {
+                        var tempFile = fs.readdirSync(outputFolder)[0];
+                        if (tempFile) {
+                          var tempFilePath = path.join(outputFolder, tempFile);
+
+                          aws.s3.upload(fs.createReadStream(tempFilePath), document.projectFile.filePath, function(evt) {
+                            // console.log(evt);
+                          }).
+                            then(function(data) {
+                              console.log(data);
+                              console.log('Upload file to S3...Done!');
+                              res.send({
+                                success: true,
+                                filePath: document.projectFile.filePath
+                              });
+                            }, function(err) {
+                              console.log(err);
+                              failure(err.message)
+                            });
+
+
+                          //var filePath = path.join(rootPath, document.projectFile.filePath);
+                          //var fileFolder = path.join(rootPath, string.path(document.projectFile.filePath).baseDir);
+                          ////var folder = path.join(fileFolder, utilService.getFolderNameFromFile(path.basename(filePath)));
+                          //var fileExt = path.extname(filePath);
+                          //var fileName = path.basename(filePath, fileExt);
+                          //var thumbnail = path.join(fileFolder, fileName + '.thumb.jpg');
+                          //fse.copySync(tempFilePath, filePath);
+                          //res.send({
+                          //  success: true,
+                          //  filePath: document.projectFile.filePath
+                          //});
+                          //imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
+                          //  if(!err) {
+                          //    //updateConversionProgress(document.projectFile.fileId, baseRequest);
+                          //  } else {
+                          //    failure(err.message);
+                          //  }
+                          //});
+                        } else {
+                          failure('Cannot export the file!');
+                        }
                       }
                     }
-                  }
+                  }).catch(function (fallback) {
+                  console.log(fallback);
                 });
+              });
             });
           });
       };
 
-      if (fs.existsSync(path.join(rootPath, document.projectFile.filePath))) {
-        console.log('File already exported, proceed to download');
-        res.send({
-          success: true,
-          filePath: document.projectFile.filePath
+      // todo have to check file exist from s3
+      aws.s3.isExists(document.projectFile.filePath)
+        .then(function () {
+          console.log('File already exported, proceed to download');
+          res.send({
+            success: true,
+            filePath: document.projectFile.filePath
+          });
+        }, function () {
+          var uuid = utilService.newGuidId();
+          utilService.ensureFolderExist(string.join('/', 'assets'));
+          utilService.ensureFolderExist(string.join('/', 'assets', 'temp'));
+          utilService.ensureFolderExist(string.join('/', 'assets', 'temp', uuid));
+
+          if (document.projectFile.parentProjectFileId !== 0) {
+            console.log('Get parent document...');
+            documentService.getDocumentById(document.projectFile.parentProjectFileId, projectId, baseRequest)
+              .then(function (parentDocument) {
+                console.log('Get parent document...Done');
+                console.log('Exporting document to pdf/image...');
+                exportFile(document, parentDocument.projectFile.filePath, uuid);
+              });
+          }
+          else {
+            console.log('Exporting document to pdf/image...');
+            exportFile(document, document.projectFile.filePath, uuid);
+          }
         });
-      }
-      else {
-        if (document.projectFile.parentProjectFileId !== 0) {
-          console.log('Get parent document...');
-          documentService.getDocumentById(document.projectFile.parentProjectFileId, projectId, baseRequest)
-            .then(function (parentDocument) {
-              console.log('Get parent document...Done');
-              console.log('Exporting document to pdf/image...');
-              exportFile(document, parentDocument.projectFile.filePath);
-            });
-        }
-        else {
-          console.log('Exporting document to pdf/image...');
-          exportFile(document, document.projectFile.filePath);
-        }
-      }
+
+      //if (fs.existsSync(path.join(rootPath, document.projectFile.filePath))) {
+      //  console.log('File already exported, proceed to download');
+      //  res.send({
+      //    success: true,
+      //    filePath: document.projectFile.filePath
+      //  });
+      //}
+      //else {
+      //  if (document.projectFile.parentProjectFileId !== 0) {
+      //    console.log('Get parent document...');
+      //    documentService.getDocumentById(document.projectFile.parentProjectFileId, projectId, baseRequest)
+      //      .then(function (parentDocument) {
+      //        console.log('Get parent document...Done');
+      //        console.log('Exporting document to pdf/image...');
+      //        exportFile(document, parentDocument.projectFile.filePath);
+      //      });
+      //  }
+      //  else {
+      //    console.log('Exporting document to pdf/image...');
+      //    exportFile(document, document.projectFile.filePath);
+      //  }
+      //}
+
     });
+}
+
+function _downloadFile(key, destFile, callback) {
+  return new Promise(function (resolve, reject) {
+    var file = fs.createWriteStream(destFile);
+    file.on('close', function () {
+      //callback();
+      resolve();
+    });
+    aws.s3.getObject(key).createReadStream()
+      .on('error', function (err) {
+        reject();
+      })
+      .pipe(file);
+  });
 }
 
 module.exports = {

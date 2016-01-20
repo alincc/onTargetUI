@@ -23,8 +23,7 @@ function uploadFile(req, res) {
       success: false
     };
   fileName = req.body.fileName
-    .replace(/\'/g, '_')
-    .replace(/\"/g, '_');
+    .replace(/[^a-z0-9-_\.]/gi, '-');
 
   file.name = fileName;
   console.log("Uploading the file  " + fileName + " with size: " + file.size);

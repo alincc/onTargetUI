@@ -297,7 +297,7 @@ function convertPdfToImage(req, res) {
               });
           };
 
-          var _doAddPage = function(){
+          var _doAddPage = function() {
             console.log('Adding page ' + (currentPage + 1) + ' to document...');
             var fp = path.join(fileFolder, fileFolderName, 'pages', pages[currentPage]);
             _addPage(baseRequest, fp, string.join('/', string.path(key).baseDir, fileFolderName, 'pages', pages[currentPage]), docId, _addCb)
@@ -336,62 +336,73 @@ function convertPdfToImage(req, res) {
         // Copy image file to folder to continue image splicing progress
         fse.copySync(filePath, fp);
 
-        console.log('Making thumbnail...');
-        var thumbnailName = fileNameWithout + '.thumb.jpg';
-        var thumbnail = path.join(fileNameFolderPath, thumbnailName);
-        var thumbnailPath = string.join('/', string.path(key).baseDir, fileNameFolder, thumbnailName);
-        imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
-          console.log('Making thumbnail...Done!');
-          aws.s3.upload(fs.createReadStream(thumbnail), thumbnailPath)
-            .then(function(data) {
-              res.send({
-                success: true
-              });
+        console.log('Uploading to S3...');
+        // Upload file to S3
+        aws.s3.upload(fs.createReadStream(fp), string.join('/', string.path(key).baseDir, fileFolderName, 'pages', fileName), function(evt) {
+          // console.log(evt);
+        }).
+          then(function(data) {
+            console.log('Uploading to S3...Done!');
+            console.log('Making thumbnail...');
+            var thumbnailName = fileNameWithout + '.thumb.jpg';
+            var thumbnail = path.join(fileNameFolderPath, thumbnailName);
+            var thumbnailPath = string.join('/', string.path(key).baseDir, fileNameFolder, thumbnailName);
+            imageService.cropImageSquare(filePath, thumbnail, 200, function(err) {
+              console.log('Making thumbnail...Done!');
+              aws.s3.upload(fs.createReadStream(thumbnail), thumbnailPath)
+                .then(function(data) {
+                  res.send({
+                    success: true
+                  });
+                });
             });
-        });
-        _addPage(baseRequest, filePath, string.join('/', string.path(key).baseDir, fileFolderName, 'pages', path.basename(filePath)), docId, function(currentPage) {
-          console.log('Starting images splicing...');
-          for(var size = 1; size <= maxZoomLevel; size++) {
-            promises.push(
-              imageService.tiles(
-                path.join(pageFolder, fileName),
-                tileSize * Math.pow(2, size),
-                size,
-                tileSize,
-                function(data) {
-                  // Upload file to S3
-                  _uploadZoomsToS3(path.join(path.dirname(fp), data.tileFolder), string.join('/', string.path(key).baseDir, fileFolderName, 'pages', data.tileFolder))
-                    .then(function() {
-                      // Update zoom level to page
-                      _updateZoomLevel(docId, baseRequest, currentPage, data.zoom)
+            _addPage(baseRequest, filePath, string.join('/', string.path(key).baseDir, fileFolderName, 'pages', path.basename(filePath)), docId, function(currentPage) {
+              console.log('Starting images splicing...');
+              // Copy image to page folder
+              for(var size = 1; size <= maxZoomLevel; size++) {
+                promises.push(
+                  imageService.tiles(
+                    path.join(pageFolder, fileName),
+                    tileSize * Math.pow(2, size),
+                    size,
+                    tileSize,
+                    function(data) {
+                      // Upload file to S3
+                      _uploadZoomsToS3(path.join(path.dirname(fp), data.tileFolder), string.join('/', string.path(key).baseDir, fileFolderName, 'pages', data.tileFolder))
                         .then(function() {
-                          // Send notifications
-                          pushService.Pusher().trigger('onTarget', 'document.preview.' + docId, {
-                            "name": "updateMaxNativeZoom",
-                            "value": {
-                              page: 1,
-                              maxNativeZoom: data.zoom
-                            }
-                          });
+                          // Update zoom level to page
+                          _updateZoomLevel(docId, baseRequest, currentPage, data.zoom)
+                            .then(function() {
+                              // Send notifications
+                              pushService.Pusher().trigger('onTarget', 'document.preview.' + docId, {
+                                "name": "updateMaxNativeZoom",
+                                "value": {
+                                  page: 1,
+                                  maxNativeZoom: data.zoom
+                                }
+                              });
+                            });
                         });
-                    });
-                }));
-          }
+                    }));
+              }
 
-          Promise.all(promises)
-            .then(function(resp) {
-              console.log(resp);
-              console.log('Starting images splicing...Done!');
-              updateConversionComplete(docId, baseRequest);
-            }, function(err) {
-              console.log('Starting images splicing...Failed!');
-              //triedTime = triedTime + 1;
-              //console.log('Re-start images splicing (' + triedTime + ')');
-              //tryAgain(err, triedTime, function() {
-              //  updateConversionComplete(docId, baseRequest);
-              //});
+              Promise.all(promises)
+                .then(function(resp) {
+                  console.log(resp);
+                  console.log('Starting images splicing...Done!');
+                  updateConversionComplete(docId, baseRequest);
+                }, function(err) {
+                  console.log('Starting images splicing...Failed!');
+                  //triedTime = triedTime + 1;
+                  //console.log('Re-start images splicing (' + triedTime + ')');
+                  //tryAgain(err, triedTime, function() {
+                  //  updateConversionComplete(docId, baseRequest);
+                  //});
+                });
             });
-        });
+          }, function(err) {
+            console.log(err);
+          });
       }
     }, function() {
       res.status(400);

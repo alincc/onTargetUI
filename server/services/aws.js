@@ -70,8 +70,6 @@ s3.getDirectories = function(key) {
       Delimiter: '/',
       Prefix: key
     }, function(err, data) {
-      console.log("Request to S3::");
-      console.log(JSON.stringify(data));
       if(err) {
         //reject(err);
         console.log("Error while getting objects::");

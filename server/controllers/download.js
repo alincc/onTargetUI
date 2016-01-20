@@ -12,8 +12,8 @@ function downloadFile(req, res) {
   var url = req.body.url;
   var uuid = req.body.uuid || utilService.newGuidId();
   var fileName = req.body.fileName
-    .replace(/\'/g, '_')
-    .replace(/\"/g, '_');
+    .replace(/[^a-z0-9-_\.]/gi, '-');
+
   var destinationDir = path.join(config.assetsPath, 'temp');
   utilService.ensureFolderExist(destinationDir);
   destinationDir = path.join(destinationDir, uuid);
