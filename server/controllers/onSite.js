@@ -636,6 +636,8 @@ function getZoomLevel(req, res) {
   // Get pages
   aws.s3.getDirectories(string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/'))
     .then(function (pages) {
+        console.log("Pages for this asset: ");
+        console.log(pages);
       _.each(pages, function (el, pageIndex) {
         // Pages
         pagePromises.push(_checkZoomLevel(el.Prefix, pageIndex));
