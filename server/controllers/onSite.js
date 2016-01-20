@@ -631,10 +631,11 @@ function getZoomLevel(req, res) {
 
   var pagePromises = [];
   console.log("Getting zoom level for path::");
-  console.log(string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/'));
+  var objectPath=string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/');
+  console.log(objectPath);
 
   // Get pages
-  aws.s3.getDirectories(string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/'))
+  aws.s3.getDirectories(objectPath)
     .then(function (pages) {
         console.log("Pages for this asset: ");
         console.log(pages);
