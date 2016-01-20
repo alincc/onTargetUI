@@ -631,7 +631,7 @@ function getZoomLevel(req, res) {
 
   var pagePromises = [];
   console.log("Getting zoom level for path::");
-  var objectPath=string.join('/', string.path(relativePath).baseDir, fileFolderName, 'pages/');
+  var objectPath=string.join('/',string.path(relativePath).baseDir, fileFolderName, 'pages/');
   console.log(objectPath);
 
   // Get pages

@@ -67,9 +67,11 @@ s3.getFiles = function(key) {
 s3.getDirectories = function(key) {
   return new Promise(function(resolve, reject) {
     client.listObjects({
-      Delimiter: '',
+      Delimiter: '/',
       Prefix: key
     }, function(err, data) {
+      console.log("Request to S3::");
+      console.log(JSON.stringify(data));
       if(err) {
         //reject(err);
         console.log("Error while getting objects::");
