@@ -319,6 +319,7 @@ module.exports = {
         console.log('Validating company logo...');
         validateCompanyLogo(data.companyLogoKey)
           .then(function(companyLogoPath) {
+              console.log(companyLogoPath);
             console.log('Validating company logo...Done!');
             var queryString = 'doctype=co&' +
               'v_logo=' + companyLogoPath + '&' +
