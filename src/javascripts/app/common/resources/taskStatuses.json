@@ -1,18 +1,18 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "name": "ACTIVE"
   },
   {
-    "id": "2",
+    "id": 2,
     "name": "PENDING"
   },
   {
-    "id": "3",
+    "id": 3,
     "name": "COMPLETED"
   },
   {
-    "id": "4",
+    "id": 4,
     "name": "EXPIRED"
   }
 ]
