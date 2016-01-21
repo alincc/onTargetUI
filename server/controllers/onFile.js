@@ -219,7 +219,7 @@ module.exports = {
                 console.log('Uploading to s3...');
                 aws.s3.upload(wkhtmltopdf(html, {
                   pageSize: 'letter',
-                  "T": "50mm",
+                  "T": "70mm",
                   disableSmartShrinking: true,
                   zoom: 0.6,
                   headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
@@ -342,7 +342,7 @@ module.exports = {
                 console.log('Uploading to s3...');
                 aws.s3.upload(wkhtmltopdf(html, {
                   pageSize: 'letter',
-                  "T": "50mm",
+                  "T": "70mm",
                   disableSmartShrinking: true,
                   zoom: 0.6,
                   headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
@@ -461,7 +461,7 @@ module.exports = {
                 console.log('Uploading to s3...');
                 aws.s3.upload(wkhtmltopdf(html, {
                   pageSize: 'letter',
-                  "T": "50mm",
+                  "T": "70mm",
                   disableSmartShrinking: true,
                   zoom: 0.6,
                   headerHtml: config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
@@ -586,7 +586,7 @@ module.exports = {
                 console.log('Uploading to s3...');
                 aws.s3.upload(wkhtmltopdf(html, {
                   pageSize: 'letter',
-                  "T": "50mm",
+                  "T": "70mm",
                   disableSmartShrinking: true,
                   zoom: 0.6,
                   "headerHtml": config.domain + '/server/assets/templates/header.html?' + encodeURI(queryString)
