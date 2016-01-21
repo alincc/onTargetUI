@@ -22,7 +22,7 @@ define(function(require) {
           //return $http.post(constant.domain + '/project/getProjectsByUser', model, {
           //  timeout: canceler.promise
           //});
-          return $http.post(constant.domain + '/project/getUserProjectList', model, {
+          return $http.post(constant.domain + '/project/v1/getUserProjectList', model, {
             timeout: canceler.promise
           });
         };
@@ -84,7 +84,7 @@ define(function(require) {
         };
 
         service.getUserProjectList = function (model) {
-          return $http.post(constant.domain + '/project/getUserProjectList', model);
+          return $http.post(constant.domain + '/project/v1/getUserProjectList', model);
         };
 
         service.getProjectByUser = function (model, canceler){
