@@ -59,4 +59,4 @@ Python excel: https://pypi.python.org/pypi/xlrd
 sudo firewall-cmd --zone=public --add-port=[port]/tcp --permanent
 sudo firewall-cmd --reload
 
-wkhtmltopdf -T 30mm --header-html "http://localhost:9001/server/assets/templates/header.html?fileNumber=999999&fileType=SANG DAO" www.stackoverflow.com test.pdf
+wkhtmltopdf -T 50mm --disable-smart-shrinking --zoom 0.6 --header-html "http://nois2.newoceaninfosys.com:3215/server/assets/templates/header.html?doctype=rfi&v_logo=https://ontarget-assets-test.s3.amazonaws.com/assets/companylogo/conxcover.jpg&v_fromFirstName=Sang&v_fromLastName=Dao&v_fromCompany=NOIS&v_date=11/12/12015&v_address=51%20Hoang%20Viet&v_toFirstName=Dao&v_toLastName=Minh&v_toCompany=New%20Ocean&v_id=CAWF49" www.stackoverflow.com test.pdf

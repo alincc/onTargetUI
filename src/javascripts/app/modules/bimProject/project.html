@@ -25,6 +25,9 @@
                     <label class="btnComments btn btn-default">
                         <input type="radio" name="options"/> Comments
                     </label>
+                    <label class="btnTasks btn btn-default" style="display: none">
+                        <input type="radio" name="options"/> Tasks
+                    </label>
                 </div>
                 <div class="panel-body sidespanWrapper">
                     <div class="sidespan">
@@ -34,6 +37,7 @@
                         <div class="typesWrapper ih"></div>
                         <div class="layersWrapper ih"></div>
                         <div class="commentWrapper ih"></div>
+                        <div class="taskWrapper ih"></div>
                     </div>
                 </div>
             </div>
@@ -47,6 +51,8 @@
             return el.featureKey === 'ONBIM_COMMENT_VIEW';
         }) : [];
         var isAllowViewComment = commentViewPermission.length > 0;
+        var projectBimFileId = $('#projectBimFileId').val();
+        var domain = $('#request_domain').val();
 
         othis.loaded = {}; // poid -> roid
         othis.models = {};
@@ -84,12 +90,17 @@
         };
 
         this.selected = function(origin, groupId, id) {
-            othis.selectListeners.trigger(function(selectListener) {
-                selectListener(origin, groupId, id);
+            othis.getBimElement(id, function(){
+                othis.selectListeners.trigger(function(selectListener) {
+                    selectListener(origin, groupId, id);
+                });
             });
+
         };
 
         this.unselected = function(groupId, id) {
+            othis.hideTabTask();
+
             othis.unselectListeners.trigger(function(unselectListener) {
                 unselectListener(groupId, id);
             });
@@ -403,6 +414,11 @@
 //				});
                     });
                 }
+
+                $('.taskWrapper').load(Global.templatePath + "tasks.html", function(){
+
+                });
+
             });
         };
 
@@ -491,6 +507,58 @@
             }).modal({keyboard: true});
         };
 
+        this.showActivities = function(){
+            if(othis.sidespan != null) {
+                othis.sidespan.hide();
+            }
+            othis.sidespan = othis.tasks;
+            othis.sidespan.show();
+        };
+
+        this.showTabTask = function(){
+            $('.btnTasks').show();
+        };
+
+        this.hideTabTask = function(){
+            $('.btnTasks').hide().removeClass('active');
+
+            $('.btnProjectTree').addClass('active');
+            othis.loadProjectTree();
+        };
+
+        this.getBimElement = function(id, cb){
+            var request = {
+                baseRequest: {
+                    loggedInUserId: Global.authenticationData.userData.userId,
+                    loggedInUserProjectId: Global.projectData.project.projectId
+                },
+                bimFileElementId: id,
+                bimFileId: projectBimFileId
+            };
+
+            $.ajax({
+                url: domain + '/bim/link/get',
+                type: 'POST',
+                data: JSON.stringify(request),
+                dataType: "json",
+                contentType: 'application/json',
+                context: {
+                    id: id
+                }
+            }).success(function (resp) {
+                if(resp.projectBimElementToTaskLinkDTO){
+                    othis.tasks = new Tasks($('.taskWrapper'), this.id, resp.projectBimElementToTaskLinkDTO.projectTaskId);
+                } else{
+                    othis.tasks = new Tasks($('.taskWrapper'), this.id);
+                }
+
+                othis.showTabTask();
+                cb();
+            }).error(function (err) {
+
+            });
+        };
+
 //	othis.menuItems.push(main.addMenuDivider("Project"));
 //	othis.menuItems.push(main.addMenuHeader("Project", "This project"));
 
@@ -508,6 +576,8 @@
         containerDiv.find(".btnTypes").click(othis.showTypes);
         containerDiv.find(".btnLayers").click(othis.showLayers);
         containerDiv.find(".btnClassifications").click(othis.showClassifications);
+
+        containerDiv.find(".btnTasks").click(othis.showActivities);
 //	containerDiv.find(".btnComment").click(othis.showComment);
     }
 </script>

@@ -67,11 +67,8 @@ define(function(require) {
               $scope.onView = true;
             }
           } else {
-
-            if(document.status === 'SUBMITTED') {
-              $scope.onView = true;
+            if(document.status !== 'SUBMITTED') {
               $scope.onApprove = true;
-            } else {
               $scope.onView = true;
             }
           }
@@ -230,8 +227,8 @@ define(function(require) {
         if($scope.document.documentId) {
           $scope.responses = responses;
 
-          if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView) {
-            $scope.onResponsed = $scope.responses.length > 0;
+          if(!$scope.onView) {
+            $scope.onResponsed = !$scope.onEdit ? true : ($scope.responses.length > 0);
           }
 
           loadDocumentAttachments(true);
@@ -407,8 +404,8 @@ define(function(require) {
           .success(function(resp) {
             $scope.responses = resp.documentResponses;
 
-            if(document.createdBy === userContext.authentication().userData.userId && !$scope.onView) {
-              $scope.onResponsed = $scope.responses.length > 0;
+            if(!$scope.onView) {
+              $scope.onResponsed = !$scope.onEdit ? true : ($scope.responses.length > 0);
             }
           })
           .error(function(err) {

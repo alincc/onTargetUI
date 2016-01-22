@@ -89,6 +89,8 @@ define(function(require) {
 
         $scope.model.project.startDate = $filter('datetime')($scope.model.project.startDate);
         $scope.model.project.endDate = $filter('datetime')($scope.model.project.endDate);
+        //$scope.model.project.projectDescription = $scope.model.project.projectDescription.length ? $scope.model.project.projectDescription : ' ';
+
 
         activityFactory.addActivity($scope.model).then(
           function(resp) {

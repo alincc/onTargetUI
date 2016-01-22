@@ -26,7 +26,9 @@ define(function (require) {
       utilFactory = require('app/common/services/util'),
       bimsurfer = require('bimsurfer'),
       bimsurferEvents = require('bimsurferEvents'),
-      bimsurferViewer = require('bimsurferViewer');
+      bimsurferViewer = require('bimsurferViewer'),
+      bootstrapDatepicker = require('bootstrapDatepicker'),
+      select2 = require('select2');
 
   var module = angular.module('app.bimProject', [
     'ui.router',

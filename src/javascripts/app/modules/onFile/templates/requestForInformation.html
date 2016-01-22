@@ -6,6 +6,7 @@
     <tab heading="Request For Information" ng-click="openAction(actions.requestForInformation)" active="true">
         <button class="btn btn-info button-export" ng-click="exportPdf(true)" ng-if="onView" ng-disabled="isExporting">Export PDF
         </button>
+
         <div class="rfi-section" ng-if="!onView">
             <div class="row">
                 <div class="col-md-12">
@@ -227,7 +228,7 @@
                     </form>
 
                     <div class="panel panel-default comment-section" style="clear: both"
-                         ng-if="(onEdit || onApprove || onView) && !onAddNew">
+                         ng-if="!onAddNew">
                         <div class="panel-heading"><b>Responses</b></div>
                         <div class="panel-body">
                             <div class="pull-none" style="clear:both;">
@@ -269,7 +270,7 @@
                                     </li>
                                 </ul>
 
-                                <div class="response-container" ng-if="(onEdit || onApprove) && isAllowAddResponse">
+                                <div class="response-container" ng-if="isAllowAddResponse">
                                     <form name="_response_form" novalidate class="form-validation"
                                           ng-submit="addResponse(_response_form)">
                                         <div class="form-group">

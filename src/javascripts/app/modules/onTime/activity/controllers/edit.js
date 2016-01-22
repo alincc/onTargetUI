@@ -39,7 +39,7 @@ define(function (require){
         projectId: activity.projectId,
         projectName: activity.projectName,
         projectDescription: activity.projectDescription,
-        companyId: activity.company.companyId,
+        companyId: activity.company ? activity.company.companyId : '',
         startDate: activity.startDate,
         endDate: activity.endDate,
         status: activity.status
@@ -142,6 +142,7 @@ define(function (require){
       $scope.save = function (){
         $scope.model.project.startDate = $filter('datetime')($scope.model.project.startDate);
         $scope.model.project.endDate = $filter('datetime')($scope.model.project.endDate);
+        //$scope.model.project.projectDescription = $scope.model.project.projectDescription.length ? $scope.model.project.projectDescription : ' ';
 
         $scope.onSubmit = true;
         activityFactory.addActivity($scope.model).then(

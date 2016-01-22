@@ -1,7 +1,9 @@
-/* angular-moment.js / v0.10.1 / (c) 2013, 2014, 2015 Uri Shaked / MIT Licence */
+/* angular-moment.js / v0.9.2 / (c) 2013, 2014, 2015 Uri Shaked / MIT Licence */
 
-'format amd';
+'format global';
 /* global define */
+'deps angular';
+'deps moment';
 
 (function () {
 	'use strict';
@@ -119,38 +121,15 @@
 
 				/**
 				 * @ngdoc property
-				 * @name angularMoment.config.amTimeAgoConfig#titleFormat
+				 * @name angularMoment.config.amTimeAgoConfig#format
 				 * @propertyOf angularMoment.config:amTimeAgoConfig
 				 * @returns {string} The format of the date to be displayed in the title of the element. If null,
 				 *        the directive set the title of the element.
 				 *
 				 * @description
-				 * The format of the date used for the title of the element. null by default.
+				 * Specify the format of the date when displayed. null by default.
 				 */
-				titleFormat: null,
-
-				/**
-				 * @ngdoc property
-				 * @name angularMoment.config.amTimeAgoConfig#fullDateThreshold
-				 * @propertyOf angularMoment.config:amTimeAgoConfig
-				 * @returns {number} The minimum number of days for showing a full date instead of relative time
-				 *
-				 * @description
-				 * The threshold for displaying a full date. The default is null, which means the date will always
-				 * be relative, and full date will never be displayed.
-				 */
-				fullDateThreshold: null,
-
-				/**
-				 * @ngdoc property
-				 * @name angularMoment.config.amTimeAgoConfig#fullDateFormat
-				 * @propertyOf angularMoment.config:amTimeAgoConfig
-				 * @returns {string} The format to use when displaying a full date.
-				 *
-				 * @description
-				 * Specify the format of the date when displayed as full date. null by default.
-				 */
-				fullDateFormat: null
+				titleFormat: null
 			})
 
 		/**
@@ -168,12 +147,12 @@
 					var currentFormat = angularMomentConfig.format;
 					var withoutSuffix = amTimeAgoConfig.withoutSuffix;
 					var titleFormat = amTimeAgoConfig.titleFormat;
-					var fullDateThreshold = amTimeAgoConfig.fullDateThreshold;
-					var fullDateFormat = amTimeAgoConfig.fullDateFormat;
 					var localDate = new Date().getTime();
 					var preprocess = angularMomentConfig.preprocess;
-					var modelName = attr.amTimeAgo;
+					var modelName = attr.amTimeAgo.replace(/^::/, '');
+					var isBindOnce = (attr.amTimeAgo.indexOf('::') === 0);
 					var isTimeElement = ('TIME' === element[0].nodeName.toUpperCase());
+					var unwatchChanges;
 
 					function getNow() {
 						var now;
@@ -196,20 +175,14 @@
 					}
 
 					function updateTime(momentInstance) {
-						var daysAgo = getNow().diff(momentInstance, 'day');
-						var showFullDate = fullDateThreshold && daysAgo >= fullDateThreshold;
-
-						if (showFullDate) {
-							element.text(momentInstance.format(fullDateFormat));
-						} else {
-							element.text(momentInstance.from(getNow(), withoutSuffix));
-						}
+						element.text(momentInstance.from(getNow(), withoutSuffix));
 
 						if (titleFormat && !element.attr('title')) {
 							element.attr('title', momentInstance.local().format(titleFormat));
 						}
 
-						if (!showFullDate) {
+						if (!isBindOnce) {
+
 							var howOld = Math.abs(getNow().diff(momentInstance, 'minute'));
 							var secondsUntilUpdate = 3600;
 							if (howOld < 1) {
@@ -241,7 +214,7 @@
 						}
 					}
 
-					scope.$watch(modelName, function (value) {
+					unwatchChanges = scope.$watch(modelName, function (value) {
 						if ((typeof value === 'undefined') || (value === null) || (value === '')) {
 							cancelTimer();
 							if (currentValue) {
@@ -254,6 +227,10 @@
 
 						currentValue = value;
 						updateMoment();
+
+						if (value !== undefined && isBindOnce) {
+							unwatchChanges();
+						}
 					});
 
 					if (angular.isDefined(attr.amWithoutSuffix)) {
@@ -276,16 +253,6 @@
 
 					attr.$observe('amPreprocess', function (newValue) {
 						preprocess = newValue;
-						updateMoment();
-					});
-
-					attr.$observe('amFullDateThreshold', function (newValue) {
-						fullDateThreshold = newValue;
-						updateMoment();
-					});
-
-					attr.$observe('amFullDateFormat', function (newValue) {
-						fullDateFormat = newValue;
 						updateMoment();
 					});
 
@@ -398,13 +365,10 @@
 				 * Otherwise, it'll not apply any timezone shift.
 				 *
 				 * @param {Moment} aMoment a moment() instance to apply the timezone shift to
-				 * @param {string=} timezone The timezone to apply. If none given, will apply the timezone
-				 * 		configured in angularMomentConfig.timezone.
-				 *
 				 * @returns {Moment} The given moment with the timezone shift applied
 				 */
-				this.applyTimezone = function (aMoment, timezone) {
-					timezone = timezone || angularMomentConfig.timezone;
+				this.applyTimezone = function (aMoment) {
+					var timezone = angularMomentConfig.timezone;
 					if (aMoment && timezone) {
 						if (aMoment.tz) {
 							aMoment = aMoment.tz(timezone);
@@ -486,7 +450,7 @@
 		 * @function
 		 */
 			.filter('amDateFormat', ['moment', 'amMoment', 'angularMomentConfig', function (moment, amMoment, angularMomentConfig) {
-				function amDateFormatFilter(value, format, preprocess, timezone) {
+				function amDateFormatFilter(value, format, preprocess) {
 					if (typeof value === 'undefined' || value === null) {
 						return '';
 					}
@@ -497,7 +461,7 @@
 						return '';
 					}
 
-					return amMoment.applyTimezone(date, timezone).format(format);
+					return amMoment.applyTimezone(date).format(format);
 				}
 
 				amDateFormatFilter.$stateful = angularMomentConfig.statefulFilters;
@@ -556,7 +520,6 @@
 		define(['angular', 'moment'], angularMoment);
 	} else if (typeof module !== 'undefined' && module && module.exports) {
 		angularMoment(angular, require('moment'));
-		module.exports = 'angularMoment';
 	} else {
 		angularMoment(angular, window.moment);
 	}

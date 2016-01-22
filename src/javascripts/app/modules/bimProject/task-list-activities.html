@@ -1,0 +1,20 @@
+<div class="activity-item" data-id="{{activity.id}}">
+    <div class="info">
+        <div class="title">{{activity.projectName}}</div>
+        <div class="date">
+            <span>{{activity.startDate}}</span> -
+            <span>{{activity.endDate}}</span>
+        </div>
+        <div class="tasks">
+            {{taskCount.taskCountByStatus}}
+        </div>
+    </div>
+    <div class="status">
+        <div class="percentage">
+            {{activity.percentageComplete}}%
+        </div>
+    </div>
+    <div class="arrow-icon">
+        <i class="fa fa-chevron-right"></i>
+    </div>
+</div>
