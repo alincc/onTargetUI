@@ -89,7 +89,7 @@ require.config({
     tween: '../js/modelViewer/Tween',
     // tree view
     jstree: '../bower_components/jstree/dist/jstree',
-    bootstrapDatepicker: '../js/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
+    bootstrapDatepicker: '../bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker',
     bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
     select2: '../bower_components/select2/dist/js/select2'
   },
