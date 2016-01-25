@@ -91,7 +91,8 @@ require.config({
     jstree: '../bower_components/jstree/dist/jstree',
     bootstrapDatepicker: '../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
     bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
-    select2: '../bower_components/select2/dist/js/select2'
+    select2: '../bower_components/select2/dist/js/select2',
+    fancybox: '../bower_components/fancybox/source/jquery.fancybox.pack'
   },
 
   shim: {
@@ -241,7 +242,8 @@ require.config({
     helvetiker_regular_typeface: {deps: ['three']},
     jstree: {deps: ['jQuery']},
     bootstrapDatepicker: {deps: ['jQuery', 'bootstrap']},
-    select2: {deps: ['jQuery']}
+    select2: {deps: ['jQuery']},
+    fancybox: {deps: ['jQuery']}
   }
 });
 
