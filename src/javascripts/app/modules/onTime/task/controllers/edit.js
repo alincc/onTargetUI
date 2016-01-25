@@ -87,7 +87,7 @@ define(function(require) {
         $scope.model.task.endDate = $filter('datetime')($scope.model.task.endDate);
 
         $scope.onSubmit = true;
-        taskFactory.updateTask($sc).then(
+        taskFactory.updateTask($scope.model).then(
           function(resp) {
             $scope.onSubmit = false;
             $scope.task_form.$setPristine();
