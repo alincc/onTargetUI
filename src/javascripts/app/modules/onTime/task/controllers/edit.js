@@ -32,7 +32,7 @@ define(function(require) {
         projectTaskId: $scope.currenttask.projectTaskId,
         title: $scope.currenttask.title,
         description: $scope.currenttask.description,
-        status: $scope.currenttask.status,
+        status: parseInt($scope.currenttask.status),
         severity: $scope.currenttask.severity.taskPriorityId,
         startDate: $scope.currenttask.startDate,
         endDate: $scope.currenttask.endDate,

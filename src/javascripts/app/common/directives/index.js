@@ -28,7 +28,8 @@ define(function(require) {
     customScroll = require('./customScroll'),
     fixHeight = require('./fixHeight'),
     fullScreen = require('./fullScreen'),
-    notificationLinkToPage = require('./notificationLinkToPage');
+    notificationLinkToPage = require('./notificationLinkToPage'),
+    fancybox = require('./fancybox');
 
   var module = angular.module('common.directives',
     [
@@ -59,7 +60,8 @@ define(function(require) {
       'common.directives.treeView',
       'common.directives.fixHeight',
       'common.directives.fullScreen',
-      'common.directives.notificationLinkToPage'
+      'common.directives.notificationLinkToPage',
+      'common.directives.fancybox'
     ]);
   return module;
 });

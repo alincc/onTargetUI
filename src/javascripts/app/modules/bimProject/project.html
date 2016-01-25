@@ -544,8 +544,11 @@
                 contentType: 'application/json',
                 context: {
                     id: id
-                }
+                },
+                async: false
             }).success(function (resp) {
+                console.log('resp', resp);
+
                 if(resp.projectBimElementToTaskLinkDTO){
                     othis.tasks = new Tasks($('.taskWrapper'), this.id, resp.projectBimElementToTaskLinkDTO.projectTaskId);
                 } else{
