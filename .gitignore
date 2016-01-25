@@ -1,3 +1,8 @@
-node_modules
-.idea
-build
+node_modules/
+.idea/
+build/
+src/bower_components/
+src/javascripts/main.min.js
+src/javascripts/main.min.js.map
+src/css/main.css
+src/css/main.min.css

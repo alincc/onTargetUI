@@ -68,8 +68,8 @@ require.config({
     leafletDraw: '../bower_components/leaflet.draw/dist/leaflet.draw',
     leafletFullScreen: '../bower_components/leaflet.fullscreen/Control.FullScreen',
     cryptorJs: '../bower_components/crypto-js/crypto-js',
-    angularChart: '../bower_components/angular-chart.js/dist/angular-chart',
-    chartjs: '../bower_components/Chart.js/Chart',
+    angularChart: '../js/angular-chart.js/dist/angular-chart',
+    'chart': '../bower_components/Chart.js/Chart',
     'jquery.ui.widget': '../js/bim/jquery.ui.widget',
     jqueryUpload: '../js/bim/jquery.fileupload',
     History: '../js/bim/history.adapter.jquery',
@@ -89,7 +89,7 @@ require.config({
     tween: '../js/modelViewer/Tween',
     // tree view
     jstree: '../bower_components/jstree/dist/jstree',
-    bootstrapDatepicker: '../bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker',
+    bootstrapDatepicker: '../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
     bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
     select2: '../bower_components/select2/dist/js/select2'
   },
@@ -214,7 +214,7 @@ require.config({
       deps: ['leaflet']
     },
     "angularChart": {
-      deps: ['angular', 'chartjs']
+      deps: ['angular', 'chart']
     },
     "jquery.ui.widget": {
       deps: ['jQuery']
