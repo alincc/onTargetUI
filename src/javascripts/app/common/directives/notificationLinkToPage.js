@@ -27,6 +27,20 @@ define(function(require) {
       },
       link: function($scope, element, attrs) {
 
+        function getActivity(activityId, callBack){
+          //this case occur when current activity id as activity id get by notification
+          if($rootScope.activitySelected && $rootScope.activitySelected.projectId === activityId){
+            callBack();
+            return;
+          }
+
+          //this case occur when current activity is null or current activity id different activity id get by notification
+          activityFactory.getActivityById($scope.notification.notificationAttributes[1].value).success(function(resp){
+            $rootScope.activitySelected = resp.project;
+            callBack();
+          });
+        }
+
         function getObjectUrl() {
           if(!$scope.notification.notificationType) {
             return undefined;
@@ -281,20 +295,6 @@ define(function(require) {
 
           return url;
         }
-
-        var getActivity = function(activityId, callBack){
-          //this case occur when current activity id as activity id get by notification
-          if($rootScope.activitySelected && $rootScope.activitySelected.projectId === activityId){
-            callBack();
-            return;
-          }
-
-          //this case occur when current activity is null or current activity id different activity id get by notification
-          activityFactory.getActivityById($scope.notification.notificationAttributes[1].value).success(function(resp){
-            $rootScope.activitySelected = resp.project;
-            callBack();
-          });
-        };
 
         element.on('click', function() {
           var urlObject = getObjectUrl();

@@ -21,7 +21,7 @@ define(function(require) {
     })
     .filter('taskStatus', function() {
       return function(input) {
-        return _.result(_.find(angular.fromJson(taskStatuses), {id: input}), 'name');
+        return _.result(_.find(angular.fromJson(taskStatuses), {id: parseInt(input)}), 'name');
       };
     })
     .filter('taskStatusColor', ['appConstant', function(appConstant) {
