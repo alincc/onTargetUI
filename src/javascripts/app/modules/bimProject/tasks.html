@@ -2067,14 +2067,45 @@
                         items += '<tr>' +
                                 '<td class="interval">' +
                                 '<span>' + parseMonthToName(budget[i].taskInterval.month) + '</span>-<span>' + budget[i].taskInterval.year + '</span>' +
+                                '</td>';
+
+                        if(budget[i].costs[0]){
+                            items += '<td class="budget-cost">' +
+                                    '<span class="budget-text">' + showDollarOrHour(budget[i].costs[0].cost) + '</span>' +
+                                    '<input type="number" max="9999999" min="-9999999" data-val="' + budget[i].costs[0].cost + '" data-id="' + budget[i].costs[0].id + '" data-cost-type="' + budget[i].costs[0].costType + '" data-month="' + budget[i].costs[0].month + '" data-year="' + budget[i].costs[0].year + '" data-from-date="' + budget[i].costs[0].fromDate + '" data-to-date="' + budget[i].costs[0].toDate + '" class="budget-input" value="' + budget[i].costs[0].cost + '" style="display: none">' +
+                                    '</td>';
+                        } else{
+                            items += '<td class="budget-cost">' +
+                                    '<span class="budget-text">' + showDollarOrHour(0) + '</span>' +
+                                    '<input type="number" max="9999999" min="-9999999" data-val="0" data-id="" data-cost-type="PLANNED" data-month="' + budget[i].taskInterval.month + '" data-year="' + budget[i].taskInterval.year + '" data-from-date="" data-to-date="" class="budget-input" value="0" style="display: none">' +
+                                    '</td>';
+                        }
+
+                        if(budget[i].costs[1]){
+                            items += '<td class="budget-cost">' +
+                                    '<span class="budget-text">' + showDollarOrHour(budget[i].costs[1].cost) + '</span>' +
+                                    '<input type="number" max="9999999" min="-9999999" data-val="' + budget[i].costs[1].cost + '" data-id="' + budget[i].costs[1].id + '" data-cost-type="' + budget[i].costs[1].costType + '" data-month="' + budget[i].costs[1].month + '" data-year="' + budget[i].costs[1].year + '" data-from-date="' + budget[i].costs[1].fromDate + '" data-to-date="' + budget[i].costs[1].toDate + '" class="budget-input" value="' + budget[i].costs[1].cost + '" style="display: none">' +
+                                    '</td>';
+                        } else{
+                            items += '<td class="budget-cost">' +
+                                    '<span class="budget-text">' + showDollarOrHour(0) + '</span>' +
+                                    '<input type="number" max="9999999" min="-9999999" data-val="0" data-id="" data-cost-type="ACTUAL" data-month="' + budget[i].taskInterval.month + '" data-year="' + budget[i].taskInterval.year + '" data-from-date="" data-to-date="" class="budget-input" value="0" style="display: none">' +
+                                    '</td>';
+                        }
+
+                        items += '</tr>';
+                    } else {
+                        items += '<tr>' +
+                                '<td class="interval">' +
+                                '<span>' + parseMonthToName(budget[i].taskInterval.month) + '</span>-<span>' + budget[i].taskInterval.year + '</span>' +
                                 '</td>' +
                                 '<td class="budget-cost">' +
-                                '<span class="budget-text">' + showDollarOrHour(budget[i].costs[0].cost) + '</span>' +
-                                '<input type="number" max="9999999" min="-9999999" data-val="' + budget[i].costs[0].cost + '" data-id="' + budget[i].costs[0].id + '" data-cost-type="' + budget[i].costs[0].costType + '" data-month="' + budget[i].costs[0].month + '" data-year="' + budget[i].costs[0].year + '" data-from-date="' + budget[i].costs[0].fromDate + '" data-to-date="' + budget[i].costs[0].toDate + '" class="budget-input" value="' + budget[i].costs[0].cost + '" style="display: none">' +
+                                '<span class="budget-text">' + showDollarOrHour(0) + '</span>' +
+                                '<input type="number" max="9999999" min="-9999999" data-val="0" data-id="" data-cost-type="PLANNED" data-month="' + budget[i].taskInterval.month + '" data-year="' + budget[i].taskInterval.year + '" data-from-date="" data-to-date="" class="budget-input" value="0" style="display: none">' +
                                 '</td>' +
                                 '<td class="budget-cost">' +
-                                '<span class="budget-text">' + showDollarOrHour(budget[i].costs[1].cost) + '</span>' +
-                                '<input type="number" max="9999999" min="-9999999" data-val="' + budget[i].costs[1].cost + '" data-id="' + budget[i].costs[1].id + '" data-cost-type="' + budget[i].costs[1].costType + '" data-month="' + budget[i].costs[1].month + '" data-year="' + budget[i].costs[1].year + '" data-from-date="' + budget[i].costs[1].fromDate + '" data-to-date="' + budget[i].costs[1].toDate + '" class="budget-input" value="' + budget[i].costs[1].cost + '" style="display: none">' +
+                                '<span class="budget-text">' + showDollarOrHour(0) + '</span>' +
+                                '<input type="number" max="9999999" min="-9999999" data-val="0" data-id="" data-cost-type="ACTUAL" data-month="' + budget[i].taskInterval.month + '" data-year="' + budget[i].taskInterval.year + '" data-from-date="" data-to-date="" class="budget-input" value="0" style="display: none">' +
                                 '</td>' +
                                 '</tr>';
                     }
@@ -2544,7 +2575,7 @@
             });
 
             if(configuration){
-                unit = configuration.configValue !== 'HOUR' ? '$' : (cost > 1 ? 'HOUR' : 'HOURS');
+                unit = configuration.configValue !== 'HOUR' ? '$' : (cost > 1 ? 'HOURS' : 'HOUR');
             }
 
             return unit === '$' ? (unit + '' + cost) : (cost + ' ' + unit) ;
@@ -2736,7 +2767,7 @@
             var year = $(this).attr('data-year');
             var fromDate = $(this).attr('data-from-date');
             var toDate = $(this).attr('data-to-date');
-            var isDollar = true;
+            var isDollar = showDollarOrHour(parseInt(cost)).indexOf('$') > -1;
             var id = $(this).attr('data-id');
             var val = $(this).attr('data-val');
 
@@ -2745,6 +2776,11 @@
             }
 
             if(val !== cost){
+                if(!id || !id.length){
+                    fromDate = taskBudget.startDate;
+                    toDate = taskBudget.endDate;
+                }
+
                 othis.updateBudgetCost($(this), id, cost, costType, fromDate, isDollar, month, taskId, toDate, year, taskBudget.creatorId);
             } else {
                 $('.list-container').find('.budget-cost').each(function(){
