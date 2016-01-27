@@ -1,0 +1,32 @@
+<div class="h-full tab-content">
+    <div class="h-full ng-scope">
+        <div class="block h-full">
+            <div class="task-owner m-t-xs m-b-xs">
+                {{task.assignees}}
+            </div>
+
+            <div class="control m-t-sm">
+                <div class="ow-add-box" style="display: none">
+                    <form>
+                        <div class="input-group">
+                            <select class="select2-multiple form-control" name="taskAssignee"></select>
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary assignee-create">
+                                <i class="fa fa-plus"></i> Add
+                            </button>
+                              <button type="button" class="btn btn-warning assignee-cancel">
+                                  <i class="fa fa-minus"></i> Cancel
+                              </button>
+                          </span>
+                        </div>
+                    </form>
+                </div>
+
+                <button type="button" class="btn btn-primary m-t-md assignee-add">
+                    <i class="fa fa-plus"></i> Add Assignee
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

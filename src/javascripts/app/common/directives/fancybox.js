@@ -1,8 +1,7 @@
 define(function(require) {
   'use strict';
   var angular = require('angular'),
-    jstree = require('jstree'),
-    jQuery = require('jQuery'),
+    jQuery = require('jquery'),
     fancybox = require('fancybox'),
     module;
   module = angular.module('common.directives.fancybox', []);

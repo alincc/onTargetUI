@@ -17,10 +17,10 @@ require.config({
   // runtime paths and shims
   paths: {
     // end of network components
-    jQuery: '../bower_components/jquery/dist/jquery',
+    jquery: '../bower_components/jquery/dist/jquery',
     jQueryMouseWheel: '../bower_components/jquery-mousewheel/jquery.mousewheel',
     jQueryCustomScroll: '../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar',
-
+    'jquery.ui': '../bower_components/jquery-ui/jquery-ui',
     angular: '../bower_components/angular/angular',
     angularMocks: '../bower_components/angular-mocks/angular-mocks',
     angularAnimate: '../bower_components/angular-animate/angular-animate',
@@ -70,8 +70,6 @@ require.config({
     cryptorJs: '../bower_components/crypto-js/crypto-js',
     angularChart: '../js/angular-chart.js/dist/angular-chart',
     'chart': '../bower_components/Chart.js/Chart',
-    'jquery.ui.widget': '../js/bim/jquery.ui.widget',
-    jqueryUpload: '../js/bim/jquery.fileupload',
     History: '../js/bim/history.adapter.jquery',
     jqueryScrollTo: '../js/bim/jquery.scrollto',
     bimsurfer: '../js/bim/bimsurfer/api/BIMSURFER',
@@ -96,17 +94,20 @@ require.config({
   },
 
   shim: {
-    "jQuery": {
+    "jquery": {
       exports: "jQuery"
     },
     "jQueryMouseWheel": {
-      deps: ["jQuery"]
+      deps: ["jquery"]
     },
     "jQueryCustomScroll": {
-      deps: ["jQuery", "jQueryMouseWheel"]
+      deps: ["jquery", "jQueryMouseWheel"]
+    },
+    'jquery.ui': {
+      deps: ['jquery']
     },
     "jPlot": {
-      deps: ["jQuery"]
+      deps: ["jquery"]
     },
     "jPlotPie": {
       deps: ["jPlot"]
@@ -130,7 +131,7 @@ require.config({
       deps: ["spin"]
     },
     "angular": {
-      deps: ["jQuery"],
+      deps: ["jquery"],
       exports: "angular"
     },
     "angularMocks": {
@@ -217,14 +218,8 @@ require.config({
     "angularChart": {
       deps: ['angular', 'chart']
     },
-    "jquery.ui.widget": {
-      deps: ['jQuery']
-    },
-    "jqueryUpload": {
-      deps: ['jQuery', 'jquery.ui.widget']
-    },
     "jqueryScrollTo": {
-      deps: ['jQuery']
+      deps: ['jquery']
     },
     "bimsurferEvents": {
       deps: ['bimsurfer']
@@ -240,31 +235,31 @@ require.config({
     stereoEffect: {deps: ['three']},
     assimpJsonLoader: {deps: ['three']},
     helvetiker_regular_typeface: {deps: ['three']},
-    jstree: {deps: ['jQuery']},
-    bootstrapDatepicker: {deps: ['jQuery', 'bootstrap']},
-    select2: {deps: ['jQuery']},
-    fancybox: {deps: ['jQuery']}
+    jstree: {deps: ['jquery']},
+    bootstrapDatepicker: {deps: ['jquery', 'bootstrap']},
+    select2: {deps: ['jquery']},
+    fancybox: {deps: ['jquery']}
   }
 });
 
 // IE console issue when the developer tools are not opened.
 //Ensures there will be no 'console is undefined' errors
-if(!window.console) {
-  window.console = window.console || (function() {
+if (!window.console) {
+  window.console = window.console || (function () {
       var c = {};
-      c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile = c.clear = c.exception = c.trace = c.assert = function() {
+      c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile = c.clear = c.exception = c.trace = c.assert = function () {
       };
       return c;
     })();
 }
 
 require([
-  'jQuery',
+  'jquery',
   'angular',
   'app/app'
-], function(jQuery, angular, app) {
+], function (jQuery, angular, app) {
   var $html = angular.element(document.getElementsByTagName('html')[0]);
-  angular.element().ready(function() {
+  angular.element().ready(function () {
     //$html.addClass('ng-app');
     angular.bootstrap($html, [app.name]);
 

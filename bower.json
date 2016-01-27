@@ -54,6 +54,7 @@
     "select2": "~4.0.1",
     "Chart.js": "~1.0.2",
     "eonasdan-bootstrap-datetimepicker": "~4.17.37",
-    "fancybox": "~2.1.5"
+    "fancybox": "~2.1.5",
+    "jquery-ui": "jqueryui#~1.11.4"
   }
 }

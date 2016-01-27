@@ -1,7 +1,7 @@
 define(function(require) {
   'use strict';
   var angular = require('angular'),
-    jQuery = require('jQuery'),
+    jQuery = require('jquery'),
     jPlotPie = require('jPlotPie'),
     jPlotResize = require('jPlotResize'),
     jPlotCategories = require('jPlotCategories'),

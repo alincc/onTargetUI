@@ -374,22 +374,11 @@
                                 $(".classificationWrapper").load(Global.templatePath + "classifications.html", function() {
                                     othis.classifications = new Classifications($(this), othis, othis.projects, othis.models, main);
 
-                                    othis.loadDetails();
-                                    othis.projects.forEach(function(project) {
-                                        othis.changeRevision(project, project.lastRevisionId);
-                                    });
-                                });
-//							});
-                            });
-                        });
-                    });
-                });
+                                    if(isAllowViewComment) {
+                                        // Load comments
+                                        $('.commentWrapper').load(Global.templatePath + "comments.html", function() {
 
-                if(isAllowViewComment) {
-                    // Load comments
-                    $('.commentWrapper').load(Global.templatePath + "comments.html", function() {
-
-                        othis.comments = new Comments($(this), othis, othis.models, main, othis.selectedObjectId);
+                                            othis.comments = new Comments($(this), othis, othis.models, main, othis.selectedObjectId);
 
 
 //				$(".projectTreeWrapper").load(Global.templatePath + "projecttree.html", function(){
@@ -412,13 +401,21 @@
 //						});
 //					});
 //				});
+                                        });
+                                    }
+
+                                    $('.taskWrapper').load(Global.templatePath + "tasks.html", function(){
+                                        othis.loadDetails();
+                                        othis.projects.forEach(function(project) {
+                                            othis.changeRevision(project, project.lastRevisionId);
+                                        });
+                                    });
+                                });
+//							});
+                            });
+                        });
                     });
-                }
-
-                $('.taskWrapper').load(Global.templatePath + "tasks.html", function(){
-
                 });
-
             });
         };
 
